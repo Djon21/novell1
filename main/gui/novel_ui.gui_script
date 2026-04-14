@@ -4,18 +4,12 @@
 local dm    = require "main.scripts.dialogue_manager"
 local story = require "main.scripts.story_data"
 
--- Ссылки на GUI-ноды
-local bg_node
-local dialogue_panel
-local name_panel
-local name_label
-local dialogue_text
-local continue_hint
-local choice_panel
+local bg_node, dialogue_panel, name_panel, name_label
+local dialogue_text, continue_hint, choice_panel, choice_question_node
 local choice_btns  = {}
 local choice_texts = {}
 
-local HINT_BLINK_SPEED = 2.0  -- мигание индикатора (раз/сек)
+local HINT_BLINK_SPEED = 2.0
 local hint_timer       = 0
 
 -- -------------------------------------------------------
@@ -27,28 +21,33 @@ local function set_background(bg)
 end
 
 local function show_dialogue_mode(node)
-    gui.set_enabled(choice_panel, false)
+    gui.set_enabled(choice_panel,   false)
     gui.set_enabled(dialogue_panel, true)
 
     local has_name = node.character and node.character ~= ""
-    gui.set_enabled(name_panel, has_name)
-    gui.set_enabled(name_label, has_name)
+    gui.set_enabled(name_panel,  has_name)
+    gui.set_enabled(name_label,  has_name)
     if has_name then
         gui.set_text(name_label, node.character)
     end
 
-    gui.set_text(dialogue_text, node.text)
+    gui.set_text(dialogue_text, node.text or "")
     gui.set_enabled(continue_hint, true)
 end
 
 local function show_choice_mode(node)
     gui.set_enabled(dialogue_panel, false)
-    gui.set_enabled(continue_hint, false)
-    gui.set_enabled(choice_panel, true)
+    gui.set_enabled(continue_hint,  false)
+    gui.set_enabled(choice_panel,   true)
+
+    -- Вопрос над кнопками
+    local question = node.question or ""
+    gui.set_text(choice_question_node, question)
 
     for i = 1, 4 do
-        local opt = node.options[i]
-        gui.set_enabled(choice_btns[i], opt ~= nil)
+        local opt = node.options and node.options[i]
+        gui.set_enabled(choice_btns[i],  opt ~= nil)
+        gui.set_enabled(choice_texts[i], opt ~= nil)
         if opt then
             gui.set_text(choice_texts[i], opt.text)
         end
@@ -56,12 +55,11 @@ local function show_choice_mode(node)
 end
 
 local function show_end_mode(node)
-    gui.set_enabled(choice_panel, false)
+    gui.set_enabled(choice_panel,   false)
     gui.set_enabled(dialogue_panel, true)
-    gui.set_enabled(name_panel, false)
-    gui.set_enabled(name_label, false)
+    gui.set_enabled(name_panel,     false)
+    gui.set_enabled(name_label,     false)
     gui.set_text(dialogue_text, node.text or "Конец")
-    -- Меняем >>> на "Начать заново"
     gui.set_text(continue_hint, "начать заново")
     gui.set_enabled(continue_hint, true)
 end
@@ -85,16 +83,17 @@ end
 -- -------------------------------------------------------
 
 function init(self)
-    bg_node        = gui.get_node("background")
-    dialogue_panel = gui.get_node("dialogue_panel")
-    name_panel     = gui.get_node("name_panel")
-    name_label     = gui.get_node("name_label")
-    dialogue_text  = gui.get_node("dialogue_text")
-    continue_hint  = gui.get_node("continue_hint")
-    choice_panel   = gui.get_node("choice_panel")
+    bg_node               = gui.get_node("background")
+    dialogue_panel        = gui.get_node("dialogue_panel")
+    name_panel            = gui.get_node("name_panel")
+    name_label            = gui.get_node("name_label")
+    dialogue_text         = gui.get_node("dialogue_text")
+    continue_hint         = gui.get_node("continue_hint")
+    choice_panel          = gui.get_node("choice_panel")
+    choice_question_node  = gui.get_node("choice_question")
 
     for i = 1, 4 do
-        choice_btns[i]  = gui.get_node("choice_btn_" .. i)
+        choice_btns[i]  = gui.get_node("choice_btn_"  .. i)
         choice_texts[i] = gui.get_node("choice_text_" .. i)
     end
 
@@ -105,13 +104,11 @@ function init(self)
 end
 
 function update(self, dt)
-    -- Мигание индикатора >>>
     local node = dm.get_current_node()
     if node and node.type == "dialogue" then
         hint_timer = hint_timer + dt * HINT_BLINK_SPEED
-        local alpha = 0.5 + 0.5 * math.sin(hint_timer * math.pi)
         local c = gui.get_color(continue_hint)
-        c.w = alpha
+        c.w = 0.5 + 0.5 * math.sin(hint_timer * math.pi)
         gui.set_color(continue_hint, c)
     end
 end
@@ -126,7 +123,6 @@ function on_input(self, action_id, action)
     local node = dm.get_current_node()
     if not node then return false end
 
-    -- Клик/тач — продвигаем диалог или выбираем вариант
     if action_id == hash("touch") then
 
         if node.type == "dialogue" then
