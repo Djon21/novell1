@@ -10,6 +10,7 @@ return {
 -- ================================================================
         wake = {
             background = { r = 0.38, g = 0.28, b = 0.18 },
+            background_image = "bg_bedroom",
             nodes = {
                 { type = "dialogue", character = "",
                   text = "Спальня. Рассветный свет проникает сквозь полуприкрытые жалюзи." },
@@ -34,6 +35,7 @@ return {
 -- ================================================================
         wake_mono = {
             background = { r = 0.38, g = 0.28, b = 0.18 },
+            background_image = "bg_bedroom",
             next_scene = "metro",
             nodes = {
                 { type = "dialogue", character = "{MC_NAME}",

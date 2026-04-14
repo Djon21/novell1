@@ -23,5 +23,4 @@ custom_heap_size = 1
 
 [project]
 title = novell1
-# dependencies#0 = https://github.com/indiesoftby/defold-yagames/archive/refs/heads/master.zip
 

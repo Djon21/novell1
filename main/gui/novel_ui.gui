@@ -3,829 +3,406 @@ fonts {
   name: "main"
   font: "/main/fonts/main.font"
 }
-background_color {
-  x: 0.0
-  y: 0.0
-  z: 0.0
-  w: 1.0
+textures {
+  name: "backgrounds"
+  texture: "/main/images/backgrounds.atlas"
 }
 nodes {
   position {
     x: 480.0
     y: 320.0
-    z: 0.0
-    w: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 0.0
   }
   size {
     x: 960.0
     y: 640.0
-    z: 0.0
-    w: 0.0
   }
   color {
     x: 0.08
     y: 0.08
     z: 0.25
-    w: 1.0
   }
   type: TYPE_BOX
-  blend_mode: BLEND_MODE_ALPHA
   id: "background"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  layer: ""
-  inherit_alpha: false
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
-  alpha: 1.0
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-  size_mode: SIZE_MODE_MANUAL
+}
+nodes {
+  position { x: 480.0  y: 320.0  z: 0.05 }
+  size     { x: 1147.0  y: 640.0 }
+  type: TYPE_BOX
+  id: "bg_image"
+  texture: "backgrounds/bg_bedroom"
+  adjust_mode: ADJUST_MODE_STRETCH
+  enabled: false
 }
 nodes {
   position {
     x: 480.0
     y: 95.0
     z: 0.1
-    w: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 0.0
   }
   size {
     x: 960.0
     y: 190.0
-    z: 0.0
-    w: 0.0
   }
   color {
     x: 0.0
     y: 0.0
     z: 0.0
-    w: 0.85
   }
   type: TYPE_BOX
-  blend_mode: BLEND_MODE_ALPHA
   id: "dialogue_panel"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  layer: ""
-  inherit_alpha: false
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
-  alpha: 1.0
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-  size_mode: SIZE_MODE_MANUAL
+  alpha: 0.85
 }
 nodes {
   position {
     x: 125.0
     y: 192.0
     z: 0.2
-    w: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 0.0
   }
   size {
     x: 220.0
     y: 38.0
-    z: 0.0
-    w: 0.0
   }
   color {
     x: 0.12
     y: 0.12
     z: 0.45
-    w: 1.0
   }
   type: TYPE_BOX
-  blend_mode: BLEND_MODE_ALPHA
   id: "name_panel"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  layer: ""
-  inherit_alpha: false
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
-  alpha: 1.0
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-  size_mode: SIZE_MODE_MANUAL
 }
 nodes {
   position {
     x: 125.0
     y: 192.0
     z: 0.3
-    w: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 0.0
   }
   size {
     x: 200.0
-    y: 0.0
-    z: 0.0
-    w: 0.0
-  }
-  color {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
   }
   type: TYPE_TEXT
-  blend_mode: BLEND_MODE_ALPHA
+  text: "\320\237\320\265\321\200\321\201\320\276\320\275\320\260\320\266"
+  font: "main"
   id: "name_label"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  layer: ""
-  inherit_alpha: false
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
-  alpha: 1.0
   outline_alpha: 0.0
   shadow_alpha: 0.0
-  font: "main"
-  text: "Персонаж"
-  line_break: false
-  text_leading: 1.0
-  text_tracking: 0.0
-  size_mode: SIZE_MODE_MANUAL
 }
 nodes {
   position {
     x: 40.0
     y: 148.0
     z: 0.3
-    w: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 0.0
   }
   size {
     x: 880.0
     y: 150.0
-    z: 0.0
-    w: 0.0
-  }
-  color {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
   }
   type: TYPE_TEXT
-  blend_mode: BLEND_MODE_ALPHA
+  text: "..."
+  font: "main"
   id: "dialogue_text"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
   pivot: PIVOT_NW
   adjust_mode: ADJUST_MODE_STRETCH
-  layer: ""
-  inherit_alpha: false
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
-  alpha: 1.0
+  line_break: true
   outline_alpha: 0.0
   shadow_alpha: 0.0
-  font: "main"
-  text: "..."
-  line_break: true
   text_leading: 1.3
-  text_tracking: 0.0
-  size_mode: SIZE_MODE_MANUAL
 }
 nodes {
   position {
     x: 920.0
     y: 18.0
     z: 0.3
-    w: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 0.0
   }
   size {
     x: 40.0
-    y: 0.0
-    z: 0.0
-    w: 0.0
   }
   color {
-    x: 1.0
-    y: 1.0
     z: 0.6
-    w: 1.0
   }
   type: TYPE_TEXT
-  blend_mode: BLEND_MODE_ALPHA
+  text: ">>>"
+  font: "main"
   id: "continue_hint"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  layer: ""
-  inherit_alpha: false
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
-  alpha: 1.0
   outline_alpha: 0.0
   shadow_alpha: 0.0
-  font: "main"
-  text: ">>>"
-  line_break: false
-  text_leading: 1.0
-  text_tracking: 0.0
-  size_mode: SIZE_MODE_MANUAL
 }
 nodes {
   position {
     x: 480.0
     y: 330.0
     z: 0.2
-    w: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 0.0
   }
   size {
     x: 720.0
     y: 280.0
-    z: 0.0
-    w: 0.0
   }
   color {
     x: 0.0
     y: 0.0
     z: 0.0
-    w: 0.88
   }
   type: TYPE_BOX
-  blend_mode: BLEND_MODE_ALPHA
   id: "choice_panel"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  layer: ""
-  inherit_alpha: false
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
-  alpha: 1.0
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
+  alpha: 0.88
   enabled: false
-  size_mode: SIZE_MODE_MANUAL
 }
 nodes {
   position {
-    x: 0.0
     y: 118.0
     z: 0.1
-    w: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 0.0
   }
   size {
     x: 620.0
-    y: 0.0
-    z: 0.0
-    w: 0.0
   }
   color {
     x: 0.8
     y: 0.8
     z: 0.5
-    w: 1.0
   }
   type: TYPE_TEXT
-  blend_mode: BLEND_MODE_ALPHA
+  font: "main"
   id: "choice_question"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  layer: ""
+  parent: "choice_panel"
   inherit_alpha: true
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
-  alpha: 1.0
   outline_alpha: 0.0
   shadow_alpha: 0.0
-  font: "main"
-  text: ""
-  line_break: false
-  text_leading: 1.0
-  text_tracking: 0.0
-  parent: "choice_panel"
-  size_mode: SIZE_MODE_MANUAL
 }
 nodes {
   position {
-    x: 0.0
     y: 95.0
     z: 0.1
-    w: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 0.0
   }
   size {
     x: 660.0
     y: 54.0
-    z: 0.0
-    w: 0.0
   }
   color {
     x: 0.18
     y: 0.18
     z: 0.55
-    w: 1.0
   }
   type: TYPE_BOX
-  blend_mode: BLEND_MODE_ALPHA
   id: "choice_btn_1"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  layer: ""
-  inherit_alpha: true
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
-  alpha: 1.0
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
   parent: "choice_panel"
-  size_mode: SIZE_MODE_MANUAL
+  inherit_alpha: true
 }
 nodes {
   position {
-    x: 0.0
-    y: 0.0
     z: 0.1
-    w: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 0.0
   }
   size {
     x: 620.0
-    y: 0.0
-    z: 0.0
-    w: 0.0
-  }
-  color {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
   }
   type: TYPE_TEXT
-  blend_mode: BLEND_MODE_ALPHA
+  text: "\320\222\320\260\321\200\320\270\320\260\320\275\321\202 1"
+  font: "main"
   id: "choice_text_1"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  layer: ""
+  parent: "choice_btn_1"
   inherit_alpha: true
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
-  alpha: 1.0
   outline_alpha: 0.0
   shadow_alpha: 0.0
-  font: "main"
-  text: "Вариант 1"
-  line_break: false
-  text_leading: 1.0
-  text_tracking: 0.0
-  parent: "choice_btn_1"
-  size_mode: SIZE_MODE_MANUAL
 }
 nodes {
   position {
-    x: 0.0
     y: 25.0
     z: 0.1
-    w: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 0.0
   }
   size {
     x: 660.0
     y: 54.0
-    z: 0.0
-    w: 0.0
   }
   color {
     x: 0.18
     y: 0.18
     z: 0.55
-    w: 1.0
   }
   type: TYPE_BOX
-  blend_mode: BLEND_MODE_ALPHA
   id: "choice_btn_2"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  layer: ""
-  inherit_alpha: true
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
-  alpha: 1.0
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
   parent: "choice_panel"
-  size_mode: SIZE_MODE_MANUAL
+  inherit_alpha: true
 }
 nodes {
   position {
-    x: 0.0
-    y: 0.0
     z: 0.1
-    w: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 0.0
   }
   size {
     x: 620.0
-    y: 0.0
-    z: 0.0
-    w: 0.0
-  }
-  color {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
   }
   type: TYPE_TEXT
-  blend_mode: BLEND_MODE_ALPHA
+  text: "\320\222\320\260\321\200\320\270\320\260\320\275\321\202 2"
+  font: "main"
   id: "choice_text_2"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  layer: ""
+  parent: "choice_btn_2"
   inherit_alpha: true
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
-  alpha: 1.0
   outline_alpha: 0.0
   shadow_alpha: 0.0
-  font: "main"
-  text: "Вариант 2"
-  line_break: false
-  text_leading: 1.0
-  text_tracking: 0.0
-  parent: "choice_btn_2"
-  size_mode: SIZE_MODE_MANUAL
 }
 nodes {
   position {
-    x: 0.0
     y: -45.0
     z: 0.1
-    w: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 0.0
   }
   size {
     x: 660.0
     y: 54.0
-    z: 0.0
-    w: 0.0
   }
   color {
     x: 0.18
     y: 0.18
     z: 0.55
-    w: 1.0
   }
   type: TYPE_BOX
-  blend_mode: BLEND_MODE_ALPHA
   id: "choice_btn_3"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  layer: ""
-  inherit_alpha: true
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
-  alpha: 1.0
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
   parent: "choice_panel"
-  size_mode: SIZE_MODE_MANUAL
+  inherit_alpha: true
 }
 nodes {
   position {
-    x: 0.0
-    y: 0.0
     z: 0.1
-    w: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 0.0
   }
   size {
     x: 620.0
-    y: 0.0
-    z: 0.0
-    w: 0.0
-  }
-  color {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
   }
   type: TYPE_TEXT
-  blend_mode: BLEND_MODE_ALPHA
+  text: "\320\222\320\260\321\200\320\270\320\260\320\275\321\202 3"
+  font: "main"
   id: "choice_text_3"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  layer: ""
+  parent: "choice_btn_3"
   inherit_alpha: true
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
-  alpha: 1.0
   outline_alpha: 0.0
   shadow_alpha: 0.0
-  font: "main"
-  text: "Вариант 3"
-  line_break: false
-  text_leading: 1.0
-  text_tracking: 0.0
-  parent: "choice_btn_3"
-  size_mode: SIZE_MODE_MANUAL
 }
 nodes {
   position {
-    x: 0.0
     y: -115.0
     z: 0.1
-    w: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 0.0
   }
   size {
     x: 660.0
     y: 54.0
-    z: 0.0
-    w: 0.0
   }
   color {
     x: 0.18
     y: 0.18
     z: 0.55
-    w: 1.0
   }
   type: TYPE_BOX
-  blend_mode: BLEND_MODE_ALPHA
   id: "choice_btn_4"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  layer: ""
-  inherit_alpha: true
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
-  alpha: 1.0
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
   parent: "choice_panel"
-  size_mode: SIZE_MODE_MANUAL
+  inherit_alpha: true
 }
 nodes {
   position {
-    x: 0.0
-    y: 0.0
     z: 0.1
-    w: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 0.0
   }
   size {
     x: 620.0
-    y: 0.0
-    z: 0.0
-    w: 0.0
-  }
-  color {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
   }
   type: TYPE_TEXT
-  blend_mode: BLEND_MODE_ALPHA
+  text: "\320\222\320\260\321\200\320\270\320\260\320\275\321\202 4"
+  font: "main"
   id: "choice_text_4"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  layer: ""
+  parent: "choice_btn_4"
   inherit_alpha: true
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
-  alpha: 1.0
   outline_alpha: 0.0
   shadow_alpha: 0.0
+}
+nodes {
+  position { x: 480.0  y: 320.0  z: 0.5 }
+  size     { x: 960.0  y: 640.0 }
+  color    { x: 0.04  y: 0.04  z: 0.10 }
+  type: TYPE_BOX
+  id: "menu_panel"
+  adjust_mode: ADJUST_MODE_STRETCH
+}
+nodes {
+  position { y: 130.0  z: 0.1 }
+  size     { x: 700.0 }
+  type: TYPE_TEXT
+  text: "\320\220\320\222\320\236\320\241\320\254"
   font: "main"
-  text: "Вариант 4"
-  line_break: false
-  text_leading: 1.0
-  text_tracking: 0.0
-  parent: "choice_btn_4"
-  size_mode: SIZE_MODE_MANUAL
+  id: "menu_title"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { y: 80.0  z: 0.1 }
+  size     { x: 600.0 }
+  type: TYPE_TEXT
+  text: "\320\270\321\202\320\265\321\200\320\260\321\206\320\270\321\217 001"
+  font: "main"
+  id: "menu_subtitle"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { z: 0.1 }
+  size     { x: 320.0  y: 54.0 }
+  color    { x: 0.18  y: 0.18  z: 0.55 }
+  type: TYPE_BOX
+  id: "menu_btn_play"
+  alpha: 1.0
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
+}
+nodes {
+  position { z: 0.1 }
+  size     { x: 280.0 }
+  type: TYPE_TEXT
+  text: "\320\230\320\263\321\200\320\260\321\202\321\214"
+  font: "main"
+  id: "menu_btn_play_text"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_btn_play"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { y: -70.0  z: 0.1 }
+  size     { x: 320.0  y: 54.0 }
+  color    { x: 0.14  y: 0.14  z: 0.40 }
+  type: TYPE_BOX
+  id: "menu_btn_continue"
+  alpha: 1.0
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
+}
+nodes {
+  position { z: 0.1 }
+  size     { x: 280.0 }
+  type: TYPE_TEXT
+  text: "\320\237\321\200\320\276\320\264\320\276\320\273\320\266\320\270\321\202\321\214"
+  font: "main"
+  id: "menu_btn_continue_text"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_btn_continue"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT

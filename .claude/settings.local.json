@@ -1,7 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(python3 -c \"import json; d=json.load\\(open\\('C:/Users/GoldiM/novell1/novell1/.claude/settings.json'\\)\\); print\\('OK:', d['hooks']['Stop'][0]['hooks'][0]['command']\\)\")"
+      "Bash(python3 -c \"import json; d=json.load\\(open\\('C:/Users/GoldiM/novell1/novell1/.claude/settings.json'\\)\\); print\\('OK:', d['hooks']['Stop'][0]['hooks'][0]['command']\\)\")",
+      "Bash(python3 -c ':*)",
+      "Read(//c/Users/GoldiM/novell1/**)",
+      "Read(//c/Users/GoldiM/Desktop/**)",
+      "Bash(git add:*)",
+      "Bash(git commit -m ':*)"
     ]
   }
 }

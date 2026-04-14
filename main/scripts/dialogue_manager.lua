@@ -5,9 +5,10 @@ local M = {}
 
 local sm = require "main.scripts.save_manager"
 
-local story         = nil
-local current_scene = nil
-local current_index = 1
+local story            = nil
+local current_scene    = nil
+local current_scene_id = nil
+local current_index    = 1
 
 -- -------------------------------------------------------
 -- Подстановка токенов в строку.
@@ -44,7 +45,7 @@ local function sub(text)
     return text
 end
 
--- Возвращает копию узла с подставленными именами
+-- Возвращает копию узла с подставленными токенами
 local function process_node(node)
     if not node then return nil end
     local n = {}
@@ -67,17 +68,36 @@ local function process_node(node)
 end
 
 -- -------------------------------------------------------
--- Инициализация
+-- Инициализация (новая игра)
 -- -------------------------------------------------------
 function M.init(story_data)
-    story         = story_data
+    story          = story_data
     sm.load()
-    current_scene = story_data.scenes[story_data.start]
-    current_index = 1
+    current_scene_id = story_data.start
+    current_scene    = story_data.scenes[current_scene_id]
+    current_index    = 1
 end
 
 -- -------------------------------------------------------
--- Текущий узел (с подставленными именами)
+-- Загрузка сохранения (продолжить)
+-- -------------------------------------------------------
+function M.load_saved(story_data)
+    story = story_data
+    sm.load()
+    local scene_id = sm.get_saved_scene()
+    local node_idx = sm.get_saved_node()
+    if scene_id and story.scenes[scene_id] then
+        current_scene_id = scene_id
+        current_scene    = story.scenes[scene_id]
+        current_index    = node_idx
+    else
+        -- Сохранение битое — начинаем с начала
+        M.init(story_data)
+    end
+end
+
+-- -------------------------------------------------------
+-- Текущий узел (с подставленными токенами)
 -- -------------------------------------------------------
 function M.get_current_node()
     if not current_scene then return nil end
@@ -85,16 +105,21 @@ function M.get_current_node()
 end
 
 -- -------------------------------------------------------
--- Цвет фона текущей сцены
+-- Фон текущей сцены
 -- -------------------------------------------------------
 function M.get_background()
     if not current_scene then return { r=0, g=0, b=0 } end
     return current_scene.background
 end
 
+-- Имя картинки фона (nil = только цвет)
+function M.get_background_image()
+    if not current_scene then return nil end
+    return current_scene.background_image
+end
+
 -- -------------------------------------------------------
--- Перейти к следующему узлу.
--- Если сцена закончилась и есть next_scene — переходим туда.
+-- Перейти к следующему узлу. Автосохраняет позицию.
 -- -------------------------------------------------------
 function M.advance()
     if not current_scene then return false end
@@ -102,21 +127,25 @@ function M.advance()
 
     if current_index > #current_scene.nodes then
         if current_scene.next_scene then
-            local next = story.scenes[current_scene.next_scene]
+            local next_id = current_scene.next_scene
+            local next = story.scenes[next_id]
             if next then
-                current_scene = next
-                current_index = 1
+                current_scene_id = next_id
+                current_scene    = next
+                current_index    = 1
+                sm.save_progress(current_scene_id, current_index)
                 return true
             end
         end
         return false
     end
+
+    sm.save_progress(current_scene_id, current_index)
     return true
 end
 
 -- -------------------------------------------------------
--- Выбрать вариант (1-based).
--- Применяет флаги, переходит в следующую сцену.
+-- Выбрать вариант (1-based). Автосохраняет позицию.
 -- -------------------------------------------------------
 function M.choose(option_index)
     local node = M.get_current_node()
@@ -125,32 +154,31 @@ function M.choose(option_index)
     local option = node.options and node.options[option_index]
     if not option then return false end
 
-    -- Установить пол если это гендерный выбор
     if option.gender then
         sm.set_gender(option.gender)
     end
 
-    -- Применить флаги
     if option.flags then
         sm.apply_flags(option.flags)
     end
 
-    -- Переход в следующую сцену
     if option.next then
         local next = story.scenes[option.next]
         if not next then
             print("[DM] Сцена не найдена: " .. tostring(option.next))
             return false
         end
-        current_scene = next
-        current_index = 1
+        current_scene_id = option.next
+        current_scene    = next
+        current_index    = 1
+        sm.save_progress(current_scene_id, current_index)
     end
 
     return true
 end
 
 -- -------------------------------------------------------
--- Перезапустить с начала (не сбрасывает сохранение)
+-- Перезапустить с начала (не сбрасывает сохранение — это делает sm.new_game)
 -- -------------------------------------------------------
 function M.restart()
     M.init(story)
