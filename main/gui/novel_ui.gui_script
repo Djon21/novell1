@@ -5,10 +5,13 @@ local dm    = require "main.scripts.dialogue_manager"
 local sm    = require "main.scripts.save_manager"
 local story = require "main.scripts.story_data"
 
-local bg_node, bg_image_node, dialogue_panel, name_panel, name_label
+local bg_node, dialogue_panel, name_panel, name_label
 local dialogue_text, continue_hint, choice_panel, choice_question_node
 local choice_btns  = {}
 local choice_texts = {}
+
+-- Таблица фонов: имя → gui-нода (заполняется в init)
+local bg_nodes = {}
 
 local menu_panel, menu_btn_play, menu_btn_continue
 local menu_btn_play_text, menu_btn_continue_text
@@ -22,7 +25,10 @@ local in_menu          = true
 -- -------------------------------------------------------
 
 local function set_background(bg, bg_image)
-    gui.set_enabled(bg_image_node, bg_image ~= nil)
+    -- Скрываем все фоны, затем показываем нужный
+    for name, node in pairs(bg_nodes) do
+        gui.set_enabled(node, name == bg_image)
+    end
     gui.set_color(bg_node, vmath.vector4(bg.r, bg.g, bg.b, 1))
 end
 
@@ -111,8 +117,10 @@ end
 
 function init(self)
     bg_node              = gui.get_node("background")
-    bg_image_node        = gui.get_node("bg_image")
-    dialogue_panel       = gui.get_node("dialogue_panel")
+    -- Регистрируем все фоновые ноды по имени
+    bg_nodes["bg_bedroom"] = gui.get_node("bg_image")
+    bg_nodes["bg_metro"]   = gui.get_node("bg_metro")
+    dialogue_panel         = gui.get_node("dialogue_panel")
     name_panel           = gui.get_node("name_panel")
     name_label           = gui.get_node("name_label")
     dialogue_text        = gui.get_node("dialogue_text")

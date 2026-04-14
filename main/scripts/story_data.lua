@@ -68,6 +68,7 @@ return {
 -- ================================================================
         metro = {
             background = { r = 0.08, g = 0.09, b = 0.15 },
+            background_image = "bg_metro",
             next_scene = "office_morning",
             nodes = {
                 { type = "dialogue", character = "",

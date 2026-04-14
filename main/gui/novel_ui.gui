@@ -35,6 +35,15 @@ nodes {
   enabled: false
 }
 nodes {
+  position { x: 480.0  y: 320.0  z: 0.05 }
+  size     { x: 1147.0  y: 640.0 }
+  type: TYPE_BOX
+  id: "bg_metro"
+  texture: "backgrounds/bg_metro"
+  adjust_mode: ADJUST_MODE_STRETCH
+  enabled: false
+}
+nodes {
   position {
     x: 480.0
     y: 95.0
