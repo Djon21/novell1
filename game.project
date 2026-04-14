@@ -17,8 +17,11 @@ gravity_y = -1000.0
 scale = 0.01
 
 [html5]
-scale_mode = stretch
+scale_mode = fit
+heap_size = 256
+custom_heap_size = 1
 
 [project]
 title = novell1
+dependencies#0 = https://github.com/indiesoftby/defold-yagames/archive/refs/heads/main.zip
 

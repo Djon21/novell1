@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c \"import json; d=json.load\\(open\\('C:/Users/GoldiM/novell1/novell1/.claude/settings.json'\\)\\); print\\('OK:', d['hooks']['Stop'][0]['hooks'][0]['command']\\)\")"
+    ]
+  }
+}

@@ -1,0 +1,170 @@
+-- yagames_manager.script
+-- Менеджер интеграции с Яндекс Играми
+-- Инициализирует SDK и управляет рекламой
+
+local IS_YANDEX = sys.get_sys_info().system_name == "HTML5"
+
+local M = {}
+
+-- Флаги состояния
+local sdk_ready = false
+local ad_is_showing = false
+
+-- Cooldown для fullscreen рекламы (в секундах)
+local FULLSCREEN_COOLDOWN = 180  -- 3 минуты
+local last_fullscreen_time = -FULLSCREEN_COOLDOWN  -- чтобы первый показ сработал сразу
+
+-- -------------------------------------------------------
+-- Инициализация SDK
+-- -------------------------------------------------------
+local function init_sdk(self)
+	if not IS_YANDEX then
+		print("[YaGames] Не HTML5 платформа, SDK пропущен")
+		sdk_ready = true  -- в редакторе считаем готовым
+		return
+	end
+
+	yagames.init(function(self, err)
+		if err then
+			print("[YaGames] Ошибка инициализации: " .. tostring(err))
+			return
+		end
+		sdk_ready = true
+		print("[YaGames] SDK инициализирован успешно")
+
+		-- Сообщаем Яндексу что игра загружена
+		yagames.features_loading_api_ready()
+	end)
+end
+
+-- -------------------------------------------------------
+-- Полноэкранная реклама (показывается между сценами)
+-- on_close_callback  — вызывается всегда после закрытия/ошибки
+-- on_skipped_callback — вызывается если cooldown ещё не прошёл
+-- -------------------------------------------------------
+function M.show_fullscreen_ad(on_close_callback, on_skipped_callback)
+	if not sdk_ready then
+		print("[YaGames] SDK не готов")
+		if on_close_callback then on_close_callback() end
+		return
+	end
+
+	-- Проверка cooldown
+	local now = os.time()
+	local elapsed = now - last_fullscreen_time
+	if elapsed < FULLSCREEN_COOLDOWN then
+		local remaining = FULLSCREEN_COOLDOWN - elapsed
+		print("[YaGames] Cooldown: ещё " .. remaining .. " сек до следующей рекламы")
+		if on_skipped_callback then on_skipped_callback() end
+		return
+	end
+
+	if ad_is_showing then return end
+
+	if not IS_YANDEX then
+		print("[YaGames] [DEV] Симуляция fullscreen рекламы")
+		last_fullscreen_time = os.time()
+		if on_close_callback then on_close_callback() end
+		return
+	end
+
+	ad_is_showing = true
+
+	yagames.adv_show_fullscreen_adv({
+		open = function(self)
+			print("[YaGames] Реклама открыта")
+		end,
+		close = function(self, was_shown)
+			ad_is_showing = false
+			last_fullscreen_time = os.time()
+			print("[YaGames] Реклама закрыта, показана: " .. tostring(was_shown))
+			if on_close_callback then on_close_callback() end
+		end,
+		error = function(self, err)
+			ad_is_showing = false
+			print("[YaGames] Ошибка рекламы: " .. tostring(err))
+			if on_close_callback then on_close_callback() end
+		end,
+		offline = function(self)
+			ad_is_showing = false
+			print("[YaGames] Офлайн, реклама недоступна")
+			if on_close_callback then on_close_callback() end
+		end,
+	})
+end
+
+-- -------------------------------------------------------
+-- Rewarded реклама (за награду — разблокировка контента)
+-- Cooldown не нужен — игрок сам инициирует показ
+-- -------------------------------------------------------
+function M.show_rewarded_ad(on_rewarded_callback, on_close_callback)
+	if not sdk_ready then
+		print("[YaGames] SDK не готов")
+		if on_close_callback then on_close_callback() end
+		return
+	end
+
+	if not IS_YANDEX then
+		print("[YaGames] [DEV] Симуляция rewarded рекламы — выдаём награду")
+		if on_rewarded_callback then on_rewarded_callback() end
+		if on_close_callback then on_close_callback() end
+		return
+	end
+
+	if ad_is_showing then return end
+	ad_is_showing = true
+
+	yagames.adv_show_rewarded_video({
+		open = function(self)
+			print("[YaGames] Rewarded открыто")
+		end,
+		rewarded = function(self)
+			print("[YaGames] Награда выдана!")
+			if on_rewarded_callback then on_rewarded_callback() end
+		end,
+		close = function(self, was_shown)
+			ad_is_showing = false
+			if on_close_callback then on_close_callback() end
+		end,
+		error = function(self, err)
+			ad_is_showing = false
+			print("[YaGames] Ошибка rewarded: " .. tostring(err))
+			if on_close_callback then on_close_callback() end
+		end,
+	})
+end
+
+-- -------------------------------------------------------
+-- Утилиты
+-- -------------------------------------------------------
+
+-- Сколько секунд осталось до следующего возможного показа (0 = можно показывать)
+function M.fullscreen_cooldown_remaining()
+	local elapsed = os.time() - last_fullscreen_time
+	return math.max(0, FULLSCREEN_COOLDOWN - elapsed)
+end
+
+-- Можно ли сейчас показать fullscreen
+function M.can_show_fullscreen()
+	return sdk_ready and not ad_is_showing and M.fullscreen_cooldown_remaining() == 0
+end
+
+function M.is_ready()
+	return sdk_ready
+end
+
+-- -------------------------------------------------------
+-- Lifecycle хуки (обязательно для Яндекс)
+-- -------------------------------------------------------
+function M.game_ready()
+	if IS_YANDEX and sdk_ready then
+		yagames.features_loading_api_ready()
+	end
+end
+
+-- -------------------------------------------------------
+-- Компонентные функции скрипта
+-- -------------------------------------------------------
+function init(self)
+	init_sdk(self)
+end
