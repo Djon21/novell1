@@ -1,4 +1,4 @@
-sound: "/main/sounds/music_background_loop_01.wav"
+sound: "/main/sounds/music_background_loop_01.ogg"
 looping: 1
 group: "music"
 gain: 0.7
