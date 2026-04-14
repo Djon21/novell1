@@ -2,7 +2,7 @@
 -- Менеджер интеграции с Яндекс Играми
 -- Инициализирует SDK и управляет рекламой
 
-local IS_YANDEX = sys.get_sys_info().system_name == "HTML5"
+local IS_YANDEX = sys.get_sys_info().system_name == "HTML5" and yagames ~= nil
 
 local M = {}
 

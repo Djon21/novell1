@@ -1,0 +1,156 @@
+-- novel_ui.gui_script
+-- Контроллер интерфейса визуальной новеллы.
+
+local dm    = require "main.scripts.dialogue_manager"
+local story = require "main.scripts.story_data"
+
+-- Ссылки на GUI-ноды
+local bg_node
+local dialogue_panel
+local name_panel
+local name_label
+local dialogue_text
+local continue_hint
+local choice_panel
+local choice_btns  = {}
+local choice_texts = {}
+
+local HINT_BLINK_SPEED = 2.0  -- мигание индикатора (раз/сек)
+local hint_timer       = 0
+
+-- -------------------------------------------------------
+-- Вспомогательные функции
+-- -------------------------------------------------------
+
+local function set_background(bg)
+    gui.set_color(bg_node, vmath.vector4(bg.r, bg.g, bg.b, 1))
+end
+
+local function show_dialogue_mode(node)
+    gui.set_enabled(choice_panel, false)
+    gui.set_enabled(dialogue_panel, true)
+
+    local has_name = node.character and node.character ~= ""
+    gui.set_enabled(name_panel, has_name)
+    gui.set_enabled(name_label, has_name)
+    if has_name then
+        gui.set_text(name_label, node.character)
+    end
+
+    gui.set_text(dialogue_text, node.text)
+    gui.set_enabled(continue_hint, true)
+end
+
+local function show_choice_mode(node)
+    gui.set_enabled(dialogue_panel, false)
+    gui.set_enabled(continue_hint, false)
+    gui.set_enabled(choice_panel, true)
+
+    for i = 1, 4 do
+        local opt = node.options[i]
+        gui.set_enabled(choice_btns[i], opt ~= nil)
+        if opt then
+            gui.set_text(choice_texts[i], opt.text)
+        end
+    end
+end
+
+local function show_end_mode(node)
+    gui.set_enabled(choice_panel, false)
+    gui.set_enabled(dialogue_panel, true)
+    gui.set_enabled(name_panel, false)
+    gui.set_enabled(name_label, false)
+    gui.set_text(dialogue_text, node.text or "Конец")
+    -- Меняем >>> на "Начать заново"
+    gui.set_text(continue_hint, "начать заново")
+    gui.set_enabled(continue_hint, true)
+end
+
+local function render()
+    set_background(dm.get_background())
+    local node = dm.get_current_node()
+    if not node then return end
+
+    if node.type == "dialogue" then
+        show_dialogue_mode(node)
+    elseif node.type == "choice" then
+        show_choice_mode(node)
+    elseif node.type == "end" then
+        show_end_mode(node)
+    end
+end
+
+-- -------------------------------------------------------
+-- Lifecycle
+-- -------------------------------------------------------
+
+function init(self)
+    bg_node        = gui.get_node("background")
+    dialogue_panel = gui.get_node("dialogue_panel")
+    name_panel     = gui.get_node("name_panel")
+    name_label     = gui.get_node("name_label")
+    dialogue_text  = gui.get_node("dialogue_text")
+    continue_hint  = gui.get_node("continue_hint")
+    choice_panel   = gui.get_node("choice_panel")
+
+    for i = 1, 4 do
+        choice_btns[i]  = gui.get_node("choice_btn_" .. i)
+        choice_texts[i] = gui.get_node("choice_text_" .. i)
+    end
+
+    dm.init(story)
+    render()
+
+    msg.post(".", "acquire_input_focus")
+end
+
+function update(self, dt)
+    -- Мигание индикатора >>>
+    local node = dm.get_current_node()
+    if node and node.type == "dialogue" then
+        hint_timer = hint_timer + dt * HINT_BLINK_SPEED
+        local alpha = 0.5 + 0.5 * math.sin(hint_timer * math.pi)
+        local c = gui.get_color(continue_hint)
+        c.w = alpha
+        gui.set_color(continue_hint, c)
+    end
+end
+
+-- -------------------------------------------------------
+-- Обработка ввода
+-- -------------------------------------------------------
+
+function on_input(self, action_id, action)
+    if not action.pressed then return false end
+
+    local node = dm.get_current_node()
+    if not node then return false end
+
+    -- Клик/тач — продвигаем диалог или выбираем вариант
+    if action_id == hash("touch") then
+
+        if node.type == "dialogue" then
+            dm.advance()
+            render()
+            hint_timer = 0
+            return true
+
+        elseif node.type == "choice" then
+            for i = 1, 4 do
+                if gui.is_enabled(choice_btns[i])
+                and gui.pick_node(choice_btns[i], action.x, action.y) then
+                    dm.choose(i)
+                    render()
+                    return true
+                end
+            end
+
+        elseif node.type == "end" then
+            dm.restart()
+            render()
+            return true
+        end
+    end
+
+    return false
+end
