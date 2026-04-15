@@ -388,7 +388,58 @@ nodes {
   alpha: 0.92
 }
 nodes {
-  position { y: 130.0  z: 0.1 }
+  position { x: -247.0  z: 0.05 }
+  size     { x: 3.0  y: 290.0 }
+  color    { x: 0.55  y: 0.38  z: 1.0 }
+  type: TYPE_BOX
+  id: "menu_card_left_line"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_card"
+  inherit_alpha: true
+}
+nodes {
+  position { x: 247.0  z: 0.05 }
+  size     { x: 1.0  y: 290.0 }
+  color    { x: 0.35  y: 0.25  z: 0.70 }
+  type: TYPE_BOX
+  id: "menu_card_right_line"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_card"
+  inherit_alpha: true
+  alpha: 0.4
+}
+nodes {
+  position { x: -3.0  y: 128.0  z: 0.06 }
+  size     { x: 460.0 }
+  type: TYPE_TEXT
+  text: "\320\220\320\222\320\236\320\241\320\254"
+  font: "main"
+  id: "menu_title_glitch_b"
+  color    { x: 0.0  y: 0.65  z: 1.0 }
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  alpha: 0.30
+}
+nodes {
+  position { x: 3.0  y: 132.0  z: 0.07 }
+  size     { x: 460.0 }
+  type: TYPE_TEXT
+  text: "\320\220\320\222\320\236\320\241\320\254"
+  font: "main"
+  id: "menu_title_glitch_r"
+  color    { x: 0.90  y: 0.15  z: 0.28 }
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  alpha: 0.35
+}
+nodes {
+  position { y: 130.0  z: 0.08 }
   size     { x: 460.0 }
   type: TYPE_TEXT
   text: "\320\220\320\222\320\236\320\241\320\254"
@@ -402,8 +453,8 @@ nodes {
 }
 nodes {
   position { y: 85.0  z: 0.09 }
-  size     { x: 400.0  y: 2.0 }
-  color    { x: 0.42  y: 0.32  z: 1.0 }
+  size     { x: 420.0  y: 2.0 }
+  color    { x: 0.55  y: 0.38  z: 1.0 }
   type: TYPE_BOX
   id: "menu_divider"
   adjust_mode: ADJUST_MODE_STRETCH
@@ -411,7 +462,7 @@ nodes {
   inherit_alpha: true
 }
 nodes {
-  position { y: 66.0  z: 0.1 }
+  position { y: 66.0  z: 0.09 }
   size     { x: 460.0 }
   type: TYPE_TEXT
   text: "\320\270\321\202\320\265\321\200\320\260\321\206\320\270\321\217 001"
@@ -425,14 +476,34 @@ nodes {
   shadow_alpha: 0.0
 }
 nodes {
-  position { y: 10.0  z: 0.1 }
+  position { y: 10.0  z: 0.10 }
   size     { x: 420.0  y: 54.0 }
-  color    { x: 0.24  y: 0.20  z: 0.80 }
+  color    { x: 0.08  y: 0.06  z: 0.30 }
   type: TYPE_BOX
   id: "menu_btn_play"
   alpha: 1.0
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "menu_panel"
+}
+nodes {
+  position { y: 37.0  z: 0.11 }
+  size     { x: 420.0  y: 2.0 }
+  color    { x: 0.55  y: 0.38  z: 1.0 }
+  type: TYPE_BOX
+  id: "menu_btn_play_top_line"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
+}
+nodes {
+  position { x: -207.0  y: 10.0  z: 0.11 }
+  size     { x: 4.0  y: 54.0 }
+  color    { x: 0.55  y: 0.38  z: 1.0 }
+  type: TYPE_BOX
+  id: "menu_btn_play_left_line"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
 }
 nodes {
   position { z: 0.1 }
@@ -448,14 +519,34 @@ nodes {
   shadow_alpha: 0.0
 }
 nodes {
-  position { y: -60.0  z: 0.1 }
+  position { y: -60.0  z: 0.10 }
   size     { x: 420.0  y: 54.0 }
-  color    { x: 0.14  y: 0.12  z: 0.50 }
+  color    { x: 0.06  y: 0.05  z: 0.22 }
   type: TYPE_BOX
   id: "menu_btn_continue"
   alpha: 1.0
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "menu_panel"
+}
+nodes {
+  position { y: -33.0  z: 0.11 }
+  size     { x: 420.0  y: 2.0 }
+  color    { x: 0.40  y: 0.28  z: 0.82 }
+  type: TYPE_BOX
+  id: "menu_btn_continue_top_line"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
+}
+nodes {
+  position { x: -207.0  y: -60.0  z: 0.11 }
+  size     { x: 4.0  y: 54.0 }
+  color    { x: 0.40  y: 0.28  z: 0.82 }
+  type: TYPE_BOX
+  id: "menu_btn_continue_left_line"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
 }
 nodes {
   position { z: 0.1 }
