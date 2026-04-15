@@ -22,5 +22,6 @@ heap_size = 256
 custom_heap_size = 1
 
 [project]
-title = novell1
+title = АВОСЬ
+dependencies#0 = https://github.com/indiesoftby/defold-yagames/archive/main.zip
 
