@@ -370,15 +370,26 @@ nodes {
 nodes {
   position { x: 480.0  y: 320.0  z: 0.5 }
   size     { x: 960.0  y: 640.0 }
-  color    { x: 0.04  y: 0.04  z: 0.10 }
+  color    { x: 0.02  y: 0.02  z: 0.08 }
   type: TYPE_BOX
   id: "menu_panel"
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.7
+  alpha: 0.5
+}
+nodes {
+  position { y: 20.0  z: 0.02 }
+  size     { x: 500.0  y: 310.0 }
+  color    { x: 0.04  y: 0.04  z: 0.16 }
+  type: TYPE_BOX
+  id: "menu_card"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.92
 }
 nodes {
   position { y: 130.0  z: 0.1 }
-  size     { x: 700.0 }
+  size     { x: 460.0 }
   type: TYPE_TEXT
   text: "\320\220\320\222\320\236\320\241\320\254"
   font: "main"
@@ -386,16 +397,27 @@ nodes {
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "menu_panel"
   inherit_alpha: true
-  outline_alpha: 0.0
+  outline_alpha: 0.5
   shadow_alpha: 0.0
 }
 nodes {
-  position { y: 80.0  z: 0.1 }
-  size     { x: 600.0 }
+  position { y: 85.0  z: 0.09 }
+  size     { x: 400.0  y: 2.0 }
+  color    { x: 0.42  y: 0.32  z: 1.0 }
+  type: TYPE_BOX
+  id: "menu_divider"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
+}
+nodes {
+  position { y: 66.0  z: 0.1 }
+  size     { x: 460.0 }
   type: TYPE_TEXT
   text: "\320\270\321\202\320\265\321\200\320\260\321\206\320\270\321\217 001"
   font: "main"
   id: "menu_subtitle"
+  color    { x: 0.75  y: 0.72  z: 1.0 }
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "menu_panel"
   inherit_alpha: true
@@ -403,19 +425,18 @@ nodes {
   shadow_alpha: 0.0
 }
 nodes {
-  position { z: 0.1 }
-  size     { x: 320.0  y: 54.0 }
-  color    { x: 0.18  y: 0.18  z: 0.55 }
+  position { y: 10.0  z: 0.1 }
+  size     { x: 420.0  y: 54.0 }
+  color    { x: 0.24  y: 0.20  z: 0.80 }
   type: TYPE_BOX
   id: "menu_btn_play"
   alpha: 1.0
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "menu_panel"
-  inherit_alpha: true
 }
 nodes {
   position { z: 0.1 }
-  size     { x: 280.0 }
+  size     { x: 380.0 }
   type: TYPE_TEXT
   text: "\320\230\320\263\321\200\320\260\321\202\321\214"
   font: "main"
@@ -427,19 +448,18 @@ nodes {
   shadow_alpha: 0.0
 }
 nodes {
-  position { y: -70.0  z: 0.1 }
-  size     { x: 320.0  y: 54.0 }
-  color    { x: 0.14  y: 0.14  z: 0.40 }
+  position { y: -60.0  z: 0.1 }
+  size     { x: 420.0  y: 54.0 }
+  color    { x: 0.14  y: 0.12  z: 0.50 }
   type: TYPE_BOX
   id: "menu_btn_continue"
   alpha: 1.0
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "menu_panel"
-  inherit_alpha: true
 }
 nodes {
   position { z: 0.1 }
-  size     { x: 280.0 }
+  size     { x: 380.0 }
   type: TYPE_TEXT
   text: "\320\237\321\200\320\276\320\264\320\276\320\273\320\266\320\270\321\202\321\214"
   font: "main"
