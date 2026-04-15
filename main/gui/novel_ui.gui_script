@@ -5,6 +5,14 @@ local dm    = require "main.scripts.dialogue_manager"
 local sm    = require "main.scripts.save_manager"
 local story = require "main.scripts.story_data"
 
+-- ВАЖНО: top-level require, БЕЗ pcall/if-обёрток. Defold compiler делает
+-- статический анализ require'ов и включает Lua extension'а в HTML5 бандл
+-- ТОЛЬКО когда видит require как обычный вызов. pcall(require, "...") — это
+-- динамический вызов, модуль НЕ попадает в бандл, на HTML5 будет
+-- "module 'yagames.yagames' not found".
+local yagames = require "yagames.yagames"
+local ysdk_ready = false
+
 local bg_node, dialogue_panel, name_panel, name_label
 local dialogue_text, continue_hint, choice_panel, choice_question_node
 local choice_btns      = {}
@@ -24,6 +32,7 @@ local hint_timer       = 0
 local in_menu          = true
 local glitch_active    = false
 local music_started    = false
+local game_lang        = "ru"  -- язык по умолчанию (Яндекс требование 2.14)
 
 -- -------------------------------------------------------
 -- Глитч-эффект на заголовке (как в Steins;Gate / DDLC)
@@ -255,6 +264,26 @@ function init(self)
     menu_btn_continue_top_line   = gui.get_node("menu_btn_continue_top_line")
     menu_btn_continue_left_line  = gui.get_node("menu_btn_continue_left_line")
 
+    -- Яндекс Игры: инициализация SDK (нужна для показа рекламы в конце новеллы).
+    -- Автоопределение языка (2.14) и LoadingAPI.ready уже вызваны в engine_template.html
+    -- напрямую через ysdk.environment — срабатывает ДО запуска Defold.
+    if yagames then
+        yagames.init(function(_, err)
+            if err then
+                print("YaGames init error: " .. tostring(err))
+                return
+            end
+            ysdk_ready = true
+
+            -- Дублируем чтение языка через Lua SDK — на случай если Яндекс
+            -- отслеживает именно обращение через нативный мост.
+            local ok, env = pcall(yagames.environment)
+            if ok and env and env.i18n then
+                game_lang = env.i18n.lang or "ru"
+            end
+        end)
+    end
+
     show_menu()
 
     msg.post(".", "acquire_input_focus")
@@ -331,15 +360,29 @@ function on_input(self, action_id, action)
             end
 
         elseif node.type == "end" then
+            -- Защита от двойного вызова show_menu (callback'и Яндекса +
+            -- страховочный таймер могут сработать одновременно).
+            local menu_returned = false
             local function go_to_menu()
+                if menu_returned then return end
+                menu_returned = true
                 show_menu()
             end
-            if yagames ~= nil then
-                yagames.adv_show_fullscreen_adv({
-                    close   = function(self, was_shown) go_to_menu() end,
-                    error   = function(self, err)       go_to_menu() end,
-                    offline = function(self)            go_to_menu() end,
+
+            if yagames and ysdk_ready then
+                -- Страховочный таймер: если реклама зависла или callback'и
+                -- не придут — через 30 сек всё равно уходим в меню.
+                timer.delay(30, false, function() go_to_menu() end)
+
+                local ok, err = pcall(yagames.adv_show_fullscreen_adv, {
+                    close   = function(_, was_shown) go_to_menu() end,
+                    error   = function(_, e)         go_to_menu() end,
+                    offline = function(_)            go_to_menu() end,
                 })
+                if not ok then
+                    print("adv pcall failed: " .. tostring(err))
+                    go_to_menu()
+                end
             else
                 go_to_menu()
             end

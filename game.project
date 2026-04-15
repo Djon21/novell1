@@ -17,9 +17,10 @@ gravity_y = -1000.0
 scale = 0.01
 
 [html5]
-scale_mode = fit
+scale_mode = zoom
 heap_size = 256
 custom_heap_size = 1
+htmlfile = /main/engine_template.html
 
 [project]
 title = АВОСЬ

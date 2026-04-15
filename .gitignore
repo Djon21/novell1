@@ -9,3 +9,6 @@ Thumbs.db
 .project
 .cproject
 builtins
+# Defold liveupdate signing keys — приватный ключ никогда не коммитить
+manifest.private.der
+manifest.public.der

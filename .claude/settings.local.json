@@ -6,7 +6,29 @@
       "Read(//c/Users/GoldiM/novell1/**)",
       "Read(//c/Users/GoldiM/Desktop/**)",
       "Bash(git add:*)",
-      "Bash(git commit -m ':*)"
+      "Bash(git commit -m ':*)",
+      "Bash(git push:*)",
+      "Bash(du -sh /c/Users/GoldiM/novell1/novell1/main/*)",
+      "Bash(du -sh /c/Users/GoldiM/novell1/novell1/build/*)",
+      "Bash(grep -n \"background\\\\|next_scene\\\\|= {$\" /c/Users/GoldiM/novell1/novell1/main/scripts/story_data.lua)",
+      "WebSearch",
+      "Bash(ls -lh /c/Users/GoldiM/novell1/novell1/main/images/icon*)",
+      "WebFetch(domain:yandex.ru)",
+      "Bash(unzip -l *.zip)",
+      "Bash(grep -E \"\\\\.lua$|\\\\.js$\")",
+      "Bash(unzip -p *.zip \"defold-yagames-master/yagames/yagames.lua\")",
+      "Read(//tmp/**)",
+      "Bash(unzip -p *.zip \"defold-yagames-master/example/app/scenemanager.lua\")",
+      "Bash(unzip -p *.zip \"defold-yagames-master/yagames/lib/web/lib_yagames.js\")",
+      "Bash(unzip -l \"C:/Users/GoldiM/novell1/novell1/.internal/lib/8e3ce9c0a39a69c65eb8bb1122b981ef91e487ec-IjdlYzNlMTM4NzU5YWZlMDU0YWRjMWQyNTU1OTBhZTFiZWY4MjgzZWM0MWIyMGE3NzVmNWFlNzA4YzJkODA4Zjki.zip\")",
+      "Bash(grep -E \"\\\\.lua$|\\\\.manifest$\")",
+      "Bash(unzip -p \"C:/Users/GoldiM/novell1/novell1/.internal/lib/8e3ce9c0a39a69c65eb8bb1122b981ef91e487ec-IjdlYzNlMTM4NzU5YWZlMDU0YWRjMWQyNTU1OTBhZTFiZWY4MjgzZWM0MWIyMGE3NzVmNWFlNzA4YzJkODA4Zjki.zip\" \"defold-yagames-master/game.project\")",
+      "Bash(unzip -q -o \".internal/lib/8e3ce9c0a39a69c65eb8bb1122b981ef91e487ec-IjdlYzNlMTM4NzU5YWZlMDU0YWRjMWQyNTU1OTBhZTFiZWY4MjgzZWM0MWIyMGE3NzVmNWFlNzA4YzJkODA4Zjki.zip\" \"defold-yagames-master/yagames/*\" -d \".internal/lib_extract/\")",
+      "Bash(grep -rn \"require\" /tmp/yagames_check/defold-yagames-master/example/*.script /tmp/yagames_check/defold-yagames-master/example/ysdkinit/)",
+      "Bash(grep -ao '[a-zA-Z0-9/_.-]\\\\{4,\\\\}')",
+      "Bash(grep -E \"yagames|\\\\.luac|\\\\.lua$\")",
+      "Bash(grep -ao '[a-zA-Z0-9/_.-]\\\\{5,\\\\}')",
+      "Bash(grep -n \"^local.*require\\\\|^require\" /tmp/yagames_check/defold-yagames-master/yagames/yagames.lua /tmp/yagames_check/defold-yagames-master/yagames/helpers/*.lua)"
     ]
   }
 }

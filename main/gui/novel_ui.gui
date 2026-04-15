@@ -26,47 +26,82 @@ nodes {
   adjust_mode: ADJUST_MODE_STRETCH
 }
 nodes {
-  position { x: 480.0  y: 320.0  z: 0.05 }
-  size     { x: 1147.0  y: 640.0 }
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.05
+  }
+  size {
+    x: 1147.0
+    y: 640.0
+  }
   type: TYPE_BOX
-  id: "bg_image"
   texture: "backgrounds/bg_bedroom"
+  id: "bg_image"
   adjust_mode: ADJUST_MODE_STRETCH
   enabled: false
 }
 nodes {
-  position { x: 480.0  y: 320.0  z: 0.05 }
-  size     { x: 1147.0  y: 640.0 }
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.05
+  }
+  size {
+    x: 1147.0
+    y: 640.0
+  }
   type: TYPE_BOX
-  id: "bg_metro"
   texture: "backgrounds/bg_metro"
+  id: "bg_metro"
   adjust_mode: ADJUST_MODE_STRETCH
   enabled: false
 }
 nodes {
-  position { x: 480.0  y: 320.0  z: 0.05 }
-  size     { x: 1147.0  y: 640.0 }
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.05
+  }
+  size {
+    x: 1147.0
+    y: 640.0
+  }
   type: TYPE_BOX
-  id: "bg_office"
   texture: "backgrounds/bg_office"
+  id: "bg_office"
   adjust_mode: ADJUST_MODE_STRETCH
   enabled: false
 }
 nodes {
-  position { x: 480.0  y: 320.0  z: 0.05 }
-  size     { x: 1147.0  y: 640.0 }
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.05
+  }
+  size {
+    x: 1147.0
+    y: 640.0
+  }
   type: TYPE_BOX
-  id: "bg_office_evening"
   texture: "backgrounds/bg_office_evening"
+  id: "bg_office_evening"
   adjust_mode: ADJUST_MODE_STRETCH
   enabled: false
 }
 nodes {
-  position { x: 480.0  y: 320.0  z: 0.05 }
-  size     { x: 1147.0  y: 640.0 }
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.05
+  }
+  size {
+    x: 1147.0
+    y: 640.0
+  }
   type: TYPE_BOX
-  id: "bg_rooftop"
   texture: "backgrounds/bg_rooftop"
+  id: "bg_rooftop"
   adjust_mode: ADJUST_MODE_STRETCH
   enabled: false
 }
@@ -168,9 +203,20 @@ nodes {
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 480.0  y: 330.0  z: 0.2 }
-  size     { x: 720.0  y: 310.0 }
-  color    { x: 0.04  y: 0.03  z: 0.14 }
+  position {
+    x: 480.0
+    y: 330.0
+    z: 0.2
+  }
+  size {
+    x: 720.0
+    y: 310.0
+  }
+  color {
+    x: 0.04
+    y: 0.03
+    z: 0.14
+  }
   type: TYPE_BOX
   id: "choice_panel"
   adjust_mode: ADJUST_MODE_STRETCH
@@ -178,9 +224,18 @@ nodes {
   enabled: false
 }
 nodes {
-  position { y: 153.0  z: 0.05 }
-  size     { x: 660.0  y: 2.0 }
-  color    { x: 0.55  y: 0.38  z: 1.0 }
+  position {
+    y: 153.0
+    z: 0.05
+  }
+  size {
+    x: 660.0
+    y: 2.0
+  }
+  color {
+    x: 0.55
+    y: 0.38
+  }
   type: TYPE_BOX
   id: "choice_panel_top_line"
   adjust_mode: ADJUST_MODE_STRETCH
@@ -188,9 +243,18 @@ nodes {
   inherit_alpha: true
 }
 nodes {
-  position { x: -357.0  z: 0.05 }
-  size     { x: 3.0  y: 300.0 }
-  color    { x: 0.55  y: 0.38  z: 1.0 }
+  position {
+    x: -357.0
+    z: 0.05
+  }
+  size {
+    x: 3.0
+    y: 300.0
+  }
+  color {
+    x: 0.55
+    y: 0.38
+  }
   type: TYPE_BOX
   id: "choice_panel_left_line"
   adjust_mode: ADJUST_MODE_STRETCH
@@ -198,9 +262,17 @@ nodes {
   inherit_alpha: true
 }
 nodes {
-  position { y: 118.0  z: 0.1 }
-  size     { x: 620.0 }
-  color    { x: 0.88  y: 0.85  z: 1.0 }
+  position {
+    y: 118.0
+    z: 0.1
+  }
+  size {
+    x: 620.0
+  }
+  color {
+    x: 0.88
+    y: 0.85
+  }
   type: TYPE_TEXT
   font: "main"
   id: "choice_question"
@@ -211,9 +283,19 @@ nodes {
   shadow_alpha: 0.0
 }
 nodes {
-  position { y: 95.0  z: 0.1 }
-  size     { x: 660.0  y: 54.0 }
-  color    { x: 0.10  y: 0.08  z: 0.34 }
+  position {
+    y: 95.0
+    z: 0.1
+  }
+  size {
+    x: 660.0
+    y: 54.0
+  }
+  color {
+    x: 0.1
+    y: 0.08
+    z: 0.34
+  }
   type: TYPE_BOX
   id: "choice_btn_1"
   adjust_mode: ADJUST_MODE_STRETCH
@@ -221,28 +303,12 @@ nodes {
   inherit_alpha: true
 }
 nodes {
-  position { y: 122.0  z: 0.15 }
-  size     { x: 660.0  y: 2.0 }
-  color    { x: 0.50  y: 0.35  z: 0.95 }
-  type: TYPE_BOX
-  id: "choice_btn_1_top"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "choice_panel"
-  inherit_alpha: true
-}
-nodes {
-  position { x: -328.0  y: 95.0  z: 0.15 }
-  size     { x: 4.0  y: 54.0 }
-  color    { x: 0.50  y: 0.35  z: 0.95 }
-  type: TYPE_BOX
-  id: "choice_btn_1_left"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "choice_panel"
-  inherit_alpha: true
-}
-nodes {
-  position { z: 0.1 }
-  size     { x: 620.0 }
+  position {
+    z: 0.1
+  }
+  size {
+    x: 620.0
+  }
   type: TYPE_TEXT
   text: "\320\222\320\260\321\200\320\270\320\260\320\275\321\202 1"
   font: "main"
@@ -254,9 +320,60 @@ nodes {
   shadow_alpha: 0.0
 }
 nodes {
-  position { y: 25.0  z: 0.1 }
-  size     { x: 660.0  y: 54.0 }
-  color    { x: 0.10  y: 0.08  z: 0.34 }
+  position {
+    y: 122.0
+    z: 0.15
+  }
+  size {
+    x: 660.0
+    y: 2.0
+  }
+  color {
+    x: 0.5
+    y: 0.35
+    z: 0.95
+  }
+  type: TYPE_BOX
+  id: "choice_btn_1_top"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: -328.0
+    y: 95.0
+    z: 0.15
+  }
+  size {
+    x: 4.0
+    y: 54.0
+  }
+  color {
+    x: 0.5
+    y: 0.35
+    z: 0.95
+  }
+  type: TYPE_BOX
+  id: "choice_btn_1_left"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    y: 25.0
+    z: 0.1
+  }
+  size {
+    x: 660.0
+    y: 54.0
+  }
+  color {
+    x: 0.1
+    y: 0.08
+    z: 0.34
+  }
   type: TYPE_BOX
   id: "choice_btn_2"
   adjust_mode: ADJUST_MODE_STRETCH
@@ -264,28 +381,12 @@ nodes {
   inherit_alpha: true
 }
 nodes {
-  position { y: 52.0  z: 0.15 }
-  size     { x: 660.0  y: 2.0 }
-  color    { x: 0.50  y: 0.35  z: 0.95 }
-  type: TYPE_BOX
-  id: "choice_btn_2_top"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "choice_panel"
-  inherit_alpha: true
-}
-nodes {
-  position { x: -328.0  y: 25.0  z: 0.15 }
-  size     { x: 4.0  y: 54.0 }
-  color    { x: 0.50  y: 0.35  z: 0.95 }
-  type: TYPE_BOX
-  id: "choice_btn_2_left"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "choice_panel"
-  inherit_alpha: true
-}
-nodes {
-  position { z: 0.1 }
-  size     { x: 620.0 }
+  position {
+    z: 0.1
+  }
+  size {
+    x: 620.0
+  }
   type: TYPE_TEXT
   text: "\320\222\320\260\321\200\320\270\320\260\320\275\321\202 2"
   font: "main"
@@ -297,31 +398,62 @@ nodes {
   shadow_alpha: 0.0
 }
 nodes {
-  position { y: -45.0  z: 0.1 }
-  size     { x: 660.0  y: 54.0 }
-  color    { x: 0.10  y: 0.08  z: 0.34 }
+  position {
+    y: 52.0
+    z: 0.15
+  }
+  size {
+    x: 660.0
+    y: 2.0
+  }
+  color {
+    x: 0.5
+    y: 0.35
+    z: 0.95
+  }
+  type: TYPE_BOX
+  id: "choice_btn_2_top"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: -328.0
+    y: 25.0
+    z: 0.15
+  }
+  size {
+    x: 4.0
+    y: 54.0
+  }
+  color {
+    x: 0.5
+    y: 0.35
+    z: 0.95
+  }
+  type: TYPE_BOX
+  id: "choice_btn_2_left"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    y: -45.0
+    z: 0.1
+  }
+  size {
+    x: 660.0
+    y: 54.0
+  }
+  color {
+    x: 0.1
+    y: 0.08
+    z: 0.34
+  }
   type: TYPE_BOX
   id: "choice_btn_3"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "choice_panel"
-  inherit_alpha: true
-}
-nodes {
-  position { y: -18.0  z: 0.15 }
-  size     { x: 660.0  y: 2.0 }
-  color    { x: 0.50  y: 0.35  z: 0.95 }
-  type: TYPE_BOX
-  id: "choice_btn_3_top"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "choice_panel"
-  inherit_alpha: true
-}
-nodes {
-  position { x: -328.0  y: -45.0  z: 0.15 }
-  size     { x: 4.0  y: 54.0 }
-  color    { x: 0.50  y: 0.35  z: 0.95 }
-  type: TYPE_BOX
-  id: "choice_btn_3_left"
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "choice_panel"
   inherit_alpha: true
@@ -344,9 +476,60 @@ nodes {
   shadow_alpha: 0.0
 }
 nodes {
-  position { y: -115.0  z: 0.1 }
-  size     { x: 660.0  y: 54.0 }
-  color    { x: 0.10  y: 0.08  z: 0.34 }
+  position {
+    y: -18.0
+    z: 0.15
+  }
+  size {
+    x: 660.0
+    y: 2.0
+  }
+  color {
+    x: 0.5
+    y: 0.35
+    z: 0.95
+  }
+  type: TYPE_BOX
+  id: "choice_btn_3_top"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: -328.0
+    y: -45.0
+    z: 0.15
+  }
+  size {
+    x: 4.0
+    y: 54.0
+  }
+  color {
+    x: 0.5
+    y: 0.35
+    z: 0.95
+  }
+  type: TYPE_BOX
+  id: "choice_btn_3_left"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    y: -115.0
+    z: 0.1
+  }
+  size {
+    x: 660.0
+    y: 54.0
+  }
+  color {
+    x: 0.1
+    y: 0.08
+    z: 0.34
+  }
   type: TYPE_BOX
   id: "choice_btn_4"
   adjust_mode: ADJUST_MODE_STRETCH
@@ -354,28 +537,12 @@ nodes {
   inherit_alpha: true
 }
 nodes {
-  position { y: -88.0  z: 0.15 }
-  size     { x: 660.0  y: 2.0 }
-  color    { x: 0.50  y: 0.35  z: 0.95 }
-  type: TYPE_BOX
-  id: "choice_btn_4_top"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "choice_panel"
-  inherit_alpha: true
-}
-nodes {
-  position { x: -328.0  y: -115.0  z: 0.15 }
-  size     { x: 4.0  y: 54.0 }
-  color    { x: 0.50  y: 0.35  z: 0.95 }
-  type: TYPE_BOX
-  id: "choice_btn_4_left"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "choice_panel"
-  inherit_alpha: true
-}
-nodes {
-  position { z: 0.1 }
-  size     { x: 620.0 }
+  position {
+    z: 0.1
+  }
+  size {
+    x: 620.0
+  }
   type: TYPE_TEXT
   text: "\320\222\320\260\321\200\320\270\320\260\320\275\321\202 4"
   font: "main"
@@ -387,27 +554,96 @@ nodes {
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 480.0  y: 320.0  z: 0.45 }
-  size     { x: 1147.0  y: 640.0 }
+  position {
+    y: -88.0
+    z: 0.15
+  }
+  size {
+    x: 660.0
+    y: 2.0
+  }
+  color {
+    x: 0.5
+    y: 0.35
+    z: 0.95
+  }
   type: TYPE_BOX
-  id: "bg_menu"
+  id: "choice_btn_4_top"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: -328.0
+    y: -115.0
+    z: 0.15
+  }
+  size {
+    x: 4.0
+    y: 54.0
+  }
+  color {
+    x: 0.5
+    y: 0.35
+    z: 0.95
+  }
+  type: TYPE_BOX
+  id: "choice_btn_4_left"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.45
+  }
+  size {
+    x: 1147.0
+    y: 640.0
+  }
+  type: TYPE_BOX
   texture: "backgrounds/bg_menu"
+  id: "bg_menu"
   adjust_mode: ADJUST_MODE_STRETCH
   enabled: false
 }
 nodes {
-  position { x: 480.0  y: 320.0  z: 0.5 }
-  size     { x: 960.0  y: 640.0 }
-  color    { x: 0.02  y: 0.02  z: 0.08 }
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.5
+  }
+  size {
+    x: 960.0
+    y: 640.0
+  }
+  color {
+    x: 0.02
+    y: 0.02
+    z: 0.08
+  }
   type: TYPE_BOX
   id: "menu_panel"
   adjust_mode: ADJUST_MODE_STRETCH
   alpha: 0.5
 }
 nodes {
-  position { y: 20.0  z: 0.02 }
-  size     { x: 500.0  y: 310.0 }
-  color    { x: 0.04  y: 0.04  z: 0.16 }
+  position {
+    y: 20.0
+    z: 0.02
+  }
+  size {
+    x: 500.0
+    y: 310.0
+  }
+  color {
+    x: 0.04
+    y: 0.04
+    z: 0.16
+  }
   type: TYPE_BOX
   id: "menu_card"
   adjust_mode: ADJUST_MODE_STRETCH
@@ -416,9 +652,18 @@ nodes {
   alpha: 0.92
 }
 nodes {
-  position { x: -247.0  z: 0.05 }
-  size     { x: 3.0  y: 290.0 }
-  color    { x: 0.55  y: 0.38  z: 1.0 }
+  position {
+    x: -247.0
+    z: 0.05
+  }
+  size {
+    x: 3.0
+    y: 290.0
+  }
+  color {
+    x: 0.55
+    y: 0.38
+  }
   type: TYPE_BOX
   id: "menu_card_left_line"
   adjust_mode: ADJUST_MODE_STRETCH
@@ -426,9 +671,19 @@ nodes {
   inherit_alpha: true
 }
 nodes {
-  position { x: 247.0  z: 0.05 }
-  size     { x: 1.0  y: 290.0 }
-  color    { x: 0.35  y: 0.25  z: 0.70 }
+  position {
+    x: 247.0
+    z: 0.05
+  }
+  size {
+    x: 1.0
+    y: 290.0
+  }
+  color {
+    x: 0.35
+    y: 0.25
+    z: 0.7
+  }
   type: TYPE_BOX
   id: "menu_card_right_line"
   adjust_mode: ADJUST_MODE_STRETCH
@@ -437,38 +692,62 @@ nodes {
   alpha: 0.4
 }
 nodes {
-  position { x: -3.0  y: 128.0  z: 0.06 }
-  size     { x: 460.0 }
+  position {
+    x: -3.0
+    y: 128.0
+    z: 0.06
+  }
+  size {
+    x: 460.0
+  }
+  color {
+    x: 0.0
+    y: 0.65
+  }
   type: TYPE_TEXT
   text: "\320\220\320\222\320\236\320\241\320\254"
   font: "main"
   id: "menu_title_glitch_b"
-  color    { x: 0.0  y: 0.65  z: 1.0 }
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "menu_panel"
   inherit_alpha: true
+  alpha: 0.3
   outline_alpha: 0.0
   shadow_alpha: 0.0
-  alpha: 0.30
 }
 nodes {
-  position { x: 3.0  y: 132.0  z: 0.07 }
-  size     { x: 460.0 }
+  position {
+    x: 3.0
+    y: 132.0
+    z: 0.07
+  }
+  size {
+    x: 460.0
+  }
+  color {
+    x: 0.9
+    y: 0.15
+    z: 0.28
+  }
   type: TYPE_TEXT
   text: "\320\220\320\222\320\236\320\241\320\254"
   font: "main"
   id: "menu_title_glitch_r"
-  color    { x: 0.90  y: 0.15  z: 0.28 }
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "menu_panel"
   inherit_alpha: true
+  alpha: 0.35
   outline_alpha: 0.0
   shadow_alpha: 0.0
-  alpha: 0.35
 }
 nodes {
-  position { y: 130.0  z: 0.08 }
-  size     { x: 460.0 }
+  position {
+    y: 130.0
+    z: 0.08
+  }
+  size {
+    x: 460.0
+  }
   type: TYPE_TEXT
   text: "\320\220\320\222\320\236\320\241\320\254"
   font: "main"
@@ -480,9 +759,18 @@ nodes {
   shadow_alpha: 0.0
 }
 nodes {
-  position { y: 85.0  z: 0.09 }
-  size     { x: 420.0  y: 2.0 }
-  color    { x: 0.55  y: 0.38  z: 1.0 }
+  position {
+    y: 85.0
+    z: 0.09
+  }
+  size {
+    x: 420.0
+    y: 2.0
+  }
+  color {
+    x: 0.55
+    y: 0.38
+  }
   type: TYPE_BOX
   id: "menu_divider"
   adjust_mode: ADJUST_MODE_STRETCH
@@ -490,13 +778,21 @@ nodes {
   inherit_alpha: true
 }
 nodes {
-  position { y: 66.0  z: 0.09 }
-  size     { x: 460.0 }
+  position {
+    y: 66.0
+    z: 0.09
+  }
+  size {
+    x: 460.0
+  }
+  color {
+    x: 0.75
+    y: 0.72
+  }
   type: TYPE_TEXT
   text: "\320\270\321\202\320\265\321\200\320\260\321\206\320\270\321\217 001"
   font: "main"
   id: "menu_subtitle"
-  color    { x: 0.75  y: 0.72  z: 1.0 }
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "menu_panel"
   inherit_alpha: true
@@ -504,38 +800,31 @@ nodes {
   shadow_alpha: 0.0
 }
 nodes {
-  position { y: 10.0  z: 0.10 }
-  size     { x: 420.0  y: 54.0 }
-  color    { x: 0.08  y: 0.06  z: 0.30 }
+  position {
+    y: 10.0
+    z: 0.1
+  }
+  size {
+    x: 420.0
+    y: 54.0
+  }
+  color {
+    x: 0.08
+    y: 0.06
+    z: 0.3
+  }
   type: TYPE_BOX
   id: "menu_btn_play"
-  alpha: 1.0
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "menu_panel"
 }
 nodes {
-  position { y: 37.0  z: 0.11 }
-  size     { x: 420.0  y: 2.0 }
-  color    { x: 0.55  y: 0.38  z: 1.0 }
-  type: TYPE_BOX
-  id: "menu_btn_play_top_line"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "menu_panel"
-  inherit_alpha: true
-}
-nodes {
-  position { x: -207.0  y: 10.0  z: 0.11 }
-  size     { x: 4.0  y: 54.0 }
-  color    { x: 0.55  y: 0.38  z: 1.0 }
-  type: TYPE_BOX
-  id: "menu_btn_play_left_line"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "menu_panel"
-  inherit_alpha: true
-}
-nodes {
-  position { z: 0.1 }
-  size     { x: 380.0 }
+  position {
+    z: 0.1
+  }
+  size {
+    x: 380.0
+  }
   type: TYPE_TEXT
   text: "\320\230\320\263\321\200\320\260\321\202\321\214"
   font: "main"
@@ -547,38 +836,70 @@ nodes {
   shadow_alpha: 0.0
 }
 nodes {
-  position { y: -60.0  z: 0.10 }
-  size     { x: 420.0  y: 54.0 }
-  color    { x: 0.06  y: 0.05  z: 0.22 }
+  position {
+    y: 37.0
+    z: 0.11
+  }
+  size {
+    x: 420.0
+    y: 2.0
+  }
+  color {
+    x: 0.55
+    y: 0.38
+  }
+  type: TYPE_BOX
+  id: "menu_btn_play_top_line"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: -207.0
+    y: 10.0
+    z: 0.11
+  }
+  size {
+    x: 4.0
+    y: 54.0
+  }
+  color {
+    x: 0.55
+    y: 0.38
+  }
+  type: TYPE_BOX
+  id: "menu_btn_play_left_line"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    y: -60.0
+    z: 0.1
+  }
+  size {
+    x: 420.0
+    y: 54.0
+  }
+  color {
+    x: 0.06
+    y: 0.05
+    z: 0.22
+  }
   type: TYPE_BOX
   id: "menu_btn_continue"
-  alpha: 1.0
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "menu_panel"
 }
 nodes {
-  position { y: -33.0  z: 0.11 }
-  size     { x: 420.0  y: 2.0 }
-  color    { x: 0.40  y: 0.28  z: 0.82 }
-  type: TYPE_BOX
-  id: "menu_btn_continue_top_line"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "menu_panel"
-  inherit_alpha: true
-}
-nodes {
-  position { x: -207.0  y: -60.0  z: 0.11 }
-  size     { x: 4.0  y: 54.0 }
-  color    { x: 0.40  y: 0.28  z: 0.82 }
-  type: TYPE_BOX
-  id: "menu_btn_continue_left_line"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "menu_panel"
-  inherit_alpha: true
-}
-nodes {
-  position { z: 0.1 }
-  size     { x: 380.0 }
+  position {
+    z: 0.1
+  }
+  size {
+    x: 380.0
+  }
   type: TYPE_TEXT
   text: "\320\237\321\200\320\276\320\264\320\276\320\273\320\266\320\270\321\202\321\214"
   font: "main"
@@ -588,6 +909,47 @@ nodes {
   inherit_alpha: true
   outline_alpha: 0.0
   shadow_alpha: 0.0
+}
+nodes {
+  position {
+    y: -33.0
+    z: 0.11
+  }
+  size {
+    x: 420.0
+    y: 2.0
+  }
+  color {
+    x: 0.4
+    y: 0.28
+    z: 0.82
+  }
+  type: TYPE_BOX
+  id: "menu_btn_continue_top_line"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: -207.0
+    y: -60.0
+    z: 0.11
+  }
+  size {
+    x: 4.0
+    y: 54.0
+  }
+  color {
+    x: 0.4
+    y: 0.28
+    z: 0.82
+  }
+  type: TYPE_BOX
+  id: "menu_btn_continue_left_line"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT
