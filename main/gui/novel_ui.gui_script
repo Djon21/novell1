@@ -118,8 +118,11 @@ end
 function init(self)
     bg_node              = gui.get_node("background")
     -- Регистрируем все фоновые ноды по имени
-    bg_nodes["bg_bedroom"] = gui.get_node("bg_image")
-    bg_nodes["bg_metro"]   = gui.get_node("bg_metro")
+    bg_nodes["bg_bedroom"]       = gui.get_node("bg_image")
+    bg_nodes["bg_metro"]         = gui.get_node("bg_metro")
+    bg_nodes["bg_office"]        = gui.get_node("bg_office")
+    bg_nodes["bg_office_evening"]= gui.get_node("bg_office_evening")
+    bg_nodes["bg_rooftop"]       = gui.get_node("bg_rooftop")
     dialogue_panel         = gui.get_node("dialogue_panel")
     name_panel           = gui.get_node("name_panel")
     name_label           = gui.get_node("name_label")

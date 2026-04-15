@@ -109,6 +109,7 @@ return {
 -- ================================================================
         office_morning = {
             background = { r = 0.12, g = 0.15, b = 0.22 },
+            background_image = "bg_office",
             next_scene = "office",
             nodes = {
                 { type = "dialogue", character = "",
@@ -139,6 +140,7 @@ return {
 -- ================================================================
         office = {
             background = { r = 0.12, g = 0.15, b = 0.22 },
+            background_image = "bg_office",
             nodes = {
                 { type = "dialogue", character = "",
                   text = "Дверь открывается. Голоса. Офис начинает просыпаться." },
@@ -186,6 +188,7 @@ return {
 
         office_a = {
             background = { r = 0.12, g = 0.15, b = 0.22 },
+            background_image = "bg_office",
             next_scene = "compile",
             nodes = {
                 { type = "dialogue", character = "{NPC_NAME}",
@@ -198,6 +201,7 @@ return {
         },
         office_b = {
             background = { r = 0.12, g = 0.15, b = 0.22 },
+            background_image = "bg_office",
             next_scene = "compile",
             nodes = {
                 { type = "dialogue", character = "{NPC_NAME}",
@@ -210,6 +214,7 @@ return {
         },
         office_c = {
             background = { r = 0.12, g = 0.15, b = 0.22 },
+            background_image = "bg_office",
             next_scene = "compile",
             nodes = {
                 { type = "dialogue", character = "{NPC_NAME}",
@@ -226,6 +231,7 @@ return {
 -- ================================================================
         compile = {
             background = { r = 0.06, g = 0.08, b = 0.14 },
+            background_image = "bg_office_evening",
             nodes = {
                 { type = "dialogue", character = "",
                   text = "Первый час — просто пытаюсь понять структуру. Модуль больше, чем должен быть для одного фрагмента." },
@@ -267,6 +273,7 @@ return {
 
         compile_a = {
             background = { r = 0.06, g = 0.08, b = 0.14 },
+            background_image = "bg_office_evening",
             next_scene = "talk",
             nodes = {
                 { type = "dialogue", character = "{NPC_NAME}",
@@ -279,6 +286,7 @@ return {
         },
         compile_b = {
             background = { r = 0.06, g = 0.08, b = 0.14 },
+            background_image = "bg_office_evening",
             next_scene = "talk",
             nodes = {
                 { type = "dialogue", character = "{NPC_NAME}",
@@ -291,6 +299,7 @@ return {
         },
         compile_c = {
             background = { r = 0.06, g = 0.08, b = 0.14 },
+            background_image = "bg_office_evening",
             next_scene = "talk",
             nodes = {
                 { type = "dialogue", character = "{NPC_NAME}",
@@ -307,6 +316,7 @@ return {
 -- ================================================================
         talk = {
             background = { r = 0.10, g = 0.08, b = 0.20 },
+            background_image = "bg_rooftop",
             nodes = {
                 { type = "dialogue", character = "",
                   text = "Конец рабочего дня. Офис пустеет. Остаётся только гул серверов и свет мониторов." },
@@ -360,6 +370,7 @@ return {
 
         talk_a = {
             background = { r = 0.10, g = 0.08, b = 0.20 },
+            background_image = "bg_rooftop",
             next_scene = "ch1_end",
             nodes = {
                 { type = "dialogue", character = "{NPC_NAME}",
@@ -370,6 +381,7 @@ return {
         },
         talk_b = {
             background = { r = 0.10, g = 0.08, b = 0.20 },
+            background_image = "bg_rooftop",
             next_scene = "ch1_end",
             nodes = {
                 { type = "dialogue", character = "{NPC_NAME}",
@@ -382,6 +394,7 @@ return {
         },
         talk_c = {
             background = { r = 0.10, g = 0.08, b = 0.20 },
+            background_image = "bg_rooftop",
             next_scene = "ch1_end",
             nodes = {
                 { type = "dialogue", character = "{NPC_NAME}",

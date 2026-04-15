@@ -4,6 +4,15 @@ images {
 images {
   image: "/main/images/bg_metro.png"
 }
+images {
+  image: "/main/images/bg_office.png"
+}
+images {
+  image: "/main/images/bg_office_evening.png"
+}
+images {
+  image: "/main/images/bg_rooftop.png"
+}
 margin: 0
 extrude_borders: 2
 inner_padding: 0

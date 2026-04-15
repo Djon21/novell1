@@ -44,6 +44,33 @@ nodes {
   enabled: false
 }
 nodes {
+  position { x: 480.0  y: 320.0  z: 0.05 }
+  size     { x: 1147.0  y: 640.0 }
+  type: TYPE_BOX
+  id: "bg_office"
+  texture: "backgrounds/bg_office"
+  adjust_mode: ADJUST_MODE_STRETCH
+  enabled: false
+}
+nodes {
+  position { x: 480.0  y: 320.0  z: 0.05 }
+  size     { x: 1147.0  y: 640.0 }
+  type: TYPE_BOX
+  id: "bg_office_evening"
+  texture: "backgrounds/bg_office_evening"
+  adjust_mode: ADJUST_MODE_STRETCH
+  enabled: false
+}
+nodes {
+  position { x: 480.0  y: 320.0  z: 0.05 }
+  size     { x: 1147.0  y: 640.0 }
+  type: TYPE_BOX
+  id: "bg_rooftop"
+  texture: "backgrounds/bg_rooftop"
+  adjust_mode: ADJUST_MODE_STRETCH
+  enabled: false
+}
+nodes {
   position {
     x: 480.0
     y: 95.0
