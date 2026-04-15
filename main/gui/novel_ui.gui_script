@@ -91,6 +91,7 @@ end
 
 local function show_menu()
     in_menu = true
+    gui.set_enabled(bg_nodes["bg_menu"], true)
     gui.set_enabled(menu_panel,     true)
     gui.set_enabled(dialogue_panel, false)
     gui.set_enabled(choice_panel,   false)
@@ -107,6 +108,7 @@ end
 
 local function start_game()
     in_menu = false
+    gui.set_enabled(bg_nodes["bg_menu"], false)
     gui.set_enabled(menu_panel, false)
     render()
 end
@@ -123,6 +125,7 @@ function init(self)
     bg_nodes["bg_office"]        = gui.get_node("bg_office")
     bg_nodes["bg_office_evening"]= gui.get_node("bg_office_evening")
     bg_nodes["bg_rooftop"]       = gui.get_node("bg_rooftop")
+    bg_nodes["bg_menu"]          = gui.get_node("bg_menu")
     dialogue_panel         = gui.get_node("dialogue_panel")
     name_panel           = gui.get_node("name_panel")
     name_label           = gui.get_node("name_label")

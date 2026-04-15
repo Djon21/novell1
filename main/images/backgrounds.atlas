@@ -2,6 +2,9 @@ images {
   image: "/main/images/bg_bedroom.png"
 }
 images {
+  image: "/main/images/bg_menu.png"
+}
+images {
   image: "/main/images/bg_metro.png"
 }
 images {

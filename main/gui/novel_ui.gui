@@ -359,12 +359,22 @@ nodes {
   shadow_alpha: 0.0
 }
 nodes {
+  position { x: 480.0  y: 320.0  z: 0.45 }
+  size     { x: 1147.0  y: 640.0 }
+  type: TYPE_BOX
+  id: "bg_menu"
+  texture: "backgrounds/bg_menu"
+  adjust_mode: ADJUST_MODE_STRETCH
+  enabled: false
+}
+nodes {
   position { x: 480.0  y: 320.0  z: 0.5 }
   size     { x: 960.0  y: 640.0 }
   color    { x: 0.04  y: 0.04  z: 0.10 }
   type: TYPE_BOX
   id: "menu_panel"
   adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.7
 }
 nodes {
   position { y: 130.0  z: 0.1 }
