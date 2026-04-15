@@ -23,5 +23,5 @@ custom_heap_size = 1
 
 [project]
 title = АВОСЬ
-dependencies#0 = https://github.com/indiesoftby/defold-yagames/archive/main.zip
+dependencies#0 = https://github.com/indiesoftby/defold-yagames/archive/master.zip
 
