@@ -7,9 +7,11 @@ local story = require "main.scripts.story_data"
 
 local bg_node, dialogue_panel, name_panel, name_label
 local dialogue_text, continue_hint, choice_panel, choice_question_node
-local choice_btns  = {}
-local choice_texts = {}
-local bg_nodes     = {}
+local choice_btns      = {}
+local choice_texts     = {}
+local choice_btn_tops  = {}
+local choice_btn_lefts = {}
+local bg_nodes         = {}
 
 local menu_panel, menu_btn_play, menu_btn_continue
 local menu_btn_play_text, menu_btn_continue_text
@@ -63,6 +65,7 @@ end
 local function show_dialogue_mode(node)
     gui.set_enabled(choice_panel,   false)
     gui.set_enabled(dialogue_panel, true)
+    gui.set_enabled(dialogue_text,  true)
 
     local has_name = node.character and node.character ~= ""
     gui.set_enabled(name_panel, has_name)
@@ -77,6 +80,9 @@ end
 
 local function show_choice_mode(node)
     gui.set_enabled(dialogue_panel, false)
+    gui.set_enabled(dialogue_text,  false)
+    gui.set_enabled(name_panel,     false)
+    gui.set_enabled(name_label,     false)
     gui.set_enabled(continue_hint,  false)
     gui.set_enabled(choice_panel,   true)
 
@@ -84,8 +90,10 @@ local function show_choice_mode(node)
 
     for i = 1, 4 do
         local opt = node.options and node.options[i]
-        gui.set_enabled(choice_btns[i],  opt ~= nil)
-        gui.set_enabled(choice_texts[i], opt ~= nil)
+        gui.set_enabled(choice_btns[i],      opt ~= nil)
+        gui.set_enabled(choice_texts[i],     opt ~= nil)
+        gui.set_enabled(choice_btn_tops[i],  opt ~= nil)
+        gui.set_enabled(choice_btn_lefts[i], opt ~= nil)
         if opt then
             gui.set_text(choice_texts[i], opt.text)
         end
@@ -95,6 +103,7 @@ end
 local function show_end_mode(node)
     gui.set_enabled(choice_panel,   false)
     gui.set_enabled(dialogue_panel, true)
+    gui.set_enabled(dialogue_text,  true)
     gui.set_enabled(name_panel,     false)
     gui.set_enabled(name_label,     false)
     gui.set_text(dialogue_text, node.text or "Конец")
@@ -189,8 +198,10 @@ function init(self)
     choice_question_node = gui.get_node("choice_question")
 
     for i = 1, 4 do
-        choice_btns[i]  = gui.get_node("choice_btn_"  .. i)
-        choice_texts[i] = gui.get_node("choice_text_" .. i)
+        choice_btns[i]      = gui.get_node("choice_btn_"  .. i)
+        choice_texts[i]     = gui.get_node("choice_text_" .. i)
+        choice_btn_tops[i]  = gui.get_node("choice_btn_"  .. i .. "_top")
+        choice_btn_lefts[i] = gui.get_node("choice_btn_"  .. i .. "_left")
     end
 
     menu_panel                   = gui.get_node("menu_panel")

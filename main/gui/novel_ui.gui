@@ -168,62 +168,52 @@ nodes {
   shadow_alpha: 0.0
 }
 nodes {
-  position {
-    x: 480.0
-    y: 330.0
-    z: 0.2
-  }
-  size {
-    x: 720.0
-    y: 280.0
-  }
-  color {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
+  position { x: 480.0  y: 330.0  z: 0.2 }
+  size     { x: 720.0  y: 280.0 }
+  color    { x: 0.04  y: 0.03  z: 0.14 }
   type: TYPE_BOX
   id: "choice_panel"
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.88
+  alpha: 0.92
   enabled: false
 }
 nodes {
-  position {
-    y: 118.0
-    z: 0.1
-  }
-  size {
-    x: 620.0
-  }
-  color {
-    x: 0.8
-    y: 0.8
-    z: 0.5
-  }
+  position { y: 138.0  z: 0.05 }
+  size     { x: 660.0  y: 2.0 }
+  color    { x: 0.55  y: 0.38  z: 1.0 }
+  type: TYPE_BOX
+  id: "choice_panel_top_line"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+}
+nodes {
+  position { x: -357.0  z: 0.05 }
+  size     { x: 3.0  y: 270.0 }
+  color    { x: 0.55  y: 0.38  z: 1.0 }
+  type: TYPE_BOX
+  id: "choice_panel_left_line"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+}
+nodes {
+  position { y: 118.0  z: 0.1 }
+  size     { x: 620.0 }
+  color    { x: 0.88  y: 0.85  z: 1.0 }
   type: TYPE_TEXT
   font: "main"
   id: "choice_question"
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "choice_panel"
   inherit_alpha: true
-  outline_alpha: 0.0
+  outline_alpha: 0.3
   shadow_alpha: 0.0
 }
 nodes {
-  position {
-    y: 95.0
-    z: 0.1
-  }
-  size {
-    x: 660.0
-    y: 54.0
-  }
-  color {
-    x: 0.18
-    y: 0.18
-    z: 0.55
-  }
+  position { y: 95.0  z: 0.1 }
+  size     { x: 660.0  y: 54.0 }
+  color    { x: 0.10  y: 0.08  z: 0.34 }
   type: TYPE_BOX
   id: "choice_btn_1"
   adjust_mode: ADJUST_MODE_STRETCH
@@ -231,12 +221,28 @@ nodes {
   inherit_alpha: true
 }
 nodes {
-  position {
-    z: 0.1
-  }
-  size {
-    x: 620.0
-  }
+  position { y: 122.0  z: 0.15 }
+  size     { x: 660.0  y: 2.0 }
+  color    { x: 0.50  y: 0.35  z: 0.95 }
+  type: TYPE_BOX
+  id: "choice_btn_1_top"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+}
+nodes {
+  position { x: -328.0  y: 95.0  z: 0.15 }
+  size     { x: 4.0  y: 54.0 }
+  color    { x: 0.50  y: 0.35  z: 0.95 }
+  type: TYPE_BOX
+  id: "choice_btn_1_left"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+}
+nodes {
+  position { z: 0.1 }
+  size     { x: 620.0 }
   type: TYPE_TEXT
   text: "\320\222\320\260\321\200\320\270\320\260\320\275\321\202 1"
   font: "main"
@@ -248,19 +254,9 @@ nodes {
   shadow_alpha: 0.0
 }
 nodes {
-  position {
-    y: 25.0
-    z: 0.1
-  }
-  size {
-    x: 660.0
-    y: 54.0
-  }
-  color {
-    x: 0.18
-    y: 0.18
-    z: 0.55
-  }
+  position { y: 25.0  z: 0.1 }
+  size     { x: 660.0  y: 54.0 }
+  color    { x: 0.10  y: 0.08  z: 0.34 }
   type: TYPE_BOX
   id: "choice_btn_2"
   adjust_mode: ADJUST_MODE_STRETCH
@@ -268,12 +264,28 @@ nodes {
   inherit_alpha: true
 }
 nodes {
-  position {
-    z: 0.1
-  }
-  size {
-    x: 620.0
-  }
+  position { y: 52.0  z: 0.15 }
+  size     { x: 660.0  y: 2.0 }
+  color    { x: 0.50  y: 0.35  z: 0.95 }
+  type: TYPE_BOX
+  id: "choice_btn_2_top"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+}
+nodes {
+  position { x: -328.0  y: 25.0  z: 0.15 }
+  size     { x: 4.0  y: 54.0 }
+  color    { x: 0.50  y: 0.35  z: 0.95 }
+  type: TYPE_BOX
+  id: "choice_btn_2_left"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+}
+nodes {
+  position { z: 0.1 }
+  size     { x: 620.0 }
   type: TYPE_TEXT
   text: "\320\222\320\260\321\200\320\270\320\260\320\275\321\202 2"
   font: "main"
@@ -285,21 +297,31 @@ nodes {
   shadow_alpha: 0.0
 }
 nodes {
-  position {
-    y: -45.0
-    z: 0.1
-  }
-  size {
-    x: 660.0
-    y: 54.0
-  }
-  color {
-    x: 0.18
-    y: 0.18
-    z: 0.55
-  }
+  position { y: -45.0  z: 0.1 }
+  size     { x: 660.0  y: 54.0 }
+  color    { x: 0.10  y: 0.08  z: 0.34 }
   type: TYPE_BOX
   id: "choice_btn_3"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+}
+nodes {
+  position { y: -18.0  z: 0.15 }
+  size     { x: 660.0  y: 2.0 }
+  color    { x: 0.50  y: 0.35  z: 0.95 }
+  type: TYPE_BOX
+  id: "choice_btn_3_top"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+}
+nodes {
+  position { x: -328.0  y: -45.0  z: 0.15 }
+  size     { x: 4.0  y: 54.0 }
+  color    { x: 0.50  y: 0.35  z: 0.95 }
+  type: TYPE_BOX
+  id: "choice_btn_3_left"
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "choice_panel"
   inherit_alpha: true
@@ -322,19 +344,9 @@ nodes {
   shadow_alpha: 0.0
 }
 nodes {
-  position {
-    y: -115.0
-    z: 0.1
-  }
-  size {
-    x: 660.0
-    y: 54.0
-  }
-  color {
-    x: 0.18
-    y: 0.18
-    z: 0.55
-  }
+  position { y: -115.0  z: 0.1 }
+  size     { x: 660.0  y: 54.0 }
+  color    { x: 0.10  y: 0.08  z: 0.34 }
   type: TYPE_BOX
   id: "choice_btn_4"
   adjust_mode: ADJUST_MODE_STRETCH
@@ -342,12 +354,28 @@ nodes {
   inherit_alpha: true
 }
 nodes {
-  position {
-    z: 0.1
-  }
-  size {
-    x: 620.0
-  }
+  position { y: -88.0  z: 0.15 }
+  size     { x: 660.0  y: 2.0 }
+  color    { x: 0.50  y: 0.35  z: 0.95 }
+  type: TYPE_BOX
+  id: "choice_btn_4_top"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+}
+nodes {
+  position { x: -328.0  y: -115.0  z: 0.15 }
+  size     { x: 4.0  y: 54.0 }
+  color    { x: 0.50  y: 0.35  z: 0.95 }
+  type: TYPE_BOX
+  id: "choice_btn_4_left"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+}
+nodes {
+  position { z: 0.1 }
+  size     { x: 620.0 }
   type: TYPE_TEXT
   text: "\320\222\320\260\321\200\320\270\320\260\320\275\321\202 4"
   font: "main"
