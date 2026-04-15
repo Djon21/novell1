@@ -169,7 +169,7 @@ nodes {
 }
 nodes {
   position { x: 480.0  y: 330.0  z: 0.2 }
-  size     { x: 720.0  y: 280.0 }
+  size     { x: 720.0  y: 310.0 }
   color    { x: 0.04  y: 0.03  z: 0.14 }
   type: TYPE_BOX
   id: "choice_panel"
@@ -178,7 +178,7 @@ nodes {
   enabled: false
 }
 nodes {
-  position { y: 138.0  z: 0.05 }
+  position { y: 153.0  z: 0.05 }
   size     { x: 660.0  y: 2.0 }
   color    { x: 0.55  y: 0.38  z: 1.0 }
   type: TYPE_BOX
@@ -189,7 +189,7 @@ nodes {
 }
 nodes {
   position { x: -357.0  z: 0.05 }
-  size     { x: 3.0  y: 270.0 }
+  size     { x: 3.0  y: 300.0 }
   color    { x: 0.55  y: 0.38  z: 1.0 }
   type: TYPE_BOX
   id: "choice_panel_left_line"

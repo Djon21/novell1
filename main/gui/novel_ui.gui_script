@@ -78,6 +78,42 @@ local function show_dialogue_mode(node)
     gui.set_enabled(continue_hint, true)
 end
 
+-- Динамически расставляет кнопки по числу вариантов
+local function layout_choices(options)
+    local BTN_H   = 54
+    local BTN_GAP = 12
+    local Q_H     = 22
+    local Q_GAP   = 14
+
+    local n = 0
+    for i = 1, 4 do
+        if options and options[i] then n = n + 1 end
+    end
+    if n == 0 then return end
+
+    -- Высота всего блока: вопрос + отступ + кнопки
+    local block_h = Q_H + Q_GAP + n * BTN_H + (n - 1) * BTN_GAP
+    local top     = block_h / 2  -- верхний край блока относительно центра панели
+
+    -- Вопрос
+    gui.set_position(choice_question_node,
+        vmath.vector3(0, top - Q_H / 2, 0.1))
+
+    -- Кнопки сверху вниз
+    local btn_y = top - Q_H - Q_GAP - BTN_H / 2
+    for i = 1, 4 do
+        if options and options[i] then
+            gui.set_position(choice_btns[i],
+                vmath.vector3(0, btn_y, 0.10))
+            gui.set_position(choice_btn_tops[i],
+                vmath.vector3(0, btn_y + BTN_H / 2, 0.15))
+            gui.set_position(choice_btn_lefts[i],
+                vmath.vector3(-328, btn_y, 0.15))
+            btn_y = btn_y - BTN_H - BTN_GAP
+        end
+    end
+end
+
 local function show_choice_mode(node)
     gui.set_enabled(dialogue_panel, false)
     gui.set_enabled(dialogue_text,  false)
@@ -98,6 +134,8 @@ local function show_choice_mode(node)
             gui.set_text(choice_texts[i], opt.text)
         end
     end
+
+    layout_choices(node.options)
 end
 
 local function show_end_mode(node)
