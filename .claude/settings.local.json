@@ -28,7 +28,20 @@
       "Bash(grep -ao '[a-zA-Z0-9/_.-]\\\\{4,\\\\}')",
       "Bash(grep -E \"yagames|\\\\.luac|\\\\.lua$\")",
       "Bash(grep -ao '[a-zA-Z0-9/_.-]\\\\{5,\\\\}')",
-      "Bash(grep -n \"^local.*require\\\\|^require\" /tmp/yagames_check/defold-yagames-master/yagames/yagames.lua /tmp/yagames_check/defold-yagames-master/yagames/helpers/*.lua)"
+      "Bash(grep -n \"^local.*require\\\\|^require\" /tmp/yagames_check/defold-yagames-master/yagames/yagames.lua /tmp/yagames_check/defold-yagames-master/yagames/helpers/*.lua)",
+      "Bash(ls main/images/mila*)",
+      "Bash(identify main/images/mila.webp)",
+      "Bash(python3 -c \"from PIL import Image; img=Image.open\\('main/images/mila.webp'\\); print\\(f'{img.size[0]}x{img.size[1]}, mode={img.mode}'\\)\")",
+      "Bash(python3 -c \"from PIL import Image; print\\('pillow ok'\\)\")",
+      "Bash(python -c \"from PIL import Image; img=Image.open\\('main/images/mila.webp'\\); img.save\\('main/images/mila.png'\\); print\\('OK', img.size, img.mode\\)\")",
+      "Bash(python3 -c \"from PIL import Image; img=Image.open\\('main/images/mila.webp'\\); img.save\\('main/images/mila.png'\\); print\\('OK', img.size, img.mode\\)\")",
+      "Bash(ffmpeg -i main/images/mila.webp main/images/mila.png -y)",
+      "Bash(ls main/images/art* main/images/Art* main/images/artem* main/images/Artem*)",
+      "Bash(python -c 'from PIL import Image; import os:*)",
+      "Bash(python -c ':*)",
+      "Bash(rm bg_bedroom.png bg_menu.png bg_metro.png bg_office.png bg_office_evening.png bg_rooftop.png)",
+      "Bash(ls bg_*.*)",
+      "WebFetch(domain:github.com)"
     ]
   }
 }

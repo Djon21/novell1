@@ -21,6 +21,25 @@ local choice_btn_tops  = {}
 local choice_btn_lefts = {}
 local bg_nodes         = {}
 
+-- Портреты персонажей
+local portraits           = {}   -- { ["Мила"] = node, ... }
+local current_portrait    = nil  -- имя текущего видимого портрета
+local PORTRAIT_X          = 120  -- конечная позиция X
+local PORTRAIT_Y          = 120  -- прижат к низу экрана через yanchor=BOTTOM
+local PORTRAIT_Z          = 0.15 -- поверх dialogue_panel (0.1)
+local PORTRAIT_SLIDE_FROM = -150 -- откуда slide-in (за левым краем экрана)
+local PORTRAIT_ANIM_DUR   = 0.25 -- длительность анимации
+
+-- Позиции текста: обычные и сдвинутые (когда портрет виден)
+local TEXT_X_NORMAL       = 260
+local TEXT_X_PORTRAIT     = 280  -- после портрета
+local TEXT_W_NORMAL       = 680
+local TEXT_W_PORTRAIT     = 660
+local TEXT_Y              = 132
+local NAME_X_NORMAL       = 330
+local NAME_X_PORTRAIT     = 330
+local NAME_Y              = 165
+
 local menu_panel, menu_btn_play, menu_btn_continue
 local menu_btn_play_text, menu_btn_continue_text
 local menu_title_glitch_r, menu_title_glitch_b
@@ -72,6 +91,94 @@ local function set_background(bg, bg_image)
     gui.set_color(bg_node, vmath.vector4(bg.r, bg.g, bg.b, 1))
 end
 
+-- -------------------------------------------------------
+-- Портреты персонажей (стиль Persona 5)
+-- -------------------------------------------------------
+
+-- Определяет, какой портрет показать для данного имени персонажа
+local function get_portrait_name(character_name)
+    if character_name == "Мила" then return "Мила" end
+    if character_name == "Артём" then return "Артём" end
+    return nil
+end
+
+-- Сдвигает текст и имя вправо (под портрет) или возвращает на место
+local function shift_text_for_portrait(has_portrait)
+    local tx = has_portrait and TEXT_X_PORTRAIT or TEXT_X_NORMAL
+    local tw = has_portrait and TEXT_W_PORTRAIT or TEXT_W_NORMAL
+    local nx = has_portrait and NAME_X_PORTRAIT or NAME_X_NORMAL
+
+    gui.set_position(dialogue_text, vmath.vector3(tx, TEXT_Y, 0.3))
+    gui.set_size(dialogue_text, vmath.vector3(tw, 130, 0))
+
+    gui.set_position(name_panel, vmath.vector3(nx, NAME_Y, 0.2))
+    gui.set_position(name_label, vmath.vector3(nx, NAME_Y, 0.3))
+end
+
+-- Показать портрет с анимацией slide-in слева + fade-in
+local function show_portrait(name)
+    if current_portrait == name then return end  -- уже показан
+
+    -- Скрываем предыдущий портрет (мгновенно)
+    if current_portrait and portraits[current_portrait] then
+        gui.cancel_animation(portraits[current_portrait], gui.PROP_POSITION)
+        gui.cancel_animation(portraits[current_portrait], gui.PROP_COLOR)
+        gui.set_enabled(portraits[current_portrait], false)
+    end
+
+    current_portrait = name
+    local node = portraits[name]
+    if not node then return end
+
+    gui.set_enabled(node, true)
+    shift_text_for_portrait(true)
+
+    -- Стартовая позиция: за левым краем экрана, прозрачный
+    gui.set_position(node, vmath.vector3(PORTRAIT_SLIDE_FROM, PORTRAIT_Y, PORTRAIT_Z))
+    gui.set_color(node, vmath.vector4(1, 1, 1, 0))
+
+    -- Анимация: slide-in + fade-in
+    gui.animate(node, gui.PROP_POSITION,
+        vmath.vector3(PORTRAIT_X, PORTRAIT_Y, PORTRAIT_Z),
+        gui.EASING_OUTBACK, PORTRAIT_ANIM_DUR)
+    gui.animate(node, gui.PROP_COLOR,
+        vmath.vector4(1, 1, 1, 1),
+        gui.EASING_OUTQUAD, PORTRAIT_ANIM_DUR)
+end
+
+-- Скрыть портрет с анимацией slide-out + fade-out
+local function hide_portrait()
+    if not current_portrait then return end
+    local node = portraits[current_portrait]
+    current_portrait = nil
+    if not node then return end
+
+    shift_text_for_portrait(false)
+
+    gui.animate(node, gui.PROP_POSITION,
+        vmath.vector3(PORTRAIT_SLIDE_FROM, PORTRAIT_Y, PORTRAIT_Z),
+        gui.EASING_INBACK, PORTRAIT_ANIM_DUR)
+    gui.animate(node, gui.PROP_COLOR,
+        vmath.vector4(1, 1, 1, 0),
+        gui.EASING_INQUAD, PORTRAIT_ANIM_DUR, 0, function()
+            gui.set_enabled(node, false)
+        end)
+end
+
+-- Обновляет портрет по текущему узлу диалога
+local function update_portrait(node)
+    if not node or not node.character or node.character == "" then
+        hide_portrait()
+        return
+    end
+    local portrait_name = get_portrait_name(node.character)
+    if portrait_name then
+        show_portrait(portrait_name)
+    else
+        hide_portrait()
+    end
+end
+
 local function show_dialogue_mode(node)
     gui.set_enabled(choice_panel,   false)
     gui.set_enabled(dialogue_panel, true)
@@ -86,6 +193,8 @@ local function show_dialogue_mode(node)
 
     gui.set_text(dialogue_text, node.text or "")
     gui.set_enabled(continue_hint, true)
+
+    update_portrait(node)
 end
 
 -- Динамически расставляет кнопки по числу вариантов
@@ -132,6 +241,8 @@ local function show_choice_mode(node)
     gui.set_enabled(continue_hint,  false)
     gui.set_enabled(choice_panel,   true)
 
+    hide_portrait()
+
     gui.set_text(choice_question_node, node.question or "")
 
     for i = 1, 4 do
@@ -154,6 +265,8 @@ local function show_end_mode(node)
     gui.set_enabled(dialogue_text,  true)
     gui.set_enabled(name_panel,     false)
     gui.set_enabled(name_label,     false)
+
+    hide_portrait()
     gui.set_text(dialogue_text, node.text or "Конец")
     gui.set_text(continue_hint, "начать заново")
     gui.set_enabled(continue_hint, true)
@@ -185,6 +298,12 @@ local function show_menu()
     gui.set_enabled(continue_hint,  false)
     gui.set_enabled(name_panel,     false)
     gui.set_enabled(name_label,     false)
+
+    -- Скрываем портреты
+    for _, node in pairs(portraits) do
+        gui.set_enabled(node, false)
+    end
+    current_portrait = nil
 
     sm.load()
     local has = sm.has_save()
@@ -236,6 +355,10 @@ function init(self)
     bg_nodes["bg_office_evening"] = gui.get_node("bg_office_evening")
     bg_nodes["bg_rooftop"]        = gui.get_node("bg_rooftop")
     bg_nodes["bg_menu"]           = gui.get_node("bg_menu")
+
+    -- Портреты персонажей
+    portraits["Мила"]    = gui.get_node("portrait_mila")
+    portraits["Артём"]   = gui.get_node("portrait_artem")
 
     dialogue_panel       = gui.get_node("dialogue_panel")
     name_panel           = gui.get_node("name_panel")

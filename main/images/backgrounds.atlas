@@ -1,20 +1,20 @@
 images {
-  image: "/main/images/bg_bedroom.png"
+  image: "/main/images/bg_bedroom.jpg"
 }
 images {
-  image: "/main/images/bg_menu.png"
+  image: "/main/images/bg_menu.jpg"
 }
 images {
-  image: "/main/images/bg_metro.png"
+  image: "/main/images/bg_metro.jpg"
 }
 images {
-  image: "/main/images/bg_office.png"
+  image: "/main/images/bg_office.jpg"
 }
 images {
-  image: "/main/images/bg_office_evening.png"
+  image: "/main/images/bg_office_evening.jpg"
 }
 images {
-  image: "/main/images/bg_rooftop.png"
+  image: "/main/images/bg_rooftop.jpg"
 }
 margin: 0
 extrude_borders: 2

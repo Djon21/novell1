@@ -7,6 +7,10 @@ textures {
   name: "backgrounds"
   texture: "/main/images/backgrounds.atlas"
 }
+textures {
+  name: "characters"
+  texture: "/main/images/characters.atlas"
+}
 nodes {
   position {
     x: 480.0
@@ -38,7 +42,7 @@ nodes {
   type: TYPE_BOX
   texture: "backgrounds/bg_bedroom"
   id: "bg_image"
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_ZOOM
   enabled: false
 }
 nodes {
@@ -54,7 +58,7 @@ nodes {
   type: TYPE_BOX
   texture: "backgrounds/bg_metro"
   id: "bg_metro"
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_ZOOM
   enabled: false
 }
 nodes {
@@ -70,7 +74,7 @@ nodes {
   type: TYPE_BOX
   texture: "backgrounds/bg_office"
   id: "bg_office"
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_ZOOM
   enabled: false
 }
 nodes {
@@ -86,7 +90,7 @@ nodes {
   type: TYPE_BOX
   texture: "backgrounds/bg_office_evening"
   id: "bg_office_evening"
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_ZOOM
   enabled: false
 }
 nodes {
@@ -102,18 +106,54 @@ nodes {
   type: TYPE_BOX
   texture: "backgrounds/bg_rooftop"
   id: "bg_rooftop"
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_ZOOM
   enabled: false
 }
 nodes {
   position {
-    x: 480.0
-    y: 95.0
+    x: 120.0
+    y: 120.0
+    z: 0.15
+  }
+  size {
+    x: 240.0
+    y: 240.0
+  }
+  type: TYPE_BOX
+  texture: "characters/mila_r"
+  id: "portrait_mila"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_BOTTOM
+  adjust_mode: ADJUST_MODE_FIT
+  enabled: false
+}
+nodes {
+  position {
+    x: 120.0
+    y: 120.0
+    z: 0.15
+  }
+  size {
+    x: 240.0
+    y: 240.0
+  }
+  type: TYPE_BOX
+  texture: "characters/artem"
+  id: "portrait_artem"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_BOTTOM
+  adjust_mode: ADJUST_MODE_FIT
+  enabled: false
+}
+nodes {
+  position {
+    x: 600.0
+    y: 80.0
     z: 0.1
   }
   size {
-    x: 960.0
-    y: 190.0
+    x: 720.0
+    y: 160.0
   }
   color {
     x: 0.0
@@ -122,13 +162,14 @@ nodes {
   }
   type: TYPE_BOX
   id: "dialogue_panel"
+  yanchor: YANCHOR_BOTTOM
   adjust_mode: ADJUST_MODE_STRETCH
   alpha: 0.85
 }
 nodes {
   position {
-    x: 125.0
-    y: 192.0
+    x: 330.0
+    y: 165.0
     z: 0.2
   }
   size {
@@ -142,12 +183,13 @@ nodes {
   }
   type: TYPE_BOX
   id: "name_panel"
+  yanchor: YANCHOR_BOTTOM
   adjust_mode: ADJUST_MODE_STRETCH
 }
 nodes {
   position {
-    x: 125.0
-    y: 192.0
+    x: 330.0
+    y: 165.0
     z: 0.3
   }
   size {
@@ -157,25 +199,27 @@ nodes {
   text: "\320\237\320\265\321\200\321\201\320\276\320\275\320\260\320\266"
   font: "main"
   id: "name_label"
+  yanchor: YANCHOR_BOTTOM
   adjust_mode: ADJUST_MODE_STRETCH
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 40.0
-    y: 148.0
+    x: 260.0
+    y: 132.0
     z: 0.3
   }
   size {
-    x: 880.0
-    y: 150.0
+    x: 680.0
+    y: 130.0
   }
   type: TYPE_TEXT
   text: "..."
   font: "main"
   id: "dialogue_text"
   pivot: PIVOT_NW
+  yanchor: YANCHOR_BOTTOM
   adjust_mode: ADJUST_MODE_STRETCH
   line_break: true
   outline_alpha: 0.0
@@ -184,8 +228,8 @@ nodes {
 }
 nodes {
   position {
-    x: 920.0
-    y: 18.0
+    x: 880.0
+    y: 15.0
     z: 0.3
   }
   size {
@@ -198,7 +242,9 @@ nodes {
   text: ">>>"
   font: "main"
   id: "continue_hint"
-  adjust_mode: ADJUST_MODE_STRETCH
+  xanchor: XANCHOR_RIGHT
+  yanchor: YANCHOR_BOTTOM
+  adjust_mode: ADJUST_MODE_FIT
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
@@ -219,7 +265,7 @@ nodes {
   }
   type: TYPE_BOX
   id: "choice_panel"
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   alpha: 0.92
   enabled: false
 }
@@ -607,7 +653,7 @@ nodes {
   type: TYPE_BOX
   texture: "backgrounds/bg_menu"
   id: "bg_menu"
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_ZOOM
   enabled: false
 }
 nodes {
