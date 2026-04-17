@@ -1,6 +1,8 @@
 -- save_manager.lua
 -- Сохранение/загрузка прогресса игры между сессиями.
--- Хранит: пол ГГ, флаги TRUST/INSIGHT/SYNC, главу, текущую позицию.
+-- Хранит: пол ГГ, номер главы, состояние ink-истории.
+-- Флаги драмы (TRUST/INSIGHT/SYNC) живут внутри ink_state как VAR'ы —
+-- дублировать их здесь не нужно.
 -- Использует sys.save() — на HTML5 пишет в localStorage (работает на Яндекс Играх).
 
 local M = {}
@@ -11,11 +13,9 @@ local _data = nil
 
 local function defaults()
     return {
-        mc_gender  = nil,
-        flags      = { TRUST = 0, INSIGHT = 0, SYNC = 0 },
-        chapter    = 1,
-        scene_id   = nil,   -- id текущей сцены (строка-ключ)
-        node_index = 1,     -- индекс текущего узла
+        mc_gender = nil,
+        chapter   = 1,
+        ink_state = nil,   -- { ink = story.get_state(), index = paragraph_idx }
     }
 end
 
@@ -25,11 +25,10 @@ end
 
 function M.load()
     local loaded = sys.load(SAVE_PATH)
-    if loaded and loaded.flags then
+    -- sys.load возвращает пустую таблицу, если файла нет.
+    -- Наличие mc_gender — простейший маркер «это наше сохранение».
+    if loaded and next(loaded) ~= nil then
         _data = loaded
-        -- Докидываем поля для совместимости со старыми сохранениями
-        if _data.scene_id   == nil then _data.scene_id   = nil end
-        if _data.node_index == nil then _data.node_index = 1   end
     else
         _data = defaults()
     end
@@ -47,25 +46,26 @@ function M.new_game()
 end
 
 -- -------------------------------------------------------
--- Прогресс (сцена + узел)
--- -------------------------------------------------------
-
 -- Есть ли сохранение для продолжения
+-- -------------------------------------------------------
 function M.has_save()
-    return _data ~= nil
-       and _data.mc_gender ~= nil
-       and _data.scene_id  ~= nil
+    if not _data then return false end
+    if _data.mc_gender == nil then return false end
+    return _data.ink_state ~= nil
 end
 
--- Сохранить текущую позицию
-function M.save_progress(scene_id, node_index)
-    _data.scene_id   = scene_id
-    _data.node_index = node_index
+-- -------------------------------------------------------
+-- Ink story state
+-- -------------------------------------------------------
+
+function M.set_ink_state(state)
+    _data.ink_state = state
     M.save()
 end
 
-function M.get_saved_scene() return _data and _data.scene_id          end
-function M.get_saved_node()  return _data and (_data.node_index or 1) end
+function M.get_ink_state()
+    return _data and _data.ink_state
+end
 
 -- -------------------------------------------------------
 -- Пол персонажа
@@ -87,23 +87,6 @@ end
 function M.get_npc_name()
     -- Выбрал Артёма → НПС Мила, выбрал Милу → НПС Артём
     return _data.mc_gender == "female" and "Артём" or "Мила"
-end
-
--- -------------------------------------------------------
--- Флаги
--- -------------------------------------------------------
-
-function M.get_flags()
-    return _data.flags
-end
-
-function M.apply_flags(delta)
-    for key, val in pairs(delta) do
-        _data.flags[key] = (_data.flags[key] or 0) + val
-    end
-    M.save()
-    print(string.format("[Save] TRUST=%d  INSIGHT=%d  SYNC=%d",
-        _data.flags.TRUST, _data.flags.INSIGHT, _data.flags.SYNC))
 end
 
 -- -------------------------------------------------------

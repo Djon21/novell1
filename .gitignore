@@ -12,3 +12,13 @@ builtins
 # Defold liveupdate signing keys — приватный ключ никогда не коммитить
 manifest.private.der
 manifest.public.der
+
+# Claude Code — локальные настройки (у каждого разработчика свои)
+.claude/settings.local.json
+
+# inklecate — бинарник Ink-компилятора (~57 MB), не храним в git.
+# Скачать: https://github.com/inkle/ink/releases → inklecate_windows.zip
+# Распаковать в tools/ (рядом с compile_ink.bat/sh).
+tools/inklecate.exe
+tools/ink-engine-runtime.dll
+tools/ink_compiler.dll

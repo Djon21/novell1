@@ -1,9 +1,25 @@
 -- novel_ui.gui_script
 -- Контроллер интерфейса визуальной новеллы.
 
-local dm    = require "main.scripts.dialogue_manager"
-local sm    = require "main.scripts.save_manager"
-local story = require "main.scripts.story_data"
+local dm = require "main.scripts.dialogue_manager_ink"
+local sm = require "main.scripts.save_manager"
+
+-- Путь к скомпилированному .ink. Меняется при переключении главы.
+-- .json лежит в custom_resources=/main/story (см. game.project).
+local STORY_RESOURCE = "/main/story/chapter_01.json"
+
+-- Загружает байты скомпилированного .ink/.json и отдаёт их dialogue_manager.
+-- Возвращает nil + печатает ошибку, если ресурс не найден — UI в этом
+-- случае останется в меню (безопаснее тихого краша).
+local function load_story_bytes()
+    local ok, bytes = pcall(sys.load_resource, STORY_RESOURCE)
+    if not ok or not bytes then
+        print("[novel_ui] ❌ не найден " .. STORY_RESOURCE ..
+              " — проверь custom_resources и tools/compile_ink.bat")
+        return nil
+    end
+    return bytes
+end
 
 -- ВАЖНО: top-level require, БЕЗ pcall/if-обёрток. Defold compiler делает
 -- статический анализ require'ов и включает Lua extension'а в HTML5 бандл
@@ -444,8 +460,10 @@ function on_input(self, action_id, action)
                 -- Вспышка на border при клике
                 gui.animate(menu_btn_play_top_line, gui.PROP_COLOR,
                     vmath.vector4(1.0, 0.85, 1.0, 1), gui.EASING_OUTQUAD, 0.06)
+                local bytes = load_story_bytes()
+                if not bytes then return true end
                 sm.new_game()
-                dm.init(story)
+                dm.init(bytes)
                 start_game()
                 return true
             end
@@ -454,7 +472,9 @@ function on_input(self, action_id, action)
             and gui.pick_node(menu_btn_continue, action.x, action.y) then
                 gui.animate(menu_btn_continue_top_line, gui.PROP_COLOR,
                     vmath.vector4(0.85, 0.65, 1.0, 1), gui.EASING_OUTQUAD, 0.06)
-                dm.load_saved(story)
+                local bytes = load_story_bytes()
+                if not bytes then return true end
+                dm.load_saved(bytes)
                 start_game()
                 return true
             end
