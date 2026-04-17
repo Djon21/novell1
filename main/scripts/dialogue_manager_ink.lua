@@ -38,15 +38,25 @@ local bg               = { r = 0, g = 0, b = 0 }
 local bg_image         = nil
 local current_speaker  = ""        -- имя говорящего (или "" для нарратива)
 
+-- Очередь одноразовых эффектов: { { type="sfx", name=... }, { type="shake", ... }, ... }
+-- UI забирает через M.get_effects() и сразу очищает.
+local pending_effects  = {}
+-- Если true — apply_tags не пушит эффекты в очередь. Нужно при
+-- load_saved replay'е, чтобы не проигрывать sfx/shake от старых параграфов.
+local suppress_effects = false
+
 -- -------------------------------------------------------
 -- Парсинг тегов
 -- Поддерживаемые теги в параграфах:
---   # bg:NAME           — картинка фона (bg_metro, bg_bedroom, ...)
---   # color:R,G,B       — цвет фона под картинкой (0..1)
---   # speaker:NAME      — имя говорящего. Спец-значения:
---                           mc   → подставляется sm.get_mc_name()
---                           npc  → подставляется sm.get_npc_name()
---                           none → очистить (нарратив)
+--   # bg:NAME            — картинка фона (bg_metro, bg_bedroom, ...)
+--   # color:R,G,B        — цвет фона под картинкой (0..1)
+--   # speaker:NAME       — имя говорящего. Спец-значения:
+--                            mc   → подставляется sm.get_mc_name()
+--                            npc  → подставляется sm.get_npc_name()
+--                            none → очистить (нарратив)
+--   # sfx:NAME           — одноразовый звуковой эффект
+--   # shake:INT,DUR      — тряска экрана (интенсивность 0..1, длительность, сек)
+--   # pulse:DUR,R,G,B    — вспышка-оверлей (длительность сек, цвет 0..255)
 -- -------------------------------------------------------
 local function parse_tag(raw)
     if not raw then return nil, nil end
@@ -65,7 +75,8 @@ local function resolve_speaker(value)
     return value   -- литеральное имя
 end
 
--- Применяет теги к текущему состоянию (bg/color/speaker)
+-- Применяет теги к текущему состоянию (bg/color/speaker) и кладёт
+-- одноразовые эффекты (sfx/shake/pulse) в pending_effects.
 local function apply_tags(tags)
     if not tags then return end
     for _, raw in ipairs(tags) do
@@ -79,6 +90,28 @@ local function apply_tags(tags)
             end
         elseif key == "speaker" then
             current_speaker = resolve_speaker(value)
+        elseif key == "sfx" and value and value ~= "" and not suppress_effects then
+            table.insert(pending_effects, { type = "sfx", name = value })
+        elseif key == "shake" and value and not suppress_effects then
+            local i, d = value:match("([%d%.]+)%s*,%s*([%d%.]+)")
+            if i and d then
+                table.insert(pending_effects, {
+                    type = "shake",
+                    intensity = tonumber(i),
+                    duration  = tonumber(d),
+                })
+            end
+        elseif key == "pulse" and value and not suppress_effects then
+            local d, r, g, b = value:match("([%d%.]+)%s*,%s*([%d%.]+)%s*,%s*([%d%.]+)%s*,%s*([%d%.]+)")
+            if d and r and g and b then
+                table.insert(pending_effects, {
+                    type     = "pulse",
+                    duration = tonumber(d),
+                    r = tonumber(r) / 255,
+                    g = tonumber(g) / 255,
+                    b = tonumber(b) / 255,
+                })
+            end
         end
     end
 end
@@ -277,11 +310,13 @@ function M.load_saved(json_bytes)
 
     push_vars_to_ink()
 
-    -- Восстанавливаем ink по истории input'ов. restore() проигрывает
-    -- все выборы/jump'ы/присваивания и возвращает текущую пачку
-    -- параграфов + варианты.
+    -- Восстанавливаем ink по истории input'ов. Во время restore apply_tags
+    -- будет срабатывать на всех параграфах старой пачки — глушим эффекты,
+    -- чтобы не сыпались sfx/shake от прошлых сцен.
+    suppress_effects = true
     local ok, paragraphs, answers = pcall(story.restore, ink_history, false, true)
     if not ok then
+        suppress_effects = false
         print("[DM-Ink] restore failed: " .. tostring(paragraphs) .. " — начинаем сначала")
         M.init(json_bytes)
         return
@@ -303,6 +338,8 @@ function M.load_saved(json_bytes)
         end
         current_index = saved_index
     end
+    suppress_effects = false
+    pending_effects  = {}  -- на всякий случай
 
     -- Синхронизируем лог-флаги (чтобы первое изменение после рестарта
     -- корректно залоггировалось).
@@ -346,6 +383,14 @@ end
 
 function M.get_background()         return bg       end
 function M.get_background_image()   return bg_image end
+
+-- Возвращает и очищает очередь одноразовых эффектов. UI должен вызывать
+-- этот метод после set_background в каждом render()/advance().
+function M.get_effects()
+    local e = pending_effects
+    pending_effects = {}
+    return e
+end
 
 function M.advance()
     -- Dialogue: идём к следующему параграфу

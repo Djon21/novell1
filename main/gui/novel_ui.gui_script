@@ -29,13 +29,22 @@ end
 local yagames = require "yagames.yagames"
 local ysdk_ready = false
 
-local bg_node, dialogue_panel, name_panel, name_label
+local bg_node, bg_sprite, bg_sprite_next, bg_menu_node, pulse_overlay
+local current_bg_image = nil  -- имя текущего активного фона (или nil = none)
+local BG_FADE_DUR      = 0.35
+-- Состояние shake-эффекта (обновляется в update())
+local shake_state      = nil  -- { elapsed, duration, intensity, nodes={n={orig_pos}} }
+-- Нарраторская плашка (терминал + часы) — показывается вместо портрета
+-- в сценах без говорящего (# speaker:none / narration).
+local narrator_panel, narrator_clock, narrator_prompt, narrator_cursor
+local narrator_visible = false
+local cursor_blink_t   = 0
+local dialogue_panel, name_panel, name_label
 local dialogue_text, continue_hint, choice_panel, choice_question_node
 local choice_btns      = {}
 local choice_texts     = {}
 local choice_btn_tops  = {}
 local choice_btn_lefts = {}
-local bg_nodes         = {}
 
 -- Портреты персонажей
 local portraits           = {}   -- { ["Мила"] = node, ... }
@@ -100,11 +109,124 @@ end
 -- Вспомогательные функции — игровой экран
 -- -------------------------------------------------------
 
+-- Переключает фон с плавным crossfade (BG_FADE_DUR). bg_image == nil или
+-- "none" → сцена без картинки (виден только цвет подложки).
+-- Схема: два слоя (bg_sprite + bg_sprite_next, next чуть выше по z).
+-- При смене: на next ставим новую картинку, fade alpha 0→1, после
+-- завершения — копируем результат на sprite, next прячем с alpha=0.
+-- Если имя не меняется — ничего не делаем (render() зовётся часто).
+local function normalize_bg(name)
+    if name == nil or name == "none" then return nil end
+    return name
+end
+
 local function set_background(bg, bg_image)
-    for name, node in pairs(bg_nodes) do
-        gui.set_enabled(node, name == bg_image)
-    end
+    -- Подложка: цвет меняем всегда (дёшево, без анимации).
     gui.set_color(bg_node, vmath.vector4(bg.r, bg.g, bg.b, 1))
+
+    local target = normalize_bg(bg_image)
+    if target == current_bg_image then return end  -- та же картинка — не дёргаем
+
+    -- Отменяем незавершённый фейд, чтобы не было наложения анимаций.
+    gui.cancel_animation(bg_sprite_next, "color.w")
+    gui.cancel_animation(bg_sprite,      "color.w")
+
+    if target == nil then
+        -- Фейд текущего фона в прозрачность.
+        gui.animate(bg_sprite, "color.w", 0, gui.EASING_INOUTQUAD, BG_FADE_DUR, 0,
+            function() gui.set_enabled(bg_sprite, false) end)
+        current_bg_image = nil
+        return
+    end
+
+    local ok, err = pcall(gui.play_flipbook, bg_sprite_next, target)
+    if not ok then
+        print("[novel_ui] ❌ фон не найден в атласе: " .. tostring(target) ..
+              " (" .. tostring(err) .. ")")
+        return
+    end
+
+    -- Стартуем next с alpha=0 и фейдим до 1. После завершения
+    -- переносим картинку на sprite и прячем next.
+    gui.set_enabled(bg_sprite_next, true)
+    local c = gui.get_color(bg_sprite_next); c.w = 0; gui.set_color(bg_sprite_next, c)
+
+    -- Если sprite был выключен (первый показ после none) — включаем с alpha=1,
+    -- чтобы next корректно смешивался поверх пустоты.
+    if not gui.is_enabled(bg_sprite) then
+        gui.set_enabled(bg_sprite, true)
+        local cs = gui.get_color(bg_sprite); cs.w = 1; gui.set_color(bg_sprite, cs)
+    end
+
+    gui.animate(bg_sprite_next, "color.w", 1, gui.EASING_INOUTQUAD, BG_FADE_DUR, 0,
+        function()
+            pcall(gui.play_flipbook, bg_sprite, target)
+            local cs2 = gui.get_color(bg_sprite); cs2.w = 1; gui.set_color(bg_sprite, cs2)
+            gui.set_enabled(bg_sprite, true)
+            local cn = gui.get_color(bg_sprite_next); cn.w = 0; gui.set_color(bg_sprite_next, cn)
+            gui.set_enabled(bg_sprite_next, false)
+        end)
+
+    current_bg_image = target
+end
+
+-- -------------------------------------------------------
+-- Эффекты из ink-тегов: sfx / shake / pulse
+-- -------------------------------------------------------
+
+-- Реестр звуков: имя из `# sfx:NAME` → url sound-компонента.
+-- Пока пусто — когда появятся .sound файлы, регистрируй их здесь, например:
+--   SFX_URLS["heartbeat"] = msg.url("main:/sfx_player#heartbeat")
+-- Если имя отсутствует — печатаем WARN и идём дальше (игра не ломается).
+local SFX_URLS = {}
+
+local function play_sfx(name)
+    local url = SFX_URLS[name]
+    if url then
+        msg.post(url, "play_sound", { delay = 0, gain = 0.6 })
+    else
+        print("[sfx] " .. tostring(name) .. " — звук не подключён (см. SFX_URLS)")
+    end
+end
+
+-- Запускаем тряску: собираем исходные позиции bg-нод, update() каждый
+-- кадр мажет случайный офсет с затуханием. По истечении duration —
+-- возвращаем ноды на место.
+local function start_shake(intensity, duration)
+    if duration <= 0 then return end
+    local nodes = { bg_sprite, bg_sprite_next }
+    local origins = {}
+    for _, n in ipairs(nodes) do
+        origins[n] = gui.get_position(n)
+    end
+    shake_state = {
+        elapsed   = 0,
+        duration  = duration,
+        intensity = intensity,
+        origins   = origins,
+    }
+end
+
+-- Коротая вспышка-оверлей: alpha 0 → 1 (быстро) → 0 (плавно).
+local function pulse_flash(duration, r, g, b)
+    local c = vmath.vector4(r, g, b, 0)
+    gui.set_color(pulse_overlay, c)
+    gui.set_enabled(pulse_overlay, true)
+
+    local up   = duration * 0.3
+    local down = duration * 0.7
+    gui.animate(pulse_overlay, "color.w", 0.6, gui.EASING_OUTQUAD, up, 0, function()
+        gui.animate(pulse_overlay, "color.w", 0, gui.EASING_INQUAD, down, 0, function()
+            gui.set_enabled(pulse_overlay, false)
+        end)
+    end)
+end
+
+local function dispatch_effect(e)
+    if     e.type == "sfx"   then play_sfx(e.name)
+    elseif e.type == "shake" then start_shake(e.intensity or 0.2, e.duration or 0.4)
+    elseif e.type == "pulse" then pulse_flash(e.duration or 0.5, e.r or 1, e.g or 1, e.b or 1)
+    end
 end
 
 -- -------------------------------------------------------
@@ -181,17 +303,52 @@ local function hide_portrait()
         end)
 end
 
+-- Нарраторская плашка: терминал + часы 03:47.
+-- Появляется в сценах без говорящего (# speaker:none) — вместо пустоты
+-- в левом нижнем углу. Всё тематично: курсор терминала (как в wake_intro)
+-- и застывшее «кодовое» время петли.
+local function show_narrator()
+    if narrator_visible then return end
+    narrator_visible = true
+    gui.set_enabled(narrator_panel,  true)
+    gui.set_enabled(narrator_clock,  true)
+    gui.set_enabled(narrator_prompt, true)
+    gui.set_enabled(narrator_cursor, true)
+    -- fade-in
+    for _, n in ipairs({ narrator_panel, narrator_clock, narrator_prompt, narrator_cursor }) do
+        local c = gui.get_color(n); c.w = 0; gui.set_color(n, c)
+    end
+    gui.animate(narrator_panel,  "color.w", 0.75, gui.EASING_OUTQUAD, 0.25)
+    gui.animate(narrator_clock,  "color.w", 1,    gui.EASING_OUTQUAD, 0.25, 0.05)
+    gui.animate(narrator_prompt, "color.w", 1,    gui.EASING_OUTQUAD, 0.25, 0.10)
+    gui.animate(narrator_cursor, "color.w", 1,    gui.EASING_OUTQUAD, 0.25, 0.15)
+end
+
+local function hide_narrator()
+    if not narrator_visible then return end
+    narrator_visible = false
+    local nodes = { narrator_panel, narrator_clock, narrator_prompt, narrator_cursor }
+    for _, n in ipairs(nodes) do
+        gui.animate(n, "color.w", 0, gui.EASING_INQUAD, 0.2, 0, function()
+            gui.set_enabled(n, false)
+        end)
+    end
+end
+
 -- Обновляет портрет по текущему узлу диалога
 local function update_portrait(node)
     if not node or not node.character or node.character == "" then
         hide_portrait()
+        show_narrator()
         return
     end
     local portrait_name = get_portrait_name(node.character)
     if portrait_name then
+        hide_narrator()
         show_portrait(portrait_name)
     else
         hide_portrait()
+        show_narrator()
     end
 end
 
@@ -208,6 +365,7 @@ local function show_dialogue_mode(node)
     end
 
     gui.set_text(dialogue_text, node.text or "")
+    gui.set_text(continue_hint, ">>>")  -- сброс после end-mode ("начать заново")
     gui.set_enabled(continue_hint, true)
 
     update_portrait(node)
@@ -258,6 +416,7 @@ local function show_choice_mode(node)
     gui.set_enabled(choice_panel,   true)
 
     hide_portrait()
+    hide_narrator()
 
     gui.set_text(choice_question_node, node.question or "")
 
@@ -283,6 +442,7 @@ local function show_end_mode(node)
     gui.set_enabled(name_label,     false)
 
     hide_portrait()
+    hide_narrator()
     gui.set_text(dialogue_text, node.text or "Конец")
     gui.set_text(continue_hint, "начать заново")
     gui.set_enabled(continue_hint, true)
@@ -290,6 +450,11 @@ end
 
 local function render()
     set_background(dm.get_background(), dm.get_background_image())
+    -- Диспатчим одноразовые эффекты текущего параграфа (sfx/shake/pulse)
+    local effects = dm.get_effects()
+    if effects then
+        for _, e in ipairs(effects) do dispatch_effect(e) end
+    end
     local node = dm.get_current_node()
     if not node then return end
 
@@ -307,7 +472,10 @@ local function show_menu()
     in_menu       = true
     glitch_active = false
 
-    gui.set_enabled(bg_nodes["bg_menu"], true)
+    gui.set_enabled(bg_menu_node, true)
+    gui.set_enabled(bg_sprite,      false)
+    gui.set_enabled(bg_sprite_next, false)
+    current_bg_image = nil  -- сброс, чтобы при старте игры фон красиво fade-in
     gui.set_enabled(menu_panel,     true)
     gui.set_enabled(dialogue_panel, false)
     gui.set_enabled(choice_panel,   false)
@@ -320,6 +488,13 @@ local function show_menu()
         gui.set_enabled(node, false)
     end
     current_portrait = nil
+
+    -- Скрываем нарраторскую плашку
+    gui.set_enabled(narrator_panel,  false)
+    gui.set_enabled(narrator_clock,  false)
+    gui.set_enabled(narrator_prompt, false)
+    gui.set_enabled(narrator_cursor, false)
+    narrator_visible = false
 
     sm.load()
     local has = sm.has_save()
@@ -354,7 +529,7 @@ end
 local function start_game()
     glitch_active = false
     in_menu       = false
-    gui.set_enabled(bg_nodes["bg_menu"], false)
+    gui.set_enabled(bg_menu_node, false)
     gui.set_enabled(menu_panel, false)
     render()
 end
@@ -364,13 +539,16 @@ end
 -- -------------------------------------------------------
 
 function init(self)
-    bg_node              = gui.get_node("background")
-    bg_nodes["bg_bedroom"]        = gui.get_node("bg_image")
-    bg_nodes["bg_metro"]          = gui.get_node("bg_metro")
-    bg_nodes["bg_office"]         = gui.get_node("bg_office")
-    bg_nodes["bg_office_evening"] = gui.get_node("bg_office_evening")
-    bg_nodes["bg_rooftop"]        = gui.get_node("bg_rooftop")
-    bg_nodes["bg_menu"]           = gui.get_node("bg_menu")
+    bg_node         = gui.get_node("background")
+    bg_sprite       = gui.get_node("bg_image")
+    bg_sprite_next  = gui.get_node("bg_image_next")
+    bg_menu_node    = gui.get_node("bg_menu")
+    pulse_overlay   = gui.get_node("pulse_overlay")
+
+    narrator_panel  = gui.get_node("narrator_panel")
+    narrator_clock  = gui.get_node("narrator_clock")
+    narrator_prompt = gui.get_node("narrator_prompt")
+    narrator_cursor = gui.get_node("narrator_cursor")
 
     -- Портреты персонажей
     portraits["Мила"]    = gui.get_node("portrait_mila")
@@ -429,7 +607,38 @@ function init(self)
 end
 
 function update(self, dt)
+    -- Тряска bg-нод: случайный офсет с линейным затуханием.
+    -- Работает и в меню — на случай, если захочется потрясти меню
+    -- (сейчас не используется, но ничего не ломает).
+    if shake_state then
+        shake_state.elapsed = shake_state.elapsed + dt
+        local t = shake_state.elapsed / shake_state.duration
+        if t >= 1 then
+            for n, op in pairs(shake_state.origins) do
+                gui.set_position(n, op)
+            end
+            shake_state = nil
+        else
+            local amp = shake_state.intensity * 20 * (1 - t)
+            for n, op in pairs(shake_state.origins) do
+                local ox = (math.random() - 0.5) * 2 * amp
+                local oy = (math.random() - 0.5) * 2 * amp
+                gui.set_position(n, vmath.vector3(op.x + ox, op.y + oy, op.z))
+            end
+        end
+    end
+
     if in_menu then return end
+
+    -- Мигание курсора терминала (квадратная волна 2 Гц, как настоящий cursor)
+    if narrator_visible then
+        cursor_blink_t = cursor_blink_t + dt
+        local phase = (cursor_blink_t % 1.0) < 0.5
+        local c = gui.get_color(narrator_cursor)
+        c.w = phase and 1.0 or 0.0
+        gui.set_color(narrator_cursor, c)
+    end
+
     local node = dm.get_current_node()
     if node and node.type == "dialogue" then
         hint_timer = hint_timer + dt * HINT_BLINK_SPEED

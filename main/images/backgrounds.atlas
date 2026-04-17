@@ -2,6 +2,24 @@ images {
   image: "/main/images/bg_bedroom.jpg"
 }
 images {
+  image: "/main/images/bg_bedroom_01.jpg"
+}
+images {
+  image: "/main/images/bg_bedroom_02.jpg"
+}
+images {
+  image: "/main/images/bg_bedroom_03.jpg"
+}
+images {
+  image: "/main/images/bg_apartment.jpg"
+}
+images {
+  image: "/main/images/bg_kitchen.jpg"
+}
+images {
+  image: "/main/images/bg_bathroom.jpg"
+}
+images {
   image: "/main/images/bg_menu.jpg"
 }
 images {
