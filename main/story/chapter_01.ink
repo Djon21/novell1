@@ -12,6 +12,7 @@ VAR INSIGHT = 0
 VAR SYNC    = 0
 VAR coffee_drunk    = false
 VAR phone_active    = false
+VAR spot_phone_after_coffee_seen = false
 VAR can_leave_apt   = false
 VAR morning_choice  = ""
 VAR newspaper_taken = false
@@ -218,6 +219,7 @@ VAR log_marker  = ""
 # speaker:mc
 Или я просто не заметил{mc_gender == "female":а|}.
 
+# flag:spot_phone_after_coffee_seen=true
 # return_to_scene
 -> DONE
 
