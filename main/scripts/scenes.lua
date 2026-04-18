@@ -47,7 +47,7 @@ M.scenes = {
                 icon = "",
                 action = { type = "ink_knot", knot = "leave_apartment" },
                 condition = function(gs)
-                    return gs.get_flag("has_phone") and gs.get_flag("has_coffee")
+                    return gs.get_flag("has_phone") and gs.get_flag("coffee_drunk")
                 end,
             },
         },
@@ -56,19 +56,45 @@ M.scenes = {
     kitchen = {
         bg = "bg_kitchen",
         hotspots = {
+            -- Кофемашина без кружки — первый клик, подскажет искать кружку.
             {
-                id = "coffee_maker",
+                id = "coffee_maker_empty",
                 rect = { x = 155, y = 250, w = 160, h = 155 },
-                label = "Кофеварка",
-                icon = "",
-                action = { type = "ink_knot", knot = "drink_coffee" },
-                condition = function(gs) return not gs.get_flag("has_coffee") end,
+                label = "Кофемашина",
+                -- U+E541 coffee_maker
+                icon = string.char(0xEE, 0x95, 0x81),
+                action = { type = "ink_knot", knot = "use_coffee_machine_no_cup" },
+                visible_when = function(gs)
+                    return not gs.get_flag("has_mug") and not gs.get_flag("coffee_drunk")
+                end,
+            },
+            -- Та же кофемашина, с кружкой — варим кофе.
+            {
+                id = "coffee_maker_brew",
+                rect = { x = 155, y = 250, w = 160, h = 155 },
+                label = "Сварить кофе",
+                icon = string.char(0xEE, 0x95, 0x81),
+                action = { type = "ink_knot", knot = "use_coffee_machine_with_cup" },
+                visible_when = function(gs)
+                    return gs.get_flag("has_mug") and not gs.get_flag("coffee_drunk")
+                end,
+            },
+            -- Ящик с кружкой — виден пока кружку не взяли.
+            {
+                id = "mug_drawer",
+                rect = { x = 420, y = 180, w = 160, h = 140 },
+                label = "Ящик",
+                -- U+E2C7 inventory
+                icon = string.char(0xEE, 0x8B, 0x87),
+                action = { type = "ink_knot", knot = "take_mug" },
+                visible_when = function(gs) return not gs.get_flag("has_mug") end,
             },
             {
                 id = "back_from_kitchen",
                 rect = { x = 0, y = 0, w = 140, h = 640 },
                 label = "Назад",
-                icon = "",
+                -- U+E5C4 arrow_back
+                icon = string.char(0xEE, 0x97, 0x84),
                 action = { type = "goto_scene", scene = "apartment_hub" },
             },
         },
@@ -95,8 +121,9 @@ M.scenes = {
                 image = "mobile",           -- имя в backgrounds.atlas
                 pos   = { x = 385, y = 260 }, -- левый-нижний угол спрайта
                 size  = { w = 52, h = 22 },
+                -- Телефон "материализуется" только после кофе.
                 visible_when = function(gs)
-                    return not gs.get_flag("has_phone")
+                    return gs.get_flag("coffee_drunk") and not gs.get_flag("has_phone")
                 end,
             },
         },
@@ -112,9 +139,12 @@ M.scenes = {
                 id = "phone_on_desk",
                 rect = { x = 400, y = 300, w = 180, h = 160 },
                 label = "Телефон",
-                icon = "",
+                icon = string.char(0xEE, 0xA4, 0x93),  -- U+E913 smartphone
                 action = { type = "ink_knot", knot = "take_phone" },
-                condition = function(gs) return not gs.get_flag("has_phone") end,
+                -- Не видим пока кофе не выпит (phone_obj тоже скрыт).
+                visible_when = function(gs)
+                    return gs.get_flag("coffee_drunk") and not gs.get_flag("has_phone")
+                end,
             },
             {
                 id = "back_from_bedroom",

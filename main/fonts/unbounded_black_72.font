@@ -1,0 +1,8 @@
+material: "/builtins/fonts/font.material"
+font: "/main/fonts/Unbounded-Black.ttf"
+size: 72
+antialias: 1
+alpha: 1.0
+outline_alpha: 1.0
+shadow_alpha: 1.0
+all_chars: true

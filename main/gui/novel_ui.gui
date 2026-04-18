@@ -11,6 +11,30 @@ fonts {
   name: "material_icons"
   font: "/main/fonts/material_icons.font"
 }
+fonts {
+  name: "unbounded_72"
+  font: "/main/fonts/unbounded_black_72.font"
+}
+fonts {
+  name: "jb_mono_14"
+  font: "/main/fonts/jb_mono_14.font"
+}
+fonts {
+  name: "jb_mono_18"
+  font: "/main/fonts/jb_mono_18.font"
+}
+fonts {
+  name: "jb_mono_bold_22"
+  font: "/main/fonts/jb_mono_bold_22.font"
+}
+fonts {
+  name: "jb_mono_stamp"
+  font: "/main/fonts/jb_mono_stamp.font"
+}
+fonts {
+  name: "caveat_28"
+  font: "/main/fonts/caveat_28.font"
+}
 textures {
   name: "backgrounds"
   texture: "/main/images/backgrounds.atlas"
@@ -2506,345 +2530,876 @@ nodes {
   enabled: false
 }
 nodes {
-  position {
-    x: 480.0
-    y: 320.0
-    z: 0.5
-  }
-  size {
-    x: 960.0
-    y: 640.0
-  }
-  color {
-    x: 0.02
-    y: 0.02
-    z: 0.08
-  }
+  position { x: 480.0 y: 320.0 z: 0.500 }
+  size { x: 960.0 y: 640.0 }
+  color { x: 0.0200 y: 0.0200 z: 0.0800 }
   type: TYPE_BOX
   id: "menu_panel"
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.5
+  inherit_alpha: true
+  alpha: 0.000
+  enabled: true
 }
 nodes {
-  position {
-    y: 20.0
-    z: 0.02
-  }
-  size {
-    x: 500.0
-    y: 310.0
-  }
-  color {
-    x: 0.04
-    y: 0.04
-    z: 0.16
-  }
+  position { x: -210.0 y: 0.0 z: 0.000 }
+  size { x: 540.0 y: 640.0 }
+  color { x: 0.0220 y: 0.0200 z: 0.0820 }
   type: TYPE_BOX
-  id: "menu_card"
+  id: "menu_left_shade"
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "menu_panel"
   inherit_alpha: true
-  alpha: 0.92
+  alpha: 0.550
+  enabled: true
 }
 nodes {
-  position {
-    x: -247.0
-    z: 0.05
-  }
-  size {
-    x: 3.0
-    y: 290.0
-  }
-  color {
-    x: 0.55
-    y: 0.38
-  }
+  position { x: 60.0 y: 0.0 z: 0.001 }
+  size { x: 2.0 y: 560.0 }
+  color { x: 0.4900 y: 0.9760 z: 1.0000 }
   type: TYPE_BOX
-  id: "menu_card_left_line"
+  id: "menu_divider_right"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "menu_card"
+  parent: "menu_panel"
   inherit_alpha: true
+  alpha: 0.220
+  enabled: true
 }
 nodes {
-  position {
-    x: 247.0
-    z: 0.05
-  }
-  size {
-    x: 1.0
-    y: 290.0
-  }
-  color {
-    x: 0.35
-    y: 0.25
-    z: 0.7
-  }
-  type: TYPE_BOX
-  id: "menu_card_right_line"
+  position { x: -440.0 y: 295.0 z: 0.020 }
+  size { x: 500.0 y: 40.0 }
+  color { x: 0.7880 y: 0.7530 z: 0.6590 }
+  type: TYPE_TEXT
+  text: "\320\220\320\222\320\236\320\241\320\254 // \320\230\320\242\320\225\320\240\320\220\320\246\320\230\320\257 001  \342\200\242  build 0.4"
+  font: "jb_mono_14"
+  id: "menu_hud_top_left"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "menu_card"
+  pivot: PIVOT_W
+  parent: "menu_panel"
   inherit_alpha: true
-  alpha: 0.4
+  alpha: 0.600
+  outline_alpha: 0.000
+  shadow_alpha: 0.0
+  enabled: true
 }
 nodes {
-  position {
-    x: -3.0
-    y: 128.0
-    z: 0.06
-  }
-  size {
-    x: 460.0
-  }
-  color {
-    x: 0.0
-    y: 0.65
-  }
+  position { x: 440.0 y: 295.0 z: 0.020 }
+  size { x: 500.0 y: 40.0 }
+  color { x: 0.4900 y: 0.9760 z: 1.0000 }
+  type: TYPE_TEXT
+  text: "\320\234\320\236\320\241\320\232\320\222\320\220  \342\200\242  07:12 MSK  \342\200\242  \342\226\210\342\226\210 62%"
+  font: "jb_mono_14"
+  id: "menu_hud_top_right"
+  adjust_mode: ADJUST_MODE_STRETCH
+  pivot: PIVOT_E
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.600
+  outline_alpha: 0.000
+  shadow_alpha: 0.0
+  enabled: true
+}
+nodes {
+  position { x: 0.0 y: -295.0 z: 0.020 }
+  size { x: 920.0 y: 40.0 }
+  color { x: 0.4900 y: 0.9760 z: 1.0000 }
+  type: TYPE_TEXT
+  text: "\320\220\320\235\320\236\320\234\320\220\320\233\320\230\320\257: \302\25303:47\302\273 \320\262 \320\273\320\276\320\263\320\265 \321\201\320\276\320\262\320\277\320\260\320\264\320\260\320\265\321\202.  //  \320\242\321\200\320\260\320\274\320\262\320\260\320\271 \342\204\2267 \320\276\320\277\320\260\320\267\320\264\321\213\320\262\320\260\320\265\321\202 3 \320\274\320\270\320\275.  //  temporal_sync.module \342\200\224 \320\276\320\266\320\270\320\264\320\260\320\265\321\202 \320\272\320\276\320\274\320\277\320\270\320\273\321\217\321\206\320\270\320\270."
+  font: "jb_mono_14"
+  id: "menu_hud_bot"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.450
+  outline_alpha: 0.000
+  shadow_alpha: 0.0
+  enabled: true
+}
+nodes {
+  position { x: -370.0 y: 150.0 z: 0.030 }
+  size { x: 420.0 y: 40.0 }
+  color { x: 0.4900 y: 0.9760 z: 1.0000 }
+  type: TYPE_TEXT
+  text: "\342\200\224  \320\230\320\242\320\225\320\240\320\220\320\246\320\230\320\257 001  \302\267  \320\237\320\236\320\222\320\242\320\236\320\240  \302\267  AVOS OS  \342\200\224"
+  font: "jb_mono_stamp"
+  id: "menu_eyebrow"
+  adjust_mode: ADJUST_MODE_STRETCH
+  pivot: PIVOT_W
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.850
+  outline_alpha: 0.000
+  shadow_alpha: 0.0
+  enabled: true
+}
+nodes {
+  position { x: -373.0 y: 69.0 z: 0.040 }
+  size { x: 650.0 y: 40.0 }
+  color { x: 0.4900 y: 0.9760 z: 1.0000 }
   type: TYPE_TEXT
   text: "\320\220\320\222\320\236\320\241\320\254"
-  font: "main"
+  font: "unbounded_72"
   id: "menu_title_glitch_b"
   adjust_mode: ADJUST_MODE_STRETCH
+  pivot: PIVOT_W
   parent: "menu_panel"
   inherit_alpha: true
-  alpha: 0.3
-  outline_alpha: 0.0
+  alpha: 0.550
+  outline_alpha: 0.000
   shadow_alpha: 0.0
+  enabled: true
 }
 nodes {
-  position {
-    x: 3.0
-    y: 132.0
-    z: 0.07
-  }
-  size {
-    x: 460.0
-  }
-  color {
-    x: 0.9
-    y: 0.15
-    z: 0.28
-  }
+  position { x: -367.0 y: 71.0 z: 0.050 }
+  size { x: 650.0 y: 40.0 }
+  color { x: 1.0000 y: 0.2390 z: 0.4980 }
   type: TYPE_TEXT
   text: "\320\220\320\222\320\236\320\241\320\254"
-  font: "main"
+  font: "unbounded_72"
   id: "menu_title_glitch_r"
   adjust_mode: ADJUST_MODE_STRETCH
+  pivot: PIVOT_W
   parent: "menu_panel"
   inherit_alpha: true
-  alpha: 0.35
-  outline_alpha: 0.0
+  alpha: 0.550
+  outline_alpha: 0.000
   shadow_alpha: 0.0
+  enabled: true
 }
 nodes {
-  position {
-    y: 130.0
-    z: 0.08
-  }
-  size {
-    x: 460.0
-  }
+  position { x: -370.0 y: 70.0 z: 0.060 }
+  size { x: 650.0 y: 40.0 }
+  color { x: 0.9530 y: 0.9250 z: 0.8510 }
   type: TYPE_TEXT
   text: "\320\220\320\222\320\236\320\241\320\254"
-  font: "main"
+  font: "unbounded_72"
   id: "menu_title"
   adjust_mode: ADJUST_MODE_STRETCH
+  pivot: PIVOT_W
   parent: "menu_panel"
   inherit_alpha: true
-  outline_alpha: 0.5
+  alpha: 1.000
+  outline_alpha: 0.500
   shadow_alpha: 0.0
+  enabled: true
 }
 nodes {
-  position {
-    y: 85.0
-    z: 0.09
-  }
-  size {
-    x: 420.0
-    y: 2.0
-  }
-  color {
-    x: 0.55
-    y: 0.38
-  }
+  position { x: 70.0 y: 110.0 z: 0.050 }
+  size { x: 160.0 y: 34.0 }
+  color { x: 0.7840 y: 0.0780 z: 0.1650 }
   type: TYPE_BOX
-  id: "menu_divider"
+  id: "menu_stamp_box"
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "menu_panel"
   inherit_alpha: true
+  alpha: 0.080
+  enabled: true
 }
 nodes {
-  position {
-    y: 66.0
-    z: 0.09
-  }
-  size {
-    x: 460.0
-  }
-  color {
-    x: 0.75
-    y: 0.72
-  }
+  position { x: 70.0 y: 126.0 z: 0.055 }
+  size { x: 160.0 y: 2.0 }
+  color { x: 0.7840 y: 0.0780 z: 0.1650 }
+  type: TYPE_BOX
+  id: "menu_stamp_bt"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.750
+  enabled: true
+}
+nodes {
+  position { x: 70.0 y: 94.0 z: 0.055 }
+  size { x: 160.0 y: 2.0 }
+  color { x: 0.7840 y: 0.0780 z: 0.1650 }
+  type: TYPE_BOX
+  id: "menu_stamp_bb"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.750
+  enabled: true
+}
+nodes {
+  position { x: -9.0 y: 110.0 z: 0.055 }
+  size { x: 2.0 y: 34.0 }
+  color { x: 0.7840 y: 0.0780 z: 0.1650 }
+  type: TYPE_BOX
+  id: "menu_stamp_bl"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.750
+  enabled: true
+}
+nodes {
+  position { x: 149.0 y: 110.0 z: 0.055 }
+  size { x: 2.0 y: 34.0 }
+  color { x: 0.7840 y: 0.0780 z: 0.1650 }
+  type: TYPE_BOX
+  id: "menu_stamp_br"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.750
+  enabled: true
+}
+nodes {
+  position { x: 70.0 y: 110.0 z: 0.060 }
+  size { x: 160.0 y: 40.0 }
+  color { x: 0.7840 y: 0.0780 z: 0.1650 }
   type: TYPE_TEXT
-  text: "\320\270\321\202\320\265\321\200\320\260\321\206\320\270\321\217 001"
-  font: "main"
+  text: "\320\241\320\225\320\232\320\240\320\225\320\242\320\235\320\236 \302\267 \342\204\22617"
+  font: "jb_mono_stamp"
+  id: "menu_stamp_text"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.850
+  outline_alpha: 0.000
+  shadow_alpha: 0.0
+  enabled: true
+}
+nodes {
+  position { x: -370.0 y: 20.0 z: 0.030 }
+  size { x: 620.0 y: 40.0 }
+  color { x: 0.7880 y: 0.7530 z: 0.6590 }
+  type: TYPE_TEXT
+  text: "\320\277\320\275 \302\267 07:12 \320\274\321\201\320\272 \302\267 \320\272\320\276\321\204\320\265 \320\275\320\265 \320\264\320\276\320\277\320\270\321\202 \302\267 \320\277\320\265\321\202\320\273\321\217 \320\262 \320\277\321\200\320\276\321\206\320\265\321\201\321\201\320\265"
+  font: "jb_mono_14"
   id: "menu_subtitle"
   adjust_mode: ADJUST_MODE_STRETCH
+  pivot: PIVOT_W
   parent: "menu_panel"
   inherit_alpha: true
-  outline_alpha: 0.0
+  alpha: 0.750
+  outline_alpha: 0.000
   shadow_alpha: 0.0
+  enabled: true
 }
 nodes {
-  position {
-    y: 10.0
-    z: 0.1
-  }
-  size {
-    x: 420.0
-    y: 54.0
-  }
-  color {
-    x: 0.08
-    y: 0.06
-    z: 0.3
-  }
+  position { x: -370.0 y: -10.0 z: 0.030 }
+  size { x: 420.0 y: 1.0 }
+  color { x: 0.4900 y: 0.9760 z: 1.0000 }
   type: TYPE_BOX
-  id: "menu_btn_play"
+  id: "menu_divider_top"
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.300
+  enabled: true
 }
 nodes {
-  position {
-    z: 0.1
-  }
-  size {
-    x: 380.0
-  }
+  position { x: -160.0 y: -50.0 z: 0.040 }
+  size { x: 420.0 y: 56.0 }
+  color { x: 0.0400 y: 0.0300 z: 0.1400 }
+  type: TYPE_BOX
+  id: "menu_btn_new"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.550
+  enabled: true
+}
+nodes {
+  position { x: -366.0 y: -50.0 z: 0.060 }
+  size { x: 4.0 y: 48.0 }
+  color { x: 0.4900 y: 0.9760 z: 1.0000 }
+  type: TYPE_BOX
+  id: "menu_btn_new_bar"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.850
+  enabled: true
+}
+nodes {
+  position { x: -348.0 y: -50.0 z: 0.070 }
+  size { x: 50.0 y: 40.0 }
+  color { x: 0.4900 y: 0.9760 z: 1.0000 }
   type: TYPE_TEXT
-  text: "\320\230\320\263\321\200\320\260\321\202\321\214"
-  font: "main"
-  id: "menu_btn_play_text"
+  text: "01"
+  font: "jb_mono_stamp"
+  id: "menu_btn_new_num"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "menu_btn_play"
+  pivot: PIVOT_W
+  parent: "menu_panel"
   inherit_alpha: true
-  outline_alpha: 0.0
+  alpha: 0.900
+  outline_alpha: 0.000
   shadow_alpha: 0.0
+  enabled: true
 }
 nodes {
-  position {
-    y: 37.0
-    z: 0.11
-  }
-  size {
-    x: 420.0
-    y: 2.0
-  }
-  color {
-    x: 0.55
-    y: 0.38
-  }
-  type: TYPE_BOX
-  id: "menu_btn_play_top_line"
+  position { x: -306.0 y: -42.0 z: 0.070 }
+  size { x: 340.0 y: 40.0 }
+  color { x: 0.9530 y: 0.9250 z: 0.8510 }
+  type: TYPE_TEXT
+  text: "\320\235\320\236\320\222\320\220\320\257 \320\230\320\242\320\225\320\240\320\220\320\246\320\230\320\257"
+  font: "jb_mono_bold_22"
+  id: "menu_btn_new_text"
   adjust_mode: ADJUST_MODE_STRETCH
+  pivot: PIVOT_W
   parent: "menu_panel"
   inherit_alpha: true
+  alpha: 1.000
+  outline_alpha: 0.000
+  shadow_alpha: 0.0
+  enabled: true
 }
 nodes {
-  position {
-    x: -207.0
-    y: 10.0
-    z: 0.11
-  }
-  size {
-    x: 4.0
-    y: 54.0
-  }
-  color {
-    x: 0.55
-    y: 0.38
-  }
-  type: TYPE_BOX
-  id: "menu_btn_play_left_line"
+  position { x: -306.0 y: -62.0 z: 0.070 }
+  size { x: 340.0 y: 40.0 }
+  color { x: 0.7880 y: 0.7530 z: 0.6590 }
+  type: TYPE_TEXT
+  text: "// New game"
+  font: "jb_mono_14"
+  id: "menu_btn_new_en"
   adjust_mode: ADJUST_MODE_STRETCH
+  pivot: PIVOT_W
   parent: "menu_panel"
   inherit_alpha: true
+  alpha: 0.550
+  outline_alpha: 0.000
+  shadow_alpha: 0.0
+  enabled: true
 }
 nodes {
-  position {
-    y: -60.0
-    z: 0.1
-  }
-  size {
-    x: 420.0
-    y: 54.0
-  }
-  color {
-    x: 0.06
-    y: 0.05
-    z: 0.22
-  }
+  position { x: -160.0 y: -116.0 z: 0.040 }
+  size { x: 420.0 y: 56.0 }
+  color { x: 0.0400 y: 0.0300 z: 0.1400 }
   type: TYPE_BOX
   id: "menu_btn_continue"
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.550
+  enabled: true
 }
 nodes {
-  position {
-    z: 0.1
-  }
-  size {
-    x: 380.0
-  }
+  position { x: -366.0 y: -116.0 z: 0.060 }
+  size { x: 4.0 y: 48.0 }
+  color { x: 1.0000 y: 0.7020 z: 0.2780 }
+  type: TYPE_BOX
+  id: "menu_btn_continue_bar"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.850
+  enabled: true
+}
+nodes {
+  position { x: -348.0 y: -116.0 z: 0.070 }
+  size { x: 50.0 y: 40.0 }
+  color { x: 1.0000 y: 0.7020 z: 0.2780 }
   type: TYPE_TEXT
-  text: "\320\237\321\200\320\276\320\264\320\276\320\273\320\266\320\270\321\202\321\214"
-  font: "main"
+  text: "02"
+  font: "jb_mono_stamp"
+  id: "menu_btn_continue_num"
+  adjust_mode: ADJUST_MODE_STRETCH
+  pivot: PIVOT_W
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.900
+  outline_alpha: 0.000
+  shadow_alpha: 0.0
+  enabled: true
+}
+nodes {
+  position { x: -306.0 y: -108.0 z: 0.070 }
+  size { x: 340.0 y: 40.0 }
+  color { x: 0.9530 y: 0.9250 z: 0.8510 }
+  type: TYPE_TEXT
+  text: "\320\237\320\240\320\236\320\224\320\236\320\233\320\226\320\230\320\242\320\254"
+  font: "jb_mono_bold_22"
   id: "menu_btn_continue_text"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "menu_btn_continue"
+  pivot: PIVOT_W
+  parent: "menu_panel"
   inherit_alpha: true
-  outline_alpha: 0.0
+  alpha: 1.000
+  outline_alpha: 0.000
   shadow_alpha: 0.0
+  enabled: true
 }
 nodes {
-  position {
-    y: -33.0
-    z: 0.11
-  }
-  size {
-    x: 420.0
-    y: 2.0
-  }
-  color {
-    x: 0.4
-    y: 0.28
-    z: 0.82
-  }
+  position { x: -306.0 y: -128.0 z: 0.070 }
+  size { x: 340.0 y: 40.0 }
+  color { x: 0.7880 y: 0.7530 z: 0.6590 }
+  type: TYPE_TEXT
+  text: "// Continue"
+  font: "jb_mono_14"
+  id: "menu_btn_continue_en"
+  adjust_mode: ADJUST_MODE_STRETCH
+  pivot: PIVOT_W
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.550
+  outline_alpha: 0.000
+  shadow_alpha: 0.0
+  enabled: true
+}
+nodes {
+  position { x: -160.0 y: -182.0 z: 0.040 }
+  size { x: 420.0 y: 56.0 }
+  color { x: 0.0400 y: 0.0300 z: 0.1400 }
   type: TYPE_BOX
-  id: "menu_btn_continue_top_line"
+  id: "menu_btn_gallery"
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "menu_panel"
   inherit_alpha: true
+  alpha: 0.550
+  enabled: true
 }
 nodes {
-  position {
-    x: -207.0
-    y: -60.0
-    z: 0.11
-  }
-  size {
-    x: 4.0
-    y: 54.0
-  }
-  color {
-    x: 0.4
-    y: 0.28
-    z: 0.82
-  }
+  position { x: -366.0 y: -182.0 z: 0.060 }
+  size { x: 4.0 y: 48.0 }
+  color { x: 0.4780 y: 0.3610 z: 1.0000 }
   type: TYPE_BOX
-  id: "menu_btn_continue_left_line"
+  id: "menu_btn_gallery_bar"
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "menu_panel"
   inherit_alpha: true
+  alpha: 0.850
+  enabled: true
+}
+nodes {
+  position { x: -348.0 y: -182.0 z: 0.070 }
+  size { x: 50.0 y: 40.0 }
+  color { x: 0.4780 y: 0.3610 z: 1.0000 }
+  type: TYPE_TEXT
+  text: "03"
+  font: "jb_mono_stamp"
+  id: "menu_btn_gallery_num"
+  adjust_mode: ADJUST_MODE_STRETCH
+  pivot: PIVOT_W
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.900
+  outline_alpha: 0.000
+  shadow_alpha: 0.0
+  enabled: true
+}
+nodes {
+  position { x: -306.0 y: -174.0 z: 0.070 }
+  size { x: 340.0 y: 40.0 }
+  color { x: 0.9530 y: 0.9250 z: 0.8510 }
+  type: TYPE_TEXT
+  text: "\320\223\320\220\320\233\320\225\320\240\320\225\320\257 CG"
+  font: "jb_mono_bold_22"
+  id: "menu_btn_gallery_text"
+  adjust_mode: ADJUST_MODE_STRETCH
+  pivot: PIVOT_W
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 1.000
+  outline_alpha: 0.000
+  shadow_alpha: 0.0
+  enabled: true
+}
+nodes {
+  position { x: -306.0 y: -194.0 z: 0.070 }
+  size { x: 340.0 y: 40.0 }
+  color { x: 0.7880 y: 0.7530 z: 0.6590 }
+  type: TYPE_TEXT
+  text: "// Gallery"
+  font: "jb_mono_14"
+  id: "menu_btn_gallery_en"
+  adjust_mode: ADJUST_MODE_STRETCH
+  pivot: PIVOT_W
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.550
+  outline_alpha: 0.000
+  shadow_alpha: 0.0
+  enabled: true
+}
+nodes {
+  position { x: -160.0 y: -248.0 z: 0.040 }
+  size { x: 420.0 y: 56.0 }
+  color { x: 0.0400 y: 0.0300 z: 0.1400 }
+  type: TYPE_BOX
+  id: "menu_btn_awards"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.550
+  enabled: true
+}
+nodes {
+  position { x: -366.0 y: -248.0 z: 0.060 }
+  size { x: 4.0 y: 48.0 }
+  color { x: 1.0000 y: 0.2390 z: 0.4980 }
+  type: TYPE_BOX
+  id: "menu_btn_awards_bar"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.850
+  enabled: true
+}
+nodes {
+  position { x: -348.0 y: -248.0 z: 0.070 }
+  size { x: 50.0 y: 40.0 }
+  color { x: 1.0000 y: 0.2390 z: 0.4980 }
+  type: TYPE_TEXT
+  text: "04"
+  font: "jb_mono_stamp"
+  id: "menu_btn_awards_num"
+  adjust_mode: ADJUST_MODE_STRETCH
+  pivot: PIVOT_W
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.900
+  outline_alpha: 0.000
+  shadow_alpha: 0.0
+  enabled: true
+}
+nodes {
+  position { x: -306.0 y: -240.0 z: 0.070 }
+  size { x: 340.0 y: 40.0 }
+  color { x: 0.9530 y: 0.9250 z: 0.8510 }
+  type: TYPE_TEXT
+  text: "\320\224\320\236\320\241\320\242\320\230\320\226\320\225\320\235\320\230\320\257"
+  font: "jb_mono_bold_22"
+  id: "menu_btn_awards_text"
+  adjust_mode: ADJUST_MODE_STRETCH
+  pivot: PIVOT_W
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 1.000
+  outline_alpha: 0.000
+  shadow_alpha: 0.0
+  enabled: true
+}
+nodes {
+  position { x: -306.0 y: -260.0 z: 0.070 }
+  size { x: 340.0 y: 40.0 }
+  color { x: 0.7880 y: 0.7530 z: 0.6590 }
+  type: TYPE_TEXT
+  text: "// Awards"
+  font: "jb_mono_14"
+  id: "menu_btn_awards_en"
+  adjust_mode: ADJUST_MODE_STRETCH
+  pivot: PIVOT_W
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.550
+  outline_alpha: 0.000
+  shadow_alpha: 0.0
+  enabled: true
+}
+nodes {
+  position { x: 320.0 y: 0.0 z: 0.040 }
+  size { x: 260.0 y: 360.0 }
+  color { x: 0.0400 y: 0.0300 z: 0.1400 }
+  type: TYPE_BOX
+  id: "menu_dossier_bg"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.720
+  enabled: true
+}
+nodes {
+  position { x: 320.0 y: 180.0 z: 0.045 }
+  size { x: 260.0 y: 1.0 }
+  color { x: 0.4900 y: 0.9760 z: 1.0000 }
+  type: TYPE_BOX
+  id: "menu_dossier_bt"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.450
+  enabled: true
+}
+nodes {
+  position { x: 320.0 y: -180.0 z: 0.045 }
+  size { x: 260.0 y: 1.0 }
+  color { x: 0.4900 y: 0.9760 z: 1.0000 }
+  type: TYPE_BOX
+  id: "menu_dossier_bb"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.250
+  enabled: true
+}
+nodes {
+  position { x: 190.0 y: 0.0 z: 0.045 }
+  size { x: 1.0 y: 360.0 }
+  color { x: 0.4900 y: 0.9760 z: 1.0000 }
+  type: TYPE_BOX
+  id: "menu_dossier_bl"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.300
+  enabled: true
+}
+nodes {
+  position { x: 450.0 y: 0.0 z: 0.045 }
+  size { x: 1.0 y: 360.0 }
+  color { x: 0.4900 y: 0.9760 z: 1.0000 }
+  type: TYPE_BOX
+  id: "menu_dossier_br"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.300
+  enabled: true
+}
+nodes {
+  position { x: 204.0 y: 150.0 z: 0.060 }
+  size { x: 240.0 y: 40.0 }
+  color { x: 0.4900 y: 0.9760 z: 1.0000 }
+  type: TYPE_TEXT
+  text: "\342\200\224 \320\224\320\236\320\241\320\254\320\225 // \320\232.\320\220\320\222\320\236\320\241\320\254\320\225\320\222 \342\200\224"
+  font: "jb_mono_stamp"
+  id: "menu_dossier_eyebrow"
+  adjust_mode: ADJUST_MODE_STRETCH
+  pivot: PIVOT_W
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.800
+  outline_alpha: 0.000
+  shadow_alpha: 0.0
+  enabled: true
+}
+nodes {
+  position { x: 204.0 y: 110.0 z: 0.060 }
+  size { x: 110.0 y: 40.0 }
+  color { x: 0.7880 y: 0.7530 z: 0.6590 }
+  type: TYPE_TEXT
+  text: "\320\237\320\225\320\242\320\233\320\257:"
+  font: "jb_mono_stamp"
+  id: "menu_dossier_label_0"
+  adjust_mode: ADJUST_MODE_STRETCH
+  pivot: PIVOT_W
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.650
+  outline_alpha: 0.000
+  shadow_alpha: 0.0
+  enabled: true
+}
+nodes {
+  position { x: 436.0 y: 110.0 z: 0.060 }
+  size { x: 240.0 y: 40.0 }
+  color { x: 1.0000 y: 0.7020 z: 0.2780 }
+  type: TYPE_TEXT
+  text: "017"
+  font: "jb_mono_14"
+  id: "menu_dossier_value_0"
+  adjust_mode: ADJUST_MODE_STRETCH
+  pivot: PIVOT_E
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.950
+  outline_alpha: 0.000
+  shadow_alpha: 0.0
+  enabled: true
+}
+nodes {
+  position { x: 204.0 y: 76.0 z: 0.060 }
+  size { x: 110.0 y: 40.0 }
+  color { x: 0.7880 y: 0.7530 z: 0.6590 }
+  type: TYPE_TEXT
+  text: "\320\241\320\246\320\225\320\235\320\220:"
+  font: "jb_mono_stamp"
+  id: "menu_dossier_label_1"
+  adjust_mode: ADJUST_MODE_STRETCH
+  pivot: PIVOT_W
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.650
+  outline_alpha: 0.000
+  shadow_alpha: 0.0
+  enabled: true
+}
+nodes {
+  position { x: 436.0 y: 76.0 z: 0.060 }
+  size { x: 240.0 y: 40.0 }
+  color { x: 0.9530 y: 0.9250 z: 0.8510 }
+  type: TYPE_TEXT
+  text: "\320\241\320\237\320\220\320\233\320\254\320\235\320\257"
+  font: "jb_mono_14"
+  id: "menu_dossier_value_1"
+  adjust_mode: ADJUST_MODE_STRETCH
+  pivot: PIVOT_E
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.950
+  outline_alpha: 0.000
+  shadow_alpha: 0.0
+  enabled: true
+}
+nodes {
+  position { x: 204.0 y: 42.0 z: 0.060 }
+  size { x: 110.0 y: 40.0 }
+  color { x: 0.7880 y: 0.7530 z: 0.6590 }
+  type: TYPE_TEXT
+  text: "\320\222\320\240\320\225\320\234\320\257:"
+  font: "jb_mono_stamp"
+  id: "menu_dossier_label_2"
+  adjust_mode: ADJUST_MODE_STRETCH
+  pivot: PIVOT_W
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.650
+  outline_alpha: 0.000
+  shadow_alpha: 0.0
+  enabled: true
+}
+nodes {
+  position { x: 436.0 y: 42.0 z: 0.060 }
+  size { x: 240.0 y: 40.0 }
+  color { x: 0.9530 y: 0.9250 z: 0.8510 }
+  type: TYPE_TEXT
+  text: "07:12 \320\234\320\241\320\232"
+  font: "jb_mono_14"
+  id: "menu_dossier_value_2"
+  adjust_mode: ADJUST_MODE_STRETCH
+  pivot: PIVOT_E
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.950
+  outline_alpha: 0.000
+  shadow_alpha: 0.0
+  enabled: true
+}
+nodes {
+  position { x: 204.0 y: 8.0 z: 0.060 }
+  size { x: 110.0 y: 40.0 }
+  color { x: 0.7880 y: 0.7530 z: 0.6590 }
+  type: TYPE_TEXT
+  text: "\320\237\320\240\320\236\320\223\320\240\320\225\320\241\320\241:"
+  font: "jb_mono_stamp"
+  id: "menu_dossier_label_3"
+  adjust_mode: ADJUST_MODE_STRETCH
+  pivot: PIVOT_W
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.650
+  outline_alpha: 0.000
+  shadow_alpha: 0.0
+  enabled: true
+}
+nodes {
+  position { x: 436.0 y: 8.0 z: 0.060 }
+  size { x: 240.0 y: 40.0 }
+  color { x: 0.4900 y: 0.9760 z: 1.0000 }
+  type: TYPE_TEXT
+  text: "7%  \342\226\223\342\226\221\342\226\221\342\226\221\342\226\221\342\226\221\342\226\221\342\226\221\342\226\221"
+  font: "jb_mono_14"
+  id: "menu_dossier_value_3"
+  adjust_mode: ADJUST_MODE_STRETCH
+  pivot: PIVOT_E
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.950
+  outline_alpha: 0.000
+  shadow_alpha: 0.0
+  enabled: true
+}
+nodes {
+  position { x: 204.0 y: -26.0 z: 0.060 }
+  size { x: 110.0 y: 40.0 }
+  color { x: 0.7880 y: 0.7530 z: 0.6590 }
+  type: TYPE_TEXT
+  text: "\320\237\320\236\320\241\320\233.\320\224\320\225\320\231\320\241\320\242.:"
+  font: "jb_mono_stamp"
+  id: "menu_dossier_label_4"
+  adjust_mode: ADJUST_MODE_STRETCH
+  pivot: PIVOT_W
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.650
+  outline_alpha: 0.000
+  shadow_alpha: 0.0
+  enabled: true
+}
+nodes {
+  position { x: 436.0 y: -26.0 z: 0.060 }
+  size { x: 240.0 y: 40.0 }
+  color { x: 0.7880 y: 0.7530 z: 0.6590 }
+  type: TYPE_TEXT
+  text: "\320\277\321\200\320\276\321\201\320\275\321\203\320\273\321\201\321\217"
+  font: "jb_mono_14"
+  id: "menu_dossier_value_4"
+  adjust_mode: ADJUST_MODE_STRETCH
+  pivot: PIVOT_E
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.950
+  outline_alpha: 0.000
+  shadow_alpha: 0.0
+  enabled: true
+}
+nodes {
+  position { x: 204.0 y: -60.0 z: 0.060 }
+  size { x: 110.0 y: 40.0 }
+  color { x: 0.7880 y: 0.7530 z: 0.6590 }
+  type: TYPE_TEXT
+  text: "\320\220\320\235\320\236\320\234\320\220\320\233\320\230\320\230:"
+  font: "jb_mono_stamp"
+  id: "menu_dossier_label_5"
+  adjust_mode: ADJUST_MODE_STRETCH
+  pivot: PIVOT_W
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.650
+  outline_alpha: 0.000
+  shadow_alpha: 0.0
+  enabled: true
+}
+nodes {
+  position { x: 436.0 y: -60.0 z: 0.060 }
+  size { x: 240.0 y: 40.0 }
+  color { x: 1.0000 y: 0.2390 z: 0.4980 }
+  type: TYPE_TEXT
+  text: "3 / 12"
+  font: "jb_mono_14"
+  id: "menu_dossier_value_5"
+  adjust_mode: ADJUST_MODE_STRETCH
+  pivot: PIVOT_E
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.950
+  outline_alpha: 0.000
+  shadow_alpha: 0.0
+  enabled: true
+}
+nodes {
+  position { x: 320.0 y: -145.0 z: 0.060 }
+  size { x: 240.0 y: 40.0 }
+  color { x: 1.0000 y: 0.7020 z: 0.2780 }
+  type: TYPE_TEXT
+  text: "\302\253\320\275\320\265 \320\267\320\260\320\261\321\213\321\202\321\214 \320\277\321\200\320\276 \320\272\320\276\321\204\320\265\302\273"
+  font: "caveat_28"
+  id: "menu_dossier_hand"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.900
+  outline_alpha: 0.000
+  shadow_alpha: 0.0
+  enabled: true
+}
+nodes {
+  position { x: -370.0 y: -330.0 z: 0.050 }
+  size { x: 420.0 y: 40.0 }
+  color { x: 0.7880 y: 0.7530 z: 0.6590 }
+  type: TYPE_TEXT
+  text: "\342\206\221 \342\206\223  \320\262\321\213\320\261\320\276\321\200   \342\200\242   ENTER  \320\277\320\276\320\264\321\202\320\262\320\265\321\200\320\264\320\270\321\202\321\214   \342\200\242   ESC  \320\275\320\260\320\267\320\260\320\264"
+  font: "jb_mono_14"
+  id: "menu_hint"
+  adjust_mode: ADJUST_MODE_STRETCH
+  pivot: PIVOT_W
+  parent: "menu_panel"
+  inherit_alpha: true
+  alpha: 0.450
+  outline_alpha: 0.000
+  shadow_alpha: 0.0
+  enabled: true
 }
 nodes {
   position {

@@ -322,6 +322,19 @@ local function consume_continue(paragraphs, answers)
     elseif pending_question then
         apply_tags(pending_question.tags)
     end
+
+    -- Если после continue/choose ни параграфов, ни вариантов не осталось
+    -- (тело выбора = только висячий тег + -> DONE, напр. `# return_to_scene`
+    -- в phone_tasks), нормальный advance() не вызовется и deferred-команды
+    -- так и останутся лежать. Переливаем их в pending прямо сейчас, чтобы
+    -- ближайший render() подхватил scene_controller.enter/return и не
+    -- проскочил в show_end_mode.
+    if finished and #deferred_commands > 0 then
+        for _, cmd in ipairs(deferred_commands) do
+            table.insert(pending_commands, cmd)
+        end
+        deferred_commands = {}
+    end
 end
 
 -- Обёртка: первый вызов continue() без аргумента — после choice с индексом

@@ -33,8 +33,16 @@ local function visible_hotspots()
     if not _scene_data then return {} end
     local list = {}
     for _, h in ipairs(_scene_data.hotspots) do
-        local locked = h.condition and not h.condition(gs) or false
-        table.insert(list, { ref = h, locked = locked })
+        -- visible_when(gs)→false полностью прячет hotspot (нет даже тусклого).
+        -- Отличается от condition: condition делает hotspot «locked» (видимым,
+        -- но некликабельным). Используй visible_when когда hotspot'ы накладываются
+        -- друг на друга (например, кофемашина без кружки vs с кружкой).
+        local visible = true
+        if h.visible_when then visible = h.visible_when(gs) end
+        if visible then
+            local locked = h.condition and not h.condition(gs) or false
+            table.insert(list, { ref = h, locked = locked })
+        end
     end
     return list
 end
