@@ -12,7 +12,6 @@ VAR INSIGHT = 0
 VAR SYNC    = 0
 VAR coffee_drunk    = false
 VAR phone_active    = false
-VAR phone_seen_after_coffee = false
 VAR can_leave_apt   = false
 VAR morning_choice  = ""
 VAR newspaper_taken = false
@@ -165,7 +164,6 @@ VAR log_marker  = ""
 Забираю с собой.
 
 # flag:has_mug=true
-# flag:tutorial_inventory_open=true
 # return_to_scene
 -> DONE
 
@@ -220,7 +218,6 @@ VAR log_marker  = ""
 # speaker:mc
 Или я просто не заметил{mc_gender == "female":а|}.
 
-~ phone_seen_after_coffee = true
 # return_to_scene
 -> DONE
 
@@ -233,7 +230,6 @@ VAR log_marker  = ""
 
 ~ TRUST = TRUST + 1
 # flag:has_phone=true
-# flag:tutorial_phone_open=true
 -> open_phone
 
 === open_phone
@@ -906,3 +902,12 @@ AUTHOR: {mc_name}@next_iteration
 === phone_close
 # phone:close
 -> DONE
+
+=== phone_stub_soon ===
+# bg:bg_phone # speaker:none
+Эта часть приложения пока недоступна.
+# speaker:mc
+Скоро. Но не сегодня.
+* [Назад]
+    # return_to_scene
+    -> DONE
