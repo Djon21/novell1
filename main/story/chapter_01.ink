@@ -851,11 +851,11 @@ AUTHOR: {mc_name}@next_iteration
 Сообщения. Одна активная ветка — от Ани.
 # speaker:mc
 Три строки. Все — про «PATCH temporal_sync.module».
-* [Открыть диалог с Аней]
++ [Открыть диалог с Аней]
     # flag:sms_anya_read=true
     -> anya_chat
-* [Назад]
-    # return_to_scene
++ [Назад]
+    # goto_scene:phone_home
     -> DONE
 
 === anya_chat
@@ -866,8 +866,8 @@ AUTHOR: {mc_name}@next_iteration
 [09:14] Аня: Ты ведь чувствуешь, что с этим файлом что-то не так?
 # speaker:mc
 Три одинаковых строки. И один вопрос в конце. Ответить пока нечем — надо сначала увидеть модуль вживую.
-* [Закрыть диалог]
-    # return_to_scene
++ [Закрыть диалог]
+    # goto_scene:phone_home
     -> DONE
 
 === phone_tasks
@@ -877,8 +877,8 @@ AUTHOR: {mc_name}@next_iteration
 — Ответить Ане.
 — Добраться до офиса: квартира → метро → «Технопарк».
 — PATCH temporal_sync.module. Без описания. Как обычно.
-* [Назад]
-    # return_to_scene
++ [Назад]
+    # goto_scene:phone_home
     -> DONE
 
 === phone_notes
@@ -886,8 +886,8 @@ AUTHOR: {mc_name}@next_iteration
 Заметки.
 # speaker:mc
 Пусто. Не веду. Если записывать всё, что в голову лезет в последние дни, — быстро закончится память и терпение.
-* [Назад]
-    # return_to_scene
++ [Назад]
+    # goto_scene:phone_home
     -> DONE
 
 === phone_contacts
@@ -897,8 +897,8 @@ AUTHOR: {mc_name}@next_iteration
 Аня — коллега. Сидит через два стола.
 {npc_name} — тоже в команде. Номер есть, но звонить не принято.
 «Авось / System» — служебный контакт. Пишет только патчи.
-* [Назад]
-    # return_to_scene
++ [Назад]
+    # goto_scene:phone_home
     -> DONE
 
 === phone_close
@@ -910,6 +910,6 @@ AUTHOR: {mc_name}@next_iteration
 Эта часть приложения пока недоступна.
 # speaker:mc
 Скоро. Но не сегодня.
-* [Назад]
-    # phone:close
++ [Назад]
+    # goto_scene:phone_home
     -> DONE
