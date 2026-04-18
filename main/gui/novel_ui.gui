@@ -3,6 +3,14 @@ fonts {
   name: "main"
   font: "/main/fonts/main.font"
 }
+fonts {
+  name: "icons"
+  font: "/main/fonts/icons.font"
+}
+fonts {
+  name: "material_icons"
+  font: "/main/fonts/material_icons.font"
+}
 textures {
   name: "backgrounds"
   texture: "/main/images/backgrounds.atlas"
@@ -78,6 +86,1782 @@ nodes {
   alpha: 0.0
   enabled: false
 }
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.05
+  }
+  size {
+    x: 100.0
+    y: 100.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/mobile"
+  id: "scene_obj_1"
+  adjust_mode: ADJUST_MODE_ZOOM
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.05
+  }
+  size {
+    x: 100.0
+    y: 100.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/mobile"
+  id: "scene_obj_2"
+  adjust_mode: ADJUST_MODE_ZOOM
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.05
+  }
+  size {
+    x: 100.0
+    y: 100.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/mobile"
+  id: "scene_obj_3"
+  adjust_mode: ADJUST_MODE_ZOOM
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.05
+  }
+  size {
+    x: 100.0
+    y: 100.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/mobile"
+  id: "scene_obj_4"
+  adjust_mode: ADJUST_MODE_ZOOM
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.08
+  }
+  size {
+    x: 200.0
+    y: 200.0
+  }
+  color {
+    x: 0.5019608
+    y: 0.0
+    z: 0.5019608
+  }
+  type: TYPE_BOX
+  id: "hotspot_1"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.15
+  enabled: false
+}
+nodes {
+  position {
+    z: 0.005
+  }
+  size {
+    x: 180.0
+    y: 40.0
+  }
+  type: TYPE_TEXT
+  text: "label"
+  font: "main"
+  id: "hotspot_label_1"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "hotspot_1"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.068
+  }
+  size {
+    x: 96.0
+    y: 96.0
+  }
+  color {
+    x: 0.06
+    y: 0.06
+    z: 0.10
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_circle"
+  id: "hotspot_circle_1"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.35
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.067
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_ring"
+  id: "hotspot_ring_1"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.90
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.066
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "hotspot_orbit_1"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.0
+  enabled: false
+}
+nodes {
+  position {
+    x: 72.00
+    y: 0.00
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_1_1"
+  parent: "hotspot_orbit_1"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+nodes {
+  position {
+    x: 36.00
+    y: 62.35
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_1_2"
+  parent: "hotspot_orbit_1"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+nodes {
+  position {
+    x: -36.00
+    y: 62.35
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_1_3"
+  parent: "hotspot_orbit_1"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+nodes {
+  position {
+    x: -72.00
+    y: 0.00
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_1_4"
+  parent: "hotspot_orbit_1"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+nodes {
+  position {
+    x: -36.00
+    y: -62.35
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_1_5"
+  parent: "hotspot_orbit_1"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+nodes {
+  position {
+    x: 36.00
+    y: -62.35
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_1_6"
+  parent: "hotspot_orbit_1"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.07
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "material_icons"
+  id: "hotspot_icon_1"
+  outline {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  shadow {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.9
+  }
+  adjust_mode: ADJUST_MODE_ZOOM
+  outline_alpha: 1.0
+  shadow_alpha: 0.9
+  enabled: false
+}
+
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.08
+  }
+  size {
+    x: 200.0
+    y: 200.0
+  }
+  color {
+    y: 0.0
+  }
+  type: TYPE_BOX
+  id: "hotspot_2"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.15
+  enabled: false
+}
+nodes {
+  position {
+    z: 0.005
+  }
+  size {
+    x: 180.0
+    y: 40.0
+  }
+  type: TYPE_TEXT
+  text: "label"
+  font: "main"
+  id: "hotspot_label_2"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "hotspot_2"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.068
+  }
+  size {
+    x: 96.0
+    y: 96.0
+  }
+  color {
+    x: 0.06
+    y: 0.06
+    z: 0.10
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_circle"
+  id: "hotspot_circle_2"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.35
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.067
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_ring"
+  id: "hotspot_ring_2"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.90
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.066
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "hotspot_orbit_2"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.0
+  enabled: false
+}
+nodes {
+  position {
+    x: 72.00
+    y: 0.00
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_2_1"
+  parent: "hotspot_orbit_2"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+nodes {
+  position {
+    x: 36.00
+    y: 62.35
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_2_2"
+  parent: "hotspot_orbit_2"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+nodes {
+  position {
+    x: -36.00
+    y: 62.35
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_2_3"
+  parent: "hotspot_orbit_2"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+nodes {
+  position {
+    x: -72.00
+    y: 0.00
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_2_4"
+  parent: "hotspot_orbit_2"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+nodes {
+  position {
+    x: -36.00
+    y: -62.35
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_2_5"
+  parent: "hotspot_orbit_2"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+nodes {
+  position {
+    x: 36.00
+    y: -62.35
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_2_6"
+  parent: "hotspot_orbit_2"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.07
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "material_icons"
+  id: "hotspot_icon_2"
+  outline {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  shadow {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.9
+  }
+  adjust_mode: ADJUST_MODE_ZOOM
+  outline_alpha: 1.0
+  shadow_alpha: 0.9
+  enabled: false
+}
+
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.08
+  }
+  size {
+    x: 200.0
+    y: 200.0
+  }
+  color {
+    y: 0.0
+  }
+  type: TYPE_BOX
+  id: "hotspot_3"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.15
+  enabled: false
+}
+nodes {
+  position {
+    z: 0.005
+  }
+  size {
+    x: 180.0
+    y: 40.0
+  }
+  type: TYPE_TEXT
+  text: "label"
+  font: "main"
+  id: "hotspot_label_3"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "hotspot_3"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.068
+  }
+  size {
+    x: 96.0
+    y: 96.0
+  }
+  color {
+    x: 0.06
+    y: 0.06
+    z: 0.10
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_circle"
+  id: "hotspot_circle_3"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.35
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.067
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_ring"
+  id: "hotspot_ring_3"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.90
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.066
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "hotspot_orbit_3"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.0
+  enabled: false
+}
+nodes {
+  position {
+    x: 72.00
+    y: 0.00
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_3_1"
+  parent: "hotspot_orbit_3"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+nodes {
+  position {
+    x: 36.00
+    y: 62.35
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_3_2"
+  parent: "hotspot_orbit_3"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+nodes {
+  position {
+    x: -36.00
+    y: 62.35
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_3_3"
+  parent: "hotspot_orbit_3"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+nodes {
+  position {
+    x: -72.00
+    y: 0.00
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_3_4"
+  parent: "hotspot_orbit_3"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+nodes {
+  position {
+    x: -36.00
+    y: -62.35
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_3_5"
+  parent: "hotspot_orbit_3"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+nodes {
+  position {
+    x: 36.00
+    y: -62.35
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_3_6"
+  parent: "hotspot_orbit_3"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.07
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "material_icons"
+  id: "hotspot_icon_3"
+  outline {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  shadow {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.9
+  }
+  adjust_mode: ADJUST_MODE_ZOOM
+  outline_alpha: 1.0
+  shadow_alpha: 0.9
+  enabled: false
+}
+
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.08
+  }
+  size {
+    x: 200.0
+    y: 200.0
+  }
+  color {
+    y: 0.0
+  }
+  type: TYPE_BOX
+  id: "hotspot_4"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.15
+  enabled: false
+}
+nodes {
+  position {
+    z: 0.005
+  }
+  size {
+    x: 180.0
+    y: 40.0
+  }
+  type: TYPE_TEXT
+  text: "label"
+  font: "main"
+  id: "hotspot_label_4"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "hotspot_4"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.068
+  }
+  size {
+    x: 96.0
+    y: 96.0
+  }
+  color {
+    x: 0.06
+    y: 0.06
+    z: 0.10
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_circle"
+  id: "hotspot_circle_4"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.35
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.067
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_ring"
+  id: "hotspot_ring_4"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.90
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.066
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "hotspot_orbit_4"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.0
+  enabled: false
+}
+nodes {
+  position {
+    x: 72.00
+    y: 0.00
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_4_1"
+  parent: "hotspot_orbit_4"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+nodes {
+  position {
+    x: 36.00
+    y: 62.35
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_4_2"
+  parent: "hotspot_orbit_4"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+nodes {
+  position {
+    x: -36.00
+    y: 62.35
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_4_3"
+  parent: "hotspot_orbit_4"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+nodes {
+  position {
+    x: -72.00
+    y: 0.00
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_4_4"
+  parent: "hotspot_orbit_4"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+nodes {
+  position {
+    x: -36.00
+    y: -62.35
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_4_5"
+  parent: "hotspot_orbit_4"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+nodes {
+  position {
+    x: 36.00
+    y: -62.35
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_4_6"
+  parent: "hotspot_orbit_4"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.07
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "material_icons"
+  id: "hotspot_icon_4"
+  outline {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  shadow {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.9
+  }
+  adjust_mode: ADJUST_MODE_ZOOM
+  outline_alpha: 1.0
+  shadow_alpha: 0.9
+  enabled: false
+}
+
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.08
+  }
+  size {
+    x: 200.0
+    y: 200.0
+  }
+  color {
+    y: 0.0
+  }
+  type: TYPE_BOX
+  id: "hotspot_5"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.15
+  enabled: false
+}
+nodes {
+  position {
+    z: 0.005
+  }
+  size {
+    x: 180.0
+    y: 40.0
+  }
+  type: TYPE_TEXT
+  text: "label"
+  font: "main"
+  id: "hotspot_label_5"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "hotspot_5"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.068
+  }
+  size {
+    x: 96.0
+    y: 96.0
+  }
+  color {
+    x: 0.06
+    y: 0.06
+    z: 0.10
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_circle"
+  id: "hotspot_circle_5"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.35
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.067
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_ring"
+  id: "hotspot_ring_5"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.90
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.066
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "hotspot_orbit_5"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.0
+  enabled: false
+}
+nodes {
+  position {
+    x: 72.00
+    y: 0.00
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_5_1"
+  parent: "hotspot_orbit_5"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+nodes {
+  position {
+    x: 36.00
+    y: 62.35
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_5_2"
+  parent: "hotspot_orbit_5"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+nodes {
+  position {
+    x: -36.00
+    y: 62.35
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_5_3"
+  parent: "hotspot_orbit_5"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+nodes {
+  position {
+    x: -72.00
+    y: 0.00
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_5_4"
+  parent: "hotspot_orbit_5"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+nodes {
+  position {
+    x: -36.00
+    y: -62.35
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_5_5"
+  parent: "hotspot_orbit_5"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+nodes {
+  position {
+    x: 36.00
+    y: -62.35
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_5_6"
+  parent: "hotspot_orbit_5"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.07
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "material_icons"
+  id: "hotspot_icon_5"
+  outline {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  shadow {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.9
+  }
+  adjust_mode: ADJUST_MODE_ZOOM
+  outline_alpha: 1.0
+  shadow_alpha: 0.9
+  enabled: false
+}
+
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.08
+  }
+  size {
+    x: 200.0
+    y: 200.0
+  }
+  color {
+    y: 0.0
+  }
+  type: TYPE_BOX
+  id: "hotspot_6"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.3
+  enabled: false
+}
+nodes {
+  position {
+    z: 0.005
+  }
+  size {
+    x: 180.0
+    y: 40.0
+  }
+  type: TYPE_TEXT
+  text: "label"
+  font: "main"
+  id: "hotspot_label_6"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "hotspot_6"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.068
+  }
+  size {
+    x: 96.0
+    y: 96.0
+  }
+  color {
+    x: 0.06
+    y: 0.06
+    z: 0.10
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_circle"
+  id: "hotspot_circle_6"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.35
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.067
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_ring"
+  id: "hotspot_ring_6"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.90
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.066
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "hotspot_orbit_6"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.0
+  enabled: false
+}
+nodes {
+  position {
+    x: 72.00
+    y: 0.00
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_6_1"
+  parent: "hotspot_orbit_6"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+nodes {
+  position {
+    x: 36.00
+    y: 62.35
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_6_2"
+  parent: "hotspot_orbit_6"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+nodes {
+  position {
+    x: -36.00
+    y: 62.35
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_6_3"
+  parent: "hotspot_orbit_6"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+nodes {
+  position {
+    x: -72.00
+    y: 0.00
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_6_4"
+  parent: "hotspot_orbit_6"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+nodes {
+  position {
+    x: -36.00
+    y: -62.35
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_6_5"
+  parent: "hotspot_orbit_6"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+nodes {
+  position {
+    x: 36.00
+    y: -62.35
+    z: 0.0
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 1.0
+    y: 0.80
+    z: 0.40
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_dot"
+  id: "hotspot_dot_6_6"
+  parent: "hotspot_orbit_6"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 1.0
+  inherit_alpha: false
+  enabled: false
+}
+
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.07
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "material_icons"
+  id: "hotspot_icon_6"
+  outline {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  shadow {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.9
+  }
+  adjust_mode: ADJUST_MODE_ZOOM
+  outline_alpha: 1.0
+  shadow_alpha: 0.9
+  enabled: false
+}
+
 nodes {
   position {
     x: 120.0
@@ -165,7 +1949,6 @@ nodes {
   }
   color {
     x: 0.4
-    y: 1.0
     z: 0.5
   }
   type: TYPE_TEXT
@@ -1062,6 +2845,1579 @@ nodes {
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "menu_panel"
   inherit_alpha: true
+}
+nodes {
+  position {
+    x: 900.0
+    y: 580.0
+    z: 0.90
+  }
+  size {
+    x: 80.0
+    y: 80.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_circle"
+  id: "hud_backpack_circle"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.55
+  enabled: true
+}
+nodes {
+  position {
+    x: 900.0
+    y: 580.0
+    z: 0.91
+  }
+  size {
+    x: 98.0
+    y: 98.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_ring"
+  id: "hud_backpack_ring"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.9
+  enabled: true
+}
+nodes {
+  position {
+    x: 900.0
+    y: 584.0
+    z: 0.92
+  }
+  size {
+    x: 100.0
+    y: 100.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "material_icons"
+  id: "hud_backpack_icon"
+  adjust_mode: ADJUST_MODE_ZOOM
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  enabled: true
+}
+nodes {
+  position {
+    x: 900.0
+    y: 580.0
+    z: 0.93
+  }
+  size {
+    x: 110.0
+    y: 110.0
+  }
+  color {
+    x: 1.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "hud_backpack_hit"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.0
+  enabled: true
+}
+nodes {
+  position {
+    x: 800.0
+    y: 580.0
+    z: 0.90
+  }
+  size {
+    x: 80.0
+    y: 80.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_circle"
+  id: "hud_phone_circle"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.55
+  enabled: false
+}
+nodes {
+  position {
+    x: 800.0
+    y: 580.0
+    z: 0.91
+  }
+  size {
+    x: 98.0
+    y: 98.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_ring"
+  id: "hud_phone_ring"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.9
+  enabled: false
+}
+nodes {
+  position {
+    x: 800.0
+    y: 584.0
+    z: 0.92
+  }
+  size {
+    x: 100.0
+    y: 100.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "material_icons"
+  id: "hud_phone_icon"
+  adjust_mode: ADJUST_MODE_ZOOM
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  enabled: false
+}
+nodes {
+  position {
+    x: 800.0
+    y: 580.0
+    z: 0.93
+  }
+  size {
+    x: 110.0
+    y: 110.0
+  }
+  color {
+    x: 1.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "hud_phone_hit"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.0
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.94
+  }
+  size {
+    x: 1280.0
+    y: 720.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "inv_modal_dim"
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.65
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.945
+  }
+  size {
+    x: 720.0
+    y: 480.0
+  }
+  color {
+    x: 0.10
+    y: 0.10
+    z: 0.14
+  }
+  type: TYPE_BOX
+  id: "inv_modal_panel"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.97
+  enabled: false
+}
+nodes {
+  position {
+    x: 0.0
+    y: 200.0
+    z: 0.0
+  }
+  size {
+    x: 680.0
+    y: 40.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_TEXT
+  text: "Инвентарь"
+  font: "main"
+  id: "inv_modal_title"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 0.0
+    y: -200.0
+    z: 0.01
+  }
+  size {
+    x: 220.0
+    y: 50.0
+  }
+  color {
+    x: 0.22
+    y: 0.22
+    z: 0.30
+  }
+  type: TYPE_BOX
+  id: "inv_modal_close_btn"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.9
+}
+nodes {
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.01
+  }
+  size {
+    x: 200.0
+    y: 40.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_TEXT
+  text: "Закрыть"
+  font: "main"
+  id: "inv_modal_close_text"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_close_btn"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -240.0
+    y: 100.0
+    z: 0.0
+  }
+  size {
+    x: 110.0
+    y: 110.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_circle"
+  id: "inv_slot_circle_1"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.6
+}
+nodes {
+  position {
+    x: -240.0
+    y: 100.0
+    z: 0.0
+  }
+  size {
+    x: 128.0
+    y: 128.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_ring"
+  id: "inv_slot_ring_1"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.9
+}
+nodes {
+  position {
+    x: -240.0
+    y: 104.0
+    z: 0.01
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "material_icons"
+  id: "inv_slot_icon_1"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -240.0
+    y: 100.0
+    z: 0.02
+  }
+  size {
+    x: 140.0
+    y: 140.0
+  }
+  color {
+    x: 1.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "inv_slot_hit_1"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: -80.0
+    y: 100.0
+    z: 0.0
+  }
+  size {
+    x: 110.0
+    y: 110.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_circle"
+  id: "inv_slot_circle_2"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.6
+}
+nodes {
+  position {
+    x: -80.0
+    y: 100.0
+    z: 0.0
+  }
+  size {
+    x: 128.0
+    y: 128.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_ring"
+  id: "inv_slot_ring_2"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.9
+}
+nodes {
+  position {
+    x: -80.0
+    y: 104.0
+    z: 0.01
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "material_icons"
+  id: "inv_slot_icon_2"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -80.0
+    y: 100.0
+    z: 0.02
+  }
+  size {
+    x: 140.0
+    y: 140.0
+  }
+  color {
+    x: 1.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "inv_slot_hit_2"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 80.0
+    y: 100.0
+    z: 0.0
+  }
+  size {
+    x: 110.0
+    y: 110.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_circle"
+  id: "inv_slot_circle_3"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.6
+}
+nodes {
+  position {
+    x: 80.0
+    y: 100.0
+    z: 0.0
+  }
+  size {
+    x: 128.0
+    y: 128.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_ring"
+  id: "inv_slot_ring_3"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.9
+}
+nodes {
+  position {
+    x: 80.0
+    y: 104.0
+    z: 0.01
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "material_icons"
+  id: "inv_slot_icon_3"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 80.0
+    y: 100.0
+    z: 0.02
+  }
+  size {
+    x: 140.0
+    y: 140.0
+  }
+  color {
+    x: 1.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "inv_slot_hit_3"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 240.0
+    y: 100.0
+    z: 0.0
+  }
+  size {
+    x: 110.0
+    y: 110.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_circle"
+  id: "inv_slot_circle_4"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.6
+}
+nodes {
+  position {
+    x: 240.0
+    y: 100.0
+    z: 0.0
+  }
+  size {
+    x: 128.0
+    y: 128.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_ring"
+  id: "inv_slot_ring_4"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.9
+}
+nodes {
+  position {
+    x: 240.0
+    y: 104.0
+    z: 0.01
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "material_icons"
+  id: "inv_slot_icon_4"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 240.0
+    y: 100.0
+    z: 0.02
+  }
+  size {
+    x: 140.0
+    y: 140.0
+  }
+  color {
+    x: 1.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "inv_slot_hit_4"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: -240.0
+    y: -30.0
+    z: 0.0
+  }
+  size {
+    x: 110.0
+    y: 110.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_circle"
+  id: "inv_slot_circle_5"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.6
+}
+nodes {
+  position {
+    x: -240.0
+    y: -30.0
+    z: 0.0
+  }
+  size {
+    x: 128.0
+    y: 128.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_ring"
+  id: "inv_slot_ring_5"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.9
+}
+nodes {
+  position {
+    x: -240.0
+    y: -26.0
+    z: 0.01
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "material_icons"
+  id: "inv_slot_icon_5"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -240.0
+    y: -30.0
+    z: 0.02
+  }
+  size {
+    x: 140.0
+    y: 140.0
+  }
+  color {
+    x: 1.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "inv_slot_hit_5"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: -80.0
+    y: -30.0
+    z: 0.0
+  }
+  size {
+    x: 110.0
+    y: 110.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_circle"
+  id: "inv_slot_circle_6"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.6
+}
+nodes {
+  position {
+    x: -80.0
+    y: -30.0
+    z: 0.0
+  }
+  size {
+    x: 128.0
+    y: 128.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_ring"
+  id: "inv_slot_ring_6"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.9
+}
+nodes {
+  position {
+    x: -80.0
+    y: -26.0
+    z: 0.01
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "material_icons"
+  id: "inv_slot_icon_6"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -80.0
+    y: -30.0
+    z: 0.02
+  }
+  size {
+    x: 140.0
+    y: 140.0
+  }
+  color {
+    x: 1.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "inv_slot_hit_6"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 80.0
+    y: -30.0
+    z: 0.0
+  }
+  size {
+    x: 110.0
+    y: 110.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_circle"
+  id: "inv_slot_circle_7"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.6
+}
+nodes {
+  position {
+    x: 80.0
+    y: -30.0
+    z: 0.0
+  }
+  size {
+    x: 128.0
+    y: 128.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_ring"
+  id: "inv_slot_ring_7"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.9
+}
+nodes {
+  position {
+    x: 80.0
+    y: -26.0
+    z: 0.01
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "material_icons"
+  id: "inv_slot_icon_7"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 80.0
+    y: -30.0
+    z: 0.02
+  }
+  size {
+    x: 140.0
+    y: 140.0
+  }
+  color {
+    x: 1.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "inv_slot_hit_7"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 240.0
+    y: -30.0
+    z: 0.0
+  }
+  size {
+    x: 110.0
+    y: 110.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_circle"
+  id: "inv_slot_circle_8"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.6
+}
+nodes {
+  position {
+    x: 240.0
+    y: -30.0
+    z: 0.0
+  }
+  size {
+    x: 128.0
+    y: 128.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_ring"
+  id: "inv_slot_ring_8"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.9
+}
+nodes {
+  position {
+    x: 240.0
+    y: -26.0
+    z: 0.01
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "material_icons"
+  id: "inv_slot_icon_8"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 240.0
+    y: -30.0
+    z: 0.02
+  }
+  size {
+    x: 140.0
+    y: 140.0
+  }
+  color {
+    x: 1.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "inv_slot_hit_8"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: -240.0
+    y: -160.0
+    z: 0.0
+  }
+  size {
+    x: 110.0
+    y: 110.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_circle"
+  id: "inv_slot_circle_9"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.6
+}
+nodes {
+  position {
+    x: -240.0
+    y: -160.0
+    z: 0.0
+  }
+  size {
+    x: 128.0
+    y: 128.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_ring"
+  id: "inv_slot_ring_9"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.9
+}
+nodes {
+  position {
+    x: -240.0
+    y: -156.0
+    z: 0.01
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "material_icons"
+  id: "inv_slot_icon_9"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -240.0
+    y: -160.0
+    z: 0.02
+  }
+  size {
+    x: 140.0
+    y: 140.0
+  }
+  color {
+    x: 1.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "inv_slot_hit_9"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: -80.0
+    y: -160.0
+    z: 0.0
+  }
+  size {
+    x: 110.0
+    y: 110.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_circle"
+  id: "inv_slot_circle_10"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.6
+}
+nodes {
+  position {
+    x: -80.0
+    y: -160.0
+    z: 0.0
+  }
+  size {
+    x: 128.0
+    y: 128.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_ring"
+  id: "inv_slot_ring_10"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.9
+}
+nodes {
+  position {
+    x: -80.0
+    y: -156.0
+    z: 0.01
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "material_icons"
+  id: "inv_slot_icon_10"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -80.0
+    y: -160.0
+    z: 0.02
+  }
+  size {
+    x: 140.0
+    y: 140.0
+  }
+  color {
+    x: 1.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "inv_slot_hit_10"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 80.0
+    y: -160.0
+    z: 0.0
+  }
+  size {
+    x: 110.0
+    y: 110.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_circle"
+  id: "inv_slot_circle_11"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.6
+}
+nodes {
+  position {
+    x: 80.0
+    y: -160.0
+    z: 0.0
+  }
+  size {
+    x: 128.0
+    y: 128.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_ring"
+  id: "inv_slot_ring_11"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.9
+}
+nodes {
+  position {
+    x: 80.0
+    y: -156.0
+    z: 0.01
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "material_icons"
+  id: "inv_slot_icon_11"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 80.0
+    y: -160.0
+    z: 0.02
+  }
+  size {
+    x: 140.0
+    y: 140.0
+  }
+  color {
+    x: 1.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "inv_slot_hit_11"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 240.0
+    y: -160.0
+    z: 0.0
+  }
+  size {
+    x: 110.0
+    y: 110.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_circle"
+  id: "inv_slot_circle_12"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.6
+}
+nodes {
+  position {
+    x: 240.0
+    y: -160.0
+    z: 0.0
+  }
+  size {
+    x: 128.0
+    y: 128.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/hotspot_ring"
+  id: "inv_slot_ring_12"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.9
+}
+nodes {
+  position {
+    x: 240.0
+    y: -156.0
+    z: 0.01
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "material_icons"
+  id: "inv_slot_icon_12"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 240.0
+    y: -160.0
+    z: 0.02
+  }
+  size {
+    x: 140.0
+    y: 140.0
+  }
+  color {
+    x: 1.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "inv_slot_hit_12"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "inv_modal_panel"
+  inherit_alpha: true
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.97
+  }
+  size {
+    x: 1280.0
+    y: 720.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "item_modal_dim"
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.65
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.98
+  }
+  size {
+    x: 560.0
+    y: 340.0
+  }
+  color {
+    x: 0.10
+    y: 0.10
+    z: 0.14
+  }
+  type: TYPE_BOX
+  id: "item_modal_panel"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.97
+  enabled: false
+}
+nodes {
+  position {
+    x: 0.0
+    y: 130.0
+    z: 0.0
+  }
+  size {
+    x: 520.0
+    y: 40.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_TEXT
+  text: "Название"
+  font: "main"
+  id: "item_modal_name"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "item_modal_panel"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -180.0
+    y: 20.0
+    z: 0.0
+  }
+  size {
+    x: 160.0
+    y: 160.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "material_icons"
+  id: "item_modal_icon"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "item_modal_panel"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 80.0
+    y: 40.0
+    z: 0.0
+  }
+  size {
+    x: 340.0
+    y: 180.0
+  }
+  color {
+    x: 0.88
+    y: 0.88
+    z: 0.92
+  }
+  type: TYPE_TEXT
+  text: "Описание предмета..."
+  font: "main"
+  id: "item_modal_desc"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "item_modal_panel"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  line_break: true
+}
+nodes {
+  position {
+    x: 0.0
+    y: -130.0
+    z: 0.01
+  }
+  size {
+    x: 220.0
+    y: 50.0
+  }
+  color {
+    x: 0.22
+    y: 0.22
+    z: 0.30
+  }
+  type: TYPE_BOX
+  id: "item_modal_close_btn"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "item_modal_panel"
+  inherit_alpha: true
+  alpha: 0.9
+}
+nodes {
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.01
+  }
+  size {
+    x: 200.0
+    y: 40.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  type: TYPE_TEXT
+  text: "Закрыть"
+  font: "main"
+  id: "item_modal_close_text"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "item_modal_close_btn"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT

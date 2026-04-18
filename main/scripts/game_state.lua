@@ -1,0 +1,174 @@
+-- game_state.lua
+-- Единый источник правды для point-and-click слоя.
+-- Хранит flags, inventory, quests, current_scene. Подписчики получают
+-- _notify() при любом изменении — так quests.lua будет реактивно
+-- пересчитывать шаги квестов (Спринт 4).
+--
+-- Сериализация — snapshot для save_manager.set_game_state(state).
+
+local M = {}
+
+-- Приватное состояние
+local _flags       = {}    -- { [name] = value } — bool/number/string
+local _inventory   = {}    -- список item_id в порядке получения
+local _quests      = {}    -- { [quest_id] = "active"|"done"|"failed" }
+local _current_scene = nil -- id сцены или nil если в ink-режиме
+local _listeners   = {}    -- callback'и на изменения
+
+-- Телефон (Спринт 4):
+--   _sms[contact_id]      = { {text=, unread=true/false}, ... } — порядок прихода
+--   _sms_unread[contact_id] = N непрочитанных (для бейджа)
+--   _notes                = { {title=, body=, time=}, ... } — порядок создания
+local _sms         = {}
+local _sms_unread  = {}
+local _notes       = {}
+
+function M.reset()
+    _flags = {}
+    _inventory = {}
+    _quests = {}
+    _sms = {}
+    _sms_unread = {}
+    _notes = {}
+    _current_scene = nil
+    M._notify()
+end
+
+-- flags ------------------------------------------------------------------
+function M.get_flag(name) return _flags[name] end
+
+function M.set_flag(name, value)
+    if _flags[name] == value then return end
+    _flags[name] = value
+    M._notify()
+end
+
+-- inventory --------------------------------------------------------------
+function M.has_item(id)
+    for _, v in ipairs(_inventory) do
+        if v == id then return true end
+    end
+    return false
+end
+
+function M.add_item(id)
+    if M.has_item(id) then return end
+    table.insert(_inventory, id)
+    M._notify()
+end
+
+function M.remove_item(id)
+    for i, v in ipairs(_inventory) do
+        if v == id then
+            table.remove(_inventory, i)
+            M._notify()
+            return true
+        end
+    end
+    return false
+end
+
+-- Внимание: возвращает прямую ссылку — не мутировать снаружи.
+function M.get_inventory() return _inventory end
+
+-- quests -----------------------------------------------------------------
+function M.get_quest(id) return _quests[id] end
+
+function M.set_quest(id, status)
+    if _quests[id] == status then return end
+    _quests[id] = status
+    M._notify()
+end
+
+-- current scene ----------------------------------------------------------
+function M.get_scene() return _current_scene end
+
+function M.set_scene(id)
+    _current_scene = id
+    M._notify()
+end
+
+-- SMS (телефон) ----------------------------------------------------------
+-- Добавить входящее сообщение от контакта. Помечаем unread=true, чтобы
+-- на иконке SMS в телефоне показался бейдж.
+function M.add_sms(contact_id, text)
+    _sms[contact_id] = _sms[contact_id] or {}
+    table.insert(_sms[contact_id], { text = text, unread = true })
+    _sms_unread[contact_id] = (_sms_unread[contact_id] or 0) + 1
+    M._notify()
+end
+
+-- Пометить чат как прочитанный (вызывается при открытии переписки).
+function M.mark_sms_read(contact_id)
+    local chat = _sms[contact_id]
+    if not chat then return end
+    for _, msg in ipairs(chat) do msg.unread = false end
+    _sms_unread[contact_id] = 0
+    M._notify()
+end
+
+function M.get_sms(contact_id) return _sms[contact_id] or {} end
+
+function M.get_sms_contacts()
+    local ids = {}
+    for id, _ in pairs(_sms) do table.insert(ids, id) end
+    table.sort(ids)
+    return ids
+end
+
+function M.get_sms_unread_total()
+    local total = 0
+    for _, n in pairs(_sms_unread) do total = total + n end
+    return total
+end
+
+function M.get_sms_unread(contact_id) return _sms_unread[contact_id] or 0 end
+
+-- Notes (заметки) --------------------------------------------------------
+function M.add_note(title, body)
+    table.insert(_notes, { title = title, body = body })
+    M._notify()
+end
+
+function M.get_notes() return _notes end
+
+-- Реактивные подписки ----------------------------------------------------
+function M.subscribe(cb)
+    table.insert(_listeners, cb)
+end
+
+function M._notify()
+    for _, cb in ipairs(_listeners) do
+        pcall(cb)
+    end
+end
+
+-- Сериализация -----------------------------------------------------------
+function M.serialize()
+    return {
+        flags         = _flags,
+        inventory     = _inventory,
+        quests        = _quests,
+        sms           = _sms,
+        sms_unread    = _sms_unread,
+        notes         = _notes,
+        current_scene = _current_scene,
+    }
+end
+
+function M.deserialize(data)
+    if not data then
+        M.reset()
+        return
+    end
+    _flags         = data.flags      or {}
+    _inventory     = data.inventory  or {}
+    _quests        = data.quests     or {}
+    _sms           = data.sms        or {}
+    _sms_unread    = data.sms_unread or {}
+    _notes         = data.notes      or {}
+    _current_scene = data.current_scene
+    M._notify()
+end
+
+return M

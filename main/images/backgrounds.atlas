@@ -20,6 +20,18 @@ images {
   image: "/main/images/bg_bathroom.jpg"
 }
 images {
+  image: "/main/images/mobile.png"
+}
+images {
+  image: "/main/images/hotspot_circle.png"
+}
+images {
+  image: "/main/images/hotspot_ring.png"
+}
+images {
+  image: "/main/images/hotspot_dot.png"
+}
+images {
   image: "/main/images/bg_menu.jpg"
 }
 images {
@@ -33,6 +45,9 @@ images {
 }
 images {
   image: "/main/images/bg_rooftop.jpg"
+}
+images {
+  image: "/main/images/bg_phone.jpg"
 }
 margin: 0
 extrude_borders: 2

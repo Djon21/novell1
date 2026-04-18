@@ -81,106 +81,66 @@ VAR log_marker  = ""
 
 // ================================================================
 // ХАБ: ИНТЕРАКТИВНАЯ КВАРТИРА
-// (bg_apt_map ещё не нарисован — используем bg:none + серый цвет)
+// Теперь чистый exploration-узел. Текст и inline-choice'ы заменены на
+// hotspot'ы в scenes.lua (scene "apartment_hub"). Действия игрока
+// (кофе/телефон/зеркало) — отдельные короткие knot'ы с # return_to_scene.
 // ================================================================
 === apartment_hub
-# bg:bg_apartment # color:0.3,0.3,0.3 # speaker:none
-Квартира. Утренний свет делит пространство на зоны.
-Что сделаешь первым делом?
-
-* [Кухня]
-    -> kitchen_zone
-* [Ванная]
-    -> bathroom_zone
-* [Рабочий стол]
-    -> desk_zone
-* {can_leave_apt} [Выход из квартиры]
-    -> street_transition
+# bg:bg_apartment # color:0.3,0.3,0.3 # speaker:none # explore:apartment_hub
+Квартира.
+-> DONE
 
 // ================================================================
-// ЗОНА: КУХНЯ (ОБУЧЕНИЕ: ВЗАИМОДЕЙСТВИЕ → РАСХОД)
+// КОРОТКИЕ МОНОЛОГИ-KNOT'Ы (запускаются из hotspot'ов)
 // ================================================================
-=== kitchen_zone
-# bg:none # color:0.25,0.22,0.18 # speaker:none
-Кухня. Тихий гул техники. На поддоне — матовая керамическая кружка ручной работы.
-{coffee_drunk:
-    Кружка пуста. Энергия есть. Можно двигаться дальше. # speaker:mc
-}
 
-* {!coffee_drunk} [Заварить кофе]
-    ~ coffee_drunk = true
-    ~ SYNC = SYNC + 1
-    ~ morning_choice = "coffee"
-    # sfx:coffee_brew # speaker:none
-    Машина шипит, наливая тёмную струйку. Аромат крепкий, без лишних примесей.
-    # speaker:mc
-    Горький, терпкий. Кофеин бьёт в виски, стирая остатки сна. Голова проясняется.
-    -> check_exit_ready
-* [Назад]
-    -> check_exit_ready
+=== drink_coffee
+# speaker:none # sfx:coffee_brew
+Машина шипит, наливая тёмную струйку. Аромат крепкий, без лишних примесей.
+# speaker:mc
+Горький, терпкий. Кофеин бьёт в виски, стирая остатки сна. Голова проясняется.
+~ coffee_drunk = true
+~ SYNC = SYNC + 1
+~ morning_choice = "coffee"
+# flag:has_coffee=true # return_to_scene
+-> DONE
 
-// ================================================================
-// ЗОНА: ВАННАЯ (БОНУС К INSIGHT)
-// ================================================================
-=== bathroom_zone
-# bg:none # color:0.16,0.20,0.26 # speaker:none
-Ванная. Зеркало с подсветкой. Вода в душе тёплая.
-
-* {morning_choice == ""} [Принять душ]
-    ~ INSIGHT = INSIGHT + 1
-    ~ morning_choice = "shower"
-    # speaker:mc
-    Горячая вода смывает вчерашний день. Чистая одежда. Чистые мысли? Пока не проверял.
-    -> check_exit_ready
-* [Назад]
-    -> check_exit_ready
-
-// ================================================================
-// ЗОНА: СТОЛ (ТЕЛЕФОН + UI-ОБУЧЕНИЕ)
-// ================================================================
-=== desk_zone
-# bg:none # color:0.2,0.22,0.28 # speaker:none
-Рабочий стол. Моноблок в спящем режиме. Рядом — телефон с матовым корпусом, экран мерцает, ловя заряд.
-{phone_active:
-    Уведомления прочитаны. Патчи ждут. Телефон в кармане. # speaker:mc
-}
-
-* {!phone_active} [Взять телефон]
-    ~ phone_active = true
-    # sfx:phone_wake # speaker:mc
-    Экран оживает без задержек. Система уже синхронизировала фон.
-    -> desk_phone_ui
-* [Назад]
-    -> check_exit_ready
-
-=== desk_phone_ui
-# bg:none # color:0.2,0.22,0.28 # speaker:none
-Три сообщения от «Авось». Все одинаковые:
+=== take_phone
+# speaker:mc # sfx:phone_wake
+Экран оживает без задержек. Система уже синхронизировала фон.
+Три сообщения от Ани. Все одинаковые:
 PATCH temporal_sync.module
 Ни контекста. Ни объяснений. Просто — работай.
+~ phone_active = true
+~ TRUST = TRUST + 1
+# sms:add:anya:"PATCH temporal_sync.module"
+# sms:add:anya:"PATCH temporal_sync.module"
+# sms:add:anya:"PATCH temporal_sync.module — ответь, когда увидишь."
+# quest:start:reply_anya
+# quest:start:go_to_office
+# flag:has_phone=true # return_to_scene
+-> DONE
 
-* [Убрать в карман]
-    ~ TRUST = TRUST + 1
-    -> check_exit_ready
+=== bedroom_monitor
+# bg:bg_bedroom_03 # speaker:mc
+Монитор мигает в режиме ожидания. На рабочем столе — десятки открытых окон, которые я вчера не закрыл.
+«Авось» уже там, в трее. Ждёт.
+# return_to_scene
+-> DONE
 
-// ================================================================
-// ПРОВЕРКА ГОТОВНОСТИ К ВЫХОДУ
-// ================================================================
-=== check_exit_ready
-{coffee_drunk && phone_active && not can_leave_apt:
-    ~ can_leave_apt = true
-    # speaker:mc
-    Кофе выпит. Телефон в кармане. Система молчит. Значит, всё на месте.
-    Можно выходить.
-}
--> apartment_hub
+=== leave_apartment
+# bg:none # speaker:mc
+Бесшумный лифт. Выход на улицу.
+~ can_leave_apt = true
+# flag:left_apartment=true
+-> street_transition
 
 // ================================================================
 // ПЕРЕХОД: УЛИЦА → КАРТА ГОРОДА
 // ================================================================
 === street_transition
 # bg:none # color:0.4,0.4,0.4 # speaker:none
-Бесшумный лифт. Выход на улицу. Серый рассветный город.
+Серый рассветный город.
 # speaker:mc
 За окном просыпается мегаполис. Машины. Огни.
 Кто-то куда-то спешит. А я — просто иду.
@@ -202,7 +162,7 @@ PATCH temporal_sync.module
 // СЦЕНА 2: МЕТРО (ИНТЕРАКТИВНАЯ)
 // ================================================================
 === metro
-# bg:bg_metro # color:0.08,0.09,0.15 # speaker:none
+# bg:bg_metro # color:0.08,0.09,0.15 # speaker:none # flag:reached_metro=true
 Утренний поток. Все смотрят в телефоны. Никто — в глаза.
 Эскалатор вниз. Запах старого металла и чего-то горелого — привычный, почти домашний.
 # speaker:mc
@@ -317,7 +277,7 @@ PATCH temporal_sync.module
 // СЦЕНА 4: ОФИС — УТРО (РЕАКЦИЯ НА ДЕЙСТВИЯ)
 // ================================================================
 === office_morning
-# bg:bg_office # color:0.12,0.15,0.22 # speaker:none
+# bg:bg_office # color:0.12,0.15,0.22 # speaker:none # flag:reached_office=true # quest:done:go_to_office
 Лифт. Девятый этаж. Ключ-карта. Зелёный огонёк. Дверь открывается.
 Опенспейс пустой — только гул кондиционера и чей-то забытый чай на крайнем столе.
 # speaker:mc
@@ -715,3 +675,71 @@ AUTHOR: {mc_name}@next_iteration
 # speaker:none
 ИТЕРАЦИЯ 001 ЗАВЕРШЕНА.
 -> END
+
+// ================================================================
+// ТЕЛЕФОН: ПРИЛОЖЕНИЯ (запускаются из hotspot'ов сцены phone_home)
+// ================================================================
+// Каждый knot — короткий ink-монолог с # return_to_scene в конце, чтобы
+// после просмотра игрок вернулся на сцену phone_home (её scene_controller
+// запомнил в _last_scene_id при клике по hotspot'у приложения).
+// phone_close — особый: # phone:close выведет игрока из phone_home
+// обратно в сцену, откуда телефон был открыт (см. _phone_return_scene).
+
+=== phone_sms
+# bg:bg_phone # speaker:none
+Сообщения. Одна активная ветка — от Ани.
+# speaker:mc
+Три строки. Все — про «PATCH temporal_sync.module».
+* [Открыть диалог с Аней]
+    # flag:sms_anya_read=true
+    -> anya_chat
+* [Назад]
+    # return_to_scene
+    -> DONE
+
+=== anya_chat
+# bg:bg_phone # speaker:none
+[09:12] Аня: Привет. Проснул{mc_gender == "female":ась|ся}?
+[09:13] Аня: Пришёл странный патч. Посмотри.
+[09:14] Аня: PATCH temporal_sync.module
+[09:14] Аня: Ты ведь чувствуешь, что с этим файлом что-то не так?
+# speaker:mc
+Три одинаковых строки. И один вопрос в конце. Ответить пока нечем — надо сначала увидеть модуль вживую.
+* [Закрыть диалог]
+    # return_to_scene
+    -> DONE
+
+=== phone_tasks
+# bg:bg_phone # speaker:none
+Задачи на сегодня.
+# speaker:mc
+— Ответить Ане.
+— Добраться до офиса: квартира → метро → «Технопарк».
+— PATCH temporal_sync.module. Без описания. Как обычно.
+* [Назад]
+    # return_to_scene
+    -> DONE
+
+=== phone_notes
+# bg:bg_phone # speaker:none
+Заметки.
+# speaker:mc
+Пусто. Не веду. Если записывать всё, что в голову лезет в последние дни, — быстро закончится память и терпение.
+* [Назад]
+    # return_to_scene
+    -> DONE
+
+=== phone_contacts
+# bg:bg_phone # speaker:none
+Контакты.
+# speaker:mc
+Аня — коллега. Сидит через два стола.
+{npc_name} — тоже в команде. Номер есть, но звонить не принято.
+«Авось / System» — служебный контакт. Пишет только патчи.
+* [Назад]
+    # return_to_scene
+    -> DONE
+
+=== phone_close
+# phone:close
+-> DONE

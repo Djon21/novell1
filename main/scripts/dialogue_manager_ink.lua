@@ -41,6 +41,16 @@ local current_speaker  = ""        -- имя говорящего (или "" д�
 -- Очередь одноразовых эффектов: { { type="sfx", name=... }, { type="shake", ... }, ... }
 -- UI забирает через M.get_effects() и сразу очищает.
 local pending_effects  = {}
+-- Очередь команд game_state: { {type="set_flag",...}, {type="enter_scene",...} }
+-- UI забирает через M.get_commands() и применяет к game_state/scene_controller.
+-- В отличие от effects, это не одноразовый визуальный эффект — это команды
+-- которые должны исполниться СРАЗУ при обработке параграфа.
+local pending_commands = {}
+-- «Отложенные» команды смены сцены: enter_scene / return_to_scene из
+-- ВИСЯЧИХ тегов (в конце knot'а). Их нельзя применять сразу — игрок
+-- не успеет прочитать параграфы монолога. Переливаем в pending_commands
+-- в advance() когда paragraph_queue исчерпан.
+local deferred_commands = {}
 -- Если true — apply_tags не пушит эффекты в очередь. Нужно при
 -- load_saved replay'е, чтобы не проигрывать sfx/shake от старых параграфов.
 local suppress_effects = false
@@ -77,8 +87,14 @@ end
 
 -- Применяет теги к текущему состоянию (bg/color/speaker) и кладёт
 -- одноразовые эффекты (sfx/shake/pulse) в pending_effects.
-local function apply_tags(tags)
+-- trailing=true означает что теги взяты из ВИСЯЧЕГО параграфа (в конце
+-- knot'а после всех текстовых параграфов). В этом случае команды смены
+-- сцены (enter_scene/return_to_scene) откладываются в deferred_commands
+-- и выполняются только после того как игрок прочитает все параграфы —
+-- иначе монолог не будет показан.
+local function apply_tags(tags, trailing)
     if not tags then return end
+    local scene_bucket = trailing and deferred_commands or pending_commands
     for _, raw in ipairs(tags) do
         local key, value = parse_tag(raw)
         if key == "bg" then
@@ -112,6 +128,88 @@ local function apply_tags(tags)
                     b = tonumber(b) / 255,
                 })
             end
+        elseif key == "flag" and value and not suppress_effects then
+            -- # flag:NAME=VALUE  (value: true/false → bool, число → number, иначе string)
+            local name, val = value:match("([^=]+)=(.+)")
+            if name then
+                name = name:gsub("^%s+", ""):gsub("%s+$", "")
+                val  = val:gsub("^%s+", ""):gsub("%s+$", "")
+                local parsed
+                if val == "true" then parsed = true
+                elseif val == "false" then parsed = false
+                elseif tonumber(val) then parsed = tonumber(val)
+                else parsed = val end
+                table.insert(pending_commands, { type = "set_flag", flag = name, value = parsed })
+            end
+        elseif key == "item" and value and not suppress_effects then
+            -- # item:add:ID  или  # item:remove:ID
+            local op, id = value:match("(%a+)%s*:%s*(.+)")
+            if op and id then
+                id = id:gsub("^%s+", ""):gsub("%s+$", "")
+                if op == "add" then
+                    table.insert(pending_commands, { type = "add_item", item = id })
+                elseif op == "remove" then
+                    table.insert(pending_commands, { type = "remove_item", item = id })
+                end
+            end
+        elseif key == "quest" and value and not suppress_effects then
+            -- Поддерживаем два формата:
+            --   # quest:ID=STATUS    — задать статус напрямую
+            --   # quest:start:ID     — удобный шорткат для active
+            --   # quest:done:ID      — шорткат для done
+            local op, id = value:match("(%a+)%s*:%s*(.+)")
+            if op and id and (op == "start" or op == "done" or op == "fail") then
+                id = id:gsub("^%s+", ""):gsub("%s+$", "")
+                local status = op == "start" and "active"
+                            or op == "done"  and "done"
+                            or "failed"
+                table.insert(pending_commands, { type = "set_quest", quest = id, status = status })
+            else
+                local qid, status = value:match("([^=]+)=(.+)")
+                if qid then
+                    qid    = qid:gsub("^%s+", ""):gsub("%s+$", "")
+                    status = status:gsub("^%s+", ""):gsub("%s+$", "")
+                    table.insert(pending_commands, { type = "set_quest", quest = qid, status = status })
+                end
+            end
+        elseif key == "sms" and value and not suppress_effects then
+            -- # sms:add:contact:текст сообщения
+            -- Текст может содержать двоеточия — берём contact и остаток.
+            local op, rest = value:match("(%a+)%s*:%s*(.+)")
+            if op == "add" and rest then
+                local contact, text = rest:match("([^:]+)%s*:%s*(.+)")
+                if contact and text then
+                    contact = contact:gsub("^%s+", ""):gsub("%s+$", "")
+                    -- Убираем крайние кавычки, если автор их поставил.
+                    text = text:gsub('^%s*"(.*)"%s*$', "%1")
+                               :gsub("^%s*'(.*)'%s*$", "%1")
+                    table.insert(pending_commands, { type = "add_sms", contact = contact, text = text })
+                end
+            end
+        elseif key == "note" and value and not suppress_effects then
+            -- # note:add:Заголовок:Тело
+            local op, rest = value:match("(%a+)%s*:%s*(.+)")
+            if op == "add" and rest then
+                local title, body = rest:match("([^:]+)%s*:%s*(.+)")
+                if title and body then
+                    title = title:gsub("^%s+", ""):gsub("%s+$", "")
+                    body  = body:gsub('^%s*"(.*)"%s*$', "%1")
+                                :gsub("^%s*'(.*)'%s*$", "%1")
+                    table.insert(pending_commands, { type = "add_note", title = title, body = body })
+                end
+            end
+        elseif key == "phone" and value == "close" and not suppress_effects then
+            -- # phone:close — закрыть телефон и вернуться в сцену-вызыватель.
+            table.insert(scene_bucket, { type = "phone_close" })
+        elseif (key == "goto_scene" or key == "explore") and value and not suppress_effects then
+            -- # goto_scene:SCENE_ID  или  # explore:SCENE_ID
+            -- Inline (у текстового параграфа) → сразу. Висячий → deferred.
+            table.insert(scene_bucket, { type = "enter_scene", scene = value })
+        elseif key == "return_to_scene" and not suppress_effects then
+            -- # return_to_scene — вернуть управление в последнюю exploration-сцену.
+            -- Обычно висит в конце knot'а → попадает в deferred и срабатывает
+            -- когда игрок прочитает все параграфы монолога.
+            table.insert(scene_bucket, { type = "return_to_scene" })
         end
     end
 end
@@ -181,8 +279,10 @@ local function absorb_trailing_tag_paragraphs(paragraphs)
     while #paragraphs > 0 do
         local last = paragraphs[#paragraphs]
         if last.text == "" or last.text == nil then
-            -- теги «висячие» — применим к состоянию и выкинем
-            apply_tags(last.tags)
+            -- теги «висячие» — применим к состоянию и выкинем.
+            -- trailing=true → enter_scene/return_to_scene уедут в deferred,
+            -- чтобы сработать только после прочтения всех текстовых параграфов.
+            apply_tags(last.tags, true)
             paragraphs[#paragraphs] = nil
         else
             break
@@ -270,6 +370,10 @@ function M.init(json_bytes)
     bg_image          = nil
     current_speaker   = ""
 
+    pending_effects   = {}
+    pending_commands  = {}
+    deferred_commands = {}
+
     sm.load()
     push_vars_to_ink()
     last_logged_flags.TRUST, last_logged_flags.INSIGHT, last_logged_flags.SYNC = 0, 0, 0
@@ -340,6 +444,8 @@ function M.load_saved(json_bytes)
     end
     suppress_effects = false
     pending_effects  = {}  -- на всякий случай
+    pending_commands = {}
+    deferred_commands = {}
 
     -- Синхронизируем лог-флаги (чтобы первое изменение после рестарта
     -- корректно залоггировалось).
@@ -384,6 +490,13 @@ end
 function M.get_background()         return bg       end
 function M.get_background_image()   return bg_image end
 
+-- Принудительно выставить текущий фон. Нужен при knot-jump из сцены
+-- point-and-click: чтобы монолог играл на фоне сцены-источника, а не
+-- на «последнем ink-фоне» (обычно это apartment_hub/коридор).
+function M.override_bg(bg_image_name)
+    if bg_image_name then bg_image = bg_image_name end
+end
+
 -- Возвращает и очищает очередь одноразовых эффектов. UI должен вызывать
 -- этот метод после set_background в каждом render()/advance().
 function M.get_effects()
@@ -392,13 +505,31 @@ function M.get_effects()
     return e
 end
 
+-- Возвращает и очищает очередь команд game_state (flag/item/quest/enter_scene).
+-- UI забирает в render() и применяет к game_state / scene_controller.
+function M.get_commands()
+    local c = pending_commands
+    pending_commands = {}
+    return c
+end
+
 function M.advance()
     -- Dialogue: идём к следующему параграфу
     if paragraph_queue[current_index] then
         current_index = current_index + 1
-        -- применяем теги нового текущего параграфа
         if paragraph_queue[current_index] then
+            -- применяем теги нового текущего параграфа
             apply_tags(paragraph_queue[current_index].tags)
+        else
+            -- Все параграфы прочитаны — переливаем deferred scene-change
+            -- команды в pending. UI подхватит в render() и scene_controller
+            -- вернётся в exploration / перейдёт в новую сцену.
+            if #deferred_commands > 0 then
+                for _, c in ipairs(deferred_commands) do
+                    table.insert(pending_commands, c)
+                end
+                deferred_commands = {}
+            end
         end
         -- Сохраняем позицию внутри пачки — иначе при «Продолжить»
         -- игрок окажется на начале сцены, а не там где вышел.
@@ -435,6 +566,18 @@ end
 
 function M.restart()
     if json_source then M.init(json_source) end
+end
+
+-- Прыжок в ink-узел (knot) по имени. Используется scene_controller'ом
+-- через request_ink_knot — когда игрок кликает по hotspot с
+-- { type="ink_knot", knot="..." } и надо показать короткий монолог.
+function M.jump_to_knot(knot_name)
+    if not story then return end
+    local paragraphs, answers = story.jump(knot_name)
+    pull_gender_from_ink()
+    consume_continue(paragraphs, answers)
+    log_flags_if_changed()
+    save_ink_state()
 end
 
 return M

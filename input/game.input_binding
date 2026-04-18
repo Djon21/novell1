@@ -2,3 +2,55 @@ mouse_trigger {
   input: MOUSE_BUTTON_1
   action: "touch"
 }
+key_trigger {
+  input: KEY_F1
+  action: "edit_toggle"
+}
+key_trigger {
+  input: KEY_ESC
+  action: "edit_exit"
+}
+key_trigger {
+  input: KEY_TAB
+  action: "edit_next"
+}
+key_trigger {
+  input: KEY_UP
+  action: "edit_up"
+}
+key_trigger {
+  input: KEY_DOWN
+  action: "edit_down"
+}
+key_trigger {
+  input: KEY_LEFT
+  action: "edit_left"
+}
+key_trigger {
+  input: KEY_RIGHT
+  action: "edit_right"
+}
+key_trigger {
+  input: KEY_LBRACKET
+  action: "edit_w_minus"
+}
+key_trigger {
+  input: KEY_RBRACKET
+  action: "edit_w_plus"
+}
+key_trigger {
+  input: KEY_SEMICOLON
+  action: "edit_h_minus"
+}
+key_trigger {
+  input: KEY_QUOTE
+  action: "edit_h_plus"
+}
+key_trigger {
+  input: KEY_P
+  action: "edit_print"
+}
+key_trigger {
+  input: KEY_LSHIFT
+  action: "edit_shift"
+}

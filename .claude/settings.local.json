@@ -68,7 +68,29 @@
       "Bash(py)",
       "Bash(rm 'кухня.png' 'ванная.png')",
       "Read(//c/c/Users/GoldiM/novell1/novell1/main/images/**)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(cmd //c \"tools\\\\\\\\compile_ink.bat\")",
+      "Bash(cmd.exe //c tools\\\\\\\\compile_ink.bat)",
+      "Bash(cmd.exe /c 'tools\\\\compile_ink.bat')",
+      "Bash(./tools/inklecate.exe -o main/story/chapter_01.json main/story/chapter_01.ink)",
+      "Bash(echo \"exit=$?\")",
+      "Bash(python -c \"from PIL import Image, ImageFilter; print\\('ok', Image.__version__\\)\")",
+      "Bash(python)",
+      "Bash(curl -L -o /c/Users/GoldiM/novell1/novell1/main/fonts/MaterialIcons-Regular.ttf \"https://github.com/google/material-design-icons/raw/master/font/MaterialIcons-Regular.ttf\")",
+      "Bash(python tools/upgrade_hotspot_buttons.py)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:defold.com)",
+      "Bash(python tools/gen_hotspot_sprites.py)",
+      "Bash(python tools/add_hud_nodes.py)",
+      "Bash(xxd)",
+      "Bash(cmd //c \"tools\\\\compile_ink.bat chapter_01\")",
+      "Bash(python -c ' *)",
+      "Bash(python tools/refactor_hud_s4.py)",
+      "Bash(python tools/bundle_state.py)",
+      "Bash(python tools/gen_bg_phone.py)",
+      "Bash(cmd.exe /c \"tools\\\\\\\\compile_ink.bat chapter_01\")",
+      "Bash(cmd.exe /c tools\\\\\\\\compile_ink.bat chapter_01)",
+      "Bash(\"tools/inklecate.exe\" -o \"main/story/chapter_01.json\" \"main/story/chapter_01.ink\")"
     ]
   }
 }

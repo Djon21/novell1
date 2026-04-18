@@ -1,0 +1,6 @@
+material: "/builtins/fonts/font.material"
+font: "/main/fonts/arial.ttf"
+size: 48
+antialias: 1
+alpha: 1.0
+all_chars: true

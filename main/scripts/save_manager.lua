@@ -13,9 +13,10 @@ local _data = nil
 
 local function defaults()
     return {
-        mc_gender = nil,
-        chapter   = 1,
-        ink_state = nil,   -- { ink = story.get_state(), index = paragraph_idx }
+        mc_gender  = nil,
+        chapter    = 1,
+        ink_state  = nil,   -- { ink = story.get_state(), index = paragraph_idx }
+        game_state = nil,   -- snapshot game_state.serialize() — point-and-click слой
     }
 end
 
@@ -65,6 +66,19 @@ end
 
 function M.get_ink_state()
     return _data and _data.ink_state
+end
+
+-- -------------------------------------------------------
+-- Game state (inventory / quests / flags / current_scene)
+-- -------------------------------------------------------
+
+function M.set_game_state(state)
+    _data.game_state = state
+    M.save()
+end
+
+function M.get_game_state()
+    return _data and _data.game_state
 end
 
 -- -------------------------------------------------------

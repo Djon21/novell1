@@ -1,0 +1,185 @@
+-- scenes.lua
+-- Каталог сцен point-and-click слоя. Данные, не код.
+-- rect = { x, y, w, h } — x/y это ЛЕВЫЙ-НИЖНИЙ угол прямоугольника
+-- в коорд. системе .gui (960×640, origin левый-нижний).
+-- scene_controller сам пересчитает в центр+size при выставлении ноды.
+--
+-- action.type:
+--   "goto_scene"  — перейти в другую сцену (scene=...)
+--   "set_flag"    — gs.set_flag(flag, value)
+--   "add_item"    — gs.add_item(item)
+--   "ink_knot"    — выйти из exploration и прыгнуть в ink-узел (knot=...)
+--
+-- condition(gs) → bool — если задано и вернуло false, hotspot показывается
+-- «тусклым» (locked) и клик по нему не срабатывает.
+
+local M = {}
+
+M.scenes = {
+    apartment_hub = {
+        bg = "bg_apartment",
+        hotspots = {
+            {
+                id = "to_kitchen",
+                rect = { x = 0, y = 0, w = 220, h = 640 },
+                label = "На кухню",
+                icon = "",
+                action = { type = "goto_scene", scene = "kitchen" },
+            },
+            {
+                id = "to_bathroom",
+                rect = { x = 620, y = 115, w = 135, h = 370 },
+                label = "В ванную",
+                icon = "",
+                action = { type = "goto_scene", scene = "bathroom" },
+            },
+            {
+                id = "to_bedroom_day",
+                rect = { x = 830, y = 75, w = 130, h = 515 },
+                label = "В спальню",
+                icon = "",
+                action = { type = "goto_scene", scene = "bedroom_day" },
+            },
+            {
+                id = "leave_home",
+                rect = { x = 390, y = 130, w = 175, h = 365 },
+                label = "Выйти",
+                icon = "",
+                action = { type = "ink_knot", knot = "leave_apartment" },
+                condition = function(gs)
+                    return gs.get_flag("has_phone") and gs.get_flag("has_coffee")
+                end,
+            },
+        },
+    },
+
+    kitchen = {
+        bg = "bg_kitchen",
+        hotspots = {
+            {
+                id = "coffee_maker",
+                rect = { x = 155, y = 250, w = 160, h = 155 },
+                label = "Кофеварка",
+                icon = "",
+                action = { type = "ink_knot", knot = "drink_coffee" },
+                condition = function(gs) return not gs.get_flag("has_coffee") end,
+            },
+            {
+                id = "back_from_kitchen",
+                rect = { x = 0, y = 0, w = 140, h = 640 },
+                label = "Назад",
+                icon = "",
+                action = { type = "goto_scene", scene = "apartment_hub" },
+            },
+        },
+    },
+
+    bathroom = {
+        bg = "bg_bathroom",
+        hotspots = {
+            {
+                id = "back_from_bathroom",
+                rect = { x = 30, y = 30, w = 140, h = 80 },
+                label = "Назад",
+                icon = "",
+                action = { type = "goto_scene", scene = "apartment_hub" },
+            },
+        },
+    },
+
+    bedroom_day = {
+        bg = "bg_bedroom_03",
+        objects = {
+            {
+                id    = "phone_obj",
+                image = "mobile",           -- имя в backgrounds.atlas
+                pos   = { x = 385, y = 260 }, -- левый-нижний угол спрайта
+                size  = { w = 52, h = 22 },
+                visible_when = function(gs)
+                    return not gs.get_flag("has_phone")
+                end,
+            },
+        },
+        hotspots = {
+            {
+                id = "look_at_monitor",
+                rect = { x = 680, y = 300, w = 280, h = 215 },
+                label = "Монитор",
+                icon = "",
+                action = { type = "ink_knot", knot = "bedroom_monitor" },
+            },
+            {
+                id = "phone_on_desk",
+                rect = { x = 400, y = 300, w = 180, h = 160 },
+                label = "Телефон",
+                icon = "",
+                action = { type = "ink_knot", knot = "take_phone" },
+                condition = function(gs) return not gs.get_flag("has_phone") end,
+            },
+            {
+                id = "back_from_bedroom",
+                rect = { x = 785, y = 0, w = 175, h = 235 },
+                label = "Назад",
+                icon = "",
+                action = { type = "goto_scene", scene = "apartment_hub" },
+            },
+        },
+    },
+
+    -- Главный экран телефона. Это обычная point-and-click сцена поверх
+    -- bg_phone.jpg (960×640, имитирует корпус смартфона).
+    -- Вход: S.ui.open_phone_ui → scene_controller.enter("phone_home"),
+    -- предварительно сохранив текущую сцену в gs-флаг _phone_return_scene.
+    -- Выход: hotspot "phone_close" → ink knot phone_close → тег # phone:close.
+    -- Координаты «экрана» (см. tools/gen_bg_phone.py):
+    --   GUI x: [80..880], GUI y: [60..580]  (origin левый-нижний).
+    phone_home = {
+        bg = "bg_phone",
+        hotspots = {
+            {
+                id = "phone_app_sms",
+                rect = { x = 230, y = 330, w = 140, h = 140 },
+                label = "SMS",
+                -- U+E0B7 chat (Material Icons)
+                icon = string.char(0xEE, 0x82, 0xB7),
+                action = { type = "ink_knot", knot = "phone_sms" },
+            },
+            {
+                id = "phone_app_tasks",
+                rect = { x = 590, y = 330, w = 140, h = 140 },
+                label = "Задачи",
+                -- U+E85D assignment
+                icon = string.char(0xEE, 0xA1, 0x9D),
+                action = { type = "ink_knot", knot = "phone_tasks" },
+            },
+            {
+                id = "phone_app_notes",
+                rect = { x = 230, y = 110, w = 140, h = 140 },
+                label = "Заметки",
+                -- U+E873 description
+                icon = string.char(0xEE, 0xA1, 0xB3),
+                action = { type = "ink_knot", knot = "phone_notes" },
+            },
+            {
+                id = "phone_app_contacts",
+                rect = { x = 590, y = 110, w = 140, h = 140 },
+                label = "Контакты",
+                -- U+E7FD people
+                icon = string.char(0xEE, 0x9F, 0xBD),
+                action = { type = "ink_knot", knot = "phone_contacts" },
+            },
+            {
+                id = "phone_close",
+                rect = { x = 410, y = 40, w = 140, h = 70 },
+                label = "Закрыть",
+                -- U+E5CD close
+                icon = string.char(0xEE, 0x97, 0x8D),
+                action = { type = "ink_knot", knot = "phone_close" },
+            },
+        },
+    },
+}
+
+function M.get(id) return M.scenes[id] end
+
+return M
