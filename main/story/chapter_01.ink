@@ -911,5 +911,5 @@ AUTHOR: {mc_name}@next_iteration
 # speaker:mc
 Скоро. Но не сегодня.
 * [Назад]
-    # return_to_scene
+    # phone:close
     -> DONE
