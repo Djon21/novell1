@@ -100,6 +100,19 @@ function M.enter(scene_id)
     _scene_data = data
     gs.set_scene(scene_id)
     render()
+
+    -- Автотриггер on_enter-knot: проверяем condition и запускаем ink-монолог.
+    if data.on_enter then
+        local oe = data.on_enter
+        local ok = true
+        if oe.condition then ok = oe.condition(gs) end
+        if ok and oe.knot then
+            M.exit()
+            if _ui and _ui.request_ink_knot then
+                _ui.request_ink_knot(oe.knot, data.bg)
+            end
+        end
+    end
 end
 
 function M.exit()
