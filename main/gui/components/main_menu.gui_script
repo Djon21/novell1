@@ -60,25 +60,15 @@ end
 -- Показать меню
 -- -------------------------------------------------------
 local function show_menu()
+    print("[main_menu] show_menu() вызван")
     gui.set_enabled(M.bg_menu, true)
     gui.set_enabled(M.menu_panel, true)
-
-    -- Загружаем сохранения и проверяем их наличие
-    sm.load()
-    local has_save = sm.has_save()
     
-    -- Кнопка «Продолжить» притушена если нет сохранений
-    local cont_alpha = has_save and 1.0 or 0.35
-    local cont_color = gui.get_color(M.menu_btn_continue_text)
-    cont_color.w = cont_alpha
-    gui.set_color(M.menu_btn_continue_text, cont_color)
-
-    -- Галерея/Достижения — заглушки (тусклые)
-    for _, node in ipairs({ M.menu_btn_gallery_text, M.menu_btn_awards_text }) do
-        local c = gui.get_color(node)
-        c.w = 0.55
-        gui.set_color(node, c)
-    end
+    -- Запускаем глитч-эффект на заголовке
+    start_glitch()
+    
+    print("[main_menu] Меню показано")
+end
 
     -- Каскадное появление меню
     local mc = gui.get_color(M.menu_panel)
@@ -173,6 +163,7 @@ function update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
+    print("[main_menu] Получено сообщение:", message_id)
     if message_id == hash("show_menu") or message_id == hash("show") then
         show_menu()
     elseif message_id == hash("hide_menu") or message_id == hash("hide") then
