@@ -173,9 +173,9 @@ function update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
-    if message_id == hash("show") then
+    if message_id == hash("show_menu") or message_id == hash("show") then
         show_menu()
-    elseif message_id == hash("hide") then
+    elseif message_id == hash("hide_menu") or message_id == hash("hide") then
         hide_menu()
     end
 end
