@@ -34,7 +34,20 @@
       "Bash(ls:*)",
       "Bash(pwd)",
       "Bash(true)",
-      "Bash(echo:*)"
+      "Bash(echo:*)",
+      "Bash(curl:*)",
+      "Bash(wget:*)",
+      "Bash(cd:*)",
+      "Bash(cat:*)",
+      "Bash(find:*)",
+      "Bash(chmod:*)",
+      "Bash(test:*)",
+      "Bash(file:*)",
+      "Bash(wc:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(basename:*)",
+      "Bash(dirname:*)"
     ]
   }
 }
