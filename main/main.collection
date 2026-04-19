@@ -1,8 +1,8 @@
 name: "main"
 scale_along_z: 0
-embedded_instances {
-  id: "novel_gui"
-  data: "components {\n  id: \"gui\"\n  component: \"/main/gui/novel_ui.gui\"\n}\n"
+game_objects {
+  id: "ui_manager"
+  components: "/main/gui/ui_manager.go"
   position {
     x: 0.0
     y: 0.0
