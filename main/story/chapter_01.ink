@@ -224,7 +224,7 @@ VAR log_marker  = ""
 -> DONE
 
 === take_phone
-# speaker:mc # sfx:phone_pickup
+# speaker:mc
 Холодный.
 
 # speaker:mc
@@ -235,7 +235,7 @@ VAR log_marker  = ""
 -> open_phone
 
 === open_phone
-# speaker:none # sfx:phone_wake
+# speaker:none
 Экран загорается от касания.
 
 # speaker:none
