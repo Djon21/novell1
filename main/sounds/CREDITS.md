@@ -23,6 +23,13 @@ This file lists all sound effects used in the game and their sources.
 - **License:** Creative Commons Attribution 4.0
 - **Note:** File needs to be trimmed to shorter duration for game use
 
+### paper_rustle.mp3
+- **Title:** HOUSE PAPER Newspaper Open 01
+- **Author:** leonelmail
+- **Source:** https://freesound.org/s/508168/
+- **License:** Creative Commons 0 (CC0)
+- **Note:** File needs to be converted from MP3 to WAV/OGG format
+
 ### coffee_brew.wav
 - **Source:** Internal/Custom
 

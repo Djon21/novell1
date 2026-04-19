@@ -34,7 +34,7 @@
 - [x] ~~`phone_wake`~~ — **НЕ НУЖЕН** (современные телефоны включаются беззвучно)
 - [x] ~~`phone_notify`~~ — **ДОБАВЛЕН** 2026-04-19 (Cell phone buzz by fitzysfunhouse, CC0)
 - [x] ~~`heartbeat`~~ — **ДОБАВЛЕН** 2026-04-19 (by Benboncan, CC-BY 4.0, требует обрезки)
-- [ ] `paper_rustle` — шуршание газеты (нужен)
+- [x] ~~`paper_rustle`~~ — **ДОБАВЛЕН** 2026-04-19 (Newspaper Open by leonelmail, CC0, требует конвертации из MP3)
 - [ ] `coffee_shop` — фоновый шум кафе (нужен)
 - [x] `click_001` — **ДОБАВЛЕН** 2026-04-19 (дополнительный звук)
 
