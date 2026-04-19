@@ -35,6 +35,48 @@ fonts {
   name: "jb_mono_18"
   font: "/main/fonts/jb_mono_18.font"
 }
+textures {
+  name: "backgrounds"
+  texture: "/main/images/backgrounds.atlas"
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.01
+  }
+  size {
+    x: 960.0
+    y: 640.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/bg_bedroom_01"
+  id: "scene_bg"
+  adjust_mode: ADJUST_MODE_ZOOM
+  inherit_alpha: true
+  size_mode: SIZE_MODE_MANUAL
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.02
+  }
+  size {
+    x: 960.0
+    y: 640.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/bg_bedroom_01"
+  id: "scene_bg_next"
+  adjust_mode: ADJUST_MODE_ZOOM
+  inherit_alpha: true
+  size_mode: SIZE_MODE_MANUAL
+  enabled: false
+}
 nodes {
   position {
     x: 120.0

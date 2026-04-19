@@ -125,7 +125,9 @@
       "Bash(tar xzf *)",
       "Bash(python tools/refactor_hud_v2.py)",
       "Bash(python tools/gen_bg_phone_v2.py)",
-      "Bash(tools/compile_ink.bat)"
+      "Bash(tools/compile_ink.bat)",
+      "Bash(grep -E \"\\\\.gui_script|\\\\.gui$\")",
+      "Bash(awk '{print $9, $5}')"
     ]
   }
 }

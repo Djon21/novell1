@@ -8,6 +8,8 @@ local scene_controller = require "main.scripts.scene_controller"
 -- РЎРѕСЃС‚РѕСЏРЅРёРµ UI Manager
 local M = {}
 M.current_mode = "menu"  -- "menu", "dialogue", "exploration"
+M.music_started = false
+M.MUSIC_URL = msg.url("main:/music_player#sound")
 
 -- URL'С‹ РєРѕРјРїРѕРЅРµРЅС‚РѕРІ
 M.components = {
@@ -103,13 +105,17 @@ local function setup_scene_controller_ui()
         max_scene_objects = function() return 4 end,
         
         set_background = function(bg_name)
-            -- РћС‚РїСЂР°РІР»СЏРµРј СЃРѕРѕР±С‰РµРЅРёРµ backgrounds РєРѕРјРїРѕРЅРµРЅС‚Сѓ (РµСЃР»Рё Р±СѓРґРµС‚ СЃРѕР·РґР°РЅ)
-            -- РџРѕРєР° backgrounds РѕСЃС‚Р°СЋС‚СЃСЏ РІ dialogue_system
-            print("[ui_manager] set_background:", bg_name)
+            msg.post(M.components.dialogue, "set_background", {name = bg_name})
         end,
         
         set_scene_object = function(i, obj)
-            msg.post(M.components.hotspots, "set_scene_object", {index = i, obj = obj})
+            local o = obj and {
+                id = obj.id,
+                image = obj.image,
+                pos = obj.pos,
+                size = obj.size,
+            } or nil
+            msg.post(M.components.hotspots, "set_scene_object", {index = i, obj = o})
         end,
         
         set_hotspot = function(i, data)
@@ -168,12 +174,21 @@ function on_message(self, message_id, message, sender)
         show_menu()
         
     elseif message_id == hash("start_game") then
-        -- РќР°С‡Р°С‚СЊ РЅРѕРІСѓСЋ РёРіСЂСѓ
-        dm.restart()
+        local ok, bytes = pcall(sys.load_resource, "/main/story/chapter_01.json")
+        if not ok or not bytes then
+            print("[ui_manager] ERROR: chapter_01.json not found")
+            return
+        end
+        dm.init(bytes)
         handle_dialogue_update()
         
     elseif message_id == hash("continue_game") then
-        -- РџСЂРѕРґРѕР»Р¶РёС‚СЊ РёРіСЂСѓ
+        local ok, bytes = pcall(sys.load_resource, "/main/story/chapter_01.json")
+        if not ok or not bytes then
+            print("[ui_manager] ERROR: chapter_01.json not found")
+            return
+        end
+        dm.load_saved(bytes)
         handle_dialogue_update()
         
     elseif message_id == hash("dialogue_updated") then
@@ -203,9 +218,12 @@ function on_message(self, message_id, message, sender)
 end
 
 function on_input(self, action_id, action)
-    -- Input РѕР±СЂР°Р±Р°С‚С‹РІР°РµС‚СЃСЏ РІ РѕС‚РґРµР»СЊРЅС‹С… РєРѕРјРїРѕРЅРµРЅС‚Р°С…
-    -- Р—РґРµСЃСЊ С‚РѕР»СЊРєРѕ РіР»РѕР±Р°Р»СЊРЅС‹Рµ С…РѕС‚РєРµРё (РµСЃР»Рё РЅСѓР¶РЅС‹)
-    
+    -- Стартуем музыку при первом касании (браузеры блокируют autoplay)
+    if not M.music_started and action_id == hash("touch") and action.pressed then
+        M.music_started = true
+        msg.post(M.MUSIC_URL, "play_sound", { delay = 0, gain = 0.5 })
+    end
+
     if action_id == hash("key_esc") and action.pressed then
         if M.current_mode == "dialogue" or M.current_mode == "exploration" then
             -- ESC РѕС‚РєСЂС‹РІР°РµС‚ РјРµРЅСЋ РїР°СѓР·С‹ (TODO)

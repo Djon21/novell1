@@ -10,6 +10,7 @@ local M = {}
 M.HOTSPOT_COUNT = 6
 M.ORBIT_DOTS = 6
 M.SCENE_OBJECT_COUNT = 4
+M.edit_shift_held = false
 
 -- Р В РЎСљР В РЎвЂўР В РўвЂР РЋРІР‚в„– hotspots (6 Р РЋР С“Р В Р’В»Р В РЎвЂўР РЋРІР‚С™Р В РЎвЂўР В Р вЂ )
 M.hotspot_boxes = {}
@@ -65,6 +66,10 @@ local function set_hotspot(i, data)
         gui.set_position(icon_node, vmath.vector3(cx, cy + ICON_Y_OFFSET, 0.07))
         
         gui.set_text(icon_node, icon)
+        -- Defold GUI: sort is by declaration order without layers, so force
+        -- icon above circle/ring regardless of how .gui file was arranged.
+        gui.move_above(circle_node, ring_node)
+        gui.move_above(icon_node, circle_node)
         
         -- Р В РЎвЂ™Р В Р’В»Р РЋР Р‰Р РЋРІР‚С›Р РЋРІР‚в„–: Р В РўвЂР В Р’В»Р РЋР РЏ locked Р В Р вЂ Р РЋР С“Р РЋРІР‚В Р РЋРІР‚С™Р РЋРЎвЂњР РЋР С“Р В РЎвЂќР В Р’В»Р В Р’ВµР В Р’Вµ
         local circle_a = data.locked and 0.50 or 0.78
@@ -263,18 +268,60 @@ function on_message(self, message_id, message, sender)
 end
 
 function on_input(self, action_id, action)
-    -- Р В РЎвЂєР В Р’В±Р РЋР вЂљР В Р’В°Р В Р’В±Р В РЎвЂўР РЋРІР‚С™Р В РЎвЂќР В Р’В° Р В РЎвЂќР В Р’В»Р В РЎвЂР В РЎвЂќР В РЎвЂўР В Р вЂ  Р В РЎвЂ”Р В РЎвЂў hotspots Р В РўвЂР В Р’ВµР В Р’В»Р В Р’ВµР В РЎвЂ“Р В РЎвЂР РЋР вЂљР РЋРЎвЂњР В Р’ВµР РЋРІР‚С™Р РЋР С“Р РЋР РЏ scene_controller
-    -- Р В РІР‚вЂќР В РўвЂР В Р’ВµР РЋР С“Р РЋР Р‰ Р РЋРІР‚С™Р В РЎвЂўР В Р’В»Р РЋР Р‰Р В РЎвЂќР В РЎвЂў Р В РЎвЂ”Р РЋР вЂљР В РЎвЂўР В Р вЂ Р В Р’ВµР РЋР вЂљР РЋР РЏР В Р’ВµР В РЎВ Р В РЎвЂ”Р В РЎвЂўР В РЎвЂ”Р В Р’В°Р В РўвЂР В Р’В°Р В Р вЂ¦Р В РЎвЂР В Р’Вµ Р В Р вЂ  hitbox
-    if action_id == hash("touch") and action.pressed then
+    -- Shift modifier for editor (needs press+release, bypass pressed filter)
+    if action_id == hash("edit_shift") then
+        if action.pressed  then M.edit_shift_held = true  end
+        if action.released then M.edit_shift_held = false end
+        return false
+    end
+
+    if not action.pressed then return false end
+
+    -- F1: toggle hotspot editor (works any time scene_controller is active)
+    if action_id == hash("edit_toggle") then
+        hotspot_editor.toggle()
+        return true
+    end
+
+    if hotspot_editor.is_active() then
+        local s = M.edit_shift_held and 20 or 5
+        if     action_id == hash("edit_exit")     then hotspot_editor.exit_mode()
+        elseif action_id == hash("edit_next")     then hotspot_editor.next()
+        elseif action_id == hash("edit_left")     then hotspot_editor.nudge(-s, 0, 0, 0)
+        elseif action_id == hash("edit_right")    then hotspot_editor.nudge( s, 0, 0, 0)
+        elseif action_id == hash("edit_up")       then hotspot_editor.nudge( 0, s, 0, 0)
+        elseif action_id == hash("edit_down")     then hotspot_editor.nudge( 0,-s, 0, 0)
+        elseif action_id == hash("edit_w_minus")  then hotspot_editor.nudge( 0, 0,-s, 0)
+        elseif action_id == hash("edit_w_plus")   then hotspot_editor.nudge( 0, 0, s, 0)
+        elseif action_id == hash("edit_h_minus")  then hotspot_editor.nudge( 0, 0, 0,-s)
+        elseif action_id == hash("edit_h_plus")   then hotspot_editor.nudge( 0, 0, 0, s)
+        elseif action_id == hash("edit_print")    then hotspot_editor.print_current()
+        elseif action_id == hash("touch") then
+            -- click-to-select in edit mode
+            for i = 1, M.HOTSPOT_COUNT do
+                if M.hotspot_boxes[i] and gui.is_enabled(M.hotspot_boxes[i]) and
+                   gui.pick_node(M.hotspot_boxes[i], action.x, action.y) then
+                    hotspot_editor.select(i)
+                    return true
+                end
+            end
+            return false
+        else return false
+        end
+        return true
+    end
+
+    -- Normal mode: click -> scene_controller
+    if action_id == hash("touch") then
         for i = 1, M.HOTSPOT_COUNT do
-            if gui.is_enabled(M.hotspot_boxes[i]) and 
+            if M.hotspot_boxes[i] and gui.is_enabled(M.hotspot_boxes[i]) and
                gui.pick_node(M.hotspot_boxes[i], action.x, action.y) then
-                -- Р В РЎвЂєР РЋРІР‚С™Р В РЎвЂ”Р РЋР вЂљР В Р’В°Р В Р вЂ Р В Р’В»Р РЋР РЏР В Р’ВµР В РЎВ Р РЋР С“Р В РЎвЂўР В Р’В±Р РЋРІР‚в„–Р РЋРІР‚С™Р В РЎвЂР В Р’Вµ Р В РЎвЂќР В Р’В»Р В РЎвЂР В РЎвЂќР В Р’В° Р В Р вЂ  scene_controller
-                msg.post("/scene_controller", "hotspot_clicked", {index = i})
+                print("[hotspots] HIT slot=" .. i)
+                scene_controller.on_hotspot_click(i)
                 return true
             end
         end
     end
-    
+
     return false
 end

@@ -1,2 +1,13 @@
 {
+  "permissions": {
+    "allow": [
+      "Read(*)",
+      "Glob(*)",
+      "Grep(*)",
+      "Edit(C:/Users/GoldiM/novell1/novell1/*)",
+      "Write(C:/Users/GoldiM/novell1/novell1/*)",
+      "Edit(C:/Users/GoldiM/.claude/*)",
+      "Write(C:/Users/GoldiM/.claude/*)"
+    ]
+  }
 }

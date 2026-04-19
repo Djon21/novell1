@@ -61,7 +61,7 @@ local function show_portrait(name)
     print("[portraits] Показан портрет: " .. name)
     
     -- Уведомляем dialogue system о показе портрета
-    msg.post("/ui_manager/dialogue_system#gui", "portrait_shown", { name = name })
+    msg.post("main:/ui_manager#dialogue_system", "portrait_shown", { name = name })
 end
 
 -- -------------------------------------------------------
@@ -88,7 +88,7 @@ local function hide_portrait()
     print("[portraits] Скрыт портрет: " .. portrait_name)
     
     -- Уведомляем dialogue system о скрытии портрета
-    msg.post("/ui_manager/dialogue_system#gui", "portrait_hidden")
+    msg.post("main:/ui_manager#dialogue_system", "portrait_hidden")
 end
 
 -- -------------------------------------------------------
@@ -112,8 +112,11 @@ function init(self)
     print("[portraits] Инициализация")
     
     -- Получаем ноды портретов
-    M.portraits["Мила"] = gui.get_node("portrait_mila")
-    M.portraits["Артём"] = gui.get_node("portrait_artem")
+    local ok_m, node_m = pcall(gui.get_node, "portrait_mila")
+    local ok_a, node_a = pcall(gui.get_node, "portrait_artem")
+    print("[portraits] init nodes: mila ok=", ok_m, "artem ok=", ok_a)
+    if ok_m then M.portraits["Мила"] = node_m end
+    if ok_a then M.portraits["Артём"] = node_a end
     
     -- Скрываем все портреты при старте
     hide_all_portraits()
@@ -124,7 +127,8 @@ function final(self)
 end
 
 function on_message(self, message_id, message, sender)
-    if message_id == hash("show") then
+    print("[portraits] on_message:", message_id, "character=", message and (message.character or message.name))
+    if message_id == hash("show") or message_id == hash("show_portrait") then
         -- Показать портрет персонажа
         -- message.character - имя персонажа
         local character = message.character or message.name
@@ -137,10 +141,10 @@ function on_message(self, message_id, message, sender)
             end
         end
         
-    elseif message_id == hash("hide") then
+    elseif message_id == hash("hide") or message_id == hash("hide_portrait") then
         -- Скрыть текущий портрет
         hide_portrait()
-        
+
     elseif message_id == hash("hide_all") then
         -- Скрыть все портреты
         hide_all_portraits()

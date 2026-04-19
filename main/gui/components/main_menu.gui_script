@@ -63,10 +63,11 @@ local function show_menu()
     print("[main_menu] show_menu() вызван")
     gui.set_enabled(M.bg_menu, true)
     gui.set_enabled(M.menu_panel, true)
-    
+    gui.set_alpha(M.menu_panel, 1.0)
+
     -- Запускаем глитч-эффект на заголовке
     start_glitch()
-    
+
     print("[main_menu] Меню показано")
 end
 
@@ -75,8 +76,9 @@ end
 -- -------------------------------------------------------
 local function hide_menu()
     stop_glitch()
-    gui.set_enabled(M.bg_menu, false)
     gui.set_enabled(M.menu_panel, false)
+    -- bg_menu остаётся видимым как фон сцены
+    -- (будет управляться отдельно при смене фонов)
 end
 
 -- -------------------------------------------------------
@@ -160,6 +162,7 @@ function on_message(self, message_id, message, sender)
 end
 
 function on_input(self, action_id, action)
+    if not gui.is_enabled(M.menu_panel) then return false end
     if action_id == hash("touch") and action.pressed then
         local x = action.x
         local y = action.y
