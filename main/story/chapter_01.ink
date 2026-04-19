@@ -286,6 +286,7 @@ PATCH temporal_sync.module
 Нормальные люди с этого начинают.
 Я — с кофе.
 
+# flag:bathroom_intro_seen=true
 # return_to_scene
 -> DONE
 

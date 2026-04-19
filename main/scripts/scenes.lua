@@ -107,14 +107,20 @@ M.scenes = {
 
     bathroom = {
         bg = "bg_bathroom",
+        on_enter = {
+            knot = "inspect_bathroom",
+            condition = function(gs) return not gs.get_flag("bathroom_intro_seen") end,
+        },
         hotspots = {
             {
                 id = "back_from_bathroom",
                 rect = { x = 30, y = 30, w = 140, h = 80 },
                 label = "Назад",
-                icon = "",
+                icon = "",
                 action = { type = "goto_scene", scene = "apartment_hub" },
             },
+        },
+    },
         },
     },
 
