@@ -1,4 +1,4 @@
-﻿-- main_menu.gui_script
+-- main_menu.gui_script
 -- Контроллер главного меню визуальной новеллы
 
 local sm = require "main.scripts.save_manager"

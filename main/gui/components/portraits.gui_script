@@ -1,4 +1,4 @@
-﻿-- portraits.gui_script
+-- portraits.gui_script
 -- Контроллер портретов персонажей (стиль Persona 5)
 
 local gui_animations = require "main.gui.modules.gui_animations"

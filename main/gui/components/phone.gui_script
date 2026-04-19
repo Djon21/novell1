@@ -1,16 +1,16 @@
 -- phone.gui_script
--- Контроллер HUD иконки телефона
+-- РљРѕРЅС‚СЂРѕР»Р»РµСЂ HUD РёРєРѕРЅРєРё С‚РµР»РµС„РѕРЅР°
 
 local gs = require "main.scripts.game_state"
 local scene_controller = require "main.scripts.scene_controller"
 local gui_animations = require "main.gui.modules.gui_animations"
 
--- Состояние телефона
+-- РЎРѕСЃС‚РѕСЏРЅРёРµ С‚РµР»РµС„РѕРЅР°
 local M = {}
 M.enabled = false
 M.has_notifications = false
 
--- Ноды HUD иконки телефона
+-- РќРѕРґС‹ HUD РёРєРѕРЅРєРё С‚РµР»РµС„РѕРЅР°
 M.circle = nil
 M.ring = nil
 M.icon = nil
@@ -23,7 +23,7 @@ M.tag = nil
 M.caption = nil
 
 -- -------------------------------------------------------
--- Включает/выключает все ноды HUD-иконки телефона
+-- Р’РєР»СЋС‡Р°РµС‚/РІС‹РєР»СЋС‡Р°РµС‚ РІСЃРµ РЅРѕРґС‹ HUD-РёРєРѕРЅРєРё С‚РµР»РµС„РѕРЅР°
 -- -------------------------------------------------------
 local function set_phone_enabled(enabled)
     M.enabled = enabled
@@ -41,12 +41,12 @@ local function set_phone_enabled(enabled)
 end
 
 -- -------------------------------------------------------
--- Обновляет бейдж с количеством уведомлений
+-- РћР±РЅРѕРІР»СЏРµС‚ Р±РµР№РґР¶ СЃ РєРѕР»РёС‡РµСЃС‚РІРѕРј СѓРІРµРґРѕРјР»РµРЅРёР№
 -- -------------------------------------------------------
 local function update_badge()
     if not M.badge or not M.badge_text then return end
     
-    -- Получаем количество непрочитанных сообщений из game_state
+    -- РџРѕР»СѓС‡Р°РµРј РєРѕР»РёС‡РµСЃС‚РІРѕ РЅРµРїСЂРѕС‡РёС‚Р°РЅРЅС‹С… СЃРѕРѕР±С‰РµРЅРёР№ РёР· game_state
     local unread_count = gs.get_flag("phone_unread_count") or 0
     
     if unread_count > 0 then
@@ -62,46 +62,46 @@ local function update_badge()
 end
 
 -- -------------------------------------------------------
--- Открывает телефон (переход на сцену phone_home)
+-- РћС‚РєСЂС‹РІР°РµС‚ С‚РµР»РµС„РѕРЅ (РїРµСЂРµС…РѕРґ РЅР° СЃС†РµРЅСѓ phone_home)
 -- -------------------------------------------------------
 local function open_phone()
     if not gs.get_flag("has_phone") then 
-        print("[phone] Телефон недоступен (has_phone=false)")
+        print("[phone] РўРµР»РµС„РѕРЅ РЅРµРґРѕСЃС‚СѓРїРµРЅ (has_phone=false)")
         return 
     end
     
-    -- Если уже открыт — ничего не делаем
+    -- Р•СЃР»Рё СѓР¶Рµ РѕС‚РєСЂС‹С‚ вЂ” РЅРёС‡РµРіРѕ РЅРµ РґРµР»Р°РµРј
     if scene_controller.get_current_scene_id() == "phone_home" then 
-        print("[phone] Телефон уже открыт")
+        print("[phone] РўРµР»РµС„РѕРЅ СѓР¶Рµ РѕС‚РєСЂС‹С‚")
         return 
     end
     
-    -- Запоминаем текущую сцену для возврата
+    -- Р—Р°РїРѕРјРёРЅР°РµРј С‚РµРєСѓС‰СѓСЋ СЃС†РµРЅСѓ РґР»СЏ РІРѕР·РІСЂР°С‚Р°
     local caller = scene_controller.get_current_scene_id()
     if caller then
         gs.set_flag("_phone_return_scene", caller)
-        print("[phone] Сохранена сцена возврата:", caller)
+        print("[phone] РЎРѕС…СЂР°РЅРµРЅР° СЃС†РµРЅР° РІРѕР·РІСЂР°С‚Р°:", caller)
     end
     
-    -- Переходим на сцену телефона
-    print("[phone] Открываем телефон")
+    -- РџРµСЂРµС…РѕРґРёРј РЅР° СЃС†РµРЅСѓ С‚РµР»РµС„РѕРЅР°
+    print("[phone] РћС‚РєСЂС‹РІР°РµРј С‚РµР»РµС„РѕРЅ")
     scene_controller.enter("phone_home")
 end
 
 -- -------------------------------------------------------
--- Анимация пульсации при новом уведомлении
+-- РђРЅРёРјР°С†РёСЏ РїСѓР»СЊСЃР°С†РёРё РїСЂРё РЅРѕРІРѕРј СѓРІРµРґРѕРјР»РµРЅРёРё
 -- -------------------------------------------------------
 local function animate_notification()
     if not M.ring then return end
     
-    -- Пульсация кольца
+    -- РџСѓР»СЊСЃР°С†РёСЏ РєРѕР»СЊС†Р°
     gui.cancel_animation(M.ring, "scale.x")
     gui.cancel_animation(M.ring, "scale.y")
     
     gui.animate(M.ring, "scale.x", 1.2, gui.EASING_OUTQUAD, 0.3, 0, nil, gui.PLAYBACK_ONCE_PINGPONG)
     gui.animate(M.ring, "scale.y", 1.2, gui.EASING_OUTQUAD, 0.3, 0, nil, gui.PLAYBACK_ONCE_PINGPONG)
     
-    -- Звук уведомления (опционально)
+    -- Р—РІСѓРє СѓРІРµРґРѕРјР»РµРЅРёСЏ (РѕРїС†РёРѕРЅР°Р»СЊРЅРѕ)
     -- msg.post("main:/sfx_player#phone_notify", "play_sound")
 end
 
@@ -110,9 +110,9 @@ end
 -- -------------------------------------------------------
 
 function init(self)
-    print("[phone] Инициализация phone.gui_script")
+    print("[phone] РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ phone.gui_script")
     
-    -- Получаем ноды HUD иконки телефона
+    -- РџРѕР»СѓС‡Р°РµРј РЅРѕРґС‹ HUD РёРєРѕРЅРєРё С‚РµР»РµС„РѕРЅР°
     M.circle = gui.get_node("hud_phone_circle")
     M.ring = gui.get_node("hud_phone_ring")
     M.icon = gui.get_node("hud_phone_icon")
@@ -124,60 +124,60 @@ function init(self)
     M.tag = gui.get_node("hud_phone_tag")
     M.caption = gui.get_node("hud_phone_caption")
     
-    -- Изначально скрыт (появится когда has_phone=true)
+    -- РР·РЅР°С‡Р°Р»СЊРЅРѕ СЃРєСЂС‹С‚ (РїРѕСЏРІРёС‚СЃСЏ РєРѕРіРґР° has_phone=true)
     set_phone_enabled(false)
     
-    -- Обновляем видимость на основе флага has_phone
+    -- РћР±РЅРѕРІР»СЏРµРј РІРёРґРёРјРѕСЃС‚СЊ РЅР° РѕСЃРЅРѕРІРµ С„Р»Р°РіР° has_phone
     local has_phone = gs.get_flag("has_phone")
     if has_phone then
         set_phone_enabled(true)
         update_badge()
     end
     
-    print("[phone] Инициализация завершена, has_phone:", has_phone)
+    print("[phone] РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ Р·Р°РІРµСЂС€РµРЅР°, has_phone:", has_phone)
 end
 
 function final(self)
-    print("[phone] Финализация phone.gui_script")
+    print("[phone] Р¤РёРЅР°Р»РёР·Р°С†РёСЏ phone.gui_script")
 end
 
 function on_message(self, message_id, message, sender)
     if message_id == hash("show_phone") then
-        -- Показать иконку телефона
+        -- РџРѕРєР°Р·Р°С‚СЊ РёРєРѕРЅРєСѓ С‚РµР»РµС„РѕРЅР°
         set_phone_enabled(true)
         update_badge()
-        print("[phone] Телефон показан")
+        print("[phone] РўРµР»РµС„РѕРЅ РїРѕРєР°Р·Р°РЅ")
         
     elseif message_id == hash("hide_phone") then
-        -- Скрыть иконку телефона
+        -- РЎРєСЂС‹С‚СЊ РёРєРѕРЅРєСѓ С‚РµР»РµС„РѕРЅР°
         set_phone_enabled(false)
-        print("[phone] Телефон скрыт")
+        print("[phone] РўРµР»РµС„РѕРЅ СЃРєСЂС‹С‚")
         
     elseif message_id == hash("update_phone") then
-        -- Обновить состояние (видимость + бейдж)
+        -- РћР±РЅРѕРІРёС‚СЊ СЃРѕСЃС‚РѕСЏРЅРёРµ (РІРёРґРёРјРѕСЃС‚СЊ + Р±РµР№РґР¶)
         local has_phone = gs.get_flag("has_phone")
         set_phone_enabled(has_phone == true)
         if has_phone then
             update_badge()
         end
-        print("[phone] Телефон обновлен, has_phone:", has_phone)
+        print("[phone] РўРµР»РµС„РѕРЅ РѕР±РЅРѕРІР»РµРЅ, has_phone:", has_phone)
         
     elseif message_id == hash("phone_notification") then
-        -- Новое уведомление
+        -- РќРѕРІРѕРµ СѓРІРµРґРѕРјР»РµРЅРёРµ
         local count = message.count or 1
         gs.set_flag("phone_unread_count", count)
         update_badge()
         animate_notification()
-        print("[phone] Новое уведомление, count:", count)
+        print("[phone] РќРѕРІРѕРµ СѓРІРµРґРѕРјР»РµРЅРёРµ, count:", count)
         
     elseif message_id == hash("clear_notifications") then
-        -- Очистить уведомления
+        -- РћС‡РёСЃС‚РёС‚СЊ СѓРІРµРґРѕРјР»РµРЅРёСЏ
         gs.set_flag("phone_unread_count", 0)
         update_badge()
-        print("[phone] Уведомления очищены")
+        print("[phone] РЈРІРµРґРѕРјР»РµРЅРёСЏ РѕС‡РёС‰РµРЅС‹")
         
     elseif message_id == hash("open_phone") then
-        -- Открыть телефон
+        -- РћС‚РєСЂС‹С‚СЊ С‚РµР»РµС„РѕРЅ
         open_phone()
     end
 end
@@ -185,10 +185,10 @@ end
 function on_input(self, action_id, action)
     if not M.enabled then return false end
     
-    -- Обработка клика по иконке телефона
+    -- РћР±СЂР°Р±РѕС‚РєР° РєР»РёРєР° РїРѕ РёРєРѕРЅРєРµ С‚РµР»РµС„РѕРЅР°
     if action_id == hash("touch") and action.pressed then
         if gui.is_enabled(M.hit) and gui.pick_node(M.hit, action.x, action.y) then
-            print("[phone] Клик по иконке телефона")
+            print("[phone] РљР»РёРє РїРѕ РёРєРѕРЅРєРµ С‚РµР»РµС„РѕРЅР°")
             open_phone()
             return true
         end

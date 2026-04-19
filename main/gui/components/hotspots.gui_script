@@ -1,17 +1,17 @@
 -- hotspots.gui_script
--- Контроллер интерактивных точек (hotspots) для point-and-click сцен
+-- РљРѕРЅС‚СЂРѕР»Р»РµСЂ РёРЅС‚РµСЂР°РєС‚РёРІРЅС‹С… С‚РѕС‡РµРє (hotspots) РґР»СЏ point-and-click СЃС†РµРЅ
 
 local scene_controller = require "main.scripts.scene_controller"
 local hotspot_editor = require "main.scripts.hotspot_editor"
 local gui_animations = require "main.gui.modules.gui_animations"
 
--- Состояние hotspots
+-- РЎРѕСЃС‚РѕСЏРЅРёРµ hotspots
 local M = {}
 M.HOTSPOT_COUNT = 6
 M.ORBIT_DOTS = 6
 M.SCENE_OBJECT_COUNT = 4
 
--- Ноды hotspots (6 слотов)
+-- РќРѕРґС‹ hotspots (6 СЃР»РѕС‚РѕРІ)
 M.hotspot_boxes = {}
 M.hotspot_labels = {}
 M.hotspot_icons = {}
@@ -20,16 +20,16 @@ M.hotspot_rings = {}
 M.hotspot_orbits = {}
 M.hotspot_dots = {}
 
--- Ноды scene objects (4 слота)
+-- РќРѕРґС‹ scene objects (4 СЃР»РѕС‚Р°)
 M.scene_obj_nodes = {}
 
 -- -------------------------------------------------------
--- Установка hotspot в слот
+-- РЈСЃС‚Р°РЅРѕРІРєР° hotspot РІ СЃР»РѕС‚
 -- -------------------------------------------------------
 
 local function set_hotspot(i, data)
     if not data then
-        -- Скрыть hotspot
+        -- РЎРєСЂС‹С‚СЊ hotspot
         gui.set_enabled(M.hotspot_boxes[i], false)
         gui.set_enabled(M.hotspot_labels[i], false)
         gui.set_enabled(M.hotspot_icons[i], false)
@@ -43,13 +43,13 @@ local function set_hotspot(i, data)
     end
     
     local r = data.rect
-    -- pivot CENTER по умолчанию, position — центр бокса
+    -- pivot CENTER РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ, position вЂ” С†РµРЅС‚СЂ Р±РѕРєСЃР°
     local cx = r.x + r.w / 2
     local cy = r.y + r.h / 2
     gui.set_position(M.hotspot_boxes[i], vmath.vector3(cx, cy, 0.08))
     gui.set_size(M.hotspot_boxes[i], vmath.vector3(r.w, r.h, 0))
     
-    -- Визуальный стек: circle + ring + icon + orbit с точками
+    -- Р’РёР·СѓР°Р»СЊРЅС‹Р№ СЃС‚РµРє: circle + ring + icon + orbit СЃ С‚РѕС‡РєР°РјРё
     local icon = data.icon
     if icon and icon ~= "" then
         local icon_node = M.hotspot_icons[i]
@@ -57,8 +57,8 @@ local function set_hotspot(i, data)
         local ring_node = M.hotspot_rings[i]
         local orbit_node = M.hotspot_orbits[i]
         
-        -- Позиционируем весь стек в центре hotspot'а
-        local ICON_Y_OFFSET = 4  -- компенсация baseline шрифта
+        -- РџРѕР·РёС†РёРѕРЅРёСЂСѓРµРј РІРµСЃСЊ СЃС‚РµРє РІ С†РµРЅС‚СЂРµ hotspot'Р°
+        local ICON_Y_OFFSET = 4  -- РєРѕРјРїРµРЅСЃР°С†РёСЏ baseline С€СЂРёС„С‚Р°
         gui.set_position(circle_node, vmath.vector3(cx, cy, 0.068))
         gui.set_position(ring_node, vmath.vector3(cx, cy, 0.067))
         gui.set_position(orbit_node, vmath.vector3(cx, cy, 0.066))
@@ -66,7 +66,7 @@ local function set_hotspot(i, data)
         
         gui.set_text(icon_node, icon)
         
-        -- Альфы: для locked всё тусклее
+        -- РђР»СЊС„С‹: РґР»СЏ locked РІСЃС‘ С‚СѓСЃРєР»РµРµ
         local circle_a = data.locked and 0.50 or 0.78
         local ring_a = data.locked and 0.35 or 0.90
         local icon_a = data.locked and 0.45 or 1.0
@@ -87,13 +87,13 @@ local function set_hotspot(i, data)
         gui.set_enabled(ring_node, true)
         gui.set_enabled(icon_node, true)
         
-        -- Orbit/dots отключены (минималистичный стиль)
+        -- Orbit/dots РѕС‚РєР»СЋС‡РµРЅС‹ (РјРёРЅРёРјР°Р»РёСЃС‚РёС‡РЅС‹Р№ СЃС‚РёР»СЊ)
         gui.set_enabled(orbit_node, false)
         for d = 1, M.ORBIT_DOTS do
             gui.set_enabled(M.hotspot_dots[i][d], false)
         end
         
-        -- Пульсация «дыхание» круга+кольца+иконки
+        -- РџСѓР»СЊСЃР°С†РёСЏ В«РґС‹С…Р°РЅРёРµВ» РєСЂСѓРіР°+РєРѕР»СЊС†Р°+РёРєРѕРЅРєРё
         gui.cancel_animation(icon_node, gui.PROP_SCALE)
         gui.cancel_animation(circle_node, gui.PROP_SCALE)
         gui.cancel_animation(ring_node, gui.PROP_SCALE)
@@ -111,7 +111,7 @@ local function set_hotspot(i, data)
                 gui.EASING_INOUTSINE, 1.4, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
         end
     else
-        -- Нет иконки — скрываем визуальный стек
+        -- РќРµС‚ РёРєРѕРЅРєРё вЂ” СЃРєСЂС‹РІР°РµРј РІРёР·СѓР°Р»СЊРЅС‹Р№ СЃС‚РµРє
         gui.cancel_animation(M.hotspot_icons[i], gui.PROP_SCALE)
         gui.cancel_animation(M.hotspot_circles[i], gui.PROP_SCALE)
         gui.cancel_animation(M.hotspot_rings[i], gui.PROP_SCALE)
@@ -124,7 +124,7 @@ local function set_hotspot(i, data)
         end
     end
     
-    -- Прозрачность hotspot-rect
+    -- РџСЂРѕР·СЂР°С‡РЅРѕСЃС‚СЊ hotspot-rect
     local editing = hotspot_editor.is_active()
     local selected = editing and (i == hotspot_editor.selected_index())
     local box_alpha
@@ -132,7 +132,7 @@ local function set_hotspot(i, data)
     if editing then
         box_alpha = selected and 0.65 or 0.25
     else
-        -- В игровом режиме rect полностью прозрачный (invisible hitbox)
+        -- Р’ РёРіСЂРѕРІРѕРј СЂРµР¶РёРјРµ rect РїРѕР»РЅРѕСЃС‚СЊСЋ РїСЂРѕР·СЂР°С‡РЅС‹Р№ (invisible hitbox)
         box_alpha = 0
     end
     
@@ -159,7 +159,7 @@ local function set_hotspot(i, data)
 end
 
 -- -------------------------------------------------------
--- Установка scene object в слот
+-- РЈСЃС‚Р°РЅРѕРІРєР° scene object РІ СЃР»РѕС‚
 -- -------------------------------------------------------
 
 local function set_scene_object(i, obj)
@@ -171,7 +171,7 @@ local function set_scene_object(i, obj)
         return
     end
     
-    -- По умолчанию pivot центр — ставим центр в pos + w/2, h/2
+    -- РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ pivot С†РµРЅС‚СЂ вЂ” СЃС‚Р°РІРёРј С†РµРЅС‚СЂ РІ pos + w/2, h/2
     local w = obj.size and obj.size.w or 87
     local h = obj.size and obj.size.h or 37
     local cx = (obj.pos.x or 0) + w / 2
@@ -187,7 +187,7 @@ local function set_scene_object(i, obj)
 end
 
 -- -------------------------------------------------------
--- Скрыть все hotspots
+-- РЎРєСЂС‹С‚СЊ РІСЃРµ hotspots
 -- -------------------------------------------------------
 
 local function hide_all_hotspots()
@@ -213,9 +213,9 @@ end
 -- -------------------------------------------------------
 
 function init(self)
-    print("[hotspots] Инициализация hotspots.gui_script")
+    print("[hotspots] РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ hotspots.gui_script")
     
-    -- Получаем ноды hotspots (6 слотов)
+    -- РџРѕР»СѓС‡Р°РµРј РЅРѕРґС‹ hotspots (6 СЃР»РѕС‚РѕРІ)
     for i = 1, M.HOTSPOT_COUNT do
         M.hotspot_boxes[i] = gui.get_node("hotspot_" .. i)
         M.hotspot_labels[i] = gui.get_node("hotspot_label_" .. i)
@@ -230,44 +230,44 @@ function init(self)
         end
     end
     
-    -- Получаем ноды scene objects (4 слота)
+    -- РџРѕР»СѓС‡Р°РµРј РЅРѕРґС‹ scene objects (4 СЃР»РѕС‚Р°)
     for i = 1, M.SCENE_OBJECT_COUNT do
         M.scene_obj_nodes[i] = gui.get_node("scene_obj_" .. i)
     end
     
-    -- Изначально всё скрыто
+    -- РР·РЅР°С‡Р°Р»СЊРЅРѕ РІСЃС‘ СЃРєСЂС‹С‚Рѕ
     hide_all_hotspots()
     
-    print("[hotspots] Инициализация завершена")
+    print("[hotspots] РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ Р·Р°РІРµСЂС€РµРЅР°")
 end
 
 function final(self)
-    print("[hotspots] Финализация hotspots.gui_script")
+    print("[hotspots] Р¤РёРЅР°Р»РёР·Р°С†РёСЏ hotspots.gui_script")
 end
 
 function on_message(self, message_id, message, sender)
     if message_id == hash("set_hotspot") then
-        -- Установить hotspot в слот
+        -- РЈСЃС‚Р°РЅРѕРІРёС‚СЊ hotspot РІ СЃР»РѕС‚
         set_hotspot(message.index, message.data)
         
     elseif message_id == hash("set_scene_object") then
-        -- Установить scene object в слот
+        -- РЈСЃС‚Р°РЅРѕРІРёС‚СЊ scene object РІ СЃР»РѕС‚
         set_scene_object(message.index, message.obj)
         
     elseif message_id == hash("hide_all") then
-        -- Скрыть все hotspots
+        -- РЎРєСЂС‹С‚СЊ РІСЃРµ hotspots
         hide_all_hotspots()
     end
 end
 
 function on_input(self, action_id, action)
-    -- Обработка кликов по hotspots делегируется scene_controller
-    -- Здесь только проверяем попадание в hitbox
+    -- РћР±СЂР°Р±РѕС‚РєР° РєР»РёРєРѕРІ РїРѕ hotspots РґРµР»РµРіРёСЂСѓРµС‚СЃСЏ scene_controller
+    -- Р—РґРµСЃСЊ С‚РѕР»СЊРєРѕ РїСЂРѕРІРµСЂСЏРµРј РїРѕРїР°РґР°РЅРёРµ РІ hitbox
     if action_id == hash("touch") and action.pressed then
         for i = 1, M.HOTSPOT_COUNT do
             if gui.is_enabled(M.hotspot_boxes[i]) and 
                gui.pick_node(M.hotspot_boxes[i], action.x, action.y) then
-                -- Отправляем событие клика в scene_controller
+                -- РћС‚РїСЂР°РІР»СЏРµРј СЃРѕР±С‹С‚РёРµ РєР»РёРєР° РІ scene_controller
                 msg.post("/scene_controller", "hotspot_clicked", {index = i})
                 return true
             end
