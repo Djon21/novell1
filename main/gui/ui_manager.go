@@ -4,25 +4,25 @@ components {
 }
 components {
   id: "main_menu"
-  component: "/main/gui/components/main_menu.go"
+  component: "/main/gui/components/main_menu.gui"
 }
 components {
   id: "portraits"
-  component: "/main/gui/components/portraits.go"
+  component: "/main/gui/components/portraits.gui"
 }
 components {
   id: "inventory"
-  component: "/main/gui/components/inventory.go"
+  component: "/main/gui/components/inventory.gui"
 }
 components {
   id: "phone"
-  component: "/main/gui/components/phone.go"
+  component: "/main/gui/components/phone.gui"
 }
 components {
   id: "dialogue_system"
-  component: "/main/gui/components/dialogue_system.go"
+  component: "/main/gui/components/dialogue_system.gui"
 }
 components {
   id: "hotspots"
-  component: "/main/gui/components/hotspots.go"
+  component: "/main/gui/components/hotspots.gui"
 }
