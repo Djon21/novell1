@@ -1,7 +1,7 @@
-﻿# GUI MIGRATION STATUS
+# GUI MIGRATION STATUS
 
 **Дата обновления:** 2026-04-19
-**Текущий прогресс:** Checkpoint 4 завершен
+**Текущий прогресс:** Checkpoint 5 завершен
 
 ---
 
@@ -11,7 +11,7 @@
 - [x] **Checkpoint 2: Main Menu** ✅ (требует GUI файл)
 - [x] **Checkpoint 3: Portraits** ✅ (требует GUI файл)
 - [x] **Checkpoint 4: Inventory** ✅ (требует GUI файл)
-- [ ] **Checkpoint 5: Phone**
+- [x] **Checkpoint 5: Phone** ✅ (требует GUI файл)
 - [ ] **Checkpoint 6: Dialogue System**
 - [ ] **Checkpoint 7: Hotspots**
 - [ ] **Checkpoint 8: UI Manager**
@@ -22,9 +22,9 @@
 
 ## ПРОГРЕСС
 
-**Задачи:** 17 из 47 (36%)
-**Checkpoints:** 4 из 10 (40%)
-**Файлов создано:** 16
+**Задачи:** 21 из 47 (45%)
+**Checkpoints:** 5 из 10 (50%)
+**Файлов создано:** 19
 
 ---
 
@@ -56,11 +56,17 @@
 - ⏳ inventory.gui (требует редактор)
 - ⏳ inventory_slot.gui template (требует редактор)
 
+### Checkpoint 5 - Phone:
+- ✅ phone.gui_script (210 строк)
+- ✅ phone.go
+- ✅ test_phone.collection
+- ⏳ phone.gui (требует редактор)
+
 ---
 
 ## СЛЕДУЮЩИЕ ШАГИ
 
-**Вариант A:** Продолжить с Checkpoint 5 (Phone System)
+**Вариант A:** Продолжить с Checkpoint 6 (Dialogue System)
 
 **Вариант B:** Остановиться и создать все GUI файлы в Defold редакторе
 
@@ -70,11 +76,11 @@
 
 ## СТАТИСТИКА СЕССИИ
 
-**Время работы:** ~2 часа
+**Время работы:** ~2.5 часа
 **Коммитов:** 3
-**Строк кода:** ~2800
-**Компонентов готово:** 3 (Menu, Portraits, Inventory)
-**Осталось:** 3 компонента (Phone, Dialogue, Hotspots) + UI Manager + Интеграция
+**Строк кода:** ~3010
+**Компонентов готово:** 4 (Menu, Portraits, Inventory, Phone)
+**Осталось:** 2 компонента (Dialogue, Hotspots) + UI Manager + Интеграция
 
 ---
 

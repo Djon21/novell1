@@ -1,8 +1,8 @@
-﻿# ИНСТРУКЦИЯ ДЛЯ ПРОДОЛЖЕНИЯ МИГРАЦИИ GUI
+# ИНСТРУКЦИЯ ДЛЯ ПРОДОЛЖЕНИЯ МИГРАЦИИ GUI
 
 **Дата:** 2026-04-19
 **Последний коммит:** 127ed8a
-**Прогресс:** 4 из 10 checkpoints (40%)
+**Прогресс:** 5 из 10 checkpoints (50%)
 
 ---
 
@@ -12,8 +12,9 @@
 ✅ **Checkpoint 2:** Main Menu (скрипт готов, GUI файл требует редактора)
 ✅ **Checkpoint 3:** Portraits (скрипт готов, GUI файл требует редактора)
 ✅ **Checkpoint 4:** Inventory (скрипт готов, GUI файл требует редактора)
+✅ **Checkpoint 5:** Phone System (скрипт готов, GUI файл требует редактора)
 
-**Всего создано:** 16 файлов, ~2800 строк кода
+**Всего создано:** 19 файлов, ~3010 строк кода
 
 ---
 
@@ -21,19 +22,20 @@
 
 ### Вариант 1: Продолжить создание компонентов
 
-Следующий этап - **Checkpoint 5: Phone System**
+Следующий этап - **Checkpoint 6: Dialogue System**
 
 **Задачи:**
-1. Создать phone.gui_script (логика телефона, приложения)
-2. Создать phone.go
-3. Создать test_phone.collection
-4. (Позже) Создать phone.gui в Defold редакторе
+1. Создать dialogue_system.gui_script (логика диалогов, выборов, нарратора)
+2. Создать dialogue_system.go
+3. Создать test_dialogue.collection
+4. (Позже) Создать dialogue_system.gui в Defold редакторе
+5. (Позже) Создать dialogue_choice.gui template
 
 **Команда для AI в новом чате:**
 `
 Продолжаем миграцию GUI проекта novell1. 
 Прочитай файл MIGRATION_STATUS.md и GUI_MIGRATION_PLAN.md.
-Начинаем с Checkpoint 5 - Phone System (задачи 4.1-4.4).
+Начинаем с Checkpoint 6 - Dialogue System (задачи 5.1-5.6).
 `
 
 ### Вариант 2: Создать GUI файлы в редакторе
@@ -43,6 +45,7 @@
 1. **main_menu.gui** - скопировать 60 нод меню из novel_ui.gui
 2. **portraits.gui** - скопировать 2 ноды (portrait_mila, portrait_artem)
 3. **inventory.gui** - скопировать 143 ноды инвентаря
+4. **phone.gui** - скопировать 10 нод HUD телефона (hud_phone_*)
 
 После этого компоненты можно тестировать.
 
@@ -68,6 +71,8 @@
   │   ├── portraits.go ✅
   │   ├── inventory.gui_script ✅
   │   ├── inventory.go ✅
+  │   ├── phone.gui_script ✅
+  │   ├── phone.go ✅
   │   └── test_*.collection ✅
   ├── modules/             # Утилиты
   │   ├── gui_utils.lua ✅
@@ -78,11 +83,6 @@
 ---
 
 ## СЛЕДУЮЩИЕ КОМПОНЕНТЫ
-
-### Checkpoint 5: Phone System (~2 часа)
-- phone.gui_script
-- phone.go
-- test_phone.collection
 
 ### Checkpoint 6: Dialogue System (~3 часа)
 - dialogue_system.gui_script (самый сложный)
@@ -110,7 +110,7 @@
 - Обновить документацию
 - Финальное тестирование
 
-**Общее время:** ~11 часов работы
+**Общее время:** ~9 часов работы
 
 ---
 
