@@ -1,8 +1,8 @@
 name: "main"
 scale_along_z: 0
-game_objects {
+collection_instances {
   id: "ui_manager"
-  components: "/main/gui/ui_manager.go"
+  collection: "/main/gui/ui_manager.go"
   position {
     x: 0.0
     y: 0.0
