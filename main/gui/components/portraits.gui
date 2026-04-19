@@ -1,0 +1,41 @@
+script: "/main/gui/components/portraits.gui_script"
+textures {
+  name: "characters"
+  texture: "/main/images/characters.atlas"
+}
+nodes {
+  position {
+    x: 120.0
+    y: 120.0
+    z: 0.15
+  }
+  size {
+    x: 240.0
+    y: 240.0
+  }
+  type: TYPE_BOX
+  texture: "characters/mila_r"
+  id: "portrait_mila"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_BOTTOM
+  enabled: false
+}
+nodes {
+  position {
+    x: 120.0
+    y: 120.0
+    z: 0.15
+  }
+  size {
+    x: 240.0
+    y: 240.0
+  }
+  type: TYPE_BOX
+  texture: "characters/artem"
+  id: "portrait_artem"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_BOTTOM
+  enabled: false
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT

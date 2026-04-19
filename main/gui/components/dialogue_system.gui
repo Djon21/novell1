@@ -1,0 +1,632 @@
+script: "/main/gui/components/dialogue_system.gui_script"
+fonts {
+  name: "jb_mono_bold_22"
+  font: "/main/fonts/jb_mono_bold_22.font"
+}
+fonts {
+  name: "jb_mono_stamp"
+  font: "/main/fonts/jb_mono_stamp.font"
+}
+fonts {
+  name: "material_icons"
+  font: "/main/fonts/material_icons.font"
+}
+fonts {
+  name: "caveat_28"
+  font: "/main/fonts/caveat_28.font"
+}
+fonts {
+  name: "main"
+  font: "/main/fonts/main.font"
+}
+fonts {
+  name: "icons"
+  font: "/main/fonts/icons.font"
+}
+fonts {
+  name: "unbounded_72"
+  font: "/main/fonts/unbounded_black_72.font"
+}
+fonts {
+  name: "jb_mono_14"
+  font: "/main/fonts/jb_mono_14.font"
+}
+fonts {
+  name: "jb_mono_18"
+  font: "/main/fonts/jb_mono_18.font"
+}
+nodes {
+  position {
+    x: 120.0
+    y: 87.0
+    z: 0.14
+  }
+  size {
+    x: 140.0
+    y: 140.0
+  }
+  color {
+    x: 0.02
+    y: 0.06
+    z: 0.03
+  }
+  type: TYPE_BOX
+  id: "narrator_panel"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_BOTTOM
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.88
+  enabled: false
+}
+nodes {
+  position {
+    x: 120.0
+    y: 125.0
+    z: 0.16
+  }
+  size {
+    x: 140.0
+    y: 32.0
+  }
+  color {
+    x: 0.3
+    y: 0.95
+    z: 0.4
+  }
+  type: TYPE_TEXT
+  text: "03:47"
+  font: "main"
+  id: "narrator_clock"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_BOTTOM
+  adjust_mode: ADJUST_MODE_STRETCH
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  enabled: false
+}
+nodes {
+  position {
+    x: 120.0
+    y: 87.0
+    z: 0.16
+  }
+  size {
+    x: 140.0
+    y: 32.0
+  }
+  color {
+    x: 0.3
+    y: 0.95
+    z: 0.4
+  }
+  type: TYPE_TEXT
+  text: "user@local:~$"
+  font: "main"
+  id: "narrator_prompt"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_BOTTOM
+  adjust_mode: ADJUST_MODE_STRETCH
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  enabled: false
+}
+nodes {
+  position {
+    x: 120.0
+    y: 50.0
+    z: 0.16
+  }
+  size {
+    x: 60.0
+    y: 32.0
+  }
+  color {
+    x: 0.4
+    z: 0.5
+  }
+  type: TYPE_TEXT
+  text: "_"
+  font: "main"
+  id: "narrator_cursor"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_BOTTOM
+  adjust_mode: ADJUST_MODE_STRETCH
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  enabled: false
+}
+nodes {
+  position {
+    x: 600.0
+    y: 80.0
+    z: 0.1
+  }
+  size {
+    x: 720.0
+    y: 160.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "dialogue_panel"
+  yanchor: YANCHOR_BOTTOM
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.85
+}
+nodes {
+  position {
+    x: 330.0
+    y: 165.0
+    z: 0.2
+  }
+  size {
+    x: 220.0
+    y: 38.0
+  }
+  color {
+    x: 0.12
+    y: 0.12
+    z: 0.45
+  }
+  type: TYPE_BOX
+  id: "name_panel"
+  yanchor: YANCHOR_BOTTOM
+  adjust_mode: ADJUST_MODE_STRETCH
+}
+nodes {
+  position {
+    x: 330.0
+    y: 165.0
+    z: 0.3
+  }
+  size {
+    x: 200.0
+  }
+  type: TYPE_TEXT
+  text: "\320\237\320\265\321\200\321\201\320\276\320\275\320\260\320\266"
+  font: "main"
+  id: "name_label"
+  yanchor: YANCHOR_BOTTOM
+  adjust_mode: ADJUST_MODE_STRETCH
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 260.0
+    y: 132.0
+    z: 0.3
+  }
+  size {
+    x: 680.0
+    y: 130.0
+  }
+  type: TYPE_TEXT
+  text: "..."
+  font: "main"
+  id: "dialogue_text"
+  yanchor: YANCHOR_BOTTOM
+  pivot: PIVOT_NW
+  adjust_mode: ADJUST_MODE_STRETCH
+  line_break: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  text_leading: 1.3
+}
+nodes {
+  position {
+    x: 880.0
+    y: 15.0
+    z: 0.3
+  }
+  size {
+    x: 40.0
+  }
+  color {
+    z: 0.6
+  }
+  type: TYPE_TEXT
+  text: ">>>"
+  font: "main"
+  id: "continue_hint"
+  xanchor: XANCHOR_RIGHT
+  yanchor: YANCHOR_BOTTOM
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 480.0
+    y: 330.0
+    z: 0.2
+  }
+  size {
+    x: 720.0
+    y: 310.0
+  }
+  color {
+    x: 0.04
+    y: 0.03
+    z: 0.14
+  }
+  type: TYPE_BOX
+  id: "choice_panel"
+  alpha: 0.92
+  enabled: false
+}
+nodes {
+  position {
+    y: 153.0
+    z: 0.05
+  }
+  size {
+    x: 660.0
+    y: 2.0
+  }
+  color {
+    x: 0.55
+    y: 0.38
+  }
+  type: TYPE_BOX
+  id: "choice_panel_top_line"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: -357.0
+    z: 0.05
+  }
+  size {
+    x: 3.0
+    y: 300.0
+  }
+  color {
+    x: 0.55
+    y: 0.38
+  }
+  type: TYPE_BOX
+  id: "choice_panel_left_line"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    y: 118.0
+    z: 0.1
+  }
+  size {
+    x: 620.0
+  }
+  color {
+    x: 0.88
+    y: 0.85
+  }
+  type: TYPE_TEXT
+  font: "main"
+  id: "choice_question"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+  outline_alpha: 0.3
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    y: 95.0
+    z: 0.1
+  }
+  size {
+    x: 660.0
+    y: 54.0
+  }
+  color {
+    x: 0.1
+    y: 0.08
+    z: 0.34
+  }
+  type: TYPE_BOX
+  id: "choice_btn_1"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    z: 0.1
+  }
+  size {
+    x: 620.0
+  }
+  type: TYPE_TEXT
+  text: "\320\222\320\260\321\200\320\270\320\260\320\275\321\202 1"
+  font: "main"
+  id: "choice_text_1"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_btn_1"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    y: 122.0
+    z: 0.15
+  }
+  size {
+    x: 660.0
+    y: 2.0
+  }
+  color {
+    x: 0.5
+    y: 0.35
+    z: 0.95
+  }
+  type: TYPE_BOX
+  id: "choice_btn_1_top"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: -328.0
+    y: 95.0
+    z: 0.15
+  }
+  size {
+    x: 4.0
+    y: 54.0
+  }
+  color {
+    x: 0.5
+    y: 0.35
+    z: 0.95
+  }
+  type: TYPE_BOX
+  id: "choice_btn_1_left"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    y: 25.0
+    z: 0.1
+  }
+  size {
+    x: 660.0
+    y: 54.0
+  }
+  color {
+    x: 0.1
+    y: 0.08
+    z: 0.34
+  }
+  type: TYPE_BOX
+  id: "choice_btn_2"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    z: 0.1
+  }
+  size {
+    x: 620.0
+  }
+  type: TYPE_TEXT
+  text: "\320\222\320\260\321\200\320\270\320\260\320\275\321\202 2"
+  font: "main"
+  id: "choice_text_2"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_btn_2"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    y: 52.0
+    z: 0.15
+  }
+  size {
+    x: 660.0
+    y: 2.0
+  }
+  color {
+    x: 0.5
+    y: 0.35
+    z: 0.95
+  }
+  type: TYPE_BOX
+  id: "choice_btn_2_top"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: -328.0
+    y: 25.0
+    z: 0.15
+  }
+  size {
+    x: 4.0
+    y: 54.0
+  }
+  color {
+    x: 0.5
+    y: 0.35
+    z: 0.95
+  }
+  type: TYPE_BOX
+  id: "choice_btn_2_left"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    y: -45.0
+    z: 0.1
+  }
+  size {
+    x: 660.0
+    y: 54.0
+  }
+  color {
+    x: 0.1
+    y: 0.08
+    z: 0.34
+  }
+  type: TYPE_BOX
+  id: "choice_btn_3"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    z: 0.1
+  }
+  size {
+    x: 620.0
+  }
+  type: TYPE_TEXT
+  text: "\320\222\320\260\321\200\320\270\320\260\320\275\321\202 3"
+  font: "main"
+  id: "choice_text_3"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_btn_3"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    y: -18.0
+    z: 0.15
+  }
+  size {
+    x: 660.0
+    y: 2.0
+  }
+  color {
+    x: 0.5
+    y: 0.35
+    z: 0.95
+  }
+  type: TYPE_BOX
+  id: "choice_btn_3_top"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: -328.0
+    y: -45.0
+    z: 0.15
+  }
+  size {
+    x: 4.0
+    y: 54.0
+  }
+  color {
+    x: 0.5
+    y: 0.35
+    z: 0.95
+  }
+  type: TYPE_BOX
+  id: "choice_btn_3_left"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    y: -115.0
+    z: 0.1
+  }
+  size {
+    x: 660.0
+    y: 54.0
+  }
+  color {
+    x: 0.1
+    y: 0.08
+    z: 0.34
+  }
+  type: TYPE_BOX
+  id: "choice_btn_4"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    z: 0.1
+  }
+  size {
+    x: 620.0
+  }
+  type: TYPE_TEXT
+  text: "\320\222\320\260\321\200\320\270\320\260\320\275\321\202 4"
+  font: "main"
+  id: "choice_text_4"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_btn_4"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    y: -88.0
+    z: 0.15
+  }
+  size {
+    x: 660.0
+    y: 2.0
+  }
+  color {
+    x: 0.5
+    y: 0.35
+    z: 0.95
+  }
+  type: TYPE_BOX
+  id: "choice_btn_4_top"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: -328.0
+    y: -115.0
+    z: 0.15
+  }
+  size {
+    x: 4.0
+    y: 54.0
+  }
+  color {
+    x: 0.5
+    y: 0.35
+    z: 0.95
+  }
+  type: TYPE_BOX
+  id: "choice_btn_4_left"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "choice_panel"
+  inherit_alpha: true
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT
