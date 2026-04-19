@@ -1,0 +1,120 @@
+name: CI - Build and Test
+
+on:
+  pull_request:
+    branches: [ dev, master ]
+  push:
+    branches: [ dev ]
+
+jobs:
+  check-ink-compilation:
+    name: Check Ink Scripts Compilation
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        
+    - name: Install Ink compiler
+      run: npm install -g inkjs
+      
+    - name: Compile Ink scripts
+      run: |
+        echo "Compiling Ink scripts..."
+        for file in main/story/*.ink; do
+          if [ -f "$file" ]; then
+            echo "Compiling $file..."
+            inklecate "$file" -o "${file%.ink}.json" || exit 1
+          fi
+        done
+        echo "All Ink scripts compiled successfully!"
+        
+    - name: Check for compilation errors
+      run: |
+        if [ $? -eq 0 ]; then
+          echo "✅ Ink compilation passed"
+        else
+          echo "❌ Ink compilation failed"
+          exit 1
+        fi
+
+  check-lua-syntax:
+    name: Check Lua Syntax
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Setup Lua
+      uses: leafo/gh-actions-lua@v10
+      with:
+        luaVersion: "5.1"
+        
+    - name: Install luacheck
+      uses: leafo/gh-actions-luarocks@v4
+      
+    - name: Install luacheck tool
+      run: luarocks install luacheck
+      
+    - name: Check Lua syntax
+      run: |
+        echo "Checking Lua syntax..."
+        find main/scripts -name "*.lua" -exec luac -p {} \; || exit 1
+        echo "✅ Lua syntax check passed"
+
+  validate-project-structure:
+    name: Validate Project Structure
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Check required files
+      run: |
+        echo "Validating project structure..."
+        
+        # Check game.project exists
+        if [ ! -f "game.project" ]; then
+          echo "❌ game.project not found"
+          exit 1
+        fi
+        
+        # Check main collection exists
+        if [ ! -f "main/main.collection" ]; then
+          echo "❌ main/main.collection not found"
+          exit 1
+        fi
+        
+        # Check story directory exists
+        if [ ! -d "main/story" ]; then
+          echo "❌ main/story directory not found"
+          exit 1
+        fi
+        
+        echo "✅ Project structure is valid"
+
+  report-status:
+    name: Report CI Status
+    runs-on: ubuntu-latest
+    needs: [check-ink-compilation, check-lua-syntax, validate-project-structure]
+    if: always()
+    
+    steps:
+    - name: Check all jobs status
+      run: |
+        if [ "${{ needs.check-ink-compilation.result }}" == "success" ] && \
+           [ "${{ needs.check-lua-syntax.result }}" == "success" ] && \
+           [ "${{ needs.validate-project-structure.result }}" == "success" ]; then
+          echo "✅ All checks passed! Project is ready to merge."
+          exit 0
+        else
+          echo "❌ Some checks failed. Please fix the issues before merging."
+          exit 1
+        fi

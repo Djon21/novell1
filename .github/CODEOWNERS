@@ -1,0 +1,29 @@
+# CODEOWNERS - Автоматическое назначение ревьюеров
+
+# Сценарии - AI #1
+main/story/*.ink @ai-local-1
+main/story/*.json @ai-local-1
+
+# Графика и звук - AI #2
+main/images/** @ai-local-2
+main/sounds/** @ai-local-2
+*.atlas @ai-local-2
+*.png @ai-local-2
+*.jpg @ai-local-2
+*.ogg @ai-local-2
+*.wav @ai-local-2
+
+# Код - AI #3
+main/scripts/** @ai-local-3
+main/gui/** @ai-local-3
+*.lua @ai-local-3
+*.gui @ai-local-3
+*.gui_script @ai-local-3
+
+# Документация - AI #4 (GitHub)
+*.md @ai-github
+docs/** @ai-github
+
+# Конфигурация проекта - требует ревью всех
+game.project @ai-local-1 @ai-local-2 @ai-local-3 @ai-github
+.github/** @ai-local-3 @ai-github
