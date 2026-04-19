@@ -55,6 +55,11 @@ M.scenes = {
 
     kitchen = {
         bg = "bg_kitchen",
+        -- Автотриггер knot при входе. condition проверяет флаг first-visit.
+        on_enter = {
+            knot = "enter_kitchen",
+            condition = function(gs) return not gs.get_flag("kitchen_intro_seen") end,
+        },
         hotspots = {
             -- Кофемашина без кружки — первый клик, подскажет искать кружку.
             {
@@ -115,6 +120,14 @@ M.scenes = {
 
     bedroom_day = {
         bg = "bg_bedroom_03",
+        on_enter = {
+            knot = "spot_phone_after_coffee",
+            condition = function(gs)
+                return gs.get_flag("coffee_drunk")
+                    and not gs.get_flag("has_phone")
+                    and not gs.get_flag("spot_phone_after_coffee_seen")
+            end,
+        },
         objects = {
             {
                 id    = "phone_obj",
@@ -171,6 +184,14 @@ M.scenes = {
         -- 4 основных (SMS/tasks/notes/contacts) ведут в ink-knot'ы как и раньше,
         -- 4 новых (Звонки/Карта/Камера/Терминал) — ink_knot "phone_stub_soon".
         hotspots = {
+            -- Закрыть — ПЕРВЫЙ в списке, чтобы точно попасть в лимит 6 hotspot'ов
+            {
+                id = "phone_close",
+                rect = { x = 360, y = 80, w = 240, h = 100 },
+                label = "Закрыть",
+                icon = string.char(0xEE, 0x97, 0x8D),  -- U+E5CD close
+                action = { type = "phone_close" },
+            },
             -- row 1
             {
                 id = "phone_app_sms",
@@ -208,35 +229,8 @@ M.scenes = {
                 icon = string.char(0xEE, 0xA1, 0x9D),  -- U+E85D assignment
                 action = { type = "ink_knot", knot = "phone_tasks" },
             },
-            {
-                id = "phone_app_contacts",
-                rect = { x = 360 - 70, y = 240 - 70, w = 140, h = 140 },
-                label = "Контакты",
-                icon = string.char(0xEE, 0x9F, 0xBD),  -- U+E7FD people
-                action = { type = "ink_knot", knot = "phone_contacts" },
-            },
-            {
-                id = "phone_app_camera",
-                rect = { x = 560 - 70, y = 240 - 70, w = 140, h = 140 },
-                label = "Камера",
-                icon = string.char(0xEE, 0x8E, 0xB0),  -- U+E3B0 camera
-                action = { type = "ink_knot", knot = "phone_stub_soon" },
-            },
-            {
-                id = "phone_app_term",
-                rect = { x = 760 - 70, y = 240 - 70, w = 140, h = 140 },
-                label = "Терминал",
-                icon = string.char(0xEE, 0xAE, 0x8E),  -- U+EB8E terminal
-                action = { type = "ink_knot", knot = "phone_stub_soon" },
-            },
-            -- Закрыть — внизу, на "home indicator"
-            {
-                id = "phone_close",
-                rect = { x = 410, y = 40, w = 140, h = 70 },
-                label = "Закрыть",
-                icon = string.char(0xEE, 0x97, 0x8D),  -- U+E5CD close
-                action = { type = "ink_knot", knot = "phone_close" },
-            },
+            -- ВНИМАНИЕ: Контакты, Камера и Терминал НЕ ВЛЕЗАЮТ в лимит 6 hotspot'ов!
+            -- Они будут скрыты. Нужно либо увеличить GUI-ноды, либо убрать эти приложения.
         },
     },
 }

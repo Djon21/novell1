@@ -100,6 +100,19 @@ function M.enter(scene_id)
     _scene_data = data
     gs.set_scene(scene_id)
     render()
+
+    -- Автотриггер on_enter-knot: проверяем condition и запускаем ink-монолог.
+    if data.on_enter then
+        local oe = data.on_enter
+        local ok = true
+        if oe.condition then ok = oe.condition(gs) end
+        if ok and oe.knot then
+            M.exit()
+            if _ui and _ui.request_ink_knot then
+                _ui.request_ink_knot(oe.knot, data.bg)
+            end
+        end
+    end
 end
 
 function M.exit()
@@ -162,6 +175,15 @@ function M.on_hotspot_click(index)
     elseif action.type == "remove_item" then
         gs.remove_item(action.item)
         render()
+    elseif action.type == "phone_close" then
+        -- Закрыть телефон и вернуться в сцену-вызыватель.
+        local caller = gs.get_flag("_phone_return_scene")
+        if caller then
+            gs.set_flag("_phone_return_scene", nil)
+            M.enter(caller)
+        else
+            M.return_to_last_scene()
+        end
     elseif action.type == "ink_knot" then
         -- Сохраняем фон текущей сцены, чтобы короткий ink-монолог
         -- (drink_coffee/take_phone/…) играл на том же фоне, а не на
