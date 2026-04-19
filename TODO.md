@@ -29,13 +29,14 @@
 В `chapter_01.ink` используются, движок их silent fail:
 
 - [ ] `terminal_wake`
-- [ ] `coffee_brew`
+- [x] ~~`coffee_brew`~~ — **ДОБАВЛЕН** 2026-04-19
 - [ ] `phone_pickup`
 - [ ] `phone_wake`
 - [ ] `phone_notify`
 - [ ] `heartbeat`
 - [ ] `paper_rustle`
 - [ ] `coffee_shop`
+- [x] `click_001` — **ДОБАВЛЕН** 2026-04-19 (дополнительный звук)
 
 ---
 
@@ -103,14 +104,13 @@
 
 ## Баги и сомнительные места
 
-- [ ] Флаги `tutorial_inventory_open`, `tutorial_phone_open` ставятся в
-      ink, но нигде не читаются. Либо удалить, либо сделать обучающие
-      оверлеи.
-- [ ] VAR `phone_seen_after_coffee` пишется в `spot_phone_after_coffee`,
-      но нигде не читается (knot сам не триггерится — см. выше).
+- [x] ~~Флаги `tutorial_inventory_open`, `tutorial_phone_open` ставятся в
+      ink, но нигде не читаются.~~ — **ИСПРАВЛЕНО** в cleanup-dead-flags
+- [x] ~~VAR `phone_seen_after_coffee` пишется в `spot_phone_after_coffee`,
+      но нигде не читается.~~ — **ИСПРАВЛЕНО** в cleanup-dead-flags
 - [ ] `city_map_hub` открывается через `-> city_map_hub` но фон `bg:none`
       — нужен фон карты (`bg_city_map`).
-- [ ] Старый `chapter_01_old.ink` — бэкап, решить удалять или оставить.
+- [x] ~~Старый `chapter_01_old.json` — бэкап~~ — **УДАЛЕН** 2026-04-19
 
 ---
 
