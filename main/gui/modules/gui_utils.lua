@@ -1,4 +1,4 @@
-﻿-- gui_utils.lua
+-- gui_utils.lua
 -- Базовые утилиты для работы с GUI нодами
 
 local M = {}

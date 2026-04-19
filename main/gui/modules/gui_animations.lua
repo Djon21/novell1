@@ -1,4 +1,4 @@
-﻿-- gui_animations.lua
+-- gui_animations.lua
 -- Модуль анимаций для GUI элементов
 
 local M = {}
