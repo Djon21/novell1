@@ -1,0 +1,364 @@
+-- inventory.gui_script (часть 1)
+-- Контроллер инвентаря визуальной новеллы
+
+local gs = require "main.scripts.game_state"
+local items_catalog = require "main.scripts.items"
+local gui_animations = require "main.gui.modules.gui_animations"
+
+-- Состояние инвентаря
+local M = {}
+M.visible = false
+M.slots = {}
+M.SLOT_COUNT = 12
+M.selected_item_id = nil
+
+-- Ноды инвентаря
+M.dim = nil
+M.panel = nil
+M.title = nil
+M.close_btn = nil
+M.close_text = nil
+M.eyebrow = nil
+M.stat_slots = nil
+M.stat_weight = nil
+M.stat_loop = nil
+
+-- Детали предмета (правая панель)
+M.details = {}
+
+-- -------------------------------------------------------
+-- Заполняет сетку слотов из game_state
+-- -------------------------------------------------------
+local function render_inv_slots()
+    if not M.slots[1] then return end
+    
+    local inv = gs.get_inventory()
+    if not inv then inv = {} end
+    
+    local used = 0
+    
+    for i = 1, M.SLOT_COUNT do
+        local s = M.slots[i]
+        local item = inv[i]
+        
+        if item and item.id then
+            used = used + 1
+            
+            -- Получаем данные предмета из каталога
+            local item_data = items_catalog.get(item.id)
+            if item_data then
+                -- Показываем иконку
+                gui.set_enabled(s.circle, true)
+                gui.set_enabled(s.ring, true)
+                gui.set_enabled(s.icon, true)
+                gui.set_enabled(s.hit, true)
+                
+                -- Устанавливаем иконку
+                gui.set_text(s.icon, item_data.icon or "?")
+                
+                -- Координаты и имя
+                if s.coord then
+                    gui.set_text(s.coord, string.format("[%02d]", i))
+                    gui.set_enabled(s.coord, true)
+                end
+                if s.name then
+                    gui.set_text(s.name, item_data.name or "???")
+                    gui.set_enabled(s.name, true)
+                end
+                if s.qty and item.qty and item.qty > 1 then
+                    gui.set_text(s.qty, "×" .. item.qty)
+                    gui.set_enabled(s.qty, true)
+                else
+                    if s.qty then gui.set_enabled(s.qty, false) end
+                end
+                
+                -- Сохраняем item_id для обработки кликов
+                s.item_id = item.id
+            else
+                -- Предмет не найден в каталоге
+                gui.set_enabled(s.circle, false)
+                gui.set_enabled(s.ring, false)
+                gui.set_enabled(s.icon, false)
+                gui.set_enabled(s.hit, false)
+                if s.coord then gui.set_enabled(s.coord, false) end
+                if s.name then gui.set_enabled(s.name, false) end
+                if s.qty then gui.set_enabled(s.qty, false) end
+                s.item_id = nil
+            end
+        else
+            -- Пустой слот
+            gui.set_enabled(s.circle, false)
+            gui.set_enabled(s.ring, false)
+            gui.set_enabled(s.icon, false)
+            gui.set_enabled(s.hit, false)
+            if s.coord then gui.set_enabled(s.coord, false) end
+            if s.name then gui.set_enabled(s.name, false) end
+            if s.qty then gui.set_enabled(s.qty, false) end
+            s.item_id = nil
+        end
+    end
+    
+    -- Обновляем статистику
+    if M.stat_slots then
+        gui.set_text(M.stat_slots, "слотов: " .. used .. "/" .. M.SLOT_COUNT)
+    end
+    if M.stat_weight then
+        local weight = used * 0.3
+        gui.set_text(M.stat_weight, string.format("вес: %.1f кг", weight))
+    end
+end
+
+-- -------------------------------------------------------
+-- Показать детали предмета
+-- -------------------------------------------------------
+local function show_item_details(item_id)
+    if not item_id then return end
+    
+    local item_data = items_catalog.get(item_id)
+    if not item_data then return end
+    
+    local d = M.details
+    
+    -- Название
+    if d.name then
+        gui.set_text(d.name, item_data.name or "???")
+        gui.set_enabled(d.name, true)
+    end
+    
+    -- Иконка превью
+    if d.preview_icon then
+        gui.set_text(d.preview_icon, item_data.icon or "?")
+        gui.set_enabled(d.preview_icon, true)
+    end
+    if d.preview_bg then
+        gui.set_enabled(d.preview_bg, true)
+    end
+    
+    -- Описание
+    if d.desc then
+        gui.set_text(d.desc, item_data.desc or "Нет описания")
+        gui.set_enabled(d.desc, true)
+    end
+    
+    -- Статистика предмета
+    if d.stat_source_key and d.stat_source_value then
+        gui.set_text(d.stat_source_key, "источник:")
+        gui.set_text(d.stat_source_value, item_data.source or "неизвестно")
+        gui.set_enabled(d.stat_source_key, true)
+        gui.set_enabled(d.stat_source_value, true)
+    end
+    
+    if d.stat_type_key and d.stat_type_value then
+        gui.set_text(d.stat_type_key, "тип:")
+        gui.set_text(d.stat_type_value, item_data.type or "предмет")
+        gui.set_enabled(d.stat_type_key, true)
+        gui.set_enabled(d.stat_type_value, true)
+    end
+    
+    -- Остальные элементы
+    if d.cap then gui.set_enabled(d.cap, true) end
+    if d.stamp then gui.set_enabled(d.stamp, true) end
+    
+    M.selected_item_id = item_id
+    print("[inventory] Показаны детали предмета: " .. item_id)
+end
+
+-- -------------------------------------------------------
+-- Скрыть детали предмета
+-- -------------------------------------------------------
+local function hide_item_details()
+    local d = M.details
+    
+    if d.name then gui.set_enabled(d.name, false) end
+    if d.preview_icon then gui.set_enabled(d.preview_icon, false) end
+    if d.preview_bg then gui.set_enabled(d.preview_bg, false) end
+    if d.desc then gui.set_enabled(d.desc, false) end
+    if d.cap then gui.set_enabled(d.cap, false) end
+    if d.stamp then gui.set_enabled(d.stamp, false) end
+    if d.stat_source_key then gui.set_enabled(d.stat_source_key, false) end
+    if d.stat_source_value then gui.set_enabled(d.stat_source_value, false) end
+    if d.stat_type_key then gui.set_enabled(d.stat_type_key, false) end
+    if d.stat_type_value then gui.set_enabled(d.stat_type_value, false) end
+    
+    M.selected_item_id = nil
+end
+
+-- -------------------------------------------------------
+-- Показать инвентарь
+-- -------------------------------------------------------
+local function show_inventory()
+    print("[inventory] Показ инвентаря")
+    
+    gui.set_enabled(M.dim, true)
+    gui.set_enabled(M.panel, true)
+    gui.set_enabled(M.title, true)
+    gui.set_enabled(M.close_btn, true)
+    gui.set_enabled(M.close_text, true)
+    
+    if M.eyebrow then gui.set_enabled(M.eyebrow, true) end
+    if M.stat_slots then gui.set_enabled(M.stat_slots, true) end
+    if M.stat_weight then gui.set_enabled(M.stat_weight, true) end
+    if M.stat_loop then gui.set_enabled(M.stat_loop, true) end
+    
+    -- Скрываем детали при открытии
+    hide_item_details()
+    
+    -- Заполняем слоты
+    render_inv_slots()
+    
+    -- Анимация появления
+    gui_animations.fade_in(M.dim, 0.2)
+    gui_animations.fade_scale_in(M.panel, 0.3)
+    
+    M.visible = true
+end
+
+-- -------------------------------------------------------
+-- Скрыть инвентарь
+-- -------------------------------------------------------
+local function hide_inventory()
+    print("[inventory] Скрытие инвентаря")
+    
+    gui.set_enabled(M.dim, false)
+    gui.set_enabled(M.panel, false)
+    gui.set_enabled(M.title, false)
+    gui.set_enabled(M.close_btn, false)
+    gui.set_enabled(M.close_text, false)
+    
+    if M.eyebrow then gui.set_enabled(M.eyebrow, false) end
+    if M.stat_slots then gui.set_enabled(M.stat_slots, false) end
+    if M.stat_weight then gui.set_enabled(M.stat_weight, false) end
+    if M.stat_loop then gui.set_enabled(M.stat_loop, false) end
+    
+    -- Скрываем все слоты
+    for i = 1, M.SLOT_COUNT do
+        local s = M.slots[i]
+        gui.set_enabled(s.circle, false)
+        gui.set_enabled(s.ring, false)
+        gui.set_enabled(s.icon, false)
+        gui.set_enabled(s.hit, false)
+        if s.coord then gui.set_enabled(s.coord, false) end
+        if s.name then gui.set_enabled(s.name, false) end
+        if s.qty then gui.set_enabled(s.qty, false) end
+    end
+    
+    -- Скрываем детали
+    hide_item_details()
+    
+    M.visible = false
+end
+
+-- -------------------------------------------------------
+-- Lifecycle функции
+-- -------------------------------------------------------
+
+function init(self)
+    print("[inventory] Инициализация")
+    
+    -- Получаем основные ноды
+    M.dim = gui.get_node("inv_modal_dim")
+    M.panel = gui.get_node("inv_modal_panel")
+    M.title = gui.get_node("inv_modal_title")
+    M.close_btn = gui.get_node("inv_modal_close_btn")
+    M.close_text = gui.get_node("inv_modal_close_text")
+    M.eyebrow = gui.get_node("inv_modal_eyebrow")
+    M.stat_slots = gui.get_node("inv_modal_stat_slots")
+    M.stat_weight = gui.get_node("inv_modal_stat_weight")
+    M.stat_loop = gui.get_node("inv_modal_stat_loop")
+    
+    -- Получаем слоты (12 штук)
+    for i = 1, M.SLOT_COUNT do
+        M.slots[i] = {
+            circle = gui.get_node("inv_slot_circle_" .. i),
+            ring = gui.get_node("inv_slot_ring_" .. i),
+            icon = gui.get_node("inv_slot_icon_" .. i),
+            hit = gui.get_node("inv_slot_hit_" .. i),
+            coord = gui.get_node("inv_slot_coord_" .. i),
+            name = gui.get_node("inv_slot_name_" .. i),
+            qty = gui.get_node("inv_slot_qty_" .. i),
+            item_id = nil
+        }
+    end
+    
+    -- Получаем ноды деталей предмета
+    M.details = {
+        cap = gui.get_node("inv_details_cap"),
+        name = gui.get_node("inv_details_name"),
+        preview_bg = gui.get_node("inv_details_preview_bg"),
+        preview_icon = gui.get_node("inv_details_preview_icon"),
+        stamp = gui.get_node("inv_details_stamp"),
+        desc = gui.get_node("inv_details_desc"),
+        stat_source_key = gui.get_node("inv_details_stat_source_key"),
+        stat_source_value = gui.get_node("inv_details_stat_source_value"),
+        stat_type_key = gui.get_node("inv_details_stat_type_key"),
+        stat_type_value = gui.get_node("inv_details_stat_type_value"),
+    }
+    
+    -- Скрываем инвентарь при старте
+    hide_inventory()
+    
+    -- Запрашиваем input focus
+    msg.post(".", "acquire_input_focus")
+end
+
+function final(self)
+    print("[inventory] Завершение")
+end
+
+function update(self, dt)
+    -- Обновляем слоты если инвентарь видим
+    if M.visible then
+        render_inv_slots()
+    end
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash("show") then
+        show_inventory()
+    elseif message_id == hash("hide") then
+        hide_inventory()
+    elseif message_id == hash("toggle") then
+        if M.visible then
+            hide_inventory()
+        else
+            show_inventory()
+        end
+    end
+end
+
+-- -------------------------------------------------------
+-- Обработка ввода (часть 2)
+-- -------------------------------------------------------
+
+function on_input(self, action_id, action)
+    if not M.visible then return false end
+    
+    if action_id == hash("touch") and action.pressed then
+        local x = action.x
+        local y = action.y
+        
+        -- Клик по кнопке закрытия
+        if gui.pick_node(M.close_btn, x, y) then
+            hide_inventory()
+            return true
+        end
+        
+        -- Клик по слотам инвентаря
+        for i = 1, M.SLOT_COUNT do
+            local s = M.slots[i]
+            if s.item_id and gui.pick_node(s.hit, x, y) then
+                print("[inventory] Клик по слоту " .. i .. ", предмет: " .. s.item_id)
+                show_item_details(s.item_id)
+                return true
+            end
+        end
+        
+        -- Клик вне панели - закрываем инвентарь
+        if not gui.pick_node(M.panel, x, y) then
+            hide_inventory()
+            return true
+        end
+    end
+    
+    return false
+end
