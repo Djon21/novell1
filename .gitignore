@@ -1,29 +1,70 @@
-/.editor_settings
-/.internal
-/build
-.externalToolBuilders
+```
+# Godot-specific ignores
+*.import
+*.pid
+.project
+.user
+.godot/
+
+# Compiled and build artifacts
+*.pyc
+__pycache__/
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.a
+*.out
+
+# Dependencies
+node_modules/
+venv/
+.venv/
+.env
+.env.local
+.env.*
+
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+*.swo
+
+# Editors
+.vscode/
+.idea/
+
+# System files
 .DS_Store
 Thumbs.db
-.lock-wscript
-*.pyc
-.project
-.cproject
-builtins
-# Defold liveupdate signing keys — приватный ключ никогда не коммитить
-manifest.private.der
-manifest.public.der
 
-# Claude Code — локальные настройки (у каждого разработчика свои)
-.claude/settings.local.json
+# Coverage
+coverage/
+htmlcov/
+.coverage
 
-# inklecate — бинарник Ink-компилятора (~57 MB), не храним в git.
-# Скачать: https://github.com/inkle/ink/releases → inklecate_windows.zip
-# Распаковать в tools/ (рядом с compile_ink.bat/sh).
-tools/inklecate.exe
-tools/ink-engine-runtime.dll
-tools/ink_compiler.dll
-
-# Бэкапы gui при перегенерации rebuild_menu.py
-*.bak_menu
-# Локальные копии из Claude Design (handoff bundle)
-.design_*.html
+# Compressed files
+*.zip
+*.gz
+*.tar
+*.tgz
+*.bz2
+*.xz
+*.7z
+*.rar
+*.zst
+*.lz4
+*.lzh
+*.cab
+*.arj
+*.rpm
+*.deb
+*.Z
+*.lz
+*.lzo
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.tar.zst
+```
