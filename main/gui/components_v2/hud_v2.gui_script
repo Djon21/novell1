@@ -1,0 +1,112 @@
+-- hud_v2.gui_script
+-- Верхний HUD с заголовком локации + правый слот BAG/PHN.
+--
+-- Принимает сообщения:
+--   "set_location"       {name, time, loop}     — обновляет заголовок
+--   "set_inventory_count"{n}                    — бейдж BAG
+--   "set_phone_notif"    {n}                    — бейдж PHN
+--   "show_hud" / "hide_hud"
+--
+-- Шлёт в ui_manager_v2:
+--   "open_inventory" — при клике на BAG
+--   "open_phone"     — при клике на PHN
+
+local theme = require "main.gui.modules.v2_theme"
+
+local UI_MGR = "main:/ui_manager_v2#ui_manager_v2"
+
+local function set_text(id, s)
+    gui.set_text(gui.get_node(id), s or "")
+end
+
+local function set_visible(id, v)
+    gui.set_enabled(gui.get_node(id), v)
+end
+
+local function point_in_node(node, action)
+    return gui.pick_node(node, action.x, action.y)
+end
+
+function init(self)
+    msg.post(".", "acquire_input_focus")
+    self.visible = true
+    self.bag_count  = 0
+    self.phn_notif  = 0
+    -- базовые тексты уже стоят в .gui, но занулим бейджи пока нет данных
+    set_text("bag_badge_text", "")
+    set_visible("bag_badge", false)
+    set_visible("bag_badge_text", false)
+    set_text("phn_badge_text", "")
+    set_visible("phn_badge", false)
+    set_visible("phn_badge_text", false)
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash("set_location") then
+        set_text("scene_name", (message.name or ""):upper())
+        local meta = ""
+        if message.time then meta = message.time end
+        if message.loop then
+            meta = meta .. (meta ~= "" and " · " or "") .. "петля #" .. tostring(message.loop)
+        end
+        if meta ~= "" then meta = meta .. " · сост. стабильна" end
+        set_text("scene_meta", meta)
+
+    elseif message_id == hash("set_inventory_count") then
+        local n = tonumber(message.n) or 0
+        self.bag_count = n
+        if n > 0 then
+            set_text("bag_badge_text", tostring(n))
+            set_visible("bag_badge", true)
+            set_visible("bag_badge_text", true)
+        else
+            set_visible("bag_badge", false)
+            set_visible("bag_badge_text", false)
+        end
+
+    elseif message_id == hash("set_phone_notif") then
+        local n = tonumber(message.n) or 0
+        self.phn_notif = n
+        if n > 0 then
+            set_text("phn_badge_text", tostring(n))
+            set_visible("phn_badge", true)
+            set_visible("phn_badge_text", true)
+        else
+            set_visible("phn_badge", false)
+            set_visible("phn_badge_text", false)
+        end
+
+    elseif message_id == hash("show_hud") then
+        self.visible = true
+        gui.set_enabled(gui.get_node("hud_root"), true)
+
+    elseif message_id == hash("hide_hud") then
+        self.visible = false
+        gui.set_enabled(gui.get_node("hud_root"), false)
+    end
+end
+
+function on_input(self, action_id, action)
+    if not self.visible then return false end
+    if action_id ~= hash("touch") or not action.pressed then return false end
+
+    local bag_ring = gui.get_node("bag_ring")
+    local phn_ring = gui.get_node("phn_ring")
+
+    if point_in_node(bag_ring, action) then
+        msg.post(UI_MGR, "open_inventory")
+        -- визуальный фидбек
+        gui.animate(bag_ring, "scale", vmath.vector4(0.94, 0.94, 1, 1), gui.EASING_OUTQUAD, 0.08, 0,
+            function() gui.animate(bag_ring, "scale", vmath.vector4(1, 1, 1, 1), gui.EASING_OUTQUAD, 0.15) end)
+        return true
+    end
+
+    if point_in_node(phn_ring, action) then
+        msg.post(UI_MGR, "open_phone")
+        gui.animate(phn_ring, "scale", vmath.vector4(0.94, 0.94, 1, 1), gui.EASING_OUTQUAD, 0.08, 0,
+            function() gui.animate(phn_ring, "scale", vmath.vector4(1, 1, 1, 1), gui.EASING_OUTQUAD, 0.15) end)
+        return true
+    end
+
+    return false
+end

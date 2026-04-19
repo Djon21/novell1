@@ -49,7 +49,7 @@
 
 ### Этап 2 — экраны (порядок: hud → map → nav → menu → dialog → choice)
 
-- [ ] **step6**: `main/gui/components_v2/hud_v2.gui` + `.gui_script`. Верхняя плашка локации ("ПРИХОЖАЯ · 07:12 · ПЕТЛЯ #017") + правый слот с двумя круглыми кнопками BAG (иконка рюкзака, бейдж с числом) и PHN (иконка телефона, amber, бейдж). Принимает `msg` "set_location" {name, time, loop}, "set_inventory_count" {n}, "set_phone_notif" {n}. Клик BAG → `msg.post(ui_manager_v2, "open_inventory")`. Клик PHN → `msg.post(ui_manager_v2, "open_phone")`.
+- [x] **step6**: `main/gui/components_v2/hud_v2.gui` + `.gui_script`. Верхняя плашка локации ("ПРИХОЖАЯ · 07:12 · ПЕТЛЯ #017") + правый слот с двумя круглыми кнопками BAG (иконка рюкзака, бейдж с числом) и PHN (иконка телефона, amber, бейдж). Принимает `msg` "set_location" {name, time, loop}, "set_inventory_count" {n}, "set_phone_notif" {n}. Клик BAG → `msg.post(ui_manager_v2, "open_inventory")`. Клик PHN → `msg.post(ui_manager_v2, "open_phone")`.
 - [ ] **step7**: `main/gui/components_v2/inventory_v2.gui` + `.gui_script`. Модалка 4×3 grid предметов. Данные из `main/scripts/game_state.lua` (функция `gs.get_items()`). Схема предмета: `{id, name, qty, type:"key|doc|rare", iter, clue, desc, verbs:{"use","inspect","combine","read","give"}}`. При клике на слот — показывает details-панель с description + кнопки verb'ов. Закрытие по кнопке X и по "close_inventory" сообщению.
 - [ ] **step8**: `main/gui/components_v2/phone_v2.gui` + `.gui_script`. Модалка: статусбар (время, 4G, 73% батарея), wallpaper с датой, 8 app-плиток (СМС / Звонки / Карта / Улики / День / Почта / Камера / Терминал) 4×2 grid с цветовыми акцентами (cyan/hot/amber/violet). При клике на app → пока только `print("[phone_v2] app: " .. id)` и визуальный highlight. Сообщения "open_phone", "close_phone".
 - [ ] **step9**: `main/gui/components_v2/map_v2.gui` + `.gui_script`. Карта Москвы — использовать bg_map атлас (если нет — генерируем quad с plain color и размещаем pin'ы поверх). 7 пинов: home/work/cafe/metro/shop/clue/gov. Поля пина: `{id, name, color, addr, walk, sub, stat, clue, stamp, desc, pos:{x,y}}`. Клик пина → выделение + показ досье справа. Кнопки "route" "save" "share" пока заглушки. Сообщение "open_map" / "close_map".
@@ -79,6 +79,7 @@
 
 - **step4**: открой `main/gui/components_v2/atoms/` в Defold Editor, визуально проверь что `corner_brackets.gui`, `hud_top.gui`, `hud_bot.gui` рендерятся корректно (углы по периметру 960×640, hud-полосы высотой 32px сверху/снизу с cyan бордером). `script: ""` в textproto обычно валидно (без скрипта), но если Defold требует явного отсутствия — удалить строку руками.
 - **step5**: `effects.gui` пока использует plain-color box'ы с alpha (grain белый 7%, scan белый 18% BLEND_MULT, vignette чёрный 55%). Выглядит как затемнение без текстур — для полноценного эффекта нужно подключить PNG текстуры noise/scan/radial_gradient в атлас и заменить TYPE_BOX на текстуру. Пока работает как базовая затенёнка.
+- **step6**: иконки BAG/PHN используют кодпойнты Material Icons `\uE533` (inventory_2) и `\uE32C` (smartphone). Если глифы не отрендерятся — заменить на другие из Material Icons codepoints. Координата `main:/ui_manager_v2#ui_manager_v2` в const `UI_MGR` — на этом этапе ui_manager_v2 ещё не создан (step14), сообщения `open_inventory`/`open_phone` пока будут лететь в пустоту. Это ОК, позже заработает.
 
 ---
 
@@ -91,3 +92,4 @@
 - step3 — `main/gui/modules/v2_theme.lua` (COLORS, FONTS, ROLES, LAYOUT, ANIM, apply helper)
 - step4 — 3 атома-шаблона: `components_v2/atoms/corner_brackets.gui`, `hud_top.gui`, `hud_bot.gui`
 - step5 — `components_v2/effects.gui` + `.gui_script` (grain/scan/vignette, msg set_effects/toggle_scan/show_effects/hide_effects)
+- step6 — `components_v2/hud_v2.gui` + `.gui_script` (заголовок локации + BAG/PHN pie-кнопки с бейджами; шлёт open_inventory/open_phone в ui_manager_v2)
