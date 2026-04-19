@@ -1,4 +1,4 @@
-sound: "/main/sounds/coffee_brew.wav"
+sound: "/main/sounds/coffee_brew.ogg"
 looping: 0
 group: "sfx"
 gain: 1.0

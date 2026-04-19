@@ -1,4 +1,4 @@
-sound: "/main/sounds/paper_rustle.mp3"
+sound: "/main/sounds/paper_rustle.ogg"
 looping: 0
 group: "sfx"
 gain: 1.0

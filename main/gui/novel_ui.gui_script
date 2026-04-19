@@ -109,12 +109,11 @@ S.in_menu = true
 S.glitch_active = false
 S.music_started = false
 S.SFX_URLS = {
-	-- TODO: All WAV files need to be converted to 16-bit (currently 24-bit, not supported by Defold)
-	-- terminal_wake = msg.url("main:/sfx_player#terminal_wake"),
-	-- coffee_brew = msg.url("main:/sfx_player#coffee_brew"),
-	-- phone_notify = msg.url("main:/sfx_player#phone_notify"),
-	-- heartbeat = msg.url("main:/sfx_player#heartbeat"),
-	-- paper_rustle = msg.url("main:/sfx_player#paper_rustle"),  -- Also needs MP3 to WAV/OGG conversion
+	terminal_wake = msg.url("main:/sfx_player#terminal_wake"),
+	coffee_brew = msg.url("main:/sfx_player#coffee_brew"),
+	phone_notify = msg.url("main:/sfx_player#phone_notify"),
+	heartbeat = msg.url("main:/sfx_player#heartbeat"),
+	paper_rustle = msg.url("main:/sfx_player#paper_rustle"),
 }
 
 -- Загружает байты скомпилированного .ink/.json и отдаёт их dialogue_manager.

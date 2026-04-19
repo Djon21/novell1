@@ -1,4 +1,4 @@
-sound: "/main/sounds/phone_notify.wav"
+sound: "/main/sounds/phone_notify.ogg"
 looping: 0
 group: "sfx"
 gain: 1.0
