@@ -1,18 +1,18 @@
--- inventory.gui_script (С‡Р°СЃС‚СЊ 1)
--- РљРѕРЅС‚СЂРѕР»Р»РµСЂ РёРЅРІРµРЅС‚Р°СЂСЏ РІРёР·СѓР°Р»СЊРЅРѕР№ РЅРѕРІРµР»Р»С‹
+-- inventory.gui_script (часть 1)
+-- Контроллер инвентаря визуальной новеллы
 
 local gs = require "main.scripts.game_state"
 local items_catalog = require "main.scripts.items"
 local gui_animations = require "main.gui.modules.gui_animations"
 
--- РЎРѕСЃС‚РѕСЏРЅРёРµ РёРЅРІРµРЅС‚Р°СЂСЏ
+-- Состояние инвентаря
 local M = {}
 M.visible = false
 M.slots = {}
 M.SLOT_COUNT = 12
 M.selected_item_id = nil
 
--- РќРѕРґС‹ РёРЅРІРµРЅС‚Р°СЂСЏ
+-- Ноды инвентаря
 M.dim = nil
 M.panel = nil
 M.title = nil
@@ -23,11 +23,11 @@ M.stat_slots = nil
 M.stat_weight = nil
 M.stat_loop = nil
 
--- Р”РµС‚Р°Р»Рё РїСЂРµРґРјРµС‚Р° (РїСЂР°РІР°СЏ РїР°РЅРµР»СЊ)
+-- Детали предмета (правая панель)
 M.details = {}
 
 -- -------------------------------------------------------
--- Р—Р°РїРѕР»РЅСЏРµС‚ СЃРµС‚РєСѓ СЃР»РѕС‚РѕРІ РёР· game_state
+-- Заполняет сетку слотов из game_state
 -- -------------------------------------------------------
 local function render_inv_slots()
     if not M.slots[1] then return end
@@ -44,19 +44,19 @@ local function render_inv_slots()
         if item and item.id then
             used = used + 1
             
-            -- РџРѕР»СѓС‡Р°РµРј РґР°РЅРЅС‹Рµ РїСЂРµРґРјРµС‚Р° РёР· РєР°С‚Р°Р»РѕРіР°
+            -- Получаем данные предмета из каталога
             local item_data = items_catalog.get(item.id)
             if item_data then
-                -- РџРѕРєР°Р·С‹РІР°РµРј РёРєРѕРЅРєСѓ
+                -- Показываем иконку
                 gui.set_enabled(s.circle, true)
                 gui.set_enabled(s.ring, true)
                 gui.set_enabled(s.icon, true)
                 gui.set_enabled(s.hit, true)
                 
-                -- РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РёРєРѕРЅРєСѓ
+                -- Устанавливаем иконку
                 gui.set_text(s.icon, item_data.icon or "?")
                 
-                -- РљРѕРѕСЂРґРёРЅР°С‚С‹ Рё РёРјСЏ
+                -- Координаты и имя
                 if s.coord then
                     gui.set_text(s.coord, string.format("[%02d]", i))
                     gui.set_enabled(s.coord, true)
@@ -72,10 +72,10 @@ local function render_inv_slots()
                     if s.qty then gui.set_enabled(s.qty, false) end
                 end
                 
-                -- РЎРѕС…СЂР°РЅСЏРµРј item_id РґР»СЏ РѕР±СЂР°Р±РѕС‚РєРё РєР»РёРєРѕРІ
+                -- Сохраняем item_id для обработки кликов
                 s.item_id = item.id
             else
-                -- РџСЂРµРґРјРµС‚ РЅРµ РЅР°Р№РґРµРЅ РІ РєР°С‚Р°Р»РѕРіРµ
+                -- Предмет не найден в каталоге
                 gui.set_enabled(s.circle, false)
                 gui.set_enabled(s.ring, false)
                 gui.set_enabled(s.icon, false)
@@ -86,7 +86,7 @@ local function render_inv_slots()
                 s.item_id = nil
             end
         else
-            -- РџСѓСЃС‚РѕР№ СЃР»РѕС‚
+            -- Пустой слот
             gui.set_enabled(s.circle, false)
             gui.set_enabled(s.ring, false)
             gui.set_enabled(s.icon, false)
@@ -98,18 +98,18 @@ local function render_inv_slots()
         end
     end
     
-    -- РћР±РЅРѕРІР»СЏРµРј СЃС‚Р°С‚РёСЃС‚РёРєСѓ
+    -- Обновляем статистику
     if M.stat_slots then
-        gui.set_text(M.stat_slots, "СЃР»РѕС‚РѕРІ: " .. used .. "/" .. M.SLOT_COUNT)
+        gui.set_text(M.stat_slots, "слотов: " .. used .. "/" .. M.SLOT_COUNT)
     end
     if M.stat_weight then
         local weight = used * 0.3
-        gui.set_text(M.stat_weight, string.format("РІРµСЃ: %.1f РєРі", weight))
+        gui.set_text(M.stat_weight, string.format("вес: %.1f кг", weight))
     end
 end
 
 -- -------------------------------------------------------
--- РџРѕРєР°Р·Р°С‚СЊ РґРµС‚Р°Р»Рё РїСЂРµРґРјРµС‚Р°
+-- Показать детали предмета
 -- -------------------------------------------------------
 local function show_item_details(item_id)
     if not item_id then return end
@@ -119,13 +119,13 @@ local function show_item_details(item_id)
     
     local d = M.details
     
-    -- РќР°Р·РІР°РЅРёРµ
+    -- Название
     if d.name then
         gui.set_text(d.name, item_data.name or "???")
         gui.set_enabled(d.name, true)
     end
     
-    -- РРєРѕРЅРєР° РїСЂРµРІСЊСЋ
+    -- Иконка превью
     if d.preview_icon then
         gui.set_text(d.preview_icon, item_data.icon or "?")
         gui.set_enabled(d.preview_icon, true)
@@ -134,37 +134,37 @@ local function show_item_details(item_id)
         gui.set_enabled(d.preview_bg, true)
     end
     
-    -- РћРїРёСЃР°РЅРёРµ
+    -- Описание
     if d.desc then
-        gui.set_text(d.desc, item_data.desc or "РќРµС‚ РѕРїРёСЃР°РЅРёСЏ")
+        gui.set_text(d.desc, item_data.desc or "Нет описания")
         gui.set_enabled(d.desc, true)
     end
     
-    -- РЎС‚Р°С‚РёСЃС‚РёРєР° РїСЂРµРґРјРµС‚Р°
+    -- Статистика предмета
     if d.stat_source_key and d.stat_source_value then
-        gui.set_text(d.stat_source_key, "РёСЃС‚РѕС‡РЅРёРє:")
-        gui.set_text(d.stat_source_value, item_data.source or "РЅРµРёР·РІРµСЃС‚РЅРѕ")
+        gui.set_text(d.stat_source_key, "источник:")
+        gui.set_text(d.stat_source_value, item_data.source or "неизвестно")
         gui.set_enabled(d.stat_source_key, true)
         gui.set_enabled(d.stat_source_value, true)
     end
     
     if d.stat_type_key and d.stat_type_value then
-        gui.set_text(d.stat_type_key, "С‚РёРї:")
-        gui.set_text(d.stat_type_value, item_data.type or "РїСЂРµРґРјРµС‚")
+        gui.set_text(d.stat_type_key, "тип:")
+        gui.set_text(d.stat_type_value, item_data.type or "предмет")
         gui.set_enabled(d.stat_type_key, true)
         gui.set_enabled(d.stat_type_value, true)
     end
     
-    -- РћСЃС‚Р°Р»СЊРЅС‹Рµ СЌР»РµРјРµРЅС‚С‹
+    -- Остальные элементы
     if d.cap then gui.set_enabled(d.cap, true) end
     if d.stamp then gui.set_enabled(d.stamp, true) end
     
     M.selected_item_id = item_id
-    print("[inventory] РџРѕРєР°Р·Р°РЅС‹ РґРµС‚Р°Р»Рё РїСЂРµРґРјРµС‚Р°: " .. item_id)
+    print("[inventory] Показаны детали предмета: " .. item_id)
 end
 
 -- -------------------------------------------------------
--- РЎРєСЂС‹С‚СЊ РґРµС‚Р°Р»Рё РїСЂРµРґРјРµС‚Р°
+-- Скрыть детали предмета
 -- -------------------------------------------------------
 local function hide_item_details()
     local d = M.details
@@ -184,10 +184,10 @@ local function hide_item_details()
 end
 
 -- -------------------------------------------------------
--- РџРѕРєР°Р·Р°С‚СЊ РёРЅРІРµРЅС‚Р°СЂСЊ
+-- Показать инвентарь
 -- -------------------------------------------------------
 local function show_inventory()
-    print("[inventory] РџРѕРєР°Р· РёРЅРІРµРЅС‚Р°СЂСЏ")
+    print("[inventory] Показ инвентаря")
     
     gui.set_enabled(M.dim, true)
     gui.set_enabled(M.panel, true)
@@ -200,13 +200,13 @@ local function show_inventory()
     if M.stat_weight then gui.set_enabled(M.stat_weight, true) end
     if M.stat_loop then gui.set_enabled(M.stat_loop, true) end
     
-    -- РЎРєСЂС‹РІР°РµРј РґРµС‚Р°Р»Рё РїСЂРё РѕС‚РєСЂС‹С‚РёРё
+    -- Скрываем детали при открытии
     hide_item_details()
     
-    -- Р—Р°РїРѕР»РЅСЏРµРј СЃР»РѕС‚С‹
+    -- Заполняем слоты
     render_inv_slots()
     
-    -- РђРЅРёРјР°С†РёСЏ РїРѕСЏРІР»РµРЅРёСЏ
+    -- Анимация появления
     gui_animations.fade_in(M.dim, 0.2)
     gui_animations.fade_scale_in(M.panel, 0.3)
     
@@ -214,10 +214,10 @@ local function show_inventory()
 end
 
 -- -------------------------------------------------------
--- РЎРєСЂС‹С‚СЊ РёРЅРІРµРЅС‚Р°СЂСЊ
+-- Скрыть инвентарь
 -- -------------------------------------------------------
 local function hide_inventory()
-    print("[inventory] РЎРєСЂС‹С‚РёРµ РёРЅРІРµРЅС‚Р°СЂСЏ")
+    print("[inventory] Скрытие инвентаря")
     
     gui.set_enabled(M.dim, false)
     gui.set_enabled(M.panel, false)
@@ -230,7 +230,7 @@ local function hide_inventory()
     if M.stat_weight then gui.set_enabled(M.stat_weight, false) end
     if M.stat_loop then gui.set_enabled(M.stat_loop, false) end
     
-    -- РЎРєСЂС‹РІР°РµРј РІСЃРµ СЃР»РѕС‚С‹
+    -- Скрываем все слоты
     for i = 1, M.SLOT_COUNT do
         local s = M.slots[i]
         gui.set_enabled(s.circle, false)
@@ -242,20 +242,20 @@ local function hide_inventory()
         if s.qty then gui.set_enabled(s.qty, false) end
     end
     
-    -- РЎРєСЂС‹РІР°РµРј РґРµС‚Р°Р»Рё
+    -- Скрываем детали
     hide_item_details()
     
     M.visible = false
 end
 
 -- -------------------------------------------------------
--- Lifecycle С„СѓРЅРєС†РёРё
+-- Lifecycle функции
 -- -------------------------------------------------------
 
 function init(self)
-    print("[inventory] РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ")
+    print("[inventory] Инициализация")
     
-    -- РџРѕР»СѓС‡Р°РµРј РѕСЃРЅРѕРІРЅС‹Рµ РЅРѕРґС‹
+    -- Получаем основные ноды
     M.dim = gui.get_node("inv_modal_dim")
     M.panel = gui.get_node("inv_modal_panel")
     M.title = gui.get_node("inv_modal_title")
@@ -266,7 +266,7 @@ function init(self)
     M.stat_weight = gui.get_node("inv_modal_stat_weight")
     M.stat_loop = gui.get_node("inv_modal_stat_loop")
     
-    -- РџРѕР»СѓС‡Р°РµРј СЃР»РѕС‚С‹ (12 С€С‚СѓРє)
+    -- Получаем слоты (12 штук)
     for i = 1, M.SLOT_COUNT do
         M.slots[i] = {
             circle = gui.get_node("inv_slot_circle_" .. i),
@@ -280,7 +280,7 @@ function init(self)
         }
     end
     
-    -- РџРѕР»СѓС‡Р°РµРј РЅРѕРґС‹ РґРµС‚Р°Р»РµР№ РїСЂРµРґРјРµС‚Р°
+    -- Получаем ноды деталей предмета
     M.details = {
         cap = gui.get_node("inv_details_cap"),
         name = gui.get_node("inv_details_name"),
@@ -294,19 +294,19 @@ function init(self)
         stat_type_value = gui.get_node("inv_details_stat_type_value"),
     }
     
-    -- РЎРєСЂС‹РІР°РµРј РёРЅРІРµРЅС‚Р°СЂСЊ РїСЂРё СЃС‚Р°СЂС‚Рµ
+    -- Скрываем инвентарь при старте
     hide_inventory()
     
-    -- Р—Р°РїСЂР°С€РёРІР°РµРј input focus
+    -- Запрашиваем input focus
     msg.post(".", "acquire_input_focus")
 end
 
 function final(self)
-    print("[inventory] Р—Р°РІРµСЂС€РµРЅРёРµ")
+    print("[inventory] Завершение")
 end
 
 function update(self, dt)
-    -- РћР±РЅРѕРІР»СЏРµРј СЃР»РѕС‚С‹ РµСЃР»Рё РёРЅРІРµРЅС‚Р°СЂСЊ РІРёРґРёРј
+    -- Обновляем слоты если инвентарь видим
     if M.visible then
         render_inv_slots()
     end
@@ -327,7 +327,7 @@ function on_message(self, message_id, message, sender)
 end
 
 -- -------------------------------------------------------
--- РћР±СЂР°Р±РѕС‚РєР° РІРІРѕРґР° (С‡Р°СЃС‚СЊ 2)
+-- Обработка ввода (часть 2)
 -- -------------------------------------------------------
 
 function on_input(self, action_id, action)
@@ -337,23 +337,23 @@ function on_input(self, action_id, action)
         local x = action.x
         local y = action.y
         
-        -- РљР»РёРє РїРѕ РєРЅРѕРїРєРµ Р·Р°РєСЂС‹С‚РёСЏ
+        -- Клик по кнопке закрытия
         if gui.pick_node(M.close_btn, x, y) then
             hide_inventory()
             return true
         end
         
-        -- РљР»РёРє РїРѕ СЃР»РѕС‚Р°Рј РёРЅРІРµРЅС‚Р°СЂСЏ
+        -- Клик по слотам инвентаря
         for i = 1, M.SLOT_COUNT do
             local s = M.slots[i]
             if s.item_id and gui.pick_node(s.hit, x, y) then
-                print("[inventory] РљР»РёРє РїРѕ СЃР»РѕС‚Сѓ " .. i .. ", РїСЂРµРґРјРµС‚: " .. s.item_id)
+                print("[inventory] Клик по слоту " .. i .. ", предмет: " .. s.item_id)
                 show_item_details(s.item_id)
                 return true
             end
         end
         
-        -- РљР»РёРє РІРЅРµ РїР°РЅРµР»Рё - Р·Р°РєСЂС‹РІР°РµРј РёРЅРІРµРЅС‚Р°СЂСЊ
+        -- Клик вне панели - закрываем инвентарь
         if not gui.pick_node(M.panel, x, y) then
             hide_inventory()
             return true

@@ -40,7 +40,7 @@ local function show_portrait(name)
     M.current_portrait = name
     local node = M.portraits[name]
     if not node then 
-        print("[portraits] ⚠️ Портрет не найден: " .. tostring(name))
+        print("[portraits] ⚠ Портрет не найден: " .. tostring(name))
         return 
     end
 
@@ -137,7 +137,7 @@ function on_message(self, message_id, message, sender)
             if portrait_name then
                 show_portrait(portrait_name)
             else
-                print("[portraits] ⚠️ Неизвестный персонаж: " .. tostring(character))
+                print("[portraits] ⚠ Неизвестный персонаж: " .. tostring(character))
             end
         end
         
