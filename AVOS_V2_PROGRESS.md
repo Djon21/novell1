@@ -44,7 +44,7 @@
 
 ### Этап 1 — общие атомы
 
-- [ ] **step4**: создать `main/gui/v2_atoms.gui` с nested prefabs: `corner_brackets` (4 угла, 22×22, cyan, opacity 0.4), `hud_top` (верхняя полоса 960×32 с ink_0 фоном + cyan пульсирующий dot + 2 текст-слота слева/справа), `hud_bot` (аналог снизу).
+- [x] **step4**: создать `main/gui/v2_atoms.gui` с nested prefabs: `corner_brackets` (4 угла, 22×22, cyan, opacity 0.4), `hud_top` (верхняя полоса 960×32 с ink_0 фоном + cyan пульсирующий dot + 2 текст-слота слева/справа), `hud_bot` (аналог снизу). *(в Defold nested prefabs = отдельные `.gui` template-файлы; создано 3 файла в `main/gui/components_v2/atoms/`: corner_brackets.gui, hud_top.gui, hud_bot.gui)*
 - [ ] **step5**: создать overlay-компонент `main/gui/components_v2/effects.gui` + `.gui_script` — три full-screen box-ноды: grain (использует generated noise texture или просто 50% opacity noise sprite), scan (repeating horizontal lines), vignette (radial gradient). Скрипт принимает `msg` "set_effects" {level:0..1} и "toggle_scan" {on:bool}.
 
 ### Этап 2 — экраны (порядок: hud → map → nav → menu → dialog → choice)
@@ -77,6 +77,8 @@
 
 *(сюда луп пишет пункты, требующие визуальной проверки в Defold Editor)*
 
+- **step4**: открой `main/gui/components_v2/atoms/` в Defold Editor, визуально проверь что `corner_brackets.gui`, `hud_top.gui`, `hud_bot.gui` рендерятся корректно (углы по периметру 960×640, hud-полосы высотой 32px сверху/снизу с cyan бордером). `script: ""` в textproto обычно валидно (без скрипта), но если Defold требует явного отсутствия — удалить строку руками.
+
 ---
 
 ## История коммитов
@@ -86,3 +88,4 @@
 - step1 — добавлены Unbounded-Bold.ttf + Manrope-Regular.ttf, 8 новых `.font` файлов (jb_mono 10/12/bold_14, unbounded_bold 20/32, manrope 14/16, caveat_18)
 - step2 — `main/images/v2/artem.png`, `mila.png`, `bg_bedroom_01.jpg` + `main/images/v2.atlas`
 - step3 — `main/gui/modules/v2_theme.lua` (COLORS, FONTS, ROLES, LAYOUT, ANIM, apply helper)
+- step4 — 3 атома-шаблона: `components_v2/atoms/corner_brackets.gui`, `hud_top.gui`, `hud_bot.gui`
