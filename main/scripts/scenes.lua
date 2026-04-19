@@ -121,8 +121,6 @@ M.scenes = {
             },
         },
     },
-        },
-    },
 
     bedroom_day = {
         bg = "bg_bedroom_03",
