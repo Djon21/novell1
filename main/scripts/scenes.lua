@@ -165,45 +165,76 @@ M.scenes = {
     --   GUI x: [80..880], GUI y: [60..580]  (origin левый-нижний).
     phone_home = {
         bg = "bg_phone",
+        -- Сетка 4x2 приложений (под bg_phone v2). Центры ячеек (gui origin BL):
+        --   row 1: y=400, x=[160,360,560,760]   — SMS/Звонки/Карта/Улики
+        --   row 2: y=240, x=[160,360,560,760]   — День/Почта/Камера/Терминал
+        -- 4 основных (SMS/tasks/notes/contacts) ведут в ink-knot'ы как и раньше,
+        -- 4 новых (Звонки/Карта/Камера/Терминал) — ink_knot "phone_stub_soon".
         hotspots = {
+            -- row 1
             {
                 id = "phone_app_sms",
-                rect = { x = 230, y = 330, w = 140, h = 140 },
+                rect = { x = 160 - 70, y = 400 - 70, w = 140, h = 140 },
                 label = "SMS",
-                -- U+E0B7 chat (Material Icons)
-                icon = string.char(0xEE, 0x82, 0xB7),
+                icon = string.char(0xEE, 0x82, 0xB7),  -- U+E0B7 chat
                 action = { type = "ink_knot", knot = "phone_sms" },
             },
             {
-                id = "phone_app_tasks",
-                rect = { x = 590, y = 330, w = 140, h = 140 },
-                label = "Задачи",
-                -- U+E85D assignment
-                icon = string.char(0xEE, 0xA1, 0x9D),
-                action = { type = "ink_knot", knot = "phone_tasks" },
+                id = "phone_app_call",
+                rect = { x = 360 - 70, y = 400 - 70, w = 140, h = 140 },
+                label = "Звонки",
+                icon = string.char(0xEE, 0x83, 0x8D),  -- U+E0CD call
+                action = { type = "ink_knot", knot = "phone_stub_soon" },
+            },
+            {
+                id = "phone_app_map",
+                rect = { x = 560 - 70, y = 400 - 70, w = 140, h = 140 },
+                label = "Карта",
+                icon = string.char(0xEE, 0x95, 0x9B),  -- U+E55B map
+                action = { type = "ink_knot", knot = "phone_stub_soon" },
             },
             {
                 id = "phone_app_notes",
-                rect = { x = 230, y = 110, w = 140, h = 140 },
-                label = "Заметки",
-                -- U+E873 description
-                icon = string.char(0xEE, 0xA1, 0xB3),
+                rect = { x = 760 - 70, y = 400 - 70, w = 140, h = 140 },
+                label = "Улики",
+                icon = string.char(0xEE, 0xA1, 0xB3),  -- U+E873 description
                 action = { type = "ink_knot", knot = "phone_notes" },
+            },
+            -- row 2
+            {
+                id = "phone_app_tasks",
+                rect = { x = 160 - 70, y = 240 - 70, w = 140, h = 140 },
+                label = "День",
+                icon = string.char(0xEE, 0xA1, 0x9D),  -- U+E85D assignment
+                action = { type = "ink_knot", knot = "phone_tasks" },
             },
             {
                 id = "phone_app_contacts",
-                rect = { x = 590, y = 110, w = 140, h = 140 },
+                rect = { x = 360 - 70, y = 240 - 70, w = 140, h = 140 },
                 label = "Контакты",
-                -- U+E7FD people
-                icon = string.char(0xEE, 0x9F, 0xBD),
+                icon = string.char(0xEE, 0x9F, 0xBD),  -- U+E7FD people
                 action = { type = "ink_knot", knot = "phone_contacts" },
             },
+            {
+                id = "phone_app_camera",
+                rect = { x = 560 - 70, y = 240 - 70, w = 140, h = 140 },
+                label = "Камера",
+                icon = string.char(0xEE, 0x8E, 0xB0),  -- U+E3B0 camera
+                action = { type = "ink_knot", knot = "phone_stub_soon" },
+            },
+            {
+                id = "phone_app_term",
+                rect = { x = 760 - 70, y = 240 - 70, w = 140, h = 140 },
+                label = "Терминал",
+                icon = string.char(0xEE, 0xAE, 0x8E),  -- U+EB8E terminal
+                action = { type = "ink_knot", knot = "phone_stub_soon" },
+            },
+            -- Закрыть — внизу, на "home indicator"
             {
                 id = "phone_close",
                 rect = { x = 410, y = 40, w = 140, h = 70 },
                 label = "Закрыть",
-                -- U+E5CD close
-                icon = string.char(0xEE, 0x97, 0x8D),
+                icon = string.char(0xEE, 0x97, 0x8D),  -- U+E5CD close
                 action = { type = "ink_knot", knot = "phone_close" },
             },
         },

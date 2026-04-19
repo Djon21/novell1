@@ -20,6 +20,15 @@ local yagames = require "yagames.yagames"
 -- и on_input() не упирались в Lua limit 60 upvalues/function.
 -- ОБЪЯВЛЕНА в самом верху, до любой local function — чтобы функции,
 -- которые её используют, видели её как upvalue, а не как глобал.
+-- Палитра из .design_hud.html (цвета в RGB 0..1).
+local COLOR_INK        = vmath.vector4(0.024, 0.012, 0.047, 1)
+local COLOR_PAPER      = vmath.vector4(0.922, 0.914, 0.871, 1)
+local COLOR_ACCENT     = vmath.vector4(0.490, 0.976, 1.000, 1)
+local COLOR_ACCENT_HOT = vmath.vector4(1.000, 0.239, 0.498, 1)
+local COLOR_AMBER      = vmath.vector4(1.000, 0.702, 0.278, 1)
+local COLOR_VIOLET     = vmath.vector4(0.604, 0.498, 1.000, 1)
+local COLOR_DIM        = vmath.vector4(0.627, 0.635, 0.694, 1)
+
 local S = {}
 S.STORY_RESOURCE = "/main/story/chapter_01.json"
 S.ysdk_ready = false
@@ -696,21 +705,51 @@ S.ui.set_hud_icon_enabled = function(icon, on)
     gui.set_enabled(icon.ring,   on)
     gui.set_enabled(icon.icon,   on)
     gui.set_enabled(icon.hit,    on)
+    -- Новые декоративные ноды (decal/badge/tag/caption)
+    if icon.decal      then gui.set_enabled(icon.decal,      on) end
+    if icon.decal_text then gui.set_enabled(icon.decal_text, on) end
+    if icon.badge      then gui.set_enabled(icon.badge,      on) end
+    if icon.badge_text then gui.set_enabled(icon.badge_text, on) end
+    if icon.tag        then gui.set_enabled(icon.tag,        on) end
+    if icon.caption    then gui.set_enabled(icon.caption,    on and (S.show_hud_labels ~= false)) end
 end
 
 -- Перерисовывает HUD: рюкзак всегда, телефон — по флагу has_phone.
+-- Badge-цифры: #inventory для рюкзака, 3 (заглушка) для телефона.
 S.ui.render_hud = function()
     if not S.hud.backpack.circle then return end   -- init ещё не прошёл
     S.ui.set_hud_icon_enabled(S.hud.backpack, true)
     S.ui.set_hud_icon_enabled(S.hud.phone, gs.get_flag("has_phone") == true)
+
+    -- Обновляем цифры в badge'ах
+    local inv = gs.get_inventory() or {}
+    local inv_count = #inv
+    if S.hud.backpack.badge_text then
+        gui.set_text(S.hud.backpack.badge_text, tostring(inv_count))
+    end
+    if S.hud.backpack.decal_text then
+        gui.set_text(S.hud.backpack.decal_text, "N" .. inv_count)
+    end
+    if S.hud.phone.badge_text then
+        -- Пока заглушка: число непрочитанных SMS+notes будет позже;
+        -- для демонстрации HUD показываем 3.
+        gui.set_text(S.hud.phone.badge_text, "3")
+    end
 end
 
 -- Заполняет сетку slot_1..slot_12 из gs.get_inventory().
+-- Для каждого слота также обновляются coord (A1/B2/...), name под иконкой и qty.
 S.ui.render_inv_slots = function()
     if not S.inv_modal.slots[1] then return end
     local inv = gs.get_inventory()
+    local LETTERS = { "A", "B", "C", "D" }
     for i = 1, S.inv_modal.COUNT do
         local s = S.inv_modal.slots[i]
+        local row = math.floor((i - 1) / 4)
+        local col = (i - 1) % 4
+        local coord_txt = LETTERS[col + 1] .. tostring(row + 1)
+        if s.coord then gui.set_text(s.coord, coord_txt) end
+
         local item_id = inv[i]
         local item = item_id and items_catalog.get(item_id)
         if item then
@@ -719,14 +758,96 @@ S.ui.render_inv_slots = function()
             gui.set_enabled(s.ring,   true)
             gui.set_enabled(s.icon,   true)
             gui.set_enabled(s.hit,    true)
+            if s.name then
+                gui.set_text(s.name, item.name or "")
+                gui.set_enabled(s.name, true)
+            end
+            if s.qty then
+                local qn = item.qty or 1
+                gui.set_text(s.qty, qn > 1 and tostring(qn) or "")
+                gui.set_enabled(s.qty, qn > 1)
+            end
             s.item_id = item_id
         else
             gui.set_enabled(s.circle, false)
             gui.set_enabled(s.ring,   false)
             gui.set_enabled(s.icon,   false)
             gui.set_enabled(s.hit,    false)
+            if s.name then
+                gui.set_text(s.name, "")
+                gui.set_enabled(s.name, false)
+            end
+            if s.qty then
+                gui.set_text(s.qty, "")
+                gui.set_enabled(s.qty, false)
+            end
             s.item_id = nil
         end
+        -- coord всегда виден пока открыта модалка (подсказывает ячейку).
+        if s.coord then gui.set_enabled(s.coord, true) end
+    end
+
+    -- Обновляем верхние статистики (slots / weight / loop).
+    local used = #inv
+    if S.inv_modal.stat_slots then
+        gui.set_text(S.inv_modal.stat_slots, "слотов: " .. used .. "/" .. S.inv_modal.COUNT)
+    end
+    if S.inv_modal.stat_weight then
+        -- Простая модель: 0.3 кг на предмет.
+        gui.set_text(S.inv_modal.stat_weight, string.format("вес: %.1f кг", used * 0.3))
+    end
+    -- stat_loop пока статичен ("петля: #017").
+end
+
+-- Заполняет details-панель по id предмета.
+S.ui.select_inv_item = function(item_id)
+    local d = S.inv_modal.details
+    if not d then return end
+    local item = item_id and items_catalog.get(item_id) or nil
+    d.selected = item_id
+    if not item then
+        -- Пусто: чистим все текстовые поля.
+        gui.set_text(d.name, "—")
+        gui.set_text(d.preview_icon, "")
+        gui.set_text(d.desc, "Нет выбранного предмета.")
+        gui.set_text(d.stamp, "")
+        for key, pair in pairs(d.stats) do
+            gui.set_text(pair.value, "—")
+        end
+        for key, v in pairs(d.verbs) do
+            gui.set_enabled(v.btn, false)
+            gui.set_enabled(v.text, false)
+        end
+        return
+    end
+    gui.set_text(d.name, item.name or "—")
+    gui.set_text(d.preview_icon, item.icon or "?")
+    gui.set_text(d.desc, item.desc or item.description or "")
+    gui.set_text(d.stamp, (item.clue == "да") and "УЛИКА" or "ОСМОТРЕТЬ")
+    -- Цвет штампа: magenta для улики, accent для обычного
+    if item.clue == "да" then
+        gui.set_color(d.stamp, COLOR_ACCENT_HOT)
+    else
+        gui.set_color(d.stamp, COLOR_ACCENT)
+    end
+    gui.set_text(d.stats.source.value, item.source or "—")
+    gui.set_text(d.stats.iter.value,   item.iter   or "—")
+    gui.set_text(d.stats.type.value,   item.type   or "—")
+    gui.set_text(d.stats.clue.value,   item.clue   or "нет")
+
+    -- Verbs: активные подсвечиваем accent, неактивные — dim.
+    local active = {}
+    for _, vname in ipairs(item.verbs or {}) do active[vname] = true end
+    for key, v in pairs(d.verbs) do
+        gui.set_enabled(v.btn, true)
+        gui.set_enabled(v.text, true)
+        local c
+        if active[key] then
+            c = vmath.vector4(COLOR_ACCENT.x, COLOR_ACCENT.y, COLOR_ACCENT.z, 1.0)
+        else
+            c = vmath.vector4(COLOR_DIM.x, COLOR_DIM.y, COLOR_DIM.z, 0.35)
+        end
+        gui.set_color(v.text, c)
     end
 end
 
@@ -738,6 +859,34 @@ S.ui.show_inv_modal = function()
     gui.set_enabled(S.inv_modal.title,       true)
     gui.set_enabled(S.inv_modal.close_btn,   true)
     gui.set_enabled(S.inv_modal.close_text,  true)
+    if S.inv_modal.eyebrow     then gui.set_enabled(S.inv_modal.eyebrow,     true) end
+    if S.inv_modal.stat_slots  then gui.set_enabled(S.inv_modal.stat_slots,  true) end
+    if S.inv_modal.stat_weight then gui.set_enabled(S.inv_modal.stat_weight, true) end
+    if S.inv_modal.stat_loop   then gui.set_enabled(S.inv_modal.stat_loop,   true) end
+
+    -- Details-панель: включаем ноды.
+    local d = S.inv_modal.details
+    if d then
+        gui.set_enabled(d.cap, true)
+        gui.set_enabled(d.name, true)
+        gui.set_enabled(d.preview_bg, true)
+        gui.set_enabled(d.preview_icon, true)
+        gui.set_enabled(d.stamp, true)
+        gui.set_enabled(d.desc, true)
+        for _, pair in pairs(d.stats) do
+            gui.set_enabled(pair.key, true)
+            gui.set_enabled(pair.value, true)
+        end
+        for _, v in pairs(d.verbs) do
+            gui.set_enabled(v.btn, true)
+            gui.set_enabled(v.text, true)
+        end
+    end
+
+    -- Авто-выбор первого непустого слота (или пусто).
+    local inv = gs.get_inventory() or {}
+    S.ui.select_inv_item(inv[1])
+
     S.inv_modal.visible = true
 end
 
@@ -747,6 +896,10 @@ S.ui.hide_inv_modal = function()
     gui.set_enabled(S.inv_modal.title,       false)
     gui.set_enabled(S.inv_modal.close_btn,   false)
     gui.set_enabled(S.inv_modal.close_text,  false)
+    if S.inv_modal.eyebrow     then gui.set_enabled(S.inv_modal.eyebrow,     false) end
+    if S.inv_modal.stat_slots  then gui.set_enabled(S.inv_modal.stat_slots,  false) end
+    if S.inv_modal.stat_weight then gui.set_enabled(S.inv_modal.stat_weight, false) end
+    if S.inv_modal.stat_loop   then gui.set_enabled(S.inv_modal.stat_loop,   false) end
     for i = 1, S.inv_modal.COUNT do
         local s = S.inv_modal.slots[i]
         if s and s.circle then
@@ -754,6 +907,26 @@ S.ui.hide_inv_modal = function()
             gui.set_enabled(s.ring,   false)
             gui.set_enabled(s.icon,   false)
             gui.set_enabled(s.hit,    false)
+            if s.coord then gui.set_enabled(s.coord, false) end
+            if s.name  then gui.set_enabled(s.name,  false) end
+            if s.qty   then gui.set_enabled(s.qty,   false) end
+        end
+    end
+    local d = S.inv_modal.details
+    if d then
+        gui.set_enabled(d.cap, false)
+        gui.set_enabled(d.name, false)
+        gui.set_enabled(d.preview_bg, false)
+        gui.set_enabled(d.preview_icon, false)
+        gui.set_enabled(d.stamp, false)
+        gui.set_enabled(d.desc, false)
+        for _, pair in pairs(d.stats) do
+            gui.set_enabled(pair.key, false)
+            gui.set_enabled(pair.value, false)
+        end
+        for _, v in pairs(d.verbs) do
+            gui.set_enabled(v.btn, false)
+            gui.set_enabled(v.text, false)
         end
     end
     S.inv_modal.visible = false
@@ -887,33 +1060,89 @@ function init(self)
 
     -- HUD: 2 постоянные иконки (backpack всегда, phone по флагу has_phone).
     S.hud.backpack = {
-        circle = gui.get_node("hud_backpack_circle"),
-        ring   = gui.get_node("hud_backpack_ring"),
-        icon   = gui.get_node("hud_backpack_icon"),
-        hit    = gui.get_node("hud_backpack_hit"),
+        circle     = gui.get_node("hud_backpack_circle"),
+        ring       = gui.get_node("hud_backpack_ring"),
+        icon       = gui.get_node("hud_backpack_icon"),
+        hit        = gui.get_node("hud_backpack_hit"),
+        decal      = gui.get_node("hud_backpack_decal"),
+        decal_text = gui.get_node("hud_backpack_decal_text"),
+        badge      = gui.get_node("hud_backpack_badge"),
+        badge_text = gui.get_node("hud_backpack_badge_text"),
+        tag        = gui.get_node("hud_backpack_tag"),
+        caption    = gui.get_node("hud_backpack_caption"),
     }
     S.hud.phone = {
-        circle = gui.get_node("hud_phone_circle"),
-        ring   = gui.get_node("hud_phone_ring"),
-        icon   = gui.get_node("hud_phone_icon"),
-        hit    = gui.get_node("hud_phone_hit"),
+        circle     = gui.get_node("hud_phone_circle"),
+        ring       = gui.get_node("hud_phone_ring"),
+        icon       = gui.get_node("hud_phone_icon"),
+        hit        = gui.get_node("hud_phone_hit"),
+        decal      = gui.get_node("hud_phone_decal"),
+        decal_text = gui.get_node("hud_phone_decal_text"),
+        badge      = gui.get_node("hud_phone_badge"),
+        badge_text = gui.get_node("hud_phone_badge_text"),
+        tag        = gui.get_node("hud_phone_tag"),
+        caption    = gui.get_node("hud_phone_caption"),
     }
+    S.show_hud_labels = true
 
-    -- Инвентарная модалка: panel + title + close + 12 слотов.
+    -- Инвентарная модалка: panel + title + close + 12 слотов + details.
     S.inv_modal.dim         = gui.get_node("inv_modal_dim")
     S.inv_modal.panel       = gui.get_node("inv_modal_panel")
     S.inv_modal.title       = gui.get_node("inv_modal_title")
     S.inv_modal.close_btn   = gui.get_node("inv_modal_close_btn")
     S.inv_modal.close_text  = gui.get_node("inv_modal_close_text")
+    S.inv_modal.eyebrow     = gui.get_node("inv_modal_eyebrow")
+    S.inv_modal.stat_slots  = gui.get_node("inv_modal_stat_slots")
+    S.inv_modal.stat_weight = gui.get_node("inv_modal_stat_weight")
+    S.inv_modal.stat_loop   = gui.get_node("inv_modal_stat_loop")
     for i = 1, S.inv_modal.COUNT do
         S.inv_modal.slots[i] = {
             circle  = gui.get_node("inv_slot_circle_" .. i),
             ring    = gui.get_node("inv_slot_ring_"   .. i),
             icon    = gui.get_node("inv_slot_icon_"   .. i),
             hit     = gui.get_node("inv_slot_hit_"    .. i),
+            coord   = gui.get_node("inv_slot_coord_"  .. i),
+            name    = gui.get_node("inv_slot_name_"   .. i),
+            qty     = gui.get_node("inv_slot_qty_"    .. i),
             item_id = nil,
         }
     end
+
+    -- Details-панель (правая половина inv_modal_panel).
+    S.inv_modal.details = {
+        cap          = gui.get_node("inv_details_cap"),
+        name         = gui.get_node("inv_details_name"),
+        preview_bg   = gui.get_node("inv_details_preview_bg"),
+        preview_icon = gui.get_node("inv_details_preview_icon"),
+        stamp        = gui.get_node("inv_details_stamp"),
+        desc         = gui.get_node("inv_details_desc"),
+        stats = {
+            source = {
+                key   = gui.get_node("inv_details_stat_source_key"),
+                value = gui.get_node("inv_details_stat_source_value"),
+            },
+            iter = {
+                key   = gui.get_node("inv_details_stat_iter_key"),
+                value = gui.get_node("inv_details_stat_iter_value"),
+            },
+            type = {
+                key   = gui.get_node("inv_details_stat_type_key"),
+                value = gui.get_node("inv_details_stat_type_value"),
+            },
+            clue = {
+                key   = gui.get_node("inv_details_stat_clue_key"),
+                value = gui.get_node("inv_details_stat_clue_value"),
+            },
+        },
+        verbs = {
+            use     = { btn = gui.get_node("inv_verb_use"),     text = gui.get_node("inv_verb_use_text") },
+            inspect = { btn = gui.get_node("inv_verb_inspect"), text = gui.get_node("inv_verb_inspect_text") },
+            combine = { btn = gui.get_node("inv_verb_combine"), text = gui.get_node("inv_verb_combine_text") },
+            read    = { btn = gui.get_node("inv_verb_read"),    text = gui.get_node("inv_verb_read_text") },
+            give    = { btn = gui.get_node("inv_verb_give"),    text = gui.get_node("inv_verb_give_text") },
+        },
+        selected = nil,
+    }
 
     -- Модалка описания предмета (поверх инвентарной).
     S.item_modal.dim        = gui.get_node("item_modal_dim")
@@ -1335,7 +1564,9 @@ function on_input(self, action_id, action)
                 if s.item_id
                 and gui.is_enabled(s.hit)
                 and gui.pick_node(s.hit, action.x, action.y) then
-                    S.ui.show_item_modal(s.item_id)
+                    -- Новый дизайн: клик по слоту обновляет details-панель
+                    -- справа вместо открытия отдельной item_modal.
+                    S.ui.select_inv_item(s.item_id)
                     return true
                 end
             end

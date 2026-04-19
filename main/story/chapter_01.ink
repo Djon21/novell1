@@ -906,3 +906,12 @@ AUTHOR: {mc_name}@next_iteration
 === phone_close
 # phone:close
 -> DONE
+
+=== phone_stub_soon ===
+# bg:bg_phone # speaker:none
+Эта часть приложения пока недоступна.
+# speaker:mc
+Скоро. Но не сегодня.
+* [Назад]
+    # return_to_scene
+    -> DONE
