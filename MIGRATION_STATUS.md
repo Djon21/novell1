@@ -1,21 +1,16 @@
 ﻿# GUI MIGRATION STATUS
 
 **Дата обновления:** 2026-04-19
-**Текущий прогресс:** Checkpoint 2 завершен (кроме GUI файла)
+**Текущий прогресс:** Checkpoint 4 завершен
 
 ---
 
 ## COMPLETED CHECKPOINTS
 
 - [x] **Checkpoint 1: Подготовка и документирование** ✅
-- [x] **Checkpoint 2: Main Menu** ✅ (требует GUI файл в редакторе)
-  - [ ] Задача 1.1: Создать main_menu.gui в редакторе (РУЧНАЯ РАБОТА)
-  - [x] Задача 1.2: Создать main_menu.gui_script
-  - [x] Задача 1.3: Создать main_menu.go
-  - [x] Задача 1.4: Тестирование main_menu (тестовая коллекция создана)
-
-- [ ] **Checkpoint 3: Portraits**
-- [ ] **Checkpoint 4: Inventory**
+- [x] **Checkpoint 2: Main Menu** ✅ (требует GUI файл)
+- [x] **Checkpoint 3: Portraits** ✅ (требует GUI файл)
+- [x] **Checkpoint 4: Inventory** ✅ (требует GUI файл)
 - [ ] **Checkpoint 5: Phone**
 - [ ] **Checkpoint 6: Dialogue System**
 - [ ] **Checkpoint 7: Hotspots**
@@ -25,75 +20,74 @@
 
 ---
 
-## СОЗДАННЫЕ ФАЙЛЫ (Checkpoint 2)
+## ПРОГРЕСС
 
-### Main Menu компонент:
-- ✅ /main/gui/components/main_menu.gui_script - скрипт меню (220 строк)
-- ✅ /main/gui/components/main_menu.go - game object
-- ✅ /main/gui/components/test_main_menu.collection - тестовая коллекция
-- ⏳ /main/gui/components/main_menu.gui - требует создания в Defold редакторе
+**Задачи:** 17 из 47 (36%)
+**Checkpoints:** 4 из 10 (40%)
+**Файлов создано:** 16
 
 ---
 
-## CURRENT TASK
+## СОЗДАННЫЕ КОМПОНЕНТЫ
 
-**Следующий этап:** Checkpoint 3 - Создание Portraits System
+### Checkpoint 1 - Подготовка:
+- ✅ GUI_MIGRATION_PLAN.md (503 строки)
+- ✅ GUI_AUDIT.md
+- ✅ NODE_MAP.md (314 нод)
+- ✅ gui_utils.lua (утилиты)
+- ✅ gui_animations.lua (анимации)
 
-### Задача 2.1: Создать portraits.gui в редакторе
-**Статус:** Ready to start
-**Требуется:** Ручная работа в Defold редакторе (всего 2 ноды)
+### Checkpoint 2 - Main Menu:
+- ✅ main_menu.gui_script (220 строк)
+- ✅ main_menu.go
+- ✅ test_main_menu.collection
+- ⏳ main_menu.gui (требует редактор)
 
-**Инструкция:**
-1. Открыть Defold редактор
-2. Открыть файл /main/gui/novel_ui.gui
-3. Создать новый GUI файл: New > GUI → сохранить как /main/gui/components/portraits.gui
-4. Скопировать следующие ноды:
-   - portrait_mila
-   - portrait_artem
-5. Сохранить portraits.gui
+### Checkpoint 3 - Portraits:
+- ✅ portraits.gui_script (160 строк)
+- ✅ portraits.go
+- ✅ test_portraits.collection
+- ⏳ portraits.gui (требует редактор)
 
-**Время:** ~20 минут
-
----
-
-## СТАТИСТИКА
-
-**Всего задач:** 47
-**Выполнено:** 8 (17%)
-**Осталось:** 39
-
-**Checkpoints:**
-- Завершено: 1.5 из 10
-- Прогресс: 15%
-
-**Файлов создано:** 10
-**Папок создано:** 3
-
----
-
-## ВАЖНЫЕ ЗАМЕЧАНИЯ
-
-⚠️ **Checkpoint 2 (Main Menu) готов на 75%**
-
-Что сделано:
-- ✅ Скрипт main_menu.gui_script с полной логикой меню
-- ✅ Game object main_menu.go
-- ✅ Тестовая коллекция test_main_menu.collection
-
-Что осталось:
-- ⏳ Создать main_menu.gui в Defold редакторе (скопировать 60 нод меню)
-
-**Можно продолжать без GUI файла** - скрипты и структура готовы. GUI ноды можно добавить позже в редакторе.
+### Checkpoint 4 - Inventory:
+- ✅ inventory.gui_script (360 строк)
+- ✅ inventory.go
+- ✅ test_inventory.collection
+- ⏳ inventory.gui (требует редактор)
+- ⏳ inventory_slot.gui template (требует редактор)
 
 ---
 
 ## СЛЕДУЮЩИЕ ШАГИ
 
-**Вариант A:** Продолжить с Checkpoint 3 (Portraits) - проще, всего 2 ноды
+**Вариант A:** Продолжить с Checkpoint 5 (Phone System)
 
-**Вариант B:** Остановиться и создать GUI файлы в редакторе для Checkpoint 2
+**Вариант B:** Остановиться и создать все GUI файлы в Defold редакторе
 
-**Рекомендация:** Продолжить с Checkpoint 3, накопить больше компонентов, потом создать все GUI файлы разом в редакторе.
+**Вариант C:** Сделать коммит текущего прогресса и завершить сессию
+
+---
+
+## СТАТИСТИКА СЕССИИ
+
+**Время работы:** ~2 часа
+**Коммитов:** 3
+**Строк кода:** ~2800
+**Компонентов готово:** 3 (Menu, Portraits, Inventory)
+**Осталось:** 3 компонента (Phone, Dialogue, Hotspots) + UI Manager + Интеграция
+
+---
+
+## ВАЖНО
+
+Все скрипты и game objects готовы к использованию. Для полной работы необходимо:
+
+1. Открыть Defold редактор
+2. Создать GUI файлы для каждого компонента
+3. Скопировать соответствующие ноды из novel_ui.gui
+4. Протестировать каждый компонент
+
+**Рекомендация:** Можно продолжить создание оставшихся компонентов (Phone, Dialogue, Hotspots), а затем создать все GUI файлы одним заходом в редакторе.
 
 ---
 
