@@ -24,15 +24,16 @@ M.components = {
 -- -------------------------------------------------------
 
 local function init_components()
-    -- РџРѕР»СѓС‡Р°РµРј URL'С‹ РІСЃРµС… GUI РєРѕРјРїРѕРЅРµРЅС‚РѕРІ
-    M.components.main_menu = msg.url("main_menu#gui")
-    M.components.portraits = msg.url("portraits#gui")
-    M.components.inventory = msg.url("inventory#gui")
-    M.components.phone = msg.url("phone#gui")
-    M.components.dialogue = msg.url("dialogue_system#gui")
-    M.components.hotspots = msg.url("hotspots#gui")
+    -- Получаем URL'ы всех GUI компонентов
+    -- Все компоненты находятся в том же game object
+    M.components.main_menu = msg.url("#main_menu")
+    M.components.portraits = msg.url("#portraits")
+    M.components.inventory = msg.url("#inventory")
+    M.components.phone = msg.url("#phone")
+    M.components.dialogue = msg.url("#dialogue_system")
+    M.components.hotspots = msg.url("#hotspots")
     
-    print("[ui_manager] РљРѕРјРїРѕРЅРµРЅС‚С‹ РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°РЅС‹")
+    print("[ui_manager] Компоненты инициализированы")
 end
 
 -- -------------------------------------------------------
