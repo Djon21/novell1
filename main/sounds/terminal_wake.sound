@@ -1,0 +1,4 @@
+sound: "/main/sounds/terminal_wake.wav"
+looping: 0
+group: "sfx"
+gain: 1.0

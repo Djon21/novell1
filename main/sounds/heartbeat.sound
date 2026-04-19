@@ -1,0 +1,4 @@
+sound: "/main/sounds/heartbeat.wav"
+looping: 0
+group: "sfx"
+gain: 1.0
