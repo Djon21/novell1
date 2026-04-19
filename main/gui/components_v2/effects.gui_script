@@ -1,0 +1,69 @@
+-- effects.gui_script
+-- Full-screen overlay с тремя эффектами: grain, scan, vignette.
+-- Сейчас использует простые цветные box'ы с alpha. В будущем можно
+-- заменить на текстуры (noise sprite, scanline texture, radial gradient).
+--
+-- Сообщения:
+--   "set_effects"  {level = 0..1}     — интенсивность grain+vignette
+--   "toggle_scan"  {on = bool}        — вкл/выкл скан-линии
+--   "show_effects"                    — показать
+--   "hide_effects"                    — скрыть (для меню паузы)
+
+local theme = require "main.gui.modules.v2_theme"
+
+local M = {}
+
+local function clamp(v, lo, hi)
+    if v < lo then return lo end
+    if v > hi then return hi end
+    return v
+end
+
+local function set_alpha(node_id, a)
+    local n = gui.get_node(node_id)
+    local c = gui.get_color(n)
+    c.w = a
+    gui.set_color(n, c)
+end
+
+function init(self)
+    self.effects_level = 0.8       -- базовый уровень (как в мобильных макетах)
+    self.scan_on       = true
+    self.visible       = true
+    -- применяем базовые уровни
+    M.apply_level(self)
+end
+
+function M.apply_level(self)
+    local lvl = clamp(self.effects_level, 0.0, 1.0)
+    -- grain: 0.03..0.13
+    set_alpha("grain",    0.03 + lvl * 0.10)
+    -- vignette: 0.40..0.95
+    set_alpha("vignette", 0.40 + lvl * 0.55)
+    -- scan: 0 или 0.18
+    set_alpha("scan",     self.scan_on and 0.18 or 0.0)
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash("set_effects") then
+        self.effects_level = message.level or 0.8
+        M.apply_level(self)
+    elseif message_id == hash("toggle_scan") then
+        self.scan_on = message.on and true or false
+        M.apply_level(self)
+    elseif message_id == hash("show_effects") then
+        if not self.visible then
+            self.visible = true
+            gui.set_enabled(gui.get_node("grain"),    true)
+            gui.set_enabled(gui.get_node("scan"),     true)
+            gui.set_enabled(gui.get_node("vignette"), true)
+        end
+    elseif message_id == hash("hide_effects") then
+        if self.visible then
+            self.visible = false
+            gui.set_enabled(gui.get_node("grain"),    false)
+            gui.set_enabled(gui.get_node("scan"),     false)
+            gui.set_enabled(gui.get_node("vignette"), false)
+        end
+    end
+end

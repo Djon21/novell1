@@ -45,7 +45,7 @@
 ### Этап 1 — общие атомы
 
 - [x] **step4**: создать `main/gui/v2_atoms.gui` с nested prefabs: `corner_brackets` (4 угла, 22×22, cyan, opacity 0.4), `hud_top` (верхняя полоса 960×32 с ink_0 фоном + cyan пульсирующий dot + 2 текст-слота слева/справа), `hud_bot` (аналог снизу). *(в Defold nested prefabs = отдельные `.gui` template-файлы; создано 3 файла в `main/gui/components_v2/atoms/`: corner_brackets.gui, hud_top.gui, hud_bot.gui)*
-- [ ] **step5**: создать overlay-компонент `main/gui/components_v2/effects.gui` + `.gui_script` — три full-screen box-ноды: grain (использует generated noise texture или просто 50% opacity noise sprite), scan (repeating horizontal lines), vignette (radial gradient). Скрипт принимает `msg` "set_effects" {level:0..1} и "toggle_scan" {on:bool}.
+- [x] **step5**: создать overlay-компонент `main/gui/components_v2/effects.gui` + `.gui_script` — три full-screen box-ноды: grain (использует generated noise texture или просто 50% opacity noise sprite), scan (repeating horizontal lines), vignette (radial gradient). Скрипт принимает `msg` "set_effects" {level:0..1} и "toggle_scan" {on:bool}. *(на старте — plain-color alpha box'ы; позже можно подключить текстуры noise/scan/gradient)*
 
 ### Этап 2 — экраны (порядок: hud → map → nav → menu → dialog → choice)
 
@@ -78,6 +78,7 @@
 *(сюда луп пишет пункты, требующие визуальной проверки в Defold Editor)*
 
 - **step4**: открой `main/gui/components_v2/atoms/` в Defold Editor, визуально проверь что `corner_brackets.gui`, `hud_top.gui`, `hud_bot.gui` рендерятся корректно (углы по периметру 960×640, hud-полосы высотой 32px сверху/снизу с cyan бордером). `script: ""` в textproto обычно валидно (без скрипта), но если Defold требует явного отсутствия — удалить строку руками.
+- **step5**: `effects.gui` пока использует plain-color box'ы с alpha (grain белый 7%, scan белый 18% BLEND_MULT, vignette чёрный 55%). Выглядит как затемнение без текстур — для полноценного эффекта нужно подключить PNG текстуры noise/scan/radial_gradient в атлас и заменить TYPE_BOX на текстуру. Пока работает как базовая затенёнка.
 
 ---
 
@@ -89,3 +90,4 @@
 - step2 — `main/images/v2/artem.png`, `mila.png`, `bg_bedroom_01.jpg` + `main/images/v2.atlas`
 - step3 — `main/gui/modules/v2_theme.lua` (COLORS, FONTS, ROLES, LAYOUT, ANIM, apply helper)
 - step4 — 3 атома-шаблона: `components_v2/atoms/corner_brackets.gui`, `hud_top.gui`, `hud_bot.gui`
+- step5 — `components_v2/effects.gui` + `.gui_script` (grain/scan/vignette, msg set_effects/toggle_scan/show_effects/hide_effects)
