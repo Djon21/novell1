@@ -1,4 +1,4 @@
-﻿components {
+components {
   id: "gui"
   component: "/main/gui/components/main_menu.gui"
   position {
