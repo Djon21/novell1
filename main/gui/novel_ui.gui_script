@@ -108,7 +108,13 @@ S.hint_timer = 0
 S.in_menu = true
 S.glitch_active = false
 S.music_started = false
-S.SFX_URLS = {}
+S.SFX_URLS = {
+	terminal_wake = msg.url("main:/sfx_player#terminal_wake"),
+	coffee_brew = msg.url("main:/sfx_player#coffee_brew"),
+	phone_notify = msg.url("main:/sfx_player#phone_notify"),
+	heartbeat = msg.url("main:/sfx_player#heartbeat"),
+	paper_rustle = msg.url("main:/sfx_player#paper_rustle"),
+}
 
 -- Загружает байты скомпилированного .ink/.json и отдаёт их dialogue_manager.
 -- Возвращает nil + печатает ошибку, если ресурс не найден — UI в этом
