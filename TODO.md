@@ -28,7 +28,7 @@
 
 В `chapter_01.ink` используются, движок их silent fail:
 
-- [ ] `terminal_wake`
+- [x] ~~`terminal_wake`~~ — **ДОБАВЛЕН** 2026-04-19 (Computer Beep by phatcorns, CC0)
 - [x] ~~`coffee_brew`~~ — **ДОБАВЛЕН** 2026-04-19
 - [ ] `phone_pickup`
 - [ ] `phone_wake`
