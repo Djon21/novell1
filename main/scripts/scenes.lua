@@ -116,7 +116,7 @@ M.scenes = {
                 id = "back_from_bathroom",
                 rect = { x = 30, y = 30, w = 140, h = 80 },
                 label = "Назад",
-                icon = "",
+                icon = string.char(0xEE, 0x97, 0x84),  -- U+E5C4 arrow_back
                 action = { type = "goto_scene", scene = "apartment_hub" },
             },
         },
