@@ -2,7 +2,7 @@
 
 **Дата:** 2026-04-19
 **Последний коммит:** 127ed8a
-**Прогресс:** 5 из 10 checkpoints (50%)
+**Прогресс:** 6 из 10 checkpoints (60%)
 
 ---
 
@@ -13,8 +13,9 @@
 ✅ **Checkpoint 3:** Portraits (скрипт готов, GUI файл требует редактора)
 ✅ **Checkpoint 4:** Inventory (скрипт готов, GUI файл требует редактора)
 ✅ **Checkpoint 5:** Phone System (скрипт готов, GUI файл требует редактора)
+✅ **Checkpoint 6:** Dialogue System (скрипт готов, GUI файл требует редактора)
 
-**Всего создано:** 19 файлов, ~3010 строк кода
+**Всего создано:** 22 файла, ~3390 строк кода
 
 ---
 
@@ -22,20 +23,19 @@
 
 ### Вариант 1: Продолжить создание компонентов
 
-Следующий этап - **Checkpoint 6: Dialogue System**
+Следующий этап - **Checkpoint 7: Hotspots**
 
 **Задачи:**
-1. Создать dialogue_system.gui_script (логика диалогов, выборов, нарратора)
-2. Создать dialogue_system.go
-3. Создать test_dialogue.collection
-4. (Позже) Создать dialogue_system.gui в Defold редакторе
-5. (Позже) Создать dialogue_choice.gui template
+1. Создать hotspots.gui_script (логика интерактивных точек)
+2. Создать hotspots.go
+3. Создать test_hotspots.collection
+4. (Позже) Создать hotspots.gui в Defold редакторе
 
 **Команда для AI в новом чате:**
 `
 Продолжаем миграцию GUI проекта novell1. 
 Прочитай файл MIGRATION_STATUS.md и GUI_MIGRATION_PLAN.md.
-Начинаем с Checkpoint 6 - Dialogue System (задачи 5.1-5.6).
+Начинаем с Checkpoint 7 - Hotspots (задачи 6.1-6.3).
 `
 
 ### Вариант 2: Создать GUI файлы в редакторе

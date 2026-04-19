@@ -1,0 +1,360 @@
+-- dialogue_system.gui_script
+-- Контроллер диалоговой системы визуальной новеллы
+
+local dm = require "main.scripts.dialogue_manager_ink"
+local gs = require "main.scripts.game_state"
+local scene_controller = require "main.scripts.scene_controller"
+local gui_animations = require "main.gui.modules.gui_animations"
+
+-- Состояние диалоговой системы
+local M = {}
+M.visible = false
+M.current_mode = nil  -- "dialogue", "choice", "end"
+
+-- Ноды диалоговой панели
+M.dialogue_panel = nil
+M.name_panel = nil
+M.name_label = nil
+M.dialogue_text = nil
+M.continue_hint = nil
+
+-- Ноды панели выборов
+M.choice_panel = nil
+M.choice_question = nil
+M.choice_btns = {}
+M.choice_texts = {}
+M.choice_btn_tops = {}
+M.choice_btn_lefts = {}
+
+-- Ноды нарраторской панели
+M.narrator_panel = nil
+M.narrator_clock = nil
+M.narrator_prompt = nil
+M.narrator_cursor = nil
+M.narrator_visible = false
+M.cursor_blink_t = 0
+
+-- Константы для позиционирования текста
+M.TEXT_X_NORMAL = 260
+M.TEXT_X_PORTRAIT = 280
+M.TEXT_W_NORMAL = 680
+M.TEXT_W_PORTRAIT = 660
+M.TEXT_Y = 132
+M.NAME_X_NORMAL = 330
+M.NAME_X_PORTRAIT = 330
+M.NAME_Y = 165
+
+-- -------------------------------------------------------
+-- Нарратор
+-- -------------------------------------------------------
+
+local function show_narrator()
+    if M.narrator_visible then return end
+    M.narrator_visible = true
+    
+    gui.set_enabled(M.narrator_panel, true)
+    gui.set_enabled(M.narrator_clock, true)
+    gui.set_enabled(M.narrator_prompt, true)
+    gui.set_enabled(M.narrator_cursor, true)
+    
+    -- Fade-in анимация
+    for _, n in ipairs({M.narrator_panel, M.narrator_clock, M.narrator_prompt, M.narrator_cursor}) do
+        local c = gui.get_color(n)
+        c.w = 0
+        gui.set_color(n, c)
+    end
+    
+    gui.animate(M.narrator_panel, "color.w", 0.75, gui.EASING_OUTQUAD, 0.25)
+    gui.animate(M.narrator_clock, "color.w", 1, gui.EASING_OUTQUAD, 0.25, 0.05)
+    gui.animate(M.narrator_prompt, "color.w", 1, gui.EASING_OUTQUAD, 0.25, 0.10)
+    gui.animate(M.narrator_cursor, "color.w", 1, gui.EASING_OUTQUAD, 0.25, 0.15)
+end
+
+local function hide_narrator()
+    if not M.narrator_visible then return end
+    M.narrator_visible = false
+    
+    local nodes = {M.narrator_panel, M.narrator_clock, M.narrator_prompt, M.narrator_cursor}
+    for _, n in ipairs(nodes) do
+        gui.animate(n, "color.w", 0, gui.EASING_INQUAD, 0.2, 0, function()
+            gui.set_enabled(n, false)
+        end)
+    end
+end
+
+-- -------------------------------------------------------
+-- Режим диалога
+-- -------------------------------------------------------
+
+local function show_dialogue_mode(node)
+    M.current_mode = "dialogue"
+    
+    gui.set_enabled(M.choice_panel, false)
+    gui.set_enabled(M.dialogue_panel, true)
+    gui.set_enabled(M.dialogue_text, true)
+    
+    local has_name = node.character and node.character ~= ""
+    gui.set_enabled(M.name_panel, has_name)
+    gui.set_enabled(M.name_label, has_name)
+    
+    if has_name then
+        gui.set_text(M.name_label, node.character)
+        hide_narrator()
+        -- Отправляем сообщение portraits компоненту для показа портрета
+        msg.post("/portraits#gui", "show_portrait", {character = node.character})
+    else
+        show_narrator()
+        -- Скрываем портрет
+        msg.post("/portraits#gui", "hide_portrait")
+    end
+    
+    gui.set_text(M.dialogue_text, node.text or "")
+    gui.set_text(M.continue_hint, ">>>")
+    gui.set_enabled(M.continue_hint, true)
+    
+    print("[dialogue_system] Показан диалог:", node.character or "narrator")
+end
+
+-- -------------------------------------------------------
+-- Режим выбора
+-- -------------------------------------------------------
+
+-- Динамически расставляет кнопки по числу вариантов
+local function layout_choices(options)
+    local BTN_H = 54
+    local BTN_GAP = 12
+    local Q_H = 22
+    local Q_GAP = 14
+    
+    local n = 0
+    for i = 1, 4 do
+        if options and options[i] then n = n + 1 end
+    end
+    if n == 0 then return end
+    
+    -- Высота всего блока: вопрос + отступ + кнопки
+    local block_h = Q_H + Q_GAP + n * BTN_H + (n - 1) * BTN_GAP
+    local top = block_h / 2
+    
+    -- Вопрос
+    gui.set_position(M.choice_question, vmath.vector3(0, top - Q_H / 2, 0.1))
+    
+    -- Кнопки сверху вниз
+    local btn_y = top - Q_H - Q_GAP - BTN_H / 2
+    for i = 1, 4 do
+        if options and options[i] then
+            gui.set_position(M.choice_btns[i], vmath.vector3(0, btn_y, 0.10))
+            gui.set_position(M.choice_btn_tops[i], vmath.vector3(0, btn_y + BTN_H / 2, 0.15))
+            gui.set_position(M.choice_btn_lefts[i], vmath.vector3(-328, btn_y, 0.15))
+            btn_y = btn_y - BTN_H - BTN_GAP
+        end
+    end
+end
+
+local function show_choice_mode(node)
+    M.current_mode = "choice"
+    
+    gui.set_enabled(M.dialogue_panel, false)
+    gui.set_enabled(M.dialogue_text, false)
+    gui.set_enabled(M.name_panel, false)
+    gui.set_enabled(M.name_label, false)
+    gui.set_enabled(M.continue_hint, false)
+    gui.set_enabled(M.choice_panel, true)
+    
+    hide_narrator()
+    msg.post("/portraits#gui", "hide_portrait")
+    
+    gui.set_text(M.choice_question, node.question or "")
+    
+    for i = 1, 4 do
+        local opt = node.options and node.options[i]
+        gui.set_enabled(M.choice_btns[i], opt ~= nil)
+        gui.set_enabled(M.choice_texts[i], opt ~= nil)
+        gui.set_enabled(M.choice_btn_tops[i], opt ~= nil)
+        gui.set_enabled(M.choice_btn_lefts[i], opt ~= nil)
+        if opt then
+            gui.set_text(M.choice_texts[i], opt.text)
+        end
+    end
+    
+    layout_choices(node.options)
+    print("[dialogue_system] Показаны выборы, вариантов:", #(node.options or {}))
+end
+
+-- -------------------------------------------------------
+-- Режим окончания
+-- -------------------------------------------------------
+
+local function show_end_mode(node)
+    M.current_mode = "end"
+    
+    gui.set_enabled(M.choice_panel, false)
+    gui.set_enabled(M.dialogue_panel, true)
+    gui.set_enabled(M.dialogue_text, true)
+    gui.set_enabled(M.name_panel, false)
+    gui.set_enabled(M.name_label, false)
+    
+    hide_narrator()
+    msg.post("/portraits#gui", "hide_portrait")
+    
+    gui.set_text(M.dialogue_text, node.text or "Конец")
+    gui.set_text(M.continue_hint, "начать заново")
+    gui.set_enabled(M.continue_hint, true)
+    
+    print("[dialogue_system] Показан конец истории")
+end
+
+-- -------------------------------------------------------
+-- Скрыть весь UI диалогов
+-- -------------------------------------------------------
+
+local function hide_dialogue_ui()
+    gui.set_enabled(M.dialogue_panel, false)
+    gui.set_enabled(M.dialogue_text, false)
+    gui.set_enabled(M.name_panel, false)
+    gui.set_enabled(M.name_label, false)
+    gui.set_enabled(M.continue_hint, false)
+    gui.set_enabled(M.choice_panel, false)
+    
+    hide_narrator()
+    msg.post("/portraits#gui", "hide_portrait")
+    
+    M.current_mode = nil
+    M.visible = false
+end
+
+-- -------------------------------------------------------
+-- Рендер текущего состояния диалога
+-- -------------------------------------------------------
+
+local function render_dialogue()
+    -- Если активен point-and-click слой — прячем диалог
+    if scene_controller.is_active() then
+        hide_dialogue_ui()
+        return
+    end
+    
+    local node = dm.get_current_node()
+    if not node then
+        hide_dialogue_ui()
+        return
+    end
+    
+    M.visible = true
+    
+    if node.type == "dialogue" then
+        show_dialogue_mode(node)
+    elseif node.type == "choice" then
+        show_choice_mode(node)
+    elseif node.type == "end" then
+        show_end_mode(node)
+    end
+end
+
+-- -------------------------------------------------------
+-- Lifecycle
+-- -------------------------------------------------------
+
+function init(self)
+    print("[dialogue_system] Инициализация dialogue_system.gui_script")
+    
+    -- Получаем ноды диалоговой панели
+    M.dialogue_panel = gui.get_node("dialogue_panel")
+    M.name_panel = gui.get_node("name_panel")
+    M.name_label = gui.get_node("name_label")
+    M.dialogue_text = gui.get_node("dialogue_text")
+    M.continue_hint = gui.get_node("continue_hint")
+    
+    -- Получаем ноды панели выборов
+    M.choice_panel = gui.get_node("choice_panel")
+    M.choice_question = gui.get_node("choice_question")
+    
+    for i = 1, 4 do
+        M.choice_btns[i] = gui.get_node("choice_btn_" .. i)
+        M.choice_texts[i] = gui.get_node("choice_text_" .. i)
+        M.choice_btn_tops[i] = gui.get_node("choice_btn_" .. i .. "_top")
+        M.choice_btn_lefts[i] = gui.get_node("choice_btn_" .. i .. "_left")
+    end
+    
+    -- Получаем ноды нарраторской панели
+    M.narrator_panel = gui.get_node("narrator_panel")
+    M.narrator_clock = gui.get_node("narrator_clock")
+    M.narrator_prompt = gui.get_node("narrator_prompt")
+    M.narrator_cursor = gui.get_node("narrator_cursor")
+    
+    -- Изначально всё скрыто
+    hide_dialogue_ui()
+    
+    print("[dialogue_system] Инициализация завершена")
+end
+
+function final(self)
+    print("[dialogue_system] Финализация dialogue_system.gui_script")
+end
+
+function update(self, dt)
+    -- Мигание курсора нарратора
+    if M.narrator_visible then
+        M.cursor_blink_t = M.cursor_blink_t + dt
+        local alpha = (math.sin(M.cursor_blink_t * 3) + 1) / 2
+        local c = gui.get_color(M.narrator_cursor)
+        c.w = alpha
+        gui.set_color(M.narrator_cursor, c)
+    end
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash("render_dialogue") then
+        -- Обновить отображение диалога
+        render_dialogue()
+        
+    elseif message_id == hash("hide_dialogue") then
+        -- Скрыть диалоговый UI
+        hide_dialogue_ui()
+        
+    elseif message_id == hash("show_dialogue") then
+        -- Показать диалог с указанными данными
+        if message.node then
+            if message.node.type == "dialogue" then
+                show_dialogue_mode(message.node)
+            elseif message.node.type == "choice" then
+                show_choice_mode(message.node)
+            elseif message.node.type == "end" then
+                show_end_mode(message.node)
+            end
+        end
+    end
+end
+
+function on_input(self, action_id, action)
+    if not M.visible then return false end
+    
+    -- Обработка клика для продолжения диалога
+    if action_id == hash("touch") and action.pressed then
+        if M.current_mode == "dialogue" or M.current_mode == "end" then
+            -- Клик в любом месте продолжает диалог
+            if M.current_mode == "end" then
+                -- Перезапуск истории
+                dm.restart()
+            else
+                dm.continue_story()
+            end
+            render_dialogue()
+            return true
+            
+        elseif M.current_mode == "choice" then
+            -- Проверяем клик по кнопкам выбора
+            for i = 1, 4 do
+                if gui.is_enabled(M.choice_btns[i]) and 
+                   gui.pick_node(M.choice_btns[i], action.x, action.y) then
+                    print("[dialogue_system] Выбран вариант:", i)
+                    dm.choose(i - 1)  -- ink использует 0-based индексы
+                    render_dialogue()
+                    return true
+                end
+            end
+        end
+    end
+    
+    return false
+end
