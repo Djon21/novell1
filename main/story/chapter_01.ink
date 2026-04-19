@@ -432,7 +432,6 @@ PATCH temporal_sync.module
     ~ TRUST = TRUST + 1
     # speaker:mc
     Лишний кофе не повредит. В офисе всё равно невкусный.
-    # sfx:coffee_shop
     -> office_morning
 
 // ================================================================
