@@ -1,0 +1,278 @@
+-- hotspots.gui_script
+-- Контроллер интерактивных точек (hotspots) для point-and-click сцен
+
+local scene_controller = require "main.scripts.scene_controller"
+local hotspot_editor = require "main.scripts.hotspot_editor"
+local gui_animations = require "main.gui.modules.gui_animations"
+
+-- Состояние hotspots
+local M = {}
+M.HOTSPOT_COUNT = 6
+M.ORBIT_DOTS = 6
+M.SCENE_OBJECT_COUNT = 4
+
+-- Ноды hotspots (6 слотов)
+M.hotspot_boxes = {}
+M.hotspot_labels = {}
+M.hotspot_icons = {}
+M.hotspot_circles = {}
+M.hotspot_rings = {}
+M.hotspot_orbits = {}
+M.hotspot_dots = {}
+
+-- Ноды scene objects (4 слота)
+M.scene_obj_nodes = {}
+
+-- -------------------------------------------------------
+-- Установка hotspot в слот
+-- -------------------------------------------------------
+
+local function set_hotspot(i, data)
+    if not data then
+        -- Скрыть hotspot
+        gui.set_enabled(M.hotspot_boxes[i], false)
+        gui.set_enabled(M.hotspot_labels[i], false)
+        gui.set_enabled(M.hotspot_icons[i], false)
+        gui.set_enabled(M.hotspot_circles[i], false)
+        gui.set_enabled(M.hotspot_rings[i], false)
+        gui.set_enabled(M.hotspot_orbits[i], false)
+        for d = 1, M.ORBIT_DOTS do
+            gui.set_enabled(M.hotspot_dots[i][d], false)
+        end
+        return
+    end
+    
+    local r = data.rect
+    -- pivot CENTER по умолчанию, position — центр бокса
+    local cx = r.x + r.w / 2
+    local cy = r.y + r.h / 2
+    gui.set_position(M.hotspot_boxes[i], vmath.vector3(cx, cy, 0.08))
+    gui.set_size(M.hotspot_boxes[i], vmath.vector3(r.w, r.h, 0))
+    
+    -- Визуальный стек: circle + ring + icon + orbit с точками
+    local icon = data.icon
+    if icon and icon ~= "" then
+        local icon_node = M.hotspot_icons[i]
+        local circle_node = M.hotspot_circles[i]
+        local ring_node = M.hotspot_rings[i]
+        local orbit_node = M.hotspot_orbits[i]
+        
+        -- Позиционируем весь стек в центре hotspot'а
+        local ICON_Y_OFFSET = 4  -- компенсация baseline шрифта
+        gui.set_position(circle_node, vmath.vector3(cx, cy, 0.068))
+        gui.set_position(ring_node, vmath.vector3(cx, cy, 0.067))
+        gui.set_position(orbit_node, vmath.vector3(cx, cy, 0.066))
+        gui.set_position(icon_node, vmath.vector3(cx, cy + ICON_Y_OFFSET, 0.07))
+        
+        gui.set_text(icon_node, icon)
+        
+        -- Альфы: для locked всё тусклее
+        local circle_a = data.locked and 0.50 or 0.78
+        local ring_a = data.locked and 0.35 or 0.90
+        local icon_a = data.locked and 0.45 or 1.0
+        
+        local cc = gui.get_color(circle_node)
+        cc.w = circle_a
+        gui.set_color(circle_node, cc)
+        
+        local rc = gui.get_color(ring_node)
+        rc.w = ring_a
+        gui.set_color(ring_node, rc)
+        
+        local ic = gui.get_color(icon_node)
+        ic.w = icon_a
+        gui.set_color(icon_node, ic)
+        
+        gui.set_enabled(circle_node, true)
+        gui.set_enabled(ring_node, true)
+        gui.set_enabled(icon_node, true)
+        
+        -- Orbit/dots отключены (минималистичный стиль)
+        gui.set_enabled(orbit_node, false)
+        for d = 1, M.ORBIT_DOTS do
+            gui.set_enabled(M.hotspot_dots[i][d], false)
+        end
+        
+        -- Пульсация «дыхание» круга+кольца+иконки
+        gui.cancel_animation(icon_node, gui.PROP_SCALE)
+        gui.cancel_animation(circle_node, gui.PROP_SCALE)
+        gui.cancel_animation(ring_node, gui.PROP_SCALE)
+        gui.set_scale(icon_node, vmath.vector3(1, 1, 1))
+        gui.set_scale(circle_node, vmath.vector3(1, 1, 1))
+        gui.set_scale(ring_node, vmath.vector3(1, 1, 1))
+        
+        if not data.locked then
+            local t = vmath.vector3(1.08, 1.08, 1)
+            gui.animate(icon_node, gui.PROP_SCALE, t,
+                gui.EASING_INOUTSINE, 1.4, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
+            gui.animate(circle_node, gui.PROP_SCALE, t,
+                gui.EASING_INOUTSINE, 1.4, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
+            gui.animate(ring_node, gui.PROP_SCALE, vmath.vector3(1.12, 1.12, 1),
+                gui.EASING_INOUTSINE, 1.4, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
+        end
+    else
+        -- Нет иконки — скрываем визуальный стек
+        gui.cancel_animation(M.hotspot_icons[i], gui.PROP_SCALE)
+        gui.cancel_animation(M.hotspot_circles[i], gui.PROP_SCALE)
+        gui.cancel_animation(M.hotspot_rings[i], gui.PROP_SCALE)
+        gui.set_enabled(M.hotspot_icons[i], false)
+        gui.set_enabled(M.hotspot_circles[i], false)
+        gui.set_enabled(M.hotspot_rings[i], false)
+        gui.set_enabled(M.hotspot_orbits[i], false)
+        for d = 1, M.ORBIT_DOTS do
+            gui.set_enabled(M.hotspot_dots[i][d], false)
+        end
+    end
+    
+    -- Прозрачность hotspot-rect
+    local editing = hotspot_editor.is_active()
+    local selected = editing and (i == hotspot_editor.selected_index())
+    local box_alpha
+    
+    if editing then
+        box_alpha = selected and 0.65 or 0.25
+    else
+        -- В игровом режиме rect полностью прозрачный (invisible hitbox)
+        box_alpha = 0
+    end
+    
+    local bc = gui.get_color(M.hotspot_boxes[i])
+    bc.w = box_alpha
+    gui.set_color(M.hotspot_boxes[i], bc)
+    
+    gui.set_enabled(M.hotspot_boxes[i], true)
+    gui.set_enabled(M.hotspot_labels[i], true)
+    
+    local label_text = data.label or ""
+    if editing and selected then
+        label_text = "[#" .. i .. "] " .. label_text
+    end
+    gui.set_text(M.hotspot_labels[i], label_text)
+    
+    local lc = gui.get_color(M.hotspot_labels[i])
+    if editing then
+        lc.w = selected and 1.0 or 0.5
+    else
+        lc.w = data.locked and 0.35 or 1.0
+    end
+    gui.set_color(M.hotspot_labels[i], lc)
+end
+
+-- -------------------------------------------------------
+-- Установка scene object в слот
+-- -------------------------------------------------------
+
+local function set_scene_object(i, obj)
+    local node = M.scene_obj_nodes[i]
+    if not node then return end
+    
+    if not obj then
+        gui.set_enabled(node, false)
+        return
+    end
+    
+    -- По умолчанию pivot центр — ставим центр в pos + w/2, h/2
+    local w = obj.size and obj.size.w or 87
+    local h = obj.size and obj.size.h or 37
+    local cx = (obj.pos.x or 0) + w / 2
+    local cy = (obj.pos.y or 0) + h / 2
+    gui.set_position(node, vmath.vector3(cx, cy, 0.05))
+    gui.set_size(node, vmath.vector3(w, h, 0))
+    
+    if obj.image then
+        gui.play_flipbook(node, hash(obj.image))
+    end
+    
+    gui.set_enabled(node, true)
+end
+
+-- -------------------------------------------------------
+-- Скрыть все hotspots
+-- -------------------------------------------------------
+
+local function hide_all_hotspots()
+    for i = 1, M.HOTSPOT_COUNT do
+        gui.set_enabled(M.hotspot_boxes[i], false)
+        gui.set_enabled(M.hotspot_labels[i], false)
+        gui.set_enabled(M.hotspot_icons[i], false)
+        gui.set_enabled(M.hotspot_circles[i], false)
+        gui.set_enabled(M.hotspot_rings[i], false)
+        gui.set_enabled(M.hotspot_orbits[i], false)
+        for d = 1, M.ORBIT_DOTS do
+            gui.set_enabled(M.hotspot_dots[i][d], false)
+        end
+    end
+    
+    for i = 1, M.SCENE_OBJECT_COUNT do
+        gui.set_enabled(M.scene_obj_nodes[i], false)
+    end
+end
+
+-- -------------------------------------------------------
+-- Lifecycle
+-- -------------------------------------------------------
+
+function init(self)
+    print("[hotspots] Инициализация hotspots.gui_script")
+    
+    -- Получаем ноды hotspots (6 слотов)
+    for i = 1, M.HOTSPOT_COUNT do
+        M.hotspot_boxes[i] = gui.get_node("hotspot_" .. i)
+        M.hotspot_labels[i] = gui.get_node("hotspot_label_" .. i)
+        M.hotspot_icons[i] = gui.get_node("hotspot_icon_" .. i)
+        M.hotspot_circles[i] = gui.get_node("hotspot_circle_" .. i)
+        M.hotspot_rings[i] = gui.get_node("hotspot_ring_" .. i)
+        M.hotspot_orbits[i] = gui.get_node("hotspot_orbit_" .. i)
+        
+        M.hotspot_dots[i] = {}
+        for d = 1, M.ORBIT_DOTS do
+            M.hotspot_dots[i][d] = gui.get_node("hotspot_dot_" .. i .. "_" .. d)
+        end
+    end
+    
+    -- Получаем ноды scene objects (4 слота)
+    for i = 1, M.SCENE_OBJECT_COUNT do
+        M.scene_obj_nodes[i] = gui.get_node("scene_obj_" .. i)
+    end
+    
+    -- Изначально всё скрыто
+    hide_all_hotspots()
+    
+    print("[hotspots] Инициализация завершена")
+end
+
+function final(self)
+    print("[hotspots] Финализация hotspots.gui_script")
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash("set_hotspot") then
+        -- Установить hotspot в слот
+        set_hotspot(message.index, message.data)
+        
+    elseif message_id == hash("set_scene_object") then
+        -- Установить scene object в слот
+        set_scene_object(message.index, message.obj)
+        
+    elseif message_id == hash("hide_all") then
+        -- Скрыть все hotspots
+        hide_all_hotspots()
+    end
+end
+
+function on_input(self, action_id, action)
+    -- Обработка кликов по hotspots делегируется scene_controller
+    -- Здесь только проверяем попадание в hitbox
+    if action_id == hash("touch") and action.pressed then
+        for i = 1, M.HOTSPOT_COUNT do
+            if gui.is_enabled(M.hotspot_boxes[i]) and 
+               gui.pick_node(M.hotspot_boxes[i], action.x, action.y) then
+                -- Отправляем событие клика в scene_controller
+                msg.post("/scene_controller", "hotspot_clicked", {index = i})
+                return true
+            end
+        end
+    end
+    
+    return false
+end
