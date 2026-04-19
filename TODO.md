@@ -8,12 +8,8 @@
 
 ### Неподключённые knot'ы (написаны в `chapter_01.ink`, но никем не вызываются)
 
-- [ ] `enter_kitchen` — flavor-текст первого входа на кухню. Нужна механика
-      «автотриггер knot при входе в сцену» (в `scene_controller` или через
-      `on_enter_knot` поле в `scenes.lua`).
-- [ ] `spot_phone_after_coffee` — «телефон появился на тумбочке». Та же
-      механика «автотриггер при входе, если выполнено условие
-      `coffee_drunk AND not has_phone`».
+- [x] ~~`enter_kitchen`~~ — **ПОДКЛЮЧЕН** через on_enter в scenes.lua (kitchen)
+- [x] ~~`spot_phone_after_coffee`~~ — **ПОДКЛЮЧЕН** через on_enter в scenes.lua (bedroom_day)
 - [ ] `inspect_bathroom` — flavor для ванной. Нужен hotspot на сцене
       `bathroom` (например, «раковина») с `action = ink_knot "inspect_bathroom"`.
 
@@ -69,9 +65,8 @@
 
 ### Механики
 
-- [ ] **Автотриггер knot при входе в сцену** — поле `on_enter` в
-      `scenes.lua` (см. выше, нужно для enter_kitchen и
-      spot_phone_after_coffee).
+- [x] ~~**Автотриггер knot при входе в сцену**~~ — **РЕАЛИЗОВАНО** поле `on_enter` в
+      `scenes.lua` (используется для enter_kitchen и spot_phone_after_coffee).
 - [ ] **Стек сцен** — сейчас `_last_scene_id` плоский, что ломается
       при цепочке «сцена → телефон → ink-monolog → return». Возможно
       надо стек.
