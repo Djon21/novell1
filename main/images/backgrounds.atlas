@@ -49,6 +49,9 @@ images {
 images {
   image: "/main/images/bg_phone.jpg"
 }
+images {
+  image: "/main/images/bg_city_map.jpg"
+}
 margin: 0
 extrude_borders: 2
 inner_padding: 0
