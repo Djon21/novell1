@@ -107,8 +107,8 @@
       ink, но нигде не читаются.~~ — **ИСПРАВЛЕНО** в cleanup-dead-flags
 - [x] ~~VAR `phone_seen_after_coffee` пишется в `spot_phone_after_coffee`,
       но нигде не читается.~~ — **ИСПРАВЛЕНО** в cleanup-dead-flags
-- [ ] `city_map_hub` открывается через `-> city_map_hub` но фон `bg:none`
-      — нужен фон карты (`bg_city_map`).
+- [x] ~~`city_map_hub` открывается через `-> city_map_hub` но фон `bg:none`
+      — нужен фон карты (`bg_city_map`).~~ — **ИСПРАВЛЕНО** 2026-04-19, фон добавлен
 - [x] ~~Старый `chapter_01_old.json` — бэкап~~ — **УДАЛЕН** 2026-04-19
 
 ---
