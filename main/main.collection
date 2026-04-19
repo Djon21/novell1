@@ -58,10 +58,6 @@ embedded_instances {
   "  id: \"heartbeat\"\n"
   "  component: \"/main/sounds/heartbeat.sound\"\n"
   "}\n"
-  "components {\n"
-  "  id: \"paper_rustle\"\n"
-  "  component: \"/main/sounds/paper_rustle.sound\"\n"
-  "}\n"
   position {
     x: 0.0
     y: 0.0

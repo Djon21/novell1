@@ -113,7 +113,7 @@ S.SFX_URLS = {
 	coffee_brew = msg.url("main:/sfx_player#coffee_brew"),
 	phone_notify = msg.url("main:/sfx_player#phone_notify"),
 	heartbeat = msg.url("main:/sfx_player#heartbeat"),
-	paper_rustle = msg.url("main:/sfx_player#paper_rustle"),
+	-- paper_rustle = msg.url("main:/sfx_player#paper_rustle"),  -- TODO: convert MP3 to WAV/OGG
 }
 
 -- Загружает байты скомпилированного .ink/.json и отдаёт их dialogue_manager.
