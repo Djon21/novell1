@@ -10,8 +10,9 @@
 
 - [x] ~~`enter_kitchen`~~ — **ПОДКЛЮЧЕН** через on_enter в scenes.lua (kitchen)
 - [x] ~~`spot_phone_after_coffee`~~ — **ПОДКЛЮЧЕН** через on_enter в scenes.lua (bedroom_day)
-- [ ] `inspect_bathroom` — flavor для ванной. Нужен hotspot на сцене
-      `bathroom` (например, «раковина») с `action = ink_knot "inspect_bathroom"`.
+- [x] ~~`inspect_bathroom`~~ — **ПОДКЛЮЧЕН** 2026-04-19 через on_enter в scenes.lua (bathroom)
+
+**Все knot'ы подключены!**
 
 ### Незакрытые квесты
 
