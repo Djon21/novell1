@@ -70,18 +70,6 @@ local function show_menu()
     print("[main_menu] Меню показано")
 end
 
-    -- Каскадное появление меню
-    local mc = gui.get_color(M.menu_panel)
-    mc.w = 0
-    gui.set_color(M.menu_panel, mc)
-    gui.animate(M.menu_panel, "color.w", 1.0, gui.EASING_OUTQUAD, 0.5)
-
-    -- Запускаем глитч после анимации
-    timer.delay(0.75, false, function()
-        start_glitch()
-    end)
-end
-
 -- -------------------------------------------------------
 -- Скрыть меню
 -- -------------------------------------------------------
