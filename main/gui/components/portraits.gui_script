@@ -1,0 +1,158 @@
+﻿-- portraits.gui_script
+-- Контроллер портретов персонажей (стиль Persona 5)
+
+local gui_animations = require "main.gui.modules.gui_animations"
+
+-- Состояние портретов
+local M = {}
+M.current_portrait = nil
+M.portraits = {}
+
+-- Константы позиционирования
+M.PORTRAIT_X = 120
+M.PORTRAIT_Y = 120
+M.PORTRAIT_Z = 0.15
+M.PORTRAIT_SLIDE_FROM = -150
+M.PORTRAIT_ANIM_DUR = 0.25
+
+-- -------------------------------------------------------
+-- Определяет, какой портрет показать для имени персонажа
+-- -------------------------------------------------------
+local function get_portrait_name(character_name)
+    if character_name == "Мила" then return "Мила" end
+    if character_name == "Артём" then return "Артём" end
+    return nil
+end
+
+-- -------------------------------------------------------
+-- Показать портрет с анимацией slide-in слева + fade-in
+-- -------------------------------------------------------
+local function show_portrait(name)
+    if M.current_portrait == name then return end  -- уже показан
+
+    -- Скрываем предыдущий портрет (мгновенно)
+    if M.current_portrait and M.portraits[M.current_portrait] then
+        gui.cancel_animation(M.portraits[M.current_portrait], gui.PROP_POSITION)
+        gui.cancel_animation(M.portraits[M.current_portrait], gui.PROP_COLOR)
+        gui.set_enabled(M.portraits[M.current_portrait], false)
+    end
+
+    M.current_portrait = name
+    local node = M.portraits[name]
+    if not node then 
+        print("[portraits] ⚠️ Портрет не найден: " .. tostring(name))
+        return 
+    end
+
+    gui.set_enabled(node, true)
+
+    -- Стартовая позиция: за левым краем экрана, прозрачный
+    gui.set_position(node, vmath.vector3(M.PORTRAIT_SLIDE_FROM, M.PORTRAIT_Y, M.PORTRAIT_Z))
+    gui.set_color(node, vmath.vector4(1, 1, 1, 0))
+
+    -- Анимация: slide-in + fade-in
+    gui.animate(node, gui.PROP_POSITION,
+        vmath.vector3(M.PORTRAIT_X, M.PORTRAIT_Y, M.PORTRAIT_Z),
+        gui.EASING_OUTBACK, M.PORTRAIT_ANIM_DUR)
+    gui.animate(node, gui.PROP_COLOR,
+        vmath.vector4(1, 1, 1, 1),
+        gui.EASING_OUTQUAD, M.PORTRAIT_ANIM_DUR)
+    
+    print("[portraits] Показан портрет: " .. name)
+    
+    -- Уведомляем dialogue system о показе портрета
+    msg.post("/ui_manager/dialogue_system#gui", "portrait_shown", { name = name })
+end
+
+-- -------------------------------------------------------
+-- Скрыть портрет с анимацией slide-out + fade-out
+-- -------------------------------------------------------
+local function hide_portrait()
+    if not M.current_portrait then return end
+    
+    local node = M.portraits[M.current_portrait]
+    local portrait_name = M.current_portrait
+    M.current_portrait = nil
+    
+    if not node then return end
+
+    gui.animate(node, gui.PROP_POSITION,
+        vmath.vector3(M.PORTRAIT_SLIDE_FROM, M.PORTRAIT_Y, M.PORTRAIT_Z),
+        gui.EASING_INBACK, M.PORTRAIT_ANIM_DUR)
+    gui.animate(node, gui.PROP_COLOR,
+        vmath.vector4(1, 1, 1, 0),
+        gui.EASING_INQUAD, M.PORTRAIT_ANIM_DUR, 0, function()
+            gui.set_enabled(node, false)
+        end)
+    
+    print("[portraits] Скрыт портрет: " .. portrait_name)
+    
+    -- Уведомляем dialogue system о скрытии портрета
+    msg.post("/ui_manager/dialogue_system#gui", "portrait_hidden")
+end
+
+-- -------------------------------------------------------
+-- Скрыть все портреты
+-- -------------------------------------------------------
+local function hide_all_portraits()
+    for name, node in pairs(M.portraits) do
+        gui.cancel_animation(node, gui.PROP_POSITION)
+        gui.cancel_animation(node, gui.PROP_COLOR)
+        gui.set_enabled(node, false)
+    end
+    M.current_portrait = nil
+    print("[portraits] Все портреты скрыты")
+end
+
+-- -------------------------------------------------------
+-- Lifecycle функции
+-- -------------------------------------------------------
+
+function init(self)
+    print("[portraits] Инициализация")
+    
+    -- Получаем ноды портретов
+    M.portraits["Мила"] = gui.get_node("portrait_mila")
+    M.portraits["Артём"] = gui.get_node("portrait_artem")
+    
+    -- Скрываем все портреты при старте
+    hide_all_portraits()
+end
+
+function final(self)
+    print("[portraits] Завершение")
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash("show") then
+        -- Показать портрет персонажа
+        -- message.character - имя персонажа
+        local character = message.character or message.name
+        if character then
+            local portrait_name = get_portrait_name(character)
+            if portrait_name then
+                show_portrait(portrait_name)
+            else
+                print("[portraits] ⚠️ Неизвестный персонаж: " .. tostring(character))
+            end
+        end
+        
+    elseif message_id == hash("hide") then
+        -- Скрыть текущий портрет
+        hide_portrait()
+        
+    elseif message_id == hash("hide_all") then
+        -- Скрыть все портреты
+        hide_all_portraits()
+        
+    elseif message_id == hash("change") then
+        -- Сменить портрет (скрыть текущий, показать новый)
+        local character = message.character or message.name
+        if character then
+            local portrait_name = get_portrait_name(character)
+            if portrait_name then
+                show_portrait(portrait_name)
+            end
+        end
+    end
+end
