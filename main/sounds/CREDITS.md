@@ -10,6 +10,19 @@ This file lists all sound effects used in the game and their sources.
 - **Source:** https://freesound.org/s/250104/
 - **License:** Creative Commons 0 (CC0)
 
+### phone_notify.wav
+- **Title:** Cell phone buzz once
+- **Author:** fitzysfunhouse
+- **Source:** https://freesound.org/s/540215/
+- **License:** Creative Commons 0 (CC0)
+
+### heartbeat.wav
+- **Title:** Heatbeat Normal Faster Normal.wav
+- **Author:** Benboncan
+- **Source:** https://freesound.org/s/108841/
+- **License:** Creative Commons Attribution 4.0
+- **Note:** File needs to be trimmed to shorter duration for game use
+
 ### coffee_brew.wav
 - **Source:** Internal/Custom
 
