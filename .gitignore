@@ -1,29 +1,31 @@
-/.editor_settings
-/.internal
-/build
-.externalToolBuilders
+# .gitignore для AI команды
+
+# Defold
+build/
+.internal/
+*.pyc
+
+# OS
 .DS_Store
 Thumbs.db
-.lock-wscript
-*.pyc
-.project
-.cproject
-builtins
-# Defold liveupdate signing keys — приватный ключ никогда не коммитить
-manifest.private.der
-manifest.public.der
+desktop.ini
 
-# Claude Code — локальные настройки (у каждого разработчика свои)
-.claude/settings.local.json
+# Editor
+.vscode/
+.idea/
 
-# inklecate — бинарник Ink-компилятора (~57 MB), не храним в git.
-# Скачать: https://github.com/inkle/ink/releases → inklecate_windows.zip
-# Распаковать в tools/ (рядом с compile_ink.bat/sh).
-tools/inklecate.exe
-tools/ink-engine-runtime.dll
-tools/ink_compiler.dll
+# Временные файлы AI
+*.tmp
+*.bak
+*~
 
-# Бэкапы gui при перегенерации rebuild_menu.py
-*.bak_menu
-# Локальные копии из Claude Design (handoff bundle)
-.design_*.html
+# Личные заметки AI (не коммитить!)
+AI_NOTES_*.md
+PRIVATE_*.md
+
+# Скомпилированные Ink файлы (генерируются автоматически)
+# Раскомментируйте, если хотите игнорировать:
+# main/story/*.json
+
+# Логи
+*.log
