@@ -39,7 +39,7 @@
 ### Этап 0 — фундамент
 
 - [x] **step1**: скопировать шрифты JetBrains Mono / Unbounded / Caveat / Manrope в `main/fonts/` (скачать с Google Fonts если нет) и создать `.font` файлы для каждого начертания, которое реально используется (JBM-Regular/Bold, Unbounded-Bold/Black, Caveat-Regular, Manrope-Regular/Medium). Формат по аналогии с `main/fonts/material_icons.font`.
-- [ ] **step2**: скопировать ассеты из `C:\Users\GoldiM\Downloads\AVOS (14)\assets\` (`artem.png`, `mila.png`, `bg_bedroom_01.jpg`) в `main/images/v2/` и добавить в атлас `main/atlases/v2.atlas`.
+- [x] **step2**: скопировать ассеты из `C:\Users\GoldiM\Downloads\AVOS (14)\assets\` (`artem.png`, `mila.png`, `bg_bedroom_01.jpg`) в `main/images/v2/` и добавить в атлас `main/atlases/v2.atlas`. *(атлас размещён в `main/images/v2.atlas` а не в `main/atlases/` — консистентно с существующими `backgrounds.atlas`/`characters.atlas`)*
 - [ ] **step3**: создать `main/gui/modules/v2_theme.lua` — экспортирует `COLORS` (все цвета палитры как `vmath.vector4`, альфа 1.0 по умолчанию; отдельно варианты с альфой .3/.5/.7 под `_dim/_medium/_soft`), `FONTS` (имена шрифтов из .font файлов), и хелпер `apply(node, role)` где role = "title" | "body" | "mono" | "caveat" | "eyebrow" с настройкой шрифта+цвета+размера.
 
 ### Этап 1 — общие атомы
@@ -84,3 +84,4 @@
 *(луп дописывает после каждого коммита: hash, сообщение)*
 
 - step1 — добавлены Unbounded-Bold.ttf + Manrope-Regular.ttf, 8 новых `.font` файлов (jb_mono 10/12/bold_14, unbounded_bold 20/32, manrope 14/16, caveat_18)
+- step2 — `main/images/v2/artem.png`, `mila.png`, `bg_bedroom_01.jpg` + `main/images/v2.atlas`
