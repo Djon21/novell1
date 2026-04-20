@@ -88,11 +88,8 @@ nodes {
     y: 20.0
     z: 0.41
   }
-  scale {
-    x: 0.768446
-  }
   size {
-    x: 920.0
+    x: 700.0
     y: 200.0
   }
   color {
@@ -114,11 +111,8 @@ nodes {
     y: 220.0
     z: 0.42
   }
-  scale {
-    x: 0.768446
-  }
   size {
-    x: 920.0
+    x: 700.0
     y: 1.0
   }
   color {
@@ -139,11 +133,8 @@ nodes {
     y: 20.0
     z: 0.42
   }
-  scale {
-    x: 0.768446
-  }
   size {
-    x: 920.0
+    x: 700.0
     y: 1.0
   }
   color {
@@ -160,102 +151,36 @@ nodes {
 }
 nodes {
   position {
-    x: 20.0
-    y: 200.0
-    z: 0.42
-  }
-  size {
-    x: 22.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "brk_tl_h"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "dlg_root"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 20.0
-    y: 180.0
-    z: 0.42
-  }
-  size {
-    x: 1.0
-    y: 22.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "brk_tl_v"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "dlg_root"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 918.0
-    y: 200.0
-    z: 0.42
-  }
-  size {
-    x: 22.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "brk_tr_h"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "dlg_root"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 939.0
-    y: 180.0
-    z: 0.42
-  }
-  size {
-    x: 1.0
-    y: 22.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "brk_tr_v"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "dlg_root"
-  inherit_alpha: true
-}
-nodes {
-  position {
     x: 40.0
-    y: 40.0
-    z: 0.42
+    y: 20.0
+    z: 0.41
   }
   size {
     x: 180.0
     y: 180.0
   }
   color {
-    x: 1.0
-    y: 1.0
-    z: 1.0
+    x: 0.047058824
+    y: 0.039215688
+    z: 0.14117648
+  }
+  type: TYPE_BOX
+  id: "portrait_bg_fon"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "dlg_root"
+  inherit_alpha: true
+  alpha: 0.77
+}
+nodes {
+  position {
+    x: 40.0
+    y: 20.0
+    z: 0.42
+  }
+  size {
+    x: 180.0
+    y: 180.0
   }
   type: TYPE_BOX
   id: "portrait_bg"
@@ -394,15 +319,12 @@ nodes {
 }
 nodes {
   position {
-    x: 377.0
+    x: 259.0
     y: 172.0
     z: 0.42
   }
-  scale {
-    x: 0.768446
-  }
   size {
-    x: 720.0
+    x: 660.0
     y: 120.0
   }
   color {
@@ -423,7 +345,7 @@ nodes {
 }
 nodes {
   position {
-    x: 377.0
+    x: 259.0
     y: 44.0
     z: 0.42
   }
@@ -449,7 +371,7 @@ nodes {
 }
 nodes {
   position {
-    x: 417.0
+    x: 299.0
     y: 56.0
     z: 0.43
   }
@@ -478,7 +400,7 @@ nodes {
 }
 nodes {
   position {
-    x: 467.0
+    x: 349.0
     y: 44.0
     z: 0.42
   }
@@ -504,7 +426,7 @@ nodes {
 }
 nodes {
   position {
-    x: 507.0
+    x: 389.0
     y: 56.0
     z: 0.43
   }
