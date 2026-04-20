@@ -1151,7 +1151,7 @@ nodes {
   inherit_alpha: false
 }
 nodes {
-  position { x: 670.0 y: 320.0 z: 0.54 }
+  position { x: 670.0 y: 360.0 z: 0.54 }
   size { x: 440.0 y: 22.0 }
   color { x: 1.0 y: 0.702 z: 0.278 w: 0.9 }
   type: TYPE_TEXT
