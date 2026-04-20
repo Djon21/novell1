@@ -17,6 +17,12 @@ local gs       = require "main.scripts.game_state"
 
 local UI_MGR = "#ui_manager_v2"
 
+local INVENTORY_NODES = {
+    "backdrop", "modal", "modal_border_top", "title_eyebrow", "title_main",
+    "close_btn", "grid", "details", "details_icon", "details_name",
+    "details_iter", "details_desc", "verbs_panel",
+}
+
 local COLS, ROWS = 4, 3
 local SLOT      = 80
 local SLOT_GAP  = 12
@@ -62,27 +68,27 @@ local function make_slot(col, row)
     gui.set_pivot(bg, gui.PIVOT_SW)
     gui.set_color(bg, COLOR_SLOT_BG)
     gui.set_parent(bg, grid)
-    gui.set_inherit_alpha(bg, true)
+    gui.set_inherit_alpha(bg, false)
 
     local border = gui.new_box_node(vmath.vector3(x, y, 0.56), vmath.vector3(SLOT, 1, 0))
     gui.set_pivot(border, gui.PIVOT_SW)
     gui.set_color(border, COLOR_SLOT_BORDER)
     gui.set_parent(border, grid)
-    gui.set_inherit_alpha(border, true)
+    gui.set_inherit_alpha(border, false)
 
     local icon = gui.new_text_node(vmath.vector3(x + SLOT/2, y + SLOT/2 + 4, 0.57), "")
     gui.set_pivot(icon, gui.PIVOT_CENTER)
     gui.set_font(icon, "icons")
     gui.set_color(icon, COLOR_PAPER)
     gui.set_parent(icon, grid)
-gui.set_inherit_alpha(icon, true)
+    gui.set_inherit_alpha(icon, false)
 
     local qty = gui.new_text_node(vmath.vector3(x + SLOT - 6, y + 6, 0.57), "")
     gui.set_pivot(qty, gui.PIVOT_SE)
     gui.set_font(qty, "jb_mono_10")
     gui.set_color(qty, COLOR_AMBER)
     gui.set_parent(qty, grid)
-gui.set_inherit_alpha(qty, true)
+    gui.set_inherit_alpha(qty, false)
 
     return { bg = bg, border = border, icon = icon, qty = qty, x = x, y = y }
 end
@@ -100,26 +106,32 @@ local function make_verb_button(idx)
     gui.set_pivot(bg, gui.PIVOT_SW)
     gui.set_color(bg, COLOR_BTN_BG)
     gui.set_parent(bg, parent)
-    gui.set_inherit_alpha(bg, true)
+    gui.set_inherit_alpha(bg, false)
 
     local border = gui.new_box_node(vmath.vector3(x, y, 0.56), vmath.vector3(w, 1, 0))
     gui.set_pivot(border, gui.PIVOT_SW)
     gui.set_color(border, COLOR_BTN_BORDER)
     gui.set_parent(border, parent)
-    gui.set_inherit_alpha(border, true)
+    gui.set_inherit_alpha(border, false)
 
     local label = gui.new_text_node(vmath.vector3(x + w/2, y + h/2, 0.57), "")
     gui.set_pivot(label, gui.PIVOT_CENTER)
     gui.set_font(label, "jb_mono_bold_14")
     gui.set_color(label, COLOR_ACCENT)
     gui.set_parent(label, parent)
-gui.set_inherit_alpha(label, true)
+    gui.set_inherit_alpha(label, false)
 
     return { bg = bg, border = border, label = label, w = w, h = h }
 end
 
 local function set_visible(id, v)
     gui.set_enabled(gui.get_node(id), v)
+end
+
+local function set_inventory_enabled(enabled)
+    for _, id in ipairs(INVENTORY_NODES) do
+        gui.set_enabled(gui.get_node(id), enabled)
+    end
 end
 
 local function set_text(id, s)
@@ -269,18 +281,22 @@ function init(self)
         gui.set_enabled(self.verb_btns[k].label, false)
     end
 
-    gui.set_enabled(gui.get_node("backdrop"), false)
+    set_inventory_enabled(false)
     clear_details(self)
 end
 
 function on_message(self, message_id, message, sender)
     if message_id == hash("show_inventory") then
         self.visible = true
-        gui.set_enabled(gui.get_node("backdrop"), true)
+        set_inventory_enabled(true)
         refresh(self)
     elseif message_id == hash("hide_inventory") then
         self.visible = false
-        gui.set_enabled(gui.get_node("backdrop"), false)
+        set_inventory_enabled(false)
+        for i = 1, #self.slots do
+            hide_slot(self, i)
+        end
+        clear_details(self)
     elseif message_id == hash("refresh_inventory") then
         if self.visible then refresh(self) end
     end

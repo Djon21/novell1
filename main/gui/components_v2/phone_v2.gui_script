@@ -16,6 +16,12 @@ local theme = require "main.gui.modules.v2_theme"
 
 local UI_MGR = "#ui_manager_v2"
 
+local PHONE_NODES = {
+    "backdrop", "phone_frame", "phone_screen", "status_bar", "status_time",
+    "status_meta", "wallpaper_date", "wallpaper_title", "wallpaper_meta",
+    "app_grid", "close_btn",
+}
+
 -- Material Icons UTF-8
 local function icon(a,b,c) return string.char(a,b,c) end
 
@@ -61,33 +67,46 @@ local function make_tile(self, i, app)
     gui.set_pivot(bg, gui.PIVOT_SW)
     gui.set_color(bg, COLORS.tile_bg)
     gui.set_parent(bg, grid)
-    gui.set_inherit_alpha(bg, true)
+    gui.set_inherit_alpha(bg, false)
 
     local border = gui.new_box_node(vmath.vector3(x, y, 0.56), vmath.vector3(TILE_W, 1, 0))
     gui.set_pivot(border, gui.PIVOT_SW)
     gui.set_color(border, COLORS.tile_border)
     gui.set_parent(border, grid)
-    gui.set_inherit_alpha(border, true)
+    gui.set_inherit_alpha(border, false)
 
     local ic = gui.new_text_node(vmath.vector3(x + TILE_W/2, y + TILE_H/2 + 4, 0.57), app.icon)
     gui.set_pivot(ic, gui.PIVOT_CENTER)
     gui.set_font(ic, "icons")
     gui.set_color(ic, COLORS[app.col] or COLORS.cyan)
     gui.set_parent(ic, grid)
-gui.set_inherit_alpha(ic, true)
+    gui.set_inherit_alpha(ic, false)
 
     local label = gui.new_text_node(vmath.vector3(x + TILE_W/2, y - 8, 0.57), app.name)
     gui.set_pivot(label, gui.PIVOT_CENTER)
     gui.set_font(label, "jb_mono_10")
     gui.set_color(label, COLORS.paper)
     gui.set_parent(label, grid)
-gui.set_inherit_alpha(label, true)
+    gui.set_inherit_alpha(label, false)
 
     return { bg = bg, border = border, icon = ic, label = label, id = app.id, col = app.col }
 end
 
 local function set_text(id, s)
     gui.set_text(gui.get_node(id), s or "")
+end
+
+local function set_phone_enabled(self, enabled)
+    for _, id in ipairs(PHONE_NODES) do
+        gui.set_enabled(gui.get_node(id), enabled)
+    end
+    for i = 1, #self.tiles do
+        local tile = self.tiles[i]
+        gui.set_enabled(tile.bg, enabled)
+        gui.set_enabled(tile.border, enabled)
+        gui.set_enabled(tile.icon, enabled)
+        gui.set_enabled(tile.label, enabled)
+    end
 end
 
 local function flash_tile(tile)
@@ -110,16 +129,16 @@ function init(self)
     for i, app in ipairs(APPS) do
         self.tiles[i] = make_tile(self, i, app)
     end
-    gui.set_enabled(gui.get_node("backdrop"), false)
+    set_phone_enabled(self, false)
 end
 
 function on_message(self, message_id, message, sender)
     if message_id == hash("open_phone") then
         self.visible = true
-        gui.set_enabled(gui.get_node("backdrop"), true)
+        set_phone_enabled(self, true)
     elseif message_id == hash("close_phone") then
         self.visible = false
-        gui.set_enabled(gui.get_node("backdrop"), false)
+        set_phone_enabled(self, false)
     elseif message_id == hash("set_phone_notif") then
         local n = tonumber(message.n) or 0
         if n > 0 then

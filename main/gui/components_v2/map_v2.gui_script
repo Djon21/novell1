@@ -16,6 +16,14 @@ local theme = require "main.gui.modules.v2_theme"
 
 local UI_MGR = "#ui_manager_v2"
 
+local MAP_NODES = {
+    "backdrop", "title_eyebrow", "title_main", "close_btn", "map_area",
+    "map_border_bot", "map_border_top", "map_coords", "dossier",
+    "doss_eyebrow", "doss_name", "doss_stamp", "doss_k_addr", "doss_v_addr",
+    "doss_k_walk", "doss_v_walk", "doss_k_sub", "doss_v_sub", "doss_k_stat",
+    "doss_v_stat", "doss_desc", "doss_verbs", "log",
+}
+
 -- map_area origin (SW) + size:
 local MAP_X, MAP_Y = 30, 70
 local MAP_W, MAP_H = 560, 480
@@ -124,6 +132,23 @@ local function set_color(id, c)
     gui.set_color(gui.get_node(id), c)
 end
 
+local function set_map_enabled(self, enabled)
+    for _, id in ipairs(MAP_NODES) do
+        gui.set_enabled(gui.get_node(id), enabled)
+    end
+    for _, pin in pairs(self.pins) do
+        gui.set_enabled(pin.body, enabled)
+        gui.set_enabled(pin.border, enabled)
+        gui.set_enabled(pin.icon, enabled)
+    end
+    for i = 1, #self.verb_btns do
+        local btn = self.verb_btns[i]
+        gui.set_enabled(btn.bg, enabled)
+        gui.set_enabled(btn.border, enabled)
+        gui.set_enabled(btn.label, enabled)
+    end
+end
+
 local function make_pin(self, id, p)
     local parent = gui.get_node("map_area")
     local px = p.pos.x * MAP_W
@@ -134,20 +159,20 @@ local function make_pin(self, id, p)
     gui.set_pivot(body, gui.PIVOT_CENTER)
     gui.set_color(body, COLORS.pin_bg)
     gui.set_parent(body, parent)
-    gui.set_inherit_alpha(body, true)
+    gui.set_inherit_alpha(body, false)
 
     local border = gui.new_box_node(vmath.vector3(px, py - 16, 0.56), vmath.vector3(32, 1, 0))
     gui.set_pivot(border, gui.PIVOT_CENTER)
     gui.set_color(border, ring_color)
     gui.set_parent(border, parent)
-    gui.set_inherit_alpha(border, true)
+    gui.set_inherit_alpha(border, false)
 
     local ic = gui.new_text_node(vmath.vector3(px, py, 0.57), p.icon or "?")
     gui.set_pivot(ic, gui.PIVOT_CENTER)
     gui.set_font(ic, "icons")
     gui.set_color(ic, ring_color)
     gui.set_parent(ic, parent)
-gui.set_inherit_alpha(ic, true)
+    gui.set_inherit_alpha(ic, false)
 
     return { body = body, border = border, icon = ic, id = id, color = ring_color }
 end
@@ -162,20 +187,20 @@ local function make_verb(self, idx, verb)
     gui.set_pivot(bg, gui.PIVOT_SW)
     gui.set_color(bg, COLORS.btn_bg)
     gui.set_parent(bg, parent)
-    gui.set_inherit_alpha(bg, true)
+    gui.set_inherit_alpha(bg, false)
 
     local border = gui.new_box_node(vmath.vector3(x, y, 0.56), vmath.vector3(w, 1, 0))
     gui.set_pivot(border, gui.PIVOT_SW)
     gui.set_color(border, COLORS.btn_border)
     gui.set_parent(border, parent)
-    gui.set_inherit_alpha(border, true)
+    gui.set_inherit_alpha(border, false)
 
     local label = gui.new_text_node(vmath.vector3(x + w/2, y + h/2, 0.57), VERB_LABEL[verb] or verb:upper())
     gui.set_pivot(label, gui.PIVOT_CENTER)
     gui.set_font(label, "jb_mono_bold_14")
     gui.set_color(label, COLORS.accent)
     gui.set_parent(label, parent)
-gui.set_inherit_alpha(label, true)
+    gui.set_inherit_alpha(label, false)
 
     return { bg = bg, border = border, label = label, verb = verb }
 end
@@ -228,17 +253,17 @@ function init(self)
         self.verb_btns[i] = make_verb(self, i, v)
     end
 
-    gui.set_enabled(gui.get_node("backdrop"), false)
     select_pin(self, "home")
+    set_map_enabled(self, false)
 end
 
 function on_message(self, message_id, message, sender)
     if message_id == hash("open_map") then
         self.visible = true
-        gui.set_enabled(gui.get_node("backdrop"), true)
+        set_map_enabled(self, true)
     elseif message_id == hash("close_map") then
         self.visible = false
-        gui.set_enabled(gui.get_node("backdrop"), false)
+        set_map_enabled(self, false)
     elseif message_id == hash("select_pin") then
         if message and message.id then select_pin(self, message.id) end
     end
