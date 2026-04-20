@@ -97,9 +97,11 @@ local function set_text(id, s)
 end
 
 local function set_phone_enabled(self, enabled)
+    print("[phone_v2] set_phone_enabled called with enabled=" .. tostring(enabled))
     for _, id in ipairs(PHONE_NODES) do
         gui.set_enabled(gui.get_node(id), enabled)
     end
+    print("[phone_v2] static nodes enabled, now enabling " .. #self.tiles .. " tiles")
     for i = 1, #self.tiles do
         local tile = self.tiles[i]
         gui.set_enabled(tile.bg, enabled)
@@ -107,6 +109,7 @@ local function set_phone_enabled(self, enabled)
         gui.set_enabled(tile.icon, enabled)
         gui.set_enabled(tile.label, enabled)
     end
+    print("[phone_v2] all tiles enabled")
 end
 
 local function flash_tile(tile)
@@ -123,20 +126,27 @@ local function flash_tile(tile)
 end
 
 function init(self)
+    print("[phone_v2] init() started")
     msg.post(".", "acquire_input_focus")
     self.visible = false
     self.tiles = {}
     for i, app in ipairs(APPS) do
         self.tiles[i] = make_tile(self, i, app)
+        print("[phone_v2] created tile " .. i .. " for app: " .. app.id)
     end
+    print("[phone_v2] total tiles created: " .. #self.tiles)
     set_phone_enabled(self, false)
+    print("[phone_v2] init() completed")
 end
 
 function on_message(self, message_id, message, sender)
     if message_id == hash("open_phone") then
+        print("[phone_v2] open_phone received")
         self.visible = true
         set_phone_enabled(self, true)
+        print("[phone_v2] phone enabled, visible=" .. tostring(self.visible))
     elseif message_id == hash("close_phone") then
+        print("[phone_v2] close_phone received")
         self.visible = false
         set_phone_enabled(self, false)
     elseif message_id == hash("set_phone_notif") then

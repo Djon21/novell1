@@ -146,22 +146,32 @@ end
 -- overlays (поверх exploration/dialogue)
 
 local function open_inventory(self)
+    print("[ui_manager_v2] open_inventory() called")
     M.overlays.inventory = true
+    print("[ui_manager_v2] sending show_inventory to", M.components.inventory)
     msg.post(M.components.inventory, "show_inventory")
+    print("[ui_manager_v2] show_inventory sent")
 end
 local function close_inventory(self)
+    print("[ui_manager_v2] close_inventory() called")
     M.overlays.inventory = false
     msg.post(M.components.inventory, "hide_inventory")
 end
 
 local function open_phone(self)
+    print("[ui_manager_v2] open_phone() called")
     if gs.get_flag and gs.get_flag("has_phone") ~= true then
+        print("[ui_manager_v2] has_phone flag is false, aborting")
         return
     end
+    print("[ui_manager_v2] has_phone flag is true")
     M.overlays.phone = true
+    print("[ui_manager_v2] sending open_phone to", M.components.phone)
     msg.post(M.components.phone, "open_phone")
+    print("[ui_manager_v2] open_phone sent")
 end
 local function close_phone(self)
+    print("[ui_manager_v2] close_phone() called")
     M.overlays.phone = false
     msg.post(M.components.phone, "close_phone")
 end
@@ -438,14 +448,17 @@ function on_message(self, message_id, message, sender)
 
     -- --- inventory ---
     elseif message_id == hash("open_inventory") then
+        print("[ui_manager_v2] received open_inventory message from", sender)
         open_inventory(self)
     elseif message_id == hash("close_inventory") then
+        print("[ui_manager_v2] received close_inventory message")
         close_inventory(self)
     elseif message_id == hash("inventory_verb") then
         print("[ui_manager_v2] inventory_verb", message.item_id, message.verb)
 
     -- --- phone ---
     elseif message_id == hash("open_phone") then
+        print("[ui_manager_v2] received open_phone message from", sender)
         open_phone(self)
     elseif message_id == hash("close_phone") then
         close_phone(self)

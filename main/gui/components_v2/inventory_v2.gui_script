@@ -224,7 +224,9 @@ local function show_details(self, item_id)
 end
 
 local function refresh(self)
+    print("[inventory_v2] refresh() started")
     local inv = gs.get_inventory() or {}
+    print("[inventory_v2] inventory from game_state: " .. tostring(#inv) .. " items")
     self.inv_ids = {}
     local n = 0
     for i = 1, COLS * ROWS do
@@ -232,11 +234,13 @@ local function refresh(self)
         if id and catalog.get(id) then
             self.inv_ids[i] = id
             show_slot(self, i, catalog.get(id))
+            print("[inventory_v2] slot " .. i .. " showing item: " .. id)
             n = n + 1
         else
             hide_slot(self, i)
         end
     end
+    print("[inventory_v2] visible items: " .. n)
     set_text("title_eyebrow", "inventory · " .. tostring(n) .. " / " .. tostring(COLS * ROWS))
     -- Выбор: либо прежний, либо первый
     if self.selected and not self.inv_ids[self.selected] then
@@ -250,13 +254,16 @@ local function refresh(self)
     if self.selected then
         highlight_selected(self, self.selected)
         show_details(self, self.inv_ids[self.selected])
+        print("[inventory_v2] selected slot: " .. self.selected)
     else
         highlight_selected(self, -1)
         clear_details(self)
+        print("[inventory_v2] no items to select")
     end
 end
 
 function init(self)
+    print("[inventory_v2] init() started")
     msg.post(".", "acquire_input_focus")
     self.visible = false
     self.slots = {}
@@ -270,9 +277,12 @@ function init(self)
     for row = 0, ROWS - 1 do
         for col = 0, COLS - 1 do
             self.slots[i] = make_slot(col, row)
+            print("[inventory_v2] created slot " .. i .. " at col=" .. col .. " row=" .. row)
             i = i + 1
         end
     end
+    print("[inventory_v2] total slots created: " .. #self.slots)
+    
     -- 5 кнопок-глаголов
     for k = 1, 5 do
         self.verb_btns[k] = make_verb_button(k)
@@ -280,17 +290,23 @@ function init(self)
         gui.set_enabled(self.verb_btns[k].border, false)
         gui.set_enabled(self.verb_btns[k].label, false)
     end
+    print("[inventory_v2] verb buttons created: " .. #self.verb_btns)
 
     set_inventory_enabled(false)
     clear_details(self)
+    print("[inventory_v2] init() completed")
 end
 
 function on_message(self, message_id, message, sender)
     if message_id == hash("show_inventory") then
+        print("[inventory_v2] show_inventory received")
         self.visible = true
         set_inventory_enabled(true)
+        print("[inventory_v2] inventory enabled, calling refresh")
         refresh(self)
+        print("[inventory_v2] refresh completed, visible=" .. tostring(self.visible))
     elseif message_id == hash("hide_inventory") then
+        print("[inventory_v2] hide_inventory received")
         self.visible = false
         set_inventory_enabled(false)
         for i = 1, #self.slots do
@@ -298,6 +314,7 @@ function on_message(self, message_id, message, sender)
         end
         clear_details(self)
     elseif message_id == hash("refresh_inventory") then
+        print("[inventory_v2] refresh_inventory received, visible=" .. tostring(self.visible))
         if self.visible then refresh(self) end
     end
 end
