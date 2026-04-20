@@ -1,0 +1,326 @@
+-- hotspots.gui_script
+-- Р В РЎв„ўР В РЎвЂўР В Р вЂ¦Р РЋРІР‚С™Р РЋР вЂљР В РЎвЂўР В Р’В»Р В Р’В»Р В Р’ВµР РЋР вЂљ Р В РЎвЂР В Р вЂ¦Р РЋРІР‚С™Р В Р’ВµР РЋР вЂљР В Р’В°Р В РЎвЂќР РЋРІР‚С™Р В РЎвЂР В Р вЂ Р В Р вЂ¦Р РЋРІР‚в„–Р РЋРІР‚В¦ Р РЋРІР‚С™Р В РЎвЂўР РЋРІР‚РЋР В Р’ВµР В РЎвЂќ (hotspots) Р В РўвЂР В Р’В»Р РЋР РЏ point-and-click Р РЋР С“Р РЋРІР‚В Р В Р’ВµР В Р вЂ¦
+
+local scene_controller = require "main.scripts.scene_controller"
+local hotspot_editor = require "main.scripts.hotspot_editor"
+local gui_animations = require "main.gui.modules.gui_animations"
+
+-- Р В Р Р‹Р В РЎвЂўР РЋР С“Р РЋРІР‚С™Р В РЎвЂўР РЋР РЏР В Р вЂ¦Р В РЎвЂР В Р’Вµ hotspots
+local M = {}
+M.HOTSPOT_COUNT = 6
+M.ORBIT_DOTS = 6
+M.SCENE_OBJECT_COUNT = 4
+M.edit_shift_held = false
+
+-- Р В РЎСљР В РЎвЂўР В РўвЂР РЋРІР‚в„– hotspots (6 Р РЋР С“Р В Р’В»Р В РЎвЂўР РЋРІР‚С™Р В РЎвЂўР В Р вЂ )
+M.hotspot_boxes = {}
+M.hotspot_labels = {}
+M.hotspot_icons = {}
+M.hotspot_circles = {}
+M.hotspot_rings = {}
+M.hotspot_orbits = {}
+M.hotspot_dots = {}
+
+-- Р В РЎСљР В РЎвЂўР В РўвЂР РЋРІР‚в„– scene objects (4 Р РЋР С“Р В Р’В»Р В РЎвЂўР РЋРІР‚С™Р В Р’В°)
+M.scene_obj_nodes = {}
+
+-- -------------------------------------------------------
+-- Р В Р в‚¬Р РЋР С“Р РЋРІР‚С™Р В Р’В°Р В Р вЂ¦Р В РЎвЂўР В Р вЂ Р В РЎвЂќР В Р’В° hotspot Р В Р вЂ  Р РЋР С“Р В Р’В»Р В РЎвЂўР РЋРІР‚С™
+-- -------------------------------------------------------
+
+local function set_hotspot(i, data)
+    if not data then
+        -- Р В Р Р‹Р В РЎвЂќР РЋР вЂљР РЋРІР‚в„–Р РЋРІР‚С™Р РЋР Р‰ hotspot
+        if M.hotspot_boxes[i] then gui.set_enabled(M.hotspot_boxes[i], false) end
+        if M.hotspot_labels[i] then gui.set_enabled(M.hotspot_labels[i], false) end
+        if M.hotspot_icons[i] then gui.set_enabled(M.hotspot_icons[i], false) end
+        if M.hotspot_circles[i] then gui.set_enabled(M.hotspot_circles[i], false) end
+        if M.hotspot_rings[i] then gui.set_enabled(M.hotspot_rings[i], false) end
+        if M.hotspot_orbits[i] then gui.set_enabled(M.hotspot_orbits[i], false) end
+        for d = 1, M.ORBIT_DOTS do
+            if M.hotspot_dots[i] and M.hotspot_dots[i][d] then gui.set_enabled(M.hotspot_dots[i][d], false) end
+        end
+        return
+    end
+    
+    local r = data.rect
+    -- pivot CENTER Р В РЎвЂ”Р В РЎвЂў Р РЋРЎвЂњР В РЎВР В РЎвЂўР В Р’В»Р РЋРІР‚РЋР В Р’В°Р В Р вЂ¦Р В РЎвЂР РЋР вЂ№, position Р Р†Р вЂљРІР‚Сњ Р РЋРІР‚В Р В Р’ВµР В Р вЂ¦Р РЋРІР‚С™Р РЋР вЂљ Р В Р’В±Р В РЎвЂўР В РЎвЂќР РЋР С“Р В Р’В°
+    local cx = r.x + r.w / 2
+    local cy = r.y + r.h / 2
+    gui.set_position(M.hotspot_boxes[i], vmath.vector3(cx, cy, 0.08))
+    gui.set_size(M.hotspot_boxes[i], vmath.vector3(r.w, r.h, 0))
+    
+    -- Р В РІР‚в„ўР В РЎвЂР В Р’В·Р РЋРЎвЂњР В Р’В°Р В Р’В»Р РЋР Р‰Р В Р вЂ¦Р РЋРІР‚в„–Р В РІвЂћвЂ“ Р РЋР С“Р РЋРІР‚С™Р В Р’ВµР В РЎвЂќ: circle + ring + icon + orbit Р РЋР С“ Р РЋРІР‚С™Р В РЎвЂўР РЋРІР‚РЋР В РЎвЂќР В Р’В°Р В РЎВР В РЎвЂ
+    local icon = data.icon
+    if icon and icon ~= "" then
+        local icon_node = M.hotspot_icons[i]
+        local circle_node = M.hotspot_circles[i]
+        local ring_node = M.hotspot_rings[i]
+        local orbit_node = M.hotspot_orbits[i]
+        
+        -- Р В РЎСџР В РЎвЂўР В Р’В·Р В РЎвЂР РЋРІР‚В Р В РЎвЂР В РЎвЂўР В Р вЂ¦Р В РЎвЂР РЋР вЂљР РЋРЎвЂњР В Р’ВµР В РЎВ Р В Р вЂ Р В Р’ВµР РЋР С“Р РЋР Р‰ Р РЋР С“Р РЋРІР‚С™Р В Р’ВµР В РЎвЂќ Р В Р вЂ  Р РЋРІР‚В Р В Р’ВµР В Р вЂ¦Р РЋРІР‚С™Р РЋР вЂљР В Р’Вµ hotspot'Р В Р’В°
+        local ICON_Y_OFFSET = 4  -- Р В РЎвЂќР В РЎвЂўР В РЎВР В РЎвЂ”Р В Р’ВµР В Р вЂ¦Р РЋР С“Р В Р’В°Р РЋРІР‚В Р В РЎвЂР РЋР РЏ baseline Р РЋРІвЂљВ¬Р РЋР вЂљР В РЎвЂР РЋРІР‚С›Р РЋРІР‚С™Р В Р’В°
+        gui.set_position(circle_node, vmath.vector3(cx, cy, 0.068))
+        gui.set_position(ring_node, vmath.vector3(cx, cy, 0.067))
+        gui.set_position(orbit_node, vmath.vector3(cx, cy, 0.066))
+        gui.set_position(icon_node, vmath.vector3(cx, cy + ICON_Y_OFFSET, 0.07))
+        
+        gui.set_text(icon_node, icon)
+        -- Defold GUI: sort is by declaration order without layers, so force
+        -- icon above circle/ring regardless of how .gui file was arranged.
+        gui.move_above(circle_node, ring_node)
+        gui.move_above(icon_node, circle_node)
+        
+        -- Р В РЎвЂ™Р В Р’В»Р РЋР Р‰Р РЋРІР‚С›Р РЋРІР‚в„–: Р В РўвЂР В Р’В»Р РЋР РЏ locked Р В Р вЂ Р РЋР С“Р РЋРІР‚В Р РЋРІР‚С™Р РЋРЎвЂњР РЋР С“Р В РЎвЂќР В Р’В»Р В Р’ВµР В Р’Вµ
+        local circle_a = data.locked and 0.50 or 0.78
+        local ring_a = data.locked and 0.35 or 0.90
+        local icon_a = data.locked and 0.45 or 1.0
+        
+        local cc = gui.get_color(circle_node)
+        cc.w = circle_a
+        gui.set_color(circle_node, cc)
+        
+        local rc = gui.get_color(ring_node)
+        rc.w = ring_a
+        gui.set_color(ring_node, rc)
+        
+        local ic = gui.get_color(icon_node)
+        ic.w = icon_a
+        gui.set_color(icon_node, ic)
+        
+        gui.set_enabled(circle_node, true)
+        gui.set_enabled(ring_node, true)
+        gui.set_enabled(icon_node, true)
+        
+        -- Orbit/dots Р В РЎвЂўР РЋРІР‚С™Р В РЎвЂќР В Р’В»Р РЋР вЂ№Р РЋРІР‚РЋР В Р’ВµР В Р вЂ¦Р РЋРІР‚в„– (Р В РЎВР В РЎвЂР В Р вЂ¦Р В РЎвЂР В РЎВР В Р’В°Р В Р’В»Р В РЎвЂР РЋР С“Р РЋРІР‚С™Р В РЎвЂР РЋРІР‚РЋР В Р вЂ¦Р РЋРІР‚в„–Р В РІвЂћвЂ“ Р РЋР С“Р РЋРІР‚С™Р В РЎвЂР В Р’В»Р РЋР Р‰)
+        gui.set_enabled(orbit_node, false)
+        for d = 1, M.ORBIT_DOTS do
+            if M.hotspot_dots[i] and M.hotspot_dots[i][d] then gui.set_enabled(M.hotspot_dots[i][d], false) end
+        end
+        
+        -- Р В РЎСџР РЋРЎвЂњР В Р’В»Р РЋР Р‰Р РЋР С“Р В Р’В°Р РЋРІР‚В Р В РЎвЂР РЋР РЏ Р вЂ™Р’В«Р В РўвЂР РЋРІР‚в„–Р РЋРІР‚В¦Р В Р’В°Р В Р вЂ¦Р В РЎвЂР В Р’ВµР вЂ™Р’В» Р В РЎвЂќР РЋР вЂљР РЋРЎвЂњР В РЎвЂ“Р В Р’В°+Р В РЎвЂќР В РЎвЂўР В Р’В»Р РЋР Р‰Р РЋРІР‚В Р В Р’В°+Р В РЎвЂР В РЎвЂќР В РЎвЂўР В Р вЂ¦Р В РЎвЂќР В РЎвЂ
+        gui.cancel_animation(icon_node, gui.PROP_SCALE)
+        gui.cancel_animation(circle_node, gui.PROP_SCALE)
+        gui.cancel_animation(ring_node, gui.PROP_SCALE)
+        gui.set_scale(icon_node, vmath.vector3(1, 1, 1))
+        gui.set_scale(circle_node, vmath.vector3(1, 1, 1))
+        gui.set_scale(ring_node, vmath.vector3(1, 1, 1))
+        
+        if not data.locked then
+            local t = vmath.vector3(1.08, 1.08, 1)
+            gui.animate(icon_node, gui.PROP_SCALE, t,
+                gui.EASING_INOUTSINE, 1.4, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
+            gui.animate(circle_node, gui.PROP_SCALE, t,
+                gui.EASING_INOUTSINE, 1.4, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
+            gui.animate(ring_node, gui.PROP_SCALE, vmath.vector3(1.12, 1.12, 1),
+                gui.EASING_INOUTSINE, 1.4, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
+        end
+    else
+        -- Р В РЎСљР В Р’ВµР РЋРІР‚С™ Р В РЎвЂР В РЎвЂќР В РЎвЂўР В Р вЂ¦Р В РЎвЂќР В РЎвЂ Р Р†Р вЂљРІР‚Сњ Р РЋР С“Р В РЎвЂќР РЋР вЂљР РЋРІР‚в„–Р В Р вЂ Р В Р’В°Р В Р’ВµР В РЎВ Р В Р вЂ Р В РЎвЂР В Р’В·Р РЋРЎвЂњР В Р’В°Р В Р’В»Р РЋР Р‰Р В Р вЂ¦Р РЋРІР‚в„–Р В РІвЂћвЂ“ Р РЋР С“Р РЋРІР‚С™Р В Р’ВµР В РЎвЂќ
+        gui.cancel_animation(M.hotspot_icons[i], gui.PROP_SCALE)
+        gui.cancel_animation(M.hotspot_circles[i], gui.PROP_SCALE)
+        gui.cancel_animation(M.hotspot_rings[i], gui.PROP_SCALE)
+        if M.hotspot_icons[i] then gui.set_enabled(M.hotspot_icons[i], false) end
+        if M.hotspot_circles[i] then gui.set_enabled(M.hotspot_circles[i], false) end
+        if M.hotspot_rings[i] then gui.set_enabled(M.hotspot_rings[i], false) end
+        if M.hotspot_orbits[i] then gui.set_enabled(M.hotspot_orbits[i], false) end
+        for d = 1, M.ORBIT_DOTS do
+            if M.hotspot_dots[i] and M.hotspot_dots[i][d] then gui.set_enabled(M.hotspot_dots[i][d], false) end
+        end
+    end
+    
+    -- Р В РЎСџР РЋР вЂљР В РЎвЂўР В Р’В·Р РЋР вЂљР В Р’В°Р РЋРІР‚РЋР В Р вЂ¦Р В РЎвЂўР РЋР С“Р РЋРІР‚С™Р РЋР Р‰ hotspot-rect
+    local editing = hotspot_editor.is_active()
+    local selected = editing and (i == hotspot_editor.selected_index())
+    local box_alpha
+    
+    if editing then
+        box_alpha = selected and 0.65 or 0.25
+    else
+        -- Р В РІР‚в„ў Р В РЎвЂР В РЎвЂ“Р РЋР вЂљР В РЎвЂўР В Р вЂ Р В РЎвЂўР В РЎВ Р РЋР вЂљР В Р’ВµР В Р’В¶Р В РЎвЂР В РЎВР В Р’Вµ rect Р В РЎвЂ”Р В РЎвЂўР В Р’В»Р В Р вЂ¦Р В РЎвЂўР РЋР С“Р РЋРІР‚С™Р РЋР Р‰Р РЋР вЂ№ Р В РЎвЂ”Р РЋР вЂљР В РЎвЂўР В Р’В·Р РЋР вЂљР В Р’В°Р РЋРІР‚РЋР В Р вЂ¦Р РЋРІР‚в„–Р В РІвЂћвЂ“ (invisible hitbox)
+        box_alpha = 0
+    end
+    
+    local bc = gui.get_color(M.hotspot_boxes[i])
+    bc.w = box_alpha
+    gui.set_color(M.hotspot_boxes[i], bc)
+    
+    gui.set_enabled(M.hotspot_boxes[i], true)
+    gui.set_enabled(M.hotspot_labels[i], true)
+    
+    local label_text = data.label or ""
+    if editing and selected then
+        label_text = "[#" .. i .. "] " .. label_text
+    end
+    gui.set_text(M.hotspot_labels[i], label_text)
+    
+    local lc = gui.get_color(M.hotspot_labels[i])
+    if editing then
+        lc.w = selected and 1.0 or 0.5
+    else
+        lc.w = data.locked and 0.35 or 1.0
+    end
+    gui.set_color(M.hotspot_labels[i], lc)
+end
+
+-- -------------------------------------------------------
+-- Р В Р в‚¬Р РЋР С“Р РЋРІР‚С™Р В Р’В°Р В Р вЂ¦Р В РЎвЂўР В Р вЂ Р В РЎвЂќР В Р’В° scene object Р В Р вЂ  Р РЋР С“Р В Р’В»Р В РЎвЂўР РЋРІР‚С™
+-- -------------------------------------------------------
+
+local function set_scene_object(i, obj)
+    local node = M.scene_obj_nodes[i]
+    if not node then return end
+    
+    if not obj then
+        gui.set_enabled(node, false)
+        return
+    end
+    
+    -- Р В РЎСџР В РЎвЂў Р РЋРЎвЂњР В РЎВР В РЎвЂўР В Р’В»Р РЋРІР‚РЋР В Р’В°Р В Р вЂ¦Р В РЎвЂР РЋР вЂ№ pivot Р РЋРІР‚В Р В Р’ВµР В Р вЂ¦Р РЋРІР‚С™Р РЋР вЂљ Р Р†Р вЂљРІР‚Сњ Р РЋР С“Р РЋРІР‚С™Р В Р’В°Р В Р вЂ Р В РЎвЂР В РЎВ Р РЋРІР‚В Р В Р’ВµР В Р вЂ¦Р РЋРІР‚С™Р РЋР вЂљ Р В Р вЂ  pos + w/2, h/2
+    local w = obj.size and obj.size.w or 87
+    local h = obj.size and obj.size.h or 37
+    local cx = (obj.pos.x or 0) + w / 2
+    local cy = (obj.pos.y or 0) + h / 2
+    gui.set_position(node, vmath.vector3(cx, cy, 0.05))
+    gui.set_size(node, vmath.vector3(w, h, 0))
+    
+    if obj.image then
+        gui.play_flipbook(node, hash(obj.image))
+    end
+    
+    gui.set_enabled(node, true)
+end
+
+-- -------------------------------------------------------
+-- Р В Р Р‹Р В РЎвЂќР РЋР вЂљР РЋРІР‚в„–Р РЋРІР‚С™Р РЋР Р‰ Р В Р вЂ Р РЋР С“Р В Р’Вµ hotspots
+-- -------------------------------------------------------
+
+local function hide_all_hotspots()
+    for i = 1, M.HOTSPOT_COUNT do
+        if M.hotspot_boxes[i] then if M.hotspot_boxes[i] then gui.set_enabled(M.hotspot_boxes[i], false) end end
+        if M.hotspot_labels[i] then if M.hotspot_labels[i] then gui.set_enabled(M.hotspot_labels[i], false) end end
+        if M.hotspot_icons[i] then if M.hotspot_icons[i] then gui.set_enabled(M.hotspot_icons[i], false) end end
+        if M.hotspot_circles[i] then if M.hotspot_circles[i] then gui.set_enabled(M.hotspot_circles[i], false) end end
+        if M.hotspot_rings[i] then if M.hotspot_rings[i] then gui.set_enabled(M.hotspot_rings[i], false) end end
+        if M.hotspot_orbits[i] then if M.hotspot_orbits[i] then gui.set_enabled(M.hotspot_orbits[i], false) end end
+        for d = 1, M.ORBIT_DOTS do
+            if M.hotspot_dots[i] and M.hotspot_dots[i][d] then 
+                if M.hotspot_dots[i] and M.hotspot_dots[i][d] then gui.set_enabled(M.hotspot_dots[i][d], false) end 
+            end
+        end
+    end
+    
+    for i = 1, M.SCENE_OBJECT_COUNT do
+        if M.scene_obj_nodes[i] then if M.scene_obj_nodes[i] then gui.set_enabled(M.scene_obj_nodes[i], false) end end
+    end
+end
+
+-- -------------------------------------------------------
+-- Lifecycle
+-- -------------------------------------------------------
+
+function init(self)
+    msg.post(".", "acquire_input_focus")
+    print("[hotspots_v2] init")
+    
+    -- Р В РЎСџР В РЎвЂўР В Р’В»Р РЋРЎвЂњР РЋРІР‚РЋР В Р’В°Р В Р’ВµР В РЎВ Р В Р вЂ¦Р В РЎвЂўР В РўвЂР РЋРІР‚в„– hotspots (6 Р РЋР С“Р В Р’В»Р В РЎвЂўР РЋРІР‚С™Р В РЎвЂўР В Р вЂ )
+    for i = 1, M.HOTSPOT_COUNT do
+        M.hotspot_boxes[i] = gui.get_node("hotspot_" .. i)
+        M.hotspot_labels[i] = gui.get_node("hotspot_label_" .. i)
+        local ok, icon = pcall(gui.get_node, "hotspot_icon_" .. i); M.hotspot_icons[i] = ok and icon or nil
+        ok, icon = pcall(gui.get_node, "hotspot_circle_" .. i); M.hotspot_circles[i] = ok and icon or nil
+        ok, icon = pcall(gui.get_node, "hotspot_ring_" .. i); M.hotspot_rings[i] = ok and icon or nil
+        ok, icon = pcall(gui.get_node, "hotspot_orbit_" .. i); M.hotspot_orbits[i] = ok and icon or nil
+        
+        M.hotspot_dots[i] = {}
+        for d = 1, M.ORBIT_DOTS do
+            ok, icon = pcall(gui.get_node, "hotspot_dot_" .. i .. "_" .. d); M.hotspot_dots[i][d] = ok and icon or nil
+        end
+    end
+    
+    -- Р В РЎСџР В РЎвЂўР В Р’В»Р РЋРЎвЂњР РЋРІР‚РЋР В Р’В°Р В Р’ВµР В РЎВ Р В Р вЂ¦Р В РЎвЂўР В РўвЂР РЋРІР‚в„– scene objects (4 Р РЋР С“Р В Р’В»Р В РЎвЂўР РЋРІР‚С™Р В Р’В°)
+    for i = 1, M.SCENE_OBJECT_COUNT do
+        M.scene_obj_nodes[i] = gui.get_node("scene_obj_" .. i)
+    end
+    
+    -- Р В Р’ВР В Р’В·Р В Р вЂ¦Р В Р’В°Р РЋРІР‚РЋР В Р’В°Р В Р’В»Р РЋР Р‰Р В Р вЂ¦Р В РЎвЂў Р В Р вЂ Р РЋР С“Р РЋРІР‚В Р РЋР С“Р В РЎвЂќР РЋР вЂљР РЋРІР‚в„–Р РЋРІР‚С™Р В РЎвЂў
+    hide_all_hotspots()
+    
+end
+
+function final(self)
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash("set_hotspot") then
+        -- Р В Р в‚¬Р РЋР С“Р РЋРІР‚С™Р В Р’В°Р В Р вЂ¦Р В РЎвЂўР В Р вЂ Р В РЎвЂР РЋРІР‚С™Р РЋР Р‰ hotspot Р В Р вЂ  Р РЋР С“Р В Р’В»Р В РЎвЂўР РЋРІР‚С™
+        set_hotspot(message.index, message.data)
+        
+    elseif message_id == hash("set_scene_object") then
+        -- Р В Р в‚¬Р РЋР С“Р РЋРІР‚С™Р В Р’В°Р В Р вЂ¦Р В РЎвЂўР В Р вЂ Р В РЎвЂР РЋРІР‚С™Р РЋР Р‰ scene object Р В Р вЂ  Р РЋР С“Р В Р’В»Р В РЎвЂўР РЋРІР‚С™
+        set_scene_object(message.index, message.obj)
+        
+    elseif message_id == hash("hide_all") then
+        -- Р В Р Р‹Р В РЎвЂќР РЋР вЂљР РЋРІР‚в„–Р РЋРІР‚С™Р РЋР Р‰ Р В Р вЂ Р РЋР С“Р В Р’Вµ hotspots
+        hide_all_hotspots()
+    end
+end
+
+function on_input(self, action_id, action)
+    -- Shift modifier for editor (needs press+release, bypass pressed filter)
+    if action_id == hash("edit_shift") then
+        if action.pressed  then M.edit_shift_held = true  end
+        if action.released then M.edit_shift_held = false end
+        return false
+    end
+
+    if not action.pressed then return false end
+
+    -- F1: toggle hotspot editor (works any time scene_controller is active)
+    if action_id == hash("edit_toggle") then
+        hotspot_editor.toggle()
+        return true
+    end
+
+    if hotspot_editor.is_active() then
+        local s = M.edit_shift_held and 20 or 5
+        if     action_id == hash("edit_exit")     then hotspot_editor.exit_mode()
+        elseif action_id == hash("edit_next")     then hotspot_editor.next()
+        elseif action_id == hash("edit_left")     then hotspot_editor.nudge(-s, 0, 0, 0)
+        elseif action_id == hash("edit_right")    then hotspot_editor.nudge( s, 0, 0, 0)
+        elseif action_id == hash("edit_up")       then hotspot_editor.nudge( 0, s, 0, 0)
+        elseif action_id == hash("edit_down")     then hotspot_editor.nudge( 0,-s, 0, 0)
+        elseif action_id == hash("edit_w_minus")  then hotspot_editor.nudge( 0, 0,-s, 0)
+        elseif action_id == hash("edit_w_plus")   then hotspot_editor.nudge( 0, 0, s, 0)
+        elseif action_id == hash("edit_h_minus")  then hotspot_editor.nudge( 0, 0, 0,-s)
+        elseif action_id == hash("edit_h_plus")   then hotspot_editor.nudge( 0, 0, 0, s)
+        elseif action_id == hash("edit_print")    then hotspot_editor.print_current()
+        elseif action_id == hash("touch") then
+            -- click-to-select in edit mode
+            for i = 1, M.HOTSPOT_COUNT do
+                if M.hotspot_boxes[i] and gui.is_enabled(M.hotspot_boxes[i]) and
+                   gui.pick_node(M.hotspot_boxes[i], action.x, action.y) then
+                    hotspot_editor.select(i)
+                    return true
+                end
+            end
+            return false
+        else return false
+        end
+        return true
+    end
+
+    -- Normal mode: click -> scene_controller
+    if action_id == hash("touch") then
+        for i = 1, M.HOTSPOT_COUNT do
+            if M.hotspot_boxes[i] and gui.is_enabled(M.hotspot_boxes[i]) and
+               gui.pick_node(M.hotspot_boxes[i], action.x, action.y) then
+                print("[hotspots] HIT slot=" .. i)
+                scene_controller.on_hotspot_click(i)
+                return true
+            end
+        end
+    end
+
+    return false
+end

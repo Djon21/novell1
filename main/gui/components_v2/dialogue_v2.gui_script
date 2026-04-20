@@ -1,0 +1,259 @@
+-- dialogue_v2.gui_script
+-- Диалоговая плашка снизу: портрет (96×96, пока icon-плашка), nameplate (имя + тег),
+-- dbox с угловыми brackets и текстом. Кнопки SKIP / AUTO / NEXT.
+--
+-- Совместимость с существующим `dialogue_manager_ink`:
+--   он шлёт "render_dialogue" {name, text, tag?, speaker?} — тот же формат, что у старого
+--   `dialogue_system`. Используем его. Если полей нет — fallback на дефолты.
+--
+-- Сообщения:
+--   "render_dialogue" {speaker, name, text, tag, mood, portrait}
+--        speaker — ключ в CHARS (mila/artem/narrator/…) — определяет цвет акцента.
+--        portrait — опционально id спрайта из v2.atlas (пока не подключаем, используем icon).
+--   "show_dialogue" / "hide_dialogue"
+--   "set_auto" {on=bool}, "set_skip" {on=bool}
+--   "typewriter_done"  — станет релевантно после step18.
+--
+-- В ui_manager_v2 / dialogue_manager_ink шлёт:
+--   "dialogue_next"  — клик NEXT или по dbox
+--   "dialogue_skip"  — клик SKIP
+--   "dialogue_auto"  — клик AUTO (переключатель)
+
+local UI_MGR = "#ui_manager_v2"
+-- dialogue_manager_ink в старой архитектуре — адрес может отличаться.
+-- Шлём туда же, ui_manager перенаправит при необходимости.
+
+-- Словарь персонажей: цвет акцента для nameplate + иконка-заглушка.
+local CHARS = {
+    mila     = { color = vmath.vector4(1.0, 0.239, 0.498, 1.0), icon = string.char(0xEE, 0x9F, 0xBB), tag = "подруга · #017" }, -- face
+    artem    = { color = vmath.vector4(0.49, 0.976, 1.0, 1.0),  icon = string.char(0xEE, 0x9F, 0xBB), tag = "МЦ" },
+    narrator = { color = vmath.vector4(0.353, 1.0, 0.478, 1.0), icon = string.char(0xEE, 0xA4, 0xB1), tag = "нарратор" }, -- terminal-ish
+    -- fallback:
+    _default = { color = vmath.vector4(0.952, 0.925, 0.85, 1.0), icon = string.char(0xEE, 0x9F, 0xBB), tag = "—" },
+}
+
+local COLOR_BTN_BG      = vmath.vector4(0.067, 0.055, 0.173, 0.85)
+local COLOR_BTN_BG_ON   = vmath.vector4(0.49, 0.976, 1.0, 0.85)
+local COLOR_LABEL_OFF   = vmath.vector4(0.952, 0.925, 0.85, 0.8)
+local COLOR_LABEL_ON    = vmath.vector4(0.027, 0.023, 0.094, 1.0)
+local COLOR_NARRATOR_TX = vmath.vector4(0.353, 1.0, 0.478, 1.0)
+local COLOR_PAPER       = vmath.vector4(0.952, 0.925, 0.85, 1.0)
+
+local function set_text(id, s)
+    gui.set_text(gui.get_node(id), s or "")
+end
+
+local function set_color(id, c)
+    gui.set_color(gui.get_node(id), c)
+end
+
+local function click_flash(node)
+    gui.animate(node, "scale", vmath.vector4(0.94, 0.94, 1, 1), gui.EASING_OUTQUAD, 0.08, 0, function()
+        gui.animate(node, "scale", vmath.vector4(1, 1, 1, 1), gui.EASING_OUTQUAD, 0.15)
+    end)
+end
+
+local function resolve_speaker(key)
+    if not key then return CHARS._default end
+    return CHARS[key] or CHARS._default
+end
+
+-- ---- typewriter (step18) ----
+local TYPEWRITER_CPS = 45  -- символов в секунду
+local PUNCT_DELAY    = 0.12  -- доп. пауза после ",.!?:;…"
+
+-- Разбивает UTF-8 строку на массив символов (поддержка кириллицы).
+local function utf8_chars(s)
+    local out = {}
+    for ch in string.gmatch(s or "", "([%z\1-\127\194-\244][\128-\191]*)") do
+        out[#out + 1] = ch
+    end
+    return out
+end
+
+local function is_punct(ch)
+    return ch == "," or ch == "." or ch == "!" or ch == "?" or ch == ":" or ch == ";" or ch == "…"
+end
+
+local function typewriter_start(self, text)
+    self.tw_chars = utf8_chars(text or "")
+    self.tw_total = #self.tw_chars
+    self.tw_shown = 0
+    self.tw_accum = 0
+    self.tw_active = self.tw_total > 0
+    self.tw_pending_pause = 0
+    gui.set_text(gui.get_node("dlg_text"), "")
+end
+
+local function typewriter_finish(self)
+    self.tw_shown = self.tw_total
+    self.tw_active = false
+    gui.set_text(gui.get_node("dlg_text"), self.full_text or "")
+    msg.post(UI_MGR, "typewriter_done")
+end
+
+local function render(self, msg)
+    local speaker_key = msg.speaker or msg.char or "_default"
+    local c = resolve_speaker(speaker_key)
+
+    local name = msg.name or (speaker_key ~= "_default" and speaker_key:upper()) or "—"
+    set_text("nameplate_name", name:upper())
+    set_color("nameplate_name", COLOR_PAPER)
+    set_text("nameplate_tag", msg.tag or c.tag or "")
+    set_color("nameplate_tag", c.color)
+
+    -- Портрет (icon-заглушка; подключение спрайта из v2.atlas — отдельная работа)
+    set_text("portrait_icon", c.icon)
+    set_color("portrait_icon", c.color)
+
+    local text = msg.text or ""
+    -- нарратор рендерится зелёным CRT-цветом
+    if speaker_key == "narrator" then
+        set_color("dlg_text", COLOR_NARRATOR_TX)
+    else
+        set_color("dlg_text", COLOR_PAPER)
+    end
+    -- typewriter (step18): посимвольная анимация
+    self.full_text = text
+    self.current_text = text
+    typewriter_start(self, text)
+end
+
+function update(self, dt)
+    if not self.tw_active then return end
+    if self.tw_pending_pause and self.tw_pending_pause > 0 then
+        self.tw_pending_pause = self.tw_pending_pause - dt
+        if self.tw_pending_pause > 0 then return end
+    end
+    self.tw_accum = (self.tw_accum or 0) + dt
+    local step = 1.0 / TYPEWRITER_CPS
+    while self.tw_active and self.tw_accum >= step do
+        self.tw_accum = self.tw_accum - step
+        self.tw_shown = self.tw_shown + 1
+        if self.tw_shown >= self.tw_total then
+            typewriter_finish(self)
+            return
+        end
+        local ch = self.tw_chars[self.tw_shown]
+        if is_punct(ch) then
+            self.tw_pending_pause = PUNCT_DELAY
+        end
+        -- склеиваем показанные символы
+        local shown = table.concat(self.tw_chars, "", 1, self.tw_shown)
+        gui.set_text(gui.get_node("dlg_text"), shown)
+        if self.tw_pending_pause and self.tw_pending_pause > 0 then return end
+    end
+end
+
+local function set_bg(self, bg_name)
+    if not bg_name or bg_name == "" or bg_name == "none" then return end
+    if self.current_bg == bg_name then return end
+    local n = gui.get_node("scene_bg")
+    local ok, err = pcall(gui.play_flipbook, n, bg_name)
+    if not ok then
+        print("[dialogue_v2] bg not found:", bg_name, err)
+        return
+    end
+    self.current_bg = bg_name
+    if self.bg_visible ~= false then
+        gui.set_enabled(n, true)
+    end
+end
+
+function init(self)
+    msg.post(".", "acquire_input_focus")
+    self.visible = true
+    self.auto = false
+    self.skip = false
+    self.full_text = ""
+    self.current_text = ""
+    self.current_bg = nil
+    self.bg_visible = false
+    gui.set_enabled(gui.get_node("scene_bg"), false)
+    gui.set_enabled(gui.get_node("scene_bg_next"), false)
+    -- стартовое состояние — пустой плейсхолдер
+    render(self, { speaker = "_default", name = "—", text = "" })
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash("render_dialogue") then
+        render(self, message or {})
+
+    elseif message_id == hash("set_background") then
+        set_bg(self, message and message.name)
+
+    elseif message_id == hash("show_bg") then
+        self.bg_visible = true
+        if self.current_bg then
+            gui.set_enabled(gui.get_node("scene_bg"), true)
+        end
+
+    elseif message_id == hash("hide_bg") then
+        self.bg_visible = false
+        gui.set_enabled(gui.get_node("scene_bg"), false)
+        gui.set_enabled(gui.get_node("scene_bg_next"), false)
+
+    elseif message_id == hash("show_dialogue") then
+        self.visible = true
+        gui.set_enabled(gui.get_node("dlg_root"), true)
+
+    elseif message_id == hash("hide_dialogue") then
+        self.visible = false
+        gui.set_enabled(gui.get_node("dlg_root"), false)
+
+    elseif message_id == hash("set_auto") then
+        self.auto = message.on and true or false
+        gui.set_color(gui.get_node("btn_auto"), self.auto and COLOR_BTN_BG_ON or COLOR_BTN_BG)
+        gui.set_color(gui.get_node("btn_auto_label"), self.auto and COLOR_LABEL_ON or COLOR_LABEL_OFF)
+
+    elseif message_id == hash("set_skip") then
+        self.skip = message.on and true or false
+        gui.set_color(gui.get_node("btn_skip"), self.skip and COLOR_BTN_BG_ON or COLOR_BTN_BG)
+        gui.set_color(gui.get_node("btn_skip_label"), self.skip and COLOR_LABEL_ON or COLOR_LABEL_OFF)
+    end
+end
+
+function on_input(self, action_id, action)
+    if not self.visible then return false end
+    if action_id ~= hash("touch") or not action.pressed then return false end
+
+    if gui.pick_node(gui.get_node("btn_skip"), action.x, action.y) then
+        click_flash(gui.get_node("btn_skip"))
+        self.skip = not self.skip
+        gui.set_color(gui.get_node("btn_skip"), self.skip and COLOR_BTN_BG_ON or COLOR_BTN_BG)
+        gui.set_color(gui.get_node("btn_skip_label"), self.skip and COLOR_LABEL_ON or COLOR_LABEL_OFF)
+        msg.post(UI_MGR, "dialogue_skip", { on = self.skip })
+        return true
+    end
+
+    if gui.pick_node(gui.get_node("btn_auto"), action.x, action.y) then
+        click_flash(gui.get_node("btn_auto"))
+        self.auto = not self.auto
+        gui.set_color(gui.get_node("btn_auto"), self.auto and COLOR_BTN_BG_ON or COLOR_BTN_BG)
+        gui.set_color(gui.get_node("btn_auto_label"), self.auto and COLOR_LABEL_ON or COLOR_LABEL_OFF)
+        msg.post(UI_MGR, "dialogue_auto", { on = self.auto })
+        return true
+    end
+
+    if gui.pick_node(gui.get_node("btn_next"), action.x, action.y) then
+        click_flash(gui.get_node("btn_next"))
+        if self.tw_active then
+            typewriter_finish(self)
+        else
+            msg.post(UI_MGR, "dialogue_next")
+        end
+        return true
+    end
+
+    -- клик по dbox = finish typewriter или next
+    if gui.pick_node(gui.get_node("dbox"), action.x, action.y) then
+        if self.tw_active then
+            typewriter_finish(self)
+        else
+            msg.post(UI_MGR, "dialogue_next")
+        end
+        return true
+    end
+
+    return false
+end

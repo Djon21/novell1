@@ -1,0 +1,145 @@
+-- nav_buttons_v2.gui_script
+-- 4 круглые nav-кнопки по периметру ландшафта 960×640:
+--   W (hot/mag)  — x=80,  y=320   — иконка ← (chevron_left)
+--   N (cyan)     — x=480, y=560   — иконка ↑ (expand_less)
+--   E (amber)    — x=880, y=320   — иконка → (chevron_right)
+--   S (violet)   — x=480, y=80    — иконка ↓ (expand_more)
+--
+-- Сообщения:
+--   "show_nav"                     — показать корень
+--   "hide_nav"                     — скрыть
+--   "set_exits" {exits = {W=..., N=..., E=..., S=...}}
+--        Значение для каждой стороны либо:
+--          nil / false       — выход отсутствует, кнопка скрыта
+--          строка scene_id   — выход активен, подпись берётся из scenes.lua
+--          таблица {room_id=..., room_label=..., disabled=bool, locked_label=""}
+--        Если scenes-модуль недоступен, fallback: текст = room_id / "—".
+--
+-- В ui_manager_v2 шлёт:
+--   "nav_go" {dir = "W|N|E|S", scene_id = "..."}
+
+local UI_MGR = "#ui_manager_v2"
+
+local DIRS = { "W", "N", "E", "S" }
+
+local COLORS = {
+    W = vmath.vector4(1.0, 0.239, 0.498, 1.0),
+    N = vmath.vector4(0.49, 0.976, 1.0, 1.0),
+    E = vmath.vector4(1.0, 0.702, 0.278, 1.0),
+    S = vmath.vector4(0.478, 0.361, 1.0, 1.0),
+    paper = vmath.vector4(0.952, 0.925, 0.85, 0.9),
+    locked = vmath.vector4(0.952, 0.925, 0.85, 0.35),
+    btn_bg_normal = vmath.vector4(0.031, 0.023, 0.094, 0.85),
+    btn_bg_locked = vmath.vector4(0.031, 0.023, 0.094, 0.55),
+}
+
+-- Пробуем подгрузить scenes.lua — чтобы брать room_label по id. Опционально.
+local scenes_mod
+local ok, mod = pcall(require, "main.scripts.scenes")
+if ok then scenes_mod = mod end
+
+local function room_label_for(id)
+    if not id then return "—" end
+    if scenes_mod then
+        local s = scenes_mod.get and scenes_mod.get(id) or (scenes_mod.scenes and scenes_mod.scenes[id])
+        if s and (s.name or s.label) then return (s.name or s.label):upper() end
+    end
+    return tostring(id):upper()
+end
+
+local function set_text(id, s)
+    gui.set_text(gui.get_node(id), s or "—")
+end
+
+local function set_visible(id, v)
+    gui.set_enabled(gui.get_node(id), v)
+end
+
+local function set_dir_visible(dir, v)
+    set_visible("btn_"..dir, v)
+    set_visible("icon_"..dir, v)
+    set_visible("label_"..dir, v)
+end
+
+local function apply_exit(self, dir, exit)
+    if not exit then
+        set_dir_visible(dir, false)
+        self.exits[dir] = nil
+        return
+    end
+    local room_id, label, disabled, locked_label
+    if type(exit) == "string" then
+        room_id = exit
+        label = room_label_for(room_id)
+    elseif type(exit) == "table" then
+        room_id = exit.room_id or exit.scene_id or exit.id
+        label = exit.room_label or exit.label or room_label_for(room_id)
+        disabled = exit.disabled or exit.locked
+        locked_label = exit.locked_label
+    end
+    set_dir_visible(dir, true)
+    if disabled then
+        set_text("label_"..dir, (locked_label or "закрыто"):upper())
+        gui.set_color(gui.get_node("label_"..dir), COLORS.locked)
+        gui.set_color(gui.get_node("btn_"..dir), COLORS.btn_bg_locked)
+        gui.set_color(gui.get_node("icon_"..dir), COLORS.locked)
+    else
+        set_text("label_"..dir, (label or "—"):upper())
+        gui.set_color(gui.get_node("label_"..dir), COLORS.paper)
+        gui.set_color(gui.get_node("btn_"..dir), COLORS.btn_bg_normal)
+        gui.set_color(gui.get_node("icon_"..dir), COLORS[dir])
+    end
+    self.exits[dir] = { room_id = room_id, disabled = disabled and true or false }
+end
+
+local function apply_exits(self, exits)
+    exits = exits or {}
+    for _, dir in ipairs(DIRS) do
+        apply_exit(self, dir, exits[dir])
+    end
+end
+
+local function press_anim(node_id)
+    local n = gui.get_node(node_id)
+    gui.animate(n, "scale", vmath.vector4(0.92, 0.92, 1, 1), gui.EASING_OUTQUAD, 0.08, 0, function()
+        gui.animate(n, "scale", vmath.vector4(1, 1, 1, 1), gui.EASING_OUTQUAD, 0.15)
+    end)
+end
+
+function init(self)
+    msg.post(".", "acquire_input_focus")
+    self.visible = true
+    self.exits = {}
+    -- По умолчанию все выходы скрыты — ui_manager пришлёт "set_exits" после входа в сцену.
+    for _, dir in ipairs(DIRS) do set_dir_visible(dir, false) end
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash("show_nav") then
+        self.visible = true
+        gui.set_enabled(gui.get_node("nav_root"), true)
+    elseif message_id == hash("hide_nav") then
+        self.visible = false
+        gui.set_enabled(gui.get_node("nav_root"), false)
+    elseif message_id == hash("set_exits") then
+        apply_exits(self, message.exits or message)
+    end
+end
+
+function on_input(self, action_id, action)
+    if not self.visible then return false end
+    if action_id ~= hash("touch") or not action.pressed then return false end
+
+    for _, dir in ipairs(DIRS) do
+        local ex = self.exits[dir]
+        if ex and gui.pick_node(gui.get_node("btn_"..dir), action.x, action.y) then
+            press_anim("btn_"..dir)
+            if not ex.disabled and ex.room_id then
+                msg.post(UI_MGR, "nav_go", { dir = dir, scene_id = ex.room_id })
+            end
+            return true
+        end
+    end
+
+    return false
+end

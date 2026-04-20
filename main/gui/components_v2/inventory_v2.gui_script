@@ -1,0 +1,325 @@
+-- inventory_v2.gui_script
+-- Модалка инвентаря v2: сетка 4x3 (макс 12 слотов), детали справа, глаголы снизу.
+-- Слоты и кнопки-глаголы создаются динамически из gui_script (в .gui лежат только контейнеры).
+--
+-- Сообщения:
+--   "show_inventory"            — открыть, перерисовать
+--   "hide_inventory"            — закрыть (скрыть корень)
+--   "refresh_inventory"         — пересобрать слоты из game_state
+--
+-- В ui_manager_v2 шлёт:
+--   "close_inventory"
+--   "inventory_verb" {item_id, verb}
+
+local theme    = require "main.gui.modules.v2_theme"
+local catalog  = require "main.scripts.items_catalog"
+local gs       = require "main.scripts.game_state"
+
+local UI_MGR = "#ui_manager_v2"
+
+local COLS, ROWS = 4, 3
+local SLOT      = 80
+local SLOT_GAP  = 12
+local GRID_X0   = 70
+local GRID_Y_TOP = 510  -- верх сетки (y grid + 380)
+
+local COLOR_SLOT_BG      = vmath.vector4(0.067, 0.055, 0.173, 0.9)
+local COLOR_SLOT_BORDER  = vmath.vector4(0.49, 0.976, 1.0, 0.35)
+local COLOR_SLOT_SEL     = vmath.vector4(0.49, 0.976, 1.0, 0.85)
+local COLOR_ICON_CLUE    = vmath.vector4(1.0, 0.239, 0.498, 1.0)    -- magenta
+local COLOR_ICON_KEY     = vmath.vector4(1.0, 0.702, 0.278, 1.0)    -- amber
+local COLOR_ICON_CONS    = vmath.vector4(0.952, 0.925, 0.85, 1.0)   -- paper
+local COLOR_BADGE        = vmath.vector4(0.784, 0.078, 0.165, 1.0)
+local COLOR_PAPER        = vmath.vector4(0.952, 0.925, 0.85, 1.0)
+local COLOR_AMBER        = vmath.vector4(1.0, 0.702, 0.278, 1.0)
+local COLOR_ACCENT       = vmath.vector4(0.49, 0.976, 1.0, 1.0)
+local COLOR_BTN_BG       = vmath.vector4(0.067, 0.055, 0.173, 0.85)
+local COLOR_BTN_BORDER   = vmath.vector4(0.49, 0.976, 1.0, 0.5)
+
+local VERB_LABEL = {
+    use     = "ПРИМЕНИТЬ",
+    inspect = "ОСМОТРЕТЬ",
+    combine = "КОМБО",
+    read    = "ПРОЧИТАТЬ",
+    give    = "ОТДАТЬ",
+}
+
+local function color_for_type(t)
+    if t == "улика" then return COLOR_ICON_CLUE end
+    if t == "ключ"  then return COLOR_ICON_KEY end
+    return COLOR_ICON_CONS
+end
+
+-- Создаёт слот как дочерний к "grid".
+-- Возвращает таблицу нод.
+local function make_slot(col, row)
+    local grid = gui.get_node("grid")
+    local x = col * (SLOT + SLOT_GAP)
+    -- y отсчитываем от верха grid (grid pivot = SW, высота 380)
+    local y = 380 - (row + 1) * SLOT - row * SLOT_GAP
+
+    local bg = gui.new_box_node(vmath.vector3(x, y, 0.55), vmath.vector3(SLOT, SLOT, 0))
+    gui.set_pivot(bg, gui.PIVOT_SW)
+    gui.set_color(bg, COLOR_SLOT_BG)
+    gui.set_parent(bg, grid)
+    gui.set_inherit_alpha(bg, true)
+
+    local border = gui.new_box_node(vmath.vector3(x, y, 0.56), vmath.vector3(SLOT, 1, 0))
+    gui.set_pivot(border, gui.PIVOT_SW)
+    gui.set_color(border, COLOR_SLOT_BORDER)
+    gui.set_parent(border, grid)
+    gui.set_inherit_alpha(border, true)
+
+    local icon = gui.new_text_node(vmath.vector3(x + SLOT/2, y + SLOT/2 + 4, 0.57), "")
+    gui.set_pivot(icon, gui.PIVOT_CENTER)
+    gui.set_font(icon, "icons")
+    gui.set_color(icon, COLOR_PAPER)
+    gui.set_parent(icon, grid)
+gui.set_inherit_alpha(icon, true)
+
+    local qty = gui.new_text_node(vmath.vector3(x + SLOT - 6, y + 6, 0.57), "")
+    gui.set_pivot(qty, gui.PIVOT_SE)
+    gui.set_font(qty, "jb_mono_10")
+    gui.set_color(qty, COLOR_AMBER)
+    gui.set_parent(qty, grid)
+gui.set_inherit_alpha(qty, true)
+
+    return { bg = bg, border = border, icon = icon, qty = qty, x = x, y = y }
+end
+
+local function make_verb_button(idx)
+    local parent = gui.get_node("verbs_panel")
+    local w, h = 160, 32
+    local gap = 12
+    local col = (idx - 1) % 2
+    local row = math.floor((idx - 1) / 2)
+    local x = col * (w + gap)
+    local y = 90 - (row + 1) * h - row * gap
+
+    local bg = gui.new_box_node(vmath.vector3(x, y, 0.55), vmath.vector3(w, h, 0))
+    gui.set_pivot(bg, gui.PIVOT_SW)
+    gui.set_color(bg, COLOR_BTN_BG)
+    gui.set_parent(bg, parent)
+    gui.set_inherit_alpha(bg, true)
+
+    local border = gui.new_box_node(vmath.vector3(x, y, 0.56), vmath.vector3(w, 1, 0))
+    gui.set_pivot(border, gui.PIVOT_SW)
+    gui.set_color(border, COLOR_BTN_BORDER)
+    gui.set_parent(border, parent)
+    gui.set_inherit_alpha(border, true)
+
+    local label = gui.new_text_node(vmath.vector3(x + w/2, y + h/2, 0.57), "")
+    gui.set_pivot(label, gui.PIVOT_CENTER)
+    gui.set_font(label, "jb_mono_bold_14")
+    gui.set_color(label, COLOR_ACCENT)
+    gui.set_parent(label, parent)
+gui.set_inherit_alpha(label, true)
+
+    return { bg = bg, border = border, label = label, w = w, h = h }
+end
+
+local function set_visible(id, v)
+    gui.set_enabled(gui.get_node(id), v)
+end
+
+local function set_text(id, s)
+    gui.set_text(gui.get_node(id), s or "")
+end
+
+local function set_color(id, c)
+    gui.set_color(gui.get_node(id), c)
+end
+
+local function hide_slot(self, i)
+    local s = self.slots[i]
+    gui.set_enabled(s.bg, false)
+    gui.set_enabled(s.border, false)
+    gui.set_enabled(s.icon, false)
+    gui.set_enabled(s.qty, false)
+end
+
+local function show_slot(self, i, item)
+    local s = self.slots[i]
+    gui.set_enabled(s.bg, true)
+    gui.set_enabled(s.border, true)
+    gui.set_enabled(s.icon, true)
+    gui.set_enabled(s.qty, true)
+    gui.set_text(s.icon, item.icon or "?")
+    gui.set_color(s.icon, color_for_type(item.type))
+    if item.qty and item.qty > 1 then
+        gui.set_text(s.qty, tostring(item.qty))
+    else
+        gui.set_text(s.qty, "")
+    end
+    -- border в дефолтном цвете
+    gui.set_color(s.border, COLOR_SLOT_BORDER)
+end
+
+local function highlight_selected(self, idx)
+    for i = 1, #self.slots do
+        local s = self.slots[i]
+        if i == idx then
+            gui.set_color(s.border, COLOR_SLOT_SEL)
+        else
+            gui.set_color(s.border, COLOR_SLOT_BORDER)
+        end
+    end
+end
+
+local function clear_details(self)
+    set_text("details_name", "—")
+    set_text("details_iter", "")
+    set_text("details_desc", "")
+    set_text("details_icon", "")
+    for i = 1, #self.verb_btns do
+        local b = self.verb_btns[i]
+        gui.set_enabled(b.bg, false)
+        gui.set_enabled(b.border, false)
+        gui.set_enabled(b.label, false)
+    end
+    self.current_verbs = {}
+end
+
+local function show_details(self, item_id)
+    local item = catalog.get(item_id)
+    if not item then clear_details(self); return end
+    set_text("details_name", (item.name or ""):upper())
+    local iter_str = (item.type or "") .. " · " .. (item.source or "") .. " · " .. (item.iter or "")
+    if item.clue == "да" then iter_str = iter_str .. " · улика" end
+    set_text("details_iter", iter_str)
+    set_text("details_desc", item.desc or item.description or "")
+    set_text("details_icon", item.icon or "")
+    set_color("details_icon", color_for_type(item.type))
+
+    -- verb buttons
+    local verbs = item.verbs or {}
+    self.current_verbs = {}
+    for i = 1, #self.verb_btns do
+        local b = self.verb_btns[i]
+        local v = verbs[i]
+        if v then
+            gui.set_enabled(b.bg, true)
+            gui.set_enabled(b.border, true)
+            gui.set_enabled(b.label, true)
+            gui.set_text(b.label, VERB_LABEL[v] or v:upper())
+            self.current_verbs[i] = v
+        else
+            gui.set_enabled(b.bg, false)
+            gui.set_enabled(b.border, false)
+            gui.set_enabled(b.label, false)
+        end
+    end
+end
+
+local function refresh(self)
+    local inv = gs.get_inventory() or {}
+    self.inv_ids = {}
+    local n = 0
+    for i = 1, COLS * ROWS do
+        local id = inv[i]
+        if id and catalog.get(id) then
+            self.inv_ids[i] = id
+            show_slot(self, i, catalog.get(id))
+            n = n + 1
+        else
+            hide_slot(self, i)
+        end
+    end
+    set_text("title_eyebrow", "inventory · " .. tostring(n) .. " / " .. tostring(COLS * ROWS))
+    -- Выбор: либо прежний, либо первый
+    if self.selected and not self.inv_ids[self.selected] then
+        self.selected = nil
+    end
+    if not self.selected then
+        for i = 1, COLS * ROWS do
+            if self.inv_ids[i] then self.selected = i; break end
+        end
+    end
+    if self.selected then
+        highlight_selected(self, self.selected)
+        show_details(self, self.inv_ids[self.selected])
+    else
+        highlight_selected(self, -1)
+        clear_details(self)
+    end
+end
+
+function init(self)
+    msg.post(".", "acquire_input_focus")
+    self.visible = false
+    self.slots = {}
+    self.verb_btns = {}
+    self.inv_ids = {}
+    self.current_verbs = {}
+    self.selected = nil
+
+    -- Создаём 12 слотов
+    local i = 1
+    for row = 0, ROWS - 1 do
+        for col = 0, COLS - 1 do
+            self.slots[i] = make_slot(col, row)
+            i = i + 1
+        end
+    end
+    -- 5 кнопок-глаголов
+    for k = 1, 5 do
+        self.verb_btns[k] = make_verb_button(k)
+        gui.set_enabled(self.verb_btns[k].bg, false)
+        gui.set_enabled(self.verb_btns[k].border, false)
+        gui.set_enabled(self.verb_btns[k].label, false)
+    end
+
+    gui.set_enabled(gui.get_node("backdrop"), false)
+    clear_details(self)
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash("show_inventory") then
+        self.visible = true
+        gui.set_enabled(gui.get_node("backdrop"), true)
+        refresh(self)
+    elseif message_id == hash("hide_inventory") then
+        self.visible = false
+        gui.set_enabled(gui.get_node("backdrop"), false)
+    elseif message_id == hash("refresh_inventory") then
+        if self.visible then refresh(self) end
+    end
+end
+
+function on_input(self, action_id, action)
+    if not self.visible then return false end
+    if action_id ~= hash("touch") or not action.pressed then return false end
+
+    -- close
+    if gui.pick_node(gui.get_node("close_btn"), action.x, action.y) then
+        msg.post(UI_MGR, "close_inventory")
+        return true
+    end
+
+    -- slots
+    for i = 1, #self.slots do
+        local s = self.slots[i]
+        if self.inv_ids[i] and gui.pick_node(s.bg, action.x, action.y) then
+            self.selected = i
+            highlight_selected(self, i)
+            show_details(self, self.inv_ids[i])
+            return true
+        end
+    end
+
+    -- verb buttons
+    for i = 1, #self.verb_btns do
+        local b = self.verb_btns[i]
+        local v = self.current_verbs[i]
+        if v and gui.pick_node(b.bg, action.x, action.y) then
+            local item_id = self.inv_ids[self.selected or -1]
+            if item_id then
+                msg.post(UI_MGR, "inventory_verb", { item_id = item_id, verb = v })
+            end
+            return true
+        end
+    end
+
+    -- клик внутри backdrop вне modal — не закрываем, чтобы не мешать случайному нажатию
+    return false
+end
