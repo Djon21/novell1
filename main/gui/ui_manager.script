@@ -1,17 +1,17 @@
 -- ui_manager.script
--- РљРѕРѕСЂРґРёРЅР°С‚РѕСЂ РІСЃРµС… GUI РєРѕРјРїРѕРЅРµРЅС‚РѕРІ РІРёР·СѓР°Р»СЊРЅРѕР№ РЅРѕРІРµР»Р»С‹
+-- Координатор всех GUI компонентов визуальной новеллы
 
 local dm = require "main.scripts.dialogue_manager_ink"
 local gs = require "main.scripts.game_state"
 local scene_controller = require "main.scripts.scene_controller"
 
--- РЎРѕСЃС‚РѕСЏРЅРёРµ UI Manager
+-- Состояние UI Manager
 local M = {}
 M.current_mode = "menu"  -- "menu", "dialogue", "exploration"
 M.music_started = false
 M.MUSIC_URL = msg.url("main:/music_player#sound")
 
--- URL'С‹ РєРѕРјРїРѕРЅРµРЅС‚РѕРІ
+-- URL'ы компонентов
 M.components = {
     main_menu = nil,
     portraits = nil,
@@ -22,7 +22,7 @@ M.components = {
 }
 
 -- -------------------------------------------------------
--- РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РєРѕРјРїРѕРЅРµРЅС‚РѕРІ
+-- Инициализация компонентов
 -- -------------------------------------------------------
 
 local function init_components()
@@ -39,7 +39,7 @@ local function init_components()
 end
 
 -- -------------------------------------------------------
--- РџРµСЂРµРєР»СЋС‡РµРЅРёРµ СЂРµР¶РёРјРѕРІ UI
+-- Переключение режимов UI
 -- -------------------------------------------------------
 
 local function show_menu()
@@ -52,7 +52,7 @@ local function show_menu()
     msg.post(M.components.phone, "hide_phone")
     msg.post(M.components.inventory, "hide_inventory")
     
-    print("[ui_manager] Р РµР¶РёРј: РјРµРЅСЋ")
+    print("[ui_manager] Режим: меню")
 end
 
 local function show_dialogue_mode()
@@ -62,10 +62,10 @@ local function show_dialogue_mode()
     msg.post(M.components.dialogue, "render_dialogue")
     msg.post(M.components.hotspots, "hide_all")
     
-    -- Phone Рё inventory РѕСЃС‚Р°СЋС‚СЃСЏ РґРѕСЃС‚СѓРїРЅС‹ С‡РµСЂРµР· HUD
+    -- Phone и inventory остаются доступны через HUD
     msg.post(M.components.phone, "update_phone")
     
-    print("[ui_manager] Р РµР¶РёРј: РґРёР°Р»РѕРі")
+    print("[ui_manager] Режим: диалог")
 end
 
 local function show_exploration_mode()
@@ -74,29 +74,29 @@ local function show_exploration_mode()
     msg.post(M.components.main_menu, "hide_menu")
     msg.post(M.components.dialogue, "hide_dialogue")
     
-    -- Hotspots СѓРїСЂР°РІР»СЏСЋС‚СЃСЏ С‡РµСЂРµР· scene_controller
-    -- Phone Рё inventory РґРѕСЃС‚СѓРїРЅС‹ С‡РµСЂРµР· HUD
+    -- Hotspots управляются через scene_controller
+    -- Phone и inventory доступны через HUD
     msg.post(M.components.phone, "update_phone")
     
-    print("[ui_manager] Р РµР¶РёРј: РёСЃСЃР»РµРґРѕРІР°РЅРёРµ")
+    print("[ui_manager] Режим: исследование")
 end
 
 -- -------------------------------------------------------
--- РћР±СЂР°Р±РѕС‚РєР° СЃРѕРѕР±С‰РµРЅРёР№ РѕС‚ dialogue_manager
+-- Обработка сообщений от dialogue_manager
 -- -------------------------------------------------------
 
 local function handle_dialogue_update()
     if scene_controller.is_active() then
-        -- Р•СЃР»Рё Р°РєС‚РёРІРЅР° exploration СЃС†РµРЅР° - РЅРµ РїРѕРєР°Р·С‹РІР°РµРј РґРёР°Р»РѕРі
+        -- Если активна exploration сцена - не показываем диалог
         show_exploration_mode()
     else
-        -- РџРѕРєР°Р·С‹РІР°РµРј РґРёР°Р»РѕРі
+        -- Показываем диалог
         show_dialogue_mode()
     end
 end
 
 -- -------------------------------------------------------
--- РРЅС‚РµРіСЂР°С†РёСЏ СЃ scene_controller
+-- Интеграция с scene_controller
 -- -------------------------------------------------------
 
 local function setup_scene_controller_ui()
@@ -129,7 +129,7 @@ local function setup_scene_controller_ui()
         end,
     })
     
-    print("[ui_manager] scene_controller UI РЅР°СЃС‚СЂРѕРµРЅ")
+    print("[ui_manager] scene_controller UI настроен")
 end
 
 -- -------------------------------------------------------
@@ -137,36 +137,36 @@ end
 -- -------------------------------------------------------
 
 function init(self)
-    print("[ui_manager] РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ ui_manager.script")
+    print("[ui_manager] Инициализация ui_manager.script")
     
-    -- РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј РєРѕРјРїРѕРЅРµРЅС‚С‹
+    -- Инициализируем компоненты
     init_components()
     
-    -- РќР°СЃС‚СЂР°РёРІР°РµРј scene_controller
+    -- Настраиваем scene_controller
     setup_scene_controller_ui()
     
-    -- РџРѕРґРїРёСЃС‹РІР°РµРјСЃСЏ РЅР° РёР·РјРµРЅРµРЅРёСЏ game_state
+    -- Подписываемся на изменения game_state
     gs.subscribe(function()
-        -- РћР±РЅРѕРІР»СЏРµРј HUD РїСЂРё РёР·РјРµРЅРµРЅРёРё СЃРѕСЃС‚РѕСЏРЅРёСЏ
+        -- Обновляем HUD при изменении состояния
         msg.post(M.components.phone, "update_phone")
     end)
     
-    -- РџРѕРєР°Р·С‹РІР°РµРј РјРµРЅСЋ РїСЂРё СЃС‚Р°СЂС‚Рµ
+    -- Показываем меню при старте
     show_menu()
     
-    -- РџРѕР»СѓС‡Р°РµРј С„РѕРєСѓСЃ РІРІРѕРґР°
+    -- Получаем фокус ввода
     msg.post(".", "acquire_input_focus")
     
-    print("[ui_manager] РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ Р·Р°РІРµСЂС€РµРЅР°")
+    print("[ui_manager] Инициализация завершена")
 end
 
 function final(self)
-    print("[ui_manager] Р¤РёРЅР°Р»РёР·Р°С†РёСЏ ui_manager.script")
+    print("[ui_manager] Финализация ui_manager.script")
     msg.post(".", "release_input_focus")
 end
 
 function update(self, dt)
-    -- РћР±РЅРѕРІР»РµРЅРёРµ UI (РµСЃР»Рё РЅСѓР¶РЅРѕ)
+    -- Обновление UI (если нужно)
 end
 
 function on_message(self, message_id, message, sender)
@@ -192,27 +192,27 @@ function on_message(self, message_id, message, sender)
         handle_dialogue_update()
         
     elseif message_id == hash("dialogue_updated") then
-        -- Р”РёР°Р»РѕРі РѕР±РЅРѕРІР»РµРЅ
+        -- Диалог обновлен
         handle_dialogue_update()
         
     elseif message_id == hash("open_inventory") then
-        -- РћС‚РєСЂС‹С‚СЊ РёРЅРІРµРЅС‚Р°СЂСЊ
+        -- Открыть инвентарь
         msg.post(M.components.inventory, "show_inventory")
         
     elseif message_id == hash("close_inventory") then
-        -- Р—Р°РєСЂС‹С‚СЊ РёРЅРІРµРЅС‚Р°СЂСЊ
+        -- Закрыть инвентарь
         msg.post(M.components.inventory, "hide_inventory")
         
     elseif message_id == hash("open_phone") then
-        -- РћС‚РєСЂС‹С‚СЊ С‚РµР»РµС„РѕРЅ
+        -- Открыть телефон
         msg.post(M.components.phone, "open_phone")
         
     elseif message_id == hash("exploration_started") then
-        -- РќР°С‡Р°Р»Р°СЃСЊ exploration СЃС†РµРЅР°
+        -- Началась exploration сцена
         show_exploration_mode()
         
     elseif message_id == hash("exploration_ended") then
-        -- Р—Р°РєРѕРЅС‡РёР»Р°СЃСЊ exploration СЃС†РµРЅР°
+        -- Закончилась exploration сцена
         handle_dialogue_update()
     end
 end
@@ -226,7 +226,7 @@ function on_input(self, action_id, action)
 
     if action_id == hash("key_esc") and action.pressed then
         if M.current_mode == "dialogue" or M.current_mode == "exploration" then
-            -- ESC РѕС‚РєСЂС‹РІР°РµС‚ РјРµРЅСЋ РїР°СѓР·С‹ (TODO)
+            -- ESC открывает меню паузы (TODO)
             return true
         end
     end

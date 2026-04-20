@@ -202,7 +202,7 @@ end
 -- Режим выбора
 -- -------------------------------------------------------
 
--- Р"инамически расставляет РєРЅРѕРїРєРё РїРѕ числу вариантов
+-- Динамически расставляет кнопки по числу вариантов
 local function layout_choices(options)
     local BTN_H = 54
     local BTN_GAP = 12
@@ -219,7 +219,7 @@ local function layout_choices(options)
     local block_h = Q_H + Q_GAP + n * BTN_H + (n - 1) * BTN_GAP
     local top = block_h / 2
     
-    -- Р'РѕРїСЂРѕСЃ
+    -- Вопрос
     gui.set_position(M.choice_question, vmath.vector3(0, top - Q_H / 2, 0.1))
     
     -- Кнопки сверху вниз
@@ -311,7 +311,7 @@ end
 -- -------------------------------------------------------
 
 local function render_dialogue()
-    -- Если активен point-and-click слой вЂ" прячем диалог
+    -- Если активен point-and-click слой — прячем диалог
     if scene_controller.is_active() then
         hide_dialogue_ui()
         return
