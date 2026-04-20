@@ -1,0 +1,276 @@
+-- map_v2.gui_script
+-- Карта Москвы · Пресня. Слева — map_area (560×480) с 7 динамическими пинами,
+-- справа — dossier-панель с инфой по выбранному пину и 3 кнопки-глагола.
+--
+-- Сообщения:
+--   "open_map"            — показать
+--   "close_map"           — скрыть
+--   "set_points" {points} — заменить массив POINTS (опционально)
+--   "select_pin" {id}     — программно выбрать пин
+--
+-- В ui_manager_v2 шлёт:
+--   "close_map"
+--   "map_verb" {pin_id, verb}  — verb ∈ {"route","save","share"}
+
+local theme = require "main.gui.modules.v2_theme"
+
+local UI_MGR = "#ui_manager_v2"
+
+-- map_area origin (SW) + size:
+local MAP_X, MAP_Y = 30, 70
+local MAP_W, MAP_H = 560, 480
+
+local COLORS = {
+    paper = vmath.vector4(0.952, 0.925, 0.85, 1.0),
+    accent = vmath.vector4(0.49, 0.976, 1.0, 1.0),
+    hot = vmath.vector4(1.0, 0.239, 0.498, 1.0),
+    amber = vmath.vector4(1.0, 0.702, 0.278, 1.0),
+    violet = vmath.vector4(0.478, 0.361, 1.0, 1.0),
+    pin_bg = vmath.vector4(0.039, 0.031, 0.129, 0.95),
+    pin_border = vmath.vector4(0.49, 0.976, 1.0, 0.8),
+    pin_active_border = vmath.vector4(0.952, 0.925, 0.85, 1.0),
+    stamp = vmath.vector4(0.784, 0.078, 0.165, 1.0),
+    btn_bg = vmath.vector4(0.067, 0.055, 0.173, 0.85),
+    btn_border = vmath.vector4(0.49, 0.976, 1.0, 0.5),
+}
+
+local function icon_b(a,b,c) return string.char(a,b,c) end
+
+-- POINTS с pos в нормализованных координатах (0..1). left% / top%.
+-- top в HTML = 0 сверху; у нас PIVOT_SW, так что y_norm = 1 - top.
+local POINTS = {
+    home = {
+        name = "ДОМ · ИСХОДНАЯ ТОЧКА", color = "hot",
+        addr = "Пресненский вал · 12, кв. 84",
+        walk = "—", sub = "ул. 1905 года · 12 мин",
+        stat = "текущая", clue = "—", stamp = "НАЧАЛО",
+        iter = "#017",
+        desc = "Отсюда всё начинается. Квартира на 9-м этаже. Кофе, дождь за окном, уведомления на телефоне.",
+        pos = { x = 0.22, y = 0.28 },       -- 22%, 1-72%
+        icon = icon_b(0xEE, 0x88, 0x8A),   -- home E88A
+    },
+    work = {
+        name = "ОФИС · БЦ ВЕСНА", color = "accent",
+        addr = "Пресненская наб., 6, 12-й этаж",
+        walk = "47 мин · 4.8 км", sub = "Выставочная · 8 мин",
+        stat = "ожидают", clue = "—", stamp = "КУРС",
+        iter = "#017",
+        desc = "Дежурка, стенд-ап в 9:00. В прошлой итерации лифт застрял на 9-м — не выходи на 9-м.",
+        pos = { x = 0.78, y = 0.75 },
+        icon = icon_b(0xEE, 0x88, 0xA4),   -- business E0AF? use business E0AF
+    },
+    cafe = {
+        name = "КОФЕЙНЯ ПЕТЛЯ", color = "amber",
+        addr = "Красная Пресня · 22",
+        walk = "17 мин · 1.2 км", sub = "—",
+        stat = "рекомендация", clue = "—", stamp = "КОФЕ",
+        iter = "#017",
+        desc = "Бариста узнаёт с порога, хотя мы не знакомы. — обычный, с корицей? Я ещё ни разу не заказывал с корицей.",
+        pos = { x = 0.44, y = 0.44 },
+        icon = icon_b(0xEF, 0xBF, 0xAF),   -- coffee EFEF
+    },
+    metro = {
+        name = "М · УЛ. 1905 ГОДА", color = "paper",
+        addr = "ст. м. Ул. 1905 года",
+        walk = "25 мин · 2.1 км", sub = "выход №3",
+        stat = "узел", clue = "—", stamp = "ТРАНЗИТ",
+        iter = "#017",
+        desc = "На платформе в 7:38 встречается человек с лицом, которое не успеваешь запомнить.",
+        pos = { x = 0.56, y = 0.58 },
+        icon = icon_b(0xEE, 0x95, 0xA5),   -- train (subway) E56F / placeholder
+    },
+    shop = {
+        name = "МАГАЗИН 24 ЧАСА", color = "violet",
+        addr = "Пресненский вал · 10",
+        walk = "5 мин · 0.4 км", sub = "—",
+        stat = "открыто 24/7", clue = "—", stamp = "24/7",
+        iter = "#017",
+        desc = "Сигареты, которые я не курю. Зонт, который я забываю. Кассирша: опять вы?",
+        pos = { x = 0.38, y = 0.2 },
+        icon = icon_b(0xEE, 0x96, 0x9C),   -- store E8D1
+    },
+    clue = {
+        name = "СЛЕД · ДЕЖАВЮ", color = "hot",
+        addr = "точные координаты неизвестны",
+        walk = "1 ч 12 мин · 6.4 км", sub = "Китай-город",
+        stat = "требуется улика", clue = "да", stamp = "УЛИКА",
+        iter = "#016",
+        desc = "Место, где память даёт сбой. Здесь, в #016, я впервые заметил, что секундная стрелка пошла назад.",
+        pos = { x = 0.88, y = 0.22 },
+        icon = icon_b(0xEE, 0xBA, 0x8B),   -- star / search_insights placeholder
+    },
+    gov = {
+        name = "АДМИНИСТРАЦИЯ", color = "paper",
+        addr = "Пресненский пер. · 4",
+        walk = "38 мин · 3.2 км", sub = "Баррикадная · 4 мин",
+        stat = "ч/п 9:00–18:00", clue = "—", stamp = "ОФИЦ.",
+        iter = "#015",
+        desc = "Здание с красной звездой над входом. В петле всегда закрыто на обед, даже если зайти в 10:30.",
+        pos = { x = 0.68, y = 0.16 },
+        icon = icon_b(0xEE, 0xA2, 0xB2),   -- account_balance E84F
+    },
+}
+
+local PIN_ORDER = { "home", "work", "cafe", "metro", "shop", "clue", "gov" }
+
+local VERBS = { "route", "save", "share" }
+local VERB_LABEL = { route = "МАРШРУТ", save = "СОХР.", share = "ОТМЕТИТЬ" }
+
+local function set_text(id, s)
+    gui.set_text(gui.get_node(id), s or "")
+end
+
+local function set_color(id, c)
+    gui.set_color(gui.get_node(id), c)
+end
+
+local function make_pin(self, id, p)
+    local parent = gui.get_node("map_area")
+    local px = p.pos.x * MAP_W
+    local py = p.pos.y * MAP_H
+    local ring_color = COLORS[p.color] or COLORS.accent
+
+    local body = gui.new_box_node(vmath.vector3(px, py, 0.55), vmath.vector3(32, 32, 0))
+    gui.set_pivot(body, gui.PIVOT_CENTER)
+    gui.set_color(body, COLORS.pin_bg)
+    gui.set_parent(body, parent)
+    gui.set_inherit_alpha(body, true)
+
+    local border = gui.new_box_node(vmath.vector3(px, py - 16, 0.56), vmath.vector3(32, 1, 0))
+    gui.set_pivot(border, gui.PIVOT_CENTER)
+    gui.set_color(border, ring_color)
+    gui.set_parent(border, parent)
+    gui.set_inherit_alpha(border, true)
+
+    local ic = gui.new_text_node(vmath.vector3(px, py, 0.57), p.icon or "?")
+    gui.set_pivot(ic, gui.PIVOT_CENTER)
+    gui.set_font(ic, "icons")
+    gui.set_color(ic, ring_color)
+    gui.set_parent(ic, parent)
+gui.set_inherit_alpha(ic, true)
+
+    return { body = body, border = border, icon = ic, id = id, color = ring_color }
+end
+
+local function make_verb(self, idx, verb)
+    local parent = gui.get_node("doss_verbs")
+    local w, h, gap = 92, 30, 4
+    local x = (idx - 1) * (w + gap)
+    local y = 0
+
+    local bg = gui.new_box_node(vmath.vector3(x, y, 0.55), vmath.vector3(w, h, 0))
+    gui.set_pivot(bg, gui.PIVOT_SW)
+    gui.set_color(bg, COLORS.btn_bg)
+    gui.set_parent(bg, parent)
+    gui.set_inherit_alpha(bg, true)
+
+    local border = gui.new_box_node(vmath.vector3(x, y, 0.56), vmath.vector3(w, 1, 0))
+    gui.set_pivot(border, gui.PIVOT_SW)
+    gui.set_color(border, COLORS.btn_border)
+    gui.set_parent(border, parent)
+    gui.set_inherit_alpha(border, true)
+
+    local label = gui.new_text_node(vmath.vector3(x + w/2, y + h/2, 0.57), VERB_LABEL[verb] or verb:upper())
+    gui.set_pivot(label, gui.PIVOT_CENTER)
+    gui.set_font(label, "jb_mono_bold_14")
+    gui.set_color(label, COLORS.accent)
+    gui.set_parent(label, parent)
+gui.set_inherit_alpha(label, true)
+
+    return { bg = bg, border = border, label = label, verb = verb }
+end
+
+local function highlight_pin(self, id)
+    for pid, pin in pairs(self.pins) do
+        local active = (pid == id)
+        gui.set_color(pin.border, active and COLORS.pin_active_border or pin.color)
+        if active then
+            gui.set_color(pin.body, pin.color)
+        else
+            gui.set_color(pin.body, COLORS.pin_bg)
+        end
+    end
+end
+
+local function select_pin(self, id)
+    local p = POINTS[id]
+    if not p then return end
+    self.selected = id
+    highlight_pin(self, id)
+    set_text("doss_name", (p.name or ""):upper())
+    set_text("doss_stamp", (p.stamp or "") .. " · петля " .. (p.iter or ""))
+    set_color("doss_stamp", COLORS[p.color] or COLORS.accent)
+    set_text("doss_v_addr", p.addr or "—")
+    set_text("doss_v_walk", p.walk or "—")
+    set_text("doss_v_sub",  p.sub or "—")
+    local stat_str = (p.stat or "—")
+    if p.clue and p.clue ~= "—" then stat_str = stat_str .. " · улика: " .. p.clue end
+    set_text("doss_v_stat", stat_str)
+    set_text("doss_desc", p.desc or "")
+    set_text("log", "> маркер выбран: " .. (p.name or ""):lower() .. " _")
+    -- координаты (fake)
+    local lat = 55.740 + p.pos.y * 0.040
+    local lon = 37.555 + p.pos.x * 0.070
+    set_text("map_coords", string.format("%.4f° N · %.4f° E", lat, lon))
+end
+
+function init(self)
+    msg.post(".", "acquire_input_focus")
+    self.visible = false
+    self.pins = {}
+    self.verb_btns = {}
+    self.selected = nil
+
+    for _, id in ipairs(PIN_ORDER) do
+        self.pins[id] = make_pin(self, id, POINTS[id])
+    end
+    for i, v in ipairs(VERBS) do
+        self.verb_btns[i] = make_verb(self, i, v)
+    end
+
+    gui.set_enabled(gui.get_node("backdrop"), false)
+    select_pin(self, "home")
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash("open_map") then
+        self.visible = true
+        gui.set_enabled(gui.get_node("backdrop"), true)
+    elseif message_id == hash("close_map") then
+        self.visible = false
+        gui.set_enabled(gui.get_node("backdrop"), false)
+    elseif message_id == hash("select_pin") then
+        if message and message.id then select_pin(self, message.id) end
+    end
+end
+
+function on_input(self, action_id, action)
+    if not self.visible then return false end
+    if action_id ~= hash("touch") or not action.pressed then return false end
+
+    if gui.pick_node(gui.get_node("close_btn"), action.x, action.y) then
+        msg.post(UI_MGR, "close_map")
+        return true
+    end
+
+    for id, pin in pairs(self.pins) do
+        if gui.pick_node(pin.body, action.x, action.y) then
+            select_pin(self, id)
+            return true
+        end
+    end
+
+    for i = 1, #self.verb_btns do
+        local b = self.verb_btns[i]
+        if gui.pick_node(b.bg, action.x, action.y) then
+            local map = { route = "прокладываю маршрут", save = "маркер сохранён", share = "отмечено в досье" }
+            set_text("log", "> " .. (map[b.verb] or b.verb) .. " _")
+            if self.selected then
+                msg.post(UI_MGR, "map_verb", { pin_id = self.selected, verb = b.verb })
+            end
+            return true
+        end
+    end
+
+    return false
+end

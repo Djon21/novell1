@@ -1,0 +1,173 @@
+script: "/main/gui/components_v2/phone_v2.gui_script"
+fonts {
+  name: "jb_mono_10"
+  font: "/main/fonts/jb_mono_10.font"
+}
+fonts {
+  name: "jb_mono_12"
+  font: "/main/fonts/jb_mono_12.font"
+}
+fonts {
+  name: "jb_mono_bold_14"
+  font: "/main/fonts/jb_mono_bold_14.font"
+}
+fonts {
+  name: "unbounded_bold_20"
+  font: "/main/fonts/unbounded_bold_20.font"
+}
+fonts {
+  name: "icons"
+  font: "/main/fonts/icons.font"
+}
+fonts {
+  name: "manrope_14"
+  font: "/main/fonts/manrope_14.font"
+}
+background_color { x: 0.0 y: 0.0 z: 0.0 w: 0.0 }
+nodes {
+  position { x: 0.0 y: 0.0 z: 0.5 }
+  size { x: 960.0 y: 640.0 }
+  color { x: 0.0 y: 0.0 z: 0.0 w: 0.78 }
+  type: TYPE_BOX
+  id: "backdrop"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+}
+nodes {
+  position { x: 340.0 y: 40.0 z: 0.51 }
+  size { x: 280.0 y: 560.0 }
+  color { x: 0.027 y: 0.023 z: 0.078 w: 1.0 }
+  type: TYPE_BOX
+  id: "phone_frame"
+  pivot: PIVOT_SW
+  parent: "backdrop"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+}
+nodes {
+  position { x: 350.0 y: 50.0 z: 0.52 }
+  size { x: 260.0 y: 540.0 }
+  color { x: 0.047 y: 0.039 z: 0.141 w: 1.0 }
+  type: TYPE_BOX
+  id: "phone_screen"
+  pivot: PIVOT_SW
+  parent: "backdrop"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+}
+nodes {
+  position { x: 350.0 y: 560.0 z: 0.53 }
+  size { x: 260.0 y: 22.0 }
+  color { x: 0.031 y: 0.023 z: 0.094 w: 1.0 }
+  type: TYPE_BOX
+  id: "status_bar"
+  pivot: PIVOT_SW
+  parent: "backdrop"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+}
+nodes {
+  position { x: 360.0 y: 571.0 z: 0.54 }
+  size { x: 100.0 y: 12.0 }
+  color { x: 0.49 y: 0.976 z: 1.0 w: 1.0 }
+  type: TYPE_TEXT
+  text: "07:12"
+  font: "jb_mono_bold_14"
+  id: "status_time"
+  pivot: PIVOT_W
+  parent: "backdrop"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 600.0 y: 571.0 z: 0.54 }
+  size { x: 140.0 y: 12.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 0.85 }
+  type: TYPE_TEXT
+  text: "4G · 73%"
+  font: "jb_mono_10"
+  id: "status_meta"
+  pivot: PIVOT_E
+  parent: "backdrop"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 360.0 y: 530.0 z: 0.54 }
+  size { x: 240.0 y: 14.0 }
+  color { x: 0.49 y: 0.976 z: 1.0 w: 0.8 }
+  type: TYPE_TEXT
+  text: "среда · 17 апреля · 2026"
+  font: "jb_mono_10"
+  id: "wallpaper_date"
+  pivot: PIVOT_W
+  parent: "backdrop"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 360.0 y: 500.0 z: 0.54 }
+  size { x: 240.0 y: 26.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  type: TYPE_TEXT
+  text: "АВОСЬ·OS"
+  font: "unbounded_bold_20"
+  id: "wallpaper_title"
+  pivot: PIVOT_W
+  parent: "backdrop"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 360.0 y: 480.0 z: 0.54 }
+  size { x: 240.0 y: 12.0 }
+  color { x: 1.0 y: 0.702 z: 0.278 w: 0.9 }
+  type: TYPE_TEXT
+  text: "петля #017 · 3 непрочитанных"
+  font: "jb_mono_10"
+  id: "wallpaper_meta"
+  pivot: PIVOT_W
+  parent: "backdrop"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 360.0 y: 80.0 z: 0.53 }
+  size { x: 240.0 y: 380.0 }
+  color { x: 0.0 y: 0.0 z: 0.0 w: 0.0 }
+  type: TYPE_BOX
+  id: "app_grid"
+  pivot: PIVOT_SW
+  parent: "backdrop"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+}
+nodes {
+  position { x: 595.0 y: 580.0 z: 0.54 }
+  size { x: 22.0 y: 22.0 }
+  color { x: 1.0 y: 0.239 z: 0.498 w: 1.0 }
+  type: TYPE_TEXT
+  text: "\uE5CD"
+  font: "icons"
+  id: "close_btn"
+  pivot: PIVOT_CENTER
+  parent: "backdrop"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT
+max_nodes: 512

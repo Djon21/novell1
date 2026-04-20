@@ -1,0 +1,174 @@
+-- main_menu_v2.gui_script
+-- Главное меню v2: glitch-логотип (3 слоя текста), 4 пункта, досье-карточка, ticker.
+-- Реальная glitch-анимация реализуется в step17 — здесь только статические слои.
+-- Реальная ticker marquee — step19; пока текст просто видим.
+--
+-- Сообщения:
+--   "show_menu"      — показать
+--   "hide_menu"      — скрыть
+--   "set_progress" {loop, branches, percent} — обновить досье
+--
+-- В ui_manager_v2 (или напрямую game_manager) шлёт:
+--   "start_game"
+--   "continue_game"
+--   "open_gallery"
+--   "open_achievements"
+
+local UI_MGR = "#ui_manager_v2"
+
+local COLOR_HOVER  = vmath.vector4(0.49, 0.976, 1.0, 1.0)
+local COLOR_NORMAL = vmath.vector4(0.952, 0.925, 0.85, 0.78)
+local COLOR_ACTIVE = vmath.vector4(0.952, 0.925, 0.85, 1.0)
+
+local MENU_ITEMS = {
+    { id = "mi_new",          msg = "start_game",         label = "НОВАЯ ИТЕРАЦИЯ" },
+    { id = "mi_continue",     msg = "continue_game",      label = "ПРОДОЛЖИТЬ" },
+    { id = "mi_gallery",      msg = "open_gallery",       label = "ГАЛЕРЕЯ" },
+    { id = "mi_achievements", msg = "open_achievements",  label = "ДОСТИЖЕНИЯ" },
+}
+
+local function set_text(id, s)
+    gui.set_text(gui.get_node(id), s or "")
+end
+
+local function click_flash(node)
+    gui.animate(node, "scale", vmath.vector4(1.06, 1.06, 1, 1), gui.EASING_OUTQUAD, 0.1, 0, function()
+        gui.animate(node, "scale", vmath.vector4(1, 1, 1, 1), gui.EASING_OUTQUAD, 0.15)
+    end)
+end
+
+-- ---- glitch-анимация логотипа (step17) ----
+-- Базовые координаты трёх слоёв: main=60, hot=58 (-2), cyan=62 (+2)
+local LOGO_BASE = { hot = 58, main = 60, cyan = 62 }
+local LOGO_Y = 498
+
+local function logo_pos(id, dx)
+    local n = gui.get_node(id)
+    local p = gui.get_position(n)
+    p.x = LOGO_BASE[id:match("logo_(.+)")] + (dx or 0)
+    p.y = LOGO_Y
+    gui.set_position(n, p)
+end
+
+local function glitch_burst(self)
+    if not self.visible then return end
+    local n_hot  = gui.get_node("logo_hot")
+    local n_cyan = gui.get_node("logo_cyan")
+    -- случайные сдвиги ±10 по X + "дрожь" за 3-4 шага
+    local dxh1 = -2 + math.random(-8, 0)
+    local dxc1 =  2 + math.random(0, 8)
+    local dxh2 = -2 + math.random(-4, 4)
+    local dxc2 =  2 + math.random(-4, 4)
+    local ph = gui.get_position(n_hot)
+    local pc = gui.get_position(n_cyan)
+    ph.x, ph.y = LOGO_BASE.hot + dxh1, LOGO_Y
+    pc.x, pc.y = LOGO_BASE.cyan + dxc1, LOGO_Y
+    gui.set_position(n_hot, ph)
+    gui.set_position(n_cyan, pc)
+
+    -- цепочка: через 30мс второе положение, через 80мс возврат
+    gui.animate(n_hot, "position.x", LOGO_BASE.hot + dxh2, gui.EASING_OUTQUAD, 0.03, 0, function()
+        gui.animate(n_hot, "position.x", LOGO_BASE.hot, gui.EASING_OUTQUAD, 0.05)
+    end)
+    gui.animate(n_cyan, "position.x", LOGO_BASE.cyan + dxc2, gui.EASING_OUTQUAD, 0.03, 0, function()
+        gui.animate(n_cyan, "position.x", LOGO_BASE.cyan, gui.EASING_OUTQUAD, 0.05)
+    end)
+end
+
+local function schedule_next_glitch(self)
+    -- случайный интервал 1.5-4.5 сек между вспышками
+    local delay = 1.5 + math.random() * 3.0
+    self.glitch_timer = timer.delay(delay, false, function()
+        glitch_burst(self)
+        schedule_next_glitch(self)
+    end)
+end
+
+-- ---- parallax skyline (step20) ----
+local function make_skyline_layer(parent, y, h, color, sway, period)
+    local n = gui.new_box_node(vmath.vector3(0, y, 0.12), vmath.vector3(960, h, 0))
+    gui.set_pivot(n, gui.PIVOT_SW)
+    gui.set_color(n, color)
+    gui.set_parent(n, parent)
+    gui.set_inherit_alpha(n, true)
+    gui.animate(n, "position.x", sway, gui.EASING_INOUTSINE, period, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
+    return n
+end
+
+local function setup_skyline(self)
+    local root = gui.get_node("menu_root")
+    self.sky_far  = make_skyline_layer(root, 70,  36,
+        vmath.vector4(0.067, 0.055, 0.173, 0.55), 4,  12.0)
+    self.sky_mid  = make_skyline_layer(root, 90,  24,
+        vmath.vector4(0.047, 0.039, 0.141, 0.75), 8,  8.0)
+    self.sky_near = make_skyline_layer(root, 110, 14,
+        vmath.vector4(0.027, 0.023, 0.094, 0.90), 12, 5.5)
+end
+
+function init(self)
+    msg.post(".", "acquire_input_focus")
+    self.visible = true
+    self.hovered = nil
+    math.randomseed(os.time())
+    self.glitch_timer = nil
+    schedule_next_glitch(self)
+    setup_skyline(self)
+end
+
+function final(self)
+    if self.glitch_timer then
+        timer.cancel(self.glitch_timer)
+        self.glitch_timer = nil
+    end
+end
+
+-- ---- ticker marquee (step19) ----
+local TICKER_SPEED = 40  -- px/сек влево
+local TICKER_TEXT_WIDTH = 2400
+local SCREEN_W = 960
+
+function update(self, dt)
+    if not self.visible then return end
+    local n = gui.get_node("ticker_text")
+    local p = gui.get_position(n)
+    p.x = p.x - TICKER_SPEED * dt
+    -- Пивот W + ширина 2400 → левый край уходит за -2400, справа нужно ре-вход.
+    -- Когда весь текст ушёл влево (p.x + width < 0), сбрасываем к SCREEN_W.
+    if p.x + TICKER_TEXT_WIDTH < 0 then
+        p.x = SCREEN_W
+    end
+    gui.set_position(n, p)
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash("show_menu") then
+        self.visible = true
+        gui.set_enabled(gui.get_node("menu_root"), true)
+    elseif message_id == hash("hide_menu") then
+        self.visible = false
+        gui.set_enabled(gui.get_node("menu_root"), false)
+    elseif message_id == hash("set_progress") then
+        local loop = tonumber(message.loop) or 17
+        local br   = tonumber(message.branches) or 23
+        local pct  = tonumber(message.percent) or 41
+        set_text("doss_progress",
+            string.format("петля #%03d · %d разв. · %d%% завершено", loop, br, pct))
+    end
+end
+
+function on_input(self, action_id, action)
+    if not self.visible then return false end
+    if action_id ~= hash("touch") or not action.pressed then return false end
+
+    for _, item in ipairs(MENU_ITEMS) do
+        local n = gui.get_node(item.id)
+        if gui.pick_node(n, action.x, action.y) then
+            click_flash(n)
+            gui.set_color(n, COLOR_ACTIVE)
+            msg.post(UI_MGR, item.msg)
+            return true
+        end
+    end
+
+    return false
+end

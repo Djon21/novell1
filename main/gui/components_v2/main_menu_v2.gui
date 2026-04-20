@@ -1,0 +1,350 @@
+script: "/main/gui/components_v2/main_menu_v2.gui_script"
+fonts {
+  name: "jb_mono_10"
+  font: "/main/fonts/jb_mono_10.font"
+}
+fonts {
+  name: "jb_mono_12"
+  font: "/main/fonts/jb_mono_12.font"
+}
+fonts {
+  name: "jb_mono_bold_14"
+  font: "/main/fonts/jb_mono_bold_14.font"
+}
+fonts {
+  name: "unbounded_bold_20"
+  font: "/main/fonts/unbounded_bold_20.font"
+}
+fonts {
+  name: "unbounded_bold_32"
+  font: "/main/fonts/unbounded_bold_32.font"
+}
+fonts {
+  name: "manrope_14"
+  font: "/main/fonts/manrope_14.font"
+}
+fonts {
+  name: "caveat_18"
+  font: "/main/fonts/caveat_18.font"
+}
+fonts {
+  name: "icons"
+  font: "/main/fonts/icons.font"
+}
+background_color { x: 0.027 y: 0.023 z: 0.102 w: 1.0 }
+
+nodes {
+  position { x: 0.0 y: 0.0 z: 0.2 }
+  size { x: 960.0 y: 640.0 }
+  color { x: 0.027 y: 0.023 z: 0.102 w: 1.0 }
+  type: TYPE_BOX
+  id: "menu_root"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+}
+
+nodes {
+  position { x: 60.0 y: 555.0 z: 0.21 }
+  size { x: 500.0 y: 14.0 }
+  color { x: 0.49 y: 0.976 z: 1.0 w: 1.0 }
+  type: TYPE_TEXT
+  text: "visual · novel · dossier · петля #017"
+  font: "jb_mono_10"
+  id: "eyebrow"
+  pivot: PIVOT_W
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+
+nodes {
+  position { x: 58.0 y: 498.0 z: 0.21 }
+  size { x: 620.0 y: 40.0 }
+  color { x: 1.0 y: 0.239 z: 0.498 w: 0.35 }
+  type: TYPE_TEXT
+  text: "АВОСЬ"
+  font: "unbounded_bold_32"
+  id: "logo_hot"
+  pivot: PIVOT_W
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 62.0 y: 498.0 z: 0.22 }
+  size { x: 620.0 y: 40.0 }
+  color { x: 0.49 y: 0.976 z: 1.0 w: 0.35 }
+  type: TYPE_TEXT
+  text: "АВОСЬ"
+  font: "unbounded_bold_32"
+  id: "logo_cyan"
+  pivot: PIVOT_W
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 60.0 y: 498.0 z: 0.23 }
+  size { x: 620.0 y: 40.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  type: TYPE_TEXT
+  text: "АВОСЬ"
+  font: "unbounded_bold_32"
+  id: "logo_main"
+  pivot: PIVOT_W
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+
+nodes {
+  position { x: 60.0 y: 460.0 z: 0.22 }
+  size { x: 500.0 y: 14.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 0.6 }
+  type: TYPE_TEXT
+  text: "интерактивная новелла · русский · 2026"
+  font: "jb_mono_10"
+  id: "meta"
+  pivot: PIVOT_W
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+
+nodes {
+  position { x: 60.0 y: 380.0 z: 0.22 }
+  size { x: 400.0 y: 28.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  type: TYPE_TEXT
+  text: "НОВАЯ ИТЕРАЦИЯ"
+  font: "unbounded_bold_20"
+  id: "mi_new"
+  pivot: PIVOT_W
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 60.0 y: 340.0 z: 0.22 }
+  size { x: 400.0 y: 26.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 0.78 }
+  type: TYPE_TEXT
+  text: "ПРОДОЛЖИТЬ"
+  font: "unbounded_bold_20"
+  id: "mi_continue"
+  pivot: PIVOT_W
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 60.0 y: 304.0 z: 0.22 }
+  size { x: 400.0 y: 26.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 0.78 }
+  type: TYPE_TEXT
+  text: "ГАЛЕРЕЯ"
+  font: "unbounded_bold_20"
+  id: "mi_gallery"
+  pivot: PIVOT_W
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 60.0 y: 268.0 z: 0.22 }
+  size { x: 400.0 y: 26.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 0.78 }
+  type: TYPE_TEXT
+  text: "ДОСТИЖЕНИЯ"
+  font: "unbounded_bold_20"
+  id: "mi_achievements"
+  pivot: PIVOT_W
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+
+nodes {
+  position { x: 60.0 y: 200.0 z: 0.22 }
+  size { x: 180.0 y: 24.0 }
+  color { x: 0.784 y: 0.078 z: 0.165 w: 0.9 }
+  type: TYPE_TEXT
+  text: "СЕКРЕТНО · №17"
+  font: "jb_mono_bold_14"
+  id: "stamp"
+  pivot: PIVOT_W
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+
+nodes {
+  position { x: 560.0 y: 140.0 z: 0.21 }
+  size { x: 360.0 y: 380.0 }
+  color { x: 0.047 y: 0.039 z: 0.141 w: 0.96 }
+  type: TYPE_BOX
+  id: "dossier_card"
+  pivot: PIVOT_SW
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+}
+nodes {
+  position { x: 575.0 y: 495.0 z: 0.22 }
+  size { x: 330.0 y: 12.0 }
+  color { x: 0.49 y: 0.976 z: 1.0 w: 1.0 }
+  type: TYPE_TEXT
+  text: "dossier · текущая сессия"
+  font: "jb_mono_10"
+  id: "doss_eyebrow"
+  pivot: PIVOT_W
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 575.0 y: 470.0 z: 0.22 }
+  size { x: 330.0 y: 22.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  type: TYPE_TEXT
+  text: "МЦ · АРТЁМ"
+  font: "unbounded_bold_20"
+  id: "doss_name"
+  pivot: PIVOT_W
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 575.0 y: 444.0 z: 0.22 }
+  size { x: 330.0 y: 12.0 }
+  color { x: 1.0 y: 0.702 z: 0.278 w: 1.0 }
+  type: TYPE_TEXT
+  text: "петля #017 · 23 разв. · 41% завершено"
+  font: "jb_mono_10"
+  id: "doss_progress"
+  pivot: PIVOT_W
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 575.0 y: 410.0 z: 0.22 }
+  size { x: 330.0 y: 240.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 0.85 }
+  type: TYPE_TEXT
+  text: "Очередной понедельник. Дождь, кофе, три непрочитанных.\nПамять даёт сбой на 7:38. На платформе «Улица 1905 года».\nОдин и тот же день, семнадцать раз."
+  font: "manrope_14"
+  id: "doss_desc"
+  pivot: PIVOT_NW
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  line_break: true
+}
+nodes {
+  position { x: 575.0 y: 170.0 z: 0.22 }
+  size { x: 330.0 y: 20.0 }
+  color { x: 1.0 y: 0.702 z: 0.278 w: 1.0 }
+  type: TYPE_TEXT
+  text: "если трамвай №7 задержится —"
+  font: "caveat_18"
+  id: "doss_caveat"
+  pivot: PIVOT_W
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 575.0 y: 150.0 z: 0.22 }
+  size { x: 330.0 y: 20.0 }
+  color { x: 1.0 y: 0.702 z: 0.278 w: 1.0 }
+  type: TYPE_TEXT
+  text: "сверни на 3-й Пресненский переулок"
+  font: "caveat_18"
+  id: "doss_caveat2"
+  pivot: PIVOT_W
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+
+nodes {
+  position { x: 0.0 y: 40.0 z: 0.22 }
+  size { x: 960.0 y: 20.0 }
+  color { x: 0.049 y: 0.039 z: 0.141 w: 1.0 }
+  type: TYPE_BOX
+  id: "ticker_bg"
+  pivot: PIVOT_SW
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+}
+nodes {
+  position { x: 10.0 y: 50.0 z: 0.23 }
+  size { x: 2400.0 y: 12.0 }
+  color { x: 0.49 y: 0.976 z: 1.0 w: 0.85 }
+  type: TYPE_TEXT
+  text: "АВОСЬ_OS // готовность · 41% · петля #017 · 23 разветвления · последний контакт: М.Кольц. · 07:12 МСК · не выходи на 9-м · если трамвай №7 задержится — сверни на 3-й Пресненский · "
+  font: "jb_mono_10"
+  id: "ticker_text"
+  pivot: PIVOT_W
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+
+nodes {
+  position { x: 30.0 y: 20.0 z: 0.22 }
+  size { x: 500.0 y: 10.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 0.45 }
+  type: TYPE_TEXT
+  text: "build · 0.2.0 · v2-ui"
+  font: "jb_mono_10"
+  id: "build_hint"
+  pivot: PIVOT_W
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT
+max_nodes: 512

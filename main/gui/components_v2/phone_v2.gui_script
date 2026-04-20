@@ -1,0 +1,155 @@
+-- phone_v2.gui_script
+-- Модалка «телефон» в вертикальной рамке 260×540, посередине ландшафта 960×640.
+-- 8 приложений (4×2 tiles) создаются динамически как дети "app_grid".
+--
+-- Сообщения:
+--   "open_phone"     — показать
+--   "close_phone"    — скрыть
+--   "set_phone_notif" {n}   — обновить счётчик уведомлений в wallpaper_meta
+--   "set_phone_time" {time} — строка для status_time
+--
+-- В ui_manager_v2:
+--   "close_phone"          — по клику на X
+--   "phone_app_clicked" {id} — по клику на плитку приложения
+
+local theme = require "main.gui.modules.v2_theme"
+
+local UI_MGR = "#ui_manager_v2"
+
+-- Material Icons UTF-8
+local function icon(a,b,c) return string.char(a,b,c) end
+
+-- Список приложений. 4 колонки × 2 ряда.
+-- Цвет-акцент: cyan / hot / amber / violet.
+local APPS = {
+    { id = "sms",      name = "СМС",      icon = icon(0xEE, 0x88, 0x8B), col = "hot"    }, -- chat_bubble E226
+    { id = "calls",    name = "Звонки",   icon = icon(0xEE, 0x82, 0xB0), col = "cyan"   }, -- call E0B0
+    { id = "map",      name = "Карта",    icon = icon(0xEE, 0x95, 0x8D), col = "amber"  }, -- map E55D? using 0xE55D placeholder
+    { id = "clues",    name = "Улики",    icon = icon(0xEF, 0x90, 0xB5), col = "violet" }, -- search_insights F435
+    { id = "day",      name = "День",     icon = icon(0xEE, 0xA3, 0xBE), col = "cyan"   }, -- today E8DF
+    { id = "mail",     name = "Почта",    icon = icon(0xEE, 0x85, 0x9A), col = "amber"  }, -- mail E158
+    { id = "camera",   name = "Камера",   icon = icon(0xEE, 0x8C, 0x92), col = "hot"    }, -- camera_alt E312
+    { id = "terminal", name = "Терминал", icon = icon(0xEE, 0xAB, 0xBE), col = "violet" }, -- terminal EB8E
+}
+
+local COLORS = {
+    cyan   = vmath.vector4(0.49, 0.976, 1.0, 1.0),
+    hot    = vmath.vector4(1.0, 0.239, 0.498, 1.0),
+    amber  = vmath.vector4(1.0, 0.702, 0.278, 1.0),
+    violet = vmath.vector4(0.478, 0.361, 1.0, 1.0),
+    paper  = vmath.vector4(0.952, 0.925, 0.85, 1.0),
+    tile_bg       = vmath.vector4(0.067, 0.055, 0.173, 0.9),
+    tile_border   = vmath.vector4(0.49, 0.976, 1.0, 0.25),
+    tile_highlight= vmath.vector4(0.49, 0.976, 1.0, 0.85),
+}
+
+local TILE_W, TILE_H = 52, 64
+local TILE_GAP_X, TILE_GAP_Y = 8, 16
+-- app_grid: 240×380, 4 колонки, 2 ряда -> левый отступ 8
+local GRID_PAD = 8
+
+local function make_tile(self, i, app)
+    local grid = gui.get_node("app_grid")
+    local col = (i - 1) % 4
+    local row = math.floor((i - 1) / 4)
+    local x = GRID_PAD + col * (TILE_W + TILE_GAP_X)
+    -- app_grid высота 380, верх вверху
+    local y_top = 380 - 20 - row * (TILE_H + TILE_GAP_Y + 14)
+    local y = y_top - TILE_H
+
+    local bg = gui.new_box_node(vmath.vector3(x, y, 0.55), vmath.vector3(TILE_W, TILE_H, 0))
+    gui.set_pivot(bg, gui.PIVOT_SW)
+    gui.set_color(bg, COLORS.tile_bg)
+    gui.set_parent(bg, grid)
+    gui.set_inherit_alpha(bg, true)
+
+    local border = gui.new_box_node(vmath.vector3(x, y, 0.56), vmath.vector3(TILE_W, 1, 0))
+    gui.set_pivot(border, gui.PIVOT_SW)
+    gui.set_color(border, COLORS.tile_border)
+    gui.set_parent(border, grid)
+    gui.set_inherit_alpha(border, true)
+
+    local ic = gui.new_text_node(vmath.vector3(x + TILE_W/2, y + TILE_H/2 + 4, 0.57), app.icon)
+    gui.set_pivot(ic, gui.PIVOT_CENTER)
+    gui.set_font(ic, "icons")
+    gui.set_color(ic, COLORS[app.col] or COLORS.cyan)
+    gui.set_parent(ic, grid)
+gui.set_inherit_alpha(ic, true)
+
+    local label = gui.new_text_node(vmath.vector3(x + TILE_W/2, y - 8, 0.57), app.name)
+    gui.set_pivot(label, gui.PIVOT_CENTER)
+    gui.set_font(label, "jb_mono_10")
+    gui.set_color(label, COLORS.paper)
+    gui.set_parent(label, grid)
+gui.set_inherit_alpha(label, true)
+
+    return { bg = bg, border = border, icon = ic, label = label, id = app.id, col = app.col }
+end
+
+local function set_text(id, s)
+    gui.set_text(gui.get_node(id), s or "")
+end
+
+local function flash_tile(tile)
+    gui.set_color(tile.border, COLORS.tile_highlight)
+    gui.animate(tile.bg, "color.w", 0.6, gui.EASING_OUTQUAD, 0.08, 0, function()
+        gui.animate(tile.bg, "color.w", 0.9, gui.EASING_OUTQUAD, 0.2)
+    end)
+    -- через пол-секунды возвращаем бордер
+    timer.delay(0.5, false, function()
+        if tile.border then
+            gui.set_color(tile.border, COLORS.tile_border)
+        end
+    end)
+end
+
+function init(self)
+    msg.post(".", "acquire_input_focus")
+    self.visible = false
+    self.tiles = {}
+    for i, app in ipairs(APPS) do
+        self.tiles[i] = make_tile(self, i, app)
+    end
+    gui.set_enabled(gui.get_node("backdrop"), false)
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash("open_phone") then
+        self.visible = true
+        gui.set_enabled(gui.get_node("backdrop"), true)
+    elseif message_id == hash("close_phone") then
+        self.visible = false
+        gui.set_enabled(gui.get_node("backdrop"), false)
+    elseif message_id == hash("set_phone_notif") then
+        local n = tonumber(message.n) or 0
+        if n > 0 then
+            set_text("wallpaper_meta", "петля #017 · " .. tostring(n) .. " непрочитанных")
+        else
+            set_text("wallpaper_meta", "петля #017 · всё спокойно")
+        end
+    elseif message_id == hash("set_phone_time") then
+        set_text("status_time", message.time or "07:12")
+    end
+end
+
+function on_input(self, action_id, action)
+    if not self.visible then return false end
+    if action_id ~= hash("touch") or not action.pressed then return false end
+
+    if gui.pick_node(gui.get_node("close_btn"), action.x, action.y) then
+        msg.post(UI_MGR, "close_phone")
+        return true
+    end
+
+    for i = 1, #self.tiles do
+        local t = self.tiles[i]
+        if gui.pick_node(t.bg, action.x, action.y) then
+            print("[phone_v2] app: " .. t.id)
+            flash_tile(t)
+            msg.post(UI_MGR, "phone_app_clicked", { id = t.id })
+            return true
+        end
+    end
+
+    return false
+end
