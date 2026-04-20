@@ -75,7 +75,7 @@ local function make_opt(self, idx, opt, total)
     gui.set_pivot(bg, gui.PIVOT_SW)
     gui.set_color(bg, bg_c)
     gui.set_parent(bg, parent)
-    gui.set_inherit_alpha(bg, true)
+    gui.set_inherit_alpha(bg, false)
     gui.set_adjust_mode(bg, gui.ADJUST_STRETCH)
     local sp = gui.get_screen_position(bg)
     print(string.format("[choice_v2] opt%d bg screen_pos=(%.1f,%.1f) size=(%.1f,%.1f) alpha=%.2f enabled=%s",
@@ -85,14 +85,14 @@ local function make_opt(self, idx, opt, total)
     gui.set_pivot(border, gui.PIVOT_SW)
     gui.set_color(border, border_c)
     gui.set_parent(border, parent)
-    gui.set_inherit_alpha(border, true)
+    gui.set_inherit_alpha(border, false)
 
     local label = gui.new_text_node(vmath.vector3(20, y + h - 22, 0.65), opt.text or "—")
     gui.set_pivot(label, gui.PIVOT_NW)
     gui.set_font(label, "manrope_16")
     gui.set_color(label, COLORS.paper)
     gui.set_parent(label, parent)
-    gui.set_inherit_alpha(label, true)
+    gui.set_inherit_alpha(label, false)
 
     local hint_node
     if opt.hint and opt.hint ~= "" then
@@ -101,7 +101,7 @@ local function make_opt(self, idx, opt, total)
         gui.set_font(hint_node, "jb_mono_10")
         gui.set_color(hint_node, hint_color(opt.hintCls))
         gui.set_parent(hint_node, parent)
-        gui.set_inherit_alpha(hint_node, true)
+        gui.set_inherit_alpha(hint_node, false)
     end
 
     return { bg = bg, border = border, text = label, hint = hint_node, cls = opt.cls }
@@ -154,11 +154,7 @@ end
 function on_message(self, message_id, message, sender)
     if message_id == hash("show_choice") then
         self.visible = true
-        local bd = gui.get_node("backdrop")
-        gui.set_enabled(bd, true)
-        -- DEBUG: ярко-красный полноэкранный backdrop
-        gui.set_color(bd, vmath.vector4(1, 0, 0, 1))
-        print("[choice_v2] backdrop screen_pos=", gui.get_screen_position(bd), "size=", gui.get_size(bd), "enabled=", gui.is_enabled(bd))
+        gui.set_enabled(gui.get_node("backdrop"), true)
         clear_opts(self)
         local opts = message.opts or {}
         print("[choice_v2] show_choice, #opts=", #opts, "title=", message.title)
