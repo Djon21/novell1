@@ -34,25 +34,12 @@ textures {
 }
 
 nodes {
-  position { x: 0.0 y: 0.0 z: 0.05 }
-  size { x: 960.0 y: 640.0 }
-  color { x: 0.0 y: 0.0 z: 0.0 w: 0.0 }
-  type: TYPE_BOX
-  id: "bg_root"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: true
-}
-
-nodes {
   position { x: 480.0 y: 320.0 z: 0.06 }
   size { x: 960.0 y: 640.0 }
   type: TYPE_BOX
   texture: "backgrounds/bg_bedroom_01"
   id: "scene_bg"
-  parent: "bg_root"
   adjust_mode: ADJUST_MODE_ZOOM
-  inherit_alpha: true
   size_mode: SIZE_MODE_MANUAL
   enabled: false
 }
@@ -63,9 +50,7 @@ nodes {
   type: TYPE_BOX
   texture: "backgrounds/bg_bedroom_01"
   id: "scene_bg_next"
-  parent: "bg_root"
   adjust_mode: ADJUST_MODE_ZOOM
-  inherit_alpha: true
   size_mode: SIZE_MODE_MANUAL
   enabled: false
 }

@@ -146,22 +146,18 @@ function update(self, dt)
 end
 
 local function set_bg(self, bg_name)
-    print("[dialogue_v2] set_bg called with:", bg_name)
     if not bg_name or bg_name == "" then return end
-    if self.current_bg == bg_name then
-        print("[dialogue_v2]   (skip, same bg)")
-        return
-    end
+    if self.current_bg == bg_name then return end
     local n = gui.get_node("scene_bg")
     local ok, err = pcall(gui.play_flipbook, n, bg_name)
     if not ok then
         print("[dialogue_v2] bg not found:", bg_name, err)
         return
     end
-    gui.set_enabled(n, true)
-    gui.set_enabled(gui.get_node("bg_root"), true)
     self.current_bg = bg_name
-    print("[dialogue_v2]   bg applied:", bg_name, "bg_root enabled=", gui.is_enabled(gui.get_node("bg_root")))
+    if self.bg_visible ~= false then
+        gui.set_enabled(n, true)
+    end
 end
 
 function init(self)
@@ -172,8 +168,7 @@ function init(self)
     self.full_text = ""
     self.current_text = ""
     self.current_bg = nil
-    -- по умолчанию bg_root виден, но scene_bg скрыт пока не придёт set_background
-    gui.set_enabled(gui.get_node("bg_root"), true)
+    self.bg_visible = false
     gui.set_enabled(gui.get_node("scene_bg"), false)
     gui.set_enabled(gui.get_node("scene_bg_next"), false)
     -- стартовое состояние — пустой плейсхолдер
@@ -188,10 +183,15 @@ function on_message(self, message_id, message, sender)
         set_bg(self, message and message.name)
 
     elseif message_id == hash("show_bg") then
-        gui.set_enabled(gui.get_node("bg_root"), true)
+        self.bg_visible = true
+        if self.current_bg then
+            gui.set_enabled(gui.get_node("scene_bg"), true)
+        end
 
     elseif message_id == hash("hide_bg") then
-        gui.set_enabled(gui.get_node("bg_root"), false)
+        self.bg_visible = false
+        gui.set_enabled(gui.get_node("scene_bg"), false)
+        gui.set_enabled(gui.get_node("scene_bg_next"), false)
 
     elseif message_id == hash("show_dialogue") then
         self.visible = true
