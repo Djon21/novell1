@@ -32,7 +32,7 @@ M.overlays = {
 }
 
 M.music_started = false
-M.MUSIC_URL = msg.url(nil, "/music_player", "sound")
+M.MUSIC_URL = "/music_player#sound"
 
 M.components = {}
 
