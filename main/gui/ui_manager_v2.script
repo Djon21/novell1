@@ -19,6 +19,21 @@ if not ok_scenes then scenes = nil end
 
 local M = {}
 
+local LEGACY_FLAG_ITEMS = {
+    has_mug = "mug",
+    has_phone = "phone",
+}
+
+local PHONE_APP_KNOTS = {
+    sms      = "phone_sms",
+    calls    = "phone_stub_soon",
+    clues    = "phone_notes",
+    day      = "phone_tasks",
+    mail     = "phone_contacts",
+    camera   = "phone_stub_soon",
+    terminal = "phone_stub_soon",
+}
+
 -- Базовый режим (menu / nav / exploration / dialogue). choice/inventory/phone/map —
 -- накладываются сверху.
 M.base_mode = "menu"
@@ -57,6 +72,39 @@ end
 -- -------------------------------------------------------
 -- show_* / hide_* — отправка сообщений в конкретный компонент
 -- -------------------------------------------------------
+
+local function sync_derived_inventory()
+    if M.syncing_inventory then return false end
+
+    M.syncing_inventory = true
+    local changed = false
+
+    for flag, item_id in pairs(LEGACY_FLAG_ITEMS) do
+        local flag_enabled = gs.get_flag and gs.get_flag(flag) == true
+        local has_item = gs.has_item and gs.has_item(item_id)
+        if flag_enabled and not has_item and gs.add_item then
+            gs.add_item(item_id)
+            changed = true
+        end
+    end
+
+    M.syncing_inventory = false
+    return changed
+end
+
+local function sync_ui_state(self)
+    sync_derived_inventory()
+
+    local inv = gs.get_inventory and gs.get_inventory() or {}
+    local unread = gs.get_sms_unread_total and gs.get_sms_unread_total() or 0
+    local has_phone = gs.get_flag and gs.get_flag("has_phone") == true or false
+
+    msg.post(M.components.hud, "set_inventory_count", { n = #inv })
+    msg.post(M.components.hud, "set_phone_enabled", { enabled = has_phone })
+    msg.post(M.components.hud, "set_phone_notif", { n = unread })
+    msg.post(M.components.inventory, "refresh_inventory")
+    msg.post(M.components.phone, "set_phone_notif", { n = unread })
+end
 
 local function show_menu(self)
     M.base_mode = "menu"
@@ -107,6 +155,9 @@ local function close_inventory(self)
 end
 
 local function open_phone(self)
+    if gs.get_flag and gs.get_flag("has_phone") ~= true then
+        return
+    end
     M.overlays.phone = true
     msg.post(M.components.phone, "open_phone")
 end
@@ -145,7 +196,9 @@ local function apply_dm_commands(self)
     local cmds = dm.get_commands and dm.get_commands() or {}
     for _, cmd in ipairs(cmds) do
         if cmd.type == "enter_scene" then
-            if scene_controller.enter then
+            if cmd.scene == "phone_home" then
+                open_phone(self)
+            elseif scene_controller.enter then
                 scene_controller.enter(cmd.scene)
             elseif scene_controller.enter_scene then
                 scene_controller.enter_scene(cmd.scene)
@@ -160,6 +213,14 @@ local function apply_dm_commands(self)
             if gs.add_item then gs.add_item(cmd.item) end
         elseif cmd.type == "remove_item" then
             if gs.remove_item then gs.remove_item(cmd.item) end
+        elseif cmd.type == "set_quest" then
+            if gs.set_quest then gs.set_quest(cmd.quest, cmd.status) end
+        elseif cmd.type == "add_sms" then
+            if gs.add_sms then gs.add_sms(cmd.contact, cmd.text) end
+        elseif cmd.type == "add_note" then
+            if gs.add_note then gs.add_note(cmd.title, cmd.body) end
+        elseif cmd.type == "phone_close" then
+            close_phone(self)
         end
     end
 end
@@ -295,6 +356,11 @@ function init(self)
         msg.post(M.components.hud, "set_inventory_count", { n = n })
     end)
 
+    gs.subscribe(function()
+        sync_ui_state(self)
+    end)
+
+    sync_ui_state(self)
     show_menu(self)
     msg.post(".", "acquire_input_focus")
     print("[ui_manager_v2] init done")
@@ -317,6 +383,7 @@ function on_message(self, message_id, message, sender)
         end
         dm.init(bytes)
         handle_dialogue_update(self)
+        sync_ui_state(self)
 
     elseif message_id == hash("continue_game") then
         local ok, bytes = pcall(sys.load_resource, "/main/story/chapter_01.json")
@@ -326,6 +393,7 @@ function on_message(self, message_id, message, sender)
         end
         dm.load_saved(bytes)
         handle_dialogue_update(self)
+        sync_ui_state(self)
 
     elseif message_id == hash("open_gallery") then
         print("[ui_manager_v2] open_gallery (TODO)")
@@ -386,6 +454,13 @@ function on_message(self, message_id, message, sender)
         if message.id == "map" then
             close_phone(self)
             open_map(self)
+        else
+            local knot = PHONE_APP_KNOTS[message.id]
+            if knot and dm.jump_to_knot then
+                close_phone(self)
+                dm.jump_to_knot(knot)
+                handle_dialogue_update(self)
+            end
         end
 
     -- --- map ---
