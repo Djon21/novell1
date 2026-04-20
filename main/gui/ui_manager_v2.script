@@ -167,12 +167,14 @@ local function handle_dialogue_update(self)
 
     -- 2) Обновить фон
     local bg = dm.get_background_image and dm.get_background_image()
+    print("[ui_manager_v2] dm bg=", bg)
     if bg then
         msg.post(M.components.dialogue, "set_background", { name = bg })
     end
 
     -- 3) Выбрать режим по scene_controller + отрендерить ноду
     local node = dm.get_current_node and dm.get_current_node()
+    print("[ui_manager_v2] dm node=", node and node.type, "char=", node and node.character, "text=", node and node.text and node.text:sub(1,40))
 
     if scene_controller.is_active and scene_controller.is_active() then
         show_exploration(self)
