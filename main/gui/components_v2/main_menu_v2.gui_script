@@ -100,6 +100,24 @@ function final(self)
     end
 end
 
+-- ---- ticker marquee (step19) ----
+local TICKER_SPEED = 40  -- px/сек влево
+local TICKER_TEXT_WIDTH = 2400
+local SCREEN_W = 960
+
+function update(self, dt)
+    if not self.visible then return end
+    local n = gui.get_node("ticker_text")
+    local p = gui.get_position(n)
+    p.x = p.x - TICKER_SPEED * dt
+    -- Пивот W + ширина 2400 → левый край уходит за -2400, справа нужно ре-вход.
+    -- Когда весь текст ушёл влево (p.x + width < 0), сбрасываем к SCREEN_W.
+    if p.x + TICKER_TEXT_WIDTH < 0 then
+        p.x = SCREEN_W
+    end
+    gui.set_position(n, p)
+end
+
 function on_message(self, message_id, message, sender)
     if message_id == hash("show_menu") then
         self.visible = true
