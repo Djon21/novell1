@@ -31,15 +31,12 @@ nodes {
   position { x: 80.0 y: 320.0 z: 0.31 }
   size { x: 112.0 y: 112.0 }
   color { x: 0.031 y: 0.023 z: 0.094 w: 0.85 }
-  type: TYPE_PIE
+  type: TYPE_BOX
   id: "btn_W"
   pivot: PIVOT_CENTER
   parent: "nav_root"
   adjust_mode: ADJUST_MODE_STRETCH
   inherit_alpha: true
-  perimeter_vertices: 40
-  pie_fill_angle: 360.0
-  outer_bounds: PIECE_BOUNDS_ELLIPSE
 }
 nodes {
   position { x: 80.0 y: 320.0 z: 0.32 }
@@ -76,15 +73,12 @@ nodes {
   position { x: 480.0 y: 560.0 z: 0.31 }
   size { x: 112.0 y: 112.0 }
   color { x: 0.031 y: 0.023 z: 0.094 w: 0.85 }
-  type: TYPE_PIE
+  type: TYPE_BOX
   id: "btn_N"
   pivot: PIVOT_CENTER
   parent: "nav_root"
   adjust_mode: ADJUST_MODE_STRETCH
   inherit_alpha: true
-  perimeter_vertices: 40
-  pie_fill_angle: 360.0
-  outer_bounds: PIECE_BOUNDS_ELLIPSE
 }
 nodes {
   position { x: 480.0 y: 560.0 z: 0.32 }
@@ -121,15 +115,12 @@ nodes {
   position { x: 880.0 y: 320.0 z: 0.31 }
   size { x: 112.0 y: 112.0 }
   color { x: 0.031 y: 0.023 z: 0.094 w: 0.85 }
-  type: TYPE_PIE
+  type: TYPE_BOX
   id: "btn_E"
   pivot: PIVOT_CENTER
   parent: "nav_root"
   adjust_mode: ADJUST_MODE_STRETCH
   inherit_alpha: true
-  perimeter_vertices: 40
-  pie_fill_angle: 360.0
-  outer_bounds: PIECE_BOUNDS_ELLIPSE
 }
 nodes {
   position { x: 880.0 y: 320.0 z: 0.32 }
@@ -166,15 +157,12 @@ nodes {
   position { x: 480.0 y: 80.0 z: 0.31 }
   size { x: 112.0 y: 112.0 }
   color { x: 0.031 y: 0.023 z: 0.094 w: 0.85 }
-  type: TYPE_PIE
+  type: TYPE_BOX
   id: "btn_S"
   pivot: PIVOT_CENTER
   parent: "nav_root"
   adjust_mode: ADJUST_MODE_STRETCH
   inherit_alpha: true
-  perimeter_vertices: 40
-  pie_fill_angle: 360.0
-  outer_bounds: PIECE_BOUNDS_ELLIPSE
 }
 nodes {
   position { x: 480.0 y: 80.0 z: 0.32 }
