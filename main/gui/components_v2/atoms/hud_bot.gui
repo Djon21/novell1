@@ -1,4 +1,3 @@
-script: ""
 fonts {
   name: "jb_mono_10"
   font: "/main/fonts/jb_mono_10.font"

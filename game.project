@@ -1,8 +1,5 @@
 [bootstrap]
 main_collection = /main/main.collectionc
-# AVOS v2 (новый UI) — переключение вручную:
-# закомментируй строку выше и раскомментируй следующую:
-# main_collection = /main/main_v2.collectionc
 
 [script]
 shared_state = 1
