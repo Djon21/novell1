@@ -145,6 +145,19 @@ function update(self, dt)
     end
 end
 
+local function set_bg(self, bg_name)
+    if not bg_name or bg_name == "" then return end
+    local tex = "backgrounds/" .. bg_name
+    local n = gui.get_node("scene_bg")
+    local ok = pcall(gui.set_texture, n, tex)
+    if not ok then
+        print("[dialogue_v2] bg not found:", tex)
+        return
+    end
+    gui.set_enabled(n, true)
+    self.current_bg = bg_name
+end
+
 function init(self)
     msg.post(".", "acquire_input_focus")
     self.visible = true
@@ -152,6 +165,11 @@ function init(self)
     self.skip = false
     self.full_text = ""
     self.current_text = ""
+    self.current_bg = nil
+    -- по умолчанию bg_root виден, но scene_bg скрыт пока не придёт set_background
+    gui.set_enabled(gui.get_node("bg_root"), true)
+    gui.set_enabled(gui.get_node("scene_bg"), false)
+    gui.set_enabled(gui.get_node("scene_bg_next"), false)
     -- стартовое состояние — пустой плейсхолдер
     render(self, { speaker = "_default", name = "—", text = "" })
 end
@@ -159,6 +177,15 @@ end
 function on_message(self, message_id, message, sender)
     if message_id == hash("render_dialogue") then
         render(self, message or {})
+
+    elseif message_id == hash("set_background") then
+        set_bg(self, message and message.name)
+
+    elseif message_id == hash("show_bg") then
+        gui.set_enabled(gui.get_node("bg_root"), true)
+
+    elseif message_id == hash("hide_bg") then
+        gui.set_enabled(gui.get_node("bg_root"), false)
 
     elseif message_id == hash("show_dialogue") then
         self.visible = true

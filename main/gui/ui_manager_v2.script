@@ -63,6 +63,7 @@ local function show_menu(self)
     msg.post(M.components.hud,       "hide_hud")
     msg.post(M.components.nav,       "hide_nav")
     msg.post(M.components.dialogue,  "hide_dialogue")
+    msg.post(M.components.dialogue,  "hide_bg")
     msg.post(M.components.choice,    "hide_choice")
     msg.post(M.components.inventory, "hide_inventory")
     msg.post(M.components.phone,     "close_phone")
@@ -75,6 +76,7 @@ local function show_exploration(self)
     M.base_mode = "exploration"
     msg.post(M.components.main_menu, "hide_menu")
     msg.post(M.components.dialogue,  "hide_dialogue")
+    msg.post(M.components.dialogue,  "show_bg")
     msg.post(M.components.hud,       "show_hud")
     msg.post(M.components.nav,       "show_nav")
     print("[ui_manager_v2] mode: exploration")
@@ -83,6 +85,7 @@ end
 local function show_dialogue(self)
     M.base_mode = "dialogue"
     msg.post(M.components.main_menu, "hide_menu")
+    msg.post(M.components.dialogue,  "show_bg")
     msg.post(M.components.hud,       "show_hud")
     msg.post(M.components.nav,       "hide_nav")
     msg.post(M.components.dialogue,  "show_dialogue")
@@ -135,23 +138,74 @@ end
 -- dialogue_manager_ink интеграция
 -- -------------------------------------------------------
 
+local function apply_dm_commands(self)
+    local cmds = dm.get_commands and dm.get_commands() or {}
+    for _, cmd in ipairs(cmds) do
+        if cmd.type == "enter_scene" then
+            if scene_controller.enter then
+                scene_controller.enter(cmd.scene)
+            elseif scene_controller.enter_scene then
+                scene_controller.enter_scene(cmd.scene)
+            end
+        elseif cmd.type == "return_to_scene" then
+            if scene_controller.return_to_last_scene then
+                scene_controller.return_to_last_scene()
+            end
+        elseif cmd.type == "set_flag" then
+            if gs.set_flag then gs.set_flag(cmd.flag, cmd.value) end
+        elseif cmd.type == "add_item" then
+            if gs.add_item then gs.add_item(cmd.item) end
+        elseif cmd.type == "remove_item" then
+            if gs.remove_item then gs.remove_item(cmd.item) end
+        end
+    end
+end
+
 local function handle_dialogue_update(self)
-    if scene_controller.is_active() then
+    -- 1) Применить команды из ink-тегов (могут поменять сцену)
+    apply_dm_commands(self)
+
+    -- 2) Обновить фон
+    local bg = dm.get_background_image and dm.get_background_image()
+    if bg then
+        msg.post(M.components.dialogue, "set_background", { name = bg })
+    end
+
+    -- 3) Выбрать режим по scene_controller + отрендерить ноду
+    local node = dm.get_current_node and dm.get_current_node()
+
+    if scene_controller.is_active and scene_controller.is_active() then
         show_exploration(self)
-    else
+        hide_choice(self)
+        return
+    end
+
+    if not node then
         show_dialogue(self)
+        return
     end
 
-    -- Прокинем render_dialogue с данными из dm, если есть
-    local ok, line = pcall(function() return dm.current_line and dm.current_line() end)
-    if ok and line then
-        msg.post(M.components.dialogue, "render_dialogue", line)
-    end
+    if node.type == "dialogue" then
+        show_dialogue(self)
+        hide_choice(self)
+        msg.post(M.components.dialogue, "render_dialogue", {
+            speaker = node.character,
+            name    = node.character and tostring(node.character):upper() or "—",
+            text    = node.text or "",
+        })
 
-    -- Если dm вернул choices — показать choice_v2
-    local ok2, choices = pcall(function() return dm.current_choices and dm.current_choices() end)
-    if ok2 and choices and #choices > 0 then
-        show_choice(self, choices, 18, "КАК ПОСТУПИТЬ?")
+    elseif node.type == "choice" then
+        show_dialogue(self)
+        show_choice(self, node.options or {}, 18, node.question or "КАК ПОСТУПИТЬ?")
+
+    elseif node.type == "end" then
+        show_dialogue(self)
+        hide_choice(self)
+        msg.post(M.components.dialogue, "render_dialogue", {
+            speaker = "narrator",
+            name    = "КОНЕЦ",
+            text    = node.text or "Конец главы",
+        })
     end
 end
 
@@ -161,7 +215,7 @@ end
 
 local function current_scene_exits()
     if not scenes then return nil end
-    local id = scene_controller.current_scene_id and scene_controller.current_scene_id()
+    local id = scene_controller.get_current_scene_id and scene_controller.get_current_scene_id()
     if not id then return nil end
     local sc = scenes[id] or (scenes.get and scenes.get(id))
     return sc and sc.exits or nil
@@ -274,13 +328,13 @@ function on_message(self, message_id, message, sender)
     -- --- выбор ---
     elseif message_id == hash("choice_picked") then
         hide_choice(self)
-        if dm.pick_choice then dm.pick_choice(message.index) end
+        if dm.choose then dm.choose(message.index) end
         handle_dialogue_update(self)
 
     elseif message_id == hash("choice_timeout") then
         -- по таймауту выбираем первую опцию (default)
         hide_choice(self)
-        if dm.pick_choice then dm.pick_choice(1) end
+        if dm.choose then dm.choose(1) end
         handle_dialogue_update(self)
 
     elseif message_id == hash("choice_cancelled") then
@@ -317,8 +371,8 @@ function on_message(self, message_id, message, sender)
     -- --- навигация ---
     elseif message_id == hash("nav_go") then
         print("[ui_manager_v2] nav_go", message.dir, message.scene_id)
-        if scene_controller.enter_scene and message.scene_id then
-            scene_controller.enter_scene(message.scene_id)
+        if scene_controller.enter and message.scene_id then
+            scene_controller.enter(message.scene_id)
             local exits = current_scene_exits()
             if exits then
                 msg.post(M.components.nav, "set_exits", { exits = exits })
