@@ -1,168 +1,104 @@
 -- phone_v2.gui_script
--- Модалка «телефон» в вертикальной рамке 260×540, посередине ландшафта 960×640.
--- 8 приложений (4×2 tiles) создаются динамически как дети "app_grid".
+-- Fullscreen 2-col modal per hud_mobile.html (phone section).
+-- Step21: static layout only. SMS view is default content in right panel.
+-- All nodes declared in phone_v2.gui. Init just wires refs, caches enabled state.
 --
--- Сообщения:
---   "open_phone"     — показать
---   "close_phone"    — скрыть
---   "set_phone_notif" {n}   — обновить счётчик уведомлений в wallpaper_meta
---   "set_phone_time" {time} — строка для status_time
+-- Incoming messages:
+--   "open_phone"             — show modal
+--   "close_phone"            — hide modal
+--   "set_phone_notif"  {n}   — update "сообщений: N" stat
+--   "set_phone_time"   {time}— update status bar time
 --
--- В ui_manager_v2:
---   "close_phone"          — по клику на X
---   "phone_app_clicked" {id} — по клику на плитку приложения
-
-local theme = require "main.gui.modules.v2_theme"
+-- Outgoing messages (to #ui_manager_v2):
+--   "close_phone"            — user hit close button
+--   "phone_app_clicked" {id} — user tapped an app tile (stub, not wired to game state yet)
 
 local UI_MGR = "#ui_manager_v2"
 
-local PHONE_NODES = {
-    "backdrop", "phone_frame", "phone_screen", "status_bar", "status_time",
-    "status_meta", "wallpaper_date", "wallpaper_title", "wallpaper_meta",
-    "app_grid", "close_btn",
+-- All static node IDs declared in the .gui
+local ALL_NODES = {
+    "backdrop", "modal",
+    "modal_border_top", "modal_border_bot",
+    "corner_tl_v", "corner_tl_h", "corner_tr_v", "corner_tr_h",
+    "corner_bl_v", "corner_bl_h", "corner_br_v", "corner_br_h",
+    "title_eyebrow", "title_main",
+    "stats_net", "stats_msg", "close_btn",
+    "head_divider",
+    "phone_case", "phone_case_top", "phone_notch", "phone_side_btn",
+    "phone_screen", "status_time", "status_meta",
+    "wall_time", "wall_date", "wall_glitch",
+    "home_indicator",
+    "side_panel", "side_eyebrow", "side_title",
+    "msg1_bg", "msg1_border", "msg1_name", "msg1_time", "msg1_body",
+    "msg2_bg", "msg2_border", "msg2_name", "msg2_time", "msg2_body",
+    "msg3_bg", "msg3_border", "msg3_name", "msg3_time", "msg3_body",
+    "msg4_bg", "msg4_border", "msg4_name", "msg4_time", "msg4_body",
+    "app1_bg", "app1_icon", "app1_label",
+    "app2_bg", "app2_icon", "app2_label",
+    "app3_bg", "app3_icon", "app3_label",
+    "app4_bg", "app4_icon", "app4_label",
+    "app5_bg", "app5_icon", "app5_label",
+    "app6_bg", "app6_icon", "app6_label",
+    "app7_bg", "app7_icon", "app7_label",
+    "app8_bg", "app8_icon", "app8_label",
 }
 
--- Material Icons UTF-8
-local function icon(a,b,c) return string.char(a,b,c) end
-
--- Список приложений. 4 колонки × 2 ряда.
--- Цвет-акцент: cyan / hot / amber / violet.
+-- app id mapping (matches HTML data-app values, for future step25 switching)
 local APPS = {
-    { id = "sms",      name = "СМС",      icon = icon(0xEE, 0x88, 0x8B), col = "hot"    }, -- chat_bubble E226
-    { id = "calls",    name = "Звонки",   icon = icon(0xEE, 0x82, 0xB0), col = "cyan"   }, -- call E0B0
-    { id = "map",      name = "Карта",    icon = icon(0xEE, 0x95, 0x8D), col = "amber"  }, -- map E55D? using 0xE55D placeholder
-    { id = "clues",    name = "Улики",    icon = icon(0xEF, 0x90, 0xB5), col = "violet" }, -- search_insights F435
-    { id = "day",      name = "День",     icon = icon(0xEE, 0xA3, 0xBE), col = "cyan"   }, -- today E8DF
-    { id = "mail",     name = "Почта",    icon = icon(0xEE, 0x85, 0x9A), col = "amber"  }, -- mail E158
-    { id = "camera",   name = "Камера",   icon = icon(0xEE, 0x8C, 0x92), col = "hot"    }, -- camera_alt E312
-    { id = "terminal", name = "Терминал", icon = icon(0xEE, 0xAB, 0xBE), col = "violet" }, -- terminal EB8E
+    { key = "app1", id = "sms"    },
+    { key = "app2", id = "call"   },
+    { key = "app3", id = "map"    },
+    { key = "app4", id = "notes"  },
+    { key = "app5", id = "quests" },
+    { key = "app6", id = "mail"   },
+    { key = "app7", id = "cam"    },
+    { key = "app8", id = "term"   },
 }
 
-local COLORS = {
-    cyan   = vmath.vector4(0.49, 0.976, 1.0, 1.0),
-    hot    = vmath.vector4(1.0, 0.239, 0.498, 1.0),
-    amber  = vmath.vector4(1.0, 0.702, 0.278, 1.0),
-    violet = vmath.vector4(0.478, 0.361, 1.0, 1.0),
-    paper  = vmath.vector4(0.952, 0.925, 0.85, 1.0),
-    tile_bg       = vmath.vector4(0.067, 0.055, 0.173, 0.9),
-    tile_border   = vmath.vector4(0.49, 0.976, 1.0, 0.25),
-    tile_highlight= vmath.vector4(0.49, 0.976, 1.0, 0.85),
-}
+local function set_all_enabled(enabled)
+    for _, id in ipairs(ALL_NODES) do
+        local n = gui.get_node(id)
+        if n then gui.set_enabled(n, enabled) end
+    end
+end
 
-local TILE_W, TILE_H = 52, 64
-local TILE_GAP_X, TILE_GAP_Y = 8, 16
--- app_grid: 240×380, 4 колонки, 2 ряда -> левый отступ 8
-local GRID_PAD = 8
-
-local function make_tile(self, i, app)
-    local grid = gui.get_node("app_grid")
-    local grid_pos = gui.get_position(grid)
-    
-    local col = (i - 1) % 4
-    local row = math.floor((i - 1) / 4)
-    
-    -- Локальные координаты
-    local local_x = GRID_PAD + col * (TILE_W + TILE_GAP_X)
-    local y_top = 380 - 20 - row * (TILE_H + TILE_GAP_Y + 14)
-    local local_y = y_top - TILE_H
-    
-    -- Абсолютные координаты
-    local abs_x = grid_pos.x + local_x
-    local abs_y = grid_pos.y + local_y
-
-    local bg = gui.new_box_node(vmath.vector3(abs_x, abs_y, 0.55), vmath.vector3(TILE_W, TILE_H, 0))
-    gui.set_pivot(bg, gui.PIVOT_SW)
-    gui.set_color(bg, COLORS.tile_bg)
-    gui.set_inherit_alpha(bg, false)
-
-    local border = gui.new_box_node(vmath.vector3(abs_x, abs_y, 0.56), vmath.vector3(TILE_W, 1, 0))
-    gui.set_pivot(border, gui.PIVOT_SW)
-    gui.set_color(border, COLORS.tile_border)
-    gui.set_inherit_alpha(border, false)
-
-    local ic = gui.new_text_node(vmath.vector3(abs_x + TILE_W/2, abs_y + TILE_H/2 + 4, 0.57), app.icon)
-    gui.set_pivot(ic, gui.PIVOT_CENTER)
-    gui.set_font(ic, "icons")
-    gui.set_color(ic, COLORS[app.col] or COLORS.cyan)
-    gui.set_inherit_alpha(ic, false)
-
-    local label = gui.new_text_node(vmath.vector3(abs_x + TILE_W/2, abs_y - 8, 0.57), app.name)
-    gui.set_pivot(label, gui.PIVOT_CENTER)
-    gui.set_font(label, "jb_mono_10")
-    gui.set_color(label, COLORS.paper)
-    gui.set_inherit_alpha(label, false)
-
-    return { bg = bg, border = border, icon = ic, label = label, id = app.id, col = app.col }
+local function flash_node(node)
+    -- quick accent flash: dim alpha then restore
+    local c = gui.get_color(node)
+    local c0 = vmath.vector4(c.x, c.y, c.z, c.w)
+    gui.animate(node, "color.w", math.max(0.25, c0.w * 0.3), gui.EASING_OUTQUAD, 0.08, 0, function()
+        gui.animate(node, "color.w", c0.w, gui.EASING_OUTQUAD, 0.18)
+    end)
 end
 
 local function set_text(id, s)
-    gui.set_text(gui.get_node(id), s or "")
-end
-
-local function set_phone_enabled(self, enabled)
-    print("[phone_v2] set_phone_enabled called with enabled=" .. tostring(enabled))
-    for _, id in ipairs(PHONE_NODES) do
-        local node = gui.get_node(id)
-        gui.set_enabled(node, enabled)
-        print("[phone_v2] node '" .. id .. "' enabled=" .. tostring(enabled) .. ", exists=" .. tostring(node ~= nil))
-    end
-    print("[phone_v2] static nodes enabled, now enabling " .. #self.tiles .. " tiles")
-    for i = 1, #self.tiles do
-        local tile = self.tiles[i]
-        gui.set_enabled(tile.bg, enabled)
-        gui.set_enabled(tile.border, enabled)
-        gui.set_enabled(tile.icon, enabled)
-        gui.set_enabled(tile.label, enabled)
-    end
-    print("[phone_v2] all tiles enabled")
-end
-
-local function flash_tile(tile)
-    gui.set_color(tile.border, COLORS.tile_highlight)
-    gui.animate(tile.bg, "color.w", 0.6, gui.EASING_OUTQUAD, 0.08, 0, function()
-        gui.animate(tile.bg, "color.w", 0.9, gui.EASING_OUTQUAD, 0.2)
-    end)
-    -- через пол-секунды возвращаем бордер
-    timer.delay(0.5, false, function()
-        if tile.border then
-            gui.set_color(tile.border, COLORS.tile_border)
-        end
-    end)
+    local n = gui.get_node(id)
+    if n then gui.set_text(n, s or "") end
 end
 
 function init(self)
-    print("[phone_v2] init() started")
     msg.post(".", "acquire_input_focus")
     self.visible = false
-    self.tiles = {}
-    for i, app in ipairs(APPS) do
-        self.tiles[i] = make_tile(self, i, app)
-        print("[phone_v2] created tile " .. i .. " for app: " .. app.id)
-    end
-    print("[phone_v2] total tiles created: " .. #self.tiles)
-    set_phone_enabled(self, false)
-    print("[phone_v2] init() completed")
+    set_all_enabled(false)
+    print("[phone_v2] init complete (" .. #ALL_NODES .. " nodes)")
 end
 
 function on_message(self, message_id, message, sender)
     if message_id == hash("open_phone") then
-        print("[phone_v2] open_phone received")
         self.visible = true
-        set_phone_enabled(self, true)
-        print("[phone_v2] phone enabled, visible=" .. tostring(self.visible))
+        set_all_enabled(true)
+        print("[phone_v2] open_phone")
     elseif message_id == hash("close_phone") then
-        print("[phone_v2] close_phone received")
         self.visible = false
-        set_phone_enabled(self, false)
+        set_all_enabled(false)
+        print("[phone_v2] close_phone")
     elseif message_id == hash("set_phone_notif") then
-        local n = tonumber(message.n) or 0
-        if n > 0 then
-            set_text("wallpaper_meta", "петля #017 · " .. tostring(n) .. " непрочитанных")
-        else
-            set_text("wallpaper_meta", "петля #017 · всё спокойно")
-        end
+        local n = tonumber(message and message.n) or 0
+        set_text("stats_msg", "сообщений: " .. tostring(n))
     elseif message_id == hash("set_phone_time") then
-        set_text("status_time", message.time or "07:12")
+        local t = (message and message.time) or "07:12"
+        set_text("status_time", t)
+        set_text("wall_time", t)
     end
 end
 
@@ -170,17 +106,19 @@ function on_input(self, action_id, action)
     if not self.visible then return false end
     if action_id ~= hash("touch") or not action.pressed then return false end
 
-    if gui.pick_node(gui.get_node("close_btn"), action.x, action.y) then
+    local close = gui.get_node("close_btn")
+    if gui.is_enabled(close) and gui.pick_node(close, action.x, action.y) then
+        flash_node(close)
         msg.post(UI_MGR, "close_phone")
         return true
     end
 
-    for i = 1, #self.tiles do
-        local t = self.tiles[i]
-        if gui.pick_node(t.bg, action.x, action.y) then
-            print("[phone_v2] app: " .. t.id)
-            flash_tile(t)
-            msg.post(UI_MGR, "phone_app_clicked", { id = t.id })
+    for _, app in ipairs(APPS) do
+        local bg = gui.get_node(app.key .. "_bg")
+        if gui.is_enabled(bg) and gui.pick_node(bg, action.x, action.y) then
+            print("[phone_v2] app tile clicked: " .. app.id)
+            flash_node(bg)
+            msg.post(UI_MGR, "phone_app_clicked", { id = app.id })
             return true
         end
     end
