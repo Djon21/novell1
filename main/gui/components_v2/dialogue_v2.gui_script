@@ -55,7 +55,9 @@ end
 
 local function resolve_speaker(key)
     if not key then return CHARS._default end
-    return CHARS[key] or CHARS._default
+    -- Приводим к нижнему регистру для поиска в CHARS
+    local lower_key = tostring(key):lower()
+    return CHARS[lower_key] or CHARS._default
 end
 
 -- ---- typewriter (step18) ----
