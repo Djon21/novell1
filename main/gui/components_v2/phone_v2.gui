@@ -144,8 +144,8 @@ nodes {
 }
 nodes {
   position { x: 360.0 y: 80.0 z: 0.53 }
-  size { x: 240.0 y: 380.0 }
-  color { x: 0.0 y: 0.0 z: 0.0 w: 0.0 }
+  size { x: 0.0 y: 0.0 }
+  color { x: 0.0 y: 0.0 z: 0.0 w: 1.0 }
   type: TYPE_BOX
   id: "app_grid"
   pivot: PIVOT_SW

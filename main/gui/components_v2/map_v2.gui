@@ -321,8 +321,8 @@ nodes {
 }
 nodes {
   position { x: 630.0 y: 90.0 z: 0.52 }
-  size { x: 290.0 y: 40.0 }
-  color { x: 0.0 y: 0.0 z: 0.0 w: 0.0 }
+  size { x: 0.0 y: 0.0 }
+  color { x: 0.0 y: 0.0 z: 0.0 w: 1.0 }
   type: TYPE_BOX
   id: "doss_verbs"
   pivot: PIVOT_SW

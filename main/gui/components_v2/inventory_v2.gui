@@ -103,8 +103,8 @@ nodes {
 }
 nodes {
   position { x: 70.0 y: 130.0 z: 0.52 }
-  size { x: 380.0 y: 380.0 }
-  color { x: 0.0 y: 0.0 z: 0.0 w: 0.0 }
+  size { x: 0.0 y: 0.0 }
+  color { x: 0.0 y: 0.0 z: 0.0 w: 1.0 }
   type: TYPE_BOX
   id: "grid"
   pivot: PIVOT_SW
@@ -186,7 +186,7 @@ nodes {
 }
 nodes {
   position { x: 500.0 y: 150.0 z: 0.53 }
-  size { x: 360.0 y: 90.0 }
+  size { x: 0.0 y: 0.0 }
   color { x: 0.0 y: 0.0 z: 0.0 w: 1.0 }
   type: TYPE_BOX
   id: "verbs_panel"

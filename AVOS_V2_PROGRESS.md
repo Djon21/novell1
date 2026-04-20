@@ -7,7 +7,8 @@
 Старый UI в `main/gui/components/` **не трогаем**. Всё новое идёт параллельно в `main/gui/components_v2/`.
 Переключение — через `bootstrap.main_collection` в `game.project` (временно можно оставить старую коллекцию, новую добавлять постепенно).
 
-**Рабочая ветка**: `AVOS_C` в репозитории `C:\Users\GoldiM\novell1\AVOS\AVOS_C`.
+**Рабочая ветка**: `AVOS_S` в репозитории `C:\Users\GoldiM\novell1\AVOS\AVOS_S`.
+**История**: миграция начата в `AVOS_C`, баги отловлены в `AVOS_G`, продолжение работы в `AVOS_S`.
 **Ассеты**: `artem.png`, `mila.png`, `bg_bedroom_01.jpg` лежат в `C:\Users\GoldiM\Downloads\AVOS (14)\assets\`.
 **HTML-источники**: `menu_mobile.html`, `hud_mobile.html`, `nav_buttons_mobile.html`, `dialog_mobile.html`, `choice_mobile.html`, `map_mobile.html` — там же.
 
@@ -26,11 +27,11 @@
 1. Читаешь этот файл. Находишь первый пункт с `[ ]`.
 2. Выполняешь его ПОЛНОСТЬЮ (код + все нужные файлы).
 3. Если что-то непонятно по макетам — читаешь соответствующий `*_mobile.html`.
-4. Коммитишь одним коммитом: `git add` → `git commit -m "v2(stepN): описание"` → `git push origin AVOS_C`.
+4. Коммитишь одним коммитом: `git add` → `git commit -m "v2(stepN): описание"` → `git push origin AVOS_S`.
 5. Меняешь `[ ]` → `[x]` напротив пункта.
 6. Если нужен ручной review — добавляешь в раздел `REVIEW_NEEDED` внизу.
 7. Никогда не трогаешь `main/gui/components/` (старый UI), только `main/gui/components_v2/` и `main/gui/v2_*`.
-8. Работаешь в `C:\Users\GoldiM\novell1\AVOS\AVOS_C` на ветке `AVOS_C`.
+8. Работаешь в `C:\Users\GoldiM\novell1\AVOS\AVOS_S` на ветке `AVOS_S`.
 
 ---
 
@@ -62,7 +63,7 @@
 
 - [x] **step14**: создать `main/gui/ui_manager_v2.script` по образцу старого `ui_manager.script`. Режимы: `menu`, `nav`, `exploration`, `dialogue`, `choice`, `inventory`, `phone`, `map`. Методы show_*() / hide_*(). Интеграция с `scene_controller` (тот же, из main/scripts/) — отдаёт scene_bg в hud_v2 (как локация), пины карты прокидывает в map_v2, выходы сцены → nav_buttons_v2.
 - [x] **step15**: создать `main/main_v2.collection` — содержит только один GO `ui_manager_v2` с `.script` + все 8 `.gui` компонентов (main_menu_v2, hud_v2, inventory_v2, phone_v2, map_v2, nav_buttons_v2, dialogue_v2, choice_v2, effects) + `music_player.go` и другие системные, как в старой main.collection.
-- [x] **step16**: в `game.project` добавить комментарием строку с альтернативой `bootstrap.main_collection = /main/main_v2.collection` (сам значение пока НЕ меняй — пусть пользователь включит вручную).
+- [x] **step16**: в `game.project` добавить комментарием строку с альтернативой `bootstrap.main_collection = /main/main_v2.collection` (сам значение пока НЕ меняй — пусть пользователь включит вручную). **ОБНОВЛЕНИЕ 2026-04-20**: bootstrap УЖЕ переключён на `/main/main_v2.collectionc` — v2 активен.
 
 ### Этап 4 — полиш (можно не торопиться)
 
@@ -77,6 +78,18 @@
 
 *(сюда луп пишет пункты, требующие визуальной проверки в Defold Editor)*
 
+**ТЕКУЩИЙ СТАТУС (2026-04-20, ветка AVOS_S, коммит a972da2):**
+
+Все 20 шагов v2-интеграции выполнены. Bootstrap переключён на `main_v2.collection`. Hotspots реализованы (`hotspots_v2.gui` + `.gui_script`, коммит ab07e57).
+
+**КРИТИЧЕСКАЯ ПРОБЛЕМА**: модалки `inventory_v2` и `phone_v2` открываются (backdrop затемнение видно), но содержимое НЕ отображается. Динамически создаваемые ноды (слоты инвентаря, плитки приложений) невидимы.
+
+Требуется диагностика и исправление отображения динамического контента в модалках.
+
+---
+
+**Предыдущие фиксы и заметки:**
+
 - **2026-04-20 · v2 inventory/phone debugging (AVOS_G)**: после перевода игры на `main_v2.collection` пропали иконки `BAG/PHN`, а затем после частичного восстановления по клику на них открывался только затемнённый backdrop без содержимого модалок. Что уже сделано:
   1. В `main/main_v2.collection` переставлен порядок GUI-компонентов, чтобы `hud_v2` рендерился после `dialogue_v2` и не перекрывался `scene_bg`.
   2. В `main/gui/ui_manager_v2.script` добавлен мост совместимости между legacy-флагами и v2 UI: `has_mug -> mug`, `has_phone -> phone`, синхронизация HUD/инвентаря/телефона из `game_state`, обработка Ink-команд `set_quest`, `add_sms`, `add_note`, `phone_close`, плюс маршрутизация phone apps в knot'ы `phone_sms`, `phone_tasks`, `phone_notes`, `phone_contacts`, `phone_stub_soon`.
@@ -88,7 +101,7 @@
 - **runtime-fix**: массово у всех root-контейнеров (`dlg_root`, `hud_root`, `nav_root`, `opts_panel`, `grid` и т.п.) стояла комбинация `color.w = 0.0` + `inherit_alpha: true`. Defold умножает альфу ребёнка на альфу родителя — получался ноль и дети были невидимы, хотя сцена рендерилась. Фикс: у таких контейнеров `color.w = 1.0`, а `size = 0×0` чтобы они сами ничего не рисовали. Если будут добавляться новые «группирующие» ноды — держать это правило (либо size=0×0+color.w=1, либо `inherit_alpha: false` у детей).
 - **effects.gui отключен пользователем** — `grain`/`scan`/`vignette` были изменены вручную (видимо набор `enabled: false` или меньше alpha). НЕ трогать их автоматически, они дают затенение поверх всей сцены.
 - **runtime-fix**: в `choice_v2` опции создавались динамически через `gui.new_box_node` + `gui.set_parent(bg, opts_panel)` — и такие parent'ные ноды **НЕ РЕНДЕРИЛИСЬ** несмотря на корректные `enabled=true`, `alpha=1.0`, валидные координаты (проверено с ярко-зелёным цветом — тоже невидимы). Причина не выяснена, но фикс: создавать опции TOP-LEVEL (без `set_parent`) с абсолютными экранными координатами (`x = 160 + local_x`, `y = 160 + local_y`). `opts_panel` сделан полностью прозрачным (w=0) — остался как опорная точка для координат. При добавлении новых динамических нод — не парентить к «группирующим» контейнерам, а использовать абсолютные координаты.
-- **hotspots в v2 НЕ реализованы**: `ui_manager_v2.setup_scene_controller_ui` поставил `set_scene_object`/`set_hotspot` в no-op («hotspots встроены в сцену»). На практике это значит: после входа в exploration-сцену кликабельных объектов/хотспотов нет вообще. Надо либо создать отдельный компонент `hotspots_v2.gui` (копия логики `hotspots.gui_script` из старого UI), либо прокидывать set_hotspot в новый слой. Пока — пропуск через эти сцены возможен только через ink-выборы и nav-кнопки.
+- **hotspots в v2 РЕАЛИЗОВАНЫ** (коммит ab07e57): `hotspots_v2.gui` + `.gui_script` портированы из старого UI, подключены в `main_v2.collection`, `ui_manager_v2.script` прокидывает `set_hotspot`/`set_scene_object` из `scene_controller`. Exploration-сцены теперь имеют кликабельные объекты.
 
 - **step4**: открой `main/gui/components_v2/atoms/` в Defold Editor, визуально проверь что `corner_brackets.gui`, `hud_top.gui`, `hud_bot.gui` рендерятся корректно (углы по периметру 960×640, hud-полосы высотой 32px сверху/снизу с cyan бордером). `script: ""` в textproto обычно валидно (без скрипта), но если Defold требует явного отсутствия — удалить строку руками.
 - **step5**: `effects.gui` пока использует plain-color box'ы с alpha (grain белый 7%, scan белый 18% BLEND_MULT, vignette чёрный 55%). Выглядит как затемнение без текстур — для полноценного эффекта нужно подключить PNG текстуры noise/scan/radial_gradient в атлас и заменить TYPE_BOX на текстуру. Пока работает как базовая затенёнка.
