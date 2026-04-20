@@ -67,7 +67,7 @@
 ### Этап 4 — полиш (можно не торопиться)
 
 - [x] **step17**: glitch-анимация логотипа (gui.animate two сдвинутых узла по X с random интервалом).
-- [ ] **step18**: печатный ввод в dialogue_v2 (посимвольная анимация).
+- [x] **step18**: печатный ввод в dialogue_v2 (посимвольная анимация).
 - [ ] **step19**: ticker marquee в main_menu (gui.animate по X, бесконечный цикл).
 - [ ] **step20**: parallax skyline (если мышь есть — по mousemove, иначе idle-sway).
 
@@ -79,6 +79,7 @@
 
 - **step4**: открой `main/gui/components_v2/atoms/` в Defold Editor, визуально проверь что `corner_brackets.gui`, `hud_top.gui`, `hud_bot.gui` рендерятся корректно (углы по периметру 960×640, hud-полосы высотой 32px сверху/снизу с cyan бордером). `script: ""` в textproto обычно валидно (без скрипта), но если Defold требует явного отсутствия — удалить строку руками.
 - **step5**: `effects.gui` пока использует plain-color box'ы с alpha (grain белый 7%, scan белый 18% BLEND_MULT, vignette чёрный 55%). Выглядит как затемнение без текстур — для полноценного эффекта нужно подключить PNG текстуры noise/scan/radial_gradient в атлас и заменить TYPE_BOX на текстуру. Пока работает как базовая затенёнка.
+- **step18**: typewriter в dialogue_v2 — 45 символов/сек (TYPEWRITER_CPS), доп. пауза 0.12s после `,.!?:;…`. UTF-8-aware: пользовательская функция `utf8_chars(s)` разбивает строку на символы через паттерн `([%z\1-\127\194-\244][\128-\191]*)` (кириллица работает). Клик по dbox/NEXT во время печати — мгновенно досыпает текст (`typewriter_finish`), повторный клик — отправляет `dialogue_next`. По завершению шлёт `typewriter_done` в ui_manager_v2. Если скорость печати кажется слишком быстрой/медленной — меняй `TYPEWRITER_CPS`. Длинные строки могут тормозить из-за `table.concat` на каждый символ — для сцен с 500+ символами переписать на `string.sub` по offsets (пока не нужно).
 - **step17**: glitch-анимация логотипа — случайная вспышка каждые 1.5-4.5s через `timer.delay` с рекурсивным `schedule_next_glitch`, сдвиг hot/cyan по X на ±8-10 с цепочкой `gui.animate position.x` (burst 30ms, возврат 50ms). Базовые позиции зашиты: hot=58, cyan=62, y=498. Если сменишь позиции логотипа в .gui — поправь константы `LOGO_BASE`/`LOGO_Y`. Таймер останавливается в `final()` (при unload компонента). Видимость логотипа не отключает таймер; если меню скрыто (`hide_menu`), glitch всё равно тикает — не критично, но если беспокоит, можно обернуть `glitch_burst` в `if self.visible then ... end` (и так сделано).
 - **step16**: `game.project` — добавлены 3 строки-комментария с `#` после `main_collection = /main/main.collectionc`. Значение НЕ изменено. ВАЖНО: Defold Editor при сохранении `game.project` через GUI может удалить комментарии `#` — если хочешь их сохранить, редактируй файл только текстовым редактором. Для переключения на v2: закомментируй строку 2 (`main_collection = /main/main.collectionc`) добавив `#` перед ней, и раскомментируй строку 5.
 - **step15**: `main/main_v2.collection` — 3 embedded GO: `ui_manager_v2` (script + 9 .gui компонентов), `music_player`, `sfx_player`. Порядок компонентов в одной GO определяет z-order рендеринга — сейчас: ui_manager_v2 → main_menu_v2 → hud_v2 → nav_buttons_v2 → dialogue_v2 → choice_v2 → inventory_v2 → phone_v2 → map_v2 → effects. Если visually overlay накладывается не тот — меняй порядок. В `.gui` у каждого компонента z задаёт свой слой (0.4-0.7), это тоже поможет. Collection пока НЕ подключена через bootstrap — это делается в step16 (комментарий) или пользователем вручную.
@@ -115,3 +116,4 @@
 - step15 — `main/main_v2.collection` (embedded GO: ui_manager_v2 + 9 .gui компонентов + music_player + sfx_player; старая main.collection не затронута)
 - step16 — `game.project` (комментарий с альтернативным bootstrap на `/main/main_v2.collectionc`; значение не менялось)
 - step17 — glitch-анимация logo_hot/logo_cyan в main_menu_v2 (timer.delay 1.5-4.5s + gui.animate position.x ±8-10px)
+- step18 — typewriter в dialogue_v2 (45 cps, пауза 0.12s на знаках препинания, UTF-8-aware, клик досыпает текст)
