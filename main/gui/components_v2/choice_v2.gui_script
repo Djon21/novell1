@@ -153,9 +153,11 @@ function on_message(self, message_id, message, sender)
         gui.set_enabled(gui.get_node("backdrop"), true)
         clear_opts(self)
         local opts = message.opts or {}
+        print("[choice_v2] show_choice, #opts=", #opts, "title=", message.title)
         self.opts = opts
         for i, opt in ipairs(opts) do
             if i <= 4 then
+                print("[choice_v2]   opt", i, "text=", opt.text)
                 self.opt_nodes[i] = make_opt(self, i, opt, #opts)
             end
         end
