@@ -37,9 +37,9 @@ nodes {
 }
 
 nodes {
-  position { x: 0.0 y: 0.0 z: 0.95 }
-  size { x: 960.0 y: 640.0 }
-  color { x: 1.0 y: 0.0 z: 1.0 w: 1.0 }
+  position { x: 140.0 y: 110.0 z: 0.61 }
+  size { x: 680.0 y: 420.0 }
+  color { x: 0.047 y: 0.039 z: 0.141 w: 0.98 }
   type: TYPE_BOX
   id: "modal"
   pivot: PIVOT_SW
