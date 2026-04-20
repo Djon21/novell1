@@ -18,8 +18,8 @@ fonts {
 background_color { x: 0.0 y: 0.0 z: 0.0 w: 0.0 }
 nodes {
   position { x: 0.0 y: 0.0 z: 0.3 }
-  size { x: 960.0 y: 640.0 }
-  color { x: 0.0 y: 0.0 z: 0.0 w: 0.0 }
+  size { x: 0.0 y: 0.0 }
+  color { x: 0.0 y: 0.0 z: 0.0 w: 1.0 }
   type: TYPE_BOX
   id: "nav_root"
   pivot: PIVOT_SW
