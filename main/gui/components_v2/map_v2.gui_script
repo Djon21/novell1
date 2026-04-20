@@ -14,7 +14,7 @@
 
 local theme = require "main.gui.modules.v2_theme"
 
-local UI_MGR = "main:/ui_manager_v2#ui_manager_v2"
+local UI_MGR = "#ui_manager_v2"
 
 -- map_area origin (SW) + size:
 local MAP_X, MAP_Y = 30, 70

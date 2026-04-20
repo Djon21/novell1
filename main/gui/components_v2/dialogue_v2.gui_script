@@ -19,7 +19,7 @@
 --   "dialogue_skip"  — клик SKIP
 --   "dialogue_auto"  — клик AUTO (переключатель)
 
-local UI_MGR = "main:/ui_manager_v2#ui_manager_v2"
+local UI_MGR = "#ui_manager_v2"
 -- dialogue_manager_ink в старой архитектуре — адрес может отличаться.
 -- Шлём туда же, ui_manager перенаправит при необходимости.
 

@@ -18,7 +18,7 @@
 -- В ui_manager_v2 шлёт:
 --   "nav_go" {dir = "W|N|E|S", scene_id = "..."}
 
-local UI_MGR = "main:/ui_manager_v2#ui_manager_v2"
+local UI_MGR = "#ui_manager_v2"
 
 local DIRS = { "W", "N", "E", "S" }
 

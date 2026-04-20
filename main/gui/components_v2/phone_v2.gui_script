@@ -14,7 +14,7 @@
 
 local theme = require "main.gui.modules.v2_theme"
 
-local UI_MGR = "main:/ui_manager_v2#ui_manager_v2"
+local UI_MGR = "#ui_manager_v2"
 
 -- Material Icons UTF-8
 local function icon(a,b,c) return string.char(a,b,c) end

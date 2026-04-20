@@ -14,7 +14,7 @@
 --   "choice_timeout"
 --   "choice_cancelled"
 
-local UI_MGR = "main:/ui_manager_v2#ui_manager_v2"
+local UI_MGR = "#ui_manager_v2"
 
 local OPTS_W, OPTS_H = 640, 300   -- размеры opts_panel
 local OPT_HEIGHT = 60

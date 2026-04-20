@@ -13,7 +13,7 @@
 
 local theme = require "main.gui.modules.v2_theme"
 
-local UI_MGR = "main:/ui_manager_v2#ui_manager_v2"
+local UI_MGR = "#ui_manager_v2"
 
 local function set_text(id, s)
     gui.set_text(gui.get_node(id), s or "")

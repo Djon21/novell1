@@ -15,7 +15,7 @@ local theme    = require "main.gui.modules.v2_theme"
 local catalog  = require "main.scripts.items_catalog"
 local gs       = require "main.scripts.game_state"
 
-local UI_MGR = "main:/ui_manager_v2#ui_manager_v2"
+local UI_MGR = "#ui_manager_v2"
 
 local COLS, ROWS = 4, 3
 local SLOT      = 80
