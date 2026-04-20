@@ -71,33 +71,33 @@ local function make_opt(self, idx, opt, total)
 
     local bg_c, border_c = bg_for(opt.cls)
 
-    local bg = gui.new_box_node(vmath.vector3(0, y, 0), vmath.vector3(w, h, 0))
+    local bg = gui.new_box_node(vmath.vector3(0, y, 0.63), vmath.vector3(w, h, 0))
     gui.set_pivot(bg, gui.PIVOT_SW)
     gui.set_color(bg, bg_c)
     gui.set_parent(bg, parent)
     gui.set_inherit_alpha(bg, true)
 
-    local border = gui.new_box_node(vmath.vector3(0, y, 0.01), vmath.vector3(w, 1, 0))
+    local border = gui.new_box_node(vmath.vector3(0, y, 0.64), vmath.vector3(w, 1, 0))
     gui.set_pivot(border, gui.PIVOT_SW)
     gui.set_color(border, border_c)
     gui.set_parent(border, parent)
     gui.set_inherit_alpha(border, true)
 
-    local label = gui.new_text_node(vmath.vector3(20, y + h - 22, 0.02), opt.text or "—")
+    local label = gui.new_text_node(vmath.vector3(20, y + h - 22, 0.65), opt.text or "—")
     gui.set_pivot(label, gui.PIVOT_NW)
     gui.set_font(label, "manrope_16")
     gui.set_color(label, COLORS.paper)
     gui.set_parent(label, parent)
-gui.set_inherit_alpha(label, true)
+    gui.set_inherit_alpha(label, true)
 
     local hint_node
     if opt.hint and opt.hint ~= "" then
-        hint_node = gui.new_text_node(vmath.vector3(20, y + 8, 0.02), opt.hint)
+        hint_node = gui.new_text_node(vmath.vector3(20, y + 8, 0.65), opt.hint)
         gui.set_pivot(hint_node, gui.PIVOT_SW)
         gui.set_font(hint_node, "jb_mono_10")
         gui.set_color(hint_node, hint_color(opt.hintCls))
         gui.set_parent(hint_node, parent)
-gui.set_inherit_alpha(hint_node, true)
+        gui.set_inherit_alpha(hint_node, true)
     end
 
     return { bg = bg, border = border, text = label, hint = hint_node, cls = opt.cls }
