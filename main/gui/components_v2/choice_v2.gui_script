@@ -1,0 +1,207 @@
+-- choice_v2.gui_script
+-- Модалка выбора 2-4 опций с таймером (countdown).
+-- Опции создаются динамически как дети "opts_panel".
+--
+-- Схема опции:
+--   { text = "…", cls = ""|"key"|"danger", hint = "подсказка", hintCls = "hot"|"amber"|"violet" }
+--
+-- Сообщения:
+--   "show_choice" {opts = {…}, timer_sec = 18, title = "…"?}
+--   "hide_choice"
+--
+-- В ui_manager_v2 шлёт:
+--   "choice_picked" {index}
+--   "choice_timeout"
+--   "choice_cancelled"
+
+local UI_MGR = "main:/ui_manager_v2#ui_manager_v2"
+
+local OPTS_W, OPTS_H = 640, 300   -- размеры opts_panel
+local OPT_HEIGHT = 60
+local OPT_GAP    = 12
+
+local COLORS = {
+    paper  = vmath.vector4(0.952, 0.925, 0.85, 1.0),
+    accent = vmath.vector4(0.49, 0.976, 1.0, 1.0),
+    hot    = vmath.vector4(1.0, 0.239, 0.498, 1.0),
+    amber  = vmath.vector4(1.0, 0.702, 0.278, 1.0),
+    violet = vmath.vector4(0.478, 0.361, 1.0, 1.0),
+    opt_bg_normal = vmath.vector4(0.067, 0.055, 0.173, 0.85),
+    opt_bg_key    = vmath.vector4(0.049, 0.082, 0.173, 0.9),
+    opt_bg_danger = vmath.vector4(0.235, 0.027, 0.078, 0.9),
+    border_normal = vmath.vector4(0.49, 0.976, 1.0, 0.35),
+    border_key    = vmath.vector4(0.49, 0.976, 1.0, 0.8),
+    border_danger = vmath.vector4(1.0, 0.239, 0.498, 0.8),
+}
+
+local function hint_color(hintCls)
+    if hintCls == "hot"    then return COLORS.hot end
+    if hintCls == "amber"  then return COLORS.amber end
+    if hintCls == "violet" then return COLORS.violet end
+    return COLORS.accent
+end
+
+local function bg_for(cls)
+    if cls == "key"    then return COLORS.opt_bg_key, COLORS.border_key end
+    if cls == "danger" then return COLORS.opt_bg_danger, COLORS.border_danger end
+    return COLORS.opt_bg_normal, COLORS.border_normal
+end
+
+local function set_text(id, s) gui.set_text(gui.get_node(id), s or "") end
+
+local function clear_opts(self)
+    for i = 1, #self.opt_nodes do
+        local o = self.opt_nodes[i]
+        gui.delete_node(o.bg)
+        gui.delete_node(o.border)
+        gui.delete_node(o.text)
+        if o.hint then gui.delete_node(o.hint) end
+    end
+    self.opt_nodes = {}
+    self.opts = {}
+end
+
+local function make_opt(self, idx, opt, total)
+    local parent = gui.get_node("opts_panel")
+    local w = OPTS_W
+    local h = OPT_HEIGHT
+    -- стакаем сверху вниз (первая опция сверху)
+    local y_top = OPTS_H - (idx - 1) * (OPT_HEIGHT + OPT_GAP)
+    local y = y_top - h
+
+    local bg_c, border_c = bg_for(opt.cls)
+
+    local bg = gui.new_box_node(vmath.vector3(0, y, 0), vmath.vector3(w, h, 0))
+    gui.set_pivot(bg, gui.PIVOT_SW)
+    gui.set_color(bg, bg_c)
+    gui.set_parent(bg, parent)
+    gui.set_inherit_alpha(bg, true)
+
+    local border = gui.new_box_node(vmath.vector3(0, y, 0.01), vmath.vector3(w, 1, 0))
+    gui.set_pivot(border, gui.PIVOT_SW)
+    gui.set_color(border, border_c)
+    gui.set_parent(border, parent)
+    gui.set_inherit_alpha(border, true)
+
+    local label = gui.new_text_node(vmath.vector3(20, y + h - 22, 0.02), opt.text or "—")
+    gui.set_pivot(label, gui.PIVOT_NW)
+    gui.set_font(label, "manrope_16")
+    gui.set_color(label, COLORS.paper)
+    gui.set_parent(label, parent)
+    gui.set_outline_alpha(label, 0)
+    gui.set_shadow_alpha(label, 0)
+    gui.set_inherit_alpha(label, true)
+
+    local hint_node
+    if opt.hint and opt.hint ~= "" then
+        hint_node = gui.new_text_node(vmath.vector3(20, y + 8, 0.02), opt.hint)
+        gui.set_pivot(hint_node, gui.PIVOT_SW)
+        gui.set_font(hint_node, "jb_mono_10")
+        gui.set_color(hint_node, hint_color(opt.hintCls))
+        gui.set_parent(hint_node, parent)
+        gui.set_outline_alpha(hint_node, 0)
+        gui.set_shadow_alpha(hint_node, 0)
+        gui.set_inherit_alpha(hint_node, true)
+    end
+
+    return { bg = bg, border = border, text = label, hint = hint_node, cls = opt.cls }
+end
+
+local function update_timer(self)
+    local pct = math.max(0, self.time_left / math.max(0.01, self.timer_max))
+    gui.set_text(gui.get_node("timer_num"), tostring(math.ceil(self.time_left)))
+    local fill = gui.get_node("timer_fill")
+    local sz = gui.get_size(fill)
+    sz.x = 640 * pct
+    gui.set_size(fill, sz)
+    -- меняем цвет к красному когда близко к концу
+    if pct < 0.3 then
+        gui.set_color(gui.get_node("timer_num"), COLORS.hot)
+        gui.set_color(fill, COLORS.hot)
+    elseif pct < 0.6 then
+        gui.set_color(gui.get_node("timer_num"), COLORS.amber)
+        gui.set_color(fill, COLORS.amber)
+    else
+        gui.set_color(gui.get_node("timer_num"), COLORS.accent)
+        gui.set_color(fill, COLORS.accent)
+    end
+end
+
+function init(self)
+    msg.post(".", "acquire_input_focus")
+    self.visible = false
+    self.opts = {}
+    self.opt_nodes = {}
+    self.timer_max = 18
+    self.time_left = 18
+    self.timer_active = false
+    gui.set_enabled(gui.get_node("backdrop"), false)
+end
+
+function update(self, dt)
+    if not self.visible or not self.timer_active then return end
+    self.time_left = self.time_left - dt
+    if self.time_left <= 0 then
+        self.time_left = 0
+        self.timer_active = false
+        update_timer(self)
+        msg.post(UI_MGR, "choice_timeout")
+    else
+        update_timer(self)
+    end
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash("show_choice") then
+        self.visible = true
+        gui.set_enabled(gui.get_node("backdrop"), true)
+        clear_opts(self)
+        local opts = message.opts or {}
+        self.opts = opts
+        for i, opt in ipairs(opts) do
+            if i <= 4 then
+                self.opt_nodes[i] = make_opt(self, i, opt, #opts)
+            end
+        end
+        if message.title then
+            gui.set_text(gui.get_node("title_main"), tostring(message.title):upper())
+        end
+        self.timer_max = tonumber(message.timer_sec) or 18
+        self.time_left = self.timer_max
+        self.timer_active = self.timer_max > 0
+        update_timer(self)
+        if self.timer_max <= 0 then
+            gui.set_enabled(gui.get_node("timer_label"), false)
+            gui.set_enabled(gui.get_node("timer_num"), false)
+            gui.set_enabled(gui.get_node("timer_track"), false)
+            gui.set_enabled(gui.get_node("timer_fill"), false)
+        else
+            gui.set_enabled(gui.get_node("timer_label"), true)
+            gui.set_enabled(gui.get_node("timer_num"), true)
+            gui.set_enabled(gui.get_node("timer_track"), true)
+            gui.set_enabled(gui.get_node("timer_fill"), true)
+        end
+
+    elseif message_id == hash("hide_choice") then
+        self.visible = false
+        self.timer_active = false
+        gui.set_enabled(gui.get_node("backdrop"), false)
+        clear_opts(self)
+    end
+end
+
+function on_input(self, action_id, action)
+    if not self.visible then return false end
+    if action_id ~= hash("touch") or not action.pressed then return false end
+
+    for i = 1, #self.opt_nodes do
+        local o = self.opt_nodes[i]
+        if gui.pick_node(o.bg, action.x, action.y) then
+            self.timer_active = false
+            msg.post(UI_MGR, "choice_picked", { index = i })
+            return true
+        end
+    end
+
+    return false
+end
