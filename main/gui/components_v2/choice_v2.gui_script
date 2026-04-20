@@ -16,6 +16,17 @@
 
 local UI_MGR = "#ui_manager_v2"
 
+local CHOICE_NODES = {
+    "backdrop", "modal", "title_eyebrow", "title_main", "opts_panel",
+    "timer_label", "timer_num", "timer_track", "timer_fill",
+}
+
+local function set_all_enabled(enabled)
+    for _, id in ipairs(CHOICE_NODES) do
+        gui.set_enabled(gui.get_node(id), enabled)
+    end
+end
+
 local OPTS_W, OPTS_H = 640, 300   -- размеры opts_panel
 local OPT_HEIGHT = 60
 local OPT_GAP    = 12
@@ -135,7 +146,7 @@ function init(self)
     self.timer_max = 18
     self.time_left = 18
     self.timer_active = false
-    gui.set_enabled(gui.get_node("backdrop"), false)
+    set_all_enabled(false)
 end
 
 function update(self, dt)
@@ -154,16 +165,7 @@ end
 function on_message(self, message_id, message, sender)
     if message_id == hash("show_choice") then
         self.visible = true
-        gui.set_enabled(gui.get_node("backdrop"), true)
-        for _, id in ipairs({"modal", "title_eyebrow", "title_main", "opts_panel", "timer_label", "timer_num", "timer_track", "timer_fill"}) do
-            local n = gui.get_node(id)
-            gui.set_enabled(n, true)
-            local sp = gui.get_screen_position(n)
-            local sz = gui.get_size(n)
-            local c = gui.get_color(n)
-            print(string.format("[choice_v2] %s pos=(%.0f,%.0f) size=(%.0f,%.0f) color=(%.2f,%.2f,%.2f,%.2f) en=%s",
-                id, sp.x, sp.y, sz.x, sz.y, c.x, c.y, c.z, c.w, tostring(gui.is_enabled(n))))
-        end
+        set_all_enabled(true)
         clear_opts(self)
         local opts = message.opts or {}
         print("[choice_v2] show_choice, #opts=", #opts, "title=", message.title)
@@ -196,7 +198,7 @@ function on_message(self, message_id, message, sender)
     elseif message_id == hash("hide_choice") then
         self.visible = false
         self.timer_active = false
-        gui.set_enabled(gui.get_node("backdrop"), false)
+        set_all_enabled(false)
         clear_opts(self)
     end
 end
