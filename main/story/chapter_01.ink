@@ -862,10 +862,12 @@ AUTHOR: {mc_name}@next_iteration
 # bg:bg_phone # speaker:none
 [09:12] Аня: Привет. Проснул{mc_gender == "female":ась|ся}?
 [09:13] Аня: Пришёл странный патч. Посмотри.
-[09:14] Аня: PATCH temporal_sync.module
+[09:14] PATCH temporal_sync.module
 [09:14] Аня: Ты ведь чувствуешь, что с этим файлом что-то не так?
 # speaker:mc
 Три одинаковых строки. И один вопрос в конце. Ответить пока нечем — надо сначала увидеть модуль вживую.
+# flag:sms_anya_replied=true
+# quest:done:reply_anya
 + [Закрыть диалог]
     # goto_scene:phone_home
     -> DONE
