@@ -91,10 +91,6 @@ local function make_opt(self, idx, opt, total)
     gui.set_pivot(bg, gui.PIVOT_SW)
     gui.set_color(bg, bg_c)
     gui.set_adjust_mode(bg, gui.ADJUST_STRETCH)
-    local sp = gui.get_screen_position(bg)
-    print(string.format("[choice_v2] opt%d bg screen_pos=(%.1f,%.1f) size=(%.1f,%.1f) alpha=%.2f enabled=%s",
-        idx, sp.x, sp.y, w, h, gui.get_color(bg).w, tostring(gui.is_enabled(bg))))
-
     local border = gui.new_box_node(vmath.vector3(abs_x, abs_y, 0.71), vmath.vector3(w, 1, 0))
     gui.set_pivot(border, gui.PIVOT_SW)
     gui.set_color(border, border_c)
@@ -168,11 +164,9 @@ function on_message(self, message_id, message, sender)
         set_all_enabled(true)
         clear_opts(self)
         local opts = message.opts or {}
-        print("[choice_v2] show_choice, #opts=", #opts, "title=", message.title)
         self.opts = opts
         for i, opt in ipairs(opts) do
             if i <= 4 then
-                print("[choice_v2]   opt", i, "text=", opt.text)
                 self.opt_nodes[i] = make_opt(self, i, opt, #opts)
             end
         end
