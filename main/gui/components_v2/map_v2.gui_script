@@ -147,9 +147,7 @@ local function make_pin(self, id, p)
     gui.set_font(ic, "icons")
     gui.set_color(ic, ring_color)
     gui.set_parent(ic, parent)
-    gui.set_outline_alpha(ic, 0)
-    gui.set_shadow_alpha(ic, 0)
-    gui.set_inherit_alpha(ic, true)
+gui.set_inherit_alpha(ic, true)
 
     return { body = body, border = border, icon = ic, id = id, color = ring_color }
 end
@@ -177,9 +175,7 @@ local function make_verb(self, idx, verb)
     gui.set_font(label, "jb_mono_bold_14")
     gui.set_color(label, COLORS.accent)
     gui.set_parent(label, parent)
-    gui.set_outline_alpha(label, 0)
-    gui.set_shadow_alpha(label, 0)
-    gui.set_inherit_alpha(label, true)
+gui.set_inherit_alpha(label, true)
 
     return { bg = bg, border = border, label = label, verb = verb }
 end

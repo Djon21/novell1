@@ -75,18 +75,14 @@ local function make_slot(col, row)
     gui.set_font(icon, "icons")
     gui.set_color(icon, COLOR_PAPER)
     gui.set_parent(icon, grid)
-    gui.set_outline_alpha(icon, 0)
-    gui.set_shadow_alpha(icon, 0)
-    gui.set_inherit_alpha(icon, true)
+gui.set_inherit_alpha(icon, true)
 
     local qty = gui.new_text_node(vmath.vector3(x + SLOT - 6, y + 6, 0.02), "")
     gui.set_pivot(qty, gui.PIVOT_SE)
     gui.set_font(qty, "jb_mono_10")
     gui.set_color(qty, COLOR_AMBER)
     gui.set_parent(qty, grid)
-    gui.set_outline_alpha(qty, 0)
-    gui.set_shadow_alpha(qty, 0)
-    gui.set_inherit_alpha(qty, true)
+gui.set_inherit_alpha(qty, true)
 
     return { bg = bg, border = border, icon = icon, qty = qty, x = x, y = y }
 end
@@ -117,9 +113,7 @@ local function make_verb_button(idx)
     gui.set_font(label, "jb_mono_bold_14")
     gui.set_color(label, COLOR_ACCENT)
     gui.set_parent(label, parent)
-    gui.set_outline_alpha(label, 0)
-    gui.set_shadow_alpha(label, 0)
-    gui.set_inherit_alpha(label, true)
+gui.set_inherit_alpha(label, true)
 
     return { bg = bg, border = border, label = label, w = w, h = h }
 end

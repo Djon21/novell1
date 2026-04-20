@@ -74,18 +74,14 @@ local function make_tile(self, i, app)
     gui.set_font(ic, "icons")
     gui.set_color(ic, COLORS[app.col] or COLORS.cyan)
     gui.set_parent(ic, grid)
-    gui.set_outline_alpha(ic, 0)
-    gui.set_shadow_alpha(ic, 0)
-    gui.set_inherit_alpha(ic, true)
+gui.set_inherit_alpha(ic, true)
 
     local label = gui.new_text_node(vmath.vector3(x + TILE_W/2, y - 8, 0.02), app.name)
     gui.set_pivot(label, gui.PIVOT_CENTER)
     gui.set_font(label, "jb_mono_10")
     gui.set_color(label, COLORS.paper)
     gui.set_parent(label, grid)
-    gui.set_outline_alpha(label, 0)
-    gui.set_shadow_alpha(label, 0)
-    gui.set_inherit_alpha(label, true)
+gui.set_inherit_alpha(label, true)
 
     return { bg = bg, border = border, icon = ic, label = label, id = app.id, col = app.col }
 end
