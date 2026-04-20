@@ -102,7 +102,9 @@ end
 local function set_phone_enabled(self, enabled)
     print("[phone_v2] set_phone_enabled called with enabled=" .. tostring(enabled))
     for _, id in ipairs(PHONE_NODES) do
-        gui.set_enabled(gui.get_node(id), enabled)
+        local node = gui.get_node(id)
+        gui.set_enabled(node, enabled)
+        print("[phone_v2] node '" .. id .. "' enabled=" .. tostring(enabled) .. ", exists=" .. tostring(node ~= nil))
     end
     print("[phone_v2] static nodes enabled, now enabling " .. #self.tiles .. " tiles")
     for i = 1, #self.tiles do

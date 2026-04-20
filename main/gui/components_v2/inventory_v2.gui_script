@@ -137,9 +137,13 @@ local function set_visible(id, v)
 end
 
 local function set_inventory_enabled(enabled)
+    print("[inventory_v2] set_inventory_enabled called with enabled=" .. tostring(enabled))
     for _, id in ipairs(INVENTORY_NODES) do
-        gui.set_enabled(gui.get_node(id), enabled)
+        local node = gui.get_node(id)
+        gui.set_enabled(node, enabled)
+        print("[inventory_v2] node '" .. id .. "' enabled=" .. tostring(enabled) .. ", exists=" .. tostring(node ~= nil))
     end
+    print("[inventory_v2] all static nodes processed")
 end
 
 local function set_text(id, s)
