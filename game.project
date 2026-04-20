@@ -8,6 +8,8 @@ shared_state = 1
 width = 1280
 height = 720
 high_dpi = 1
+display_profiles = /builtins/render/default.display_profilesc
+dynamic_orientation = 0
 
 [android]
 input_method = HiddenInputField
