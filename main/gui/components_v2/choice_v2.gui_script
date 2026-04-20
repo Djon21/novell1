@@ -37,7 +37,7 @@ local COLORS = {
     hot    = vmath.vector4(1.0, 0.239, 0.498, 1.0),
     amber  = vmath.vector4(1.0, 0.702, 0.278, 1.0),
     violet = vmath.vector4(0.478, 0.361, 1.0, 1.0),
-    opt_bg_normal = vmath.vector4(0.0, 1.0, 0.0, 1.0),
+    opt_bg_normal = vmath.vector4(0.067, 0.055, 0.173, 0.95),
     opt_bg_key    = vmath.vector4(0.049, 0.082, 0.173, 0.9),
     opt_bg_danger = vmath.vector4(0.235, 0.027, 0.078, 0.9),
     border_normal = vmath.vector4(0.49, 0.976, 1.0, 0.35),
@@ -72,47 +72,47 @@ local function clear_opts(self)
     self.opts = {}
 end
 
+-- opts_panel в .gui: position (160, 160), size (640, 300), pivot SW
+-- опции создаём TOP-LEVEL с абсолютными координатами (дети opts_panel по непонятной причине не рендерятся)
+local OPTS_PANEL_X = 160
+local OPTS_PANEL_Y = 160
+
 local function make_opt(self, idx, opt, total)
-    local parent = gui.get_node("opts_panel")
     local w = OPTS_W
     local h = OPT_HEIGHT
-    -- стакаем сверху вниз (первая опция сверху)
-    local y_top = OPTS_H - (idx - 1) * (OPT_HEIGHT + OPT_GAP)
-    local y = y_top - h
+    local y_top_local = OPTS_H - (idx - 1) * (OPT_HEIGHT + OPT_GAP)
+    local y_local = y_top_local - h
+    local abs_x = OPTS_PANEL_X
+    local abs_y = OPTS_PANEL_Y + y_local
 
     local bg_c, border_c = bg_for(opt.cls)
 
-    local bg = gui.new_box_node(vmath.vector3(0, y, 0.63), vmath.vector3(w, h, 0))
+    local bg = gui.new_box_node(vmath.vector3(abs_x, abs_y, 0.7), vmath.vector3(w, h, 0))
     gui.set_pivot(bg, gui.PIVOT_SW)
     gui.set_color(bg, bg_c)
-    gui.set_parent(bg, parent)
-    gui.set_inherit_alpha(bg, false)
     gui.set_adjust_mode(bg, gui.ADJUST_STRETCH)
     local sp = gui.get_screen_position(bg)
     print(string.format("[choice_v2] opt%d bg screen_pos=(%.1f,%.1f) size=(%.1f,%.1f) alpha=%.2f enabled=%s",
         idx, sp.x, sp.y, w, h, gui.get_color(bg).w, tostring(gui.is_enabled(bg))))
 
-    local border = gui.new_box_node(vmath.vector3(0, y, 0.64), vmath.vector3(w, 1, 0))
+    local border = gui.new_box_node(vmath.vector3(abs_x, abs_y, 0.71), vmath.vector3(w, 1, 0))
     gui.set_pivot(border, gui.PIVOT_SW)
     gui.set_color(border, border_c)
-    gui.set_parent(border, parent)
-    gui.set_inherit_alpha(border, false)
+    gui.set_adjust_mode(border, gui.ADJUST_STRETCH)
 
-    local label = gui.new_text_node(vmath.vector3(20, y + h - 22, 0.65), opt.text or "—")
+    local label = gui.new_text_node(vmath.vector3(abs_x + 20, abs_y + h - 22, 0.72), opt.text or "—")
     gui.set_pivot(label, gui.PIVOT_NW)
     gui.set_font(label, "manrope_16")
     gui.set_color(label, COLORS.paper)
-    gui.set_parent(label, parent)
-    gui.set_inherit_alpha(label, false)
+    gui.set_adjust_mode(label, gui.ADJUST_STRETCH)
 
     local hint_node
     if opt.hint and opt.hint ~= "" then
-        hint_node = gui.new_text_node(vmath.vector3(20, y + 8, 0.65), opt.hint)
+        hint_node = gui.new_text_node(vmath.vector3(abs_x + 20, abs_y + 8, 0.72), opt.hint)
         gui.set_pivot(hint_node, gui.PIVOT_SW)
         gui.set_font(hint_node, "jb_mono_10")
         gui.set_color(hint_node, hint_color(opt.hintCls))
-        gui.set_parent(hint_node, parent)
-        gui.set_inherit_alpha(hint_node, false)
+        gui.set_adjust_mode(hint_node, gui.ADJUST_STRETCH)
     end
 
     return { bg = bg, border = border, text = label, hint = hint_node, cls = opt.cls }
