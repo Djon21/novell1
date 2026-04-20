@@ -1,7 +1,7 @@
 -- scenes.lua
 -- Каталог сцен point-and-click слоя. Данные, не код.
 -- rect = { x, y, w, h } — x/y это ЛЕВЫЙ-НИЖНИЙ угол прямоугольника
--- в коорд. системе .gui (960×640, origin левый-нижний).
+-- в коорд. системе .gui (1280×720, origin левый-нижний).
 -- scene_controller сам пересчитает в центр+size при выставлении ноды.
 --
 -- action.type:
@@ -21,28 +21,28 @@ M.scenes = {
         hotspots = {
             {
                 id = "to_kitchen",
-                rect = { x = 0, y = 0, w = 220, h = 640 },
+                rect = { x = 0, y = 0, w = 293, h = 720 },
                 label = "На кухню",
                 icon = "",
                 action = { type = "goto_scene", scene = "kitchen" },
             },
             {
                 id = "to_bathroom",
-                rect = { x = 620, y = 115, w = 135, h = 370 },
+                rect = { x = 827, y = 129, w = 180, h = 416 },
                 label = "В ванную",
                 icon = "",
                 action = { type = "goto_scene", scene = "bathroom" },
             },
             {
                 id = "to_bedroom_day",
-                rect = { x = 830, y = 75, w = 130, h = 515 },
+                rect = { x = 1107, y = 84, w = 173, h = 579 },
                 label = "В спальню",
                 icon = "",
                 action = { type = "goto_scene", scene = "bedroom_day" },
             },
             {
                 id = "leave_home",
-                rect = { x = 390, y = 130, w = 175, h = 365 },
+                rect = { x = 520, y = 146, w = 233, h = 411 },
                 label = "Выйти",
                 icon = "",
                 action = { type = "ink_knot", knot = "leave_apartment" },
@@ -64,7 +64,7 @@ M.scenes = {
             -- Кофемашина без кружки — первый клик, подскажет искать кружку.
             {
                 id = "coffee_maker_empty",
-                rect = { x = 155, y = 250, w = 160, h = 155 },
+                rect = { x = 207, y = 281, w = 213, h = 174 },
                 label = "Кофемашина",
                 -- U+E541 coffee_maker
                 icon = string.char(0xEE, 0x95, 0x81),
@@ -76,7 +76,7 @@ M.scenes = {
             -- Та же кофемашина, с кружкой — варим кофе.
             {
                 id = "coffee_maker_brew",
-                rect = { x = 155, y = 250, w = 160, h = 155 },
+                rect = { x = 207, y = 281, w = 213, h = 174 },
                 label = "Сварить кофе",
                 icon = string.char(0xEE, 0x95, 0x81),
                 action = { type = "ink_knot", knot = "use_coffee_machine_with_cup" },
@@ -87,7 +87,7 @@ M.scenes = {
             -- Ящик с кружкой — виден пока кружку не взяли.
             {
                 id = "mug_drawer",
-                rect = { x = 420, y = 180, w = 160, h = 140 },
+                rect = { x = 560, y = 202, w = 213, h = 158 },
                 label = "Ящик",
                 -- U+E2C7 inventory
                 icon = string.char(0xEE, 0x8B, 0x87),
@@ -96,7 +96,7 @@ M.scenes = {
             },
             {
                 id = "back_from_kitchen",
-                rect = { x = 0, y = 0, w = 140, h = 640 },
+                rect = { x = 0, y = 0, w = 187, h = 720 },
                 label = "Назад",
                 -- U+E5C4 arrow_back
                 icon = string.char(0xEE, 0x97, 0x84),
@@ -114,7 +114,7 @@ M.scenes = {
         hotspots = {
             {
                 id = "back_from_bathroom",
-                rect = { x = 30, y = 30, w = 140, h = 80 },
+                rect = { x = 40, y = 34, w = 187, h = 90 },
                 label = "Назад",
                 icon = string.char(0xEE, 0x97, 0x84),  -- U+E5C4 arrow_back
                 action = { type = "goto_scene", scene = "apartment_hub" },
@@ -147,14 +147,14 @@ M.scenes = {
         hotspots = {
             {
                 id = "look_at_monitor",
-                rect = { x = 680, y = 300, w = 280, h = 215 },
+                rect = { x = 907, y = 338, w = 373, h = 242 },
                 label = "Монитор",
                 icon = "",
                 action = { type = "ink_knot", knot = "bedroom_monitor" },
             },
             {
                 id = "phone_on_desk",
-                rect = { x = 400, y = 300, w = 180, h = 160 },
+                rect = { x = 533, y = 338, w = 240, h = 180 },
                 label = "Телефон",
                 icon = string.char(0xEE, 0xA4, 0x93),  -- U+E913 smartphone
                 action = { type = "ink_knot", knot = "take_phone" },
@@ -165,7 +165,7 @@ M.scenes = {
             },
             {
                 id = "back_from_bedroom",
-                rect = { x = 785, y = 0, w = 175, h = 235 },
+                rect = { x = 1047, y = 0, w = 233, h = 264 },
                 label = "Назад",
                 icon = "",
                 action = { type = "goto_scene", scene = "apartment_hub" },
@@ -191,7 +191,7 @@ M.scenes = {
             -- Закрыть — ПЕРВЫЙ в списке, чтобы точно попасть в лимит 6 hotspot'ов
             {
                 id = "phone_close",
-                rect = { x = 360, y = 80, w = 240, h = 100 },
+                rect = { x = 480, y = 90, w = 320, h = 112 },
                 label = "Закрыть",
                 icon = string.char(0xEE, 0x97, 0x8D),  -- U+E5CD close
                 action = { type = "phone_close" },
