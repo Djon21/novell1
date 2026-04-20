@@ -234,6 +234,13 @@ function init(self)
     gui.set_enabled(gui.get_node("scene_bg_next"), false)
     -- стартовое состояние — пустой плейсхолдер
     render(self, { speaker = "_default", name = "—", text = "" })
+    
+    -- Анимация next arrow (bob effect)
+    local next_label = gui.get_node("btn_next_label")
+    local pos = gui.get_position(next_label)
+    gui.animate(next_label, "position.x", pos.x + 5, 
+        gui.EASING_INOUTSINE, 1.4, 0, nil, 
+        gui.PLAYBACK_LOOP_PINGPONG)
 end
 
 function on_message(self, message_id, message, sender)
