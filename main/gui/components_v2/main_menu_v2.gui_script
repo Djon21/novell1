@@ -137,7 +137,7 @@ end
 -- ---- ticker marquee (step19) ----
 local TICKER_SPEED = 40  -- px/сек влево
 local TICKER_TEXT_WIDTH = 2400
-local SCREEN_W = 960
+local SCREEN_W = 1280  -- было 960
 
 function update(self, dt)
     if not self.visible then return end
