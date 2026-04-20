@@ -1,6 +1,6 @@
 ---
 name: defold-gui
-description: AVOS project GUI standards - Defold V2 UI system, design port rules, theme system, and battle-tested patterns
+description: AVOS project GUI standards - Defold V2 UI system, design port rules, theme system, battle-tested patterns, and official Defold GUI best practices
 license: MIT
 compatibility: opencode
 metadata:
@@ -8,11 +8,12 @@ metadata:
   framework: defold
   language: lua
   project: AVOS visual novel
+  updated: 2026-04-20
 ---
 
 ## What I do
 
-I am the **authoritative source** for AVOS GUI development standards. I enforce:
+I am the **authoritative source** for AVOS GUI development standards and Defold GUI best practices. I enforce:
 
 - **DESIGN_PORT_RULES.md**: Battle-tested rules from real bugs (with commit references)
 - **V2 Theme System**: Color palette, fonts, layout constants from `v2_theme.lua`
@@ -21,6 +22,7 @@ I am the **authoritative source** for AVOS GUI development standards. I enforce:
 - **Dynamic Node Patterns**: Absolute positioning, no parenting, explicit z-order
 - **Message Passing**: Serialization rules, URL formats, clean data structures
 - **Visual Novel Patterns**: Dialogue, portraits, choices, inventory, phone UI
+- **Official Defold GUI Practices**: Layouts, node types, rendering optimization, input handling
 
 ## When to use me
 
@@ -34,6 +36,9 @@ I am the **authoritative source** for AVOS GUI development standards. I enforce:
 - Using texture atlases and sprite animations
 - Handling Cyrillic text (UTF-8 string operations)
 - Setting up message passing between components
+- Working with GUI layouts for different screen sizes/orientations
+- Optimizing GUI rendering and draw calls
+- Implementing GUI scripts and input handling
 
 **DO NOT use for:**
 - Legacy UI in `main/gui/components/` (read-only, do not modify)
@@ -486,6 +491,308 @@ end
 
 ### 6. Check Pick vs Render
 If `gui.pick_node()` works but node invisible = alpha/z/parent issue (Rules #1, #3, #4)
+
+---
+
+## 🔧 AVOS-SPECIFIC PATTERNS
+
+---
+
+## 📚 OFFICIAL DEFOLD GUI BEST PRACTICES
+
+### GUI Component Structure
+
+**Creating GUI Components:**
+
+1. GUI components are created from `.gui` files (scene prototypes)
+2. Each GUI component must be attached to a game object in a collection
+3. GUI components render independently of game view (by default on top)
+4. GUI components don't have visual representation in collection editor
+
+**GUI Properties:**
+
+- `Script`: GUI script bound to this component
+- `Material`: Material used for rendering (can have multiple materials per GUI)
+- `Adjust Reference`: Controls node adjust mode calculation (`Per Node` or `Disable`)
+- `Max Nodes`: Maximum number of nodes for this GUI
+- `Max Dynamic Textures`: Max textures created via `gui.new_texture()`
+
+### Node Types and Usage
+
+**Box Nodes:**
+- Rectangular nodes with color, texture, or flipbook animation
+- Always rendered even without texture (assign textures for proper batching!)
+- Support Slice-9 texturing for scalable UI elements
+- Tint color multiplies onto image data (white = no tint)
+
+**Text Nodes:**
+- Display text with font resources
+- Alignment controlled by pivot: Center/West/East
+- Line Break property for multi-line text
+- Leading (line spacing) and Tracking (letter spacing) properties
+
+**Pie Nodes:**
+- Circular/ellipsoid nodes, can be partially filled or inverted
+- Inner Radius, Outer Bounds, Perimeter Vertices properties
+- Pie Fill Angle controls fill amount
+
+**Template Nodes:**
+- Instances based on other GUI scene files
+- Reusable GUI components
+
+**ParticleFX Nodes:**
+- Play particle effects in GUI
+
+### Node Properties Deep Dive
+
+**Pivot Point:**
+- Center point for rotation, scaling, size changes
+- Options: Center, North, South, East, West, NE, NW, SE, SW
+- Changing pivot moves node so new pivot is at node's position
+- Text alignment: Center = center-aligned, West = left, East = right
+
+**Anchoring (X/Y Anchor):**
+- Controls position when scene/parent boundaries stretch
+- `None`: Keeps position from center relative to adjusted size
+- `Left/Right` (X): Scales horizontal position to keep percentage from edges
+- `Top/Bottom` (Y): Scales vertical position to keep percentage from edges
+
+**Adjust Mode:**
+- Controls what happens when scene/parent boundaries adjust to screen
+- `Fit`: Content fits inside stretched bounding box (smallest dimension)
+- `Zoom`: Content covers stretched bounding box (largest dimension)
+- `Stretch`: Content fills stretched bounding box completely
+- Ignored if GUI's `Adjust Reference` is `Disabled`
+
+**Practical Example - Pivot, Anchors, Adjust Mode:**
+
+For a 640x1136 UI that needs to adapt to wider screens:
+1. Top/bottom panels: Pivot North/South, Adjust Mode Stretch, X Anchor Left/Right
+2. Side elements: Set X Anchor to Left/Right, Pivot to West/East
+3. Center elements: Pivot Center, Anchors None for relative positioning
+
+### Draw Order and Rendering
+
+**Within one .gui file:**
+- Nodes render in list order (top = first/behind, bottom = last/front)
+- Z-value doesn't control order (but affects render range)
+- Use Alt+Up/Down to reorder nodes
+- Parents drawn before children
+
+**Between GUI components:**
+- Z is IGNORED between components in same game object
+- Render order = component order in game object
+- Use Layers to override draw order within a GUI
+
+**Layers for Optimization:**
+- Group nodes by type, texture, blend mode, font for batching
+- Assign layers to control draw order independent of hierarchy
+- Child nodes inherit parent's layer if unset
+- "null" layer drawn before any named layer
+- Reduces draw calls significantly
+
+**Example Layer Setup:**
+```
+Layer "graphics": all button backgrounds
+Layer "text": all button text
+Result: 2 draw calls instead of 6 (for 3 buttons)
+```
+
+### GUI Layouts for Multiple Resolutions
+
+**Display Profiles:**
+- Define in `.display_profiles` file (or use builtins)
+- Each profile has Width, Height, Device Models qualifiers
+- Device Models: comma-separated, matches start of model name
+- Example: `"iPhone10,3", "iPhone10,6"` for iPhone X
+
+**Auto Layout Selection:**
+- ON (default): Engine automatically selects best matching layout
+- OFF: Use `gui.set_layout()` manually from script
+- Scoring: based on area and aspect ratio differences
+- Orientation matching: landscape/portrait preference
+
+**Creating Layouts:**
+- Right-click Layouts in Outline → Add → Layout
+- Each layout overrides properties from Default layout
+- Overridden properties marked in blue
+- Layouts cannot add/remove nodes, only override properties
+
+**Layout Change Messages:**
+```lua
+function on_message(self, message_id, message, sender)
+  if message_id == hash("layout_changed") then
+    -- message.id contains hashed layout id
+    if message.id == hash("Portrait") then
+      -- handle portrait layout
+    end
+  end
+end
+```
+
+**Manual Layout Control:**
+```lua
+-- Set layout manually (when Auto Layout Selection is OFF)
+local ok = gui.set_layout("Portrait")  -- returns true if exists
+
+-- Get all available layouts
+local layouts = gui.get_layouts()  -- returns {id_hash = vector3(w,h,0)}
+```
+
+### GUI Scripts
+
+**Script Lifecycle:**
+```lua
+function init(self)
+  -- Initialization, call msg.post(".", "acquire_input_focus") if using on_input
+end
+
+function final(self)
+  -- Cleanup
+end
+
+function update(self, dt)
+  -- Per-frame updates
+end
+
+function on_message(self, message_id, message, sender)
+  -- Handle messages
+end
+
+function on_input(self, action_id, action)
+  -- Handle input (requires acquire_input_focus)
+end
+
+function on_reload(self)
+  -- Hot reload handling
+end
+```
+
+**Important Notes:**
+- GUI scripts use `gui.*` namespace, NOT `go.*`
+- Attempting to use `go.*` functions will cause error
+- Message passing works like any script component
+- Address GUI: `msg.post("hud#gui", "message", data)`
+
+**Node Addressing:**
+```lua
+-- Static nodes (from .gui file)
+local node = gui.get_node("node_id")
+
+-- Dynamic nodes (created at runtime)
+local new_node = gui.new_box_node(pos, size)
+-- Keep reference! Dynamic nodes have no id by design
+```
+
+**Dynamic Node Creation:**
+```lua
+-- Create from scratch
+local box = gui.new_box_node(vmath.vector3(x, y, z), vmath.vector3(w, h, 0))
+local text = gui.new_text_node(vmath.vector3(x, y, z), "Hello")
+
+-- Clone existing
+local clone = gui.clone(original_node)
+local tree = gui.clone_tree(root_node)  -- returns table of cloned nodes
+```
+
+### Slice-9 Texturing
+
+**When to Use:**
+- Panels/dialogs that resize to fit content
+- Health bars that scale
+- Any UI element that needs context-sensitive sizing
+
+**How It Works:**
+- Define 4 margins (left, top, right, bottom) in pixels
+- Corners never scale
+- Edges scale along one axis only
+- Center scales both axes
+
+**Important:**
+- Only applied when changing node SIZE, not SCALE
+- For Sprites: Image Trim Mode must be OFF
+- Avoid scaling down segments below original size (mipmap artifacts)
+
+**Slice9 Property Format:**
+```
+Slice9: left, top, right, bottom (clockwise from left)
+```
+
+### Input Handling
+
+**Acquiring Input Focus:**
+```lua
+function init(self)
+  msg.post(".", "acquire_input_focus")
+end
+
+function on_input(self, action_id, action)
+  if action_id == hash("touch") and action.pressed then
+    local node = gui.get_node("button")
+    if gui.pick_node(node, action.x, action.y) then
+      -- Handle button press
+    end
+  end
+end
+```
+
+**Important:** `gui.pick_node()` checks geometry only, ignores `enabled` flag and alpha!
+
+**Safe Pick Pattern:**
+```lua
+if gui.is_enabled(node) and gui.pick_node(node, action.x, action.y) then
+  -- Safe to interact
+end
+```
+
+### Runtime Property Manipulation
+
+**Get/Set GUI Resources:**
+```lua
+-- Fonts
+go.get("#gui", "fonts", { key = "default" })
+go.set("#gui", "fonts", font_resource, { key = "default" })
+
+-- Materials
+go.get("#gui", "materials", { key = "effect" })
+go.set("#gui", "materials", material_resource, { key = "effect" })
+
+-- Textures (atlases)
+go.get("#gui", "textures", { key = "theme" })
+go.set("#gui", "textures", atlas_resource, { key = "theme" })
+```
+
+### Performance Optimization
+
+**Batching Rules:**
+Nodes batch together when they share:
+- Same node type
+- Same atlas/tile source
+- Same blend mode
+- Same font (for text)
+
+**Breaking Batches:**
+- Different node types
+- Clipping nodes (always break batch)
+- Each stencil scope breaks batch
+- Mixed node types in hierarchy
+
+**Optimization Strategy:**
+1. Use layers to group similar nodes
+2. Assign textures to all box nodes (even invisible ones)
+3. Minimize node type mixing
+4. Use same atlas for related graphics
+5. Group text nodes by font
+
+### Common Pitfalls
+
+1. **Box nodes without textures** - Always assign texture for proper batching
+2. **Forgetting acquire_input_focus** - Input won't work without it
+3. **Using go.* in GUI scripts** - Use gui.* namespace only
+4. **Scaling instead of sizing for Slice-9** - Change SIZE property, not SCALE
+5. **Picking disabled nodes** - Always check `gui.is_enabled()` before `gui.pick_node()`
+6. **Dynamic nodes without references** - Keep references, they have no ids
+7. **Z-order between components** - Use component order in game object, not z-values
 
 ---
 
