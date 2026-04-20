@@ -207,6 +207,22 @@ nodes {
 }
 
 nodes {
+  position { x: 820.0 y: 220.0 z: 0.42 }
+  size { x: 100.0 y: 14.0 }
+  color { x: 0.784 y: 0.078 z: 0.165 w: 1.0 }
+  type: TYPE_TEXT
+  text: "петля #017"
+  font: "jb_mono_10"
+  id: "loop_counter"
+  pivot: PIVOT_E
+  parent: "dlg_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+
+nodes {
   position { x: 160.0 y: 172.0 z: 0.42 }
   size { x: 720.0 y: 120.0 }
   color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }

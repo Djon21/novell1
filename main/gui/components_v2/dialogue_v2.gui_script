@@ -132,6 +132,10 @@ local function render(self, msg)
     set_text("nameplate_tag", msg.tag or c.tag or "")
     set_color("nameplate_tag", c.color)
 
+    -- Loop counter (петля #XXX)
+    local loop_num = msg.loop or 17
+    set_text("loop_counter", string.format("петля #%03d", loop_num))
+
     -- Портрет: если передан portrait в msg или есть в CHARS, используем спрайт из v2.atlas, иначе icon-заглушку
     local portrait_bg = gui.get_node("portrait_bg")
     local portrait_icon = gui.get_node("portrait_icon")
