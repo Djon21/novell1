@@ -27,7 +27,7 @@ local function set_all_enabled(enabled)
     end
 end
 
-local OPTS_W, OPTS_H = 640, 300   -- размеры opts_panel
+local OPTS_W, OPTS_H = 853, 300   -- размеры opts_panel (было 640×300, ×1.333)
 local OPT_HEIGHT = 60
 local OPT_GAP    = 12
 
@@ -119,7 +119,7 @@ local function update_timer(self)
     gui.set_text(gui.get_node("timer_num"), tostring(math.ceil(self.time_left)))
     local fill = gui.get_node("timer_fill")
     local sz = gui.get_size(fill)
-    sz.x = 640 * pct
+    sz.x = 853 * pct  -- было 640, теперь 853 (×1.333)
     gui.set_size(fill, sz)
     -- меняем цвет к красному когда близко к концу
     if pct < 0.3 then
