@@ -956,6 +956,706 @@ nodes {
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
+nodes {
+  position { x: 888.0 y: 510.0 z: 0.54 }
+  size { x: 60.0 y: 18.0 }
+  color { x: 0.49 y: 0.976 z: 1.0 w: 0.85 }
+  type: TYPE_TEXT
+  text: "← домой"
+  font: "jb_mono_10"
+  id: "home_btn"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 436.0 y: 498.0 z: 0.53 }
+  size { x: 460.0 y: 12.0 }
+  color { x: 0.49 y: 0.976 z: 1.0 w: 1.0 }
+  type: TYPE_TEXT
+  text: "журнал вызовов · 4 записи"
+  font: "jb_mono_10"
+  id: "v_calls_eyebrow"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 436.0 y: 474.0 z: 0.53 }
+  size { x: 460.0 y: 22.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  type: TYPE_TEXT
+  text: "Звонки"
+  font: "unbounded_bold_20"
+  id: "v_calls_title"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 432.0 y: 390.0 z: 0.53 }
+  size { x: 476.0 y: 46.0 }
+  color { x: 0.49 y: 0.976 z: 1.0 w: 0.08 }
+  type: TYPE_BOX
+  id: "v_calls_row1_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+}
+nodes {
+  position { x: 444.0 y: 422.0 z: 0.54 }
+  size { x: 300.0 y: 12.0 }
+  color { x: 0.49 y: 0.976 z: 1.0 w: 1.0 }
+  type: TYPE_TEXT
+  text: "Н. М."
+  font: "jb_mono_bold_14"
+  id: "v_calls_row1_name"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 444.0 y: 402.0 z: 0.54 }
+  size { x: 440.0 y: 12.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 0.55 }
+  type: TYPE_TEXT
+  text: "пропущенный · 06:42"
+  font: "jb_mono_10"
+  id: "v_calls_row1_meta"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 432.0 y: 332.0 z: 0.53 }
+  size { x: 476.0 y: 46.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 0.05 }
+  type: TYPE_BOX
+  id: "v_calls_row2_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+}
+nodes {
+  position { x: 444.0 y: 364.0 z: 0.54 }
+  size { x: 300.0 y: 12.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  type: TYPE_TEXT
+  text: "Мама"
+  font: "jb_mono_bold_14"
+  id: "v_calls_row2_name"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 444.0 y: 344.0 z: 0.54 }
+  size { x: 440.0 y: 12.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 0.55 }
+  type: TYPE_TEXT
+  text: "исходящий · вчера 21:05"
+  font: "jb_mono_10"
+  id: "v_calls_row2_meta"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 432.0 y: 274.0 z: 0.53 }
+  size { x: 476.0 y: 46.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 0.05 }
+  type: TYPE_BOX
+  id: "v_calls_row3_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+}
+nodes {
+  position { x: 444.0 y: 306.0 z: 0.54 }
+  size { x: 300.0 y: 12.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  text: "+7 (???) ???-??-??"
+  font: "jb_mono_bold_14"
+  type: TYPE_TEXT
+  id: "v_calls_row3_name"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 444.0 y: 286.0 z: 0.54 }
+  size { x: 440.0 y: 12.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 0.55 }
+  type: TYPE_TEXT
+  text: "входящий · 03:14"
+  font: "jb_mono_10"
+  id: "v_calls_row3_meta"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 436.0 y: 498.0 z: 0.53 }
+  size { x: 460.0 y: 12.0 }
+  color { x: 1.0 y: 0.702 z: 0.278 w: 1.0 }
+  type: TYPE_TEXT
+  text: "карта · см. модалку карты"
+  font: "jb_mono_10"
+  id: "v_map_eyebrow"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 436.0 y: 474.0 z: 0.53 }
+  size { x: 460.0 y: 22.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  type: TYPE_TEXT
+  text: "Карта"
+  font: "unbounded_bold_20"
+  id: "v_map_title"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 432.0 y: 160.0 z: 0.53 }
+  size { x: 476.0 y: 280.0 }
+  color { x: 1.0 y: 0.702 z: 0.278 w: 0.05 }
+  type: TYPE_BOX
+  id: "v_map_placeholder"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+}
+nodes {
+  position { x: 670.0 y: 320.0 z: 0.54 }
+  size { x: 440.0 y: 22.0 }
+  color { x: 1.0 y: 0.702 z: 0.278 w: 0.9 }
+  type: TYPE_TEXT
+  text: "полноэкранная карта — кнопка M"
+  font: "unbounded_bold_20"
+  id: "v_map_hint"
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 670.0 y: 290.0 z: 0.54 }
+  size { x: 440.0 y: 14.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 0.5 }
+  type: TYPE_TEXT
+  text: "здесь: миниатюра текущей локации"
+  font: "manrope_14"
+  id: "v_map_hint2"
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 436.0 y: 498.0 z: 0.53 }
+  size { x: 460.0 y: 12.0 }
+  color { x: 0.478 y: 0.361 z: 1.0 w: 1.0 }
+  type: TYPE_TEXT
+  text: "улики · пока пусто"
+  font: "jb_mono_10"
+  id: "v_clues_eyebrow"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 436.0 y: 474.0 z: 0.53 }
+  size { x: 460.0 y: 22.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  type: TYPE_TEXT
+  text: "Улики"
+  font: "unbounded_bold_20"
+  id: "v_clues_title"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 432.0 y: 340.0 z: 0.53 }
+  size { x: 230.0 y: 100.0 }
+  color { x: 0.478 y: 0.361 z: 1.0 w: 0.08 }
+  type: TYPE_BOX
+  id: "v_clues_card1_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+}
+nodes {
+  position { x: 444.0 y: 420.0 z: 0.54 }
+  size { x: 200.0 y: 14.0 }
+  color { x: 0.478 y: 0.361 z: 1.0 w: 1.0 }
+  type: TYPE_TEXT
+  text: "CLUE · 01"
+  font: "jb_mono_bold_14"
+  id: "v_clues_card1_tag"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 444.0 y: 380.0 z: 0.54 }
+  size { x: 210.0 y: 40.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 0.8 }
+  type: TYPE_TEXT
+  text: "странная запись в журнале"
+  font: "manrope_14"
+  id: "v_clues_card1_body"
+  pivot: PIVOT_NW
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  line_break: true
+}
+nodes {
+  position { x: 676.0 y: 340.0 z: 0.53 }
+  size { x: 230.0 y: 100.0 }
+  color { x: 0.478 y: 0.361 z: 1.0 w: 0.05 }
+  type: TYPE_BOX
+  id: "v_clues_card2_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+}
+nodes {
+  position { x: 688.0 y: 420.0 z: 0.54 }
+  size { x: 200.0 y: 14.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 0.45 }
+  type: TYPE_TEXT
+  text: "CLUE · 02 ???"
+  font: "jb_mono_bold_14"
+  id: "v_clues_card2_tag"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 688.0 y: 380.0 z: 0.54 }
+  size { x: 210.0 y: 40.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 0.4 }
+  type: TYPE_TEXT
+  text: "заблокировано — нужно больше данных"
+  font: "manrope_14"
+  id: "v_clues_card2_body"
+  pivot: PIVOT_NW
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  line_break: true
+}
+nodes {
+  position { x: 436.0 y: 498.0 z: 0.53 }
+  size { x: 460.0 y: 12.0 }
+  color { x: 1.0 y: 0.239 z: 0.498 w: 1.0 }
+  type: TYPE_TEXT
+  text: "квесты · активных 2"
+  font: "jb_mono_10"
+  id: "v_quests_eyebrow"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 436.0 y: 474.0 z: 0.53 }
+  size { x: 460.0 y: 22.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  type: TYPE_TEXT
+  text: "Квесты"
+  font: "unbounded_bold_20"
+  id: "v_quests_title"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 432.0 y: 360.0 z: 0.53 }
+  size { x: 476.0 y: 76.0 }
+  color { x: 1.0 y: 0.239 z: 0.498 w: 0.08 }
+  type: TYPE_BOX
+  id: "v_quests_q1_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+}
+nodes {
+  position { x: 444.0 y: 420.0 z: 0.54 }
+  size { x: 300.0 y: 12.0 }
+  color { x: 1.0 y: 0.239 z: 0.498 w: 1.0 }
+  type: TYPE_TEXT
+  text: "Найти причину петли"
+  font: "jb_mono_bold_14"
+  id: "v_quests_q1_name"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 444.0 y: 390.0 z: 0.54 }
+  size { x: 450.0 y: 28.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 0.7 }
+  type: TYPE_TEXT
+  text: "собрать улики о понедельнике · 1/3"
+  font: "manrope_14"
+  id: "v_quests_q1_desc"
+  pivot: PIVOT_NW
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  line_break: true
+}
+nodes {
+  position { x: 432.0 y: 272.0 z: 0.53 }
+  size { x: 476.0 y: 76.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 0.05 }
+  type: TYPE_BOX
+  id: "v_quests_q2_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+}
+nodes {
+  position { x: 444.0 y: 332.0 z: 0.54 }
+  size { x: 300.0 y: 12.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  type: TYPE_TEXT
+  text: "Не опоздать на работу"
+  font: "jb_mono_bold_14"
+  id: "v_quests_q2_name"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 444.0 y: 302.0 z: 0.54 }
+  size { x: 450.0 y: 28.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 0.7 }
+  type: TYPE_TEXT
+  text: "успеть к 09:00 · 0/1"
+  font: "manrope_14"
+  id: "v_quests_q2_desc"
+  pivot: PIVOT_NW
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  line_break: true
+}
+nodes {
+  position { x: 436.0 y: 498.0 z: 0.53 }
+  size { x: 460.0 y: 12.0 }
+  color { x: 1.0 y: 0.239 z: 0.498 w: 1.0 }
+  type: TYPE_TEXT
+  text: "почта · 2 непрочитанных"
+  font: "jb_mono_10"
+  id: "v_mail_eyebrow"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 436.0 y: 474.0 z: 0.53 }
+  size { x: 460.0 y: 22.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  type: TYPE_TEXT
+  text: "Почта"
+  font: "unbounded_bold_20"
+  id: "v_mail_title"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 432.0 y: 360.0 z: 0.53 }
+  size { x: 476.0 y: 76.0 }
+  color { x: 1.0 y: 0.239 z: 0.498 w: 0.08 }
+  type: TYPE_BOX
+  id: "v_mail_m1_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+}
+nodes {
+  position { x: 444.0 y: 420.0 z: 0.54 }
+  size { x: 400.0 y: 12.0 }
+  color { x: 1.0 y: 0.239 z: 0.498 w: 1.0 }
+  type: TYPE_TEXT
+  text: "hr@megacorp.ru"
+  font: "jb_mono_bold_14"
+  id: "v_mail_m1_from"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 444.0 y: 390.0 z: 0.54 }
+  size { x: 450.0 y: 28.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 0.8 }
+  type: TYPE_TEXT
+  text: "испытательный срок: напоминание о дедлайне"
+  font: "manrope_14"
+  id: "v_mail_m1_subj"
+  pivot: PIVOT_NW
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  line_break: true
+}
+nodes {
+  position { x: 432.0 y: 272.0 z: 0.53 }
+  size { x: 476.0 y: 76.0 }
+  color { x: 1.0 y: 0.239 z: 0.498 w: 0.08 }
+  type: TYPE_BOX
+  id: "v_mail_m2_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+}
+nodes {
+  position { x: 444.0 y: 332.0 z: 0.54 }
+  size { x: 400.0 y: 12.0 }
+  color { x: 1.0 y: 0.239 z: 0.498 w: 1.0 }
+  type: TYPE_TEXT
+  text: "noreply@loop.system"
+  font: "jb_mono_bold_14"
+  id: "v_mail_m2_from"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 444.0 y: 302.0 z: 0.54 }
+  size { x: 450.0 y: 28.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 0.8 }
+  type: TYPE_TEXT
+  text: "повтор цикла 017 · отчёт"
+  font: "manrope_14"
+  id: "v_mail_m2_subj"
+  pivot: PIVOT_NW
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  line_break: true
+}
+nodes {
+  position { x: 436.0 y: 498.0 z: 0.53 }
+  size { x: 460.0 y: 12.0 }
+  color { x: 0.49 y: 0.976 z: 1.0 w: 1.0 }
+  type: TYPE_TEXT
+  text: "камера · нет сигнала"
+  font: "jb_mono_10"
+  id: "v_cam_eyebrow"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 436.0 y: 474.0 z: 0.53 }
+  size { x: 460.0 y: 22.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  type: TYPE_TEXT
+  text: "Камера"
+  font: "unbounded_bold_20"
+  id: "v_cam_title"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 432.0 y: 160.0 z: 0.53 }
+  size { x: 476.0 y: 280.0 }
+  color { x: 0.0 y: 0.0 z: 0.0 w: 1.0 }
+  type: TYPE_BOX
+  id: "v_cam_screen"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+}
+nodes {
+  position { x: 670.0 y: 310.0 z: 0.54 }
+  size { x: 440.0 y: 22.0 }
+  color { x: 0.49 y: 0.976 z: 1.0 w: 0.9 }
+  type: TYPE_TEXT
+  text: "NO SIGNAL"
+  font: "unbounded_bold_20"
+  id: "v_cam_msg"
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 670.0 y: 280.0 z: 0.54 }
+  size { x: 440.0 y: 14.0 }
+  color { x: 0.49 y: 0.976 z: 1.0 w: 0.45 }
+  type: TYPE_TEXT
+  text: "CAM-01 · offline · last: 07:12"
+  font: "jb_mono_10"
+  id: "v_cam_meta"
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 436.0 y: 498.0 z: 0.53 }
+  size { x: 460.0 y: 12.0 }
+  color { x: 0.31 y: 0.98 z: 0.48 w: 1.0 }
+  type: TYPE_TEXT
+  text: "terminal · /dev/loop0"
+  font: "jb_mono_10"
+  id: "v_term_eyebrow"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 436.0 y: 474.0 z: 0.53 }
+  size { x: 460.0 y: 22.0 }
+  color { x: 0.31 y: 0.98 z: 0.48 w: 1.0 }
+  type: TYPE_TEXT
+  text: "Терминал"
+  font: "unbounded_bold_20"
+  id: "v_term_title"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 432.0 y: 80.0 z: 0.53 }
+  size { x: 476.0 y: 360.0 }
+  color { x: 0.0 y: 0.08 z: 0.02 w: 1.0 }
+  type: TYPE_BOX
+  id: "v_term_screen"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+}
+nodes {
+  position { x: 444.0 y: 420.0 z: 0.54 }
+  size { x: 450.0 y: 12.0 }
+  color { x: 0.31 y: 0.98 z: 0.48 w: 1.0 }
+  type: TYPE_TEXT
+  text: "> loop --init"
+  font: "jb_mono_12"
+  id: "v_term_l1"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 444.0 y: 400.0 z: 0.54 }
+  size { x: 450.0 y: 12.0 }
+  color { x: 0.31 y: 0.98 z: 0.48 w: 0.8 }
+  type: TYPE_TEXT
+  text: "[ok] monday-worker spawned · pid 017"
+  font: "jb_mono_12"
+  id: "v_term_l2"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 444.0 y: 380.0 z: 0.54 }
+  size { x: 450.0 y: 12.0 }
+  color { x: 1.0 y: 0.702 z: 0.278 w: 0.9 }
+  type: TYPE_TEXT
+  text: "[warn] cycle drift detected · +14ms"
+  font: "jb_mono_12"
+  id: "v_term_l3"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 444.0 y: 360.0 z: 0.54 }
+  size { x: 450.0 y: 12.0 }
+  color { x: 1.0 y: 0.239 z: 0.498 w: 0.95 }
+  type: TYPE_TEXT
+  text: "[err] reality.check() returned FALSE"
+  font: "jb_mono_12"
+  id: "v_term_l4"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT
 max_nodes: 512
