@@ -123,6 +123,28 @@ nodes {
 }
 
 nodes {
+  position { x: 50.0 y: 364.0 z: 0.215 }
+  size { x: 460.0 y: 34.0 }
+  color { x: 0.067 y: 0.055 z: 0.173 w: 0.78 }
+  type: TYPE_BOX
+  id: "mi_new_bg"
+  pivot: PIVOT_SW
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+}
+nodes {
+  position { x: 50.0 y: 364.0 z: 0.216 }
+  size { x: 3.0 y: 34.0 }
+  color { x: 0.49 y: 0.976 z: 1.0 w: 0.45 }
+  type: TYPE_BOX
+  id: "mi_new_bar"
+  pivot: PIVOT_SW
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+}
+nodes {
   position { x: 60.0 y: 380.0 z: 0.22 }
   size { x: 400.0 y: 28.0 }
   color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
@@ -136,6 +158,43 @@ nodes {
   inherit_alpha: true
   outline_alpha: 0.0
   shadow_alpha: 0.0
+}
+nodes {
+  position { x: 488.0 y: 380.0 z: 0.223 }
+  size { x: 18.0 y: 16.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 0.55 }
+  type: TYPE_TEXT
+  text: "→"
+  font: "jb_mono_12"
+  id: "mi_new_arrow"
+  pivot: PIVOT_E
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 50.0 y: 324.0 z: 0.215 }
+  size { x: 460.0 y: 34.0 }
+  color { x: 0.067 y: 0.055 z: 0.173 w: 0.72 }
+  type: TYPE_BOX
+  id: "mi_continue_bg"
+  pivot: PIVOT_SW
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+}
+nodes {
+  position { x: 50.0 y: 324.0 z: 0.216 }
+  size { x: 3.0 y: 34.0 }
+  color { x: 0.49 y: 0.976 z: 1.0 w: 0.40 }
+  type: TYPE_BOX
+  id: "mi_continue_bar"
+  pivot: PIVOT_SW
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
 }
 nodes {
   position { x: 60.0 y: 340.0 z: 0.22 }
@@ -153,6 +212,59 @@ nodes {
   shadow_alpha: 0.0
 }
 nodes {
+  position { x: 488.0 y: 340.0 z: 0.223 }
+  size { x: 18.0 y: 16.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 0.50 }
+  type: TYPE_TEXT
+  text: "→"
+  font: "jb_mono_12"
+  id: "mi_continue_arrow"
+  pivot: PIVOT_E
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 518.0 y: 340.0 z: 0.224 }
+  size { x: 60.0 y: 12.0 }
+  color { x: 1.0 y: 0.239 z: 0.498 w: 0.85 }
+  type: TYPE_TEXT
+  text: "LOCK"
+  font: "jb_mono_10"
+  id: "mi_continue_lock"
+  pivot: PIVOT_W
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  enabled: false
+}
+nodes {
+  position { x: 50.0 y: 288.0 z: 0.215 }
+  size { x: 460.0 y: 34.0 }
+  color { x: 0.067 y: 0.055 z: 0.173 w: 0.72 }
+  type: TYPE_BOX
+  id: "mi_gallery_bg"
+  pivot: PIVOT_SW
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+}
+nodes {
+  position { x: 50.0 y: 288.0 z: 0.216 }
+  size { x: 3.0 y: 34.0 }
+  color { x: 0.49 y: 0.976 z: 1.0 w: 0.40 }
+  type: TYPE_BOX
+  id: "mi_gallery_bar"
+  pivot: PIVOT_SW
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+}
+nodes {
   position { x: 60.0 y: 304.0 z: 0.22 }
   size { x: 400.0 y: 26.0 }
   color { x: 0.952 y: 0.925 z: 0.85 w: 0.78 }
@@ -166,6 +278,43 @@ nodes {
   inherit_alpha: true
   outline_alpha: 0.0
   shadow_alpha: 0.0
+}
+nodes {
+  position { x: 488.0 y: 304.0 z: 0.223 }
+  size { x: 18.0 y: 16.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 0.50 }
+  type: TYPE_TEXT
+  text: "→"
+  font: "jb_mono_12"
+  id: "mi_gallery_arrow"
+  pivot: PIVOT_E
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 50.0 y: 252.0 z: 0.215 }
+  size { x: 460.0 y: 34.0 }
+  color { x: 0.067 y: 0.055 z: 0.173 w: 0.72 }
+  type: TYPE_BOX
+  id: "mi_achievements_bg"
+  pivot: PIVOT_SW
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+}
+nodes {
+  position { x: 50.0 y: 252.0 z: 0.216 }
+  size { x: 3.0 y: 34.0 }
+  color { x: 0.49 y: 0.976 z: 1.0 w: 0.40 }
+  type: TYPE_BOX
+  id: "mi_achievements_bar"
+  pivot: PIVOT_SW
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
 }
 nodes {
   position { x: 60.0 y: 268.0 z: 0.22 }
@@ -182,7 +331,77 @@ nodes {
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
+nodes {
+  position { x: 488.0 y: 268.0 z: 0.223 }
+  size { x: 18.0 y: 16.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 0.50 }
+  type: TYPE_TEXT
+  text: "→"
+  font: "jb_mono_12"
+  id: "mi_achievements_arrow"
+  pivot: PIVOT_E
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
 
+nodes {
+  position { x: 56.0 y: 190.0 z: 0.218 }
+  size { x: 210.0 y: 28.0 }
+  color { x: 0.784 y: 0.078 z: 0.165 w: 0.10 }
+  type: TYPE_BOX
+  id: "stamp_plate"
+  pivot: PIVOT_SW
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+}
+nodes {
+  position { x: 56.0 y: 217.0 z: 0.219 }
+  size { x: 210.0 y: 1.0 }
+  color { x: 0.784 y: 0.078 z: 0.165 w: 0.75 }
+  type: TYPE_BOX
+  id: "stamp_border_t"
+  pivot: PIVOT_SW
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+}
+nodes {
+  position { x: 56.0 y: 190.0 z: 0.219 }
+  size { x: 210.0 y: 1.0 }
+  color { x: 0.784 y: 0.078 z: 0.165 w: 0.75 }
+  type: TYPE_BOX
+  id: "stamp_border_b"
+  pivot: PIVOT_SW
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+}
+nodes {
+  position { x: 56.0 y: 190.0 z: 0.219 }
+  size { x: 1.0 y: 28.0 }
+  color { x: 0.784 y: 0.078 z: 0.165 w: 0.75 }
+  type: TYPE_BOX
+  id: "stamp_border_l"
+  pivot: PIVOT_SW
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+}
+nodes {
+  position { x: 265.0 y: 190.0 z: 0.219 }
+  size { x: 1.0 y: 28.0 }
+  color { x: 0.784 y: 0.078 z: 0.165 w: 0.75 }
+  type: TYPE_BOX
+  id: "stamp_border_r"
+  pivot: PIVOT_SW
+  parent: "menu_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+}
 nodes {
   position { x: 60.0 y: 200.0 z: 0.22 }
   size { x: 180.0 y: 24.0 }

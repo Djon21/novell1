@@ -15,16 +15,24 @@
 --   "open_achievements"
 
 local UI_MGR = "#ui_manager_v2"
+local sm = require "main.scripts.save_manager"
 
-local COLOR_HOVER  = vmath.vector4(0.49, 0.976, 1.0, 1.0)
-local COLOR_NORMAL = vmath.vector4(0.952, 0.925, 0.85, 0.78)
-local COLOR_ACTIVE = vmath.vector4(0.952, 0.925, 0.85, 1.0)
+local COLOR_HOVER   = vmath.vector4(0.49, 0.976, 1.0, 1.0)
+local COLOR_NORMAL  = vmath.vector4(0.952, 0.925, 0.85, 0.78)
+local COLOR_ACTIVE  = vmath.vector4(0.952, 0.925, 0.85, 1.0)
+local COLOR_DISABLE = vmath.vector4(0.952, 0.925, 0.85, 0.38)
+
+local COLOR_BG_NORMAL  = vmath.vector4(0.067, 0.055, 0.173, 0.72)
+local COLOR_BG_ACTIVE  = vmath.vector4(0.067, 0.055, 0.173, 0.82)
+local COLOR_BG_DISABLE = vmath.vector4(0.067, 0.055, 0.173, 0.38)
+
+local STAMP_ROTATION = vmath.quat_rotation_z(math.rad(-9))
 
 local MENU_ITEMS = {
-    { id = "mi_new",          msg = "start_game",         label = "НОВАЯ ИТЕРАЦИЯ" },
-    { id = "mi_continue",     msg = "continue_game",      label = "ПРОДОЛЖИТЬ" },
-    { id = "mi_gallery",      msg = "open_gallery",       label = "ГАЛЕРЕЯ" },
-    { id = "mi_achievements", msg = "open_achievements",  label = "ДОСТИЖЕНИЯ" },
+    { id = "mi_new",          hit = "mi_new_bg",          arrow = "mi_new_arrow",          bar = "mi_new_bar",          bg = "mi_new_bg",          msg = "start_game",         label = "НОВАЯ ИТЕРАЦИЯ" },
+    { id = "mi_continue",     hit = "mi_continue_bg",     arrow = "mi_continue_arrow",     bar = "mi_continue_bar",     bg = "mi_continue_bg",     lock = "mi_continue_lock", msg = "continue_game",      label = "ПРОДОЛЖИТЬ", requires_save = true },
+    { id = "mi_gallery",      hit = "mi_gallery_bg",      arrow = "mi_gallery_arrow",      bar = "mi_gallery_bar",      bg = "mi_gallery_bg",      msg = "open_gallery",       label = "ГАЛЕРЕЯ" },
+    { id = "mi_achievements", hit = "mi_achievements_bg", arrow = "mi_achievements_arrow", bar = "mi_achievements_bar", bg = "mi_achievements_bg", msg = "open_achievements",  label = "ДОСТИЖЕНИЯ" },
 }
 
 local function set_text(id, s)
@@ -35,6 +43,51 @@ local function click_flash(node)
     gui.animate(node, "scale", vmath.vector4(1.06, 1.06, 1, 1), gui.EASING_OUTQUAD, 0.1, 0, function()
         gui.animate(node, "scale", vmath.vector4(1, 1, 1, 1), gui.EASING_OUTQUAD, 0.15)
     end)
+end
+
+local function set_menu_item_enabled(item, enabled)
+    local label = gui.get_node(item.id)
+    local bg = gui.get_node(item.bg)
+    local bar = gui.get_node(item.bar)
+    local arrow = gui.get_node(item.arrow)
+
+    if enabled then
+        gui.set_color(label, COLOR_ACTIVE)
+        gui.set_color(bg, COLOR_BG_ACTIVE)
+        gui.set_color(bar, vmath.vector4(0.49, 0.976, 1.0, 0.45))
+        gui.set_color(arrow, vmath.vector4(0.952, 0.925, 0.85, 0.55))
+        if item.lock then gui.set_enabled(gui.get_node(item.lock), false) end
+    else
+        gui.set_color(label, COLOR_DISABLE)
+        gui.set_color(bg, COLOR_BG_DISABLE)
+        gui.set_color(bar, vmath.vector4(0.49, 0.976, 1.0, 0.22))
+        gui.set_color(arrow, vmath.vector4(0.952, 0.925, 0.85, 0.25))
+        if item.lock then gui.set_enabled(gui.get_node(item.lock), true) end
+    end
+end
+
+local function refresh_continue_state(self)
+    pcall(sm.load)
+    local has_save = sm.has_save and sm.has_save() or false
+    self.can_continue = has_save
+
+    for _, item in ipairs(MENU_ITEMS) do
+        if item.requires_save then
+            set_menu_item_enabled(item, has_save)
+        else
+            set_menu_item_enabled(item, true)
+        end
+    end
+end
+
+local function setup_stamp_style()
+    local stamp_nodes = {
+        "stamp", "stamp_plate",
+        "stamp_border_t", "stamp_border_b", "stamp_border_l", "stamp_border_r",
+    }
+    for _, id in ipairs(stamp_nodes) do
+        gui.set_rotation(gui.get_node(id), STAMP_ROTATION)
+    end
 end
 
 -- ---- glitch-анимация логотипа (step17) ----
@@ -94,7 +147,7 @@ local function make_skyline_layer(parent_pos, y, h, color, sway, period)
     local abs_y = parent_pos.y + y
     local abs_z = parent_pos.z - 0.08  -- z=0.12 относительно parent z=0.2
     
-    local n = gui.new_box_node(vmath.vector3(abs_x, abs_y, abs_z), vmath.vector3(960, h, 0))
+    local n = gui.new_box_node(vmath.vector3(abs_x, abs_y, abs_z), vmath.vector3(1280, h, 0))
     gui.set_pivot(n, gui.PIVOT_SW)
     gui.set_color(n, color)
     -- НЕ используем gui.set_parent() для динамических нод!
@@ -125,6 +178,8 @@ function init(self)
     self.glitch_timer = nil
     schedule_next_glitch(self)
     setup_skyline(self)
+    setup_stamp_style()
+    refresh_continue_state(self)
 end
 
 function final(self)
@@ -156,6 +211,7 @@ function on_message(self, message_id, message, sender)
     if message_id == hash("show_menu") then
         self.visible = true
         gui.set_enabled(gui.get_node("menu_root"), true)
+        refresh_continue_state(self)
     elseif message_id == hash("hide_menu") then
         self.visible = false
         gui.set_enabled(gui.get_node("menu_root"), false)
@@ -173,10 +229,14 @@ function on_input(self, action_id, action)
     if action_id ~= hash("touch") or not action.pressed then return false end
 
     for _, item in ipairs(MENU_ITEMS) do
-        local n = gui.get_node(item.id)
+        local n = gui.get_node(item.hit or item.id)
         if gui.pick_node(n, action.x, action.y) then
+            if item.requires_save and not self.can_continue then
+                return true
+            end
             click_flash(n)
-            gui.set_color(n, COLOR_ACTIVE)
+            gui.set_color(gui.get_node(item.id), COLOR_ACTIVE)
+            gui.set_color(gui.get_node(item.bg), COLOR_BG_ACTIVE)
             msg.post(UI_MGR, item.msg)
             return true
         end
