@@ -49,6 +49,7 @@ local function init_components()
     M.components.inventory   = msg.url("#inventory_v2")
     M.components.phone       = msg.url("#phone_v2")
     M.components.map         = msg.url("#map_v2")
+    M.components.hotspots    = msg.url("#hotspots_v2")
     M.components.effects     = msg.url("#effects")
     print("[ui_manager_v2] компоненты инициализированы")
 end
@@ -234,12 +235,11 @@ local function setup_scene_controller_ui(self)
         end,
 
         set_scene_object = function(i, obj)
-            -- v2: hotspots в этой версии — часть сцены-фона, не отдельный компонент.
-            -- Оставим no-op, чтобы не падать.
+            msg.post(M.components.hotspots, "set_scene_object", { index = i, obj = obj })
         end,
 
         set_hotspot = function(i, data)
-            -- no-op в v2 (hotspots встроены в сцену)
+            msg.post(M.components.hotspots, "set_hotspot", { index = i, data = data })
         end,
 
         request_ink_knot = function(knot_name, keep_bg)
