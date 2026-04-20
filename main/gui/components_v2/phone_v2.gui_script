@@ -195,8 +195,15 @@ local function refresh_quests(self, list)
         set_node_enabled(prefix .. "_desc", has)
         if has then
             local q = list[i]
-            set_text(prefix .. "_name", q.title or "—")
-            set_text(prefix .. "_desc", q.progress or q.status or "")
+            -- Название квеста с прогрессом
+            local title_text = q.title or "—"
+            if q.progress and q.progress ~= "" then
+                title_text = title_text .. " [" .. q.progress .. "]"
+            end
+            set_text(prefix .. "_name", title_text)
+            -- Описание или статус
+            set_text(prefix .. "_desc", q.desc or q.status or "")
+            -- Цвет по статусу
             local c = COLOR_PAPER
             if q.status == "active" then c = COLOR_CYAN
             elseif q.status == "done"   then c = COLOR_PAPER_DIM

@@ -182,15 +182,25 @@ end
 -- Квесты для phone-вьюхи: { {title, status, progress}, ... }.
 -- Берём из _quests ({ [id] = "active"|"done"|"failed" }). progress пока пустой.
 function M.get_quests()
+    local quests_catalog = require "main.scripts.quests"
     local out = {}
     local ids = {}
     for id, _ in pairs(_quests) do table.insert(ids, id) end
     table.sort(ids)
     for _, id in ipairs(ids) do
+        local q = quests_catalog.get(id)
+        local title = q and q.name or id
+        local desc = q and q.description or ""
+        local progress = ""
+        if q then
+            local done, total, _ = quests_catalog.progress(id, M)
+            progress = string.format("%d/%d", done, total)
+        end
         table.insert(out, {
-            title    = id,
+            title    = title,
             status   = _quests[id],
-            progress = "",
+            progress = progress,
+            desc     = desc,
         })
     end
     return out
