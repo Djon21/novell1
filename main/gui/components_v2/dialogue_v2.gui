@@ -32,6 +32,10 @@ textures {
   name: "backgrounds"
   texture: "/main/images/backgrounds.atlas"
 }
+textures {
+  name: "v2"
+  texture: "/main/images/v2.atlas"
+}
 
 nodes {
   position { x: 480.0 y: 320.0 z: 0.06 }
