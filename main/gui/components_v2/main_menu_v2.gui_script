@@ -91,12 +91,44 @@ function init(self)
     math.randomseed(os.time())
     self.glitch_timer = nil
     schedule_next_glitch(self)
+    setup_skyline(self)
 end
 
 function final(self)
     if self.glitch_timer then
         timer.cancel(self.glitch_timer)
         self.glitch_timer = nil
+    end
+end
+
+-- ---- parallax skyline (step20) ----
+-- 3 слоя силуэтов-полос с лёгким idle-sway (gui.animate PINGPONG по X).
+-- Слои создаются динамически, размещаются за menu_root контентом (z=0.12-0.14).
+local function make_skyline_layer(parent, y, h, color, sway, period)
+    local n = gui.new_box_node(vmath.vector3(0, y, 0.12), vmath.vector3(960, h, 0))
+    gui.set_pivot(n, gui.PIVOT_SW)
+    gui.set_color(n, color)
+    gui.set_parent(n, parent)
+    gui.set_inherit_alpha(n, true)
+    -- idle sway
+    gui.animate(n, "position.x", sway, gui.EASING_INOUTSINE, period, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
+    return n
+end
+
+local function setup_skyline(self)
+    local root = gui.get_node("menu_root")
+    -- Три слоя: дальний (слабый) / средний / ближний (яркий), снизу вверх
+    self.sky_far  = make_skyline_layer(root, 70,  36,
+        vmath.vector4(0.067, 0.055, 0.173, 0.55), 4,  12.0)
+    self.sky_mid  = make_skyline_layer(root, 90,  24,
+        vmath.vector4(0.047, 0.039, 0.141, 0.75), 8,  8.0)
+    self.sky_near = make_skyline_layer(root, 110, 14,
+        vmath.vector4(0.027, 0.023, 0.094, 0.90), 12, 5.5)
+    -- z-отсечение (за всем контентом)
+    for _, n in ipairs({ self.sky_far, self.sky_mid, self.sky_near }) do
+        local p = gui.get_position(n)
+        p.z = 0.12
+        gui.set_position(n, p)
     end
 end
 
