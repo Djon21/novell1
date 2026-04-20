@@ -154,14 +154,11 @@ end
 function on_message(self, message_id, message, sender)
     if message_id == hash("show_choice") then
         self.visible = true
-        gui.set_enabled(gui.get_node("backdrop"), true)
-        -- DEBUG: подкрасить opts_panel в ярко-красный чтобы увидеть где он
-        local op = gui.get_node("opts_panel")
-        gui.set_color(op, vmath.vector4(1, 0, 0, 1))
-        local sp2 = gui.get_screen_position(op)
-        local sz2 = gui.get_size(op)
-        print(string.format("[choice_v2] opts_panel screen_pos=(%.1f,%.1f) size=(%.1f,%.1f) enabled=%s",
-            sp2.x, sp2.y, sz2.x, sz2.y, tostring(gui.is_enabled(op))))
+        local bd = gui.get_node("backdrop")
+        gui.set_enabled(bd, true)
+        -- DEBUG: ярко-красный полноэкранный backdrop
+        gui.set_color(bd, vmath.vector4(1, 0, 0, 1))
+        print("[choice_v2] backdrop screen_pos=", gui.get_screen_position(bd), "size=", gui.get_size(bd), "enabled=", gui.is_enabled(bd))
         clear_opts(self)
         local opts = message.opts or {}
         print("[choice_v2] show_choice, #opts=", #opts, "title=", message.title)
