@@ -104,6 +104,8 @@ local function sync_ui_state(self)
     msg.post(M.components.hud, "set_phone_notif", { n = unread })
     msg.post(M.components.inventory, "refresh_inventory")
     msg.post(M.components.phone, "set_phone_notif", { n = unread })
+    -- step23: phone подтягивает SMS/quests/mail/calls/clues из game_state.
+    msg.post(M.components.phone, "refresh_phone")
 end
 
 local function show_menu(self)

@@ -132,6 +132,82 @@ end
 
 function M.get_notes() return _notes end
 
+-- Phone view getters (step23) --------------------------------------------
+-- Возвращают списки в формате, ожидаемом phone_v2.gui_script.
+-- Пока что основаны на существующих SMS/notes + пустые стабы для
+-- quests/mail/calls/clues, которые будут заполняться ink-тегами позже.
+
+-- Сообщения для SMS-вьюхи: { {from, time, body, unread}, ... }
+-- Берём последние сообщения по каждому контакту (по одной карточке на
+-- контакт), сортируем по порядку добавления контакта.
+function M.get_messages()
+    local out = {}
+    local ids = {}
+    for id, _ in pairs(_sms) do table.insert(ids, id) end
+    table.sort(ids)
+    for _, id in ipairs(ids) do
+        local chat = _sms[id]
+        if chat and #chat > 0 then
+            local last = chat[#chat]
+            local unread_n = _sms_unread[id] or 0
+            table.insert(out, {
+                from   = id,
+                time   = last.time or "",
+                body   = last.text or "",
+                unread = unread_n > 0,
+            })
+        end
+    end
+    return out
+end
+
+-- Почта: { {from, subject, unread}, ... }. Пока нет хранилища — пустой список.
+-- TODO: добавить _mails + add_mail/mark_mail_read когда появятся ink-теги.
+function M.get_mails()
+    return {}
+end
+
+-- Журнал звонков: { {who, time, missed}, ... }. Пустой стаб.
+-- TODO: добавить _call_log + add_call.
+function M.get_call_log()
+    return {}
+end
+
+-- Улики: { {id, label}, ... }. Пустой стаб.
+-- TODO: завести _clues + add_clue (можно шарить с notes).
+function M.get_clues()
+    return {}
+end
+
+-- Квесты для phone-вьюхи: { {title, status, progress}, ... }.
+-- Берём из _quests ({ [id] = "active"|"done"|"failed" }). progress пока пустой.
+function M.get_quests()
+    local out = {}
+    local ids = {}
+    for id, _ in pairs(_quests) do table.insert(ids, id) end
+    table.sort(ids)
+    for _, id in ipairs(ids) do
+        table.insert(out, {
+            title    = id,
+            status   = _quests[id],
+            progress = "",
+        })
+    end
+    return out
+end
+
+-- Суммарный счётчик непрочитанных для бейджа телефона.
+function M.get_phone_unread_total()
+    local total = M.get_sms_unread_total()
+    for _, m in ipairs(M.get_mails()) do
+        if m.unread then total = total + 1 end
+    end
+    for _, c in ipairs(M.get_call_log()) do
+        if c.missed then total = total + 1 end
+    end
+    return total
+end
+
 -- Реактивные подписки ----------------------------------------------------
 function M.subscribe(cb)
     table.insert(_listeners, cb)

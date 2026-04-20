@@ -4,16 +4,26 @@
 -- All nodes declared in phone_v2.gui. Views are node groups toggled by enabled flag.
 --
 -- Incoming messages:
---   "open_phone"             — show modal (defaults to SMS view)
+--   "open_phone"             — show modal (defaults to SMS view), pulls data
 --   "close_phone"            — hide modal
---   "set_phone_notif"  {n}   — update "сообщений: N" stat
+--   "refresh_phone"          — re-pull data into all app views (step23)
+--   "set_phone_notif"  {n}   — update "сообщений: N" stat (override)
 --   "set_phone_time"   {time}— update status bar time
 --
 -- Outgoing messages (to #ui_manager_v2):
 --   "close_phone"            — user hit close button
 --   "phone_app_clicked" {id} — user tapped an app tile (informational)
 
+local gs = require "main.scripts.game_state"
+
 local UI_MGR = "#ui_manager_v2"
+
+-- Палитра цветов (матчим hud_mobile.html для app-вьюх).
+-- Используется в per-view refresh для статусов/missed и т.п.
+local COLOR_CYAN      = vmath.vector4(0.47, 0.94, 1.00, 1.0)  -- active quest
+local COLOR_PAPER_DIM = vmath.vector4(0.80, 0.80, 0.78, 0.7)  -- done / placeholder
+local COLOR_HOT       = vmath.vector4(1.00, 0.30, 0.30, 1.0)  -- failed / missed
+local COLOR_PAPER     = vmath.vector4(0.95, 0.95, 0.90, 1.0)
 
 -- Shared chrome: always visible when phone open.
 local CHROME_NODES = {
@@ -135,11 +145,164 @@ local function set_text(id, s)
     if n then gui.set_text(n, s or "") end
 end
 
+local function set_node_enabled(id, enabled)
+    local n = gui.get_node(id)
+    if n then gui.set_enabled(n, enabled) end
+end
+
+local function set_node_color(id, c)
+    local n = gui.get_node(id)
+    if n then gui.set_color(n, c) end
+end
+
+-- -------- per-view refreshers --------
+-- Каждый refresh_* получает таблицу данных (list) и ничего не возвращает.
+-- Статические ноды существуют всегда — когда данных меньше слотов, лишние
+-- слоты (bg-root карточки) выключаются целиком, чтобы не оставалось стэйла.
+
+-- SMS: 4 статичных карточки msg1..msg4.
+local SMS_SLOTS = 4
+local function refresh_sms(self, list)
+    list = list or {}
+    for i = 1, SMS_SLOTS do
+        local prefix = "msg" .. i
+        local has = list[i] ~= nil
+        set_node_enabled(prefix .. "_bg",     has)
+        set_node_enabled(prefix .. "_border", has)
+        set_node_enabled(prefix .. "_name",   has)
+        set_node_enabled(prefix .. "_time",   has)
+        set_node_enabled(prefix .. "_body",   has)
+        if has then
+            local m = list[i]
+            set_text(prefix .. "_name", m.from or "—")
+            set_text(prefix .. "_time", m.time or "")
+            set_text(prefix .. "_body", m.body or "")
+            -- unread → акцентный цвет имени, read → приглушённый
+            set_node_color(prefix .. "_name", m.unread and COLOR_CYAN or COLOR_PAPER)
+        end
+    end
+end
+
+-- Quests: 2 слота q1..q2.
+local QUEST_SLOTS = 2
+local function refresh_quests(self, list)
+    list = list or {}
+    for i = 1, QUEST_SLOTS do
+        local prefix = "v_quests_q" .. i
+        local has = list[i] ~= nil
+        set_node_enabled(prefix .. "_bg",   has)
+        set_node_enabled(prefix .. "_name", has)
+        set_node_enabled(prefix .. "_desc", has)
+        if has then
+            local q = list[i]
+            set_text(prefix .. "_name", q.title or "—")
+            set_text(prefix .. "_desc", q.progress or q.status or "")
+            local c = COLOR_PAPER
+            if q.status == "active" then c = COLOR_CYAN
+            elseif q.status == "done"   then c = COLOR_PAPER_DIM
+            elseif q.status == "failed" then c = COLOR_HOT end
+            set_node_color(prefix .. "_name", c)
+        end
+    end
+end
+
+-- Mail: 2 слота m1..m2.
+local MAIL_SLOTS = 2
+local function refresh_mail(self, list)
+    list = list or {}
+    for i = 1, MAIL_SLOTS do
+        local prefix = "v_mail_m" .. i
+        local has = list[i] ~= nil
+        set_node_enabled(prefix .. "_bg",   has)
+        set_node_enabled(prefix .. "_from", has)
+        set_node_enabled(prefix .. "_subj", has)
+        if has then
+            local m = list[i]
+            set_text(prefix .. "_from", m.from or "—")
+            set_text(prefix .. "_subj", m.subject or "")
+            set_node_color(prefix .. "_from", m.unread and COLOR_CYAN or COLOR_PAPER)
+        end
+    end
+end
+
+-- Calls: 3 строки row1..row3.
+local CALL_SLOTS = 3
+local function refresh_calls(self, list)
+    list = list or {}
+    for i = 1, CALL_SLOTS do
+        local prefix = "v_calls_row" .. i
+        local has = list[i] ~= nil
+        set_node_enabled(prefix .. "_bg",   has)
+        set_node_enabled(prefix .. "_name", has)
+        set_node_enabled(prefix .. "_meta", has)
+        if has then
+            local c = list[i]
+            set_text(prefix .. "_name", c.who or "—")
+            set_text(prefix .. "_meta", c.time or "")
+            set_node_color(prefix .. "_name", c.missed and COLOR_HOT or COLOR_PAPER)
+        end
+    end
+end
+
+-- Clues: 2 карточки card1..card2. Если список пуст — в первой карточке
+-- показываем «пока пусто», вторую отключаем.
+local CLUE_SLOTS = 2
+local function refresh_clues(self, list)
+    list = list or {}
+    if #list == 0 then
+        set_node_enabled("v_clues_card1_bg",   true)
+        set_node_enabled("v_clues_card1_tag",  true)
+        set_node_enabled("v_clues_card1_body", true)
+        set_text("v_clues_card1_tag",  "улики")
+        set_text("v_clues_card1_body", "пока пусто")
+        set_node_color("v_clues_card1_tag", COLOR_PAPER_DIM)
+        set_node_enabled("v_clues_card2_bg",   false)
+        set_node_enabled("v_clues_card2_tag",  false)
+        set_node_enabled("v_clues_card2_body", false)
+        return
+    end
+    for i = 1, CLUE_SLOTS do
+        local prefix = "v_clues_card" .. i
+        local has = list[i] ~= nil
+        set_node_enabled(prefix .. "_bg",   has)
+        set_node_enabled(prefix .. "_tag",  has)
+        set_node_enabled(prefix .. "_body", has)
+        if has then
+            local cl = list[i]
+            set_text(prefix .. "_tag",  cl.id or "—")
+            set_text(prefix .. "_body", cl.label or "")
+            set_node_color(prefix .. "_tag", COLOR_CYAN)
+        end
+    end
+end
+
+-- Полный pull из game_state + обновление всех app-вьюх + счётчика.
+-- map/camera/terminal данными не обеспечены — остаются как есть (заполнены
+-- статичным текстом в .gui, step22).
+local function refresh_all_views(self)
+    local sms   = gs.get_messages  and gs.get_messages()  or {}
+    local qs    = gs.get_quests    and gs.get_quests()    or {}
+    local mails = gs.get_mails     and gs.get_mails()     or {}
+    local calls = gs.get_call_log  and gs.get_call_log()  or {}
+    local clues = gs.get_clues     and gs.get_clues()     or {}
+
+    refresh_sms(self,    sms)
+    refresh_quests(self, qs)
+    refresh_mail(self,   mails)
+    refresh_calls(self,  calls)
+    refresh_clues(self,  clues)
+
+    local unread = gs.get_phone_unread_total and gs.get_phone_unread_total() or 0
+    set_text("stats_msg", "сообщений: " .. tostring(unread))
+end
+
 function init(self)
     msg.post(".", "acquire_input_focus")
     self.visible = false
     self.active_view = "sms"
     set_all_enabled(false)
+    -- Заполнить статические ноды текущим состоянием до первого показа.
+    refresh_all_views(self)
     print("[phone_v2] init complete, default view = sms")
 end
 
@@ -148,12 +311,16 @@ function on_message(self, message_id, message, sender)
         self.visible = true
         set_all_enabled(false)
         set_nodes_enabled(CHROME_NODES, true)
+        -- Подтянуть свежие данные до показа (рейс unread с game_state).
+        refresh_all_views(self)
         show_view(self, "sms")
         print("[phone_v2] open_phone")
     elseif message_id == hash("close_phone") then
         self.visible = false
         set_all_enabled(false)
         print("[phone_v2] close_phone")
+    elseif message_id == hash("refresh_phone") then
+        refresh_all_views(self)
     elseif message_id == hash("set_phone_notif") then
         local n = tonumber(message and message.n) or 0
         set_text("stats_msg", "сообщений: " .. tostring(n))
