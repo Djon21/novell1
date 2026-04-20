@@ -85,23 +85,35 @@ local function schedule_next_glitch(self)
 end
 
 -- ---- parallax skyline (step20) ----
-local function make_skyline_layer(parent, y, h, color, sway, period)
-    local n = gui.new_box_node(vmath.vector3(0, y, 0.12), vmath.vector3(960, h, 0))
+-- ИСПРАВЛЕНО: используем абсолютные координаты вместо gui.set_parent()
+-- Причина: динамические ноды с set_parent могут не рендериться (известный баг Defold)
+-- См. DESIGN_PORT_RULES.md Rule #2
+local function make_skyline_layer(parent_pos, y, h, color, sway, period)
+    -- Абсолютные координаты: parent_pos + локальные координаты
+    local abs_x = parent_pos.x + 0
+    local abs_y = parent_pos.y + y
+    local abs_z = parent_pos.z - 0.08  -- z=0.12 относительно parent z=0.2
+    
+    local n = gui.new_box_node(vmath.vector3(abs_x, abs_y, abs_z), vmath.vector3(960, h, 0))
     gui.set_pivot(n, gui.PIVOT_SW)
     gui.set_color(n, color)
-    gui.set_parent(n, parent)
-    gui.set_inherit_alpha(n, true)
-    gui.animate(n, "position.x", sway, gui.EASING_INOUTSINE, period, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
+    -- НЕ используем gui.set_parent() для динамических нод!
+    gui.set_inherit_alpha(n, false)  -- false, т.к. нет parent
+    
+    -- Анимация sway - теперь анимируем от абсолютной позиции
+    gui.animate(n, "position.x", abs_x + sway, gui.EASING_INOUTSINE, period, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
     return n
 end
 
 local function setup_skyline(self)
     local root = gui.get_node("menu_root")
-    self.sky_far  = make_skyline_layer(root, 70,  36,
+    local root_pos = gui.get_position(root)
+    
+    self.sky_far  = make_skyline_layer(root_pos, 70,  36,
         vmath.vector4(0.067, 0.055, 0.173, 0.55), 4,  12.0)
-    self.sky_mid  = make_skyline_layer(root, 90,  24,
+    self.sky_mid  = make_skyline_layer(root_pos, 90,  24,
         vmath.vector4(0.047, 0.039, 0.141, 0.75), 8,  8.0)
-    self.sky_near = make_skyline_layer(root, 110, 14,
+    self.sky_near = make_skyline_layer(root_pos, 110, 14,
         vmath.vector4(0.027, 0.023, 0.094, 0.90), 12, 5.5)
 end
 
