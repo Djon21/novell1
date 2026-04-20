@@ -237,11 +237,29 @@ local function setup_scene_controller_ui(self)
         end,
 
         set_scene_object = function(i, obj)
-            msg.post(M.components.hotspots, "set_scene_object", { index = i, obj = obj })
+            local clean = nil
+            if obj then
+                clean = {
+                    id    = obj.id,
+                    image = obj.image,
+                    pos   = obj.pos and { x = obj.pos.x, y = obj.pos.y } or nil,
+                    size  = obj.size and { w = obj.size.w, h = obj.size.h } or nil,
+                }
+            end
+            msg.post(M.components.hotspots, "set_scene_object", { index = i, obj = clean })
         end,
 
         set_hotspot = function(i, data)
-            msg.post(M.components.hotspots, "set_hotspot", { index = i, data = data })
+            local clean = nil
+            if data then
+                clean = {
+                    rect   = data.rect and { x = data.rect.x, y = data.rect.y, w = data.rect.w, h = data.rect.h } or nil,
+                    label  = data.label,
+                    icon   = data.icon,
+                    locked = data.locked and true or false,
+                }
+            end
+            msg.post(M.components.hotspots, "set_hotspot", { index = i, data = clean })
         end,
 
         request_ink_knot = function(knot_name, keep_bg)
