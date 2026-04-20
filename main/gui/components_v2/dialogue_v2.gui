@@ -223,6 +223,22 @@ nodes {
 }
 
 nodes {
+  position { x: 240.0 y: 274.0 z: 0.42 }
+  size { x: 150.0 y: 12.0 }
+  color { x: 0.952 y: 0.925 z: 0.85 w: 0.5 }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_10"
+  id: "nameplate_mood"
+  pivot: PIVOT_W
+  parent: "dlg_root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+
+nodes {
   position { x: 160.0 y: 172.0 z: 0.42 }
   size { x: 720.0 y: 120.0 }
   color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }

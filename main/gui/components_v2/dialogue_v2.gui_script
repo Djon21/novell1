@@ -136,6 +136,14 @@ local function render(self, msg)
     local loop_num = msg.loop or 17
     set_text("loop_counter", string.format("петля #%03d", loop_num))
 
+    -- Mood indicator (настроение персонажа)
+    if msg.mood and msg.mood ~= "" then
+        set_text("nameplate_mood", "mood · " .. msg.mood)
+        gui.set_enabled(gui.get_node("nameplate_mood"), true)
+    else
+        gui.set_enabled(gui.get_node("nameplate_mood"), false)
+    end
+
     -- Портрет: если передан portrait в msg или есть в CHARS, используем спрайт из v2.atlas, иначе icon-заглушку
     local portrait_bg = gui.get_node("portrait_bg")
     local portrait_icon = gui.get_node("portrait_icon")
