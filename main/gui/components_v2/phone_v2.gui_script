@@ -56,37 +56,40 @@ local GRID_PAD = 8
 
 local function make_tile(self, i, app)
     local grid = gui.get_node("app_grid")
+    local grid_pos = gui.get_position(grid)
+    
     local col = (i - 1) % 4
     local row = math.floor((i - 1) / 4)
-    local x = GRID_PAD + col * (TILE_W + TILE_GAP_X)
-    -- app_grid высота 380, верх вверху
+    
+    -- Локальные координаты
+    local local_x = GRID_PAD + col * (TILE_W + TILE_GAP_X)
     local y_top = 380 - 20 - row * (TILE_H + TILE_GAP_Y + 14)
-    local y = y_top - TILE_H
+    local local_y = y_top - TILE_H
+    
+    -- Абсолютные координаты
+    local abs_x = grid_pos.x + local_x
+    local abs_y = grid_pos.y + local_y
 
-    local bg = gui.new_box_node(vmath.vector3(x, y, 0.55), vmath.vector3(TILE_W, TILE_H, 0))
+    local bg = gui.new_box_node(vmath.vector3(abs_x, abs_y, 0.55), vmath.vector3(TILE_W, TILE_H, 0))
     gui.set_pivot(bg, gui.PIVOT_SW)
     gui.set_color(bg, COLORS.tile_bg)
-    gui.set_parent(bg, grid)
     gui.set_inherit_alpha(bg, false)
 
-    local border = gui.new_box_node(vmath.vector3(x, y, 0.56), vmath.vector3(TILE_W, 1, 0))
+    local border = gui.new_box_node(vmath.vector3(abs_x, abs_y, 0.56), vmath.vector3(TILE_W, 1, 0))
     gui.set_pivot(border, gui.PIVOT_SW)
     gui.set_color(border, COLORS.tile_border)
-    gui.set_parent(border, grid)
     gui.set_inherit_alpha(border, false)
 
-    local ic = gui.new_text_node(vmath.vector3(x + TILE_W/2, y + TILE_H/2 + 4, 0.57), app.icon)
+    local ic = gui.new_text_node(vmath.vector3(abs_x + TILE_W/2, abs_y + TILE_H/2 + 4, 0.57), app.icon)
     gui.set_pivot(ic, gui.PIVOT_CENTER)
     gui.set_font(ic, "icons")
     gui.set_color(ic, COLORS[app.col] or COLORS.cyan)
-    gui.set_parent(ic, grid)
     gui.set_inherit_alpha(ic, false)
 
-    local label = gui.new_text_node(vmath.vector3(x + TILE_W/2, y - 8, 0.57), app.name)
+    local label = gui.new_text_node(vmath.vector3(abs_x + TILE_W/2, abs_y - 8, 0.57), app.name)
     gui.set_pivot(label, gui.PIVOT_CENTER)
     gui.set_font(label, "jb_mono_10")
     gui.set_color(label, COLORS.paper)
-    gui.set_parent(label, grid)
     gui.set_inherit_alpha(label, false)
 
     return { bg = bg, border = border, icon = ic, label = label, id = app.id, col = app.col }

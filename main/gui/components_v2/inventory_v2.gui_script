@@ -60,65 +60,73 @@ end
 -- Возвращает таблицу нод.
 local function make_slot(col, row)
     local grid = gui.get_node("grid")
-    local x = col * (SLOT + SLOT_GAP)
-    -- y отсчитываем от верха grid (grid pivot = SW, высота 380)
-    local y = 380 - (row + 1) * SLOT - row * SLOT_GAP
+    local grid_pos = gui.get_position(grid)
+    
+    -- Локальные координаты внутри grid
+    local local_x = col * (SLOT + SLOT_GAP)
+    local local_y = 380 - (row + 1) * SLOT - row * SLOT_GAP
+    
+    -- Абсолютные координаты относительно backdrop
+    local abs_x = grid_pos.x + local_x
+    local abs_y = grid_pos.y + local_y
 
-    local bg = gui.new_box_node(vmath.vector3(x, y, 0.55), vmath.vector3(SLOT, SLOT, 0))
+    local bg = gui.new_box_node(vmath.vector3(abs_x, abs_y, 0.55), vmath.vector3(SLOT, SLOT, 0))
     gui.set_pivot(bg, gui.PIVOT_SW)
     gui.set_color(bg, COLOR_SLOT_BG)
-    gui.set_parent(bg, grid)
+    -- НЕ используем set_parent — создаём top-level ноду
     gui.set_inherit_alpha(bg, false)
 
-    local border = gui.new_box_node(vmath.vector3(x, y, 0.56), vmath.vector3(SLOT, 1, 0))
+    local border = gui.new_box_node(vmath.vector3(abs_x, abs_y, 0.56), vmath.vector3(SLOT, 1, 0))
     gui.set_pivot(border, gui.PIVOT_SW)
     gui.set_color(border, COLOR_SLOT_BORDER)
-    gui.set_parent(border, grid)
     gui.set_inherit_alpha(border, false)
 
-    local icon = gui.new_text_node(vmath.vector3(x + SLOT/2, y + SLOT/2 + 4, 0.57), "")
+    local icon = gui.new_text_node(vmath.vector3(abs_x + SLOT/2, abs_y + SLOT/2 + 4, 0.57), "")
     gui.set_pivot(icon, gui.PIVOT_CENTER)
     gui.set_font(icon, "icons")
     gui.set_color(icon, COLOR_PAPER)
-    gui.set_parent(icon, grid)
     gui.set_inherit_alpha(icon, false)
 
-    local qty = gui.new_text_node(vmath.vector3(x + SLOT - 6, y + 6, 0.57), "")
+    local qty = gui.new_text_node(vmath.vector3(abs_x + SLOT - 6, abs_y + 6, 0.57), "")
     gui.set_pivot(qty, gui.PIVOT_SE)
     gui.set_font(qty, "jb_mono_10")
     gui.set_color(qty, COLOR_AMBER)
-    gui.set_parent(qty, grid)
     gui.set_inherit_alpha(qty, false)
 
-    return { bg = bg, border = border, icon = icon, qty = qty, x = x, y = y }
+    return { bg = bg, border = border, icon = icon, qty = qty, x = local_x, y = local_y }
 end
 
 local function make_verb_button(idx)
     local parent = gui.get_node("verbs_panel")
+    local parent_pos = gui.get_position(parent)
+    
     local w, h = 160, 32
     local gap = 12
     local col = (idx - 1) % 2
     local row = math.floor((idx - 1) / 2)
-    local x = col * (w + gap)
-    local y = 90 - (row + 1) * h - row * gap
+    
+    -- Локальные координаты
+    local local_x = col * (w + gap)
+    local local_y = 90 - (row + 1) * h - row * gap
+    
+    -- Абсолютные координаты
+    local abs_x = parent_pos.x + local_x
+    local abs_y = parent_pos.y + local_y
 
-    local bg = gui.new_box_node(vmath.vector3(x, y, 0.55), vmath.vector3(w, h, 0))
+    local bg = gui.new_box_node(vmath.vector3(abs_x, abs_y, 0.55), vmath.vector3(w, h, 0))
     gui.set_pivot(bg, gui.PIVOT_SW)
     gui.set_color(bg, COLOR_BTN_BG)
-    gui.set_parent(bg, parent)
     gui.set_inherit_alpha(bg, false)
 
-    local border = gui.new_box_node(vmath.vector3(x, y, 0.56), vmath.vector3(w, 1, 0))
+    local border = gui.new_box_node(vmath.vector3(abs_x, abs_y, 0.56), vmath.vector3(w, 1, 0))
     gui.set_pivot(border, gui.PIVOT_SW)
     gui.set_color(border, COLOR_BTN_BORDER)
-    gui.set_parent(border, parent)
     gui.set_inherit_alpha(border, false)
 
-    local label = gui.new_text_node(vmath.vector3(x + w/2, y + h/2, 0.57), "")
+    local label = gui.new_text_node(vmath.vector3(abs_x + w/2, abs_y + h/2, 0.57), "")
     gui.set_pivot(label, gui.PIVOT_CENTER)
     gui.set_font(label, "jb_mono_bold_14")
     gui.set_color(label, COLOR_ACCENT)
-    gui.set_parent(label, parent)
     gui.set_inherit_alpha(label, false)
 
     return { bg = bg, border = border, label = label, w = w, h = h }

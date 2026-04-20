@@ -151,27 +151,32 @@ end
 
 local function make_pin(self, id, p)
     local parent = gui.get_node("map_area")
-    local px = p.pos.x * MAP_W
-    local py = p.pos.y * MAP_H
+    local parent_pos = gui.get_position(parent)
+    
+    -- Локальные координаты (нормализованные 0..1)
+    local local_px = p.pos.x * MAP_W
+    local local_py = p.pos.y * MAP_H
+    
+    -- Абсолютные координаты
+    local abs_px = parent_pos.x + local_px
+    local abs_py = parent_pos.y + local_py
+    
     local ring_color = COLORS[p.color] or COLORS.accent
 
-    local body = gui.new_box_node(vmath.vector3(px, py, 0.55), vmath.vector3(32, 32, 0))
+    local body = gui.new_box_node(vmath.vector3(abs_px, abs_py, 0.55), vmath.vector3(32, 32, 0))
     gui.set_pivot(body, gui.PIVOT_CENTER)
     gui.set_color(body, COLORS.pin_bg)
-    gui.set_parent(body, parent)
     gui.set_inherit_alpha(body, false)
 
-    local border = gui.new_box_node(vmath.vector3(px, py - 16, 0.56), vmath.vector3(32, 1, 0))
+    local border = gui.new_box_node(vmath.vector3(abs_px, abs_py - 16, 0.56), vmath.vector3(32, 1, 0))
     gui.set_pivot(border, gui.PIVOT_CENTER)
     gui.set_color(border, ring_color)
-    gui.set_parent(border, parent)
     gui.set_inherit_alpha(border, false)
 
-    local ic = gui.new_text_node(vmath.vector3(px, py, 0.57), p.icon or "?")
+    local ic = gui.new_text_node(vmath.vector3(abs_px, abs_py, 0.57), p.icon or "?")
     gui.set_pivot(ic, gui.PIVOT_CENTER)
     gui.set_font(ic, "icons")
     gui.set_color(ic, ring_color)
-    gui.set_parent(ic, parent)
     gui.set_inherit_alpha(ic, false)
 
     return { body = body, border = border, icon = ic, id = id, color = ring_color }
@@ -179,27 +184,30 @@ end
 
 local function make_verb(self, idx, verb)
     local parent = gui.get_node("doss_verbs")
+    local parent_pos = gui.get_position(parent)
+    
     local w, h, gap = 92, 30, 4
-    local x = (idx - 1) * (w + gap)
-    local y = 0
+    local local_x = (idx - 1) * (w + gap)
+    local local_y = 0
+    
+    -- Абсолютные координаты
+    local abs_x = parent_pos.x + local_x
+    local abs_y = parent_pos.y + local_y
 
-    local bg = gui.new_box_node(vmath.vector3(x, y, 0.55), vmath.vector3(w, h, 0))
+    local bg = gui.new_box_node(vmath.vector3(abs_x, abs_y, 0.55), vmath.vector3(w, h, 0))
     gui.set_pivot(bg, gui.PIVOT_SW)
     gui.set_color(bg, COLORS.btn_bg)
-    gui.set_parent(bg, parent)
     gui.set_inherit_alpha(bg, false)
 
-    local border = gui.new_box_node(vmath.vector3(x, y, 0.56), vmath.vector3(w, 1, 0))
+    local border = gui.new_box_node(vmath.vector3(abs_x, abs_y, 0.56), vmath.vector3(w, 1, 0))
     gui.set_pivot(border, gui.PIVOT_SW)
     gui.set_color(border, COLORS.btn_border)
-    gui.set_parent(border, parent)
     gui.set_inherit_alpha(border, false)
 
-    local label = gui.new_text_node(vmath.vector3(x + w/2, y + h/2, 0.57), VERB_LABEL[verb] or verb:upper())
+    local label = gui.new_text_node(vmath.vector3(abs_x + w/2, abs_y + h/2, 0.57), VERB_LABEL[verb] or verb:upper())
     gui.set_pivot(label, gui.PIVOT_CENTER)
     gui.set_font(label, "jb_mono_bold_14")
     gui.set_color(label, COLORS.accent)
-    gui.set_parent(label, parent)
     gui.set_inherit_alpha(label, false)
 
     return { bg = bg, border = border, label = label, verb = verb }
