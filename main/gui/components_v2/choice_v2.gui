@@ -82,7 +82,7 @@ nodes {
 nodes {
   position { x: 160.0 y: 160.0 z: 0.62 }
   size { x: 640.0 y: 300.0 }
-  color { x: 0.0 y: 0.0 z: 0.0 w: 0.0 }
+  color { x: 0.0 y: 0.0 z: 0.0 w: 1.0 }
   type: TYPE_BOX
   id: "opts_panel"
   pivot: PIVOT_SW
