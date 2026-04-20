@@ -239,18 +239,25 @@ local function handle_dialogue_update(self)
     -- 1) Применить команды из ink-тегов (могут поменять сцену)
     apply_dm_commands(self)
 
-    -- 2) Обновить фон
-    local bg = dm.get_background_image and dm.get_background_image()
-    print("[ui_manager_v2] dm bg=", bg)
-    if bg then
-        msg.post(M.components.dialogue, "set_background", { name = bg })
+    -- 2) Проверить режим ПЕРЕД обновлением фона
+    local in_exploration = scene_controller.is_active and scene_controller.is_active()
+    
+    -- 3) Обновить фон только если НЕ в exploration (в exploration фон идёт из scene_controller)
+    if not in_exploration then
+        local bg = dm.get_background_image and dm.get_background_image()
+        print("[ui_manager_v2] dm bg=", bg)
+        if bg then
+            msg.post(M.components.dialogue, "set_background", { name = bg })
+        end
+    else
+        print("[ui_manager_v2] in exploration mode, bg from scene_controller")
     end
 
-    -- 3) Выбрать режим по scene_controller + отрендерить ноду
+    -- 4) Выбрать режим по scene_controller + отрендерить ноду
     local node = dm.get_current_node and dm.get_current_node()
     print("[ui_manager_v2] dm node=", node and node.type, "char=", node and node.character, "text=", node and node.text and node.text:sub(1,40))
 
-    if scene_controller.is_active and scene_controller.is_active() then
+    if in_exploration then
         show_exploration(self)
         hide_choice(self)
         return
@@ -306,6 +313,11 @@ local function setup_scene_controller_ui(self)
         set_background = function(bg_name)
             -- HUD показывает имя локации (короткое)
             msg.post(M.components.hud, "set_location", { name = bg_name or "—" })
+            -- Обновляем визуальный фон в dialogue компоненте
+            if bg_name then
+                msg.post(M.components.dialogue, "set_background", { name = bg_name })
+                print("[ui_manager_v2] scene_controller set_background:", bg_name)
+            end
         end,
 
         set_scene_object = function(i, obj)
