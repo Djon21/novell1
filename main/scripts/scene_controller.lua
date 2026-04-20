@@ -17,8 +17,8 @@ local M = {}
 local _active        = false
 local _scene_id      = nil
 local _scene_data    = nil
-local _last_scene_id = nil   -- запоминаем последнюю exploration-сцену,
-                             -- чтобы вернуться после ink-монолога
+local _scene_stack   = {}    -- стек exploration-сцен для возврата после
+                             -- вложенных ink-монологов/телефона/модалок
 local _ui            = nil
 
 function M.set_ui(iface)
@@ -120,11 +120,11 @@ function M.enter(scene_id)
 end
 
 function M.exit()
-    -- Перед сбросом запоминаем текущую сцену — чтобы ink-монолог,
+    -- Перед сбросом запоминаем текущую сцену в стек — чтобы ink-монолог,
     -- запущенный через ink_knot-hotspot, мог вернуться обратно
     -- по тэгу # return_to_scene.
     if _active and _scene_id then
-        _last_scene_id = _scene_id
+        table.insert(_scene_stack, _scene_id)
     end
     _active     = false
     _scene_id   = nil
@@ -134,9 +134,12 @@ end
 
 -- Возврат в последнюю exploration-сцену (после короткого ink-монолога).
 -- Вызывается из gui_script при обработке команды return_to_scene.
+-- Использует стек, чтобы корректно работать при вложенных переходах
+-- (сцена → телефон → ink-монолог → return).
 function M.return_to_last_scene()
-    if _last_scene_id then
-        M.enter(_last_scene_id)
+    if #_scene_stack > 0 then
+        local last_id = table.remove(_scene_stack)  -- pop со стека
+        M.enter(last_id)
     end
 end
 
@@ -201,6 +204,23 @@ function M.on_hotspot_click(index)
         print("[scene_controller] неизвестный action.type: " .. tostring(action.type))
     end
     return true
+end
+
+-- Сериализация состояния для сохранений
+function M.serialize()
+    return {
+        scene_stack = _scene_stack,
+        active = _active,
+        scene_id = _scene_id,
+    }
+end
+
+-- Восстановление состояния из сохранения
+function M.deserialize(data)
+    if not data then return end
+    _scene_stack = data.scene_stack or {}
+    -- Не восстанавливаем _active/_scene_id напрямую — это делается через
+    -- enter() при загрузке, чтобы корректно отрендерить сцену
 end
 
 return M
