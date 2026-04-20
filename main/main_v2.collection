@@ -1,0 +1,120 @@
+name: "main_v2"
+scale_along_z: 0
+embedded_instances {
+  id: "ui_manager_v2"
+  data: "components {\n"
+  "  id: \"ui_manager_v2\"\n"
+  "  component: \"/main/gui/ui_manager_v2.script\"\n"
+  "}\n"
+  "components {\n"
+  "  id: \"main_menu_v2\"\n"
+  "  component: \"/main/gui/components_v2/main_menu_v2.gui\"\n"
+  "}\n"
+  "components {\n"
+  "  id: \"hud_v2\"\n"
+  "  component: \"/main/gui/components_v2/hud_v2.gui\"\n"
+  "}\n"
+  "components {\n"
+  "  id: \"nav_buttons_v2\"\n"
+  "  component: \"/main/gui/components_v2/nav_buttons_v2.gui\"\n"
+  "}\n"
+  "components {\n"
+  "  id: \"dialogue_v2\"\n"
+  "  component: \"/main/gui/components_v2/dialogue_v2.gui\"\n"
+  "}\n"
+  "components {\n"
+  "  id: \"choice_v2\"\n"
+  "  component: \"/main/gui/components_v2/choice_v2.gui\"\n"
+  "}\n"
+  "components {\n"
+  "  id: \"inventory_v2\"\n"
+  "  component: \"/main/gui/components_v2/inventory_v2.gui\"\n"
+  "}\n"
+  "components {\n"
+  "  id: \"phone_v2\"\n"
+  "  component: \"/main/gui/components_v2/phone_v2.gui\"\n"
+  "}\n"
+  "components {\n"
+  "  id: \"map_v2\"\n"
+  "  component: \"/main/gui/components_v2/map_v2.gui\"\n"
+  "}\n"
+  "components {\n"
+  "  id: \"effects\"\n"
+  "  component: \"/main/gui/components_v2/effects.gui\"\n"
+  "}\n"
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+embedded_instances {
+  id: "music_player"
+  data: "components {\n  id: \"sound\"\n  component: \"/main/sounds/music_background_loop_01.sound\"\n}\n"
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+embedded_instances {
+  id: "sfx_player"
+  data: "components {\n"
+  "  id: \"terminal_wake\"\n"
+  "  component: \"/main/sounds/terminal_wake.sound\"\n"
+  "}\n"
+  "components {\n"
+  "  id: \"coffee_brew\"\n"
+  "  component: \"/main/sounds/coffee_brew.sound\"\n"
+  "}\n"
+  "components {\n"
+  "  id: \"phone_notify\"\n"
+  "  component: \"/main/sounds/phone_notify.sound\"\n"
+  "}\n"
+  "components {\n"
+  "  id: \"heartbeat\"\n"
+  "  component: \"/main/sounds/heartbeat.sound\"\n"
+  "}\n"
+  "components {\n"
+  "  id: \"paper_rustle\"\n"
+  "  component: \"/main/sounds/paper_rustle.sound\"\n"
+  "}\n"
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
