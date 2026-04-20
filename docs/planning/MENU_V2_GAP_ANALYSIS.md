@@ -4,6 +4,17 @@
 Источник дизайна: `C:\Users\GoldiM\Downloads\AVOS (14)\menu_mobile.html`  
 Текущее меню игры: `main/gui/components_v2/main_menu_v2.gui` + `main/gui/components_v2/main_menu_v2.gui_script`
 
+## Статус реализации (обновлено 2026-04-21)
+
+- Stage A: завершён (карточки меню, disabled `continue`, штамп, skyline fix `1280`).
+- Stage B: в работе, но ядро уже перенесено:
+  - split-слои логотипа (`logo_hot_top`, `logo_cyan_bot`) и расширенный glitch-burst,
+  - dossier scene-thumb блок (`doss_scene_thumb*`) и пульсация статуса,
+  - corner-маркеры dossier card + строка состояния dossier.
+- Stage C: начат, добавлен `boot overlay` переход на `start_game`.
+- Дополнительно реализовано: `grain/vignette/crt` gui-оверлеи, stagger intro при `show_menu`, responsive-скрытие dossier при ширине < 980.
+- Остаток Stage B/C: тонкая визуальная полировка интенсивности оверлеев и возможный mobile-reflow левого блока меню (если понадобится по QA).
+
 ---
 
 ## Контекст сравнения
