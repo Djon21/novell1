@@ -37,10 +37,67 @@ local function click_flash(node)
     end)
 end
 
+-- ---- glitch-анимация логотипа (step17) ----
+-- Базовые координаты трёх слоёв: main=60, hot=58 (-2), cyan=62 (+2)
+local LOGO_BASE = { hot = 58, main = 60, cyan = 62 }
+local LOGO_Y = 498
+
+local function logo_pos(id, dx)
+    local n = gui.get_node(id)
+    local p = gui.get_position(n)
+    p.x = LOGO_BASE[id:match("logo_(.+)")] + (dx or 0)
+    p.y = LOGO_Y
+    gui.set_position(n, p)
+end
+
+local function glitch_burst(self)
+    if not self.visible then return end
+    local n_hot  = gui.get_node("logo_hot")
+    local n_cyan = gui.get_node("logo_cyan")
+    -- случайные сдвиги ±10 по X + "дрожь" за 3-4 шага
+    local dxh1 = -2 + math.random(-8, 0)
+    local dxc1 =  2 + math.random(0, 8)
+    local dxh2 = -2 + math.random(-4, 4)
+    local dxc2 =  2 + math.random(-4, 4)
+    local ph = gui.get_position(n_hot)
+    local pc = gui.get_position(n_cyan)
+    ph.x, ph.y = LOGO_BASE.hot + dxh1, LOGO_Y
+    pc.x, pc.y = LOGO_BASE.cyan + dxc1, LOGO_Y
+    gui.set_position(n_hot, ph)
+    gui.set_position(n_cyan, pc)
+
+    -- цепочка: через 30мс второе положение, через 80мс возврат
+    gui.animate(n_hot, "position.x", LOGO_BASE.hot + dxh2, gui.EASING_OUTQUAD, 0.03, 0, function()
+        gui.animate(n_hot, "position.x", LOGO_BASE.hot, gui.EASING_OUTQUAD, 0.05)
+    end)
+    gui.animate(n_cyan, "position.x", LOGO_BASE.cyan + dxc2, gui.EASING_OUTQUAD, 0.03, 0, function()
+        gui.animate(n_cyan, "position.x", LOGO_BASE.cyan, gui.EASING_OUTQUAD, 0.05)
+    end)
+end
+
+local function schedule_next_glitch(self)
+    -- случайный интервал 1.5-4.5 сек между вспышками
+    local delay = 1.5 + math.random() * 3.0
+    self.glitch_timer = timer.delay(delay, false, function()
+        glitch_burst(self)
+        schedule_next_glitch(self)
+    end)
+end
+
 function init(self)
     msg.post(".", "acquire_input_focus")
     self.visible = true
     self.hovered = nil
+    math.randomseed(os.time())
+    self.glitch_timer = nil
+    schedule_next_glitch(self)
+end
+
+function final(self)
+    if self.glitch_timer then
+        timer.cancel(self.glitch_timer)
+        self.glitch_timer = nil
+    end
 end
 
 function on_message(self, message_id, message, sender)
