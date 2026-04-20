@@ -1,5 +1,9 @@
 # GUI MIGRATION STATUS
 
+> Статус: Archive (исторический отчёт, не источник текущей архитектуры)
+> 
+> Актуальные документы: `docs/README.md`, `docs/planning/TODO.md`, `docs/internal/V2_ARCHITECTURE.md`
+
 **Дата обновления:** 2026-04-19
 **Текущий прогресс:** ✅ МИГРАЦИЯ ЗАВЕРШЕНА (100%)
 

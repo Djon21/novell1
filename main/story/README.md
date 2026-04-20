@@ -12,8 +12,12 @@ main/story/
 ```
 
 Новые главы добавляются как `chapter_02.ink`, `chapter_03.ink` и т. д.
-Переключение между главами — в `main/gui/novel_ui.gui_script`, константа
-`STORY_RESOURCE`.
+Сейчас загрузка сценария выполняется напрямую в UI-менеджерах:
+- `main/gui/ui_manager_v2.script` (активный)
+- `main/gui/ui_manager.script` (legacy)
+
+Оба скрипта сейчас грузят `chapter_01.json` через `sys.load_resource(...)`.
+Если добавляете новую главу, обновите эти места вручную.
 
 ## Компиляция .ink → .json
 

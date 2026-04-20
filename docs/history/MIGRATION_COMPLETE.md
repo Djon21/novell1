@@ -1,5 +1,9 @@
 # 🎉 GUI MIGRATION COMPLETE!
 
+> Статус: Archive (исторический отчёт о завершении миграции)
+>
+> Актуальные документы: `docs/README.md`, `docs/planning/TODO.md`, `docs/internal/V2_ARCHITECTURE.md`
+
 **Дата завершения:** 2026-04-19
 **Статус:** ✅ МИГРАЦИЯ УСПЕШНО ЗАВЕРШЕНА
 

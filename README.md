@@ -40,19 +40,19 @@ tools\compile_ink.bat
 
 ### Для сценаристов и дизайнеров:
 - **[INK_STYLE.md](main/story/INK_STYLE.md)** - полная спецификация написания сценариев
-- **[HOW_TO_ADD_BACKGROUNDS.md](HOW_TO_ADD_BACKGROUNDS.md)** - добавление фонов
-- **[HOW_TO_ADD_SOUNDS.md](HOW_TO_ADD_SOUNDS.md)** - добавление звуков
-- **[HOW_TO_ADD_SCENES.md](HOW_TO_ADD_SCENES.md)** - создание point-and-click сцен
-- **[HOW_TO_ADD_PORTRAITS.md](HOW_TO_ADD_PORTRAITS.md)** - добавление портретов персонажей
-- **[GRAPHICS_GUIDE.md](GRAPHICS_GUIDE.md)** - требования к графике
+- **[HOW_TO_ADD_BACKGROUNDS.md](docs/guides/HOW_TO_ADD_BACKGROUNDS.md)** - добавление фонов
+- **[HOW_TO_ADD_SOUNDS.md](docs/guides/HOW_TO_ADD_SOUNDS.md)** - добавление звуков
+- **[HOW_TO_ADD_SCENES.md](docs/guides/HOW_TO_ADD_SCENES.md)** - создание point-and-click сцен
+- **[HOW_TO_ADD_PORTRAITS.md](docs/guides/HOW_TO_ADD_PORTRAITS.md)** - добавление портретов персонажей
+- **[GRAPHICS_GUIDE.md](docs/guides/GRAPHICS_GUIDE.md)** - требования к графике
 
 ### Для программистов:
-- **[ROADMAP.md](ROADMAP.md)** - план развития проекта (Спринты 1-6)
-- **[TODO.md](TODO.md)** - текущие задачи и приоритеты
-- **[AVOS_V2_PROGRESS.md](AVOS_V2_PROGRESS.md)** - прогресс миграции на V2 архитектуру
-- **[V2_ARCHITECTURE.md](.opencode/V2_ARCHITECTURE.md)** - архитектура V2 системы
-- **[YANDEX_GAMES_REQUIREMENTS.md](.opencode/YANDEX_GAMES_REQUIREMENTS.md)** - чеклист требований Яндекс.Игр
-- **[F1_HOTSPOT_EDITOR.md](F1_HOTSPOT_EDITOR.md)** - редактор hotspot'ов (F1)
+- **[ROADMAP.md](docs/planning/ROADMAP.md)** - план развития проекта (Спринты 1-6)
+- **[TODO.md](docs/planning/TODO.md)** - текущие задачи и приоритеты
+- **[YANDEX_GAMES_REQUIREMENTS.md](docs/planning/YANDEX_GAMES_REQUIREMENTS.md)** - чеклист требований Яндекс.Игр
+- **[V2_ARCHITECTURE.md](docs/internal/V2_ARCHITECTURE.md)** - архитектура V2 системы
+- **[F1_HOTSPOT_EDITOR.md](docs/guides/F1_HOTSPOT_EDITOR.md)** - редактор hotspot'ов (F1)
+- **[Документация проекта](docs/README.md)** - полный каталог документов
 
 ## 🎨 Структура проекта
 
@@ -89,9 +89,12 @@ AVOS_S/
 │   ├── update_gui_resolution.py
 │   ├── scale_hotspots.py
 │   └── update_center_positions.py
-├── .opencode/                # Документация разработки
-├── ROADMAP.md
-├── TODO.md
+├── docs/                     # Вся документация проекта
+│   ├── guides/               # Практические инструкции
+│   ├── planning/             # Планирование и требования
+│   ├── history/              # Исторические отчеты миграций
+│   └── internal/             # Внутренние техдоки
+├── .opencode/                # Служебные материалы/скиллы
 └── game.project              # Разрешение: 1280×720
 ```
 
@@ -139,7 +142,7 @@ AVOS_S/
 - ✅ **Стек сцен** - корректная работа вложенных переходов
 
 ### Контент:
-- 14 фонов (1280×720)
+- 14 фоновых сцен
 - 5 звуковых эффектов
 - 2 портрета персонажей
 - 5 сцен с hotspot'ами (квартира, кухня, ванная, спальня, телефон)
@@ -158,7 +161,7 @@ AVOS_S/
 ## 🤝 Вклад в проект
 
 Проект находится в активной разработке. Перед коммитом:
-1. Проверьте TODO.md на актуальные задачи
+1. Проверьте docs/planning/TODO.md на актуальные задачи
 2. Следуйте INK_STYLE.md для сценариев
 3. Компилируйте Ink после изменений
 4. Тестируйте игру перед коммитом
@@ -176,5 +179,4 @@ AVOS_S/
 ---
 
 **Версия:** 0.2.0 (V2 архитектура + разрешение 1280×720)  
-**Дата обновления:** 2026-04-20  
-**Ветка:** AVOS_S (main), resolution-1280x720 (в разработке)
+**Дата обновления:** 2026-04-21

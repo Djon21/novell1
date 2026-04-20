@@ -1,5 +1,9 @@
 # AVOS V2 — прогресс интеграции нового UI
 
+> Статус: Archive (журнал выполнения шагов, часть секций устарела)
+>
+> Актуальные документы: `docs/README.md`, `docs/planning/TODO.md`, `docs/internal/V2_ARCHITECTURE.md`
+
 ## Контекст
 
 Интегрируем mobile-макеты из `C:\Users\GoldiM\Downloads\AVOS (14)\` в Defold-игру.
