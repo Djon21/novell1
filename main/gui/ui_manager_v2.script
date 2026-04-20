@@ -209,8 +209,9 @@ local function handle_dialogue_update(self)
         msg.post(M.components.dialogue, "render_dialogue", {
             speaker = "narrator",
             name    = "КОНЕЦ",
-            text    = node.text or "Конец главы",
+            text    = node.text or "Конец главы. Нажми NEXT чтобы вернуться в меню.",
         })
+        M.at_end = true
     end
 end
 
@@ -337,6 +338,11 @@ function on_message(self, message_id, message, sender)
         handle_dialogue_update(self)
 
     elseif message_id == hash("dialogue_next") then
+        if M.at_end then
+            M.at_end = false
+            show_menu(self)
+            return
+        end
         if dm.advance then dm.advance() end
         handle_dialogue_update(self)
 

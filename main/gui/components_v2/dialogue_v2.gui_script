@@ -146,7 +146,7 @@ function update(self, dt)
 end
 
 local function set_bg(self, bg_name)
-    if not bg_name or bg_name == "" then return end
+    if not bg_name or bg_name == "" or bg_name == "none" then return end
     if self.current_bg == bg_name then return end
     local n = gui.get_node("scene_bg")
     local ok, err = pcall(gui.play_flipbook, n, bg_name)
