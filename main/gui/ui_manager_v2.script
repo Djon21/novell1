@@ -405,18 +405,6 @@ function on_message(self, message_id, message, sender)
         end
         dm.init(bytes)
         
-        -- DEBUG: добавляем тестовые предметы для проверки модалки
-        print("[ui_manager_v2] DEBUG: adding test items to inventory")
-        if gs.add_item then
-            gs.add_item("mug")
-            gs.add_item("phone")
-            gs.add_item("key")
-        end
-        if gs.set_flag then
-            gs.set_flag("has_phone", true)
-        end
-        print("[ui_manager_v2] DEBUG: test items added")
-        
         handle_dialogue_update(self)
         sync_ui_state(self)
 
