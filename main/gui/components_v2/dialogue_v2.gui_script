@@ -97,6 +97,8 @@ end
 local function render(self, msg)
     local speaker_key = msg.speaker or msg.char or "_default"
     local c = resolve_speaker(speaker_key)
+    
+    print("[dialogue_v2] speaker_key:", speaker_key, "resolved portrait:", c.portrait)
 
     local name = msg.name or (speaker_key ~= "_default" and speaker_key:upper()) or "—"
     set_text("nameplate_name", name:upper())
@@ -108,6 +110,8 @@ local function render(self, msg)
     local portrait_bg = gui.get_node("portrait_bg")
     local portrait_icon = gui.get_node("portrait_icon")
     local portrait_id = msg.portrait or c.portrait
+    
+    print("[dialogue_v2] final portrait_id:", portrait_id)
     
     if portrait_id then
         -- Показываем спрайт портрета
