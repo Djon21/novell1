@@ -90,6 +90,36 @@ local function setup_stamp_style()
     end
 end
 
+local function setup_menu_ambience()
+    local hud_dot = gui.get_node("menu_hud_dot")
+    local p = gui.get_position(hud_dot)
+    gui.animate(hud_dot, "scale", vmath.vector4(0.72, 0.72, 1, 1), gui.EASING_INOUTSINE, 0.8, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
+    gui.animate(hud_dot, "position.y", p.y + 1.5, gui.EASING_INOUTSINE, 0.8, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
+
+    local blips = {
+        { id = "neon_blip_1", min = 0.18, max = 0.88, dur = 1.7 },
+        { id = "neon_blip_2", min = 0.10, max = 0.82, dur = 2.3 },
+        { id = "neon_blip_3", min = 0.15, max = 0.80, dur = 1.4 },
+    }
+    for _, b in ipairs(blips) do
+        local n = gui.get_node(b.id)
+        local c = gui.get_color(n)
+        c.w = b.max
+        gui.set_color(n, c)
+        gui.animate(n, "color.w", b.min, gui.EASING_INOUTSINE, b.dur, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
+    end
+end
+
+local function set_dossier_progress(percent)
+    local track = gui.get_node("doss_progress_track")
+    local fill = gui.get_node("doss_progress_fill")
+    local track_sz = gui.get_size(track)
+    local fill_sz = gui.get_size(fill)
+    local pct = math.max(0, math.min(100, tonumber(percent) or 0)) / 100
+    fill_sz.x = math.max(4, track_sz.x * pct)
+    gui.set_size(fill, fill_sz)
+end
+
 -- ---- glitch-анимация логотипа (step17) ----
 -- Базовые координаты трёх слоёв: main=60, hot=58 (-2), cyan=62 (+2)
 local LOGO_BASE = { hot = 58, main = 60, cyan = 62 }
@@ -179,7 +209,9 @@ function init(self)
     schedule_next_glitch(self)
     setup_skyline(self)
     setup_stamp_style()
+    setup_menu_ambience()
     refresh_continue_state(self)
+    set_dossier_progress(41)
 end
 
 function final(self)
@@ -221,6 +253,7 @@ function on_message(self, message_id, message, sender)
         local pct  = tonumber(message.percent) or 41
         set_text("doss_progress",
             string.format("петля #%03d · %d разв. · %d%% завершено", loop, br, pct))
+        set_dossier_progress(pct)
     end
 end
 
