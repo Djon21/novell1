@@ -95,18 +95,22 @@ function M.enter(scene_id)
         print("[scene_controller] не известна сцена: " .. tostring(scene_id))
         return
     end
+    print("[scene_controller] enter scene:", scene_id)
     _active     = true
     _scene_id   = scene_id
     _scene_data = data
     gs.set_scene(scene_id)
     render()
+    print("[scene_controller] render() called, objects rendered")
 
     -- Автотриггер on_enter-knot: проверяем condition и запускаем ink-монолог.
     if data.on_enter then
         local oe = data.on_enter
         local ok = true
         if oe.condition then ok = oe.condition(gs) end
+        print("[scene_controller] on_enter check:", oe.knot, "condition:", ok)
         if ok and oe.knot then
+            print("[scene_controller] triggering on_enter knot:", oe.knot)
             M.exit()
             if _ui and _ui.request_ink_knot then
                 _ui.request_ink_knot(oe.knot, data.bg)
