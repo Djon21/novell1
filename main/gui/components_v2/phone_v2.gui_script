@@ -109,27 +109,41 @@ local APPS = {
 local function set_nodes_enabled(ids, enabled)
     for _, id in ipairs(ids) do
         local n = gui.get_node(id)
-        if n then gui.set_enabled(n, enabled) end
+        if n then 
+            gui.set_enabled(n, enabled)
+            -- Uncomment for detailed per-node logging:
+            -- print("[phone_v2]     node '" .. id .. "' -> " .. tostring(enabled))
+        end
     end
 end
 
 local function set_all_enabled(enabled)
+    print("[phone_v2] set_all_enabled(" .. tostring(enabled) .. ")")
+    print("[phone_v2]   setting CHROME_NODES (" .. #CHROME_NODES .. " nodes)")
     set_nodes_enabled(CHROME_NODES, enabled)
-    for _, ids in pairs(VIEWS) do
+    print("[phone_v2]   setting VIEW nodes")
+    for view_id, ids in pairs(VIEWS) do
+        print("[phone_v2]     view '" .. view_id .. "' (" .. #ids .. " nodes)")
         set_nodes_enabled(ids, enabled)
     end
+    print("[phone_v2] set_all_enabled complete")
 end
 
 local function show_view(self, view_id)
     if not VIEWS[view_id] then view_id = "sms" end
+    print("[phone_v2] show_view called, switching from '" .. (self.active_view or "none") .. "' to '" .. view_id .. "'")
+    
     -- hide all views
-    for _, ids in pairs(VIEWS) do
+    for v_id, ids in pairs(VIEWS) do
+        print("[phone_v2]   hiding view '" .. v_id .. "' (" .. #ids .. " nodes)")
         set_nodes_enabled(ids, false)
     end
+    
     -- show target
+    print("[phone_v2]   showing view '" .. view_id .. "' (" .. #VIEWS[view_id] .. " nodes)")
     set_nodes_enabled(VIEWS[view_id], true)
     self.active_view = view_id
-    print("[phone_v2] show view: " .. view_id)
+    print("[phone_v2] show view complete: " .. view_id)
 end
 
 local function flash_node(node)
@@ -323,9 +337,30 @@ function on_message(self, message_id, message, sender)
         show_view(self, "sms")
         print("[phone_v2] open_phone")
     elseif message_id == hash("close_phone") then
+        print("[phone_v2] close_phone - hiding all nodes")
+        print("[phone_v2] active_view before close:", self.active_view)
         self.visible = false
         set_all_enabled(false)
-        print("[phone_v2] close_phone")
+        print("[phone_v2] close_phone complete")
+        
+        -- DEBUG: Check if any nodes are still enabled
+        local still_enabled = {}
+        for view_id, ids in pairs(VIEWS) do
+            for _, id in ipairs(ids) do
+                local n = gui.get_node(id)
+                if n and gui.is_enabled(n) then
+                    table.insert(still_enabled, id .. " (view: " .. view_id .. ")")
+                end
+            end
+        end
+        if #still_enabled > 0 then
+            print("[phone_v2] WARNING: Some nodes still enabled after close:")
+            for _, id in ipairs(still_enabled) do
+                print("  - " .. id)
+            end
+        else
+            print("[phone_v2] All view nodes properly disabled")
+        end
     elseif message_id == hash("refresh_phone") then
         refresh_all_views(self)
     elseif message_id == hash("set_phone_notif") then
