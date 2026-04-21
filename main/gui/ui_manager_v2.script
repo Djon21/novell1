@@ -131,6 +131,19 @@ local function show_exploration(self)
     msg.post(M.components.dialogue,  "show_bg")
     msg.post(M.components.hud,       "show_hud")
     msg.post(M.components.nav,       "show_nav")
+    -- Close all overlays when entering exploration mode
+    if M.overlays.phone then
+        close_phone(self)
+    end
+    if M.overlays.inventory then
+        close_inventory(self)
+    end
+    if M.overlays.map then
+        close_map(self)
+    end
+    if M.overlays.choice then
+        hide_choice(self)
+    end
     print("[ui_manager_v2] mode: exploration")
 end
 
