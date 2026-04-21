@@ -200,10 +200,12 @@ end
 -- Quests: 2 слота q1..q2.
 local QUEST_SLOTS = 2
 local function refresh_quests(self, list)
+    print("[phone_v2] refresh_quests called, visible=" .. tostring(self.visible) .. ", list size=" .. #(list or {}))
     list = list or {}
     for i = 1, QUEST_SLOTS do
         local prefix = "v_quests_q" .. i
         local has = list[i] ~= nil
+        print("[phone_v2]   quest slot " .. i .. ": " .. tostring(has))
         set_node_enabled(prefix .. "_bg",   has)
         set_node_enabled(prefix .. "_name", has)
         set_node_enabled(prefix .. "_desc", has)
@@ -225,6 +227,7 @@ local function refresh_quests(self, list)
             set_node_color(prefix .. "_name", c)
         end
     end
+    print("[phone_v2] refresh_quests complete")
 end
 
 -- Mail: 2 слота m1..m2.
@@ -301,6 +304,7 @@ end
 -- map/camera/terminal данными не обеспечены — остаются как есть (заполнены
 -- статичным текстом в .gui, step22).
 local function refresh_all_views(self)
+    print("[phone_v2] refresh_all_views called, visible=" .. tostring(self.visible))
     local sms   = gs.get_messages  and gs.get_messages()  or {}
     local qs    = gs.get_quests    and gs.get_quests()    or {}
     local mails = gs.get_mails     and gs.get_mails()     or {}
@@ -315,6 +319,7 @@ local function refresh_all_views(self)
 
     local unread = gs.get_phone_unread_total and gs.get_phone_unread_total() or 0
     set_text("stats_msg", "сообщений: " .. tostring(unread))
+    print("[phone_v2] refresh_all_views complete")
 end
 
 function init(self)
