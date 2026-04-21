@@ -126,24 +126,26 @@ end
 
 local function show_exploration(self)
     M.base_mode = "exploration"
+    print("[ui_manager_v2] show_exploration() called")
+    print("[ui_manager_v2] overlay states: phone=" .. tostring(M.overlays.phone) .. 
+          ", inventory=" .. tostring(M.overlays.inventory) .. 
+          ", map=" .. tostring(M.overlays.map) .. 
+          ", choice=" .. tostring(M.overlays.choice))
+    
     msg.post(M.components.main_menu, "hide_menu")
     msg.post(M.components.dialogue,  "hide_dialogue")
     msg.post(M.components.dialogue,  "show_bg")
     msg.post(M.components.hud,       "show_hud")
     msg.post(M.components.nav,       "show_nav")
+    
     -- Close all overlays when entering exploration mode
-    if M.overlays.phone then
-        close_phone(self)
-    end
-    if M.overlays.inventory then
-        close_inventory(self)
-    end
-    if M.overlays.map then
-        close_map(self)
-    end
-    if M.overlays.choice then
-        hide_choice(self)
-    end
+    -- ALWAYS close, regardless of overlay state (force close)
+    print("[ui_manager_v2] force closing all overlays")
+    close_phone(self)
+    close_inventory(self)
+    close_map(self)
+    hide_choice(self)
+    
     print("[ui_manager_v2] mode: exploration")
 end
 
