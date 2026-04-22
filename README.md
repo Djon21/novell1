@@ -24,43 +24,45 @@ tools\compile_ink.bat
 
 ## Карта документации
 
+Подробная навигация теперь собрана в `docs/README.md`.
+
 ### С чего начинать
 
-- `ARCHITECTURE.md` — актуальная карта runtime-архитектуры
-- `CODEX_CONTEXT.md` — короткий handoff для новых Codex-сессий
-- `CONTINUE_HERE.md` — что читать первым и куда обычно продолжают работу
+- `docs/reference/CODEX_CONTEXT.md` — короткий handoff для новых Codex-сессий
+- `docs/reference/ARCHITECTURE.md` — актуальная карта runtime-архитектуры
+- `docs/reference/CONTINUE_HERE.md` — что читать первым и куда обычно продолжают работу
 
 ### Контент и пайплайны
 
 - `main/story/README.md` — Ink-пайплайн, поддерживаемые теги, ограничения текущего story-loader
 - `main/story/INK_STYLE.md` — стиль и правила написания Ink
-- `HOW_TO_ADD_SCENES.md` — добавление exploration-сцен, hotspot'ов, объектов и `exits`
-- `HOW_TO_ADD_BACKGROUNDS.md` — добавление фонов и привязка к Ink / `scenes.lua`
-- `HOW_TO_ADD_PORTRAITS.md` — добавление v2-портретов в `dialogue_v2`
-- `HOW_TO_ADD_SOUNDS.md` — текущий звуковой пайплайн и caveats
-- `GRAPHICS_GUIDE.md` — требования к графике и атласам
-- `F1_HOTSPOT_EDITOR.md` — встроенный редактор hotspot'ов и scene objects
-- `DESIGN_PORT_RULES.md` — правила портирования HTML/CSS-макетов в Defold GUI
+- `docs/guides/HOW_TO_ADD_SCENES.md` — добавление exploration-сцен, hotspot'ов, объектов и `exits`
+- `docs/guides/HOW_TO_ADD_BACKGROUNDS.md` — добавление фонов и привязка к Ink / `scenes.lua`
+- `docs/guides/HOW_TO_ADD_PORTRAITS.md` — добавление v2-портретов в `dialogue_v2`
+- `docs/guides/HOW_TO_ADD_SOUNDS.md` — текущий звуковой пайплайн и caveats
+- `docs/guides/GRAPHICS_GUIDE.md` — требования к графике и атласам
+- `docs/guides/F1_HOTSPOT_EDITOR.md` — встроенный редактор hotspot'ов и scene objects
+- `docs/guides/DESIGN_PORT_RULES.md` — правила портирования HTML/CSS-макетов в Defold GUI
 
 ### Планирование и живые хвосты
 
-- `ROADMAP.md` — стратегические направления после завершённой v2-миграции
-- `TODO.md` — оперативный список текущих незакрытых задач
-- `DOCUMENTATION_AUDIT.md` — текущее состояние docs и оставшиеся пробелы
+- `docs/reference/ROADMAP.md` — стратегические направления после завершённой v2-миграции
+- `docs/reference/TODO.md` — оперативный список текущих незакрытых задач
+- `docs/reference/DOCUMENTATION_AUDIT.md` — текущее состояние docs и оставшиеся пробелы
 
 ### Архив / история миграции
 
 Эти файлы полезны как хронология и reference по legacy UI, но не должны использоваться как основной source of truth для текущей разработки:
 
-- `AVOS_V2_PROGRESS.md`
-- `GUI_MIGRATION_PLAN.md`
-- `GUI_AUDIT.md`
-- `GUI_CREATION_GUIDE.md`
-- `GUI_VALIDATION_REPORT.md`
-- `INTEGRATION_REPORT.md`
-- `MIGRATION_STATUS.md`
-- `MIGRATION_COMPLETE.md`
-- `NODE_MAP.md`
+- `docs/archive/legacy-ui/AVOS_V2_PROGRESS.md`
+- `docs/archive/legacy-ui/GUI_MIGRATION_PLAN.md`
+- `docs/archive/legacy-ui/GUI_AUDIT.md`
+- `docs/archive/legacy-ui/GUI_CREATION_GUIDE.md`
+- `docs/archive/legacy-ui/GUI_VALIDATION_REPORT.md`
+- `docs/archive/legacy-ui/INTEGRATION_REPORT.md`
+- `docs/archive/legacy-ui/MIGRATION_STATUS.md`
+- `docs/archive/legacy-ui/MIGRATION_COMPLETE.md`
+- `docs/archive/legacy-ui/NODE_MAP.md`
 
 ## Структура проекта
 
@@ -89,6 +91,12 @@ main/
     ├── chapter_01.ink
     ├── chapter_01.json
     └── README.md
+
+docs/
+├── README.md
+├── reference/
+├── guides/
+└── archive/legacy-ui/
 ```
 
 ## Важные caveats

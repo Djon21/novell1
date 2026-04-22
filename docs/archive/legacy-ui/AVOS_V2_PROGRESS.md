@@ -2,7 +2,7 @@
 
 ## Контекст
 > Архивный журнал завершённой v2-миграции.
-> Для текущей разработки сначала читайте `README.md`, `ARCHITECTURE.md`, `CODEX_CONTEXT.md` и `TODO.md`.
+> Для текущей разработки сначала читайте `README.md`, `docs/reference/ARCHITECTURE.md`, `docs/reference/CODEX_CONTEXT.md` и `docs/reference/TODO.md`.
 
 
 Интегрируем mobile-макеты из `C:\Users\GoldiM\Downloads\AVOS (14)\` в Defold-игру.

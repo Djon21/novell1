@@ -12,38 +12,38 @@
 ## Что теперь считается рабочей документацией
 
 - `README.md`
-- `ARCHITECTURE.md`
-- `CODEX_CONTEXT.md`
-- `CONTINUE_HERE.md`
+- `docs/reference/ARCHITECTURE.md`
+- `docs/reference/CODEX_CONTEXT.md`
+- `docs/reference/CONTINUE_HERE.md`
 - `main/story/README.md`
 - `main/story/INK_STYLE.md`
-- `HOW_TO_ADD_SCENES.md`
-- `HOW_TO_ADD_BACKGROUNDS.md`
-- `HOW_TO_ADD_PORTRAITS.md`
-- `HOW_TO_ADD_SOUNDS.md`
-- `GRAPHICS_GUIDE.md`
-- `F1_HOTSPOT_EDITOR.md`
-- `DESIGN_PORT_RULES.md`
-- `ROADMAP.md`
-- `TODO.md`
+- `docs/guides/HOW_TO_ADD_SCENES.md`
+- `docs/guides/HOW_TO_ADD_BACKGROUNDS.md`
+- `docs/guides/HOW_TO_ADD_PORTRAITS.md`
+- `docs/guides/HOW_TO_ADD_SOUNDS.md`
+- `docs/guides/GRAPHICS_GUIDE.md`
+- `docs/guides/F1_HOTSPOT_EDITOR.md`
+- `docs/guides/DESIGN_PORT_RULES.md`
+- `docs/reference/ROADMAP.md`
+- `docs/reference/TODO.md`
 
 ## Что теперь считается архивом
 
-- `AVOS_V2_PROGRESS.md`
-- `GUI_MIGRATION_PLAN.md`
-- `GUI_AUDIT.md`
-- `GUI_CREATION_GUIDE.md`
-- `GUI_VALIDATION_REPORT.md`
-- `INTEGRATION_REPORT.md`
-- `MIGRATION_STATUS.md`
-- `MIGRATION_COMPLETE.md`
-- `NODE_MAP.md`
+- `docs/archive/legacy-ui/AVOS_V2_PROGRESS.md`
+- `docs/archive/legacy-ui/GUI_MIGRATION_PLAN.md`
+- `docs/archive/legacy-ui/GUI_AUDIT.md`
+- `docs/archive/legacy-ui/GUI_CREATION_GUIDE.md`
+- `docs/archive/legacy-ui/GUI_VALIDATION_REPORT.md`
+- `docs/archive/legacy-ui/INTEGRATION_REPORT.md`
+- `docs/archive/legacy-ui/MIGRATION_STATUS.md`
+- `docs/archive/legacy-ui/MIGRATION_COMPLETE.md`
+- `docs/archive/legacy-ui/NODE_MAP.md`
 
 ## Что было исправлено в этой ревизии
 
 - `README.md` обновлён под активный bootstrap `main_v2.collectionc`
-- добавлен `ARCHITECTURE.md` как короткий source of truth по runtime
-- `CODEX_CONTEXT.md` и `CONTINUE_HERE.md` синхронизированы с текущим состоянием `AVOS_S`
+- добавлен `docs/reference/ARCHITECTURE.md` как короткий source of truth по runtime
+- `docs/reference/CODEX_CONTEXT.md` и `docs/reference/CONTINUE_HERE.md` синхронизированы с текущим состоянием `AVOS_S`
 - `main/story/README.md` обновлён под текущий loader и реальные Ink-теги
 - инструкции по сценам, портретам, звукам, графике и F1-редактору приведены к `v2`-архитектуре
 - roadmap и TODO отделены от завершённой migration-хронологии
@@ -60,6 +60,6 @@
 Если появляется новый runtime-модуль или новый контент-пайплайн, обновлять нужно как минимум:
 
 1. `README.md`
-2. `ARCHITECTURE.md`
+2. `docs/reference/ARCHITECTURE.md`
 3. профильный how-to / README рядом с модулем
-4. `TODO.md`, если остался незакрытый хвост
+4. `docs/reference/TODO.md`, если остался незакрытый хвост

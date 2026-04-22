@@ -44,7 +44,7 @@
 
 - hotspot'ы и scene objects в `scenes.lua` описываются в системе `960x640`
 - origin — левый нижний угол
-- подгонка делается через `F1_HOTSPOT_EDITOR.md`
+- подгонка делается через `docs/guides/F1_HOTSPOT_EDITOR.md`
 
 ## 5. Практические правила
 
@@ -54,6 +54,6 @@
 
 ## 6. Быстрые ссылки
 
-- фоны: `HOW_TO_ADD_BACKGROUNDS.md`
-- портреты: `HOW_TO_ADD_PORTRAITS.md`
-- сцены и scene objects: `HOW_TO_ADD_SCENES.md`
+- фоны: `docs/guides/HOW_TO_ADD_BACKGROUNDS.md`
+- портреты: `docs/guides/HOW_TO_ADD_PORTRAITS.md`
+- сцены и scene objects: `docs/guides/HOW_TO_ADD_SCENES.md`

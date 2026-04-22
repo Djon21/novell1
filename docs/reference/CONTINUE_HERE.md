@@ -6,10 +6,10 @@ V2-миграция уже завершена. Этот файл больше н
 
 ## Читать в таком порядке
 
-1. `CODEX_CONTEXT.md`
+1. `docs/reference/CODEX_CONTEXT.md`
 2. `README.md`
-3. `ARCHITECTURE.md`
-4. `TODO.md`
+3. `docs/reference/ARCHITECTURE.md`
+4. `docs/reference/TODO.md`
 5. `main/story/README.md`
 
 ## Текущее состояние проекта
@@ -28,22 +28,22 @@ V2-миграция уже завершена. Этот файл больше н
 
 ## Где быстро искать контекст
 
-- архитектура и вход: `ARCHITECTURE.md`
+- архитектура и вход: `docs/reference/ARCHITECTURE.md`
 - story pipeline: `main/story/README.md`
-- scenes / hotspots: `HOW_TO_ADD_SCENES.md`
-- дизайн-портирование в Defold: `DESIGN_PORT_RULES.md`
-- оперативные хвосты: `TODO.md`
+- scenes / hotspots: `docs/guides/HOW_TO_ADD_SCENES.md`
+- дизайн-портирование в Defold: `docs/guides/DESIGN_PORT_RULES.md`
+- оперативные хвосты: `docs/reference/TODO.md`
 
 ## Что теперь считать архивом
 
 Следующие файлы не удаляем, но читаем как историю миграции, а не как текущую инструкцию:
 
-- `AVOS_V2_PROGRESS.md`
-- `GUI_MIGRATION_PLAN.md`
-- `GUI_AUDIT.md`
-- `GUI_CREATION_GUIDE.md`
-- `GUI_VALIDATION_REPORT.md`
-- `INTEGRATION_REPORT.md`
-- `MIGRATION_STATUS.md`
-- `MIGRATION_COMPLETE.md`
-- `NODE_MAP.md`
+- `docs/archive/legacy-ui/AVOS_V2_PROGRESS.md`
+- `docs/archive/legacy-ui/GUI_MIGRATION_PLAN.md`
+- `docs/archive/legacy-ui/GUI_AUDIT.md`
+- `docs/archive/legacy-ui/GUI_CREATION_GUIDE.md`
+- `docs/archive/legacy-ui/GUI_VALIDATION_REPORT.md`
+- `docs/archive/legacy-ui/INTEGRATION_REPORT.md`
+- `docs/archive/legacy-ui/MIGRATION_STATUS.md`
+- `docs/archive/legacy-ui/MIGRATION_COMPLETE.md`
+- `docs/archive/legacy-ui/NODE_MAP.md`

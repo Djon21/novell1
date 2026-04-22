@@ -103,4 +103,4 @@ tools\compile_ink.bat chapter_01
 1. Пишете или редактируете `.ink`
 2. Перекомпилируете `.json`
 3. Запускаете игру в Defold
-4. Если меняли теги/команды, проверяете их по `dialogue_manager_ink.lua` и `ARCHITECTURE.md`
+4. Если меняли теги/команды, проверяете их по `dialogue_manager_ink.lua` и `../../docs/reference/ARCHITECTURE.md`

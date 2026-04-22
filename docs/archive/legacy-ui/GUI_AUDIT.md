@@ -2,7 +2,7 @@
 
 Дата: 2026-04-19
 > Архивный документ по legacy `novel_ui`.
-> Не использовать как актуальную инструкцию для текущего `v2` runtime; стартовые документы теперь — `README.md`, `ARCHITECTURE.md` и `CODEX_CONTEXT.md`.
+> Не использовать как актуальную инструкцию для текущего `v2` runtime; стартовые документы теперь — `README.md`, `docs/reference/ARCHITECTURE.md` и `docs/reference/CODEX_CONTEXT.md`.
 
 Файл: novel_ui.gui_script (1670 строк)
 
