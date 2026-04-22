@@ -1,112 +1,65 @@
-# Анализ документации проекта
+# Аудит документации
 
-## ✅ Что УЖЕ задокументировано:
+Актуально на `2026-04-22`.
 
-### Существующие документы:
-1. **INK_STYLE.md** (379 строк) - полная спецификация Ink
-2. **main/story/README.md** - компиляция Ink, структура
-3. **GRAPHICS_GUIDE.md** - требования к графике
-4. **HOW_TO_ADD_BACKGROUNDS.md** - добавление фонов
-5. **HOW_TO_ADD_SOUNDS.md** - добавление звуков
-6. **ROADMAP.md** - план развития проекта
-7. **TODO.md** - текущие задачи
-8. **main/sounds/CREDITS.md** - атрибуция звуков
+Цель этой ревизии — разделить документацию на:
 
----
+- рабочую, которая описывает текущий `v2` runtime
+- архивную, которая сохраняет историю миграции и legacy UI
 
-## ❌ Что НЕ задокументировано:
+Папка `skills/` в этот аудит намеренно не входит.
 
-### 1. Point-and-Click система
-- ❌ Как создавать новые сцены в `scenes.lua`
-- ❌ Структура hotspot'ов (rect, label, icon, action, condition)
-- ❌ Типы action: goto_scene, set_flag, add_item, ink_knot, phone_close
-- ❌ Функции condition и visible_when
-- ❌ Система объектов сцены (objects с visible_when)
-- ❌ Координатная система (960×640, origin левый-нижний)
-- ❌ Как использовать F1-редактор для настройки hotspot'ов
+## Что теперь считается рабочей документацией
 
-### 2. Портреты персонажей
-- ❌ Как добавить новый портрет в `characters.atlas`
-- ❌ Как портреты связываются с именами персонажей
-- ❌ Функция get_portrait_name в novel_ui.gui_script
+- `README.md`
+- `ARCHITECTURE.md`
+- `CODEX_CONTEXT.md`
+- `CONTINUE_HERE.md`
+- `main/story/README.md`
+- `main/story/INK_STYLE.md`
+- `HOW_TO_ADD_SCENES.md`
+- `HOW_TO_ADD_BACKGROUNDS.md`
+- `HOW_TO_ADD_PORTRAITS.md`
+- `HOW_TO_ADD_SOUNDS.md`
+- `GRAPHICS_GUIDE.md`
+- `F1_HOTSPOT_EDITOR.md`
+- `DESIGN_PORT_RULES.md`
+- `ROADMAP.md`
+- `TODO.md`
 
-### 3. Квесты
-- ❌ Структура `quests_catalog.lua` (если существует)
-- ❌ Как создавать новые квесты
-- ❌ Формат описания квестов для UI
+## Что теперь считается архивом
 
-### 4. Game State система
-- ❌ Структура `game_state.lua`
-- ❌ API: get_flag, set_flag, add_item, remove_item
-- ❌ Разница между Ink VAR и game_state флагами (частично есть в INK_STYLE)
-- ❌ Система сохранений
+- `AVOS_V2_PROGRESS.md`
+- `GUI_MIGRATION_PLAN.md`
+- `GUI_AUDIT.md`
+- `GUI_CREATION_GUIDE.md`
+- `GUI_VALIDATION_REPORT.md`
+- `INTEGRATION_REPORT.md`
+- `MIGRATION_STATUS.md`
+- `MIGRATION_COMPLETE.md`
+- `NODE_MAP.md`
 
-### 5. Телефон (Phone UI)
-- ❌ Структура сцены phone_home
-- ❌ Как добавлять новые приложения в телефон
-- ❌ Система SMS (sms:add)
-- ❌ Система заметок (note:add)
-- ❌ Механика phone:close
+## Что было исправлено в этой ревизии
 
-### 6. Инструменты разработки (tools/)
-- ❌ Что делает каждый Python скрипт
-- ❌ gen_bg_menu.py, gen_bg_phone.py и т.д.
-- ❌ Когда и как их использовать
+- `README.md` обновлён под активный bootstrap `main_v2.collectionc`
+- добавлен `ARCHITECTURE.md` как короткий source of truth по runtime
+- `CODEX_CONTEXT.md` и `CONTINUE_HERE.md` синхронизированы с текущим состоянием `AVOS_S`
+- `main/story/README.md` обновлён под текущий loader и реальные Ink-теги
+- инструкции по сценам, портретам, звукам, графике и F1-редактору приведены к `v2`-архитектуре
+- roadmap и TODO отделены от завершённой migration-хронологии
+- migration-документы помечены как архивные, чтобы не путать с боевой документацией
 
-### 7. Структура проекта
-- ❌ Общая архитектура (GUI → dialogue_manager → scene_controller → game_state)
-- ❌ Роль каждого основного модуля
-- ❌ Поток данных между компонентами
+## Что ещё остаётся непокрытым
 
-### 8. Эффекты
-- ❌ Как работают shake, pulse эффекты
-- ❌ Параметры и примеры использования
+- нет отдельного `BUILD_GUIDE.md` с пошаговой сборкой под Яндекс.Игры
+- нет отдельного `TESTING_GUIDE.md` с release-чеклистом
+- документация честно фиксирует, что `# sfx/#shake/#pulse` уже парсятся, но ещё не проигрываются в активном `v2`-UI
 
-### 9. Нарраторская панель (терминал)
-- ❌ Когда показывается терминал вместо портрета
-- ❌ Формат времени и текста
+## Рекомендация на будущее
 
-### 10. Сборка и деплой
-- ❌ Как собрать игру для Яндекс.Игр
-- ❌ Настройки game.project
-- ❌ Custom resources
+Если появляется новый runtime-модуль или новый контент-пайплайн, обновлять нужно как минимум:
 
-### 11. Тестирование
-- ❌ Как тестировать игру
-- ❌ Чек-лист перед коммитом
-- ❌ Известные проблемы и их решения
-
-### 12. README.md
-- ❌ Главный README устарел (дефолтный шаблон Defold)
-- ❌ Нет описания проекта АВОСЬ
-- ❌ Нет quick start guide
-
----
-
-## 📋 Приоритеты документирования:
-
-### Высокий приоритет (критично для разработки):
-1. **HOW_TO_ADD_SCENES.md** - создание point-and-click сцен
-2. **HOW_TO_ADD_PORTRAITS.md** - добавление портретов персонажей
-3. **README.md** - обновить главный README с описанием проекта
-4. **ARCHITECTURE.md** - общая архитектура проекта
-
-### Средний приоритет (полезно):
-5. **HOW_TO_ADD_QUESTS.md** - система квестов
-6. **GAME_STATE_API.md** - API game_state
-7. **PHONE_SYSTEM.md** - система телефона
-8. **TOOLS_GUIDE.md** - описание инструментов в tools/
-
-### Низкий приоритет (можно позже):
-9. **EFFECTS_GUIDE.md** - эффекты shake/pulse
-10. **BUILD_GUIDE.md** - сборка и деплой
-11. **TESTING_GUIDE.md** - тестирование
-
----
-
-## 🎯 Рекомендации:
-
-1. Начать с **HOW_TO_ADD_SCENES.md** - это самая частая задача
-2. Обновить **README.md** - первое, что видят разработчики
-3. Создать **ARCHITECTURE.md** - понимание общей картины
-4. Добавить **HOW_TO_ADD_PORTRAITS.md** - для новых персонажей
+1. `README.md`
+2. `ARCHITECTURE.md`
+3. профильный how-to / README рядом с модулем
+4. `TODO.md`, если остался незакрытый хвост

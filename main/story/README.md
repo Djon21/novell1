@@ -2,117 +2,105 @@
 
 Эта папка содержит сценарий АВОСЬ в формате [Ink](https://www.inklestudios.com/ink/).
 
-## Структура
+## Что сейчас реально загружается
 
-```
+- исходник: `main/story/chapter_01.ink`
+- runtime-ресурс: `main/story/chapter_01.json`
+- текущий loader в `main/gui/ui_manager_v2.script` жёстко читает именно `/main/story/chapter_01.json`
+
+Если добавляете `chapter_02.ink`, мало просто создать файл: нужно ещё расширить loader или роутинг глав.
+
+## Структура папки
+
+```text
 main/story/
-├── chapter_01.ink    — Итерация 001 (первая глава)
-├── chapter_01.json   — скомпилированный результат (автогенерация)
-└── README.md         — этот файл
+├── chapter_01.ink
+├── chapter_01.json
+├── INK_STYLE.md
+└── README.md
 ```
 
-Новые главы добавляются как `chapter_02.ink`, `chapter_03.ink` и т. д.
-Переключение между главами — в `main/gui/novel_ui.gui_script`, константа
-`STORY_RESOURCE`.
+## Компиляция `.ink -> .json`
 
-## Компиляция .ink → .json
-
-Ink-файлы компилируются в JSON через `inklecate.exe` (лежит в `tools/`).
-Defold не умеет читать сырой `.ink`, ему нужен `.json`.
+Ink-файлы компилируются через `inklecate`, который лежит в `tools/`.
 
 ### Компилировать всё
+
 ```bash
-# Linux/macOS/Git Bash:
+# Linux/macOS/Git Bash
 ./tools/compile_ink.sh
 
-# Windows CMD:
+# Windows CMD
 tools\compile_ink.bat
 ```
 
 ### Компилировать один файл
+
 ```bash
 ./tools/compile_ink.sh chapter_01
 tools\compile_ink.bat chapter_01
 ```
 
-**Важно:** после каждого изменения `.ink` нужно перекомпилировать. В будущем
-можно автоматизировать через Defold build hook или pre-commit hook.
+После каждого изменения `.ink` нужно перекомпилировать `.json`.
 
-## Как Defold читает json
+## Как runtime использует JSON
 
-`.json` файлы попадают в бандл через `custom_resources = /main/story` в
-`game.project`. В Lua-скрипте читаются через:
+- `game.project` подтягивает `main/story` через `custom_resources = /main/story`
+- `ui_manager_v2.script` делает `sys.load_resource("/main/story/chapter_01.json")`
+- дальше байты уходят в `dialogue_manager_ink.lua`
 
-```lua
-local bytes = sys.load_resource("/main/story/chapter_01.json")
-local dm = require "main.scripts.dialogue_manager_ink"
-dm.init(bytes)
+## Поддерживаемые Ink-теги
+
+Текущий runtime понимает следующие теги:
+
+| Тег | Что делает |
+| --- | --- |
+| `# bg:NAME` | меняет фон |
+| `# bg:none` | скрывает фоновую картинку |
+| `# color:R,G,B` | задаёт цвет под фоном |
+| `# speaker:mc|npc|none|Имя` | переключает говорящего |
+| `# sfx:NAME` | одноразовый SFX |
+| `# shake:INT,DUR` | тряска экрана |
+| `# pulse:DUR,R,G,B` | цветовая вспышка |
+| `# flag:NAME=VALUE` | ставит флаг в `game_state` |
+| `# item:add:ID` | добавляет предмет |
+| `# item:remove:ID` | убирает предмет |
+| `# quest:start:ID` / `done` / `fail` | меняет статус квеста |
+| `# sms:add:contact:text` | добавляет SMS |
+| `# note:add:title:body` | добавляет заметку |
+| `# phone:close` | закрывает телефон |
+| `# goto_scene:SCENE_ID` / `# explore:SCENE_ID` | переводит игру в exploration-сцену |
+| `# return_to_scene` | возвращает управление в предыдущую exploration-сцену |
+
+## Важный caveat по эффектам
+
+`dialogue_manager_ink.lua` уже парсит `# sfx`, `# shake`, `# pulse`, но активный `v2`-UI пока не забирает `dm.get_effects()`. То есть теги уже являются частью формата, но их bridge в `ui_manager_v2` ещё не доделан.
+
+## Переменные истории
+
+Глобальные Ink-переменные, которые runtime синхронизирует с `save_manager.lua`:
+
+| VAR | Что значит |
+| --- | --- |
+| `mc_gender` | `"male"` или `"female"` |
+| `mc_name` | имя главного героя |
+| `npc_name` | имя второго главного персонажа |
+| `TRUST` | счётчик доверия |
+| `INSIGHT` | счётчик догадок |
+| `SYNC` | счётчик синхронности |
+
+## Пример exploration-перехода
+
+```ink
+=== apartment_hub_intro
+# bg:bg_apartment # speaker:none # explore:apartment_hub
+Коридор. Тихо.
+-> DONE
 ```
 
 ## AI-friendly workflow
 
-Главная причина выбора Ink — лёгкая интеграция с нейросетями.
-
-1. Открываешь `.ink` файл (это plain text)
-2. Копируешь содержимое в ChatGPT/Claude/Gemini с промптом вида:
-   > «Продолжи историю в формате Ink. Учитывай теги `# bg:NAME`, `# speaker:mc|npc`,
-   > и правила согласования по полу через `{mc_gender == "female":ж|м}`.»
-3. Вставляешь результат обратно в `.ink`
-4. `./tools/compile_ink.sh` — перекомпилируешь
-5. Перезапускаешь Defold — играешь новый контент
-
-## Наши теги
-
-Движок АВОСЬ понимает следующие теги в параграфах Ink:
-
-| Тег                 | Что делает                                  | Пример                   |
-|---------------------|---------------------------------------------|--------------------------|
-| `# bg:NAME`         | Меняет фоновую картинку (имя из атласа)     | `# bg:bg_metro`          |
-| `# bg:none`         | Скрывает картинку фона (остаётся чистый цвет) | `# bg:none`            |
-| `# color:R,G,B`     | Цвет фона под картинкой (значения 0..1)     | `# color:0.08,0.09,0.15` |
-| `# speaker:mc`      | Имя говорящего = имя ГГ (mc_name)           | `# speaker:mc`           |
-| `# speaker:npc`     | Имя говорящего = имя НПС (npc_name)         | `# speaker:npc`          |
-| `# speaker:Мила`    | Литеральное имя                             | `# speaker:Мила`         |
-| `# speaker:none`    | Нарратив (скрыть имя и портрет)             | `# speaker:none`         |
-
-Теги ставятся перед параграфом или на той же строке. Когда `speaker:mc`
-или `speaker:npc` → автоматически подставляется имя из save_manager
-(«Артём» или «Мила», в зависимости от выбранного пола), и GUI
-автоматически показывает правильный портрет.
-
-На вариантах выбора теги тоже работают — например `* [Милу] # gender:female`.
-
-## Переменные истории
-
-Глобальные Ink-переменные, которые менеджер диалогов автоматически
-синхронизирует с save_manager:
-
-| VAR         | Что значит                                  | Кто меняет                   |
-|-------------|---------------------------------------------|------------------------------|
-| `mc_gender` | `"male"` или `"female"`                     | тело выбора пола в .ink      |
-| `mc_name`   | имя ГГ — «Артём» или «Мила»                 | тело выбора пола в .ink      |
-| `npc_name`  | имя НПС противоположного пола               | тело выбора пола в .ink      |
-| `TRUST`     | счётчик доверия с НПС                       | `~ TRUST = TRUST + 1`        |
-| `INSIGHT`   | счётчик догадок про петлю                   | `~ INSIGHT = INSIGHT + 1`    |
-| `SYNC`      | счётчик «синхронности» с НПС                | `~ SYNC = SYNC + 1`          |
-
-В тексте подстановка: `{mc_name}`, `{npc_name}`.
-Согласование по полу: `{mc_gender == "female":лась|лся}`.
-
-## Пример сцены
-
-```ink
-=== metro ===
-# bg:bg_metro # color:0.08,0.09,0.15 # speaker:none
-Утренний поток. Все смотрят в телефоны.
-# speaker:mc
-Каждый день одно и то же. Устал{mc_gender == "female":а|}. Или привык{mc_gender == "female":ла|}.
-{npc_name} пишет в чате: «Встретимся на крыше?»
-Что ответить?
-* [«Да. Через десять минут.»]
-    ~ TRUST = TRUST + 1
-    -> rooftop
-* [«Сегодня не могу.»]
-    ~ TRUST = TRUST - 1
-    -> home
-```
+1. Пишете или редактируете `.ink`
+2. Перекомпилируете `.json`
+3. Запускаете игру в Defold
+4. Если меняли теги/команды, проверяете их по `dialogue_manager_ink.lua` и `ARCHITECTURE.md`

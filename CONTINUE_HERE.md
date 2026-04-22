@@ -1,105 +1,49 @@
-# 🎉 МИГРАЦИЯ GUI ЗАВЕРШЕНА!
+# CONTINUE_HERE
 
-**Дата завершения:** 2026-04-19
-**Прогресс:** 10 из 10 checkpoints (100%)
+Актуально на `2026-04-22`.
 
----
+V2-миграция уже завершена. Этот файл больше не про rollout migration, а про то, с чего удобно продолжать работу в текущем `AVOS_S`.
 
-## ✅ ЧТО СДЕЛАНО
+## Читать в таком порядке
 
-✅ **Checkpoint 1:** Подготовка и документирование
-✅ **Checkpoint 2:** Main Menu (скрипт готов, GUI файл создан)
-✅ **Checkpoint 3:** Portraits (скрипт готов, GUI файл создан)
-✅ **Checkpoint 4:** Inventory (скрипт готов, GUI файл создан)
-✅ **Checkpoint 5:** Phone System (скрипт готов, GUI файл создан)
-✅ **Checkpoint 6:** Dialogue System (скрипт готов, GUI файл создан)
-✅ **Checkpoint 7:** Hotspots (скрипт готов, GUI файл создан)
-✅ **Checkpoint 8:** UI Manager (координатор компонентов)
-✅ **Checkpoint 9:** Интеграция (main.collection обновлен)
-✅ **Checkpoint 10:** Очистка (старые файлы удалены)
+1. `CODEX_CONTEXT.md`
+2. `README.md`
+3. `ARCHITECTURE.md`
+4. `TODO.md`
+5. `main/story/README.md`
 
-**Всего создано:** 35 файлов, ~3900 строк кода
+## Текущее состояние проекта
 
----
+- активный bootstrap уже переключён на `main/main_v2.collectionc`
+- основной UI живёт в `main/gui/components_v2/`
+- Ink, `scene_controller` и `game_state` уже связаны в одном runtime
+- legacy UI оставлен в проекте только как reference / fallback
 
-## 📊 РЕЗУЛЬТАТЫ
+## Самые вероятные направления следующей работы
 
-### Создано компонентов: 6
-1. main_menu - главное меню (60 нод)
-2. portraits - портреты персонажей (2 ноды)
-3. inventory - инвентарь (143 ноды)
-4. phone - HUD телефона (10 нод)
-5. dialogue_system - диалоги и выборы (27 нод)
-6. hotspots - интерактивные точки (64 ноды)
+- подключить bridge для `dm.get_effects()` в активный v2 UI
+- довести до конца `exits`-навигацию и карту мира
+- полировать gallery / achievements / phone apps
+- провести нормальный release QA под Яндекс.Игры
 
-### Удалено:
-- ❌ novel_ui.gui (112 KB, 314 нод)
-- ❌ novel_ui.gui_script (77 KB, 1670 строк)
+## Где быстро искать контекст
 
-### Резервные копии:
-- ✅ novel_ui.gui.backup
-- ✅ novel_ui.gui_script.backup
+- архитектура и вход: `ARCHITECTURE.md`
+- story pipeline: `main/story/README.md`
+- scenes / hotspots: `HOW_TO_ADD_SCENES.md`
+- дизайн-портирование в Defold: `DESIGN_PORT_RULES.md`
+- оперативные хвосты: `TODO.md`
 
----
+## Что теперь считать архивом
 
-## 🎯 СЛЕДУЮЩИЕ ШАГИ
+Следующие файлы не удаляем, но читаем как историю миграции, а не как текущую инструкцию:
 
-### 1. ТЕСТИРОВАНИЕ (ОБЯЗАТЕЛЬНО!)
-
-Открой Defold редактор и протестируй:
-
-1. **Запуск игры** - Project → Build (Ctrl+B)
-2. **Главное меню** - должно показаться меню
-3. **Начало игры** - нажать "Новая игра"
-4. **Диалоги** - проверить текст, портреты, выборы
-5. **Exploration** - проверить hotspots
-6. **Телефон** - открыть через HUD иконку
-7. **Инвентарь** - открыть через рюкзак
-
-**Если есть ошибки:**
-- Смотри консоль Defold
-- Читай INTEGRATION_REPORT.md
-- Проверь GUI_VALIDATION_REPORT.md
-
-### 2. Опционально: Улучшения
-
-- Создать GUI templates (inventory_slot, dialogue_choice)
-- Вынести backgrounds в отдельный компонент
-- Создать HUD компонент
-- Обновить README.md
-
----
-
-## 📚 ДОКУМЕНТАЦИЯ
-
-Все файлы документации созданы:
-
-- **MIGRATION_COMPLETE.md** - итоговый отчет (ЧИТАЙ ПЕРВЫМ!)
-- **GUI_CREATION_GUIDE.md** - как создавать GUI файлы
-- **GUI_VALIDATION_REPORT.md** - проверка GUI файлов
-- **INTEGRATION_REPORT.md** - детали интеграции
-- **NODE_MAP.md** - карта всех 314 нод
-- **GUI_MIGRATION_PLAN.md** - полный план миграции
-
----
-
-## 🎉 ПОЗДРАВЛЯЕМ!
-
-Миграция GUI успешно завершена! Проект теперь имеет профессиональную модульную архитектуру.
-
-**Время миграции:** ~5 часов
-**Коммитов:** 10
-**Результат:** Готово к продакшену!
-
----
-
-## 📞 ЕСЛИ ЧТО-ТО ПОШЛО НЕ ТАК
-
-1. Проверь консоль Defold на ошибки
-2. Убедись что все GUI файлы созданы
-3. Проверь пути в ui_manager.go
-4. Восстанови из бэкапа: novel_ui.gui.backup
-
----
-
-🚀 **Удачи с дальнейшей разработкой!**
+- `AVOS_V2_PROGRESS.md`
+- `GUI_MIGRATION_PLAN.md`
+- `GUI_AUDIT.md`
+- `GUI_CREATION_GUIDE.md`
+- `GUI_VALIDATION_REPORT.md`
+- `INTEGRATION_REPORT.md`
+- `MIGRATION_STATUS.md`
+- `MIGRATION_COMPLETE.md`
+- `NODE_MAP.md`
