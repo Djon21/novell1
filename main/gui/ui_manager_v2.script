@@ -34,6 +34,7 @@ local ok_scenes, scenes = pcall(require, "main.scripts.scenes")
 if not ok_scenes then scenes = nil end
 
 local M = {}
+local handle_dialogue_update
 
 local LEGACY_FLAG_ITEMS = {
     has_mug = "mug",
@@ -245,6 +246,72 @@ local function restore_run_state()
     M.suppress_run_save = false
 end
 
+local function load_main_story_bytes()
+    local ok, bytes = pcall(sys.load_resource, "/main/story/chapter_01.json")
+    if not ok or not bytes then
+        print("[ui_manager_v2] ERROR: chapter_01.json not found")
+        return nil
+    end
+    return bytes
+end
+
+local function reset_runtime_state()
+    M.suppress_run_save = true
+    gs.reset()
+    if scene_controller.reset then
+        scene_controller.reset()
+    else
+        scene_controller.deserialize({ scene_stack = {} })
+    end
+    M.suppress_run_save = false
+end
+
+local function start_new_run(self, reset_iteration_progress)
+    local bytes = load_main_story_bytes()
+    if not bytes then
+        return false
+    end
+
+    sm.load()
+    meta.init()
+
+    if reset_iteration_progress then
+        meta.reset_all()
+    end
+
+    M.at_end = false
+    M.base_mode = "dialogue"
+    M.overlays.choice = false
+    M.overlays.inventory = false
+    M.overlays.phone = false
+    M.overlays.map = false
+
+    msg.post(M.components.choice, "hide_choice")
+    msg.post(M.components.inventory, "hide_inventory")
+    msg.post(M.components.phone, "close_phone")
+    msg.post(M.components.map, "close_map")
+    msg.post(M.components.hotspots, "hide_all")
+
+    sm.new_game()
+    reset_runtime_state()
+
+    dm.init(bytes)
+    handle_dialogue_update(self)
+    sync_ui_state(self)
+    persist_run_state()
+    return true
+end
+
+local function reset_iteration_and_restart(self)
+    meta.init()
+    meta.reset_all()
+
+    -- Даём UI закончить обработку клика по меню и только потом стартуем новый run.
+    timer.delay(0, false, function()
+        start_new_run(self, false)
+    end)
+end
+
 local function refresh_menu_state(self)
     sm.load()
     meta.init()
@@ -404,7 +471,7 @@ local function apply_dm_commands(self)
     end
 end
 
-local function handle_dialogue_update(self)
+handle_dialogue_update = function(self)
     -- 1) Применить команды из ink-тегов (могут поменять сцену)
     apply_dm_commands(self)
 
@@ -571,27 +638,7 @@ function on_message(self, message_id, message, sender)
         show_menu(self)
 
     elseif message_id == hash("start_game") then
-        sm.load()
-        meta.init()
-        sm.new_game()
-        M.suppress_run_save = true
-        gs.reset()
-        if scene_controller.reset then
-            scene_controller.reset()
-        else
-            scene_controller.deserialize({ scene_stack = {} })
-        end
-        M.suppress_run_save = false
-
-        local ok, bytes = pcall(sys.load_resource, "/main/story/chapter_01.json")
-        if not ok or not bytes then
-            print("[ui_manager_v2] ERROR: chapter_01.json not found")
-            return
-        end
-        dm.init(bytes)
-        handle_dialogue_update(self)
-        sync_ui_state(self)
-        persist_run_state()
+        start_new_run(self, false)
 
     elseif message_id == hash("continue_game") then
         sm.load()
@@ -628,8 +675,8 @@ function on_message(self, message_id, message, sender)
         print("[ui_manager_v2] chapter finished; next iteration =", next_loop.iteration_number)
         show_menu(self)
 
-    elseif message_id == hash("open_gallery") then
-        print("[ui_manager_v2] open_gallery (TODO)")
+    elseif message_id == hash("reset_iteration") or message_id == hash("open_gallery") then
+        reset_iteration_and_restart(self)
 
     elseif message_id == hash("open_achievements") then
         print("[ui_manager_v2] open_achievements (TODO)")

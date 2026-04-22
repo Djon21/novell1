@@ -49,6 +49,7 @@
   - загружает `/main/story/chapter_01.json`
   - управляет `menu`, `exploration`, `dialogue`
   - на `chapter_finished` переводит игру в следующую итерацию
+  - поддерживает `reset_iteration`, который вручную возвращает проект к `Итерации 001`
 
 ## Где лежит контент
 
@@ -68,6 +69,7 @@
 - runtime всё ещё грузит один `chapter_01.json`, но source-level story уже разбит на include-файлы в `main/story/chapters/`
 - `chapter_01.json` всё ещё зашит напрямую в `ui_manager_v2.script`; multi-chapter loader ещё не выделен
 - `dialogue_manager_ink.lua` уже поддерживает `# sfx`, `# shake`, `# pulse`, но `ui_manager_v2` пока не забирает `dm.get_effects()`
+- в `main_menu_v2` больше нет реального gallery-flow: его место заняла кнопка `СБРОСИТЬ ИТЕРАЦИЮ`
 
 ## Если задача звучит как «изучи проект»
 

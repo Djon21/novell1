@@ -15,6 +15,8 @@
 - `main/gui/ui_manager_v2.script` показывает `main_menu_v2`
 - меню получает loop-state через сообщение `set_loop_state`
 - `start_game` сбрасывает только run-state и стартует текущую итерацию заново
+- `reset_iteration` сбрасывает и run-state, и meta-state, затем запускает новую игру с `Итерации 001`
+- кнопка `СБРОСИТЬ ИТЕРАЦИЮ` в меню заменила старую `Галерею`
 - `continue_game` доступен только если есть активный run-state save
 
 ### 2. Диалоговый режим
@@ -87,6 +89,8 @@ Persisted meta-state между итерациями:
 
 `meta_state.lua` не сбрасывается при старте новой итерации. Его задача — хранить память петли.
 
+Исключение: ручной `reset_iteration` из меню намеренно вызывает `meta.reset_all()`, чтобы полностью вернуть игру к `Итерации 001`.
+
 ## Ключевые runtime-модули
 
 ### `main/scripts/dialogue_manager_ink.lua`
@@ -143,6 +147,9 @@ Persisted meta-state между итерациями:
   - `save_manager`
   - `meta_state`
   - `components_v2/*`
+- держит единый helper старта новой игры:
+  - `start_game` -> перезапуск текущей итерации без сброса loop-памяти
+  - `reset_iteration` -> полный сброс meta-state и запуск с `001`
 
 ## Ink и compile pipeline
 

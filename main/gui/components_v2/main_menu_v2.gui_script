@@ -7,7 +7,7 @@ local COLOR_ACTIVE = vmath.vector4(0.952, 0.925, 0.85, 1.0)
 local MENU_ITEMS = {
     { id = "mi_new",          msg = "start_game",         label = "НОВАЯ ИТЕРАЦИЯ" },
     { id = "mi_continue",     msg = "continue_game",      label = "ПРОДОЛЖИТЬ" },
-    { id = "mi_gallery",      msg = "open_gallery",       label = "ГАЛЕРЕЯ" },
+    { id = "mi_gallery",      msg = "reset_iteration",    label = "СБРОСИТЬ ИТЕРАЦИЮ" },
     { id = "mi_achievements", msg = "open_achievements",  label = "ДОСТИЖЕНИЯ" },
 }
 
@@ -34,6 +34,14 @@ local function set_text_alpha(id, alpha)
     gui.set_color(node, color)
 end
 
+local function apply_static_labels()
+    for _, item in ipairs(MENU_ITEMS) do
+        if item.id ~= "mi_new" then
+            set_text(item.id, item.label)
+        end
+    end
+end
+
 local function apply_loop_state(self, message)
     local iteration = tonumber(message and message.iteration) or 1
     local awareness = tonumber(message and message.awareness) or 0
@@ -41,6 +49,7 @@ local function apply_loop_state(self, message)
     local iteration_label = message and message.iteration_label or string.format("%03d", iteration)
     local can_continue = message and message.can_continue == true
 
+    apply_static_labels()
     self.can_continue = can_continue
 
     set_text("mi_new", string.format("НАЧАТЬ ИТЕРАЦИЮ %s", iteration_label))
@@ -567,6 +576,7 @@ function init(self)
     cache_logo_base_from_scene()
     start_glitch_loop(self)
     setup_skyline(self)
+    apply_static_labels()
     apply_loop_state(self, { iteration = 1, iteration_label = "001", awareness = 0, completed = 0, can_continue = false })
 end
 
