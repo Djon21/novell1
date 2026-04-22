@@ -154,9 +154,8 @@
 - `main/images/scene_objects.atlas` — overlay-спрайты (`mobile` и т.д.)
 - `main/images/v2.atlas` — v2-портреты и часть v2-ассетов
 - `main/images/ui_common.atlas` — общие декоративные элементы UI
-- `main/images/backgrounds.atlas` — **legacy**, используется только v1 GUI
-  (`main/gui/components/`). V2 на него не ссылается
-- `main/images/characters.atlas` — legacy portrait atlas
+- `archive/legacy_runtime/main/images/backgrounds.atlas` — архивный atlas старого GUI; v2 его не использует
+- `archive/legacy_runtime/main/images/characters.atlas` — архивный portrait atlas старого GUI
 
 Архитектура фон-атласов задокументирована в
 `docs/reference/BACKGROUND_SYSTEM_MIGRATION_PLAN.md`.
@@ -204,4 +203,4 @@
   - максимум `6` hotspot'ов на сцену
   - максимум `4` scene objects на сцену
 - `dialogue_manager_ink` собирает очередь эффектов (`# sfx`, `# shake`, `# pulse`), но активный `v2`-UI пока их не потребляет
-- legacy stack остаётся в проекте и может использоваться как reference, но его документация должна считаться архивной
+- legacy stack архивирован в `archive/legacy_runtime/` и не рассматривается как поддерживаемая часть runtime

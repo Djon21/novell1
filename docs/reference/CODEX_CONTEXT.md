@@ -26,7 +26,7 @@
 
 - Активный bootstrap: `game.project` -> `/main/main_v2.collectionc`
 - Активная главная коллекция: `main/main_v2.collection`
-- Legacy-стек (`main/main.collection`, `main/gui/ui_manager.script`, `main/gui/components/`) всё ещё лежит в проекте, но не является боевым входом
+- Legacy-стек отключён и перенесён в `archive/legacy_runtime/`; боевым входом он больше не считается
 
 ## Текущая карта runtime
 
@@ -74,7 +74,7 @@
 - hotspot sprites: `main/images/hotspots.atlas`
 - scene objects: `main/images/scene_objects.atlas`
 - v2-портреты: `main/images/v2.atlas`
-- legacy `main/images/backgrounds.atlas` — только для v1 GUI (`main/gui/components/`)
+- legacy `archive/legacy_runtime/main/images/backgrounds.atlas` — архивный след v1 GUI, не fallback и не часть текущей v2-системы
 
 ## Важные caveats перед работой
 

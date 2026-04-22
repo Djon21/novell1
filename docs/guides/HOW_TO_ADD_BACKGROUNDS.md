@@ -6,8 +6,10 @@
 - `Ink` и `scenes.lua` продолжают работать через имя `bg_name`
 - `ui_manager_v2` сам переключает atlas у `dialogue_v2` перед `gui.play_flipbook()`
 - внутри dedicated atlas-ов fullscreen background нормализуется к общему animation id `scene_bg`
-- `main/images/backgrounds.atlas` больше **не используется** v2-стеком — он остался
-  только для legacy v1 GUI (`main/gui/components/`). Ничего нового туда не кладём.
+- `archive/legacy_runtime/main/images/backgrounds.atlas` больше **не используется** v2-стеком — он оставлен
+  только как архивный след legacy v1 GUI.
+- старую схему смены фонов считаем отключённой: `backgrounds.atlas` не является
+  fallback, rollback или местом для новых v2-ассетов.
 
 Мелкие ассеты у v2 живут в собственных атласах:
 
@@ -66,7 +68,8 @@ extrude_borders: 2
 
 - один atlas содержит ровно один fullscreen background
 - в dedicated atlas обязательно нужен `rename_patterns: "bg_name=scene_bg"`, чтобы все runtime atlas-ы отдавали один и тот же animation id
-- не добавляйте новый fullscreen background в `main/images/backgrounds.atlas`
+- не добавляйте новый fullscreen background в `archive/legacy_runtime/main/images/backgrounds.atlas`
+- не пытайтесь использовать `backgrounds.atlas` как запасной путь для v2
 
 ## Шаг 3: Зарегистрировать Atlas В `ui_manager_v2.script`
 
@@ -141,7 +144,7 @@ image = "mobile"
 
 - не называем `bg_*`
 - не оформляем как отдельный fullscreen atlas
-- не кладём в `main/images/backgrounds.atlas` (он остался только для legacy v1 GUI)
+- не кладём в `archive/legacy_runtime/main/images/backgrounds.atlas` (он архивный и не считается частью v2-системы)
 
 ## Чеклист
 

@@ -6,7 +6,7 @@
 
 - Активный bootstrap: `game.project` -> `/main/main_v2.collectionc`
 - Активная рабочая ветка: `AVOS_S`
-- Legacy UI (`main/main.collection`, `main/gui/ui_manager.script`, `main/gui/components/`) оставлен в проекте как reference и fallback, но не является текущей точкой входа
+- Legacy GUI отключён и архивируется в `archive/legacy_runtime/`; он больше не считается fallback или рабочей альтернативой для v2
 
 ## Быстрый старт
 
@@ -101,6 +101,8 @@ docs/
 ├── guides/
 └── archive/legacy-ui/
 ```
+
+Legacy runtime-файлы старого GUI теперь живут отдельно в `archive/legacy_runtime/`.
 
 ## Важные caveats
 

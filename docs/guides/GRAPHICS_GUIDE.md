@@ -61,9 +61,9 @@
 
 ## 5. Legacy ресурсы (НЕ для новых ассетов)
 
-- `main/images/characters.atlas` — legacy portrait atlas
-- `main/images/backgrounds.atlas` — legacy atlas v1 GUI (`main/gui/components/`).
-  Сейчас содержит только то, что нужно legacy сцене (`bg_bedroom_01`, `mobile`,
+- `archive/legacy_runtime/main/images/characters.atlas` — архивный portrait atlas старого GUI
+- `archive/legacy_runtime/main/images/backgrounds.atlas` — archive-only atlas старого v1 GUI.
+Старая схема смены фонов отключена; этот atlas не используется v2 и не считается fallback. Сейчас содержит только то, что осталось от legacy сцены (`bg_bedroom_01`, `mobile`,
   `hotspot_*`). Новые ресурсы сюда не добавляем — `dialogue_v2`, `hotspots_v2`
   и `main_menu_v2` его не используют.
 

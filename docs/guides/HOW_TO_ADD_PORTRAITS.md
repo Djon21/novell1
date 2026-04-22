@@ -6,7 +6,7 @@
 
 - активный atlas: `main/images/v2.atlas`
 - активная логика: `main/gui/components_v2/dialogue_v2.gui_script`
-- legacy `main/images/characters.atlas` нужен только для старого UI и не является текущим source of truth
+- legacy `archive/legacy_runtime/main/images/characters.atlas` нужен только как архив старого UI и не является текущим source of truth
 
 ## Требования к файлу
 

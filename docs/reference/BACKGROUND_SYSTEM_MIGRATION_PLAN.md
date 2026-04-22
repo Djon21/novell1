@@ -88,25 +88,27 @@ extrude_borders: 2
 В `hotspots_v2.gui` для них объявлены отдельные texture slot'ы
 `hotspots` и `scene_objects` (см. файл).
 
-### Legacy backgrounds.atlas
+### Archive-only backgrounds.atlas
 
-Остаётся в проекте, но **только для legacy v1 GUI** (`main/gui/components/`),
-который продолжает существовать как fallback/reference. Atlas сильно
-урезан — содержит только то, что нужно legacy сцене:
+`archive/legacy_runtime/main/images/backgrounds.atlas` оставлен в репозитории только как архивный
+след legacy v1 GUI. Старая схема смены фонов
+считается **отключённой** и больше не поддерживается как fallback или rollback.
 
-- `bg_bedroom_01` (нужен legacy `dialogue_system.gui`)
-- `bg_menu` (нужен legacy `main_menu.gui`) — изображение жило отдельно;
-  если legacy bootstrap снова понадобится, добавить в atlas
-- `mobile`, `hotspot_*` (нужны legacy `hotspots.gui`/`inventory.gui`/`phone.gui`)
+Важно:
 
-V2-стек (`main/gui/components_v2/` + `ui_manager_v2.script`) больше
-**не ссылается** на `backgrounds.atlas` ни в одном файле.
+- v2-стек (`main/gui/components_v2/` + `ui_manager_v2.script`) больше
+  **не ссылается** на `backgrounds.atlas`
+- содержимое `backgrounds.atlas` может со временем расходиться с legacy GUI
+- любые правки новой системы фонов делаются только через dedicated atlas-ы в
+  `main/images/backgrounds/`
 
 ## Правила Новой Системы
 
 1. `bg_name` в Ink, `scenes.lua` и регистрации в `ui_manager_v2` должен совпадать один в один.
-2. Полноэкранные фоны больше не добавляются в `main/images/backgrounds.atlas`.
-3. V2 GUI (`components_v2/*.gui`) НЕ должен ссылаться на `backgrounds.atlas` ни прямо, ни через `texture: "backgrounds/..."`.
+2. Полноэкранные фоны больше не добавляются в `archive/legacy_runtime/main/images/backgrounds.atlas`.
+3. V2 GUI (`components_v2/*.gui`) НЕ должен ссылаться прямо на `archive/legacy_runtime/main/images/backgrounds.atlas`.
+   Использовать texture slot `backgrounds` допустимо, если он указывает на dedicated atlas
+   и работает через общий animation id `scene_bg`.
 4. Hotspot sprites — только из `hotspots.atlas`. Scene objects — только из `scene_objects.atlas`.
 5. Новый fullscreen background считается заведённым только после двух действий:
    atlas-файл создан и зарегистрирован в `ui_manager_v2.script`
@@ -126,6 +128,7 @@ V2-стек (`main/gui/components_v2/` + `ui_manager_v2.script`) больше
 - [x] `hotspots_v2.gui` переключён на `hotspots/` и `scene_objects/` texture slots
 - [x] Удалён legacy fallback из `ui_manager_v2.script` (`legacy_backgrounds_atlas` свойство)
 - [x] V2 backgrounds.atlas очищен от fullscreen-фонов и v2-ассетов
+- [x] Legacy background switching объявлен архивным и больше не рассматривается как supported fallback
 - [ ] Добавлены custom texture profiles (опционально, отдельный этап)
 
 ## Что Сделано В Этой Итерации
@@ -138,7 +141,7 @@ V2-стек (`main/gui/components_v2/` + `ui_manager_v2.script`) больше
 - из `hotspots_v2.gui` убрана зависимость от `backgrounds.atlas` —
   он теперь использует `hotspots.atlas` и `scene_objects.atlas`
 - legacy fallback в `ui_manager_v2.script` удалён: незарегистрированный
-  `bg_name` теперь логируется как WARNING вместо тихого fallback
+  `bg_name` теперь логируется как WARNING вместо возврата к старой схеме
 - баг с `go.set` из gui_script-контекста зафиксирован и исправлен через
   msg.post-маршрутизацию
 
@@ -147,15 +150,19 @@ V2-стек (`main/gui/components_v2/` + `ui_manager_v2.script`) больше
 - custom `.texture_profiles` для fullscreen background atlas-ов
 - проверка HTML5 / mobile memory behavior
 
-## Безопасный Rollback
+## Rollback
 
-После завершения миграции откат частичный:
+Rollback к старой схеме смены фонов **не поддерживается**.
 
-1. Чтобы вернуть legacy fallback — восстановить `go.property("legacy_backgrounds_atlas", ...)` и ветку `fallback` в `resolve_dialogue_bg_visual`.
-2. Чтобы вернуть scene objects/hotspots в `backgrounds.atlas` — добавить `mobile.png` и `hotspot_*.png` обратно в `main/images/backgrounds.atlas` и переключить texture slot в `hotspots_v2.gui` на `backgrounds`.
+Если в v2 что-то ломается:
 
-Удалять dedicated atlas-ы из `main/images/backgrounds/` нельзя пока
-v2 является активным bootstrap (см. `game.project` → `main_v2.collectionc`).
+1. проверяем регистрацию `bg_name` в `ui_manager_v2.script`
+2. проверяем dedicated atlas в `main/images/backgrounds/`
+3. проверяем `rename_patterns: "bg_name=scene_bg"`
+
+Возвращать `legacy_backgrounds_atlas`, снова подключать v2 к
+`archive/legacy_runtime/main/images/backgrounds.atlas` или переносить v2-ассеты обратно в legacy atlas
+не нужно.
 
 ## Файлы, Затронутые Этой Миграцией
 
@@ -172,7 +179,7 @@ v2 является активным bootstrap (см. `game.project` → `main_v
 - `main/gui/components_v2/dialogue_v2.gui`
 - `main/gui/components_v2/hotspots_v2.gui`
 - `main/scripts/scenes.lua` (только комментарий про scene objects)
-- `main/images/backgrounds.atlas` (очищен до legacy minimal-set)
+- `archive/legacy_runtime/main/images/backgrounds.atlas` (archive-only legacy след, не часть v2 runtime)
 - `main/images/backgrounds/*.atlas` (13 dedicated atlas-ов)
 - `main/images/hotspots.atlas` (новый)
 - `main/images/scene_objects.atlas` (новый)

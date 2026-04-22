@@ -238,7 +238,7 @@ Default 512. Если плодишь динамику (например 8 app-ti
 
 ## 17. Чего делать НЕ надо
 
-- ❌ Не трогай `main/gui/components/` (старый UI) — только `components_v2/`.
+- ❌ Не возвращайся к legacy GUI из `archive/legacy_runtime/main/gui/components/` — работаем только с `components_v2/`.
 - ❌ Не меняй `bootstrap.main_collection` в `game.project`.
 - ❌ Не добавляй emoji в код/комментарии если пользователь явно не попросил.
 - ❌ Не коммить debug-принты в финальных фиксах (после того как баг локализован — уберить перед merge).
