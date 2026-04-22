@@ -1,19 +1,3 @@
--- main_menu_v2.gui_script
--- Главное меню v2: glitch-логотип (3 слоя текста), 4 пункта, досье-карточка, ticker.
--- Реальная glitch-анимация реализуется в step17 — здесь только статические слои.
--- Реальная ticker marquee — step19; пока текст просто видим.
---
--- Сообщения:
---   "show_menu"      — показать
---   "hide_menu"      — скрыть
---   "set_progress" {loop, branches, percent} — обновить досье
---
--- В ui_manager_v2 (или напрямую game_manager) шлёт:
---   "start_game"
---   "continue_game"
---   "open_gallery"
---   "open_achievements"
-
 local UI_MGR = "#ui_manager_v2"
 
 local COLOR_HOVER  = vmath.vector4(0.49, 0.976, 1.0, 1.0)
@@ -27,6 +11,18 @@ local MENU_ITEMS = {
     { id = "mi_achievements", msg = "open_achievements",  label = "ДОСТИЖЕНИЯ" },
 }
 
+local TICKER_SPEED = 40
+local TICKER_TEXT_WIDTH = 2400
+local SCREEN_W = 1280
+
+local LOGO_BASE = {
+    hot  = 58,
+    main = 60,
+    cyan = 62,
+}
+
+local LOGO_Y = 498
+
 local function set_text(id, s)
     gui.set_text(gui.get_node(id), s or "")
 end
@@ -37,70 +33,472 @@ local function click_flash(node)
     end)
 end
 
--- ---- glitch-анимация логотипа (step17) ----
--- Базовые координаты трёх слоёв: main=60, hot=58 (-2), cyan=62 (+2)
-local LOGO_BASE = { hot = 58, main = 60, cyan = 62 }
-local LOGO_Y = 498
+local function get_logo_key(id)
+    return id:match("logo_(.+)")
+end
+
+local function cache_logo_base_from_scene()
+    local p_hot  = gui.get_position(gui.get_node("logo_hot"))
+    local p_main = gui.get_position(gui.get_node("logo_main"))
+    local p_cyan = gui.get_position(gui.get_node("logo_cyan"))
+
+    LOGO_BASE.hot  = p_hot.x
+    LOGO_BASE.main = p_main.x
+    LOGO_BASE.cyan = p_cyan.x
+    LOGO_Y = p_main.y
+end
 
 local function logo_pos(id, dx)
     local n = gui.get_node(id)
     local p = gui.get_position(n)
-    p.x = LOGO_BASE[id:match("logo_(.+)")] + (dx or 0)
+    local key = get_logo_key(id)
+    p.x = LOGO_BASE[key] + (dx or 0)
     p.y = LOGO_Y
     gui.set_position(n, p)
 end
 
-local function glitch_burst(self)
-    if not self.visible then return end
+local function reset_logo_glitch()
     local n_hot  = gui.get_node("logo_hot")
+    local n_main = gui.get_node("logo_main")
     local n_cyan = gui.get_node("logo_cyan")
-    -- случайные сдвиги ±10 по X + "дрожь" за 3-4 шага
-    local dxh1 = -2 + math.random(-8, 0)
-    local dxc1 =  2 + math.random(0, 8)
-    local dxh2 = -2 + math.random(-4, 4)
-    local dxc2 =  2 + math.random(-4, 4)
+
+    gui.cancel_animation(n_hot,  "position.x")
+    gui.cancel_animation(n_hot,  "position.y")
+    gui.cancel_animation(n_hot,  "color.w")
+    gui.cancel_animation(n_hot,  "scale")
+
+    gui.cancel_animation(n_main, "position.x")
+    gui.cancel_animation(n_main, "position.y")
+    gui.cancel_animation(n_main, "color.w")
+    gui.cancel_animation(n_main, "scale")
+
+    gui.cancel_animation(n_cyan, "position.x")
+    gui.cancel_animation(n_cyan, "position.y")
+    gui.cancel_animation(n_cyan, "color.w")
+    gui.cancel_animation(n_cyan, "scale")
+
+    logo_pos("logo_hot", 0)
+    logo_pos("logo_main", 0)
+    logo_pos("logo_cyan", 0)
+
+    local ch = gui.get_color(n_hot)
+    local cm = gui.get_color(n_main)
+    local cc = gui.get_color(n_cyan)
+
+    ch.w = 1.0
+    cm.w = 1.0
+    cc.w = 1.0
+
+    gui.set_color(n_hot, ch)
+    gui.set_color(n_main, cm)
+    gui.set_color(n_cyan, cc)
+
+    gui.set_scale(n_hot,  vmath.vector3(1, 1, 1))
+    gui.set_scale(n_main, vmath.vector3(1, 1, 1))
+    gui.set_scale(n_cyan, vmath.vector3(1, 1, 1))
+end
+
+local function animate_x(node, target, duration, easing, delay, complete_fn)
+    gui.animate(node, "position.x", target, easing or gui.EASING_LINEAR, duration or 0.02, delay or 0, complete_fn)
+end
+
+local function animate_y(node, target, duration, easing, delay, complete_fn)
+    gui.animate(node, "position.y", target, easing or gui.EASING_LINEAR, duration or 0.02, delay or 0, complete_fn)
+end
+
+local function animate_alpha(node, target, duration, easing, delay, complete_fn)
+    gui.animate(node, "color.w", target, easing or gui.EASING_LINEAR, duration or 0.02, delay or 0, complete_fn)
+end
+
+local function animate_scale_xy(node, sx, sy, duration, easing, delay, complete_fn)
+    gui.animate(node, "scale", vmath.vector3(sx, sy, 1), easing or gui.EASING_LINEAR, duration or 0.02, delay or 0, complete_fn)
+end
+
+local function glitch_burst(self)
+    if not self.visible then
+        reset_logo_glitch()
+        return
+    end
+
+    local n_hot  = gui.get_node("logo_hot")
+    local n_main = gui.get_node("logo_main")
+    local n_cyan = gui.get_node("logo_cyan")
+
+    reset_logo_glitch()
+
+    local dir = (math.random() < 0.5) and -1 or 1
+    local strong = (math.random() < 0.25)
+
+    -- МЯГКИЕ диапазоны
+    local yank = dir * (strong and math.random(14, 20) or math.random(8, 14))
+
+    local split_hot_1  = -dir * (strong and math.random(18, 26) or math.random(10, 16))
+    local split_cyan_1 =  dir * (strong and math.random(18, 26) or math.random(10, 16))
+
+    local split_hot_2  = -dir * math.random(6, 10)
+    local split_cyan_2 =  dir * math.random(6, 10)
+
+    local split_hot_3  = -dir * math.random(2, 4)
+    local split_cyan_3 =  dir * math.random(2, 4)
+
+    local main_1 = dir * math.random(2, 4)
+    local main_2 = -dir * math.random(1, 2)
+
+    -- очень лёгкий vertical jitter
+    local y_hot  = LOGO_Y + math.random(-1, 1)
+    local y_main = LOGO_Y
+    local y_cyan = LOGO_Y + math.random(-1, 1)
+
+    -- мягкая альфа (без мигания)
+    local a_hot  = strong and 0.65 or 0.78
+    local a_main = 0.95
+    local a_cyan = strong and 0.65 or 0.78
+
+    -- фаза 1: рывок
+    logo_pos("logo_hot",  yank + split_hot_1)
+    logo_pos("logo_main", yank + main_1)
+    logo_pos("logo_cyan", yank + split_cyan_1)
+
     local ph = gui.get_position(n_hot)
+    local pm = gui.get_position(n_main)
     local pc = gui.get_position(n_cyan)
-    ph.x, ph.y = LOGO_BASE.hot + dxh1, LOGO_Y
-    pc.x, pc.y = LOGO_BASE.cyan + dxc1, LOGO_Y
+
+    ph.y = y_hot
+    pm.y = y_main
+    pc.y = y_cyan
+
     gui.set_position(n_hot, ph)
+    gui.set_position(n_main, pm)
     gui.set_position(n_cyan, pc)
 
-    -- цепочка: через 30мс второе положение, через 80мс возврат
-    gui.animate(n_hot, "position.x", LOGO_BASE.hot + dxh2, gui.EASING_OUTQUAD, 0.03, 0, function()
-        gui.animate(n_hot, "position.x", LOGO_BASE.hot, gui.EASING_OUTQUAD, 0.05)
+    animate_alpha(n_hot,  a_hot,  0.02)
+    animate_alpha(n_main, a_main, 0.02)
+    animate_alpha(n_cyan, a_cyan, 0.02)
+
+    -- фаза 2: отскок (без дерганья)
+    animate_x(n_hot, LOGO_BASE.hot + (-yank * 0.3) + split_hot_2, 0.035, gui.EASING_OUTQUAD, 0.01, function()
+        animate_x(n_hot, LOGO_BASE.hot + split_hot_3, 0.03, gui.EASING_OUTQUAD, 0, function()
+            animate_x(n_hot, LOGO_BASE.hot, 0.06, gui.EASING_OUTQUAD)
+        end)
     end)
-    gui.animate(n_cyan, "position.x", LOGO_BASE.cyan + dxc2, gui.EASING_OUTQUAD, 0.03, 0, function()
-        gui.animate(n_cyan, "position.x", LOGO_BASE.cyan, gui.EASING_OUTQUAD, 0.05)
+
+    animate_x(n_main, LOGO_BASE.main + (-yank * 0.2) + main_2, 0.03, gui.EASING_OUTQUAD, 0.01, function()
+        animate_x(n_main, LOGO_BASE.main, 0.05, gui.EASING_OUTQUAD)
     end)
+
+    animate_x(n_cyan, LOGO_BASE.cyan + (-yank * 0.3) + split_cyan_2, 0.035, gui.EASING_OUTQUAD, 0.01, function()
+        animate_x(n_cyan, LOGO_BASE.cyan + split_cyan_3, 0.03, gui.EASING_OUTQUAD, 0, function()
+            animate_x(n_cyan, LOGO_BASE.cyan, 0.06, gui.EASING_OUTQUAD)
+        end)
+    end)
+
+    animate_y(n_hot, LOGO_Y, 0.05, gui.EASING_OUTQUAD)
+    animate_y(n_main, LOGO_Y, 0.05, gui.EASING_OUTQUAD)
+    animate_y(n_cyan, LOGO_Y, 0.05, gui.EASING_OUTQUAD)
+
+    -- возврат альфы
+    animate_alpha(n_hot, 1.0, 0.06)
+    animate_alpha(n_cyan, 1.0, 0.06)
 end
 
 local function schedule_next_glitch(self)
-    -- случайный интервал 1.5-4.5 сек между вспышками
-    local delay = 1.5 + math.random() * 3.0
+    if self.glitch_timer then
+        timer.cancel(self.glitch_timer)
+    end
+
+    local delay = 1.2 + math.random() * 2.5
+
     self.glitch_timer = timer.delay(delay, false, function()
+        if not self.visible then return end
+
         glitch_burst(self)
+
+        -- иногда второй мягкий удар
+        if math.random() < 0.35 then
+            timer.delay(0.06 + math.random() * 0.06, false, function()
+                if self.visible then
+                    glitch_burst(self)
+                end
+            end)
+        end
+
         schedule_next_glitch(self)
     end)
 end
 
--- ---- parallax skyline (step20) ----
--- ИСПРАВЛЕНО: используем абсолютные координаты вместо gui.set_parent()
--- Причина: динамические ноды с set_parent могут не рендериться (известный баг Defold)
--- См. DESIGN_PORT_RULES.md Rule #2
+local function animate_alpha(node, target, duration, easing, delay, complete_fn)
+    gui.animate(node, "color.w", target, easing or gui.EASING_LINEAR, duration or 0.02, delay or 0, complete_fn)
+end
+
+local function animate_x(node, target, duration, easing, delay, complete_fn)
+    gui.animate(node, "position.x", target, easing or gui.EASING_LINEAR, duration or 0.02, delay or 0, complete_fn)
+end
+
+local function animate_y(node, target, duration, easing, delay, complete_fn)
+    gui.animate(node, "position.y", target, easing or gui.EASING_LINEAR, duration or 0.02, delay or 0, complete_fn)
+end
+
+local function glitch_burst(self)
+    if not self.visible then
+        reset_logo_glitch()
+        return
+    end
+
+    local n_hot  = gui.get_node("logo_hot")
+    local n_main = gui.get_node("logo_main")
+    local n_cyan = gui.get_node("logo_cyan")
+
+    reset_logo_glitch()
+
+    local mode_roll = math.random()
+    local mode
+    if mode_roll < 0.24 then
+        mode = "violent"
+    elseif mode_roll < 0.64 then
+        mode = "hard"
+    else
+        mode = "normal"
+    end
+
+    local dir = (math.random() < 0.5) and -1 or 1
+
+    local yank
+    local split_hot_1, split_cyan_1
+    local split_hot_2, split_cyan_2
+    local split_hot_3, split_cyan_3
+    local main_1, main_2, main_3
+    local y_hot, y_main, y_cyan
+    local a_hot, a_main, a_cyan
+    local sx_main, sy_main
+    local sx_hot, sy_hot
+    local sx_cyan, sy_cyan
+    local hold_1, hold_2
+
+    if mode == "violent" then
+        yank = dir * math.random(20, 34)
+
+        split_hot_1  = -dir * math.random(34, 56)
+        split_cyan_1 =  dir * math.random(34, 56)
+
+        split_hot_2  = -dir * math.random(14, 24)
+        split_cyan_2 =  dir * math.random(14, 24)
+
+        split_hot_3  = -dir * math.random(5, 10)
+        split_cyan_3 =  dir * math.random(5, 10)
+
+        main_1 = dir * math.random(10, 18)
+        main_2 = -dir * math.random(5, 9)
+        main_3 = dir * math.random(-2, 2)
+
+        y_hot  = LOGO_Y + math.random(-5, 5)
+        y_main = LOGO_Y + math.random(-3, 3)
+        y_cyan = LOGO_Y + math.random(-5, 5)
+
+        a_hot  = 0.08
+        a_main = 0.64
+        a_cyan = 0.06
+
+        sx_main, sy_main = 1.085, 0.915
+        sx_hot,  sy_hot  = 1.028, 0.985
+        sx_cyan, sy_cyan = 0.972, 1.020
+
+        hold_1 = 0.012
+        hold_2 = 0.000
+    elseif mode == "hard" then
+        yank = dir * math.random(12, 22)
+
+        split_hot_1  = -dir * math.random(22, 38)
+        split_cyan_1 =  dir * math.random(22, 38)
+
+        split_hot_2  = -dir * math.random(10, 16)
+        split_cyan_2 =  dir * math.random(10, 16)
+
+        split_hot_3  = -dir * math.random(4, 7)
+        split_cyan_3 =  dir * math.random(4, 7)
+
+        main_1 = dir * math.random(6, 10)
+        main_2 = -dir * math.random(3, 6)
+        main_3 = dir * math.random(-1, 1)
+
+        y_hot  = LOGO_Y + math.random(-3, 3)
+        y_main = LOGO_Y + math.random(-2, 2)
+        y_cyan = LOGO_Y + math.random(-3, 3)
+
+        a_hot  = 0.20
+        a_main = 0.78
+        a_cyan = 0.18
+
+        sx_main, sy_main = 1.050, 0.950
+        sx_hot,  sy_hot  = 1.015, 0.992
+        sx_cyan, sy_cyan = 0.986, 1.012
+
+        hold_1 = 0.010
+        hold_2 = 0.000
+    else
+        yank = dir * math.random(6, 12)
+
+        split_hot_1  = -dir * math.random(12, 22)
+        split_cyan_1 =  dir * math.random(12, 22)
+
+        split_hot_2  = -dir * math.random(6, 10)
+        split_cyan_2 =  dir * math.random(6, 10)
+
+        split_hot_3  = -dir * math.random(2, 4)
+        split_cyan_3 =  dir * math.random(2, 4)
+
+        main_1 = dir * math.random(3, 5)
+        main_2 = -dir * math.random(1, 3)
+        main_3 = 0
+
+        y_hot  = LOGO_Y + math.random(-2, 2)
+        y_main = LOGO_Y + math.random(-1, 1)
+        y_cyan = LOGO_Y + math.random(-2, 2)
+
+        a_hot  = 0.36
+        a_main = 0.90
+        a_cyan = 0.34
+
+        sx_main, sy_main = 1.024, 0.976
+        sx_hot,  sy_hot  = 1.008, 0.997
+        sx_cyan, sy_cyan = 0.992, 1.008
+
+        hold_1 = 0.008
+        hold_2 = 0.000
+    end
+
+    -- Первая фаза: весь логотип рвётся в одну сторону, а RGB ещё сильнее расходится
+    logo_pos("logo_hot",  yank + split_hot_1)
+    logo_pos("logo_main", yank + main_1)
+    logo_pos("logo_cyan", yank + split_cyan_1)
+
+    local ph = gui.get_position(n_hot)
+    local pm = gui.get_position(n_main)
+    local pc = gui.get_position(n_cyan)
+
+    ph.y = y_hot
+    pm.y = y_main
+    pc.y = y_cyan
+
+    gui.set_position(n_hot, ph)
+    gui.set_position(n_main, pm)
+    gui.set_position(n_cyan, pc)
+
+    gui.set_scale(n_hot,  vmath.vector3(sx_hot,  sy_hot,  1))
+    gui.set_scale(n_main, vmath.vector3(sx_main, sy_main, 1))
+    gui.set_scale(n_cyan, vmath.vector3(sx_cyan, sy_cyan, 1))
+
+    animate_alpha(n_hot, a_hot, 0.010, gui.EASING_LINEAR, 0, function()
+        animate_alpha(n_hot, 0.88, 0.020, gui.EASING_LINEAR, 0, function()
+            animate_alpha(n_hot, 1.0, 0.070, gui.EASING_OUTQUAD)
+        end)
+    end)
+
+    animate_alpha(n_main, a_main, 0.009, gui.EASING_LINEAR, 0, function()
+        animate_alpha(n_main, 1.0, 0.055, gui.EASING_OUTQUAD)
+    end)
+
+    animate_alpha(n_cyan, a_cyan, 0.010, gui.EASING_LINEAR, 0, function()
+        animate_alpha(n_cyan, 0.86, 0.020, gui.EASING_LINEAR, 0, function()
+            animate_alpha(n_cyan, 1.0, 0.070, gui.EASING_OUTQUAD)
+        end)
+    end)
+
+    animate_scale_xy(n_hot, 1.0, 1.0, 0.085, gui.EASING_OUTQUAD)
+    animate_scale_xy(n_main, 1.0, 1.0, 0.095, gui.EASING_OUTQUAD)
+    animate_scale_xy(n_cyan, 1.0, 1.0, 0.085, gui.EASING_OUTQUAD)
+
+    -- Вторая фаза: отскок
+    animate_x(n_hot, LOGO_BASE.hot + (-yank * 0.35) + split_hot_2, 0.024, gui.EASING_LINEAR, hold_1, function()
+        animate_x(n_hot, LOGO_BASE.hot + split_hot_3, 0.022, gui.EASING_LINEAR, hold_2, function()
+            animate_x(n_hot, LOGO_BASE.hot, 0.075, gui.EASING_OUTQUAD)
+        end)
+    end)
+
+    animate_x(n_main, LOGO_BASE.main + (-yank * 0.22) + main_2, 0.022, gui.EASING_LINEAR, hold_1, function()
+        animate_x(n_main, LOGO_BASE.main + main_3, 0.020, gui.EASING_LINEAR, hold_2, function()
+            animate_x(n_main, LOGO_BASE.main, 0.068, gui.EASING_OUTQUAD)
+        end)
+    end)
+
+    animate_x(n_cyan, LOGO_BASE.cyan + (-yank * 0.35) + split_cyan_2, 0.024, gui.EASING_LINEAR, hold_1, function()
+        animate_x(n_cyan, LOGO_BASE.cyan + split_cyan_3, 0.022, gui.EASING_LINEAR, hold_2, function()
+            animate_x(n_cyan, LOGO_BASE.cyan, 0.075, gui.EASING_OUTQUAD)
+        end)
+    end)
+
+    animate_y(n_hot, LOGO_Y, 0.060, gui.EASING_OUTQUAD)
+    animate_y(n_main, LOGO_Y, 0.055, gui.EASING_OUTQUAD)
+    animate_y(n_cyan, LOGO_Y, 0.060, gui.EASING_OUTQUAD)
+end
+
+local function stop_glitch_loop(self)
+    if self.glitch_timer then
+        timer.cancel(self.glitch_timer)
+        self.glitch_timer = nil
+    end
+    reset_logo_glitch()
+end
+
+local function schedule_next_glitch(self)
+    if self.glitch_timer then
+        timer.cancel(self.glitch_timer)
+        self.glitch_timer = nil
+    end
+
+    local delay = 0.35 + math.random() * 1.35
+
+    self.glitch_timer = timer.delay(delay, false, function()
+        self.glitch_timer = nil
+
+        if not self.visible then
+            reset_logo_glitch()
+            return
+        end
+
+        glitch_burst(self)
+
+        if math.random() < 0.78 then
+            timer.delay(0.026 + math.random() * 0.045, false, function()
+                if self.visible then
+                    glitch_burst(self)
+                end
+            end)
+        end
+
+        if math.random() < 0.42 then
+            timer.delay(0.075 + math.random() * 0.055, false, function()
+                if self.visible then
+                    glitch_burst(self)
+                end
+            end)
+        end
+
+        if math.random() < 0.14 then
+            timer.delay(0.145 + math.random() * 0.070, false, function()
+                if self.visible then
+                    glitch_burst(self)
+                end
+            end)
+        end
+
+        schedule_next_glitch(self)
+    end)
+end
+
+local function start_glitch_loop(self)
+    reset_logo_glitch()
+    schedule_next_glitch(self)
+end
+
 local function make_skyline_layer(parent_pos, y, h, color, sway, period)
-    -- Абсолютные координаты: parent_pos + локальные координаты
     local abs_x = parent_pos.x + 0
     local abs_y = parent_pos.y + y
-    local abs_z = parent_pos.z - 0.08  -- z=0.12 относительно parent z=0.2
-    
-    local n = gui.new_box_node(vmath.vector3(abs_x, abs_y, abs_z), vmath.vector3(960, h, 0))
+    local abs_z = parent_pos.z - 0.08
+
+    local n = gui.new_box_node(vmath.vector3(abs_x, abs_y, abs_z), vmath.vector3(1280, h, 0))
     gui.set_pivot(n, gui.PIVOT_SW)
     gui.set_color(n, color)
-    -- НЕ используем gui.set_parent() для динамических нод!
-    gui.set_inherit_alpha(n, false)  -- false, т.к. нет parent
-    
-    -- Анимация sway - теперь анимируем от абсолютной позиции
+    gui.set_inherit_alpha(n, false)
     gui.animate(n, "position.x", abs_x + sway, gui.EASING_INOUTSINE, period, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
     return n
 end
@@ -108,11 +506,11 @@ end
 local function setup_skyline(self)
     local root = gui.get_node("menu_root")
     local root_pos = gui.get_position(root)
-    
-    self.sky_far  = make_skyline_layer(root_pos, 70,  36,
-        vmath.vector4(0.067, 0.055, 0.173, 0.55), 4,  12.0)
-    self.sky_mid  = make_skyline_layer(root_pos, 90,  24,
-        vmath.vector4(0.047, 0.039, 0.141, 0.75), 8,  8.0)
+
+    self.sky_far  = make_skyline_layer(root_pos, 70, 36,
+        vmath.vector4(0.067, 0.055, 0.173, 0.55), 4, 12.0)
+    self.sky_mid  = make_skyline_layer(root_pos, 90, 24,
+        vmath.vector4(0.047, 0.039, 0.141, 0.75), 8, 8.0)
     self.sky_near = make_skyline_layer(root_pos, 110, 14,
         vmath.vector4(0.027, 0.023, 0.094, 0.90), 12, 5.5)
 end
@@ -121,34 +519,30 @@ function init(self)
     msg.post(".", "acquire_input_focus")
     self.visible = true
     self.hovered = nil
-    math.randomseed(os.time())
     self.glitch_timer = nil
-    schedule_next_glitch(self)
+
+    math.randomseed(os.time())
+
+    cache_logo_base_from_scene()
+    start_glitch_loop(self)
     setup_skyline(self)
 end
 
 function final(self)
-    if self.glitch_timer then
-        timer.cancel(self.glitch_timer)
-        self.glitch_timer = nil
-    end
+    stop_glitch_loop(self)
 end
-
--- ---- ticker marquee (step19) ----
-local TICKER_SPEED = 40  -- px/сек влево
-local TICKER_TEXT_WIDTH = 2400
-local SCREEN_W = 960
 
 function update(self, dt)
     if not self.visible then return end
+
     local n = gui.get_node("ticker_text")
     local p = gui.get_position(n)
     p.x = p.x - TICKER_SPEED * dt
-    -- Пивот W + ширина 2400 → левый край уходит за -2400, справа нужно ре-вход.
-    -- Когда весь текст ушёл влево (p.x + width < 0), сбрасываем к SCREEN_W.
+
     if p.x + TICKER_TEXT_WIDTH < 0 then
         p.x = SCREEN_W
     end
+
     gui.set_position(n, p)
 end
 
@@ -156,13 +550,18 @@ function on_message(self, message_id, message, sender)
     if message_id == hash("show_menu") then
         self.visible = true
         gui.set_enabled(gui.get_node("menu_root"), true)
+        start_glitch_loop(self)
+
     elseif message_id == hash("hide_menu") then
         self.visible = false
         gui.set_enabled(gui.get_node("menu_root"), false)
+        stop_glitch_loop(self)
+
     elseif message_id == hash("set_progress") then
         local loop = tonumber(message.loop) or 17
         local br   = tonumber(message.branches) or 23
         local pct  = tonumber(message.percent) or 41
+
         set_text("doss_progress",
             string.format("петля #%03d · %d разв. · %d%% завершено", loop, br, pct))
     end

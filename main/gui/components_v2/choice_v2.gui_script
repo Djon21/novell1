@@ -72,10 +72,10 @@ local function clear_opts(self)
     self.opts = {}
 end
 
--- opts_panel в .gui: position (160, 160), size (640, 300), pivot SW
+-- opts_panel в .gui: position (320, 200), size (640, 300), pivot SW
 -- опции создаём TOP-LEVEL с абсолютными координатами (дети opts_panel по непонятной причине не рендерятся)
-local OPTS_PANEL_X = 160
-local OPTS_PANEL_Y = 160
+local OPTS_PANEL_X = 320
+local OPTS_PANEL_Y = 200
 
 local function make_opt(self, idx, opt, total)
     local w = OPTS_W

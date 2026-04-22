@@ -1,9 +1,9 @@
 -- nav_buttons_v2.gui_script
--- 4 круглые nav-кнопки по периметру ландшафта 960×640:
---   W (hot/mag)  — x=80,  y=320   — иконка ← (chevron_left)
---   N (cyan)     — x=480, y=560   — иконка ↑ (expand_less)
---   E (amber)    — x=880, y=320   — иконка → (chevron_right)
---   S (violet)   — x=480, y=80    — иконка ↓ (expand_more)
+-- 4 круглые nav-кнопки по периметру ландшафта 1280×720:
+--   W (hot/mag)  — x=80,   y=360   — иконка ← (chevron_left)
+--   N (cyan)     — x=640,  y=640   — иконка ↑ (expand_less)
+--   E (amber)    — x=1200, y=360   — иконка → (chevron_right)
+--   S (violet)   — x=640,  y=80    — иконка ↓ (expand_more)
 --
 -- Сообщения:
 --   "show_nav"                     — показать корень

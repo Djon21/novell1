@@ -31,320 +31,726 @@ fonts {
   name: "icons"
   font: "/main/fonts/icons.font"
 }
-background_color { x: 0.027 y: 0.023 z: 0.102 w: 1.0 }
-
+fonts {
+  name: "unbo_128"
+  font: "/main/fonts/unbo_128.font"
+}
+textures {
+  name: "backgrounds"
+  texture: "/main/images/backgrounds.atlas"
+}
+textures {
+  name: "ui_common"
+  texture: "/main/images/ui_common.atlas"
+}
 nodes {
-  position { x: 0.0 y: 0.0 z: 0.2 }
-  size { x: 960.0 y: 640.0 }
-  color { x: 0.027 y: 0.023 z: 0.102 w: 1.0 }
+  size {
+    x: 1280.0
+    y: 720.0
+  }
+  type: TYPE_BOX
+  texture: "backgrounds/menu_fon"
+  id: "BG"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+}
+nodes {
+  position {
+    z: 0.2
+  }
+  size {
+    x: 1280.0
+    y: 720.0
+  }
+  color {
+    x: 0.027
+    y: 0.023
+    z: 0.102
+  }
   type: TYPE_BOX
   id: "menu_root"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   inherit_alpha: true
+  alpha: 0.0
 }
-
 nodes {
-  position { x: 60.0 y: 555.0 z: 0.21 }
-  size { x: 500.0 y: 14.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 1.0 }
-  type: TYPE_TEXT
-  text: "visual · novel · dossier · петля #017"
-  font: "jb_mono_10"
-  id: "eyebrow"
-  pivot: PIVOT_W
-  parent: "menu_root"
+  position {
+    x: 36.0
+    y: 600.0
+  }
+  size {
+    x: 666.4
+    y: 455.2
+  }
+  type: TYPE_BOX
+  id: "left_menu_root"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
+  pivot: PIVOT_NW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: true
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-
-nodes {
-  position { x: 58.0 y: 498.0 z: 0.21 }
-  size { x: 620.0 y: 40.0 }
-  color { x: 1.0 y: 0.239 z: 0.498 w: 0.35 }
-  type: TYPE_TEXT
-  text: "АВОСЬ"
-  font: "unbounded_bold_32"
-  id: "logo_hot"
-  pivot: PIVOT_W
   parent: "menu_root"
-  adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: true
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
+  alpha: 0.0
+  size_mode: SIZE_MODE_AUTO
 }
 nodes {
-  position { x: 62.0 y: 498.0 z: 0.22 }
-  size { x: 620.0 y: 40.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.35 }
+  position {
+    x: 26.0
+    y: -184.0
+    z: 0.22
+  }
+  size {
+    x: 500.0
+    y: 14.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "АВОСЬ"
-  font: "unbounded_bold_32"
-  id: "logo_cyan"
-  pivot: PIVOT_W
-  parent: "menu_root"
-  adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: true
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position { x: 60.0 y: 498.0 z: 0.23 }
-  size { x: 620.0 y: 40.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
-  type: TYPE_TEXT
-  text: "АВОСЬ"
-  font: "unbounded_bold_32"
-  id: "logo_main"
-  pivot: PIVOT_W
-  parent: "menu_root"
-  adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: true
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-
-nodes {
-  position { x: 60.0 y: 460.0 z: 0.22 }
-  size { x: 500.0 y: 14.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.6 }
-  type: TYPE_TEXT
-  text: "интерактивная новелла · русский · 2026"
+  text: "\320\270\320\275\321\202\320\265\321\200\320\260\320\272\321\202\320\270\320\262\320\275\320\260\321\217 \320\275\320\276\320\262\320\265\320\273\320\273\320\260 \302\267 \321\200\321\203\321\201\321\201\320\272\320\270\320\271 \302\267 2026"
   font: "jb_mono_10"
   id: "meta"
   pivot: PIVOT_W
-  parent: "menu_root"
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: true
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-
-nodes {
-  position { x: 60.0 y: 380.0 z: 0.22 }
-  size { x: 400.0 y: 28.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
-  type: TYPE_TEXT
-  text: "НОВАЯ ИТЕРАЦИЯ"
-  font: "unbounded_bold_20"
-  id: "mi_new"
-  pivot: PIVOT_W
-  parent: "menu_root"
-  adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: true
+  parent: "left_menu_root"
+  alpha: 0.6
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 60.0 y: 340.0 z: 0.22 }
-  size { x: 400.0 y: 26.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.78 }
+  position {
+    x: 26.0
+    y: -399.0
+    z: 0.22
+  }
+  size {
+    x: 180.0
+    y: 24.0
+  }
+  color {
+    x: 0.784
+    y: 0.078
+    z: 0.165
+  }
   type: TYPE_TEXT
-  text: "ПРОДОЛЖИТЬ"
-  font: "unbounded_bold_20"
-  id: "mi_continue"
-  pivot: PIVOT_W
-  parent: "menu_root"
-  adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: true
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position { x: 60.0 y: 304.0 z: 0.22 }
-  size { x: 400.0 y: 26.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.78 }
-  type: TYPE_TEXT
-  text: "ГАЛЕРЕЯ"
-  font: "unbounded_bold_20"
-  id: "mi_gallery"
-  pivot: PIVOT_W
-  parent: "menu_root"
-  adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: true
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position { x: 60.0 y: 268.0 z: 0.22 }
-  size { x: 400.0 y: 26.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.78 }
-  type: TYPE_TEXT
-  text: "ДОСТИЖЕНИЯ"
-  font: "unbounded_bold_20"
-  id: "mi_achievements"
-  pivot: PIVOT_W
-  parent: "menu_root"
-  adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: true
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-
-nodes {
-  position { x: 60.0 y: 200.0 z: 0.22 }
-  size { x: 180.0 y: 24.0 }
-  color { x: 0.784 y: 0.078 z: 0.165 w: 0.9 }
-  type: TYPE_TEXT
-  text: "СЕКРЕТНО · №17"
+  text: "\320\241\320\225\320\232\320\240\320\225\320\242\320\235\320\236 \302\267 \342\204\22617"
   font: "jb_mono_bold_14"
   id: "stamp"
   pivot: PIVOT_W
-  parent: "menu_root"
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: true
+  parent: "left_menu_root"
+  alpha: 0.9
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
-
 nodes {
-  position { x: 560.0 y: 140.0 z: 0.21 }
-  size { x: 360.0 y: 380.0 }
-  color { x: 0.047 y: 0.039 z: 0.141 w: 0.96 }
+  position {
+    x: 26.0
+    y: -219.0
+    z: 0.22
+  }
+  size {
+    x: 400.0
+    y: 28.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "\320\235\320\236\320\222\320\220\320\257 \320\230\320\242\320\225\320\240\320\220\320\246\320\230\320\257"
+  font: "unbounded_bold_20"
+  id: "mi_new"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "left_menu_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 26.0
+    y: -259.0
+    z: 0.22
+  }
+  size {
+    x: 400.0
+    y: 26.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "\320\237\320\240\320\236\320\224\320\236\320\233\320\226\320\230\320\242\320\254"
+  font: "unbounded_bold_20"
+  id: "mi_continue"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "left_menu_root"
+  alpha: 0.78
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 26.0
+    y: -295.0
+    z: 0.22
+  }
+  size {
+    x: 400.0
+    y: 26.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "\320\223\320\220\320\233\320\225\320\240\320\225\320\257"
+  font: "unbounded_bold_20"
+  id: "mi_gallery"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "left_menu_root"
+  alpha: 0.78
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 26.0
+    y: -331.0
+    z: 0.22
+  }
+  size {
+    x: 400.0
+    y: 26.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "\320\224\320\236\320\241\320\242\320\230\320\226\320\225\320\235\320\230\320\257"
+  font: "unbounded_bold_20"
+  id: "mi_achievements"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "left_menu_root"
+  alpha: 0.78
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 26.0
+    y: -44.0
+    z: 0.21
+  }
+  size {
+    x: 500.0
+    y: 14.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "visual \302\267 novel \302\267 dossier \302\267 \320\277\320\265\321\202\320\273\321\217 #017"
+  font: "jb_mono_10"
+  id: "eyebrow"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "left_menu_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    y: -197.0
+  }
+  size {
+    x: 659.2
+    y: 160.0
+  }
+  type: TYPE_BOX
+  id: "LOGO"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
+  pivot: PIVOT_SW
+  parent: "left_menu_root"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 26.0
+    z: 0.21
+  }
+  size {
+    x: 620.0
+    y: 150.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
+  type: TYPE_TEXT
+  text: "\320\220\320\222\320\236\320\241\320\254"
+  font: "unbo_128"
+  id: "logo_hot"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "LOGO"
+  alpha: 0.35
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 26.0
+    z: 0.22
+  }
+  size {
+    x: 620.0
+    y: 150.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "\320\220\320\222\320\236\320\241\320\254"
+  font: "unbo_128"
+  id: "logo_cyan"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "LOGO"
+  alpha: 0.35
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 26.0
+    z: 0.23
+  }
+  size {
+    x: 620.0
+    y: 150.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "\320\220\320\222\320\236\320\241\320\254"
+  font: "unbo_128"
+  id: "logo_main"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "LOGO"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 880.0
+    y: 220.0
+    z: 0.21
+  }
+  size {
+    x: 360.0
+    y: 380.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
   type: TYPE_BOX
   id: "dossier_card"
   pivot: PIVOT_SW
-  parent: "menu_root"
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: true
+  parent: "menu_root"
+  alpha: 0.96
 }
 nodes {
-  position { x: 575.0 y: 495.0 z: 0.22 }
-  size { x: 330.0 y: 12.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 1.0 }
+  position {
+    x: 16.0
+    y: 366.0
+    z: 0.22
+  }
+  size {
+    x: 330.0
+    y: 12.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
   type: TYPE_TEXT
-  text: "dossier · текущая сессия"
+  text: "dossier \302\267 \321\202\320\265\320\272\321\203\321\211\320\260\321\217 \321\201\320\265\321\201\321\201\320\270\321\217"
   font: "jb_mono_10"
   id: "doss_eyebrow"
   pivot: PIVOT_W
-  parent: "menu_root"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "dossier_card"
   inherit_alpha: true
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 575.0 y: 470.0 z: 0.22 }
-  size { x: 330.0 y: 22.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  position {
+    x: 16.0
+    y: 341.0
+    z: 0.22
+  }
+  size {
+    x: 330.0
+    y: 22.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "МЦ · АРТЁМ"
+  text: "\320\234\320\246 \302\267 \320\220\320\240\320\242\320\201\320\234"
   font: "unbounded_bold_20"
   id: "doss_name"
   pivot: PIVOT_W
-  parent: "menu_root"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "dossier_card"
   inherit_alpha: true
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 575.0 y: 444.0 z: 0.22 }
-  size { x: 330.0 y: 12.0 }
-  color { x: 1.0 y: 0.702 z: 0.278 w: 1.0 }
+  position {
+    x: 16.0
+    y: 315.0
+    z: 0.22
+  }
+  size {
+    x: 330.0
+    y: 12.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
   type: TYPE_TEXT
-  text: "петля #017 · 23 разв. · 41% завершено"
+  text: "\320\277\320\265\321\202\320\273\321\217 #017 \302\267 23 \321\200\320\260\320\267\320\262. \302\267 41% \320\267\320\260\320\262\320\265\321\200\321\210\320\265\320\275\320\276"
   font: "jb_mono_10"
   id: "doss_progress"
   pivot: PIVOT_W
-  parent: "menu_root"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "dossier_card"
   inherit_alpha: true
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 575.0 y: 410.0 z: 0.22 }
-  size { x: 330.0 y: 240.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.85 }
+  position {
+    x: 16.0
+    y: 281.0
+    z: 0.22
+  }
+  size {
+    x: 330.0
+    y: 240.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "Очередной понедельник. Дождь, кофе, три непрочитанных.\nПамять даёт сбой на 7:38. На платформе «Улица 1905 года».\nОдин и тот же день, семнадцать раз."
+  text: "\320\236\321\207\320\265\321\200\320\265\320\264\320\275\320\276\320\271 \320\277\320\276\320\275\320\265\320\264\320\265\320\273\321\214\320\275\320\270\320\272. \320\224\320\276\320\266\320\264\321\214, \320\272\320\276\321\204\320\265, \321\202\321\200\320\270 \320\275\320\265\320\277\321\200\320\276\321\207\320\270\321\202\320\260\320\275\320\275\321\213\321\205.\n"
+  "\320\237\320\260\320\274\321\217\321\202\321\214 \320\264\320\260\321\221\321\202 \321\201\320\261\320\276\320\271 \320\275\320\260 7:38. \320\235\320\260 \320\277\320\273\320\260\321\202\321\204\320\276\321\200\320\274\320\265 \302\253\320\243\320\273\320\270\321\206\320\260 1905 \320\263\320\276\320\264\320\260\302\273.\n"
+  "\320\236\320\264\320\270\320\275 \320\270 \321\202\320\276\321\202 \320\266\320\265 \320\264\320\265\320\275\321\214, \321\201\320\265\320\274\320\275\320\260\320\264\321\206\320\260\321\202\321\214 \321\200\320\260\320\267."
   font: "manrope_14"
   id: "doss_desc"
   pivot: PIVOT_NW
-  parent: "menu_root"
   adjust_mode: ADJUST_MODE_STRETCH
+  line_break: true
+  parent: "dossier_card"
   inherit_alpha: true
+  alpha: 0.85
   outline_alpha: 0.0
   shadow_alpha: 0.0
-  line_break: true
 }
 nodes {
-  position { x: 575.0 y: 170.0 z: 0.22 }
-  size { x: 330.0 y: 20.0 }
-  color { x: 1.0 y: 0.702 z: 0.278 w: 1.0 }
+  position {
+    x: 16.0
+    y: 41.0
+    z: 0.22
+  }
+  size {
+    x: 330.0
+    y: 20.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
   type: TYPE_TEXT
-  text: "если трамвай №7 задержится —"
+  text: "\320\265\321\201\320\273\320\270 \321\202\321\200\320\260\320\274\320\262\320\260\320\271 \342\204\2267 \320\267\320\260\320\264\320\265\321\200\320\266\320\270\321\202\321\201\321\217 \342\200\224"
   font: "caveat_18"
   id: "doss_caveat"
   pivot: PIVOT_W
-  parent: "menu_root"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "dossier_card"
   inherit_alpha: true
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 575.0 y: 150.0 z: 0.22 }
-  size { x: 330.0 y: 20.0 }
-  color { x: 1.0 y: 0.702 z: 0.278 w: 1.0 }
+  position {
+    x: 16.0
+    y: 21.0
+    z: 0.22
+  }
+  size {
+    x: 330.0
+    y: 20.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
   type: TYPE_TEXT
-  text: "сверни на 3-й Пресненский переулок"
+  text: "\321\201\320\262\320\265\321\200\320\275\320\270 \320\275\320\260 3-\320\271 \320\237\321\200\320\265\321\201\320\275\320\265\320\275\321\201\320\272\320\270\320\271 \320\277\320\265\321\200\320\265\321\203\320\273\320\276\320\272"
   font: "caveat_18"
   id: "doss_caveat2"
   pivot: PIVOT_W
-  parent: "menu_root"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "dossier_card"
   inherit_alpha: true
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
-
 nodes {
-  position { x: 0.0 y: 40.0 z: 0.22 }
-  size { x: 960.0 y: 20.0 }
-  color { x: 0.049 y: 0.039 z: 0.141 w: 1.0 }
+  position {
+    y: 22.0
+    z: 0.22
+  }
+  size {
+    x: 1280.0
+    y: 20.0
+  }
+  color {
+    x: 0.049
+    y: 0.039
+    z: 0.141
+  }
   type: TYPE_BOX
   id: "ticker_bg"
   pivot: PIVOT_SW
-  parent: "menu_root"
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: true
+  parent: "menu_root"
 }
 nodes {
-  position { x: 10.0 y: 50.0 z: 0.23 }
-  size { x: 2400.0 y: 12.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.85 }
+  position {
+    x: 10.0
+    y: 10.0
+    z: 0.23
+  }
+  size {
+    x: 1218.0
+    y: 12.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
   type: TYPE_TEXT
-  text: "АВОСЬ_OS // готовность · 41% · петля #017 · 23 разветвления · последний контакт: М.Кольц. · 07:12 МСК · не выходи на 9-м · если трамвай №7 задержится — сверни на 3-й Пресненский · "
+  text: "\320\220\320\222\320\236\320\241\320\254_OS // \320\263\320\276\321\202\320\276\320\262\320\275\320\276\321\201\321\202\321\214 \302\267 41% \302\267 \320\277\320\265\321\202\320\273\321\217 #017 \302\267 23 \321\200\320\260\320\267\320\262\320\265\321\202\320\262\320\273\320\265\320\275\320\270\321\217 \302\267 \320\277\320\276\321\201\320\273\320\265\320\264\320\275\320\270\320\271 \320\272\320\276\320\275\321\202\320\260\320\272\321\202: \320\234.\320\232\320\276\320\273\321\214\321\206. \302\267 07:12 \320\234\320\241\320\232 \302\267 \320\275\320\265 \320\262\321\213\321\205\320\276\320\264\320\270 \320\275\320\260 9-\320\274 \302\267 \320\265\321\201\320\273\320\270 \321\202\321\200\320\260\320\274\320\262\320\260\320\271 \342\204\2267 \320\267\320\260\320\264\320\265\321\200\320\266\320\270\321\202\321\201\321\217 \342\200\224 \321\201\320\262\320\265\321\200\320\275\320\270 \320\275\320\260 3-\320\271 \320\237\321\200\320\265\321\201\320\275\320\265\320\275\321\201\320\272\320\270\320\271 \302\267 "
   font: "jb_mono_10"
   id: "ticker_text"
   pivot: PIVOT_W
-  parent: "menu_root"
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: true
+  parent: "ticker_bg"
+  alpha: 0.85
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
-
 nodes {
-  position { x: 30.0 y: 20.0 z: 0.22 }
-  size { x: 500.0 y: 10.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.45 }
+  size {
+    x: 1280.0
+    y: 720.0
+  }
+  type: TYPE_BOX
+  id: "corner"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_BOTTOM
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_root"
+  alpha: 0.0
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 20.0
+    y: 700.0
+  }
+  size {
+    x: 22.0
+    y: 22.0
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border2"
+  id: "box"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
+  pivot: PIVOT_NW
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "corner"
+}
+nodes {
+  position {
+    x: 1260.0
+    y: 700.0
+  }
+  rotation {
+    y: -180.0
+  }
+  size {
+    x: 22.0
+    y: 22.0
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border2"
+  id: "box1"
+  xanchor: XANCHOR_RIGHT
+  yanchor: YANCHOR_TOP
+  pivot: PIVOT_NW
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "corner"
+}
+nodes {
+  position {
+    x: 1260.0
+    y: 20.0
+  }
+  rotation {
+    x: -180.0
+    y: -180.0
+  }
+  size {
+    x: 22.0
+    y: 22.0
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border2"
+  id: "box2"
+  xanchor: XANCHOR_RIGHT
+  yanchor: YANCHOR_TOP
+  pivot: PIVOT_NW
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "corner"
+}
+nodes {
+  position {
+    x: 20.0
+    y: 20.0
+  }
+  rotation {
+    x: -180.0
+  }
+  size {
+    x: 22.0
+    y: 22.0
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border2"
+  id: "box3"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_BOTTOM
+  pivot: PIVOT_NW
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "corner"
+}
+nodes {
+  position {
+    x: 20.0
+    y: 700.0
+  }
+  size {
+    x: 1240.0
+    y: 22.0
+  }
+  type: TYPE_BOX
+  id: "header_root"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
+  pivot: PIVOT_NW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_root"
+  alpha: 0.0
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 10.0
+    y: -11.0
+    z: 0.22
+  }
+  size {
+    x: 320.0
+    y: 20.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "build · 0.2.0 · v2-ui"
-  font: "jb_mono_10"
+  text: "\320\220\320\222\320\236\320\241\320\254_build \302\267 0.2.0 \302\267 v2-ui"
+  font: "jb_mono_12"
   id: "build_hint"
   pivot: PIVOT_W
-  parent: "menu_root"
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: true
+  parent: "header_root"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
-
+nodes {
+  position {
+    x: 1231.0
+    y: -11.0
+    z: 0.22
+  }
+  size {
+    x: 220.0
+    y: 20.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "\320\234\320\236\320\241\320\232\320\222\320\220  \342\200\242  07:12 MSK  \342\200\242  \342\226\210\342\226\210 62%"
+  font: "jb_mono_12"
+  id: "time"
+  xanchor: XANCHOR_RIGHT
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "header_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT
-max_nodes: 512

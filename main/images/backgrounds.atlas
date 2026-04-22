@@ -52,6 +52,7 @@ images {
 images {
   image: "/main/images/bg_city_map.jpg"
 }
-margin: 0
+images {
+  image: "/main/images/menu_fon.png"
+}
 extrude_borders: 2
-inner_padding: 0
