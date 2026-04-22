@@ -21,28 +21,28 @@ M.scenes = {
         hotspots = {
             {
                 id = "to_kitchen",
-                rect = { x = 0, y = 0, w = 220, h = 640 },
+                rect = { x = 95, y = 0, w = 225, h = 680 },
                 label = "На кухню",
                 icon = "",
                 action = { type = "goto_scene", scene = "kitchen" },
             },
             {
                 id = "to_bathroom",
-                rect = { x = 620, y = 115, w = 135, h = 370 },
+                rect = { x = 805, y = 145, w = 135, h = 370 },
                 label = "В ванную",
                 icon = "",
                 action = { type = "goto_scene", scene = "bathroom" },
             },
             {
                 id = "to_bedroom_day",
-                rect = { x = 830, y = 75, w = 130, h = 515 },
+                rect = { x = 1055, y = 75, w = 130, h = 515 },
                 label = "В спальню",
                 icon = "",
                 action = { type = "goto_scene", scene = "bedroom_day" },
             },
             {
                 id = "leave_home",
-                rect = { x = 390, y = 130, w = 175, h = 365 },
+                rect = { x = 550, y = 160, w = 175, h = 365 },
                 label = "Выйти",
                 icon = "",
                 action = { type = "ink_knot", knot = "leave_apartment" },
@@ -64,7 +64,7 @@ M.scenes = {
             -- Кофемашина без кружки — первый клик, подскажет искать кружку.
             {
                 id = "coffee_maker_empty",
-                rect = { x = 155, y = 250, w = 160, h = 155 },
+                rect = { x = 290, y = 405, w = 160, h = 155 },
                 label = "Кофемашина",
                 -- U+E541 coffee_maker
                 icon = string.char(0xEE, 0x95, 0x81),
@@ -76,7 +76,7 @@ M.scenes = {
             -- Та же кофемашина, с кружкой — варим кофе.
             {
                 id = "coffee_maker_brew",
-                rect = { x = 155, y = 250, w = 160, h = 155 },
+                rect = { x = 280, y = 275, w = 160, h = 155 },
                 label = "Сварить кофе",
                 icon = string.char(0xEE, 0x95, 0x81),
                 action = { type = "ink_knot", knot = "use_coffee_machine_with_cup" },
@@ -87,7 +87,7 @@ M.scenes = {
             -- Ящик с кружкой — виден пока кружку не взяли.
             {
                 id = "mug_drawer",
-                rect = { x = 420, y = 180, w = 160, h = 140 },
+                rect = { x = 695, y = 470, w = 160, h = 140 },
                 label = "Ящик",
                 -- U+E2C7 inventory
                 icon = string.char(0xEE, 0x8B, 0x87),
@@ -96,7 +96,7 @@ M.scenes = {
             },
             {
                 id = "back_from_kitchen",
-                rect = { x = 0, y = 0, w = 140, h = 640 },
+                rect = { x = 95, y = 35, w = 140, h = 640 },
                 label = "Назад",
                 -- U+E5C4 arrow_back
                 icon = string.char(0xEE, 0x97, 0x84),
@@ -136,7 +136,7 @@ M.scenes = {
             {
                 id    = "phone_obj",
                 image = "mobile",           -- имя в main/images/scene_objects.atlas
-                pos   = { x = 385, y = 260 }, -- левый-нижний угол спрайта
+                pos   = { x = 575, y = 290 }, -- левый-нижний угол спрайта
                 size  = { w = 52, h = 22 },
                 -- Телефон "материализуется" только после кофе.
                 visible_when = function(gs)
@@ -147,14 +147,14 @@ M.scenes = {
         hotspots = {
             {
                 id = "look_at_monitor",
-                rect = { x = 680, y = 300, w = 280, h = 215 },
+                rect = { x = 895, y = 355, w = 280, h = 215 },
                 label = "Монитор",
                 icon = "",
                 action = { type = "ink_knot", knot = "bedroom_monitor" },
             },
             {
                 id = "phone_on_desk",
-                rect = { x = 400, y = 300, w = 180, h = 160 },
+                rect = { x = 510, y = 300, w = 180, h = 160 },
                 label = "Телефон",
                 icon = string.char(0xEE, 0xA4, 0x93),  -- U+E913 smartphone
                 action = { type = "ink_knot", knot = "take_phone" },
@@ -165,7 +165,7 @@ M.scenes = {
             },
             {
                 id = "back_from_bedroom",
-                rect = { x = 785, y = 0, w = 175, h = 235 },
+                rect = { x = 1100, y = 0, w = 175, h = 235 },
                 label = "Назад",
                 icon = "",
                 action = { type = "goto_scene", scene = "apartment_hub" },

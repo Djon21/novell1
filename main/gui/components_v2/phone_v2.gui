@@ -31,1631 +31,2902 @@ fonts {
   name: "manrope_16"
   font: "/main/fonts/manrope_16.font"
 }
-background_color { x: 0.0 y: 0.0 z: 0.0 w: 0.0 }
 nodes {
-  position { x: 0.0 y: 0.0 z: 0.40 }
-  size { x: 1280.0 y: 720.0 }
-  color { x: 0.027 y: 0.023 z: 0.102 w: 0.55 }
+  position {
+    z: 0.4
+  }
+  size {
+    x: 1280.0
+    y: 720.0
+  }
+  color {
+    x: 0.027
+    y: 0.023
+    z: 0.102
+  }
   type: TYPE_BOX
   id: "backdrop"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.55
 }
 nodes {
-  position { x: 180.0 y: 80.0 z: 0.50 }
-  size { x: 920.0 y: 560.0 }
-  color { x: 0.047 y: 0.039 z: 0.141 w: 0.98 }
+  position {
+    x: 180.0
+    y: 80.0
+    z: 0.5
+  }
+  size {
+    x: 920.0
+    y: 560.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
   type: TYPE_BOX
   id: "modal"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.98
 }
 nodes {
-  position { x: 180.0 y: 639.0 z: 0.51 }
-  size { x: 920.0 y: 1.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.30 }
+  position {
+    x: 180.0
+    y: 639.0
+    z: 0.51
+  }
+  size {
+    x: 920.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
   type: TYPE_BOX
   id: "modal_border_top"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.3
 }
 nodes {
-  position { x: 180.0 y: 80.0 z: 0.51 }
-  size { x: 920.0 y: 1.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.20 }
+  position {
+    x: 180.0
+    y: 80.0
+    z: 0.51
+  }
+  size {
+    x: 920.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
   type: TYPE_BOX
   id: "modal_border_bot"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.2
 }
 nodes {
-  position { x: 180.0 y: 620.0 z: 0.51 }
-  size { x: 1.0 y: 20.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.6 }
+  position {
+    x: 180.0
+    y: 620.0
+    z: 0.51
+  }
+  size {
+    x: 1.0
+    y: 20.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
   type: TYPE_BOX
   id: "corner_tl_v"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.6
 }
 nodes {
-  position { x: 180.0 y: 639.0 z: 0.51 }
-  size { x: 20.0 y: 1.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.6 }
+  position {
+    x: 180.0
+    y: 639.0
+    z: 0.51
+  }
+  size {
+    x: 20.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
   type: TYPE_BOX
   id: "corner_tl_h"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.6
 }
 nodes {
-  position { x: 1099.0 y: 620.0 z: 0.51 }
-  size { x: 1.0 y: 20.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.6 }
+  position {
+    x: 1099.0
+    y: 620.0
+    z: 0.51
+  }
+  size {
+    x: 1.0
+    y: 20.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
   type: TYPE_BOX
   id: "corner_tr_v"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.6
 }
 nodes {
-  position { x: 1080.0 y: 639.0 z: 0.51 }
-  size { x: 20.0 y: 1.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.6 }
+  position {
+    x: 1080.0
+    y: 639.0
+    z: 0.51
+  }
+  size {
+    x: 20.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
   type: TYPE_BOX
   id: "corner_tr_h"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.6
 }
 nodes {
-  position { x: 180.0 y: 80.0 z: 0.51 }
-  size { x: 1.0 y: 20.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.6 }
+  position {
+    x: 180.0
+    y: 80.0
+    z: 0.51
+  }
+  size {
+    x: 1.0
+    y: 20.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
   type: TYPE_BOX
   id: "corner_bl_v"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.6
 }
 nodes {
-  position { x: 180.0 y: 80.0 z: 0.51 }
-  size { x: 20.0 y: 1.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.6 }
+  position {
+    x: 180.0
+    y: 80.0
+    z: 0.51
+  }
+  size {
+    x: 20.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
   type: TYPE_BOX
   id: "corner_bl_h"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.6
 }
 nodes {
-  position { x: 1099.0 y: 80.0 z: 0.51 }
-  size { x: 1.0 y: 20.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.6 }
+  position {
+    x: 1099.0
+    y: 80.0
+    z: 0.51
+  }
+  size {
+    x: 1.0
+    y: 20.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
   type: TYPE_BOX
   id: "corner_br_v"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.6
 }
 nodes {
-  position { x: 1080.0 y: 80.0 z: 0.51 }
-  size { x: 20.0 y: 1.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.6 }
+  position {
+    x: 1080.0
+    y: 80.0
+    z: 0.51
+  }
+  size {
+    x: 20.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
   type: TYPE_BOX
   id: "corner_br_h"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.6
 }
 nodes {
-  position { x: 204.0 y: 622.0 z: 0.52 }
-  size { x: 400.0 y: 12.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 1.0 }
+  position {
+    x: 204.0
+    y: 622.0
+    z: 0.52
+  }
+  size {
+    x: 400.0
+    y: 12.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
   type: TYPE_TEXT
-  text: "phone · xiaomi mi · 73%"
+  text: "phone \302\267 xiaomi mi \302\267 73%"
   font: "jb_mono_10"
   id: "title_eyebrow"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 204.0 y: 598.0 z: 0.52 }
-  size { x: 400.0 y: 22.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  position {
+    x: 204.0
+    y: 598.0
+    z: 0.52
+  }
+  size {
+    x: 400.0
+    y: 22.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "ТЕЛЕФОН"
+  text: "\320\242\320\225\320\233\320\225\320\244\320\236\320\235"
   font: "unbounded_bold_20"
   id: "title_main"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 810.0 y: 622.0 z: 0.52 }
-  size { x: 240.0 y: 12.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.85 }
+  position {
+    x: 810.0
+    y: 622.0
+    z: 0.52
+  }
+  size {
+    x: 240.0
+    y: 12.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "сеть: МТС · 4G"
+  text: "\321\201\320\265\321\202\321\214: \320\234\320\242\320\241 \302\267 4G"
   font: "jb_mono_10"
   id: "stats_net"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.85
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 810.0 y: 602.0 z: 0.52 }
-  size { x: 240.0 y: 12.0 }
-  color { x: 1.0 y: 0.239 z: 0.498 w: 1.0 }
+  position {
+    x: 810.0
+    y: 602.0
+    z: 0.52
+  }
+  size {
+    x: 240.0
+    y: 12.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
   type: TYPE_TEXT
-  text: "сообщений: 3"
+  text: "\321\201\320\276\320\276\320\261\321\211\320\265\320\275\320\270\320\271: 3"
   font: "jb_mono_10"
   id: "stats_msg"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 1070.0 y: 618.0 z: 0.52 }
-  size { x: 28.0 y: 28.0 }
-  color { x: 1.0 y: 0.239 z: 0.498 w: 1.0 }
+  position {
+    x: 1070.0
+    y: 618.0
+    z: 0.52
+  }
+  size {
+    x: 28.0
+    y: 28.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
   type: TYPE_TEXT
-  text: "\uE5CD"
+  text: "\356\227\215"
   font: "icons"
   id: "close_btn"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 200.0 y: 580.0 z: 0.52 }
-  size { x: 880.0 y: 1.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.12 }
+  position {
+    x: 200.0
+    y: 580.0
+    z: 0.52
+  }
+  size {
+    x: 880.0
+    y: 1.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_BOX
   id: "head_divider"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.12
 }
 nodes {
-  position { x: 250.0 y: 100.0 z: 0.52 }
-  size { x: 260.0 y: 460.0 }
-  color { x: 0.102 y: 0.082 z: 0.173 w: 1.0 }
+  position {
+    x: 250.0
+    y: 100.0
+    z: 0.52
+  }
+  size {
+    x: 260.0
+    y: 460.0
+  }
+  color {
+    x: 0.102
+    y: 0.082
+    z: 0.173
+  }
   type: TYPE_BOX
   id: "phone_case"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
 }
 nodes {
-  position { x: 250.0 y: 558.0 z: 0.53 }
-  size { x: 260.0 y: 2.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.30 }
+  position {
+    x: 250.0
+    y: 558.0
+    z: 0.53
+  }
+  size {
+    x: 260.0
+    y: 2.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
   type: TYPE_BOX
   id: "phone_case_top"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.3
 }
 nodes {
-  position { x: 335.0 y: 540.0 z: 0.54 }
-  size { x: 90.0 y: 14.0 }
-  color { x: 0.0 y: 0.0 z: 0.0 w: 1.0 }
+  position {
+    x: 335.0
+    y: 540.0
+    z: 0.54
+  }
+  size {
+    x: 90.0
+    y: 14.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
   type: TYPE_BOX
   id: "phone_notch"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
 }
 nodes {
-  position { x: 509.0 y: 430.0 z: 0.53 }
-  size { x: 3.0 y: 46.0 }
-  color { x: 0.102 y: 0.082 z: 0.173 w: 1.0 }
+  position {
+    x: 509.0
+    y: 430.0
+    z: 0.53
+  }
+  size {
+    x: 3.0
+    y: 46.0
+  }
+  color {
+    x: 0.102
+    y: 0.082
+    z: 0.173
+  }
   type: TYPE_BOX
   id: "phone_side_btn"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
 }
 nodes {
-  position { x: 260.0 y: 110.0 z: 0.53 }
-  size { x: 240.0 y: 440.0 }
-  color { x: 0.024 y: 0.016 z: 0.063 w: 1.0 }
+  position {
+    x: 260.0
+    y: 110.0
+    z: 0.53
+  }
+  size {
+    x: 240.0
+    y: 440.0
+  }
+  color {
+    x: 0.024
+    y: 0.016
+    z: 0.063
+  }
   type: TYPE_BOX
   id: "phone_screen"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
 }
 nodes {
-  position { x: 270.0 y: 532.0 z: 0.55 }
-  size { x: 60.0 y: 12.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.9 }
+  position {
+    x: 270.0
+    y: 532.0
+    z: 0.55
+  }
+  size {
+    x: 60.0
+    y: 12.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
   text: "07:12"
   font: "jb_mono_bold_14"
   id: "status_time"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.9
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 490.0 y: 532.0 z: 0.55 }
-  size { x: 140.0 y: 12.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 1.0 }
+  position {
+    x: 490.0
+    y: 532.0
+    z: 0.55
+  }
+  size {
+    x: 140.0
+    y: 12.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
   type: TYPE_TEXT
-  text: "4G · 73%"
+  text: "4G \302\267 73%"
   font: "jb_mono_10"
   id: "status_meta"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 380.0 y: 492.0 z: 0.55 }
-  size { x: 220.0 y: 36.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  position {
+    x: 380.0
+    y: 492.0
+    z: 0.55
+  }
+  size {
+    x: 220.0
+    y: 36.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
   text: "07:12"
   font: "unbounded_bold_32"
   id: "wall_time"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 380.0 y: 468.0 z: 0.55 }
-  size { x: 220.0 y: 12.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.65 }
+  position {
+    x: 380.0
+    y: 468.0
+    z: 0.55
+  }
+  size {
+    x: 220.0
+    y: 12.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "ПОНЕДЕЛЬНИК · 23 АПРЕЛЯ"
+  text: "\320\237\320\236\320\235\320\225\320\224\320\225\320\233\320\254\320\235\320\230\320\232 \302\267 23 \320\220\320\237\320\240\320\225\320\233\320\257"
   font: "jb_mono_10"
   id: "wall_date"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.65
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 380.0 y: 448.0 z: 0.55 }
-  size { x: 220.0 y: 12.0 }
-  color { x: 0.784 y: 0.078 z: 0.165 w: 1.0 }
+  position {
+    x: 380.0
+    y: 448.0
+    z: 0.55
+  }
+  size {
+    x: 220.0
+    y: 12.0
+  }
+  color {
+    x: 0.784
+    y: 0.078
+    z: 0.165
+  }
   type: TYPE_TEXT
-  text: "ПОНЕДЕЛЬНИК · ПОВТОР · 017"
+  text: "\320\237\320\236\320\235\320\225\320\224\320\225\320\233\320\254\320\235\320\230\320\232 \302\267 \320\237\320\236\320\222\320\242\320\236\320\240 \302\267 017"
   font: "jb_mono_10"
   id: "wall_glitch"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 380.0 y: 138.0 z: 0.55 }
-  size { x: 100.0 y: 4.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.35 }
+  position {
+    x: 380.0
+    y: 138.0
+    z: 0.55
+  }
+  size {
+    x: 100.0
+    y: 4.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_BOX
   id: "home_indicator"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.35
 }
 nodes {
-  position { x: 580.0 y: 100.0 z: 0.52 }
-  size { x: 500.0 y: 460.0 }
-  color { x: 0.047 y: 0.039 z: 0.141 w: 0.85 }
+  position {
+    x: 580.0
+    y: 100.0
+    z: 0.52
+  }
+  size {
+    x: 500.0
+    y: 460.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
   type: TYPE_BOX
   id: "side_panel"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.85
 }
 nodes {
-  position { x: 596.0 y: 538.0 z: 0.53 }
-  size { x: 460.0 y: 12.0 }
-  color { x: 1.0 y: 0.702 z: 0.278 w: 1.0 }
+  position {
+    x: 596.0
+    y: 538.0
+    z: 0.53
+  }
+  size {
+    x: 460.0
+    y: 12.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
   type: TYPE_TEXT
-  text: "входящие · 3 новых"
+  text: "\320\262\321\205\320\276\320\264\321\217\321\211\320\270\320\265 \302\267 3 \320\275\320\276\320\262\321\213\321\205"
   font: "jb_mono_10"
   id: "side_eyebrow"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 596.0 y: 514.0 z: 0.53 }
-  size { x: 460.0 y: 22.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  position {
+    x: 596.0
+    y: 514.0
+    z: 0.53
+  }
+  size {
+    x: 460.0
+    y: 22.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "Сообщения"
+  text: "\320\241\320\276\320\276\320\261\321\211\320\265\320\275\320\270\321\217"
   font: "unbounded_bold_20"
   id: "side_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 592.0 y: 404.0 z: 0.53 }
-  size { x: 476.0 y: 76.0 }
-  color { x: 1.0 y: 0.239 z: 0.498 w: 0.08 }
+  position {
+    x: 592.0
+    y: 404.0
+    z: 0.53
+  }
+  size {
+    x: 476.0
+    y: 76.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
   type: TYPE_BOX
   id: "msg1_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.08
 }
 nodes {
-  position { x: 592.0 y: 480.0 z: 0.54 }
-  size { x: 476.0 y: 1.0 }
-  color { x: 1.0 y: 0.239 z: 0.498 w: 0.6 }
+  position {
+    x: 592.0
+    y: 480.0
+    z: 0.54
+  }
+  size {
+    x: 476.0
+    y: 1.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
   type: TYPE_BOX
   id: "msg1_border"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.6
 }
 nodes {
-  position { x: 604.0 y: 464.0 z: 0.54 }
-  size { x: 300.0 y: 12.0 }
-  color { x: 1.0 y: 0.239 z: 0.498 w: 1.0 }
+  position {
+    x: 604.0
+    y: 464.0
+    z: 0.54
+  }
+  size {
+    x: 300.0
+    y: 12.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
   type: TYPE_TEXT
-  text: "Н. М."
+  text: "\320\235. \320\234."
   font: "jb_mono_bold_14"
   id: "msg1_name"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 1056.0 y: 464.0 z: 0.54 }
-  size { x: 120.0 y: 12.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.45 }
+  position {
+    x: 1056.0
+    y: 464.0
+    z: 0.54
+  }
+  size {
+    x: 120.0
+    y: 12.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
   text: "07:10"
   font: "jb_mono_12"
   id: "msg1_time"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.45
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 604.0 y: 436.0 z: 0.54 }
-  size { x: 450.0 y: 36.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.78 }
+  position {
+    x: 604.0
+    y: 436.0
+    z: 0.54
+  }
+  size {
+    x: 450.0
+    y: 36.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "ты опять опоздаешь. я же говорила. опять."
+  text: "\321\202\321\213 \320\276\320\277\321\217\321\202\321\214 \320\276\320\277\320\276\320\267\320\264\320\260\320\265\321\210\321\214. \321\217 \320\266\320\265 \320\263\320\276\320\262\320\276\321\200\320\270\320\273\320\260. \320\276\320\277\321\217\321\202\321\214."
   font: "manrope_14"
   id: "msg1_body"
   pivot: PIVOT_NW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  line_break: true
+  alpha: 0.78
   outline_alpha: 0.0
   shadow_alpha: 0.0
-  line_break: true
 }
 nodes {
-  position { x: 592.0 y: 316.0 z: 0.53 }
-  size { x: 476.0 y: 76.0 }
-  color { x: 1.0 y: 0.239 z: 0.498 w: 0.08 }
+  position {
+    x: 592.0
+    y: 316.0
+    z: 0.53
+  }
+  size {
+    x: 476.0
+    y: 76.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
   type: TYPE_BOX
   id: "msg2_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.08
 }
 nodes {
-  position { x: 592.0 y: 392.0 z: 0.54 }
-  size { x: 476.0 y: 1.0 }
-  color { x: 1.0 y: 0.239 z: 0.498 w: 0.6 }
+  position {
+    x: 592.0
+    y: 392.0
+    z: 0.54
+  }
+  size {
+    x: 476.0
+    y: 1.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
   type: TYPE_BOX
   id: "msg2_border"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.6
 }
 nodes {
-  position { x: 604.0 y: 376.0 z: 0.54 }
-  size { x: 300.0 y: 12.0 }
-  color { x: 1.0 y: 0.239 z: 0.498 w: 1.0 }
+  position {
+    x: 604.0
+    y: 376.0
+    z: 0.54
+  }
+  size {
+    x: 300.0
+    y: 12.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
   type: TYPE_TEXT
   text: "+7 (???) ???-??-??"
   font: "jb_mono_bold_14"
   id: "msg2_name"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 1056.0 y: 376.0 z: 0.54 }
-  size { x: 120.0 y: 12.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.45 }
+  position {
+    x: 1056.0
+    y: 376.0
+    z: 0.54
+  }
+  size {
+    x: 120.0
+    y: 12.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
   text: "03:17"
   font: "jb_mono_12"
   id: "msg2_time"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.45
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 604.0 y: 348.0 z: 0.54 }
-  size { x: 450.0 y: 36.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.78 }
+  position {
+    x: 604.0
+    y: 348.0
+    z: 0.54
+  }
+  size {
+    x: 450.0
+    y: 36.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "если помнишь понедельник — ответь. это важно."
+  text: "\320\265\321\201\320\273\320\270 \320\277\320\276\320\274\320\275\320\270\321\210\321\214 \320\277\320\276\320\275\320\265\320\264\320\265\320\273\321\214\320\275\320\270\320\272 \342\200\224 \320\276\321\202\320\262\320\265\321\202\321\214. \321\215\321\202\320\276 \320\262\320\260\320\266\320\275\320\276."
   font: "manrope_14"
   id: "msg2_body"
   pivot: PIVOT_NW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  line_break: true
+  alpha: 0.78
   outline_alpha: 0.0
   shadow_alpha: 0.0
-  line_break: true
 }
 nodes {
-  position { x: 592.0 y: 228.0 z: 0.53 }
-  size { x: 476.0 y: 76.0 }
-  color { x: 1.0 y: 0.239 z: 0.498 w: 0.08 }
+  position {
+    x: 592.0
+    y: 228.0
+    z: 0.53
+  }
+  size {
+    x: 476.0
+    y: 76.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
   type: TYPE_BOX
   id: "msg3_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.08
 }
 nodes {
-  position { x: 592.0 y: 304.0 z: 0.54 }
-  size { x: 476.0 y: 1.0 }
-  color { x: 1.0 y: 0.239 z: 0.498 w: 0.6 }
+  position {
+    x: 592.0
+    y: 304.0
+    z: 0.54
+  }
+  size {
+    x: 476.0
+    y: 1.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
   type: TYPE_BOX
   id: "msg3_border"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.6
 }
 nodes {
-  position { x: 604.0 y: 288.0 z: 0.54 }
-  size { x: 300.0 y: 12.0 }
-  color { x: 1.0 y: 0.239 z: 0.498 w: 1.0 }
+  position {
+    x: 604.0
+    y: 288.0
+    z: 0.54
+  }
+  size {
+    x: 300.0
+    y: 12.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
   type: TYPE_TEXT
-  text: "Отдел · Прод"
+  text: "\320\236\321\202\320\264\320\265\320\273 \302\267 \320\237\321\200\320\276\320\264"
   font: "jb_mono_bold_14"
   id: "msg3_name"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 1056.0 y: 288.0 z: 0.54 }
-  size { x: 120.0 y: 12.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.45 }
+  position {
+    x: 1056.0
+    y: 288.0
+    z: 0.54
+  }
+  size {
+    x: 120.0
+    y: 12.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "вчера"
+  text: "\320\262\321\207\320\265\321\200\320\260"
   font: "jb_mono_12"
   id: "msg3_time"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.45
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 604.0 y: 260.0 z: 0.54 }
-  size { x: 450.0 y: 36.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.78 }
-  text: "прод упал. тех. долг догнал. подними, пожалуйста."
-  font: "manrope_14"
+  position {
+    x: 604.0
+    y: 260.0
+    z: 0.54
+  }
+  size {
+    x: 450.0
+    y: 36.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
+  text: "\320\277\321\200\320\276\320\264 \321\203\320\277\320\260\320\273. \321\202\320\265\321\205. \320\264\320\276\320\273\320\263 \320\264\320\276\320\263\320\275\320\260\320\273. \320\277\320\276\320\264\320\275\320\270\320\274\320\270, \320\277\320\276\320\266\320\260\320\273\321\203\320\271\321\201\321\202\320\260."
+  font: "manrope_14"
   id: "msg3_body"
   pivot: PIVOT_NW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  line_break: true
+  alpha: 0.78
   outline_alpha: 0.0
   shadow_alpha: 0.0
-  line_break: true
 }
 nodes {
-  position { x: 592.0 y: 140.0 z: 0.53 }
-  size { x: 476.0 y: 76.0 }
-  color { x: 0.047 y: 0.039 z: 0.141 w: 0.5 }
+  position {
+    x: 592.0
+    y: 140.0
+    z: 0.53
+  }
+  size {
+    x: 476.0
+    y: 76.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
   type: TYPE_BOX
   id: "msg4_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.5
 }
 nodes {
-  position { x: 592.0 y: 216.0 z: 0.54 }
-  size { x: 476.0 y: 1.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.15 }
+  position {
+    x: 592.0
+    y: 216.0
+    z: 0.54
+  }
+  size {
+    x: 476.0
+    y: 1.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_BOX
   id: "msg4_border"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.15
 }
 nodes {
-  position { x: 604.0 y: 200.0 z: 0.54 }
-  size { x: 300.0 y: 12.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  position {
+    x: 604.0
+    y: 200.0
+    z: 0.54
+  }
+  size {
+    x: 300.0
+    y: 12.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "Мама"
+  text: "\320\234\320\260\320\274\320\260"
   font: "jb_mono_bold_14"
   id: "msg4_name"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 1056.0 y: 200.0 z: 0.54 }
-  size { x: 120.0 y: 12.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.45 }
+  position {
+    x: 1056.0
+    y: 200.0
+    z: 0.54
+  }
+  size {
+    x: 120.0
+    y: 12.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "пн"
+  text: "\320\277\320\275"
   font: "jb_mono_12"
   id: "msg4_time"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.45
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 604.0 y: 172.0 z: 0.54 }
-  size { x: 450.0 y: 36.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.78 }
+  position {
+    x: 604.0
+    y: 172.0
+    z: 0.54
+  }
+  size {
+    x: 450.0
+    y: 36.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "не забудь поесть. и зонт возьми — обещают дождь."
+  text: "\320\275\320\265 \320\267\320\260\320\261\321\203\320\264\321\214 \320\277\320\276\320\265\321\201\321\202\321\214. \320\270 \320\267\320\276\320\275\321\202 \320\262\320\276\320\267\321\214\320\274\320\270 \342\200\224 \320\276\320\261\320\265\321\211\320\260\321\216\321\202 \320\264\320\276\320\266\320\264\321\214."
   font: "manrope_14"
   id: "msg4_body"
   pivot: PIVOT_NW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  line_break: true
+  alpha: 0.78
   outline_alpha: 0.0
   shadow_alpha: 0.0
-  line_break: true
 }
 nodes {
-  position { x: 290.0 y: 340.0 z: 0.55 }
-  size { x: 40.0 y: 40.0 }
-  color { x: 1.0 y: 0.239 z: 0.498 w: 0.22 }
+  position {
+    x: 290.0
+    y: 340.0
+    z: 0.55
+  }
+  size {
+    x: 40.0
+    y: 40.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
   type: TYPE_BOX
   id: "app1_bg"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.22
 }
 nodes {
-  position { x: 290.0 y: 340.0 z: 0.56 }
-  size { x: 22.0 y: 22.0 }
-  color { x: 1.0 y: 0.239 z: 0.498 w: 1.0 }
+  position {
+    x: 290.0
+    y: 340.0
+    z: 0.56
+  }
+  size {
+    x: 22.0
+    y: 22.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
   type: TYPE_TEXT
-  text: "\uE0CA"
+  text: "\356\203\212"
   font: "icons"
   id: "app1_icon"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 290.0 y: 310.0 z: 0.56 }
-  size { x: 60.0 y: 12.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.85 }
+  position {
+    x: 290.0
+    y: 310.0
+    z: 0.56
+  }
+  size {
+    x: 60.0
+    y: 12.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "СМС"
+  text: "\320\241\320\234\320\241"
   font: "jb_mono_10"
   id: "app1_label"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.85
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 350.0 y: 340.0 z: 0.55 }
-  size { x: 40.0 y: 40.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.22 }
+  position {
+    x: 350.0
+    y: 340.0
+    z: 0.55
+  }
+  size {
+    x: 40.0
+    y: 40.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
   type: TYPE_BOX
   id: "app2_bg"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.22
 }
 nodes {
-  position { x: 350.0 y: 340.0 z: 0.56 }
-  size { x: 22.0 y: 22.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 1.0 }
+  position {
+    x: 350.0
+    y: 340.0
+    z: 0.56
+  }
+  size {
+    x: 22.0
+    y: 22.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
   type: TYPE_TEXT
-  text: "\uE0B0"
+  text: "\356\202\260"
   font: "icons"
   id: "app2_icon"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 350.0 y: 310.0 z: 0.56 }
-  size { x: 60.0 y: 12.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.85 }
+  position {
+    x: 350.0
+    y: 310.0
+    z: 0.56
+  }
+  size {
+    x: 60.0
+    y: 12.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "Звонки"
+  text: "\320\227\320\262\320\276\320\275\320\272\320\270"
   font: "jb_mono_10"
   id: "app2_label"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.85
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 410.0 y: 340.0 z: 0.55 }
-  size { x: 40.0 y: 40.0 }
-  color { x: 1.0 y: 0.702 z: 0.278 w: 0.22 }
+  position {
+    x: 410.0
+    y: 340.0
+    z: 0.55
+  }
+  size {
+    x: 40.0
+    y: 40.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
   type: TYPE_BOX
   id: "app3_bg"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.22
 }
 nodes {
-  position { x: 410.0 y: 340.0 z: 0.56 }
-  size { x: 22.0 y: 22.0 }
-  color { x: 1.0 y: 0.702 z: 0.278 w: 1.0 }
+  position {
+    x: 410.0
+    y: 340.0
+    z: 0.56
+  }
+  size {
+    x: 22.0
+    y: 22.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
   type: TYPE_TEXT
-  text: "\uE55B"
+  text: "\356\225\233"
   font: "icons"
   id: "app3_icon"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 410.0 y: 310.0 z: 0.56 }
-  size { x: 60.0 y: 12.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.85 }
+  position {
+    x: 410.0
+    y: 310.0
+    z: 0.56
+  }
+  size {
+    x: 60.0
+    y: 12.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "Карта"
+  text: "\320\232\320\260\321\200\321\202\320\260"
   font: "jb_mono_10"
   id: "app3_label"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.85
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 470.0 y: 340.0 z: 0.55 }
-  size { x: 40.0 y: 40.0 }
-  color { x: 0.478 y: 0.361 z: 1.0 w: 0.22 }
+  position {
+    x: 470.0
+    y: 340.0
+    z: 0.55
+  }
+  size {
+    x: 40.0
+    y: 40.0
+  }
+  color {
+    x: 0.478
+    y: 0.361
+  }
   type: TYPE_BOX
   id: "app4_bg"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.22
 }
 nodes {
-  position { x: 470.0 y: 340.0 z: 0.56 }
-  size { x: 22.0 y: 22.0 }
-  color { x: 0.478 y: 0.361 z: 1.0 w: 1.0 }
+  position {
+    x: 470.0
+    y: 340.0
+    z: 0.56
+  }
+  size {
+    x: 22.0
+    y: 22.0
+  }
+  color {
+    x: 0.478
+    y: 0.361
+  }
   type: TYPE_TEXT
-  text: "\uE873"
+  text: "\356\241\263"
   font: "icons"
   id: "app4_icon"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 470.0 y: 310.0 z: 0.56 }
-  size { x: 60.0 y: 12.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.85 }
-  text: "Улики"
-  font: "jb_mono_10"
+  position {
+    x: 470.0
+    y: 310.0
+    z: 0.56
+  }
+  size {
+    x: 60.0
+    y: 12.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
+  text: "\320\243\320\273\320\270\320\272\320\270"
+  font: "jb_mono_10"
   id: "app4_label"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.85
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 290.0 y: 240.0 z: 0.55 }
-  size { x: 40.0 y: 40.0 }
-  color { x: 1.0 y: 0.239 z: 0.498 w: 0.22 }
+  position {
+    x: 290.0
+    y: 240.0
+    z: 0.55
+  }
+  size {
+    x: 40.0
+    y: 40.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
   type: TYPE_BOX
   id: "app5_bg"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.22
 }
 nodes {
-  position { x: 290.0 y: 240.0 z: 0.56 }
-  size { x: 22.0 y: 22.0 }
-  color { x: 1.0 y: 0.239 z: 0.498 w: 1.0 }
+  position {
+    x: 290.0
+    y: 240.0
+    z: 0.56
+  }
+  size {
+    x: 22.0
+    y: 22.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
   type: TYPE_TEXT
-  text: "\uE85D"
+  text: "\356\241\235"
   font: "icons"
   id: "app5_icon"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 290.0 y: 210.0 z: 0.56 }
-  size { x: 60.0 y: 12.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.85 }
+  position {
+    x: 290.0
+    y: 210.0
+    z: 0.56
+  }
+  size {
+    x: 60.0
+    y: 12.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "Квесты"
+  text: "\320\232\320\262\320\265\321\201\321\202\321\213"
   font: "jb_mono_10"
   id: "app5_label"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.85
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 350.0 y: 240.0 z: 0.55 }
-  size { x: 40.0 y: 40.0 }
-  color { x: 1.0 y: 0.239 z: 0.498 w: 0.22 }
+  position {
+    x: 350.0
+    y: 240.0
+    z: 0.55
+  }
+  size {
+    x: 40.0
+    y: 40.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
   type: TYPE_BOX
   id: "app6_bg"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.22
 }
 nodes {
-  position { x: 350.0 y: 240.0 z: 0.56 }
-  size { x: 22.0 y: 22.0 }
-  color { x: 1.0 y: 0.239 z: 0.498 w: 1.0 }
+  position {
+    x: 350.0
+    y: 240.0
+    z: 0.56
+  }
+  size {
+    x: 22.0
+    y: 22.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
   type: TYPE_TEXT
-  text: "\uE158"
+  text: "\356\205\230"
   font: "icons"
   id: "app6_icon"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 350.0 y: 210.0 z: 0.56 }
-  size { x: 60.0 y: 12.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.85 }
+  position {
+    x: 350.0
+    y: 210.0
+    z: 0.56
+  }
+  size {
+    x: 60.0
+    y: 12.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "Почта"
+  text: "\320\237\320\276\321\207\321\202\320\260"
   font: "jb_mono_10"
   id: "app6_label"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.85
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 410.0 y: 240.0 z: 0.55 }
-  size { x: 40.0 y: 40.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.22 }
+  position {
+    x: 410.0
+    y: 240.0
+    z: 0.55
+  }
+  size {
+    x: 40.0
+    y: 40.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
   type: TYPE_BOX
   id: "app7_bg"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.22
 }
 nodes {
-  position { x: 410.0 y: 240.0 z: 0.56 }
-  size { x: 22.0 y: 22.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 1.0 }
+  position {
+    x: 410.0
+    y: 240.0
+    z: 0.56
+  }
+  size {
+    x: 22.0
+    y: 22.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
   type: TYPE_TEXT
-  text: "\uE412"
+  text: "\356\220\222"
   font: "icons"
   id: "app7_icon"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 410.0 y: 210.0 z: 0.56 }
-  size { x: 60.0 y: 12.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.85 }
+  position {
+    x: 410.0
+    y: 210.0
+    z: 0.56
+  }
+  size {
+    x: 60.0
+    y: 12.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "Камера"
+  text: "\320\232\320\260\320\274\320\265\321\200\320\260"
   font: "jb_mono_10"
   id: "app7_label"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.85
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 470.0 y: 240.0 z: 0.55 }
-  size { x: 40.0 y: 40.0 }
-  color { x: 1.0 y: 0.702 z: 0.278 w: 0.22 }
+  position {
+    x: 470.0
+    y: 240.0
+    z: 0.55
+  }
+  size {
+    x: 40.0
+    y: 40.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
   type: TYPE_BOX
   id: "app8_bg"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.22
 }
 nodes {
-  position { x: 470.0 y: 240.0 z: 0.56 }
-  size { x: 22.0 y: 22.0 }
-  color { x: 1.0 y: 0.702 z: 0.278 w: 1.0 }
+  position {
+    x: 470.0
+    y: 240.0
+    z: 0.56
+  }
+  size {
+    x: 22.0
+    y: 22.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
   type: TYPE_TEXT
-  text: "\uEB8E"
+  text: "\356\256\216"
   font: "icons"
   id: "app8_icon"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 470.0 y: 210.0 z: 0.56 }
-  size { x: 60.0 y: 12.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.85 }
+  position {
+    x: 470.0
+    y: 210.0
+    z: 0.56
+  }
+  size {
+    x: 60.0
+    y: 12.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "Терминал"
+  text: "\320\242\320\265\321\200\320\274\320\270\320\275\320\260\320\273"
   font: "jb_mono_10"
   id: "app8_label"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.85
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 1048.0 y: 550.0 z: 0.54 }
-  size { x: 60.0 y: 18.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.85 }
+  position {
+    x: 1048.0
+    y: 550.0
+    z: 0.54
+  }
+  size {
+    x: 60.0
+    y: 18.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
   type: TYPE_TEXT
-  text: "← домой"
+  text: "\342\206\220 \320\264\320\276\320\274\320\276\320\271"
   font: "jb_mono_10"
   id: "home_btn"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.85
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 596.0 y: 538.0 z: 0.53 }
-  size { x: 460.0 y: 12.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 1.0 }
+  position {
+    x: 596.0
+    y: 538.0
+    z: 0.53
+  }
+  size {
+    x: 460.0
+    y: 12.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
   type: TYPE_TEXT
-  text: "журнал вызовов · 4 записи"
+  text: "\320\266\321\203\321\200\320\275\320\260\320\273 \320\262\321\213\320\267\320\276\320\262\320\276\320\262 \302\267 4 \320\267\320\260\320\277\320\270\321\201\320\270"
   font: "jb_mono_10"
   id: "v_calls_eyebrow"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 596.0 y: 514.0 z: 0.53 }
-  size { x: 460.0 y: 22.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  position {
+    x: 596.0
+    y: 514.0
+    z: 0.53
+  }
+  size {
+    x: 460.0
+    y: 22.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "Звонки"
+  text: "\320\227\320\262\320\276\320\275\320\272\320\270"
   font: "unbounded_bold_20"
   id: "v_calls_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 592.0 y: 430.0 z: 0.53 }
-  size { x: 476.0 y: 46.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.08 }
+  position {
+    x: 592.0
+    y: 430.0
+    z: 0.53
+  }
+  size {
+    x: 476.0
+    y: 46.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
   type: TYPE_BOX
   id: "v_calls_row1_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.08
 }
 nodes {
-  position { x: 604.0 y: 462.0 z: 0.54 }
-  size { x: 300.0 y: 12.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 1.0 }
+  position {
+    x: 604.0
+    y: 462.0
+    z: 0.54
+  }
+  size {
+    x: 300.0
+    y: 12.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
   type: TYPE_TEXT
-  text: "Н. М."
+  text: "\320\235. \320\234."
   font: "jb_mono_bold_14"
   id: "v_calls_row1_name"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 604.0 y: 442.0 z: 0.54 }
-  size { x: 440.0 y: 12.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.55 }
+  position {
+    x: 604.0
+    y: 442.0
+    z: 0.54
+  }
+  size {
+    x: 440.0
+    y: 12.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "пропущенный · 06:42"
+  text: "\320\277\321\200\320\276\320\277\321\203\321\211\320\265\320\275\320\275\321\213\320\271 \302\267 06:42"
   font: "jb_mono_10"
   id: "v_calls_row1_meta"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.55
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 592.0 y: 372.0 z: 0.53 }
-  size { x: 476.0 y: 46.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.05 }
+  position {
+    x: 592.0
+    y: 372.0
+    z: 0.53
+  }
+  size {
+    x: 476.0
+    y: 46.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_BOX
   id: "v_calls_row2_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.05
 }
 nodes {
-  position { x: 604.0 y: 404.0 z: 0.54 }
-  size { x: 300.0 y: 12.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  position {
+    x: 604.0
+    y: 404.0
+    z: 0.54
+  }
+  size {
+    x: 300.0
+    y: 12.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "Мама"
+  text: "\320\234\320\260\320\274\320\260"
   font: "jb_mono_bold_14"
   id: "v_calls_row2_name"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 604.0 y: 384.0 z: 0.54 }
-  size { x: 440.0 y: 12.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.55 }
+  position {
+    x: 604.0
+    y: 384.0
+    z: 0.54
+  }
+  size {
+    x: 440.0
+    y: 12.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "исходящий · вчера 21:05"
+  text: "\320\270\321\201\321\205\320\276\320\264\321\217\321\211\320\270\320\271 \302\267 \320\262\321\207\320\265\321\200\320\260 21:05"
   font: "jb_mono_10"
   id: "v_calls_row2_meta"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.55
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 592.0 y: 314.0 z: 0.53 }
-  size { x: 476.0 y: 46.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.05 }
+  position {
+    x: 592.0
+    y: 314.0
+    z: 0.53
+  }
+  size {
+    x: 476.0
+    y: 46.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_BOX
   id: "v_calls_row3_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.05
 }
 nodes {
-  position { x: 604.0 y: 346.0 z: 0.54 }
-  size { x: 300.0 y: 12.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  position {
+    x: 604.0
+    y: 346.0
+    z: 0.54
+  }
+  size {
+    x: 300.0
+    y: 12.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
   text: "+7 (???) ???-??-??"
   font: "jb_mono_bold_14"
-  type: TYPE_TEXT
   id: "v_calls_row3_name"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 604.0 y: 326.0 z: 0.54 }
-  size { x: 440.0 y: 12.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.55 }
+  position {
+    x: 604.0
+    y: 326.0
+    z: 0.54
+  }
+  size {
+    x: 440.0
+    y: 12.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "входящий · 03:14"
+  text: "\320\262\321\205\320\276\320\264\321\217\321\211\320\270\320\271 \302\267 03:14"
   font: "jb_mono_10"
   id: "v_calls_row3_meta"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.55
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 596.0 y: 538.0 z: 0.53 }
-  size { x: 460.0 y: 12.0 }
-  color { x: 1.0 y: 0.702 z: 0.278 w: 1.0 }
+  position {
+    x: 596.0
+    y: 538.0
+    z: 0.53
+  }
+  size {
+    x: 460.0
+    y: 12.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
   type: TYPE_TEXT
-  text: "карта · см. модалку карты"
+  text: "\320\272\320\260\321\200\321\202\320\260 \302\267 \321\201\320\274. \320\274\320\276\320\264\320\260\320\273\320\272\321\203 \320\272\320\260\321\200\321\202\321\213"
   font: "jb_mono_10"
   id: "v_map_eyebrow"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 596.0 y: 514.0 z: 0.53 }
-  size { x: 460.0 y: 22.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  position {
+    x: 596.0
+    y: 514.0
+    z: 0.53
+  }
+  size {
+    x: 460.0
+    y: 22.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "Карта"
+  text: "\320\232\320\260\321\200\321\202\320\260"
   font: "unbounded_bold_20"
   id: "v_map_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 592.0 y: 200.0 z: 0.53 }
-  size { x: 476.0 y: 280.0 }
-  color { x: 1.0 y: 0.702 z: 0.278 w: 0.05 }
+  position {
+    x: 592.0
+    y: 200.0
+    z: 0.53
+  }
+  size {
+    x: 476.0
+    y: 280.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
   type: TYPE_BOX
   id: "v_map_placeholder"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.05
 }
 nodes {
-  position { x: 830.0 y: 360.0 z: 0.54 }
-  size { x: 440.0 y: 22.0 }
-  color { x: 1.0 y: 0.702 z: 0.278 w: 0.9 }
+  position {
+    x: 830.0
+    y: 360.0
+    z: 0.54
+  }
+  size {
+    x: 440.0
+    y: 22.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
   type: TYPE_TEXT
-  text: "полноэкранная карта — кнопка M"
+  text: "\320\277\320\276\320\273\320\275\320\276\321\215\320\272\321\200\320\260\320\275\320\275\320\260\321\217 \320\272\320\260\321\200\321\202\320\260 \342\200\224 \320\272\320\275\320\276\320\277\320\272\320\260 M"
   font: "unbounded_bold_20"
   id: "v_map_hint"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.9
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 830.0 y: 330.0 z: 0.54 }
-  size { x: 440.0 y: 14.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.5 }
+  position {
+    x: 830.0
+    y: 330.0
+    z: 0.54
+  }
+  size {
+    x: 440.0
+    y: 14.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "здесь: миниатюра текущей локации"
+  text: "\320\267\320\264\320\265\321\201\321\214: \320\274\320\270\320\275\320\270\320\260\321\202\321\216\321\200\320\260 \321\202\320\265\320\272\321\203\321\211\320\265\320\271 \320\273\320\276\320\272\320\260\321\206\320\270\320\270"
   font: "manrope_14"
   id: "v_map_hint2"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.5
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 596.0 y: 538.0 z: 0.53 }
-  size { x: 460.0 y: 12.0 }
-  color { x: 0.478 y: 0.361 z: 1.0 w: 1.0 }
+  position {
+    x: 596.0
+    y: 538.0
+    z: 0.53
+  }
+  size {
+    x: 460.0
+    y: 12.0
+  }
+  color {
+    x: 0.478
+    y: 0.361
+  }
   type: TYPE_TEXT
-  text: "улики · пока пусто"
+  text: "\321\203\320\273\320\270\320\272\320\270 \302\267 \320\277\320\276\320\272\320\260 \320\277\321\203\321\201\321\202\320\276"
   font: "jb_mono_10"
   id: "v_clues_eyebrow"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 596.0 y: 514.0 z: 0.53 }
-  size { x: 460.0 y: 22.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  position {
+    x: 596.0
+    y: 514.0
+    z: 0.53
+  }
+  size {
+    x: 460.0
+    y: 22.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "Улики"
+  text: "\320\243\320\273\320\270\320\272\320\270"
   font: "unbounded_bold_20"
   id: "v_clues_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 592.0 y: 380.0 z: 0.53 }
-  size { x: 230.0 y: 100.0 }
-  color { x: 0.478 y: 0.361 z: 1.0 w: 0.08 }
+  position {
+    x: 592.0
+    y: 380.0
+    z: 0.53
+  }
+  size {
+    x: 230.0
+    y: 100.0
+  }
+  color {
+    x: 0.478
+    y: 0.361
+  }
   type: TYPE_BOX
   id: "v_clues_card1_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.08
 }
 nodes {
-  position { x: 604.0 y: 460.0 z: 0.54 }
-  size { x: 200.0 y: 14.0 }
-  color { x: 0.478 y: 0.361 z: 1.0 w: 1.0 }
+  position {
+    x: 604.0
+    y: 460.0
+    z: 0.54
+  }
+  size {
+    x: 200.0
+    y: 14.0
+  }
+  color {
+    x: 0.478
+    y: 0.361
+  }
   type: TYPE_TEXT
-  text: "CLUE · 01"
+  text: "CLUE \302\267 01"
   font: "jb_mono_bold_14"
   id: "v_clues_card1_tag"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 604.0 y: 420.0 z: 0.54 }
-  size { x: 210.0 y: 40.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.8 }
+  position {
+    x: 604.0
+    y: 420.0
+    z: 0.54
+  }
+  size {
+    x: 210.0
+    y: 40.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "странная запись в журнале"
+  text: "\321\201\321\202\321\200\320\260\320\275\320\275\320\260\321\217 \320\267\320\260\320\277\320\270\321\201\321\214 \320\262 \320\266\321\203\321\200\320\275\320\260\320\273\320\265"
   font: "manrope_14"
   id: "v_clues_card1_body"
   pivot: PIVOT_NW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  line_break: true
+  alpha: 0.8
   outline_alpha: 0.0
   shadow_alpha: 0.0
-  line_break: true
 }
 nodes {
-  position { x: 836.0 y: 380.0 z: 0.53 }
-  size { x: 230.0 y: 100.0 }
-  color { x: 0.478 y: 0.361 z: 1.0 w: 0.05 }
+  position {
+    x: 836.0
+    y: 380.0
+    z: 0.53
+  }
+  size {
+    x: 230.0
+    y: 100.0
+  }
+  color {
+    x: 0.478
+    y: 0.361
+  }
   type: TYPE_BOX
   id: "v_clues_card2_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.05
 }
 nodes {
-  position { x: 848.0 y: 460.0 z: 0.54 }
-  size { x: 200.0 y: 14.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.45 }
+  position {
+    x: 848.0
+    y: 460.0
+    z: 0.54
+  }
+  size {
+    x: 200.0
+    y: 14.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "CLUE · 02 ???"
+  text: "CLUE \302\267 02 ???"
   font: "jb_mono_bold_14"
   id: "v_clues_card2_tag"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.45
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 848.0 y: 420.0 z: 0.54 }
-  size { x: 210.0 y: 40.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.4 }
+  position {
+    x: 848.0
+    y: 420.0
+    z: 0.54
+  }
+  size {
+    x: 210.0
+    y: 40.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "заблокировано — нужно больше данных"
+  text: "\320\267\320\260\320\261\320\273\320\276\320\272\320\270\321\200\320\276\320\262\320\260\320\275\320\276 \342\200\224 \320\275\321\203\320\266\320\275\320\276 \320\261\320\276\320\273\321\214\321\210\320\265 \320\264\320\260\320\275\320\275\321\213\321\205"
   font: "manrope_14"
   id: "v_clues_card2_body"
   pivot: PIVOT_NW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  line_break: true
+  alpha: 0.4
   outline_alpha: 0.0
   shadow_alpha: 0.0
-  line_break: true
 }
 nodes {
-  position { x: 596.0 y: 538.0 z: 0.53 }
-  size { x: 460.0 y: 12.0 }
-  color { x: 1.0 y: 0.239 z: 0.498 w: 1.0 }
+  position {
+    x: 596.0
+    y: 538.0
+    z: 0.53
+  }
+  size {
+    x: 460.0
+    y: 12.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
   type: TYPE_TEXT
-  text: "квесты · активных 2"
+  text: "\320\272\320\262\320\265\321\201\321\202\321\213 \302\267 \320\260\320\272\321\202\320\270\320\262\320\275\321\213\321\205 2"
   font: "jb_mono_10"
   id: "v_quests_eyebrow"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 596.0 y: 514.0 z: 0.53 }
-  size { x: 460.0 y: 22.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  position {
+    x: 596.0
+    y: 514.0
+    z: 0.53
+  }
+  size {
+    x: 460.0
+    y: 22.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "Квесты"
+  text: "\320\232\320\262\320\265\321\201\321\202\321\213"
   font: "unbounded_bold_20"
   id: "v_quests_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 592.0 y: 400.0 z: 0.53 }
-  size { x: 476.0 y: 76.0 }
-  color { x: 1.0 y: 0.239 z: 0.498 w: 0.08 }
+  position {
+    x: 592.0
+    y: 400.0
+    z: 0.53
+  }
+  size {
+    x: 476.0
+    y: 76.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
   type: TYPE_BOX
   id: "v_quests_q1_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.08
 }
 nodes {
-  position { x: 604.0 y: 460.0 z: 0.54 }
-  size { x: 300.0 y: 12.0 }
-  color { x: 1.0 y: 0.239 z: 0.498 w: 1.0 }
+  position {
+    x: 604.0
+    y: 460.0
+    z: 0.54
+  }
+  size {
+    x: 300.0
+    y: 12.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
   type: TYPE_TEXT
-  text: "Найти причину петли"
+  text: "\320\235\320\260\320\271\321\202\320\270 \320\277\321\200\320\270\321\207\320\270\320\275\321\203 \320\277\320\265\321\202\320\273\320\270"
   font: "jb_mono_bold_14"
   id: "v_quests_q1_name"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 604.0 y: 430.0 z: 0.54 }
-  size { x: 450.0 y: 28.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.7 }
+  position {
+    x: 604.0
+    y: 430.0
+    z: 0.54
+  }
+  size {
+    x: 450.0
+    y: 28.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "собрать улики о понедельнике · 1/3"
+  text: "\321\201\320\276\320\261\321\200\320\260\321\202\321\214 \321\203\320\273\320\270\320\272\320\270 \320\276 \320\277\320\276\320\275\320\265\320\264\320\265\320\273\321\214\320\275\320\270\320\272\320\265 \302\267 1/3"
   font: "manrope_14"
   id: "v_quests_q1_desc"
   pivot: PIVOT_NW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  line_break: true
+  alpha: 0.7
   outline_alpha: 0.0
   shadow_alpha: 0.0
-  line_break: true
 }
 nodes {
-  position { x: 592.0 y: 312.0 z: 0.53 }
-  size { x: 476.0 y: 76.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.05 }
+  position {
+    x: 592.0
+    y: 312.0
+    z: 0.53
+  }
+  size {
+    x: 476.0
+    y: 76.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_BOX
   id: "v_quests_q2_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.05
 }
 nodes {
-  position { x: 604.0 y: 372.0 z: 0.54 }
-  size { x: 300.0 y: 12.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  position {
+    x: 604.0
+    y: 372.0
+    z: 0.54
+  }
+  size {
+    x: 300.0
+    y: 12.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "Не опоздать на работу"
+  text: "\320\235\320\265 \320\276\320\277\320\276\320\267\320\264\320\260\321\202\321\214 \320\275\320\260 \321\200\320\260\320\261\320\276\321\202\321\203"
   font: "jb_mono_bold_14"
   id: "v_quests_q2_name"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 604.0 y: 342.0 z: 0.54 }
-  size { x: 450.0 y: 28.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.7 }
+  position {
+    x: 604.0
+    y: 342.0
+    z: 0.54
+  }
+  size {
+    x: 450.0
+    y: 28.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "успеть к 09:00 · 0/1"
+  text: "\321\203\321\201\320\277\320\265\321\202\321\214 \320\272 09:00 \302\267 0/1"
   font: "manrope_14"
   id: "v_quests_q2_desc"
   pivot: PIVOT_NW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  line_break: true
+  alpha: 0.7
   outline_alpha: 0.0
   shadow_alpha: 0.0
-  line_break: true
 }
 nodes {
-  position { x: 596.0 y: 538.0 z: 0.53 }
-  size { x: 460.0 y: 12.0 }
-  color { x: 1.0 y: 0.239 z: 0.498 w: 1.0 }
+  position {
+    x: 596.0
+    y: 538.0
+    z: 0.53
+  }
+  size {
+    x: 460.0
+    y: 12.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
   type: TYPE_TEXT
-  text: "почта · 2 непрочитанных"
+  text: "\320\277\320\276\321\207\321\202\320\260 \302\267 2 \320\275\320\265\320\277\321\200\320\276\321\207\320\270\321\202\320\260\320\275\320\275\321\213\321\205"
   font: "jb_mono_10"
   id: "v_mail_eyebrow"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 596.0 y: 514.0 z: 0.53 }
-  size { x: 460.0 y: 22.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  position {
+    x: 596.0
+    y: 514.0
+    z: 0.53
+  }
+  size {
+    x: 460.0
+    y: 22.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "Почта"
+  text: "\320\237\320\276\321\207\321\202\320\260"
   font: "unbounded_bold_20"
   id: "v_mail_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 592.0 y: 400.0 z: 0.53 }
-  size { x: 476.0 y: 76.0 }
-  color { x: 1.0 y: 0.239 z: 0.498 w: 0.08 }
+  position {
+    x: 592.0
+    y: 400.0
+    z: 0.53
+  }
+  size {
+    x: 476.0
+    y: 76.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
   type: TYPE_BOX
   id: "v_mail_m1_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.08
 }
 nodes {
-  position { x: 604.0 y: 460.0 z: 0.54 }
-  size { x: 400.0 y: 12.0 }
-  color { x: 1.0 y: 0.239 z: 0.498 w: 1.0 }
+  position {
+    x: 604.0
+    y: 460.0
+    z: 0.54
+  }
+  size {
+    x: 400.0
+    y: 12.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
   type: TYPE_TEXT
   text: "hr@megacorp.ru"
   font: "jb_mono_bold_14"
   id: "v_mail_m1_from"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 604.0 y: 430.0 z: 0.54 }
-  size { x: 450.0 y: 28.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.8 }
+  position {
+    x: 604.0
+    y: 430.0
+    z: 0.54
+  }
+  size {
+    x: 450.0
+    y: 28.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "испытательный срок: напоминание о дедлайне"
+  text: "\320\270\321\201\320\277\321\213\321\202\320\260\321\202\320\265\320\273\321\214\320\275\321\213\320\271 \321\201\321\200\320\276\320\272: \320\275\320\260\320\277\320\276\320\274\320\270\320\275\320\260\320\275\320\270\320\265 \320\276 \320\264\320\265\320\264\320\273\320\260\320\271\320\275\320\265"
   font: "manrope_14"
   id: "v_mail_m1_subj"
   pivot: PIVOT_NW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  line_break: true
+  alpha: 0.8
   outline_alpha: 0.0
   shadow_alpha: 0.0
-  line_break: true
 }
 nodes {
-  position { x: 592.0 y: 312.0 z: 0.53 }
-  size { x: 476.0 y: 76.0 }
-  color { x: 1.0 y: 0.239 z: 0.498 w: 0.08 }
+  position {
+    x: 592.0
+    y: 312.0
+    z: 0.53
+  }
+  size {
+    x: 476.0
+    y: 76.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
   type: TYPE_BOX
   id: "v_mail_m2_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.08
 }
 nodes {
-  position { x: 604.0 y: 372.0 z: 0.54 }
-  size { x: 400.0 y: 12.0 }
-  color { x: 1.0 y: 0.239 z: 0.498 w: 1.0 }
+  position {
+    x: 604.0
+    y: 372.0
+    z: 0.54
+  }
+  size {
+    x: 400.0
+    y: 12.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
   type: TYPE_TEXT
   text: "noreply@loop.system"
   font: "jb_mono_bold_14"
   id: "v_mail_m2_from"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 604.0 y: 342.0 z: 0.54 }
-  size { x: 450.0 y: 28.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.8 }
+  position {
+    x: 604.0
+    y: 342.0
+    z: 0.54
+  }
+  size {
+    x: 450.0
+    y: 28.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "повтор цикла 017 · отчёт"
+  text: "\320\277\320\276\320\262\321\202\320\276\321\200 \321\206\320\270\320\272\320\273\320\260 017 \302\267 \320\276\321\202\321\207\321\221\321\202"
   font: "manrope_14"
   id: "v_mail_m2_subj"
   pivot: PIVOT_NW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  line_break: true
+  alpha: 0.8
   outline_alpha: 0.0
   shadow_alpha: 0.0
-  line_break: true
 }
 nodes {
-  position { x: 596.0 y: 538.0 z: 0.53 }
-  size { x: 460.0 y: 12.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 1.0 }
+  position {
+    x: 596.0
+    y: 538.0
+    z: 0.53
+  }
+  size {
+    x: 460.0
+    y: 12.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
   type: TYPE_TEXT
-  text: "камера · нет сигнала"
+  text: "\320\272\320\260\320\274\320\265\321\200\320\260 \302\267 \320\275\320\265\321\202 \321\201\320\270\320\263\320\275\320\260\320\273\320\260"
   font: "jb_mono_10"
   id: "v_cam_eyebrow"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 596.0 y: 514.0 z: 0.53 }
-  size { x: 460.0 y: 22.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  position {
+    x: 596.0
+    y: 514.0
+    z: 0.53
+  }
+  size {
+    x: 460.0
+    y: 22.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
   type: TYPE_TEXT
-  text: "Камера"
+  text: "\320\232\320\260\320\274\320\265\321\200\320\260"
   font: "unbounded_bold_20"
   id: "v_cam_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 592.0 y: 200.0 z: 0.53 }
-  size { x: 476.0 y: 280.0 }
-  color { x: 0.0 y: 0.0 z: 0.0 w: 1.0 }
+  position {
+    x: 592.0
+    y: 200.0
+    z: 0.53
+  }
+  size {
+    x: 476.0
+    y: 280.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
   type: TYPE_BOX
   id: "v_cam_screen"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
 }
 nodes {
-  position { x: 830.0 y: 350.0 z: 0.54 }
-  size { x: 440.0 y: 22.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.9 }
+  position {
+    x: 830.0
+    y: 350.0
+    z: 0.54
+  }
+  size {
+    x: 440.0
+    y: 22.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
   type: TYPE_TEXT
   text: "NO SIGNAL"
   font: "unbounded_bold_20"
   id: "v_cam_msg"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.9
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 830.0 y: 320.0 z: 0.54 }
-  size { x: 440.0 y: 14.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.45 }
+  position {
+    x: 830.0
+    y: 320.0
+    z: 0.54
+  }
+  size {
+    x: 440.0
+    y: 14.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
   type: TYPE_TEXT
-  text: "CAM-01 · offline · last: 07:12"
+  text: "CAM-01 \302\267 offline \302\267 last: 07:12"
   font: "jb_mono_10"
   id: "v_cam_meta"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  alpha: 0.45
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 596.0 y: 538.0 z: 0.53 }
-  size { x: 460.0 y: 12.0 }
-  color { x: 0.31 y: 0.98 z: 0.48 w: 1.0 }
+  position {
+    x: 596.0
+    y: 538.0
+    z: 0.53
+  }
+  size {
+    x: 460.0
+    y: 12.0
+  }
+  color {
+    x: 0.31
+    y: 0.98
+    z: 0.48
+  }
   type: TYPE_TEXT
-  text: "terminal · /dev/loop0"
+  text: "terminal \302\267 /dev/loop0"
   font: "jb_mono_10"
   id: "v_term_eyebrow"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 596.0 y: 514.0 z: 0.53 }
-  size { x: 460.0 y: 22.0 }
-  color { x: 0.31 y: 0.98 z: 0.48 w: 1.0 }
+  position {
+    x: 596.0
+    y: 514.0
+    z: 0.53
+  }
+  size {
+    x: 460.0
+    y: 22.0
+  }
+  color {
+    x: 0.31
+    y: 0.98
+    z: 0.48
+  }
   type: TYPE_TEXT
-  text: "Терминал"
+  text: "\320\242\320\265\321\200\320\274\320\270\320\275\320\260\320\273"
   font: "unbounded_bold_20"
   id: "v_term_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 592.0 y: 120.0 z: 0.53 }
-  size { x: 476.0 y: 360.0 }
-  color { x: 0.0 y: 0.08 z: 0.02 w: 1.0 }
+  position {
+    x: 592.0
+    y: 120.0
+    z: 0.53
+  }
+  size {
+    x: 476.0
+    y: 360.0
+  }
+  color {
+    x: 0.0
+    y: 0.08
+    z: 0.02
+  }
   type: TYPE_BOX
   id: "v_term_screen"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
 }
 nodes {
-  position { x: 604.0 y: 460.0 z: 0.54 }
-  size { x: 450.0 y: 12.0 }
-  color { x: 0.31 y: 0.98 z: 0.48 w: 1.0 }
+  position {
+    x: 9.0
+    y: 344.0
+    z: 0.54
+  }
+  size {
+    x: 450.0
+    y: 12.0
+  }
+  color {
+    x: 0.31
+    y: 0.98
+    z: 0.48
+  }
   type: TYPE_TEXT
   text: "> loop --init"
   font: "jb_mono_12"
   id: "v_term_l1"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  parent: "v_term_screen"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 604.0 y: 440.0 z: 0.54 }
-  size { x: 450.0 y: 12.0 }
-  color { x: 0.31 y: 0.98 z: 0.48 w: 0.8 }
+  position {
+    x: 9.0
+    y: 324.0
+    z: 0.54
+  }
+  size {
+    x: 450.0
+    y: 12.0
+  }
+  color {
+    x: 0.31
+    y: 0.98
+    z: 0.48
+  }
   type: TYPE_TEXT
-  text: "[ok] monday-worker spawned · pid 017"
+  text: "[ok] monday-worker spawned \302\267 pid 017"
   font: "jb_mono_12"
   id: "v_term_l2"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  parent: "v_term_screen"
+  alpha: 0.8
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 604.0 y: 420.0 z: 0.54 }
-  size { x: 450.0 y: 12.0 }
-  color { x: 1.0 y: 0.702 z: 0.278 w: 0.9 }
+  position {
+    x: 9.0
+    y: 304.0
+    z: 0.54
+  }
+  size {
+    x: 450.0
+    y: 12.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
   type: TYPE_TEXT
-  text: "[warn] cycle drift detected · +14ms"
+  text: "[warn] cycle drift detected \302\267 +14ms"
   font: "jb_mono_12"
   id: "v_term_l3"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  parent: "v_term_screen"
+  alpha: 0.9
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 604.0 y: 400.0 z: 0.54 }
-  size { x: 450.0 y: 12.0 }
-  color { x: 1.0 y: 0.239 z: 0.498 w: 0.95 }
+  position {
+    x: 9.0
+    y: 284.0
+    z: 0.54
+  }
+  size {
+    x: 450.0
+    y: 12.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
   type: TYPE_TEXT
   text: "[err] reality.check() returned FALSE"
   font: "jb_mono_12"
   id: "v_term_l4"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
+  parent: "v_term_screen"
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT
-max_nodes: 512
