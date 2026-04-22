@@ -10,6 +10,20 @@
 -- scene_controller, что и старый ui_manager.script. Включение — через
 -- переключение bootstrap.main_collection на main_v2 (step16 — опциональный).
 
+go.property("bg_apartment_atlas", resource.atlas("/main/images/backgrounds/bg_apartment.atlas"))
+go.property("bg_bathroom_atlas", resource.atlas("/main/images/backgrounds/bg_bathroom.atlas"))
+go.property("bg_bedroom_atlas", resource.atlas("/main/images/backgrounds/bg_bedroom.atlas"))
+go.property("bg_bedroom_01_atlas", resource.atlas("/main/images/backgrounds/bg_bedroom_01.atlas"))
+go.property("bg_bedroom_02_atlas", resource.atlas("/main/images/backgrounds/bg_bedroom_02.atlas"))
+go.property("bg_bedroom_03_atlas", resource.atlas("/main/images/backgrounds/bg_bedroom_03.atlas"))
+go.property("bg_city_map_atlas", resource.atlas("/main/images/backgrounds/bg_city_map.atlas"))
+go.property("bg_kitchen_atlas", resource.atlas("/main/images/backgrounds/bg_kitchen.atlas"))
+go.property("bg_metro_atlas", resource.atlas("/main/images/backgrounds/bg_metro.atlas"))
+go.property("bg_office_atlas", resource.atlas("/main/images/backgrounds/bg_office.atlas"))
+go.property("bg_office_evening_atlas", resource.atlas("/main/images/backgrounds/bg_office_evening.atlas"))
+go.property("bg_phone_atlas", resource.atlas("/main/images/backgrounds/bg_phone.atlas"))
+go.property("bg_rooftop_atlas", resource.atlas("/main/images/backgrounds/bg_rooftop.atlas"))
+
 local dm = require "main.scripts.dialogue_manager_ink"
 local gs = require "main.scripts.game_state"
 local scene_controller = require "main.scripts.scene_controller"
@@ -32,6 +46,25 @@ local PHONE_APP_KNOTS = {
     mail     = "phone_contacts",
     camera   = "phone_stub_soon",
     terminal = "phone_stub_soon",
+}
+
+local BG_TEXTURE_KEY = "backgrounds"
+local DEDICATED_BG_ANIMATION = "scene_bg"
+
+local DEDICATED_BG_ATLAS_PROPS = {
+    bg_apartment      = "bg_apartment_atlas",
+    bg_bathroom       = "bg_bathroom_atlas",
+    bg_bedroom        = "bg_bedroom_atlas",
+    bg_bedroom_01     = "bg_bedroom_01_atlas",
+    bg_bedroom_02     = "bg_bedroom_02_atlas",
+    bg_bedroom_03     = "bg_bedroom_03_atlas",
+    bg_city_map       = "bg_city_map_atlas",
+    bg_kitchen        = "bg_kitchen_atlas",
+    bg_metro          = "bg_metro_atlas",
+    bg_office         = "bg_office_atlas",
+    bg_office_evening = "bg_office_evening_atlas",
+    bg_phone          = "bg_phone_atlas",
+    bg_rooftop        = "bg_rooftop_atlas",
 }
 
 -- Базовый режим (menu / nav / exploration / dialogue). choice/inventory/phone/map —
@@ -72,6 +105,67 @@ end
 -- -------------------------------------------------------
 -- show_* / hide_* — отправка сообщений в конкретный компонент
 -- -------------------------------------------------------
+
+local function init_background_atlas_state(self)
+    self.dialogue_bg_atlases = {}
+    self.current_dialogue_bg_atlas = nil
+    -- URL на самого себя — нужен чтобы из callback'ов (которые могут
+    -- исполняться в gui_script контексте) перекинуть работу с go.set
+    -- обратно в .script контекст через msg.post.
+    self.self_url = msg.url()
+
+    for bg_name, prop_name in pairs(DEDICATED_BG_ATLAS_PROPS) do
+        self.dialogue_bg_atlases[bg_name] = self[prop_name]
+    end
+end
+
+local function resolve_dialogue_bg_visual(self, bg_name)
+    if bg_name and self.dialogue_bg_atlases[bg_name] then
+        return self.dialogue_bg_atlases[bg_name], DEDICATED_BG_ANIMATION
+    end
+    return nil, nil
+end
+
+-- ВНИМАНИЕ: эта функция содержит go.set и ОБЯЗАНА вызываться только
+-- из контекста .script (например, on_message ui_manager_v2). Если её
+-- дёрнуть из gui_script callback (через scene_controller _ui.set_background),
+-- Defold упадёт с "You can only access go.* functions ... from a script instance".
+-- Поэтому из callback'ов используем post_dialogue_background, который
+-- асинхронно прокидывает запрос обратно сюда через msg.post.
+local function apply_dialogue_bg(self, bg_name)
+    if not self or not M.components.dialogue then return end
+    if not bg_name or bg_name == "" or bg_name == "none" then return end
+
+    local atlas, animation_id = resolve_dialogue_bg_visual(self, bg_name)
+    if not atlas then
+        -- После завершения миграции в `BACKGROUND_SYSTEM_MIGRATION_PLAN.md`
+        -- единственный источник fullscreen-фонов — `DEDICATED_BG_ATLAS_PROPS`.
+        -- Незарегистрированный bg_name здесь — это отсутствующий dedicated
+        -- atlas. Не падаем, но громко логируем, чтобы такой кейс был виден.
+        print("[ui_manager_v2] WARNING: no dedicated atlas for bg:", bg_name,
+              "— зарегистрируй его в ui_manager_v2.script + main/images/backgrounds/")
+        return
+    end
+
+    if self.current_dialogue_bg_atlas ~= atlas then
+        go.set(M.components.dialogue, "textures", atlas, { key = BG_TEXTURE_KEY })
+        self.current_dialogue_bg_atlas = atlas
+    end
+
+    msg.post(M.components.dialogue, "set_background", {
+        name = bg_name,
+        animation = animation_id,
+    })
+end
+
+-- Безопасная для любого контекста (script / gui_script) точка входа.
+-- Просит ui_manager_v2 переключить atlas и обновить фон через msg.post
+-- самому себе — так go.set всегда исполняется в .script контексте.
+local function post_dialogue_background(self, bg_name)
+    if not bg_name then return end
+    local target = (self and self.self_url) or msg.url("#ui_manager_v2")
+    msg.post(target, "apply_dialogue_bg", { name = bg_name })
+end
 
 local function sync_derived_inventory()
     if M.syncing_inventory then return false end
@@ -264,7 +358,7 @@ local function handle_dialogue_update(self)
         local bg = dm.get_background_image and dm.get_background_image()
         print("[ui_manager_v2] dm bg=", bg)
         if bg then
-            msg.post(M.components.dialogue, "set_background", { name = bg })
+            post_dialogue_background(self, bg)
         end
     else
         print("[ui_manager_v2] in exploration mode, bg from scene_controller")
@@ -332,7 +426,7 @@ local function setup_scene_controller_ui(self)
             msg.post(M.components.hud, "set_location", { name = bg_name or "—" })
             -- Обновляем визуальный фон в dialogue компоненте
             if bg_name then
-                msg.post(M.components.dialogue, "set_background", { name = bg_name })
+                post_dialogue_background(self, bg_name)
                 print("[ui_manager_v2] scene_controller set_background:", bg_name)
             end
         end,
@@ -366,7 +460,7 @@ local function setup_scene_controller_ui(self)
         request_ink_knot = function(knot_name, keep_bg)
             dm.jump_to_knot(knot_name)
             if keep_bg then dm.override_bg(keep_bg) end
-            handle_dialogue_update(nil)
+            handle_dialogue_update(self)
         end,
     })
 
@@ -385,6 +479,7 @@ end
 function init(self)
     print("[ui_manager_v2] init")
     init_components()
+    init_background_atlas_state(self)
     setup_scene_controller_ui(self)
 
     gs.subscribe(function()
@@ -440,6 +535,14 @@ function on_message(self, message_id, message, sender)
 
     elseif message_id == hash("open_achievements") then
         print("[ui_manager_v2] open_achievements (TODO)")
+
+    -- --- фон ---
+    elseif message_id == hash("apply_dialogue_bg") then
+        -- Прилетает из callback'ов scene_controller.set_background,
+        -- которые могут исполняться из gui_script контекста. go.set
+        -- можно дёрнуть только отсюда, поэтому переключение atlas'а
+        -- для dialogue_v2 делаем в этом хендлере.
+        apply_dialogue_bg(self, message and message.name)
 
     -- --- диалог ---
     elseif message_id == hash("dialogue_updated") then

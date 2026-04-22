@@ -135,7 +135,7 @@ M.scenes = {
         objects = {
             {
                 id    = "phone_obj",
-                image = "mobile",           -- имя в backgrounds.atlas
+                image = "mobile",           -- имя в main/images/scene_objects.atlas
                 pos   = { x = 385, y = 260 }, -- левый-нижний угол спрайта
                 size  = { w = 52, h = 22 },
                 -- Телефон "материализуется" только после кофе.

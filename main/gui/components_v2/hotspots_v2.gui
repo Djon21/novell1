@@ -8,8 +8,12 @@ fonts {
   font: "/main/fonts/main.font"
 }
 textures {
-  name: "backgrounds"
-  texture: "/main/images/backgrounds.atlas"
+  name: "hotspots"
+  texture: "/main/images/hotspots.atlas"
+}
+textures {
+  name: "scene_objects"
+  texture: "/main/images/scene_objects.atlas"
 }
 nodes {
   position {
@@ -27,7 +31,7 @@ nodes {
     z: 0.1
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_circle"
+  texture: "hotspots/hotspot_circle"
   id: "hotspot_circle_3"
   adjust_mode: ADJUST_MODE_ZOOM
   alpha: 0.35
@@ -44,7 +48,7 @@ nodes {
     y: 120.0
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_ring"
+  texture: "hotspots/hotspot_ring"
   id: "hotspot_ring_1"
   adjust_mode: ADJUST_MODE_ZOOM
   alpha: 0.9
@@ -78,7 +82,7 @@ nodes {
     y: 120.0
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_ring"
+  texture: "hotspots/hotspot_ring"
   id: "hotspot_ring_5"
   adjust_mode: ADJUST_MODE_ZOOM
   alpha: 0.9
@@ -118,7 +122,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_6_1"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_6"
@@ -138,7 +142,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_6_2"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_6"
@@ -158,7 +162,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_6_3"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_6"
@@ -177,7 +181,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_6_4"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_6"
@@ -197,7 +201,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_6_5"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_6"
@@ -217,7 +221,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_6_6"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_6"
@@ -274,7 +278,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_5_1"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_5"
@@ -294,7 +298,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_5_2"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_5"
@@ -314,7 +318,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_5_3"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_5"
@@ -333,7 +337,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_5_4"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_5"
@@ -353,7 +357,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_5_5"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_5"
@@ -373,7 +377,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_5_6"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_5"
@@ -412,7 +416,7 @@ nodes {
     z: 0.1
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_circle"
+  texture: "hotspots/hotspot_circle"
   id: "hotspot_circle_1"
   adjust_mode: ADJUST_MODE_ZOOM
   alpha: 0.35
@@ -429,7 +433,7 @@ nodes {
     y: 120.0
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_ring"
+  texture: "hotspots/hotspot_ring"
   id: "hotspot_ring_3"
   adjust_mode: ADJUST_MODE_ZOOM
   alpha: 0.9
@@ -451,7 +455,7 @@ nodes {
     z: 0.1
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_circle"
+  texture: "hotspots/hotspot_circle"
   id: "hotspot_circle_6"
   adjust_mode: ADJUST_MODE_ZOOM
   alpha: 0.35
@@ -473,7 +477,7 @@ nodes {
     z: 0.1
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_circle"
+  texture: "hotspots/hotspot_circle"
   id: "hotspot_circle_4"
   adjust_mode: ADJUST_MODE_ZOOM
   alpha: 0.35
@@ -528,7 +532,7 @@ nodes {
     y: 120.0
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_ring"
+  texture: "hotspots/hotspot_ring"
   id: "hotspot_ring_2"
   adjust_mode: ADJUST_MODE_ZOOM
   alpha: 0.9
@@ -550,7 +554,7 @@ nodes {
     z: 0.1
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_circle"
+  texture: "hotspots/hotspot_circle"
   id: "hotspot_circle_2"
   adjust_mode: ADJUST_MODE_ZOOM
   alpha: 0.35
@@ -584,7 +588,7 @@ nodes {
     y: 120.0
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_ring"
+  texture: "hotspots/hotspot_ring"
   id: "hotspot_ring_6"
   adjust_mode: ADJUST_MODE_ZOOM
   alpha: 0.9
@@ -624,7 +628,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_3_1"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_3"
@@ -644,7 +648,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_3_2"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_3"
@@ -664,7 +668,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_3_3"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_3"
@@ -683,7 +687,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_3_4"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_3"
@@ -703,7 +707,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_3_5"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_3"
@@ -723,7 +727,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_3_6"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_3"
@@ -763,7 +767,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_2_1"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_2"
@@ -783,7 +787,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_2_2"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_2"
@@ -803,7 +807,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_2_3"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_2"
@@ -822,7 +826,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_2_4"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_2"
@@ -842,7 +846,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_2_5"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_2"
@@ -862,7 +866,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_2_6"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_2"
@@ -1018,7 +1022,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_4_1"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_4"
@@ -1038,7 +1042,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_4_2"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_4"
@@ -1058,7 +1062,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_4_3"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_4"
@@ -1077,7 +1081,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_4_4"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_4"
@@ -1097,7 +1101,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_4_5"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_4"
@@ -1117,7 +1121,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_4_6"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_4"
@@ -1189,7 +1193,7 @@ nodes {
     y: 120.0
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_ring"
+  texture: "hotspots/hotspot_ring"
   id: "hotspot_ring_4"
   adjust_mode: ADJUST_MODE_ZOOM
   alpha: 0.9
@@ -1211,7 +1215,7 @@ nodes {
     z: 0.1
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_circle"
+  texture: "hotspots/hotspot_circle"
   id: "hotspot_circle_5"
   adjust_mode: ADJUST_MODE_ZOOM
   alpha: 0.35
@@ -1251,7 +1255,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_1_1"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_1"
@@ -1271,7 +1275,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_1_2"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_1"
@@ -1291,7 +1295,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_1_3"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_1"
@@ -1310,7 +1314,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_1_4"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_1"
@@ -1330,7 +1334,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_1_5"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_1"
@@ -1350,7 +1354,7 @@ nodes {
     z: 0.4
   }
   type: TYPE_BOX
-  texture: "backgrounds/hotspot_dot"
+  texture: "hotspots/hotspot_dot"
   id: "hotspot_dot_1_6"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_orbit_1"
@@ -1405,7 +1409,7 @@ nodes {
     y: 100.0
   }
   type: TYPE_BOX
-  texture: "backgrounds/mobile"
+  texture: "scene_objects/mobile"
   id: "scene_obj_1"
   adjust_mode: ADJUST_MODE_ZOOM
   enabled: false
@@ -1421,7 +1425,7 @@ nodes {
     y: 100.0
   }
   type: TYPE_BOX
-  texture: "backgrounds/mobile"
+  texture: "scene_objects/mobile"
   id: "scene_obj_2"
   adjust_mode: ADJUST_MODE_ZOOM
   enabled: false
@@ -1437,7 +1441,7 @@ nodes {
     y: 100.0
   }
   type: TYPE_BOX
-  texture: "backgrounds/mobile"
+  texture: "scene_objects/mobile"
   id: "scene_obj_3"
   adjust_mode: ADJUST_MODE_ZOOM
   enabled: false
@@ -1453,7 +1457,7 @@ nodes {
     y: 100.0
   }
   type: TYPE_BOX
-  texture: "backgrounds/mobile"
+  texture: "scene_objects/mobile"
   id: "scene_obj_4"
   adjust_mode: ADJUST_MODE_ZOOM
   enabled: false

@@ -1,10 +1,4 @@
 images {
-  image: "/main/images/bg_bedroom_01.jpg"
-}
-images {
-  image: "/main/images/mobile.png"
-}
-images {
   image: "/main/images/hotspot_circle.png"
 }
 images {

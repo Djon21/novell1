@@ -83,7 +83,7 @@ VAR newspaper_kept = false
 
 | Тег | Пример | Что делает |
 |---|---|---|
-| `bg:IMAGE` | `# bg:bg_metro` | Меняет фон. `bg:none` — убрать фон. Картинка должна существовать в атласе `backgrounds.atlas`. |
+| `bg:IMAGE` | `# bg:bg_metro` | Меняет фон. `bg:none` — убрать фон. Для каждого `bg_name` должен существовать `main/images/backgrounds/<bg_name>.atlas` и регистрация в `ui_manager_v2.script` (см. `docs/guides/HOW_TO_ADD_BACKGROUNDS.md`). |
 | `color:R,G,B` | `# color:0.1,0.1,0.15` | Тинт фона (0…1). Используется для подсветки. |
 | `speaker:ID` | `# speaker:mc` / `# speaker:npc` / `# speaker:none` / `# speaker:Аня` | Меняет «имя говорящего» в табличке. `mc` / `npc` резолвятся в `mc_name`/`npc_name`. `none` — без таблички (нарратор). |
 | `sfx:NAME` | `# sfx:phone_pickup` | Одноразовый звук. Файл должен быть в `sounds/sfx/`. |
@@ -317,8 +317,10 @@ hotspot'ы: кликабельные прямоугольники. Каждый 
 - [ ] Все knot'ы начинаются с `=== name` (имя latin_snake_case).
 - [ ] Есть `-> start_knot` в самом верху после VAR-блока.
 - [ ] Все ветки заканчиваются либо `-> name`, либо `-> DONE`, либо `-> END`.
-- [ ] Каждому new фону `bg:NAME` соответствует картинка в `backgrounds.atlas`
-      (если её нет — попроси добавить, иначе фон станет чёрным).
+- [ ] Каждому new фону `bg:NAME` соответствует dedicated atlas
+      `main/images/backgrounds/<bg_name>.atlas` И регистрация в
+      `ui_manager_v2.script` (`go.property` + `DEDICATED_BG_ATLAS_PROPS`).
+      Без второго фон станет чёрным с warning'ом в консоли.
 - [ ] Все `sfx:NAME` существуют в `sounds/sfx/` (иначе будет silent fail).
 - [ ] `{mc_gender == "female":ж|м}` проверен по всем репликам MC-а (нет
       просто `вернулся` без форки).

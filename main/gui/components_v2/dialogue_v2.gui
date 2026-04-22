@@ -29,7 +29,7 @@ fonts {
 }
 textures {
   name: "backgrounds"
-  texture: "/main/images/backgrounds.atlas"
+  texture: "/main/images/backgrounds/bg_apartment.atlas"
 }
 textures {
   name: "v2"
@@ -46,7 +46,7 @@ nodes {
     y: 720.0
   }
   type: TYPE_BOX
-  texture: "backgrounds/bg_bedroom_01"
+  texture: "backgrounds/scene_bg"
   id: "scene_bg"
   adjust_mode: ADJUST_MODE_ZOOM
   enabled: false
@@ -62,7 +62,7 @@ nodes {
     y: 720.0
   }
   type: TYPE_BOX
-  texture: "backgrounds/bg_bedroom_01"
+  texture: "backgrounds/scene_bg"
   id: "scene_bg_next"
   adjust_mode: ADJUST_MODE_ZOOM
   enabled: false

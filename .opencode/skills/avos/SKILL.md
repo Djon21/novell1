@@ -189,7 +189,9 @@ serialize(), deserialize(data)
 **Scene Structure:**
 ```lua
 scene_id = {
-    bg = "bg_name",              -- Background from backgrounds.atlas
+    bg = "bg_name",              -- fullscreen фон. Один dedicated atlas на bg_name
+                                 -- в main/images/backgrounds/, регистрируется в
+                                 -- ui_manager_v2.script.
     on_enter = { ... },          -- Auto-trigger on first visit
     objects = { ... },           -- Sprites on top of background
     hotspots = { ... },          -- Clickable zones
@@ -435,12 +437,19 @@ quest_id = {
 
 ### Adding Backgrounds:
 
-See `HOW_TO_ADD_BACKGROUNDS.md`
+See `docs/guides/HOW_TO_ADD_BACKGROUNDS.md` and architecture in
+`docs/reference/BACKGROUND_SYSTEM_MIGRATION_PLAN.md`.
 
 1. Prepare image: JPEG 1920×1080, ~250-350 KB
-2. Add to `main/images/`
-3. Add to `backgrounds.atlas`
-4. Reference in Ink: `# bg:bg_name`
+2. Add to `main/images/bg_<name>.jpg`
+3. Create dedicated atlas `main/images/backgrounds/bg_<name>.atlas`
+   with `rename_patterns: "bg_<name>=scene_bg"`
+4. Register in `main/gui/ui_manager_v2.script`:
+   - `go.property("bg_<name>_atlas", resource.atlas(...))`
+   - add `bg_<name> = "bg_<name>_atlas"` to `DEDICATED_BG_ATLAS_PROPS`
+5. Reference in Ink: `# bg:bg_<name>`
+
+`main/images/backgrounds.atlas` (без подпапки) — legacy, для v2 не используется.
 
 ### Adding Sounds:
 
@@ -652,6 +661,31 @@ end
 **ERROR:** `explore:unknown_scene` will crash!
 
 Always define scene in `scenes.lua` before referencing in Ink.
+
+### 6. Calling go.* From gui_script Context
+
+`scene_controller._ui.set_background()` is invoked from
+`hotspots_v2.gui_script` (gui_script context). From there `go.*` API is
+not available — calling it crashes:
+
+```
+ERROR:SCRIPT: You can only access go.* functions and values from a
+script instance (.script file)
+```
+
+`ui_manager_v2.script` works around this: `post_dialogue_background()`
+posts `apply_dialogue_bg` message to itself, and `go.set` runs inside
+its own `on_message` handler (.script context). Do NOT inline `go.set`
+into UI callbacks.
+
+### 7. Adding Background Without Dedicated Atlas
+
+V2 expects each fullscreen `bg_name` to have a dedicated atlas in
+`main/images/backgrounds/<bg_name>.atlas` AND a `go.property` +
+`DEDICATED_BG_ATLAS_PROPS` entry in `ui_manager_v2.script`. Missing
+either piece → background goes black with a warning in console.
+The legacy `main/images/backgrounds.atlas` is no longer a fallback for
+v2. See `docs/reference/BACKGROUND_SYSTEM_MIGRATION_PLAN.md`.
 
 ---
 

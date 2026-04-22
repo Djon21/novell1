@@ -68,8 +68,13 @@
 - сцены: `main/scripts/scenes.lua`
 - предметы: `main/scripts/items_catalog.lua`
 - квесты: `main/scripts/quests.lua`
-- фоны: `main/images/backgrounds.atlas`
+- фоны: `main/images/backgrounds/<bg_name>.atlas` (по одному на фон, регистрируются
+  в `ui_manager_v2.script`). Общий внутренний animation id — `scene_bg`.
+  См. `docs/reference/BACKGROUND_SYSTEM_MIGRATION_PLAN.md`.
+- hotspot sprites: `main/images/hotspots.atlas`
+- scene objects: `main/images/scene_objects.atlas`
 - v2-портреты: `main/images/v2.atlas`
+- legacy `main/images/backgrounds.atlas` — только для v1 GUI (`main/gui/components/`)
 
 ## Важные caveats перед работой
 

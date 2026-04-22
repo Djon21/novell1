@@ -206,16 +206,31 @@ function update(self, dt)
     end
 end
 
-local function set_bg(self, bg_name)
+local BG_TEXTURE_KEY = "backgrounds"
+
+local function bind_bg_nodes_to_texture()
+    local current = gui.get_node("scene_bg")
+    local next_node = gui.get_node("scene_bg_next")
+    gui.set_texture(current, BG_TEXTURE_KEY)
+    gui.set_texture(next_node, BG_TEXTURE_KEY)
+    return current, next_node
+end
+
+local function set_bg(self, bg_name, animation_id)
     if not bg_name or bg_name == "" or bg_name == "none" then return end
-    if self.current_bg == bg_name then return end
-    local n = gui.get_node("scene_bg")
-    local ok, err = pcall(gui.play_flipbook, n, bg_name)
+    animation_id = animation_id or bg_name
+    if self.current_bg == bg_name and self.current_bg_animation == animation_id then return end
+
+    local n, n_next = bind_bg_nodes_to_texture()
+    local ok, err = pcall(gui.play_flipbook, n, animation_id)
     if not ok then
-        print("[dialogue_v2] bg not found:", bg_name, err)
+        print("[dialogue_v2] bg animation not found:", bg_name, animation_id, err)
         return
     end
+
+    pcall(gui.play_flipbook, n_next, animation_id)
     self.current_bg = bg_name
+    self.current_bg_animation = animation_id
     if self.bg_visible ~= false then
         gui.set_enabled(n, true)
     end
@@ -229,7 +244,9 @@ function init(self)
     self.full_text = ""
     self.current_text = ""
     self.current_bg = nil
+    self.current_bg_animation = nil
     self.bg_visible = false
+    bind_bg_nodes_to_texture()
     gui.set_enabled(gui.get_node("scene_bg"), false)
     gui.set_enabled(gui.get_node("scene_bg_next"), false)
     -- стартовое состояние — пустой плейсхолдер
@@ -248,7 +265,7 @@ function on_message(self, message_id, message, sender)
         render(self, message or {})
 
     elseif message_id == hash("set_background") then
-        set_bg(self, message and message.name)
+        set_bg(self, message and message.name, message and message.animation)
 
     elseif message_id == hash("show_bg") then
         self.bg_visible = true

@@ -74,9 +74,12 @@ main/
 │   ├── components_v2/          # активные GUI-компоненты
 │   └── components/             # legacy GUI-компоненты (reference)
 ├── images/
-│   ├── backgrounds.atlas       # фоны + exploration sprites
-│   ├── v2.atlas                # v2-портреты и часть v2-ассетов
-│   └── characters.atlas        # legacy portrait atlas
+│   ├── backgrounds/             # dedicated atlas на каждый fullscreen фон (v2)
+│   ├── backgrounds.atlas        # legacy atlas (только для v1 GUI)
+│   ├── hotspots.atlas           # иконки hotspot'ов (v2)
+│   ├── scene_objects.atlas      # overlay-спрайты сцен (mobile и т.д.)
+│   ├── v2.atlas                 # v2-портреты и часть v2-ассетов
+│   └── characters.atlas         # legacy portrait atlas
 ├── scripts/
 │   ├── dialogue_manager_ink.lua
 │   ├── scene_controller.lua

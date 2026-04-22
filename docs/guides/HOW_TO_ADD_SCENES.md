@@ -126,7 +126,9 @@ objects = {
 }
 ```
 
-Поле `image` должно указывать на имя flipbook'а из `main/images/backgrounds.atlas`.
+Поле `image` должно указывать на имя flipbook'а из `main/images/scene_objects.atlas`.
+По умолчанию там лежит `mobile`. Чтобы добавить новый scene-object спрайт, см.
+`docs/guides/HOW_TO_ADD_BACKGROUNDS.md` → раздел «Если Нужен Не Fullscreen Background».
 
 ## Автотриггер при входе
 
@@ -182,7 +184,7 @@ exits = {
 
 ## Чеклист
 
-- [ ] фон зарегистрирован в `backgrounds.atlas`
+- [ ] фон оформлен по `HOW_TO_ADD_BACKGROUNDS.md` (отдельный atlas + регистрация в `ui_manager_v2.script`)
 - [ ] scene id добавлен в `scenes.lua`
 - [ ] у hotspot'ов уникальные `id`
 - [ ] сцена укладывается в лимиты `6` hotspot'ов / `4` objects

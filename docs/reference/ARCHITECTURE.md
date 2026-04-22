@@ -147,9 +147,19 @@
 
 ### Графика
 
-- `main/images/backgrounds.atlas` — фоны и exploration sprites
+- `main/images/backgrounds/*.atlas` — по одному dedicated atlas на каждый fullscreen фон.
+  Все нормализованы к animation id `scene_bg`. Регистрируются в `ui_manager_v2.script`
+  через `go.property` + `DEDICATED_BG_ATLAS_PROPS`.
+- `main/images/hotspots.atlas` — иконки hotspot'ов (`hotspot_circle/ring/dot`)
+- `main/images/scene_objects.atlas` — overlay-спрайты (`mobile` и т.д.)
 - `main/images/v2.atlas` — v2-портреты и часть v2-ассетов
+- `main/images/ui_common.atlas` — общие декоративные элементы UI
+- `main/images/backgrounds.atlas` — **legacy**, используется только v1 GUI
+  (`main/gui/components/`). V2 на него не ссылается
 - `main/images/characters.atlas` — legacy portrait atlas
+
+Архитектура фон-атласов задокументирована в
+`docs/reference/BACKGROUND_SYSTEM_MIGRATION_PLAN.md`.
 
 ### Каталоги контента
 

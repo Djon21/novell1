@@ -8,7 +8,7 @@
 - `guides/` — практические how-to и рабочие инструкции
 - `archive/legacy-ui/` — исторические материалы по старому UI и миграции
 
-## С чего начинать
+## С Чего Начинать
 
 1. `../README.md`
 2. `reference/CODEX_CONTEXT.md`
@@ -19,6 +19,7 @@
 ## Reference
 
 - `reference/ARCHITECTURE.md`
+- `reference/BACKGROUND_SYSTEM_MIGRATION_PLAN.md`
 - `reference/CODEX_CONTEXT.md`
 - `reference/CONTINUE_HERE.md`
 - `reference/DOCUMENTATION_AUDIT.md`
