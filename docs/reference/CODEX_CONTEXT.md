@@ -1,109 +1,79 @@
 # CODEX_CONTEXT
 
-Актуально на `2026-04-22`, commit `9a3d819`, ветка `AVOS_S`.
+Актуально на `2026-04-23`, ветка `AVOS_S`.
 
 Этот файл нужен как короткая стартовая карта проекта для новых Codex-сессий.
 
-## Как использовать в новой сессии
-
-Стартовая команда:
-
-```text
-Прочитай docs/reference/CODEX_CONTEXT.md, README.md и docs/reference/ARCHITECTURE.md. Не делай полный повторный обзор репозитория без необходимости: сначала опирайся на эти файлы, потом дочитывай только то, что относится к задаче.
-```
-
-## Что считать текущим source of truth
+## Что читать первым
 
 1. `README.md`
 2. `docs/reference/ARCHITECTURE.md`
-3. `docs/reference/TODO.md`
-4. `main/story/README.md`
-5. затем уже код конкретного модуля
+3. `docs/reference/LOOP_SYSTEM.md`
+4. `docs/reference/TODO.md`
+5. `main/story/README.md`
 
-Исторические файлы про миграцию в `docs/archive/legacy-ui/` полезны как архив, но не как основной ориентир для текущего runtime.
+Исторические материалы в `docs/archive/legacy-ui/` полезны только как архив, а не как source of truth для текущего runtime.
 
-## Точка входа
+## Активная точка входа
 
-- Активный bootstrap: `game.project` -> `/main/main_v2.collectionc`
-- Активная главная коллекция: `main/main_v2.collection`
-- Legacy-стек отключён и перенесён в `archive/legacy_runtime/`; боевым входом он больше не считается
+- `game.project` -> `/main/main_v2.collectionc`
+- активная коллекция: `main/main_v2.collection`
+- legacy runtime отключён и архивирован в `archive/legacy_runtime/`
 
 ## Текущая карта runtime
 
 - `main/scripts/dialogue_manager_ink.lua`
   - Ink runtime
   - возвращает `current_node`, `commands`, `effects`
-  - синхронизирует `mc_gender` / `mc_name` / `npc_name`
+  - прокидывает в Ink и run-state, и meta-state
 
 - `main/scripts/game_state.lua`
-  - единый state для exploration/UI
+  - runtime-state текущего прохождения
   - flags, inventory, quests, sms, notes, current_scene
+
+- `main/scripts/save_manager.lua`
+  - persisted run-state текущей попытки
+  - нужен для `Continue`
+
+- `main/scripts/meta_state.lua`
+  - persisted meta-state между итерациями
+  - хранит `iteration_number`, `completed_iterations`, `loop_awareness`
 
 - `main/scripts/scene_controller.lua`
   - управление exploration-сценами
   - читает `main/scripts/scenes.lua`
-  - через `set_ui()` прокидывает данные в GUI
+  - умеет `reset()` для чистого старта новой итерации
 
 - `main/gui/ui_manager_v2.script`
-  - оркестратор активного UI
+  - главный оркестратор UI
   - загружает `/main/story/chapter_01.json`
-  - управляет режимами `menu`, `exploration`, `dialogue`
-  - открывает overlays `choice`, `inventory`, `phone`, `map`
-
-- `main/gui/components_v2/*`
-  - `main_menu_v2`
-  - `dialogue_v2`
-  - `hotspots_v2`
-  - `nav_buttons_v2`
-  - `hud_v2`
-  - `choice_v2`
-  - `inventory_v2`
-  - `phone_v2`
-  - `map_v2`
-  - `effects`
+  - управляет `menu`, `exploration`, `dialogue`
+  - на `chapter_finished` переводит игру в следующую итерацию
 
 ## Где лежит контент
 
 - сценарий: `main/story/chapter_01.ink`, `main/story/chapter_01.json`
+- архивный story-черновик: `main/story/chapter_01_old.ink`
 - сцены: `main/scripts/scenes.lua`
 - предметы: `main/scripts/items_catalog.lua`
 - квесты: `main/scripts/quests.lua`
-- фоны: `main/images/backgrounds/<bg_name>.atlas` (по одному на фон, регистрируются
-  в `ui_manager_v2.script`). Общий внутренний animation id — `scene_bg`.
-  См. `docs/reference/BACKGROUND_SYSTEM_MIGRATION_PLAN.md`.
+- фоны: `main/images/backgrounds/<bg_name>.atlas`
 - hotspot sprites: `main/images/hotspots.atlas`
 - scene objects: `main/images/scene_objects.atlas`
-- v2-портреты: `main/images/v2.atlas`
-- legacy `archive/legacy_runtime/main/images/backgrounds.atlas` — архивный след v1 GUI, не fallback и не часть текущей v2-системы
 
 ## Важные caveats перед работой
 
-- `chapter_01.json` сейчас зашит напрямую в `ui_manager_v2.script`; мульти-главный loader ещё не выделен
-- `dialogue_manager_ink.lua` уже поддерживает `# sfx`, `# shake`, `# pulse`, но `ui_manager_v2` пока не вызывает `dm.get_effects()`
-- `nav_buttons_v2` готов к `exits`, но `scenes.lua` пока в основном использует hotspot-переходы
-- рабочее дерево может быть грязным: не трогать чужие изменения вне текущей задачи
+- после изменения `.ink` нужно перекомпилировать `.json`
+- bulk compile теперь пропускает `*_old.ink`, чтобы архивные источники не создавали лишние `.json`
+- `chapter_01.json` всё ещё зашит напрямую в `ui_manager_v2.script`; multi-chapter loader ещё не выделен
+- `dialogue_manager_ink.lua` уже поддерживает `# sfx`, `# shake`, `# pulse`, но `ui_manager_v2` пока не забирает `dm.get_effects()`
 
-## Если задача звучит «изучи этот проект»
+## Если задача звучит как «изучи проект»
 
 Под этим понимать:
 
-1. Сначала прочитать этот файл, `README.md` и `docs/reference/ARCHITECTURE.md`
-2. Проверить, что изменилось с момента их обновления
-3. Дочитать только затронутые или потенциально устаревшие части кода
-4. Не делать полный обзор всего репозитория без отдельной просьбы
+1. сначала прочитать этот файл, `README.md` и `docs/reference/ARCHITECTURE.md`
+2. затем проверить `docs/reference/LOOP_SYSTEM.md`, если задача касается сюжета, сейвов или итераций
+3. только после этого дочитывать конкретные затронутые модули
 
-Если нужен именно полный re-audit, пользователь должен явно попросить:
-
-```text
-изучи проект с нуля
-```
-
-## Если обновляешь этот файл
-
-Желательно обновить:
-
-- дату
-- commit hash
-- активную точку входа
-- ключевые caveats
-- список документов, которые стоит читать первыми
+Полный re-audit всего репозитория без отдельной просьбы не нужен.

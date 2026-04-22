@@ -143,6 +143,14 @@ function M.return_to_last_scene()
     end
 end
 
+function M.reset()
+    _active = false
+    _scene_id = nil
+    _scene_data = nil
+    _scene_stack = {}
+    gs.set_scene(nil)
+end
+
 function M.is_active() return _active end
 
 -- Доступ для редактора хотспотов: вернуть таблицу текущей сцены
@@ -217,8 +225,16 @@ end
 
 -- Восстановление состояния из сохранения
 function M.deserialize(data)
-    if not data then return end
+    if not data then
+        M.reset()
+        return
+    end
+
     _scene_stack = data.scene_stack or {}
+    _active = false
+    _scene_id = nil
+    _scene_data = nil
+    gs.set_scene(nil)
     -- Не восстанавливаем _active/_scene_id напрямую — это делается через
     -- enter() при загрузке, чтобы корректно отрендерить сцену
 end

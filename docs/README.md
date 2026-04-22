@@ -8,13 +8,14 @@
 - `guides/` — практические how-to и рабочие инструкции
 - `archive/legacy-ui/` — исторические материалы по старому UI и миграции
 
-## С Чего Начинать
+## С чего начинать
 
 1. `../README.md`
 2. `reference/CODEX_CONTEXT.md`
 3. `reference/ARCHITECTURE.md`
-4. `reference/TODO.md`
-5. `../main/story/README.md`
+4. `reference/LOOP_SYSTEM.md`
+5. `reference/TODO.md`
+6. `../main/story/README.md`
 
 ## Reference
 
@@ -23,6 +24,7 @@
 - `reference/CODEX_CONTEXT.md`
 - `reference/CONTINUE_HERE.md`
 - `reference/DOCUMENTATION_AUDIT.md`
+- `reference/LOOP_SYSTEM.md`
 - `reference/ROADMAP.md`
 - `reference/TODO.md`
 

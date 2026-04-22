@@ -2,11 +2,16 @@
 //
 // Переменные выставляются Lua-стороной (dialogue_manager_ink) перед continue:
 //   mc_gender, mc_name, npc_name
+//   iteration_number, iteration_label, loop_awareness, completed_iterations
 //
 // Флаги состояния и инвентаря
 VAR mc_gender = "male"
 VAR mc_name   = "Артём"
 VAR npc_name  = "Мила"
+VAR iteration_number = 1
+VAR iteration_label = "001"
+VAR loop_awareness = 0
+VAR completed_iterations = 0
 VAR TRUST   = 0
 VAR INSIGHT = 0
 VAR SYNC    = 0
@@ -36,6 +41,10 @@ VAR log_marker  = ""
 
 Перед кроватью — большой экран, скорее телевизор, чем монитор.
 Чёрный. Спящий. Слишком пустой.
+{iteration_number > 1:
+На секунду приходит ощущение повтора.
+Будто это утро уже пыталось начаться.
+}
 
 # bg:bg_bedroom_02
 В тёмном экране — размытое, безликое отражение.
@@ -90,6 +99,9 @@ VAR log_marker  = ""
 Будильник должен сработать через три минуты.
 
 Но я уже просну{mc_gender == "female":лась|лся}. Опять.
+{loop_awareness > 0:
+И это «опять» звучит слишком точно, чтобы списать его на недосып.
+}
 
 Холодный пол под ногами.
 
@@ -814,7 +826,7 @@ AUTHOR: {mc_name}@next_iteration
 Я не стираю ошибки. Я вписываю их в архитектуру.
 # speaker:none
 {npc_name} рядом. Не как наблюдатель. Как со-автор.
-ИТЕРАЦИЯ 001 ЗАВЕРШЕНА.
+ИТЕРАЦИЯ {iteration_label} ЗАВЕРШЕНА.
 -> END
 
 === ch1_end_silent
@@ -823,7 +835,7 @@ AUTHOR: {mc_name}@next_iteration
 Но в логе — одна пустая строка.
 Иногда система понимает тишину лучше слов.
 # speaker:none
-ИТЕРАЦИЯ 001 ЗАВЕРШЕНА.
+ИТЕРАЦИЯ {iteration_label} ЗАВЕРШЕНА.
 -> END
 
 === ch1_end
@@ -834,7 +846,7 @@ AUTHOR: {mc_name}@next_iteration
 Даже если придётся ошибаться.
 Я буду здесь. В этой строке. В этом дне.
 # speaker:none
-ИТЕРАЦИЯ 001 ЗАВЕРШЕНА.
+ИТЕРАЦИЯ {iteration_label} ЗАВЕРШЕНА.
 -> END
 
 // ================================================================

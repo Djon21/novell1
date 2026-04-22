@@ -19,6 +19,7 @@
 
 local ink = require "ink.story"
 local sm  = require "main.scripts.save_manager"
+local meta = require "main.scripts.meta_state"
 
 local M = {}
 
@@ -32,6 +33,9 @@ local current_index    = 1         -- индекс текущего парагр
 local current_answers  = nil       -- массив вариантов (если есть choice)
 local pending_question = nil       -- текст-вопрос перед choice (последний paragraph)
 local finished         = false     -- Ink истёк до END
+local is_story_end = false
+local pending_loop_intro = nil
+local warned_missing_loop_vars = false
 
 -- Состояние, накапливаемое из тегов
 local bg               = { r = 0, g = 0, b = 0 }
@@ -82,9 +86,33 @@ local function resolve_speaker(value)
     if not value or value == "" or value == "none" then return "" end
     if value == "mc"  then return sm.get_mc_name()  end
     if value == "npc" then return sm.get_npc_name() end
-    return value   -- литеральное имя
+    return value   -- literal name
 end
 
+local function build_loop_intro()
+    local awareness = tonumber(meta.get("loop_awareness", 0)) or 0
+    if awareness <= 0 then
+        return nil
+    end
+
+    local lines = {
+        "На секунду приходит ощущение повтора.",
+    }
+
+    if awareness >= 2 then
+        table.insert(lines, "Память цепляется за это утро раньше, чем должна.")
+    end
+
+    return table.concat(lines, "\n")
+end
+
+local function apply_meta_text_overrides(text)
+    if not text or text == "" then
+        return text
+    end
+
+    return text:gsub("ИТЕРАЦИЯ%s+001", "ИТЕРАЦИЯ " .. meta.get_iteration_label())
+end
 -- Применяет теги к текущему состоянию (bg/color/speaker) и кладёт
 -- одноразовые эффекты (sfx/shake/pulse) в pending_effects.
 -- trailing=true означает что теги взяты из ВИСЯЧЕГО параграфа (в конце
@@ -224,6 +252,18 @@ local function push_vars_to_ink()
     story.variables.mc_gender = sm.get_gender() or "male"
     story.variables.mc_name   = sm.get_mc_name()
     story.variables.npc_name  = sm.get_npc_name()
+
+    local ok = pcall(function()
+        story.variables.iteration_number = meta.get("iteration_number", 1)
+        story.variables.iteration_label = meta.get_iteration_label()
+        story.variables.loop_awareness = meta.get("loop_awareness", 0)
+        story.variables.completed_iterations = meta.get("completed_iterations", 0)
+    end)
+
+    if not ok and not warned_missing_loop_vars then
+        warned_missing_loop_vars = true
+        print("[DM-Ink] loop vars are missing in compiled Ink JSON; using runtime fallback text only")
+    end
 end
 
 -- Читает mc_gender из Ink обратно в save_manager, если там изменилось
@@ -315,6 +355,11 @@ local function consume_continue(paragraphs, answers)
     current_answers  = (#answers > 0) and answers or nil
     finished         = (#paragraph_queue == 0) and (current_answers == nil)
 
+    if pending_loop_intro and paragraph_queue[1] then
+        paragraph_queue[1].text = pending_loop_intro .. "\n" .. (paragraph_queue[1].text or "")
+        pending_loop_intro = nil
+    end
+
     -- Применяем теги первого показываемого узла сразу,
     -- чтобы get_background() уже на рендере вернул актуальное.
     if paragraph_queue[1] then
@@ -379,6 +424,7 @@ function M.init(json_bytes)
     current_answers   = nil
     pending_question  = nil
     finished          = false
+    is_story_end      = false
     bg                = { r = 0, g = 0, b = 0 }
     bg_image          = nil
     current_speaker   = ""
@@ -388,6 +434,8 @@ function M.init(json_bytes)
     deferred_commands = {}
 
     sm.load()
+    meta.init()
+    pending_loop_intro = build_loop_intro()
     push_vars_to_ink()
     last_logged_flags.TRUST, last_logged_flags.INSIGHT, last_logged_flags.SYNC = 0, 0, 0
     pull_from_ink()           -- первая пачка параграфов
@@ -395,6 +443,8 @@ end
 
 function M.load_saved(json_bytes)
     sm.load()
+    meta.init()
+    pending_loop_intro = nil
     local saved = sm.get_ink_state()
     if not saved then
         -- нет сохранения — начинаем сначала
@@ -421,6 +471,7 @@ function M.load_saved(json_bytes)
     current_answers   = nil
     pending_question  = nil
     finished          = false
+    is_story_end      = false
     bg                = { r = 0, g = 0, b = 0 }
     bg_image          = nil
     current_speaker   = ""
@@ -474,7 +525,7 @@ function M.get_current_node()
         return {
             type      = "dialogue",
             character = current_speaker,
-            text      = p.text or "",
+            text      = apply_meta_text_overrides(p.text or ""),
         }
     end
 
@@ -487,7 +538,7 @@ function M.get_current_node()
         end
         return {
             type     = "choice",
-            question = question_text,
+            question = apply_meta_text_overrides(question_text),
             options  = options,
         }
     end
@@ -550,12 +601,20 @@ function M.advance()
         return true
     end
 
-    -- Если в этой точке choice — UI должен вызывать M.choose, не M.advance
+    -- Если есть выбор — это НЕ конец
     if current_answers then
         return false
     end
 
-    -- END — по клику уходим в меню (UI сам это делает)
+    -- Если нет текста и нет выборов → это END
+    if not is_story_end then
+        is_story_end = true
+
+        print("[DM-Ink] END detected")
+        print("[DM-Ink] chapter_finished SENT")
+        msg.post("#ui_manager_v2", "chapter_finished")
+    end
+
     return false
 end
 
@@ -578,6 +637,7 @@ function M.choose(option_index)
 end
 
 function M.restart()
+    is_story_end = false
     if json_source then M.init(json_source) end
 end
 

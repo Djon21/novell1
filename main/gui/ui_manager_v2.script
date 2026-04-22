@@ -26,6 +26,8 @@ go.property("bg_rooftop_atlas", resource.atlas("/main/images/backgrounds/bg_roof
 
 local dm = require "main.scripts.dialogue_manager_ink"
 local gs = require "main.scripts.game_state"
+local sm = require "main.scripts.save_manager"
+local meta = require "main.scripts.meta_state"
 local scene_controller = require "main.scripts.scene_controller"
 
 local ok_scenes, scenes = pcall(require, "main.scripts.scenes")
@@ -83,6 +85,7 @@ M.music_started = false
 M.MUSIC_URL = "/music_player#sound"
 
 M.components = {}
+M.suppress_run_save = false
 
 -- -------------------------------------------------------
 -- init components (URL'ы всех GUI-компонентов в одной GO)
@@ -202,8 +205,62 @@ local function sync_ui_state(self)
     msg.post(M.components.phone, "refresh_phone")
 end
 
+local function persist_run_state()
+    if M.suppress_run_save then return end
+    if not gs.serialize or not scene_controller.serialize then return end
+
+    sm.set_game_state({
+        gs = gs.serialize(),
+        scene_controller = scene_controller.serialize(),
+    })
+end
+
+local function restore_run_state()
+    local saved = sm.get_game_state()
+
+    M.suppress_run_save = true
+
+    if saved and saved.gs then
+        gs.deserialize(saved.gs)
+        scene_controller.deserialize(saved.scene_controller)
+        if saved.scene_controller and saved.scene_controller.active and saved.scene_controller.scene_id then
+            scene_controller.enter(saved.scene_controller.scene_id)
+        end
+    elseif saved then
+        gs.deserialize(saved)
+        if scene_controller.reset then
+            scene_controller.reset()
+        else
+            scene_controller.deserialize({ scene_stack = {} })
+        end
+    else
+        gs.reset()
+        if scene_controller.reset then
+            scene_controller.reset()
+        else
+            scene_controller.deserialize({ scene_stack = {} })
+        end
+    end
+
+    M.suppress_run_save = false
+end
+
+local function refresh_menu_state(self)
+    sm.load()
+    meta.init()
+
+    msg.post(M.components.main_menu, "set_loop_state", {
+        iteration = meta.get("iteration_number", 1),
+        iteration_label = meta.get_iteration_label(),
+        awareness = meta.get("loop_awareness", 0),
+        completed = meta.get("completed_iterations", 0),
+        can_continue = sm.has_save(),
+    })
+end
+
 local function show_menu(self)
     M.base_mode = "menu"
+    M.at_end = false
     -- скрыть всё игровое
     msg.post(M.components.hud,       "hide_hud")
     msg.post(M.components.nav,       "hide_nav")
@@ -214,6 +271,7 @@ local function show_menu(self)
     msg.post(M.components.phone,     "close_phone")
     msg.post(M.components.map,       "close_map")
     msg.post(M.components.hotspots,  "hide_all")
+    refresh_menu_state(self)
     msg.post(M.components.main_menu, "show_menu")
     print("[ui_manager_v2] mode: menu")
 end
@@ -481,6 +539,8 @@ function init(self)
     init_components()
     init_background_atlas_state(self)
     setup_scene_controller_ui(self)
+    sm.load()
+    meta.init()
 
     gs.subscribe(function()
         -- Обновляем счётчики в HUD при изменении game_state
@@ -492,6 +552,7 @@ function init(self)
 
     gs.subscribe(function()
         sync_ui_state(self)
+        persist_run_state()
     end)
 
     sync_ui_state(self)
@@ -510,25 +571,62 @@ function on_message(self, message_id, message, sender)
         show_menu(self)
 
     elseif message_id == hash("start_game") then
+        sm.load()
+        meta.init()
+        sm.new_game()
+        M.suppress_run_save = true
+        gs.reset()
+        if scene_controller.reset then
+            scene_controller.reset()
+        else
+            scene_controller.deserialize({ scene_stack = {} })
+        end
+        M.suppress_run_save = false
+
         local ok, bytes = pcall(sys.load_resource, "/main/story/chapter_01.json")
         if not ok or not bytes then
             print("[ui_manager_v2] ERROR: chapter_01.json not found")
             return
         end
         dm.init(bytes)
-        
         handle_dialogue_update(self)
         sync_ui_state(self)
+        persist_run_state()
 
     elseif message_id == hash("continue_game") then
+        sm.load()
+        meta.init()
+        if not sm.has_save() then
+            print("[ui_manager_v2] continue_game ignored: no run-state save")
+            refresh_menu_state(self)
+            return
+        end
+
         local ok, bytes = pcall(sys.load_resource, "/main/story/chapter_01.json")
         if not ok or not bytes then
             print("[ui_manager_v2] ERROR: chapter_01.json not found")
             return
         end
+        restore_run_state()
         dm.load_saved(bytes)
         handle_dialogue_update(self)
         sync_ui_state(self)
+
+    elseif message_id == hash("chapter_finished") then
+        local next_loop = meta.complete_iteration(1)
+
+        sm.clear_run()
+        M.suppress_run_save = true
+        gs.reset()
+        if scene_controller.reset then
+            scene_controller.reset()
+        else
+            scene_controller.deserialize({ scene_stack = {} })
+        end
+        M.suppress_run_save = false
+
+        print("[ui_manager_v2] chapter finished; next iteration =", next_loop.iteration_number)
+        show_menu(self)
 
     elseif message_id == hash("open_gallery") then
         print("[ui_manager_v2] open_gallery (TODO)")
@@ -549,11 +647,6 @@ function on_message(self, message_id, message, sender)
         handle_dialogue_update(self)
 
     elseif message_id == hash("dialogue_next") then
-        if M.at_end then
-            M.at_end = false
-            show_menu(self)
-            return
-        end
         if dm.advance then dm.advance() end
         handle_dialogue_update(self)
 
@@ -635,8 +728,10 @@ function on_message(self, message_id, message, sender)
         if exits then
             msg.post(M.components.nav, "set_exits", { exits = exits })
         end
+        persist_run_state()
     elseif message_id == hash("exploration_ended") then
         handle_dialogue_update(self)
+        persist_run_state()
     end
 end
 

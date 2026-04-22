@@ -27,6 +27,46 @@ local function set_text(id, s)
     gui.set_text(gui.get_node(id), s or "")
 end
 
+local function set_text_alpha(id, alpha)
+    local node = gui.get_node(id)
+    local color = gui.get_color(node)
+    color.w = alpha
+    gui.set_color(node, color)
+end
+
+local function apply_loop_state(self, message)
+    local iteration = tonumber(message and message.iteration) or 1
+    local awareness = tonumber(message and message.awareness) or 0
+    local completed = tonumber(message and message.completed) or math.max(iteration - 1, 0)
+    local iteration_label = message and message.iteration_label or string.format("%03d", iteration)
+    local can_continue = message and message.can_continue == true
+
+    self.can_continue = can_continue
+
+    set_text("mi_new", string.format("НАЧАТЬ ИТЕРАЦИЮ %s", iteration_label))
+    set_text("eyebrow", string.format("visual · novel · dossier · петля #%s", iteration_label))
+    set_text("stamp", string.format("СЕКРЕТНО · №%s", iteration_label))
+    set_text("doss_eyebrow", "dossier · активная петля")
+    set_text("doss_name", string.format("ИТЕРАЦИЯ %s", iteration_label))
+    set_text("doss_progress", string.format("осознание %d · завершено %d", awareness, completed))
+
+    if awareness > 0 then
+        set_text("doss_desc",
+            "День запускается заново, но память уже не стирается полностью.\n" ..
+            "Некоторые реплики звучат знакомо, а система начинает пропускать швы.")
+        set_text("doss_caveat", "meta-state сохранён между циклами")
+        set_text("doss_caveat2", string.format("следующий запуск: итерация %s", iteration_label))
+    else
+        set_text("doss_desc",
+            "Очередной понедельник. Дождь, кофе, три непрочитанных.\n" ..
+            "Пока это выглядит как обычное утро, но контур петли уже рядом.")
+        set_text("doss_caveat", "run-state сбрасывается при новом запуске")
+        set_text("doss_caveat2", string.format("активная итерация: %s", iteration_label))
+    end
+
+    set_text_alpha("mi_continue", can_continue and 0.78 or 0.25)
+end
+
 local function click_flash(node)
     gui.animate(node, "scale", vmath.vector4(1.06, 1.06, 1, 1), gui.EASING_OUTQUAD, 0.1, 0, function()
         gui.animate(node, "scale", vmath.vector4(1, 1, 1, 1), gui.EASING_OUTQUAD, 0.15)
@@ -520,12 +560,14 @@ function init(self)
     self.visible = true
     self.hovered = nil
     self.glitch_timer = nil
+    self.can_continue = false
 
     math.randomseed(os.time())
 
     cache_logo_base_from_scene()
     start_glitch_loop(self)
     setup_skyline(self)
+    apply_loop_state(self, { iteration = 1, iteration_label = "001", awareness = 0, completed = 0, can_continue = false })
 end
 
 function final(self)
@@ -557,6 +599,9 @@ function on_message(self, message_id, message, sender)
         gui.set_enabled(gui.get_node("menu_root"), false)
         stop_glitch_loop(self)
 
+    elseif message_id == hash("set_loop_state") then
+        apply_loop_state(self, message)
+
     elseif message_id == hash("set_progress") then
         local loop = tonumber(message.loop) or 17
         local br   = tonumber(message.branches) or 23
@@ -574,6 +619,9 @@ function on_input(self, action_id, action)
     for _, item in ipairs(MENU_ITEMS) do
         local n = gui.get_node(item.id)
         if gui.pick_node(n, action.x, action.y) then
+            if item.id == "mi_continue" and not self.can_continue then
+                return true
+            end
             click_flash(n)
             gui.set_color(n, COLOR_ACTIVE)
             msg.post(UI_MGR, item.msg)
