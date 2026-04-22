@@ -52,7 +52,7 @@
 
 ## Где лежит контент
 
-- сценарий: `main/story/chapter_01.ink`, `main/story/chapter_01.json`
+- сценарий: `main/story/chapter_01.ink` (composition root), `main/story/chapters/*.ink`, `main/story/chapter_01.json`
 - архивный story-черновик: `main/story/chapter_01_old.ink`
 - сцены: `main/scripts/scenes.lua`
 - предметы: `main/scripts/items_catalog.lua`
@@ -65,6 +65,7 @@
 
 - после изменения `.ink` нужно перекомпилировать `.json`
 - bulk compile теперь пропускает `*_old.ink`, чтобы архивные источники не создавали лишние `.json`
+- runtime всё ещё грузит один `chapter_01.json`, но source-level story уже разбит на include-файлы в `main/story/chapters/`
 - `chapter_01.json` всё ещё зашит напрямую в `ui_manager_v2.script`; multi-chapter loader ещё не выделен
 - `dialogue_manager_ink.lua` уже поддерживает `# sfx`, `# shake`, `# pulse`, но `ui_manager_v2` пока не забирает `dm.get_effects()`
 

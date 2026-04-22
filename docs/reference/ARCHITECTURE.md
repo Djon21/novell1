@@ -146,10 +146,12 @@ Persisted meta-state между итерациями:
 
 ## Ink и compile pipeline
 
-- активный исходник: `main/story/chapter_01.ink`
+- composition root story: `main/story/chapter_01.ink`
+- chapter-source модули: `main/story/chapters/*.ink`
 - активный compiled runtime-файл: `main/story/chapter_01.json`
 - story-loader пока жёстко читает именно `chapter_01.json`
 - после изменения `.ink` нужно перекомпилировать `.json`
+- runtime намеренно остаётся единым compiled story, чтобы не ломать `Continue`, replay history и loop-state
 
 Команды:
 
@@ -158,7 +160,7 @@ tools\compile_ink.bat chapter_01
 ./tools/compile_ink.sh chapter_01
 ```
 
-Bulk-компиляция по умолчанию пропускает `*_old.ink`, чтобы архивные story-черновики не засоряли рабочее дерево лишними `.json`.
+Bulk-компиляция по умолчанию пропускает `*_old.ink`, чтобы архивные story-черновики не засоряли рабочее дерево лишними `.json`. Include-файлы в `main/story/chapters/` не компилируются отдельно и попадают в runtime через `chapter_01.ink`.
 
 ## V2 GUI-компоненты
 
@@ -179,7 +181,7 @@ Bulk-компиляция по умолчанию пропускает `*_old.in
   - максимум `6` hotspot'ов на сцену
   - максимум `4` scene objects на сцену
 - `dialogue_manager_ink.lua` уже собирает очередь эффектов (`# sfx`, `# shake`, `# pulse`), но активный `v2` UI пока их не потребляет
-- story-loader всё ещё однофайловый: `chapter_01.json` зашит напрямую, multi-chapter routing пока не выделен
+- runtime-loader всё ещё однофайловый: `chapter_01.json` зашит напрямую, но source-level story уже разбит на include-главы в `main/story/chapters/`; отдельный multi-json chapter routing пока не выделен
 
 ## Где читать дальше
 
