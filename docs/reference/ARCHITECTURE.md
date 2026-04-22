@@ -109,6 +109,9 @@ Persisted meta-state между итерациями:
   - `iteration_label`
   - `loop_awareness`
   - `completed_iterations`
+- для новой игры пишет внешние vars через `story.assign_value(...)`, чтобы они попадали в replay history `defold-ink`
+- при `load_saved()` восстанавливает историю через строгий `story.restore(state, with_externals)` без silent ignore mode
+- для старых сейвов дополнительно подмешивает текущие external vars в replay перед restore, чтобы loop-state не терялся на `Continue`
 
 ### `main/scripts/scene_controller.lua`
 

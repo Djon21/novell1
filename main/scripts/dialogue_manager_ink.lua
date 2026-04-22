@@ -35,7 +35,6 @@ local pending_question = nil       -- текст-вопрос перед choice 
 local finished         = false     -- Ink истёк до END
 local is_story_end = false
 local pending_loop_intro = nil
-local warned_missing_loop_vars = false
 
 -- Состояние, накапливаемое из тегов
 local bg               = { r = 0, g = 0, b = 0 }
@@ -246,24 +245,60 @@ end
 -- Синхронизация переменных с save_manager
 -- -------------------------------------------------------
 
--- Выставляет Ink-переменные из save_manager (при init / load / после рестарта)
-local function push_vars_to_ink()
+local function set_story_value(name, value, track_in_state)
     if not story then return end
-    story.variables.mc_gender = sm.get_gender() or "male"
-    story.variables.mc_name   = sm.get_mc_name()
-    story.variables.npc_name  = sm.get_npc_name()
-
-    local ok = pcall(function()
-        story.variables.iteration_number = meta.get("iteration_number", 1)
-        story.variables.iteration_label = meta.get_iteration_label()
-        story.variables.loop_awareness = meta.get("loop_awareness", 0)
-        story.variables.completed_iterations = meta.get("completed_iterations", 0)
-    end)
-
-    if not ok and not warned_missing_loop_vars then
-        warned_missing_loop_vars = true
-        print("[DM-Ink] loop vars are missing in compiled Ink JSON; using runtime fallback text only")
+    if track_in_state and story.assign_value then
+        story.assign_value(name, value)
+    else
+        story.variables[name] = value
     end
+end
+
+-- Выставляет внешние Ink-переменные из save/meta state.
+-- track_in_state=true нужен при старте новой игры: тогда значения попадут
+-- в story.get_state() через defold-ink replay history и не потеряются на Continue.
+local function push_vars_to_ink(track_in_state)
+    if not story then return end
+
+    set_story_value("mc_gender", sm.get_gender() or "male", track_in_state)
+    set_story_value("mc_name", sm.get_mc_name(), track_in_state)
+    set_story_value("npc_name", sm.get_npc_name(), track_in_state)
+    set_story_value("iteration_number", meta.get("iteration_number", 1), track_in_state)
+    set_story_value("iteration_label", meta.get_iteration_label(), track_in_state)
+    set_story_value("loop_awareness", meta.get("loop_awareness", 0), track_in_state)
+    set_story_value("completed_iterations", meta.get("completed_iterations", 0), track_in_state)
+end
+
+-- Для старых сейвов (созданных до фикса assign_value) обогащаем replay history
+-- внешними переменными перед restore(). Так restore построит текущую пачку
+-- параграфов уже с правильными meta/run vars, а не с дефолтами из .ink.
+local function build_restore_history(saved_state)
+    local history = {
+        input = {},
+        randoms = saved_state and saved_state.randoms or {},
+    }
+
+    local injected = {
+        { name = "mc_gender", value = sm.get_gender() or "male" },
+        { name = "mc_name", value = sm.get_mc_name() },
+        { name = "npc_name", value = sm.get_npc_name() },
+        { name = "iteration_number", value = meta.get("iteration_number", 1) },
+        { name = "iteration_label", value = meta.get_iteration_label() },
+        { name = "loop_awareness", value = meta.get("loop_awareness", 0) },
+        { name = "completed_iterations", value = meta.get("completed_iterations", 0) },
+    }
+
+    for _, entry in ipairs(injected) do
+        table.insert(history.input, entry)
+    end
+
+    if saved_state and saved_state.input then
+        for _, entry in ipairs(saved_state.input) do
+            table.insert(history.input, entry)
+        end
+    end
+
+    return history
 end
 
 -- Читает mc_gender из Ink обратно в save_manager, если там изменилось
@@ -436,7 +471,7 @@ function M.init(json_bytes)
     sm.load()
     meta.init()
     pending_loop_intro = build_loop_intro()
-    push_vars_to_ink()
+    push_vars_to_ink(true)
     last_logged_flags.TRUST, last_logged_flags.INSIGHT, last_logged_flags.SYNC = 0, 0, 0
     pull_from_ink()           -- первая пачка параграфов
 end
@@ -476,13 +511,12 @@ function M.load_saved(json_bytes)
     bg_image          = nil
     current_speaker   = ""
 
-    push_vars_to_ink()
-
     -- Восстанавливаем ink по истории input'ов. Во время restore apply_tags
     -- будет срабатывать на всех параграфах старой пачки — глушим эффекты,
     -- чтобы не сыпались sfx/shake от прошлых сцен.
     suppress_effects = true
-    local ok, paragraphs, answers = pcall(story.restore, ink_history, false, true)
+    local restore_history = build_restore_history(ink_history)
+    local ok, paragraphs, answers = pcall(story.restore, restore_history, false)
     if not ok then
         suppress_effects = false
         print("[DM-Ink] restore failed: " .. tostring(paragraphs) .. " — начинаем сначала")
@@ -491,6 +525,7 @@ function M.load_saved(json_bytes)
     end
 
     pull_gender_from_ink()
+    push_vars_to_ink(false)
     consume_continue(paragraphs, answers)
 
     -- ink.restore() возвращает в начало последней пачки. Чтобы попасть
