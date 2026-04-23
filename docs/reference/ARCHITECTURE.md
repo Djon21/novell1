@@ -33,6 +33,7 @@
   - `choice_v2` для выборов
   - `main_menu_v2` при возврате в меню после конца главы
 - при `render_dialogue` прокидывает в `dialogue_v2` текущие `iteration_number` / `iteration_label`, чтобы dossier-плашка и loop-counter не жили на старом `#017`
+- `AUTO` и `SKIP` в `dialogue_v2` больше не декоративные: `ui_manager_v2` ведёт их как взаимоисключающие режимы автолистания и останавливает на `choice` / `end`
 
 ### 3. Exploration-режим
 
@@ -68,6 +69,7 @@ Runtime-state текущего прохождения:
 
 Для текущего MVP инвентарь хранится как список уникальных `item_id` с лимитом `12` слотов. `get_inventory()` возвращает копию массива, чтобы GUI не мутировал state напрямую.
 Названия, описания и шаги квестов телефон берёт из `main/scripts/quests.lua`; chapter bootstrap квесты вроде `make_coffee` и `find_phone` тоже должны быть зарегистрированы там, а не только стартовать из Ink.
+Для phone-квестов `game_state.get_quests()` сейчас отдаёт список с приоритетом `active -> failed -> done`; `phone_v2` показывает первые две карточки и помечает в заголовке, если задач больше, чем видно на экране.
 
 Именно это состояние живёт во время игры и синхронизируется с UI через `gs.subscribe(...)`.
 
@@ -162,6 +164,7 @@ Persisted meta-state между итерациями:
   - `# sfx:*` -> `sfx_player`
   - `# shake:*` -> `effects`
   - `# pulse:*` -> `effects`
+- держит реальные режимы `dialogue_auto` / `dialogue_skip`: `skip` мгновенно раскрывает typewriter и быстро листает реплики, `auto` ждёт завершения печати и переключает их по таймеру
 - обрабатывает MVP-действия инвентаря через Ink-knot contract:
   - `inv_<scene_id>_<verb>_<item_id>`
   - `inv_<verb>_<item_id>`

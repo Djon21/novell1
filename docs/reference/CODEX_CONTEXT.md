@@ -30,6 +30,7 @@
 - `main/scripts/game_state.lua`
   - runtime-state текущего прохождения
   - flags, inventory, quests, sms, notes, current_scene
+  - phone-квесты сортируются по приоритету `active -> failed -> done`, чтобы завершённые не вытесняли активные из двух видимых карточек
 
 - `main/scripts/save_manager.lua`
   - persisted run-state текущей попытки
@@ -51,6 +52,7 @@
   - на `chapter_finished` переводит игру в следующую итерацию
   - поддерживает `reset_iteration`, который вручную возвращает проект к `Итерации 001`
   - прокидывает текущий `loop_label` в `dialogue_v2`, поэтому диалоговая dossier-плашка теперь берёт номер итерации из `meta_state`
+  - ведёт рабочие `AUTO/SKIP` режимы диалога, а не только локальную подсветку кнопок
 
 ## Где лежит контент
 

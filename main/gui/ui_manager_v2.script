@@ -55,6 +55,9 @@ local LEGACY_FLAG_ITEMS = {
 
 local BG_TEXTURE_KEY = "backgrounds"
 local DEDICATED_BG_ANIMATION = "scene_bg"
+local AUTO_ADVANCE_MIN_DELAY = 1.0
+local AUTO_ADVANCE_MAX_DELAY = 3.0
+local SKIP_ADVANCE_DELAY = 0.05
 
 local DEDICATED_BG_ATLAS_PROPS = {
     bg_apartment      = "bg_apartment_atlas",
@@ -178,6 +181,109 @@ local function post_dialogue_background(self, bg_name)
     if not bg_name then return end
     local target = (self and self.self_url) or msg.url("#ui_manager_v2")
     msg.post(target, "apply_dialogue_bg", { name = bg_name })
+end
+
+local function cancel_dialogue_autoplay(self)
+    if self.dialogue_autoplay_handle then
+        timer.cancel(self.dialogue_autoplay_handle)
+        self.dialogue_autoplay_handle = nil
+    end
+end
+
+local function reset_dialogue_autoplay_state(self)
+    cancel_dialogue_autoplay(self)
+    self.dialogue_waiting_for_typewriter = false
+    self.dialogue_node_type = nil
+    self.dialogue_current_text = ""
+end
+
+local function compute_dialogue_autoplay_delay(text, skip_mode)
+    if skip_mode then
+        return SKIP_ADVANCE_DELAY
+    end
+    local text_len = #(text or "")
+    return math.min(AUTO_ADVANCE_MAX_DELAY, math.max(AUTO_ADVANCE_MIN_DELAY, 0.75 + (text_len / 28)))
+end
+
+local function dialogue_can_autoadvance(self)
+    return self.dialogue_node_type == "dialogue"
+        and M.base_mode == "dialogue"
+        and not M.overlays.choice
+        and not M.overlays.inventory
+        and not M.overlays.phone
+        and not M.overlays.map
+        and not self.dialogue_waiting_for_typewriter
+        and not M.at_end
+end
+
+local function apply_dialogue_toggle_state(self)
+    msg.post(M.components.dialogue, "set_auto", { on = self.dialogue_auto == true })
+    msg.post(M.components.dialogue, "set_skip", { on = self.dialogue_skip == true })
+end
+
+local function schedule_dialogue_autoadvance(self)
+    cancel_dialogue_autoplay(self)
+    if not dialogue_can_autoadvance(self) then
+        return
+    end
+    if not self.dialogue_auto and not self.dialogue_skip then
+        return
+    end
+
+    local delay = compute_dialogue_autoplay_delay(self.dialogue_current_text, self.dialogue_skip)
+    self.dialogue_autoplay_handle = timer.delay(delay, false, function()
+        self.dialogue_autoplay_handle = nil
+        if not dialogue_can_autoadvance(self) then
+            return
+        end
+        msg.post(".", "dialogue_next")
+    end)
+end
+
+local function nudge_dialogue_skip(self)
+    if not self.dialogue_skip then
+        return
+    end
+    if self.dialogue_node_type ~= "dialogue" then
+        return
+    end
+    if self.dialogue_waiting_for_typewriter then
+        timer.delay(0, false, function()
+            if self.dialogue_skip and self.dialogue_waiting_for_typewriter and self.dialogue_node_type == "dialogue" then
+                msg.post(M.components.dialogue, "finish_typewriter")
+            end
+        end)
+    else
+        schedule_dialogue_autoadvance(self)
+    end
+end
+
+local function set_dialogue_play_mode(self, mode, on)
+    if mode == "auto" then
+        self.dialogue_auto = on and true or false
+        if self.dialogue_auto then
+            self.dialogue_skip = false
+        end
+    elseif mode == "skip" then
+        self.dialogue_skip = on and true or false
+        if self.dialogue_skip then
+            self.dialogue_auto = false
+        end
+    end
+
+    cancel_dialogue_autoplay(self)
+    apply_dialogue_toggle_state(self)
+    nudge_dialogue_skip(self)
+    if not self.dialogue_waiting_for_typewriter then
+        schedule_dialogue_autoadvance(self)
+    end
+end
+
+local function reset_dialogue_play_modes(self)
+    self.dialogue_auto = false
+    self.dialogue_skip = false
+    reset_dialogue_autoplay_state(self)
+    apply_dialogue_toggle_state(self)
 end
 
 local function has_phone_access()
@@ -426,6 +532,7 @@ end
 local function show_menu(self)
     M.base_mode = "menu"
     M.at_end = false
+    reset_dialogue_play_modes(self)
     -- скрыть всё игровое
     msg.post(M.components.hud,       "hide_hud")
     msg.post(M.components.nav,       "hide_nav")
@@ -443,6 +550,7 @@ end
 
 local function show_exploration(self)
     M.base_mode = "exploration"
+    reset_dialogue_autoplay_state(self)
     print("[ui_manager_v2] show_exploration() called")
     print("[ui_manager_v2] overlay states: phone=" .. tostring(M.overlays.phone) .. 
           ", inventory=" .. tostring(M.overlays.inventory) .. 
@@ -613,6 +721,8 @@ local function apply_dm_commands(self)
 end
 
 handle_dialogue_update = function(self)
+    cancel_dialogue_autoplay(self)
+
     -- 1) Применить команды из ink-тегов (могут поменять сцену)
     apply_dm_commands(self)
 
@@ -637,17 +747,24 @@ handle_dialogue_update = function(self)
     print("[ui_manager_v2] dm node=", node and node.type, "char=", node and node.character, "text=", node and node.text and node.text:sub(1,40))
 
     if in_exploration then
+        M.at_end = false
         show_exploration(self)
         hide_choice(self)
         return
     end
 
     if not node then
+        M.at_end = false
+        reset_dialogue_autoplay_state(self)
         show_dialogue(self)
         return
     end
 
     if node.type == "dialogue" then
+        M.at_end = false
+        self.dialogue_node_type = "dialogue"
+        self.dialogue_waiting_for_typewriter = true
+        self.dialogue_current_text = node.text or ""
         show_dialogue(self)
         hide_choice(self)
         msg.post(M.components.dialogue, "render_dialogue", {
@@ -657,12 +774,20 @@ handle_dialogue_update = function(self)
             loop    = meta.get("iteration_number", 1),
             loop_label = meta.get_iteration_label(),
         })
+        nudge_dialogue_skip(self)
 
     elseif node.type == "choice" then
+        M.at_end = false
+        self.dialogue_node_type = "choice"
+        self.dialogue_waiting_for_typewriter = false
+        self.dialogue_current_text = ""
         show_dialogue(self)
         show_choice(self, node.options or {}, 18, node.question or "КАК ПОСТУПИТЬ?")
 
     elseif node.type == "end" then
+        self.dialogue_node_type = "end"
+        self.dialogue_waiting_for_typewriter = true
+        self.dialogue_current_text = node.text or ""
         show_dialogue(self)
         hide_choice(self)
         msg.post(M.components.dialogue, "render_dialogue", {
@@ -767,6 +892,14 @@ function init(self)
         persist_run_state()
     end)
 
+    self.dialogue_auto = false
+    self.dialogue_skip = false
+    self.dialogue_autoplay_handle = nil
+    self.dialogue_waiting_for_typewriter = false
+    self.dialogue_node_type = nil
+    self.dialogue_current_text = ""
+
+    apply_dialogue_toggle_state(self)
     sync_ui_state(self)
     show_menu(self)
     msg.post(".", "acquire_input_focus")
@@ -839,15 +972,23 @@ function on_message(self, message_id, message, sender)
         handle_dialogue_update(self)
 
     elseif message_id == hash("dialogue_next") then
+        cancel_dialogue_autoplay(self)
         if dm.advance then dm.advance() end
         handle_dialogue_update(self)
 
+    elseif message_id == hash("typewriter_done") then
+        self.dialogue_waiting_for_typewriter = false
+        if self.dialogue_skip or self.dialogue_auto then
+            schedule_dialogue_autoadvance(self)
+        end
+
     elseif message_id == hash("dialogue_skip") then
-        -- переключатель скипа (пока no-op)
         print("[ui_manager_v2] dialogue_skip", message.on)
+        set_dialogue_play_mode(self, "skip", message and message.on)
 
     elseif message_id == hash("dialogue_auto") then
         print("[ui_manager_v2] dialogue_auto", message.on)
+        set_dialogue_play_mode(self, "auto", message and message.on)
 
     -- --- выбор ---
     elseif message_id == hash("choice_picked") then

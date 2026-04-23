@@ -12,6 +12,7 @@
 --        portrait — опционально id спрайта из v2.atlas (пока не подключаем, используем icon).
 --   "show_dialogue" / "hide_dialogue"
 --   "set_auto" {on=bool}, "set_skip" {on=bool}
+--   "finish_typewriter" — мгновенно дорисовать текущую реплику
 --   "typewriter_done"  — станет релевантно после step18.
 --
 -- В ui_manager_v2 / dialogue_manager_ink шлёт:
@@ -110,7 +111,12 @@ local function typewriter_start(self, text)
     self.tw_accum = 0
     self.tw_active = self.tw_total > 0
     self.tw_pending_pause = 0
-    gui.set_text(gui.get_node("dlg_text"), "")
+    if self.tw_active then
+        gui.set_text(gui.get_node("dlg_text"), "")
+    else
+        gui.set_text(gui.get_node("dlg_text"), text or "")
+        msg.post(UI_MGR, "typewriter_done")
+    end
 end
 
 local function typewriter_finish(self)
@@ -302,6 +308,11 @@ function on_message(self, message_id, message, sender)
         self.skip = message.on and true or false
         gui.set_color(gui.get_node("btn_skip"), self.skip and COLOR_BTN_BG_ON or COLOR_BTN_BG)
         gui.set_color(gui.get_node("btn_skip_label"), self.skip and COLOR_LABEL_ON or COLOR_LABEL_OFF)
+
+    elseif message_id == hash("finish_typewriter") then
+        if self.tw_active then
+            typewriter_finish(self)
+        end
     end
 end
 
