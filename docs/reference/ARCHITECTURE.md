@@ -203,7 +203,7 @@ Bulk-компиляция по умолчанию пропускает `*_old.in
 - `choice_v2` — экран выбора
 - `inventory_v2` — модальный инвентарь; рабочие verbs MVP: `use`, `inspect`, `read`
 - `phone_v2` — data-driven телефон поверх `game_state`; app tiles больше не ведут в статичные Ink-экраны
-- `map_v2` — карта и dossier-панель
+- `map_v2` — карта и dossier-панель; принимает runtime `set_points`, умеет динамически обновлять pin'ы и шлёт `map_verb` в `ui_manager_v2`
 - `effects` — визуальные оверлеи grain/scan/vignette
 
 ## Ограничения и открытые хвосты
@@ -212,6 +212,7 @@ Bulk-компиляция по умолчанию пропускает `*_old.in
   - максимум `6` hotspot'ов на сцену
   - максимум `4` scene objects на сцену
 - one-shot эффекты (`# sfx`, `# shake`, `# pulse`) уже подключены к активному `v2`; для новых SFX нужно держать в sync и `sfx_player`, и `M.SFX_URLS` в `ui_manager_v2.script`
+- `ui_manager_v2` больше не оставляет `map_verb` пустым: `route/save/share` теперь синхронизируют карту с runtime-флагами и пишут следы в заметки через `game_state`
 - runtime-loader всё ещё однофайловый: `chapter_01.json` зашит напрямую, но source-level story уже разбит на include-главы в `main/story/chapters/`; отдельный multi-json chapter routing пока не выделен
 
 ## Где читать дальше

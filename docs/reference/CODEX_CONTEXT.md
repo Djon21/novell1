@@ -53,6 +53,7 @@
   - поддерживает `reset_iteration`, который вручную возвращает проект к `Итерации 001`
   - прокидывает текущий `loop_label` в `dialogue_v2`, поэтому диалоговая dossier-плашка теперь берёт номер итерации из `meta_state`
   - ведёт рабочие `AUTO/SKIP` режимы диалога, а не только локальную подсветку кнопок
+  - синхронизирует `map_v2` через `set_points` и обрабатывает `route/save/share` как реальные runtime-действия
 
 ## Где лежит контент
 
@@ -73,6 +74,7 @@
 - `chapter_01.json` всё ещё зашит напрямую в `ui_manager_v2.script`; multi-chapter loader ещё не выделен
 - `dialogue_manager_ink.lua` уже поддерживает `# sfx`, `# shake`, `# pulse`, а `ui_manager_v2` забирает `dm.get_effects()`; новые SFX требуют записи и в `sfx_player`, и в `M.SFX_URLS`
 - в `main_menu_v2` больше нет реального gallery-flow: его место заняла кнопка `СБРОСИТЬ ИТЕРАЦИЮ`
+- `map_v2` уже не purely decorative overlay, но большой хвост по world-map всё ещё живёт в Ink-узле `city_map_hub`; полного объединения схемы пока нет
 
 ## Если задача звучит как «изучи проект»
 

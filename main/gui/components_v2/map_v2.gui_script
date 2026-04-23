@@ -46,7 +46,7 @@ local function icon_b(a,b,c) return string.char(a,b,c) end
 
 -- POINTS с pos в нормализованных координатах (0..1). left% / top%.
 -- top в HTML = 0 сверху; у нас PIVOT_SW, так что y_norm = 1 - top.
-local POINTS = {
+local DEFAULT_POINTS = {
     home = {
         name = "ДОМ · ИСХОДНАЯ ТОЧКА", color = "hot",
         addr = "Пресненский вал · 12, кв. 84",
@@ -119,10 +119,12 @@ local POINTS = {
     },
 }
 
-local PIN_ORDER = { "home", "work", "cafe", "metro", "shop", "clue", "gov" }
+local DEFAULT_PIN_ORDER = { "home", "work", "cafe", "metro", "shop", "clue", "gov" }
 
 local VERBS = { "route", "save", "share" }
 local VERB_LABEL = { route = "МАРШРУТ", save = "СОХР.", share = "ОТМЕТИТЬ" }
+local make_pin
+local select_pin
 
 local function set_text(id, s)
     gui.set_text(gui.get_node(id), s or "")
@@ -149,7 +151,143 @@ local function set_map_enabled(self, enabled)
     end
 end
 
-local function make_pin(self, id, p)
+local function clone_point(point)
+    if type(point) ~= "table" then
+        return point
+    end
+    local out = {}
+    for k, v in pairs(point) do
+        if type(v) == "table" then
+            local nested = {}
+            for nk, nv in pairs(v) do
+                nested[nk] = nv
+            end
+            out[k] = nested
+        else
+            out[k] = v
+        end
+    end
+    return out
+end
+
+local function clone_points(points)
+    local out = {}
+    for id, point in pairs(points or {}) do
+        out[id] = clone_point(point)
+    end
+    return out
+end
+
+local function clone_array(src)
+    local out = {}
+    for i = 1, #(src or {}) do
+        out[i] = src[i]
+    end
+    return out
+end
+
+local function normalize_point_overrides(points)
+    local out = {}
+    if type(points) ~= "table" then
+        return out
+    end
+
+    if #points > 0 then
+        for _, point in ipairs(points) do
+            if type(point) == "table" and point.id then
+                out[point.id] = clone_point(point)
+            end
+        end
+        return out
+    end
+
+    for id, point in pairs(points) do
+        if point == false then
+            out[id] = false
+        elseif type(point) == "table" then
+            local copy = clone_point(point)
+            copy.id = copy.id or id
+            out[id] = copy
+        end
+    end
+    return out
+end
+
+local function delete_pin_nodes(pin)
+    if not pin then return end
+    if pin.body then gui.delete_node(pin.body) end
+    if pin.border then gui.delete_node(pin.border) end
+    if pin.icon then gui.delete_node(pin.icon) end
+end
+
+local function rebuild_pins(self)
+    for _, pin in pairs(self.pins or {}) do
+        delete_pin_nodes(pin)
+    end
+    self.pins = {}
+
+    for _, id in ipairs(self.pin_order or {}) do
+        local point = self.points and self.points[id] or nil
+        if point and point.visible ~= false then
+            self.pins[id] = make_pin(self, id, point)
+        end
+    end
+end
+
+local function apply_points(self, points, selected_id)
+    local overrides = normalize_point_overrides(points)
+    local next_points = clone_points(DEFAULT_POINTS)
+    local next_order = {}
+
+    for _, id in ipairs(DEFAULT_PIN_ORDER) do
+        local point = next_points[id]
+        local override = overrides[id]
+
+        if override == false then
+            next_points[id] = nil
+        else
+            if point and type(override) == "table" then
+                for k, v in pairs(override) do
+                    point[k] = v
+                end
+            end
+            if point and point.visible ~= false then
+                table.insert(next_order, id)
+            end
+        end
+
+        overrides[id] = nil
+    end
+
+    local extra_ids = {}
+    for id, point in pairs(overrides) do
+        if point and point ~= false then
+            next_points[id] = point
+            if point.visible ~= false then
+                table.insert(extra_ids, id)
+            end
+        end
+    end
+    table.sort(extra_ids)
+    for _, id in ipairs(extra_ids) do
+        table.insert(next_order, id)
+    end
+
+    self.points = next_points
+    self.pin_order = next_order
+    rebuild_pins(self)
+
+    local preferred = selected_id or self.selected or self.pin_order[1]
+    if preferred and self.points[preferred] and self.points[preferred].visible ~= false then
+        select_pin(self, preferred)
+    elseif self.pin_order[1] then
+        select_pin(self, self.pin_order[1])
+    end
+
+    set_map_enabled(self, self.visible)
+end
+
+make_pin = function(self, id, p)
     local parent = gui.get_node("map_area")
     local parent_pos = gui.get_position(parent)
     
@@ -225,8 +363,8 @@ local function highlight_pin(self, id)
     end
 end
 
-local function select_pin(self, id)
-    local p = POINTS[id]
+select_pin = function(self, id)
+    local p = self.points and self.points[id] or nil
     if not p then return end
     self.selected = id
     highlight_pin(self, id)
@@ -253,10 +391,10 @@ function init(self)
     self.pins = {}
     self.verb_btns = {}
     self.selected = nil
+    self.points = clone_points(DEFAULT_POINTS)
+    self.pin_order = clone_array(DEFAULT_PIN_ORDER)
 
-    for _, id in ipairs(PIN_ORDER) do
-        self.pins[id] = make_pin(self, id, POINTS[id])
-    end
+    rebuild_pins(self)
     for i, v in ipairs(VERBS) do
         self.verb_btns[i] = make_verb(self, i, v)
     end
@@ -272,8 +410,12 @@ function on_message(self, message_id, message, sender)
     elseif message_id == hash("close_map") then
         self.visible = false
         set_map_enabled(self, false)
+    elseif message_id == hash("set_points") then
+        apply_points(self, message and message.points, message and message.selected_id)
     elseif message_id == hash("select_pin") then
         if message and message.id then select_pin(self, message.id) end
+    elseif message_id == hash("set_log") then
+        set_text("log", message and message.text or "")
     end
 end
 
