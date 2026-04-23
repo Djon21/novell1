@@ -19,6 +19,26 @@
 local M = {}
 
 M.quests = {
+    make_coffee = {
+        name = "Сделать кофе",
+        description = "Нужно прийти в себя перед выходом: дойти до кухни, найти кружку и запустить кофемашину.",
+        steps = {
+            { text = "Дойти до кухни",         done_when = "kitchen_intro_seen" },
+            { text = "Найти кружку",           done_when = "has_mug" },
+            { text = "Сделать кофе",           done_when = "coffee_drunk" },
+        },
+    },
+
+    find_phone = {
+        name = "Найти телефон",
+        description = "После кофе нужно вернуться в спальню, найти телефон и включить его, чтобы открыть путь дальше.",
+        steps = {
+            { text = "Вернуться в спальню",    done_when = "spot_phone_after_coffee_seen" },
+            { text = "Подобрать телефон",      done_when = "has_phone" },
+            { text = "Включить экран",         done_when = "phone_active" },
+        },
+    },
+
     reply_anya = {
         name = "Ответить Ане",
         description = "Аня прислала странные сообщения с ссылкой на " ..
