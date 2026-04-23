@@ -18,7 +18,7 @@ local _current_scene = nil -- id сцены или nil если в ink-режи�
 local _listeners   = {}    -- callback'и на изменения
 
 -- Телефон (Спринт 4):
---   _sms[contact_id]      = { {text=, unread=true/false}, ... } — порядок прихода
+--   _sms[contact_id]      = { {text=, unread=true/false, time=, seq=}, ... } — порядок прихода
 --   _sms_unread[contact_id] = N непрочитанных (для бейджа)
 --   _notes                = { {title=, body=, time=}, ... } — порядок создания
 local _sms         = {}
@@ -30,6 +30,23 @@ local QUEST_STATUS_PRIORITY = {
     failed = 2,
     done = 3,
 }
+
+local SMS_TIME_BASE_MINUTES = 7 * 60 + 12
+local NOTE_TIME_BASE_MINUTES = 7 * 60 + 20
+
+local _sms_seq = 0
+local _note_seq = 0
+
+local function clone_value(value)
+    if type(value) ~= "table" then
+        return value
+    end
+    local out = {}
+    for k, v in pairs(value) do
+        out[k] = clone_value(v)
+    end
+    return out
+end
 
 local function clone_array(src)
     local out = {}
@@ -66,6 +83,118 @@ local function sms_read_flag(contact_id)
     return "sms_" .. tostring(contact_id) .. "_read"
 end
 
+local function format_clock(total_minutes)
+    total_minutes = math.max(0, math.floor(tonumber(total_minutes) or 0))
+    local hours = math.floor(total_minutes / 60) % 24
+    local minutes = total_minutes % 60
+    return string.format("%02d:%02d", hours, minutes)
+end
+
+local function next_sms_seq()
+    _sms_seq = _sms_seq + 1
+    return _sms_seq
+end
+
+local function next_note_seq()
+    _note_seq = _note_seq + 1
+    return _note_seq
+end
+
+local function default_sms_time(seq)
+    return format_clock(SMS_TIME_BASE_MINUTES + math.max(0, (tonumber(seq) or 1) - 1))
+end
+
+local function default_note_time(seq)
+    return format_clock(NOTE_TIME_BASE_MINUTES + math.max(0, (tonumber(seq) or 1) - 1))
+end
+
+local function get_contact_last_seq(contact_id)
+    local chat = _sms[contact_id]
+    if not chat or #chat == 0 then
+        return 0
+    end
+    local last = chat[#chat]
+    return tonumber(last and last.seq) or 0
+end
+
+local function normalize_sms_state()
+    local raw_sms = type(_sms) == "table" and _sms or {}
+    local normalized = {}
+    local max_seq = 0
+
+    for raw_contact_id, chat in pairs(raw_sms) do
+        if type(chat) == "table" and #chat > 0 then
+            local contact_id = tostring(raw_contact_id)
+            local out_chat = {}
+            for _, msg in ipairs(chat) do
+                local entry = type(msg) == "table" and msg or { text = msg }
+                local seq = tonumber(entry.seq)
+                if not seq or seq < 1 then
+                    seq = max_seq + 1
+                end
+                if seq > max_seq then
+                    max_seq = seq
+                end
+                table.insert(out_chat, {
+                    text = tostring(entry.text or ""),
+                    unread = entry.unread == true,
+                    time = entry.time and tostring(entry.time) or default_sms_time(seq),
+                    seq = seq,
+                })
+            end
+            table.sort(out_chat, function(a, b)
+                return (tonumber(a.seq) or 0) < (tonumber(b.seq) or 0)
+            end)
+            if #out_chat > 0 then
+                normalized[contact_id] = out_chat
+            end
+        end
+    end
+
+    _sms = normalized
+    _sms_unread = {}
+    for contact_id, chat in pairs(_sms) do
+        local unread = 0
+        for _, msg in ipairs(chat) do
+            if msg.unread then
+                unread = unread + 1
+            end
+        end
+        _sms_unread[contact_id] = unread
+    end
+    _sms_seq = max_seq
+end
+
+local function normalize_notes_state()
+    local raw_notes = type(_notes) == "table" and _notes or {}
+    local normalized = {}
+    local max_seq = 0
+
+    for _, note in ipairs(raw_notes) do
+        local entry = type(note) == "table" and note or { body = note }
+        local seq = tonumber(entry.seq)
+        if not seq or seq < 1 then
+            seq = max_seq + 1
+        end
+        if seq > max_seq then
+            max_seq = seq
+        end
+        table.insert(normalized, {
+            title = tostring(entry.title or ""),
+            body = tostring(entry.body or ""),
+            time = entry.time and tostring(entry.time) or default_note_time(seq),
+            seq = seq,
+        })
+    end
+
+    table.sort(normalized, function(a, b)
+        return (tonumber(a.seq) or 0) < (tonumber(b.seq) or 0)
+    end)
+
+    _notes = normalized
+    _note_seq = max_seq
+end
+
 function M.reset()
     _flags = {}
     _inventory = {}
@@ -74,6 +203,8 @@ function M.reset()
     _sms_unread = {}
     _notes = {}
     _current_scene = nil
+    _sms_seq = 0
+    _note_seq = 0
     M._notify()
 end
 
@@ -121,7 +252,7 @@ function M.remove_item(id)
     return false
 end
 
--- Внимание: возвращает прямую ссылку — не мутировать снаружи.
+-- Возвращает копию массива, чтобы UI не мутировал state напрямую.
 function M.get_inventory() return clone_array(_inventory) end
 
 -- quests -----------------------------------------------------------------
@@ -145,10 +276,20 @@ end
 -- Добавить входящее сообщение от контакта. Помечаем unread=true, чтобы
 -- на иконке SMS в телефоне показался бейдж.
 function M.add_sms(contact_id, text)
+    if not contact_id or contact_id == "" then
+        return false
+    end
+    local seq = next_sms_seq()
     _sms[contact_id] = _sms[contact_id] or {}
-    table.insert(_sms[contact_id], { text = text, unread = true })
+    table.insert(_sms[contact_id], {
+        text = tostring(text or ""),
+        unread = true,
+        time = default_sms_time(seq),
+        seq = seq,
+    })
     _sms_unread[contact_id] = (_sms_unread[contact_id] or 0) + 1
     M._notify()
+    return true
 end
 
 -- Пометить чат как прочитанный (вызывается при открытии переписки).
@@ -200,12 +341,25 @@ function M.mark_all_sms_read()
     end
 end
 
-function M.get_sms(contact_id) return _sms[contact_id] or {} end
+function M.get_sms(contact_id)
+    return clone_value(_sms[contact_id] or {})
+end
 
 function M.get_sms_contacts()
     local ids = {}
-    for id, _ in pairs(_sms) do table.insert(ids, id) end
-    table.sort(ids)
+    for id, chat in pairs(_sms) do
+        if type(chat) == "table" and #chat > 0 then
+            table.insert(ids, id)
+        end
+    end
+    table.sort(ids, function(a, b)
+        local seq_a = get_contact_last_seq(a)
+        local seq_b = get_contact_last_seq(b)
+        if seq_a ~= seq_b then
+            return seq_a > seq_b
+        end
+        return tostring(a) < tostring(b)
+    end)
     return ids
 end
 
@@ -219,11 +373,19 @@ function M.get_sms_unread(contact_id) return _sms_unread[contact_id] or 0 end
 
 -- Notes (заметки) --------------------------------------------------------
 function M.add_note(title, body)
-    table.insert(_notes, { title = title, body = body })
+    local seq = next_note_seq()
+    table.insert(_notes, {
+        title = tostring(title or ""),
+        body = tostring(body or ""),
+        time = default_note_time(seq),
+        seq = seq,
+    })
     M._notify()
 end
 
-function M.get_notes() return _notes end
+function M.get_notes()
+    return clone_value(_notes)
+end
 
 -- Phone view getters (step23) --------------------------------------------
 -- Возвращают списки в формате, ожидаемом phone_v2.gui_script.
@@ -231,14 +393,11 @@ function M.get_notes() return _notes end
 -- quests/mail/calls/clues, которые будут заполняться ink-тегами позже.
 
 -- Сообщения для SMS-вьюхи: { {from, time, body, unread}, ... }
--- Берём последние сообщения по каждому контакту (по одной карточке на
--- контакт), сортируем по порядку добавления контакта.
+-- Берём последние сообщения по каждому контакту и сортируем чаты по
+-- актуальности последнего сообщения.
 function M.get_messages()
     local out = {}
-    local ids = {}
-    for id, _ in pairs(_sms) do table.insert(ids, id) end
-    table.sort(ids)
-    for _, id in ipairs(ids) do
+    for _, id in ipairs(M.get_sms_contacts()) do
         local chat = _sms[id]
         if chat and #chat > 0 then
             local last = chat[#chat]
@@ -345,9 +504,9 @@ function M.serialize()
         flags         = _flags,
         inventory     = clone_array(_inventory),
         quests        = _quests,
-        sms           = _sms,
-        sms_unread    = _sms_unread,
-        notes         = _notes,
+        sms           = clone_value(_sms),
+        sms_unread    = clone_value(_sms_unread),
+        notes         = clone_value(_notes),
         current_scene = _current_scene,
     }
 end
@@ -364,6 +523,8 @@ function M.deserialize(data)
     _sms_unread    = data.sms_unread or {}
     _notes         = data.notes      or {}
     _current_scene = data.current_scene
+    normalize_sms_state()
+    normalize_notes_state()
     M._notify()
 end
 

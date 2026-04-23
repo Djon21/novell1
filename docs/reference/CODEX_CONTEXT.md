@@ -31,6 +31,7 @@
   - runtime-state текущего прохождения
   - flags, inventory, quests, sms, notes, current_scene
   - phone-квесты сортируются по приоритету `active -> failed -> done`, чтобы завершённые не вытесняли активные из двух видимых карточек
+  - SMS-чаты сортируются по свежести последнего сообщения; новые SMS/notes автоматически получают fallback `time`, а `get_sms()` / `get_notes()` возвращают копии, а не живые таблицы state
 
 - `main/scripts/save_manager.lua`
   - persisted run-state текущей попытки
