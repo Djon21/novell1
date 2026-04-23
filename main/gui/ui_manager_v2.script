@@ -29,12 +29,21 @@ local gs = require "main.scripts.game_state"
 local sm = require "main.scripts.save_manager"
 local meta = require "main.scripts.meta_state"
 local scene_controller = require "main.scripts.scene_controller"
+local catalog = require "main.scripts.items_catalog"
 
 local ok_scenes, scenes = pcall(require, "main.scripts.scenes")
 if not ok_scenes then scenes = nil end
 
 local M = {}
 local handle_dialogue_update
+local close_inventory
+local open_phone
+
+local INVENTORY_MVP_VERBS = {
+    use = true,
+    inspect = true,
+    read = true,
+}
 
 local LEGACY_FLAG_ITEMS = {
     has_mug = "mug",
@@ -161,6 +170,95 @@ local function post_dialogue_background(self, bg_name)
     msg.post(target, "apply_dialogue_bg", { name = bg_name })
 end
 
+local function has_phone_access()
+    local has_flag = gs.get_flag and gs.get_flag("has_phone") == true or false
+    local has_item = gs.has_item and gs.has_item("phone") or false
+    return has_flag or has_item
+end
+
+local function run_side_dialogue_knot(self, knot_name, keep_bg)
+    if not knot_name or not dm.jump_to_knot then
+        return false
+    end
+    dm.jump_to_knot(knot_name)
+    if keep_bg then
+        dm.override_bg(keep_bg)
+    end
+    handle_dialogue_update(self)
+    return true
+end
+
+local function jump_inventory_knot(self, knot_name)
+    local keep_bg = nil
+    if scene_controller.is_active and scene_controller.is_active() then
+        local scene_data = scene_controller.get_current_scene_data and scene_controller.get_current_scene_data()
+        keep_bg = scene_data and scene_data.bg or nil
+        if scene_controller.exit then
+            scene_controller.exit()
+        end
+    end
+    return run_side_dialogue_knot(self, knot_name, keep_bg)
+end
+
+local function resolve_inventory_knot(item_id, verb, scene_id)
+    local candidates = {}
+    if scene_id and scene_id ~= "" then
+        table.insert(candidates, "inv_" .. scene_id .. "_" .. verb .. "_" .. item_id)
+    end
+    table.insert(candidates, "inv_" .. verb .. "_" .. item_id)
+    table.insert(candidates, "inv_" .. verb .. "_fallback")
+    table.insert(candidates, "inv_fallback")
+
+    for _, knot_name in ipairs(candidates) do
+        if dm.has_knot and dm.has_knot(knot_name) then
+            return knot_name
+        end
+    end
+    return nil
+end
+
+local function handle_inventory_verb(self, item_id, verb)
+    if not item_id or not verb then
+        return
+    end
+    if not INVENTORY_MVP_VERBS[verb] then
+        print("[ui_manager_v2] inventory verb is not enabled in MVP:", tostring(verb))
+        return
+    end
+
+    local scene_id = scene_controller.get_current_scene_id and scene_controller.get_current_scene_id() or nil
+    if not scene_id or scene_id == "" then
+        print("[ui_manager_v2] inventory verbs are only supported from exploration in MVP")
+        close_inventory(self)
+        return
+    end
+
+    if item_id == "phone" and (verb == "use" or verb == "read") then
+        close_inventory(self)
+        open_phone(self)
+        return
+    end
+
+    local item = catalog.get_runtime and catalog.get_runtime(item_id) or catalog.get(item_id)
+    local knot_name = resolve_inventory_knot(item_id, verb, scene_id)
+    if not knot_name then
+        print("[ui_manager_v2] WARNING: no inventory knot for", item_id, verb, scene_id)
+        close_inventory(self)
+        return
+    end
+
+    close_inventory(self)
+    if dm.set_inventory_action_context then
+        dm.set_inventory_action_context({
+            item_id = item_id,
+            item_name = item and item.name or item_id,
+            verb = verb,
+            scene_id = scene_id,
+        })
+    end
+    jump_inventory_knot(self, knot_name)
+end
+
 local function sync_derived_inventory()
     if M.syncing_inventory then return false end
 
@@ -185,7 +283,7 @@ local function sync_ui_state(self)
 
     local inv = gs.get_inventory and gs.get_inventory() or {}
     local unread = gs.get_phone_unread_total and gs.get_phone_unread_total() or 0
-    local has_phone = gs.get_flag and gs.get_flag("has_phone") == true or false
+    local has_phone = has_phone_access()
 
     msg.post(M.components.hud, "set_inventory_count", { n = #inv })
     msg.post(M.components.hud, "set_phone_enabled", { enabled = has_phone })
@@ -378,19 +476,19 @@ local function open_inventory(self)
     msg.post(M.components.inventory, "show_inventory")
     print("[ui_manager_v2] show_inventory sent")
 end
-local function close_inventory(self)
+close_inventory = function(self)
     print("[ui_manager_v2] close_inventory() called")
     M.overlays.inventory = false
     msg.post(M.components.inventory, "hide_inventory")
 end
 
-local function open_phone(self)
+open_phone = function(self)
     print("[ui_manager_v2] open_phone() called")
-    if gs.get_flag and gs.get_flag("has_phone") ~= true then
-        print("[ui_manager_v2] has_phone flag is false, aborting")
+    if not has_phone_access() then
+        print("[ui_manager_v2] phone is unavailable, aborting")
         return
     end
-    print("[ui_manager_v2] has_phone flag is true")
+    print("[ui_manager_v2] phone is available")
     M.overlays.phone = true
     print("[ui_manager_v2] sending open_phone to", M.components.phone)
     msg.post(M.components.phone, "open_phone")
@@ -579,9 +677,7 @@ local function setup_scene_controller_ui(self)
         end,
 
         request_ink_knot = function(knot_name, keep_bg)
-            dm.jump_to_knot(knot_name)
-            if keep_bg then dm.override_bg(keep_bg) end
-            handle_dialogue_update(self)
+            run_side_dialogue_knot(self, knot_name, keep_bg)
         end,
     })
 
@@ -724,6 +820,7 @@ function on_message(self, message_id, message, sender)
         close_inventory(self)
     elseif message_id == hash("inventory_verb") then
         print("[ui_manager_v2] inventory_verb", message.item_id, message.verb)
+        handle_inventory_verb(self, message.item_id, message.verb)
 
     -- --- phone ---
     elseif message_id == hash("open_phone") then

@@ -8,6 +8,8 @@
 
 local M = {}
 
+M.MAX_INVENTORY_SLOTS = 12
+
 -- Приватное состояние
 local _flags       = {}    -- { [name] = value } — bool/number/string
 local _inventory   = {}    -- список item_id в порядке получения
@@ -22,6 +24,36 @@ local _listeners   = {}    -- callback'и на изменения
 local _sms         = {}
 local _sms_unread  = {}
 local _notes       = {}
+
+local function clone_array(src)
+    local out = {}
+    if type(src) ~= "table" then
+        return out
+    end
+    for i = 1, #src do
+        out[i] = src[i]
+    end
+    return out
+end
+
+local function sanitize_inventory(src)
+    local out = {}
+    local seen = {}
+    if type(src) ~= "table" then
+        return out
+    end
+    for _, id in ipairs(src) do
+        if id ~= nil and id ~= "" and not seen[id] then
+            if #out >= M.MAX_INVENTORY_SLOTS then
+                print("[game_state] inventory overflow on deserialize, dropping:", tostring(id))
+            else
+                table.insert(out, id)
+                seen[id] = true
+            end
+        end
+    end
+    return out
+end
 
 local function sms_read_flag(contact_id)
     if not contact_id or contact_id == "" then return nil end
@@ -57,9 +89,19 @@ function M.has_item(id)
 end
 
 function M.add_item(id)
-    if M.has_item(id) then return end
+    if not id or id == "" then
+        return false
+    end
+    if M.has_item(id) then
+        return false
+    end
+    if #_inventory >= M.MAX_INVENTORY_SLOTS then
+        print("[game_state] inventory is full, cannot add:", tostring(id))
+        return false
+    end
     table.insert(_inventory, id)
     M._notify()
+    return true
 end
 
 function M.remove_item(id)
@@ -74,7 +116,7 @@ function M.remove_item(id)
 end
 
 -- Внимание: возвращает прямую ссылку — не мутировать снаружи.
-function M.get_inventory() return _inventory end
+function M.get_inventory() return clone_array(_inventory) end
 
 -- quests -----------------------------------------------------------------
 function M.get_quest(id) return _quests[id] end
@@ -278,7 +320,7 @@ end
 function M.serialize()
     return {
         flags         = _flags,
-        inventory     = _inventory,
+        inventory     = clone_array(_inventory),
         quests        = _quests,
         sms           = _sms,
         sms_unread    = _sms_unread,
@@ -293,7 +335,7 @@ function M.deserialize(data)
         return
     end
     _flags         = data.flags      or {}
-    _inventory     = data.inventory  or {}
+    _inventory     = sanitize_inventory(data.inventory)
     _quests        = data.quests     or {}
     _sms           = data.sms        or {}
     _sms_unread    = data.sms_unread or {}

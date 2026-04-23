@@ -144,4 +144,27 @@ M.items = {
 
 function M.get(id) return M.items[id] end
 
+function M.get_runtime(id)
+    local item = M.items[id]
+    if item then
+        return item
+    end
+    if not id or id == "" then
+        return nil
+    end
+    return {
+        name = tostring(id),
+        type = "runtime",
+        source = "game_state",
+        iter = "?",
+        clue = "нет",
+        desc = "Предмет есть в inventory state, но для него нет описания в items_catalog.lua.",
+        description = "Добавьте item_id '" .. tostring(id) .. "' в main/scripts/items_catalog.lua.",
+        verbs = { "inspect" },
+        icon = "?",
+        qty = 1,
+        missing = true,
+    }
+end
+
 return M

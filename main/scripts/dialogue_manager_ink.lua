@@ -36,6 +36,7 @@ local pending_question = nil       -- текст-вопрос перед choice 
 local finished         = false     -- Ink истёк до END
 local is_story_end = false
 local pending_loop_intro = nil
+local story_knot_index = {}
 
 local META_NUMERIC_KEYS = {
     iteration_number = true,
@@ -333,6 +334,17 @@ local function push_vars_to_ink(track_in_state)
     set_story_value("completed_iterations", meta.get("completed_iterations", 0), track_in_state)
 end
 
+local function set_inventory_story_context(ctx)
+    if not story or not set_story_value then
+        return
+    end
+    ctx = ctx or {}
+    set_story_value("inventory_item_id", ctx.item_id or "", true)
+    set_story_value("inventory_item_name", ctx.item_name or "", true)
+    set_story_value("inventory_item_verb", ctx.verb or "", true)
+    set_story_value("inventory_scene_id", ctx.scene_id or "", true)
+end
+
 -- Для старых сейвов (созданных до фикса assign_value) обогащаем replay history
 -- внешними переменными перед restore(). Так restore построит текущую пачку
 -- параграфов уже с правильными meta/run vars, а не с дефолтами из .ink.
@@ -515,9 +527,34 @@ local function create_story(json_bytes)
     return ink.create(json_bytes)
 end
 
+local function build_story_knot_index(json_bytes)
+    local index = {}
+    local ok, decoded = pcall(json.decode, json_bytes)
+    if not ok or type(decoded) ~= "table" then
+        print("[DM-Ink] WARNING: failed to decode story JSON for knot index")
+        return index
+    end
+
+    local root = decoded.root
+    local knot_map = type(root) == "table" and root[3] or nil
+    if type(knot_map) ~= "table" then
+        print("[DM-Ink] WARNING: story JSON has no top-level knot map")
+        return index
+    end
+
+    for key, _ in pairs(knot_map) do
+        if type(key) == "string" then
+            index[key] = true
+        end
+    end
+
+    return index
+end
+
 function M.init(json_bytes)
     json_source       = json_bytes
     story             = create_story(json_bytes)
+    story_knot_index  = build_story_knot_index(json_bytes)
     paragraph_queue   = {}
     current_index     = 1
     current_answers   = nil
@@ -565,6 +602,7 @@ function M.load_saved(json_bytes)
 
     json_source       = json_bytes
     story             = create_story(json_bytes)
+    story_knot_index  = build_story_knot_index(json_bytes)
     paragraph_queue   = {}
     current_index     = 1
     current_answers   = nil
@@ -615,6 +653,14 @@ function M.load_saved(json_bytes)
     last_logged_flags.TRUST   = story.variables.TRUST   or 0
     last_logged_flags.INSIGHT = story.variables.INSIGHT or 0
     last_logged_flags.SYNC    = story.variables.SYNC    or 0
+end
+
+function M.has_knot(knot_name)
+    return story_knot_index[knot_name] == true
+end
+
+function M.set_inventory_action_context(ctx)
+    set_inventory_story_context(ctx)
 end
 
 function M.get_current_node()

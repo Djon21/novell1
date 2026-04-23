@@ -65,6 +65,8 @@ Runtime-state текущего прохождения:
 - sms / unread counters
 - notes / mail / clues / call log
 
+Для текущего MVP инвентарь хранится как список уникальных `item_id` с лимитом `12` слотов. `get_inventory()` возвращает копию массива, чтобы GUI не мутировал state напрямую.
+
 Именно это состояние живёт во время игры и синхронизируется с UI через `gs.subscribe(...)`.
 
 ### `main/scripts/save_manager.lua`
@@ -116,6 +118,7 @@ Persisted meta-state между итерациями:
 - для новой игры пишет внешние vars через `story.assign_value(...)`, чтобы они попадали в replay history `defold-ink`
 - при `load_saved()` восстанавливает историю через строгий `story.restore(state, with_externals)` без silent ignore mode
 - для старых сейвов дополнительно подмешивает текущие external vars в replay перед restore, чтобы loop-state не терялся на `Continue`
+- держит registry top-level knot'ов compiled story и умеет принимать inventory-context (`inventory_item_*`) перед side-knot прыжком
 
 ### `main/scripts/scene_controller.lua`
 
@@ -153,6 +156,12 @@ Persisted meta-state между итерациями:
   - `# quest:*`
   - `# note:add:*`
   - `# meta:add:*`
+- обрабатывает MVP-действия инвентаря через Ink-knot contract:
+  - `inv_<scene_id>_<verb>_<item_id>`
+  - `inv_<verb>_<item_id>`
+  - `inv_<verb>_fallback`
+  - `inv_fallback`
+- special-case: `phone + use/read` открывает `phone_v2` напрямую, без side-knot
 - держит единый helper старта новой игры:
   - `start_game` -> перезапуск текущей итерации без сброса loop-памяти
   - `reset_iteration` -> полный сброс meta-state и запуск с `001`
@@ -183,7 +192,7 @@ Bulk-компиляция по умолчанию пропускает `*_old.in
 - `nav_buttons_v2` — направленная навигация по `exits`
 - `hud_v2` — локация, inventory badge, phone badge
 - `choice_v2` — экран выбора
-- `inventory_v2` — модальный инвентарь
+- `inventory_v2` — модальный инвентарь; рабочие verbs MVP: `use`, `inspect`, `read`
 - `phone_v2` — data-driven телефон поверх `game_state`; app tiles больше не ведут в статичные Ink-экраны
 - `map_v2` — карта и dossier-панель
 - `effects` — визуальные оверлеи grain/scan/vignette
@@ -199,5 +208,6 @@ Bulk-компиляция по умолчанию пропускает `*_old.in
 ## Где читать дальше
 
 - `docs/reference/LOOP_SYSTEM.md`
+- `docs/reference/INVENTORY_SYSTEM.md`
 - `docs/reference/CODEX_CONTEXT.md`
 - `main/story/README.md`

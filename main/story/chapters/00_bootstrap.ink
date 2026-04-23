@@ -25,5 +25,9 @@ VAR newspaper_kept  = false
 VAR early_terminal_glitch = false
 VAR log_message = ""
 VAR log_marker  = ""
+VAR inventory_item_id = ""
+VAR inventory_item_name = ""
+VAR inventory_item_verb = ""
+VAR inventory_scene_id = ""
 
 -> wake_intro

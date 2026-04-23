@@ -26,6 +26,7 @@ main/story/
 │   ├── 03_office.ink
 │   ├── 04_rooftop.ink
 │   ├── 90_phone_apps.ink
+│   ├── 91_inventory_actions.ink
 │   └── README.md
 ├── chapter_01_old.ink
 ├── INK_STYLE.md
@@ -41,6 +42,7 @@ main/story/
 - `chapters/03_office.ink` содержит утро в офисе, рабочие выборы и переход на крышу
 - `chapters/04_rooftop.ink` содержит rooftop-разговор и финалы итерации
 - `chapters/90_phone_apps.ink` хранит compatibility-knot'ы телефона; реальный контент телефона живёт в `phone_v2` + `game_state`
+- `chapters/91_inventory_actions.ink` хранит действия предметов инвентаря и fallback-knot'ы
 
 Такой порядок даёт два плюса:
 
@@ -153,6 +155,31 @@ tools\compile_ink.bat chapter_01
 | `# phone:close` | закрывает телефон |
 | `# goto_scene:SCENE_ID` / `# explore:SCENE_ID` | переводит игру в exploration-сцену |
 | `# return_to_scene` | возвращает управление в предыдущую exploration-сцену |
+
+## Действия инвентаря
+
+- `inventory_v2` показывает ids из `game_state`, а метаданные берёт из `main/scripts/items_catalog.lua`
+- текущий MVP поддерживает только `use`, `inspect`, `read`
+- `combine` и `give` пока не входят в рабочий flow и должны оставаться выключенными как verbs второго этапа
+- `ui_manager_v2` ищет Ink-knot для действия предмета в таком порядке:
+  - `inv_<scene_id>_<verb>_<item_id>`
+  - `inv_<verb>_<item_id>`
+  - `inv_<verb>_fallback`
+  - `inv_fallback`
+- перед прыжком в knot runtime выставляет в Ink:
+  - `inventory_item_id`
+  - `inventory_item_name`
+  - `inventory_item_verb`
+  - `inventory_scene_id`
+- особый случай: `phone` с verb `use` или `read` не уходит в Ink, а открывает `phone_v2` напрямую
+
+### Как добавить новое действие предмета
+
+1. Добавьте или обновите `item_id` в `main/scripts/items_catalog.lua`.
+2. Создайте knot в `main/story/chapters/91_inventory_actions.ink`.
+3. Если действие сцено-зависимое, используйте имя `inv_<scene_id>_<verb>_<item_id>`.
+4. Если после монолога нужно вернуться в exploration, заканчивайте knot через `# return_to_scene`.
+5. Перекомпилируйте `chapter_01.json`.
 
 ## Телефон и итерации
 
