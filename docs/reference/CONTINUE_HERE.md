@@ -1,6 +1,6 @@
 # CONTINUE_HERE
 
-Актуально на `2026-04-22`.
+Актуально на `2026-04-23`.
 
 V2-миграция уже завершена. Этот файл больше не про rollout migration, а про то, с чего удобно продолжать работу в текущем `AVOS_S`.
 
@@ -10,18 +10,18 @@ V2-миграция уже завершена. Этот файл больше н
 2. `README.md`
 3. `docs/reference/ARCHITECTURE.md`
 4. `docs/reference/TODO.md`
-5. `main/story/README.md`
+5. `main/story/README_INK.md`
 
 ## Текущее состояние проекта
 
 - активный bootstrap уже переключён на `main/main_v2.collectionc`
 - основной UI живёт в `main/gui/components_v2/`
 - Ink, `scene_controller` и `game_state` уже связаны в одном runtime
-- legacy UI оставлен в проекте только как reference / fallback
+- legacy UI оставлен в проекте только как archive / reference
 
 ## Самые вероятные направления следующей работы
 
-- подключить bridge для `dm.get_effects()` в активный v2 UI
+- исправить loop-индикацию в `dialogue_v2`, чтобы dossier-плашка показывала текущую итерацию вместо старого хардкода
 - довести до конца `exits`-навигацию и карту мира
 - полировать achievements / phone apps
 - провести нормальный release QA под Яндекс.Игры
@@ -29,7 +29,7 @@ V2-миграция уже завершена. Этот файл больше н
 ## Где быстро искать контекст
 
 - архитектура и вход: `docs/reference/ARCHITECTURE.md`
-- story pipeline: `main/story/README.md`
+- story pipeline: `main/story/README_INK.md`
 - scenes / hotspots: `docs/guides/HOW_TO_ADD_SCENES.md`
 - дизайн-портирование в Defold: `docs/guides/DESIGN_PORT_RULES.md`
 - оперативные хвосты: `docs/reference/TODO.md`

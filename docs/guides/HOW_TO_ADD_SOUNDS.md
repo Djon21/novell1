@@ -7,8 +7,9 @@
 - `music_player` в `main/main_v2.collection`
 - `sfx_player` в `main/main_v2.collection`
 - парсинг Ink-тегов `# sfx:name` в `dialogue_manager_ink.lua`
+- playback bridge `dm.get_effects()` в `ui_manager_v2.script`
 
-Но при этом активный `ui_manager_v2.script` пока не забирает `dm.get_effects()`. Поэтому одноразовые SFX уже являются частью формата, но их playback bridge для `v2` ещё не доведён до конца.
+То есть одноразовые SFX уже реально проигрываются в `v2`, а `# shake` и `# pulse` работают как one-shot визуальные эффекты через `effects`.
 
 ## Формат файлов
 
@@ -55,21 +56,36 @@ group: "music"
 
 Если это музыка, правится `music_player`, а не `sfx_player`.
 
+## Шаг 3b: Добавить routing в `ui_manager_v2.script`
+
+В `main/gui/ui_manager_v2.script` новый id нужно добавить в таблицу `M.SFX_URLS`:
+
+```lua
+M.SFX_URLS = {
+    door_open = "/sfx_player#door_open",
+}
+```
+
+Без этого `# sfx:door_open` будет валидным для Ink, но `ui_manager_v2` не найдёт URL и выведет warning вместо проигрывания.
+
 ## Шаг 4: Использовать звук в Ink
 
 ```ink
 # sfx:door_open
 ```
 
-## Важный caveat активного v2 UI
+## Как это работает в активном v2 UI
 
-На данный момент:
+Сейчас active `v2` runtime уже забирает `dm.get_effects()` и делает следующее:
 
-- `dialogue_manager_ink.lua` кладёт `# sfx`, `# shake`, `# pulse` в очередь эффектов
-- legacy `dialogue_system.gui_script` умел эту очередь читать
-- активный `ui_manager_v2.script` пока этого не делает
+- `# sfx:name` -> проигрывает звук через `sfx_player`
+- `# shake:intensity,duration` -> шлёт one-shot тряску в `effects`
+- `# pulse:duration,r,g,b` -> шлёт цветовую вспышку в `effects`
 
-Итог: после добавления звука в `sfx_player` тег уже будет валидным с точки зрения формата, но в текущем `v2` runtime он не заиграет, пока не будет реализован bridge к `dm.get_effects()`.
+Важно: для нового `# sfx:name` одного `sfx_player` недостаточно. Нужны оба шага:
+
+- зарегистрировать `.sound` в `main/main_v2.collection`
+- добавить id в `M.SFX_URLS` в `main/gui/ui_manager_v2.script`
 
 ## Что реально уже зарегистрировано в `sfx_player`
 
@@ -90,6 +106,7 @@ group: "music"
 - [ ] `.ogg` лежит в `main/sounds/`
 - [ ] создан `.sound`
 - [ ] компонент добавлен в `sfx_player` или `music_player`
+- [ ] новый id добавлен в `M.SFX_URLS` в `main/gui/ui_manager_v2.script`
 - [ ] тег `# sfx:name` использует правильный id
 - [ ] обновлён `CREDITS.md`, если это внешний asset
-- [ ] если звук должен реально звучать в `v2`, задача на bridge `dm.get_effects()` тоже учтена
+- [ ] звук проверен в игре через реальный Ink-тег

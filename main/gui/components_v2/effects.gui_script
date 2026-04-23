@@ -1,17 +1,19 @@
 -- effects.gui_script
--- Full-screen overlay с тремя эффектами: grain, scan, vignette.
--- Сейчас использует простые цветные box'ы с alpha. В будущем можно
--- заменить на текстуры (noise sprite, scanline texture, radial gradient).
---
--- Сообщения:
---   "set_effects"  {level = 0..1}     — интенсивность grain+vignette
---   "toggle_scan"  {on = bool}        — вкл/выкл скан-линии
---   "show_effects"                    — показать
---   "hide_effects"                    — скрыть (для меню паузы)
-
-local theme = require "main.gui.modules.v2_theme"
+-- Full-screen overlay с тремя базовыми эффектами: grain, scan, vignette.
+-- Базовые сообщения:
+--   "set_effects"  {level = 0..1}
+--   "toggle_scan"  {on = bool}
+--   "show_effects"
+--   "hide_effects"
+-- One-shot bridge для Ink:
+--   "play_pulse" {duration, r, g, b}
+--   "play_shake" {intensity, duration}
 
 local M = {}
+
+local OVERLAY_IDS = { "grain", "scan", "vignette" }
+local SHAKE_PIXELS = 20
+local PULSE_INTENSITY = 0.8
 
 local function clamp(v, lo, hi)
     if v < lo then return lo end
@@ -19,51 +21,147 @@ local function clamp(v, lo, hi)
     return v
 end
 
-local function set_alpha(node_id, a)
-    local n = gui.get_node(node_id)
-    local c = gui.get_color(n)
-    c.w = a
-    gui.set_color(n, c)
+local function get_node(id)
+    return gui.get_node(id)
 end
 
-function init(self)
-    self.effects_level = 0.8       -- базовый уровень (как в мобильных макетах)
-    self.scan_on       = true
-    self.visible       = true
-    -- применяем базовые уровни
-    M.apply_level(self)
+local function set_alpha(node_id, a)
+    local node = get_node(node_id)
+    local color = gui.get_color(node)
+    color.w = a
+    gui.set_color(node, color)
+end
+
+local function set_overlays_enabled(enabled)
+    for _, id in ipairs(OVERLAY_IDS) do
+        local node = get_node(id)
+        gui.set_enabled(node, enabled)
+    end
+end
+
+local function restore_positions(self)
+    for _, id in ipairs(OVERLAY_IDS) do
+        local base = self.base_positions[id]
+        if base then
+            gui.set_position(get_node(id), base)
+        end
+    end
+end
+
+local function play_pulse(self, message)
+    local node = get_node("vignette")
+    local duration = tonumber(message and message.duration) or 0.5
+    local r = tonumber(message and message.r) or 1
+    local g = tonumber(message and message.g) or 1
+    local b = tonumber(message and message.b) or 1
+
+    self.pulse_token = (self.pulse_token or 0) + 1
+    local token = self.pulse_token
+
+    gui.cancel_animation(node, "color.w")
+    gui.set_enabled(node, true)
+    gui.set_color(node, vmath.vector4(r, g, b, 0))
+
+    local up_time = duration * 0.3
+    local down_time = duration * 0.7
+
+    gui.animate(node, "color.w", PULSE_INTENSITY, gui.EASING_OUTQUAD, up_time, 0, function()
+        if token ~= self.pulse_token then return end
+        gui.animate(node, "color.w", 0, gui.EASING_INQUAD, down_time, 0, function()
+            if token ~= self.pulse_token then return end
+            gui.set_enabled(node, self.visible and self.vignette_enabled)
+            M.apply_level(self)
+        end)
+    end)
+end
+
+local function start_shake(self, message)
+    local intensity = tonumber(message and message.intensity) or 0.2
+    local duration = tonumber(message and message.duration) or 0.4
+
+    self.shake_active = intensity > 0 and duration > 0
+    self.shake_elapsed = 0
+    self.shake_duration = math.max(0.01, duration)
+    self.shake_intensity = math.max(0, intensity)
+
+    if not self.shake_active then
+        restore_positions(self)
+    end
 end
 
 function M.apply_level(self)
-    local lvl = clamp(self.effects_level, 0.0, 1.0)
-    -- grain: 0.03..0.13
-    set_alpha("grain",    0.03 + lvl * 0.10)
-    -- vignette: 0.40..0.95
-    set_alpha("vignette", 0.40 + lvl * 0.55)
-    -- scan: 0 или 0.18
-    set_alpha("scan",     self.scan_on and 0.18 or 0.0)
+    local level = clamp(self.effects_level, 0.0, 1.0)
+    set_alpha("grain", 0.03 + level * 0.10)
+    set_alpha("scan", self.scan_on and 0.18 or 0.0)
+    if gui.is_enabled(get_node("vignette")) then
+        set_alpha("vignette", 0.40 + level * 0.55)
+    end
+end
+
+function init(self)
+    self.effects_level = 0.8
+    self.scan_on = true
+    self.visible = true
+    self.vignette_enabled = gui.is_enabled(get_node("vignette"))
+    self.base_positions = {}
+
+    for _, id in ipairs(OVERLAY_IDS) do
+        self.base_positions[id] = gui.get_position(get_node(id))
+    end
+
+    self.shake_active = false
+    self.shake_elapsed = 0
+    self.shake_duration = 0
+    self.shake_intensity = 0
+    self.pulse_token = 0
+
+    set_overlays_enabled(self.visible)
+    gui.set_enabled(get_node("vignette"), self.vignette_enabled)
+    M.apply_level(self)
+end
+
+function update(self, dt)
+    if not self.shake_active then
+        return
+    end
+
+    self.shake_elapsed = self.shake_elapsed + dt
+    local t = self.shake_elapsed / self.shake_duration
+
+    if t >= 1 then
+        self.shake_active = false
+        restore_positions(self)
+        return
+    end
+
+    local amp = self.shake_intensity * SHAKE_PIXELS * (1 - t)
+    for _, id in ipairs(OVERLAY_IDS) do
+        local base = self.base_positions[id]
+        local ox = (math.random() - 0.5) * 2 * amp
+        local oy = (math.random() - 0.5) * 2 * amp
+        gui.set_position(get_node(id), vmath.vector3(base.x + ox, base.y + oy, base.z))
+    end
 end
 
 function on_message(self, message_id, message, sender)
     if message_id == hash("set_effects") then
-        self.effects_level = message.level or 0.8
+        self.effects_level = tonumber(message and message.level) or 0.8
         M.apply_level(self)
     elseif message_id == hash("toggle_scan") then
         self.scan_on = message.on and true or false
         M.apply_level(self)
     elseif message_id == hash("show_effects") then
-        if not self.visible then
-            self.visible = true
-            gui.set_enabled(gui.get_node("grain"),    true)
-            gui.set_enabled(gui.get_node("scan"),     true)
-            gui.set_enabled(gui.get_node("vignette"), true)
-        end
+        self.visible = true
+        set_overlays_enabled(true)
+        gui.set_enabled(get_node("vignette"), self.vignette_enabled)
+        M.apply_level(self)
     elseif message_id == hash("hide_effects") then
-        if self.visible then
-            self.visible = false
-            gui.set_enabled(gui.get_node("grain"),    false)
-            gui.set_enabled(gui.get_node("scan"),     false)
-            gui.set_enabled(gui.get_node("vignette"), false)
-        end
+        self.visible = false
+        set_overlays_enabled(false)
+        restore_positions(self)
+    elseif message_id == hash("play_pulse") then
+        play_pulse(self, message or {})
+    elseif message_id == hash("play_shake") then
+        start_shake(self, message or {})
     end
 end

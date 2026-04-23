@@ -15,7 +15,7 @@
 3. `reference/ARCHITECTURE.md`
 4. `reference/LOOP_SYSTEM.md`
 5. `reference/TODO.md`
-6. `../main/story/README.md`
+6. `../main/story/README_INK.md`
 
 ## Reference
 

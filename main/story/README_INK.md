@@ -194,7 +194,9 @@ tools\compile_ink.bat chapter_01
 
 ## Важный caveat по эффектам
 
-`dialogue_manager_ink.lua` уже парсит `# sfx`, `# shake`, `# pulse`, но активный `v2` UI пока не потребляет `dm.get_effects()`. То есть формат уже живой, а bridge для визуальных и звуковых one-shot эффектов ещё нужно подключать отдельно.
+`dialogue_manager_ink.lua` парсит `# sfx`, `# shake`, `# pulse`, а `ui_manager_v2.script` теперь забирает `dm.get_effects()` и роутит их в `sfx_player` и `effects`.
+
+Важно: для нового `# sfx:name` мало добавить `.sound` в `sfx_player`. Тот же id нужно ещё прописать в `M.SFX_URLS` в `main/gui/ui_manager_v2.script`, иначе runtime выведет warning про неизвестный SFX.
 
 ## AI-friendly workflow
 

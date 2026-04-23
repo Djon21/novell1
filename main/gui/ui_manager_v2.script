@@ -38,6 +38,9 @@ local M = {}
 local handle_dialogue_update
 local close_inventory
 local open_phone
+local close_phone
+local close_map
+local hide_choice
 
 local INVENTORY_MVP_VERBS = {
     use = true,
@@ -83,6 +86,13 @@ M.overlays = {
 
 M.music_started = false
 M.MUSIC_URL = "/music_player#sound"
+M.SFX_URLS = {
+    terminal_wake = "/sfx_player#terminal_wake",
+    coffee_brew   = "/sfx_player#coffee_brew",
+    phone_notify  = "/sfx_player#phone_notify",
+    heartbeat     = "/sfx_player#heartbeat",
+    paper_rustle  = "/sfx_player#paper_rustle",
+}
 
 M.components = {}
 M.suppress_run_save = false
@@ -494,7 +504,7 @@ open_phone = function(self)
     msg.post(M.components.phone, "open_phone")
     print("[ui_manager_v2] open_phone sent")
 end
-local function close_phone(self)
+close_phone = function(self)
     print("[ui_manager_v2] close_phone() called")
     M.overlays.phone = false
     msg.post(M.components.phone, "close_phone")
@@ -504,7 +514,7 @@ local function open_map(self)
     M.overlays.map = true
     msg.post(M.components.map, "open_map")
 end
-local function close_map(self)
+close_map = function(self)
     M.overlays.map = false
     msg.post(M.components.map, "close_map")
 end
@@ -517,9 +527,46 @@ local function show_choice(self, opts, timer_sec, title)
         title = title,
     })
 end
-local function hide_choice(self)
+hide_choice = function(self)
     M.overlays.choice = false
     msg.post(M.components.choice, "hide_choice")
+end
+
+local function dispatch_dm_effect(effect)
+    if not effect or not effect.type then
+        return
+    end
+
+    if effect.type == "sfx" then
+        local url = effect.name and M.SFX_URLS[effect.name] or nil
+        if url then
+            msg.post(url, "play_sound", {
+                delay = 0,
+                gain = tonumber(effect.gain) or 0.6,
+            })
+        else
+            print("[ui_manager_v2] WARNING: unknown sfx effect:", tostring(effect.name))
+        end
+    elseif effect.type == "shake" then
+        msg.post(M.components.effects, "play_shake", {
+            intensity = tonumber(effect.intensity) or 0.2,
+            duration = tonumber(effect.duration) or 0.4,
+        })
+    elseif effect.type == "pulse" then
+        msg.post(M.components.effects, "play_pulse", {
+            duration = tonumber(effect.duration) or 0.5,
+            r = tonumber(effect.r) or 1,
+            g = tonumber(effect.g) or 1,
+            b = tonumber(effect.b) or 1,
+        })
+    end
+end
+
+local function consume_dm_effects()
+    local effects = dm.get_effects and dm.get_effects() or {}
+    for _, effect in ipairs(effects) do
+        dispatch_dm_effect(effect)
+    end
 end
 
 -- -------------------------------------------------------
@@ -584,6 +631,8 @@ handle_dialogue_update = function(self)
     end
 
     -- 4) Выбрать режим по scene_controller + отрендерить ноду
+    consume_dm_effects()
+
     local node = dm.get_current_node and dm.get_current_node()
     print("[ui_manager_v2] dm node=", node and node.type, "char=", node and node.character, "text=", node and node.text and node.text:sub(1,40))
 

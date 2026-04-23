@@ -156,6 +156,10 @@ Persisted meta-state между итерациями:
   - `# quest:*`
   - `# note:add:*`
   - `# meta:add:*`
+- потребляет one-shot очередь эффектов из `dm.get_effects()`:
+  - `# sfx:*` -> `sfx_player`
+  - `# shake:*` -> `effects`
+  - `# pulse:*` -> `effects`
 - обрабатывает MVP-действия инвентаря через Ink-knot contract:
   - `inv_<scene_id>_<verb>_<item_id>`
   - `inv_<verb>_<item_id>`
@@ -202,7 +206,7 @@ Bulk-компиляция по умолчанию пропускает `*_old.in
 - `ui_manager_v2` сейчас отдаёт `scene_controller` лимиты:
   - максимум `6` hotspot'ов на сцену
   - максимум `4` scene objects на сцену
-- `dialogue_manager_ink.lua` уже собирает очередь эффектов (`# sfx`, `# shake`, `# pulse`), но активный `v2` UI пока их не потребляет
+- one-shot эффекты (`# sfx`, `# shake`, `# pulse`) уже подключены к активному `v2`; для новых SFX нужно держать в sync и `sfx_player`, и `M.SFX_URLS` в `ui_manager_v2.script`
 - runtime-loader всё ещё однофайловый: `chapter_01.json` зашит напрямую, но source-level story уже разбит на include-главы в `main/story/chapters/`; отдельный multi-json chapter routing пока не выделен
 
 ## Где читать дальше
@@ -210,4 +214,4 @@ Bulk-компиляция по умолчанию пропускает `*_old.in
 - `docs/reference/LOOP_SYSTEM.md`
 - `docs/reference/INVENTORY_SYSTEM.md`
 - `docs/reference/CODEX_CONTEXT.md`
-- `main/story/README.md`
+- `main/story/README_INK.md`

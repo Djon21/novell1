@@ -51,7 +51,7 @@ nodes {
   inherit_alpha: true
   alpha: 0.0
   enabled: false
-  visible: false
+  visible: true
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT

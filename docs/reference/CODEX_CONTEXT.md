@@ -10,7 +10,7 @@
 2. `docs/reference/ARCHITECTURE.md`
 3. `docs/reference/LOOP_SYSTEM.md`
 4. `docs/reference/TODO.md`
-5. `main/story/README.md`
+5. `main/story/README_INK.md`
 
 Исторические материалы в `docs/archive/legacy-ui/` полезны только как архив, а не как source of truth для текущего runtime.
 
@@ -68,7 +68,7 @@
 - bulk compile теперь пропускает `*_old.ink`, чтобы архивные источники не создавали лишние `.json`
 - runtime всё ещё грузит один `chapter_01.json`, но source-level story уже разбит на include-файлы в `main/story/chapters/`
 - `chapter_01.json` всё ещё зашит напрямую в `ui_manager_v2.script`; multi-chapter loader ещё не выделен
-- `dialogue_manager_ink.lua` уже поддерживает `# sfx`, `# shake`, `# pulse`, но `ui_manager_v2` пока не забирает `dm.get_effects()`
+- `dialogue_manager_ink.lua` уже поддерживает `# sfx`, `# shake`, `# pulse`, а `ui_manager_v2` забирает `dm.get_effects()`; новые SFX требуют записи и в `sfx_player`, и в `M.SFX_URLS`
 - в `main_menu_v2` больше нет реального gallery-flow: его место заняла кнопка `СБРОСИТЬ ИТЕРАЦИЮ`
 
 ## Если задача звучит как «изучи проект»

@@ -44,7 +44,7 @@ tools\compile_ink.bat
 - `docs/reference/CODEX_CONTEXT.md`
 - `docs/reference/ARCHITECTURE.md`
 - `docs/reference/LOOP_SYSTEM.md`
-- `main/story/README.md`
+- `main/story/README_INK.md`
 
 ### Практические гайды
 
@@ -58,7 +58,7 @@ tools\compile_ink.bat
 - активный story-loader пока жёстко читает только `main/story/chapter_01.json`
 - после правок `.ink` обязательно нужен новый compile
 - bulk compile пропускает `*_old.ink`, чтобы архивные story-черновики не создавали лишние `.json`
-- `dialogue_manager_ink.lua` уже собирает `# sfx`, `# shake`, `# pulse`, но `ui_manager_v2` пока не потребляет `dm.get_effects()`
+- one-shot Ink-эффекты `# sfx`, `# shake`, `# pulse` уже подключены к активному `v2` runtime через `dm.get_effects()`; новые SFX нужно добавлять и в `sfx_player`, и в `M.SFX_URLS` в `ui_manager_v2.script`
 
 ## Legacy
 

@@ -15,7 +15,7 @@
 - `docs/reference/ARCHITECTURE.md`
 - `docs/reference/CODEX_CONTEXT.md`
 - `docs/reference/CONTINUE_HERE.md`
-- `main/story/README.md`
+- `main/story/README_INK.md`
 - `main/story/INK_STYLE.md`
 - `docs/guides/HOW_TO_ADD_SCENES.md`
 - `docs/guides/HOW_TO_ADD_BACKGROUNDS.md`
@@ -44,7 +44,7 @@
 - `README.md` обновлён под активный bootstrap `main_v2.collectionc`
 - добавлен `docs/reference/ARCHITECTURE.md` как короткий source of truth по runtime
 - `docs/reference/CODEX_CONTEXT.md` и `docs/reference/CONTINUE_HERE.md` синхронизированы с текущим состоянием `AVOS_S`
-- `main/story/README.md` обновлён под текущий loader и реальные Ink-теги
+- `main/story/README_INK.md` обновлён под текущий loader и реальные Ink-теги
 - инструкции по сценам, портретам, звукам, графике и F1-редактору приведены к `v2`-архитектуре
 - roadmap и TODO отделены от завершённой migration-хронологии
 - migration-документы помечены как архивные, чтобы не путать с боевой документацией
@@ -53,7 +53,6 @@
 
 - нет отдельного `BUILD_GUIDE.md` с пошаговой сборкой под Яндекс.Игры
 - нет отдельного `TESTING_GUIDE.md` с release-чеклистом
-- документация честно фиксирует, что `# sfx/#shake/#pulse` уже парсятся, но ещё не проигрываются в активном `v2`-UI
 
 ## Рекомендация на будущее
 
