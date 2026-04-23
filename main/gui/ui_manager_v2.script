@@ -551,8 +551,9 @@ local function sync_derived_inventory()
         local flag_enabled = gs.get_flag and gs.get_flag(flag) == true
         local has_item = gs.has_item and gs.has_item(item_id)
         if flag_enabled and not has_item and gs.add_item then
-            gs.add_item(item_id)
-            changed = true
+            changed = gs.add_item(item_id) or changed
+        elseif not flag_enabled and has_item and gs.remove_item then
+            changed = gs.remove_item(item_id) or changed
         end
     end
 

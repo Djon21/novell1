@@ -162,6 +162,7 @@ Persisted meta-state между итерациями:
   - `# quest:*`
   - `# note:add:*`
   - `# meta:add:*`
+- двусторонне синхронизирует legacy-derived предметы инвентаря: `has_mug/has_phone` не только добавляют `mug/phone`, но и убирают их обратно, если старый флаг уже снят
 - потребляет one-shot очередь эффектов из `dm.get_effects()`:
   - `# sfx:*` -> `sfx_player`
   - `# shake:*` -> `effects`
