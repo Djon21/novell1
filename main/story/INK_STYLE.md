@@ -109,7 +109,7 @@ VAR newspaper_kept = false
 |---|---|---|
 | `sms:add:CONTACT:TEXT` | `# sms:add:anya:"PATCH temporal_sync.module"` | Добавить SMS в приложение «Сообщения». Кавычки вокруг текста — опционально, но с ними безопаснее (двоеточия внутри текста не поломают парсинг). |
 | `note:add:TITLE:BODY` | `# note:add:Коммит:"хеш 03:47"` | Добавить заметку. |
-| `phone:close` | `# phone:close` | Выйти из сцены телефона обратно в место, откуда его открыли. Используется только в knot'е `phone_close`. |
+| `phone:close` | `# phone:close` | Закрыть активный `phone_v2` overlay и вернуться в предыдущий runtime-контекст. Используется только в knot'е `phone_close`. |
 
 ### Сцены (point-and-click)
 
@@ -189,7 +189,7 @@ VAR newspaper_kept = false
     -> DONE
 ```
 
-Движок это корректно отработает — вернёт в `phone_home`.
+Движок это корректно отработает — вернёт в предыдущий runtime-контекст, а не в отдельную legacy scene телефона.
 
 ---
 

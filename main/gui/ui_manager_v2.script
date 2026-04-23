@@ -852,6 +852,8 @@ local function apply_dm_commands(self)
     local cmds = dm.get_commands and dm.get_commands() or {}
     for _, cmd in ipairs(cmds) do
         if cmd.type == "enter_scene" then
+            -- Compatibility alias: old Ink still emits goto_scene:phone_home,
+            -- but the real runtime phone is the phone_v2 overlay, not a scene.
             if cmd.scene == "phone_home" then
                 open_phone(self)
             elseif scene_controller.enter then

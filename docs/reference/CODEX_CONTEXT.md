@@ -44,6 +44,7 @@
   - управление exploration-сценами
   - читает `main/scripts/scenes.lua`
   - умеет `reset()` для чистого старта новой итерации
+  - больше не содержит legacy phone scene: телефон живёт вне `scene_controller`
 
 - `main/gui/ui_manager_v2.script`
   - главный оркестратор UI
@@ -51,6 +52,7 @@
   - управляет `menu`, `exploration`, `dialogue`
   - на `chapter_finished` переводит игру в следующую итерацию
   - поддерживает `reset_iteration`, который вручную возвращает проект к `Итерации 001`
+  - держит compatibility alias `phone_home -> open_phone()`, чтобы старые Ink-knot'ы не ломались после удаления legacy scene
   - прокидывает текущий `loop_label` в `dialogue_v2`, поэтому диалоговая dossier-плашка теперь берёт номер итерации из `meta_state`
   - ведёт рабочие `AUTO/SKIP` режимы диалога, а не только локальную подсветку кнопок
   - синхронизирует `map_v2` через `set_points` и обрабатывает `route/save/share` как реальные runtime-действия

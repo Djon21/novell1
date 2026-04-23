@@ -17,6 +17,7 @@ V2-миграция уже завершена. Этот файл больше н
 - активный bootstrap уже переключён на `main/main_v2.collectionc`
 - основной UI живёт в `main/gui/components_v2/`
 - Ink, `scene_controller` и `game_state` уже связаны в одном runtime
+- телефон больше не существует как отдельная scene `phone_home`: активный runtime работает через `phone_v2`, а старые `goto_scene:phone_home` живут только как compatibility alias в `ui_manager_v2`
 - legacy UI оставлен в проекте только как archive / reference
 
 ## Самые вероятные направления следующей работы

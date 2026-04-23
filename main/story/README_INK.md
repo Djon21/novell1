@@ -190,6 +190,7 @@ tools\compile_ink.bat chapter_01
 - если вводите новый `quest_id`, добавьте ему название и описание в `main/scripts/quests.lua`, иначе телефон покажет только сырой id
 - для роста осознания петли внутри главы используйте `# meta:add:loop_awareness:N`
 - compatibility-knot'ы в `chapters/90_phone_apps.ink` больше не должны хранить статичный текст приложений; они оставлены только как безопасные точки входа для старых переходов
+- `phone_home` больше не существует как scene в `main/scripts/scenes.lua`; старые `# goto_scene:phone_home` работают только потому, что `ui_manager_v2` перехватывает их как alias на `phone_v2`
 - если новое значение meta-поля должно влиять на ветвление сразу в этом же knot, дублируйте его обычным Ink-присваиванием (`~ loop_awareness = loop_awareness + 1`) и рядом оставляйте `# meta:add:loop_awareness:1` для сохранения в `meta_state`
 
 ## Важный caveat по эффектам

@@ -86,7 +86,7 @@ action = { type = "ink_knot", knot = "take_phone" }
 action = { type = "phone_close" }
 ```
 
-Используется для `phone_home` и похожих сценариев.
+Исторически использовалось для `phone_home`, но в текущем `v2` телефон уже не scene, а overlay. Для новых сцен этот action обычно не нужен.
 
 ## `condition` и `visible_when`
 
