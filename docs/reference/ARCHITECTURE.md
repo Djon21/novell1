@@ -204,7 +204,7 @@ Bulk-компиляция по умолчанию пропускает `*_old.in
 - `nav_buttons_v2` — направленная навигация по `exits`
 - `hud_v2` — локация, inventory badge, phone badge
 - `choice_v2` — экран выбора
-- `inventory_v2` — модальный инвентарь; рабочие verbs MVP: `use`, `inspect`, `read`
+- `inventory_v2` — модальный инвентарь; в footer видны только рабочие verbs MVP: `use`, `inspect`, `read`
 - `phone_v2` — data-driven телефон поверх `game_state`; app tiles больше не ведут в статичные Ink-экраны
 - `map_v2` — карта и dossier-панель; принимает runtime `set_points`, умеет динамически обновлять pin'ы и шлёт `map_verb` в `ui_manager_v2`
 - `effects` — визуальные оверлеи grain/scan/vignette

@@ -27,7 +27,7 @@ local gs      = require "main.scripts.game_state"
 local UI_MGR = "#ui_manager_v2"
 
 local SLOT_COUNT = gs.MAX_INVENTORY_SLOTS or 12
-local VERB_COUNT = 5
+local VERB_NODE_COUNT = 5
 local ACTIVE_VERBS = {
     use = true,
     inspect = true,
@@ -99,8 +99,11 @@ local VERB_LABEL = {
     give    = "ОТДАТЬ",
 }
 
--- Fixed order of verb buttons in the footer (matches .gui verb1..verb5).
-local VERB_ORDER = { "use", "inspect", "combine", "read", "give" }
+local VERB_SLOT_TO_NAME = {
+    [2] = "use",
+    [3] = "inspect",
+    [4] = "read",
+}
 
 -- Color per item type (paper = consumable, amber = key, hot = clue, violet = rare).
 local function color_for_type(t, is_clue)
@@ -197,12 +200,15 @@ local function set_verb_enabled(i, enabled)
     gui.set_enabled(v.label,  enabled)
 end
 
--- When open but no item selected, show all 5 verb buttons in disabled style
--- so the layout still reads as a verb row.
-local function paint_verb(i, available)
+-- Render only the current MVP verbs in the centered footer slots.
+local function paint_verb(i, verb_name, available)
     local v = verb_nodes(i)
-    local name = VERB_ORDER[i]
-    gui.set_text(v.label, VERB_LABEL[name] or (name or ""):upper())
+    if not verb_name then
+        set_verb_enabled(i, false)
+        return
+    end
+    set_verb_enabled(i, true)
+    gui.set_text(v.label, VERB_LABEL[verb_name] or (verb_name or ""):upper())
     if available then
         gui.set_color(v.label,  COLOR_VERB_LABEL_ON)
         gui.set_color(v.border, COLOR_VERB_BORDER_ON)
@@ -229,8 +235,8 @@ local function clear_details(self)
     set_text("stat_clue_v",  "—")
     -- all verbs disabled, but visible as placeholders
     self.available_verbs = {}
-    for i = 1, VERB_COUNT do
-        paint_verb(i, false)
+    for i = 1, VERB_NODE_COUNT do
+        paint_verb(i, VERB_SLOT_TO_NAME[i], false)
     end
 end
 
@@ -262,8 +268,9 @@ local function show_item_details(self, item_id)
         end
     end
     self.available_verbs = avail
-    for i = 1, VERB_COUNT do
-        paint_verb(i, avail[VERB_ORDER[i]] == true)
+    for i = 1, VERB_NODE_COUNT do
+        local verb_name = VERB_SLOT_TO_NAME[i]
+        paint_verb(i, verb_name, verb_name and avail[verb_name] == true)
     end
 end
 
@@ -314,7 +321,9 @@ end
 local function set_modal_enabled(self, enabled)
     set_group_enabled(CHROME_NODES, enabled)
     for i = 1, SLOT_COUNT do set_slot_enabled(i, enabled) end
-    for i = 1, VERB_COUNT do set_verb_enabled(i, enabled) end
+    for i = 1, VERB_NODE_COUNT do
+        set_verb_enabled(i, enabled and VERB_SLOT_TO_NAME[i] ~= nil)
+    end
 end
 
 -- ---------------------------------------------------------------------------
@@ -376,9 +385,9 @@ function on_input(self, action_id, action)
 
     -- verb clicks: only act if the verb is available for the current item
     if self.selected and self.inv_ids[self.selected] then
-        for i = 1, VERB_COUNT do
+        for i = 1, VERB_NODE_COUNT do
             local bg = n("verb" .. i .. "_bg")
-            local vname = VERB_ORDER[i]
+            local vname = VERB_SLOT_TO_NAME[i]
             if vname and self.available_verbs[vname]
                and gui.is_enabled(bg) and gui.pick_node(bg, action.x, action.y) then
                 msg.post(UI_MGR, "inventory_verb", {

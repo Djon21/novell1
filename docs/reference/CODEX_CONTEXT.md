@@ -59,6 +59,10 @@
   - синхронизирует `map_v2` через `set_points` и обрабатывает `route/save/share` как реальные runtime-действия
   - двусторонне зеркалит legacy inventory flags `has_mug/has_phone` в реальные предметы `mug/phone`, чтобы derived-инвентарь не зависал в устаревшем состоянии
 
+- `main/gui/components_v2/inventory_v2.gui_script`
+  - показывает только рабочие MVP verbs `use`, `inspect`, `read`
+  - `combine/give` сейчас скрыты из footer целиком, а не висят как фальшивые disabled-кнопки
+
 ## Где лежит контент
 
 - сценарий: `main/story/chapter_01.ink` (composition root), `main/story/chapters/*.ink`, `main/story/chapter_01.json`

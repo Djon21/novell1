@@ -160,7 +160,7 @@ tools\compile_ink.bat chapter_01
 
 - `inventory_v2` показывает ids из `game_state`, а метаданные берёт из `main/scripts/items_catalog.lua`
 - текущий MVP поддерживает только `use`, `inspect`, `read`
-- `combine` и `give` пока не входят в рабочий flow и должны оставаться выключенными как verbs второго этапа
+- `combine` и `give` пока не входят в рабочий flow и скрыты из активного footer до отдельного этапа реализации
 - `ui_manager_v2` ищет Ink-knot для действия предмета в таком порядке:
   - `inv_<scene_id>_<verb>_<item_id>`
   - `inv_<verb>_<item_id>`

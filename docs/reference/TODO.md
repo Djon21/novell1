@@ -16,8 +16,6 @@
 
 ## P2 — баги модели данных и UI-состояния
 
-- [ ] Решить, оставлять ли disabled-verb UI в инвентаре (`combine`, `give`) как roadmap-намёк или скрыть их до реальной реализации.
-
 ## P3 — нестыковки, cleanup и техдолг
 
 - [ ] Убрать дубли в `main_menu_v2.gui_script`: файл содержит повторные определения `animate_alpha`, `animate_x`, `animate_y`, `glitch_burst`, `schedule_next_glitch`.
