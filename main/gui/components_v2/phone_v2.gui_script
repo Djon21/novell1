@@ -214,6 +214,13 @@ local QUEST_SLOTS = 2
 local function refresh_quests(self, list)
     print("[phone_v2] refresh_quests called, visible=" .. tostring(self.visible) .. ", list size=" .. #(list or {}))
     list = list or {}
+    if #list == 0 then
+        set_text("v_quests_title", "ЗАДАЧИ [0]")
+    elseif #list > QUEST_SLOTS then
+        set_text("v_quests_title", string.format("ЗАДАЧИ [%d/%d]", QUEST_SLOTS, #list))
+    else
+        set_text("v_quests_title", "ЗАДАЧИ")
+    end
     for i = 1, QUEST_SLOTS do
         local prefix = "v_quests_q" .. i
         local has = list[i] ~= nil

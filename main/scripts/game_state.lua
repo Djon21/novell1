@@ -25,6 +25,12 @@ local _sms         = {}
 local _sms_unread  = {}
 local _notes       = {}
 
+local QUEST_STATUS_PRIORITY = {
+    active = 1,
+    failed = 2,
+    done = 3,
+}
+
 local function clone_array(src)
     local out = {}
     if type(src) ~= "table" then
@@ -273,7 +279,23 @@ function M.get_quests()
     local out = {}
     local ids = {}
     for id, _ in pairs(_quests) do table.insert(ids, id) end
-    table.sort(ids)
+    table.sort(ids, function(a, b)
+        local status_a = _quests[a]
+        local status_b = _quests[b]
+        local priority_a = QUEST_STATUS_PRIORITY[status_a] or 99
+        local priority_b = QUEST_STATUS_PRIORITY[status_b] or 99
+        if priority_a ~= priority_b then
+            return priority_a < priority_b
+        end
+
+        local order_a = quests_catalog.get_order and quests_catalog.get_order(a) or math.huge
+        local order_b = quests_catalog.get_order and quests_catalog.get_order(b) or math.huge
+        if order_a ~= order_b then
+            return order_a < order_b
+        end
+
+        return tostring(a) < tostring(b)
+    end)
     for _, id in ipairs(ids) do
         local q = quests_catalog.get(id)
         local title = q and q.name or id
@@ -284,6 +306,7 @@ function M.get_quests()
             progress = string.format("%d/%d", done, total)
         end
         table.insert(out, {
+            id       = id,
             title    = title,
             status   = _quests[id],
             progress = progress,

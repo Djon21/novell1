@@ -18,6 +18,18 @@
 
 local M = {}
 
+M.phone_order = {
+    "make_coffee",
+    "find_phone",
+    "reply_anya",
+    "go_to_office",
+}
+
+local ORDER_INDEX = {}
+for i, id in ipairs(M.phone_order) do
+    ORDER_INDEX[id] = i
+end
+
 M.quests = {
     make_coffee = {
         name = "Сделать кофе",
@@ -63,6 +75,10 @@ M.quests = {
 }
 
 function M.get(id) return M.quests[id] end
+
+function M.get_order(id)
+    return ORDER_INDEX[id] or math.huge
+end
 
 -- Считает выполненные/все шаги квеста по текущим флагам.
 -- Возвращает done_count, total_count, steps_table (с .checked = true/false).
