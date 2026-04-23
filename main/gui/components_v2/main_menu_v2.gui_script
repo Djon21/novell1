@@ -11,6 +11,10 @@ local MENU_ITEMS = {
     { id = "mi_achievements", msg = "open_achievements",  label = "ДОСТИЖЕНИЯ" },
 }
 
+local HIDDEN_MENU_ITEMS = {
+    mi_achievements = true,
+}
+
 local TICKER_SPEED = 40
 local TICKER_TEXT_WIDTH = 2400
 local SCREEN_W = 1280
@@ -39,6 +43,12 @@ local function apply_static_labels()
         if item.id ~= "mi_new" then
             set_text(item.id, item.label)
         end
+    end
+end
+
+local function apply_menu_visibility()
+    for _, item in ipairs(MENU_ITEMS) do
+        gui.set_enabled(gui.get_node(item.id), not HIDDEN_MENU_ITEMS[item.id])
     end
 end
 
@@ -577,6 +587,7 @@ function init(self)
     start_glitch_loop(self)
     setup_skyline(self)
     apply_static_labels()
+    apply_menu_visibility()
     apply_loop_state(self, { iteration = 1, iteration_label = "001", awareness = 0, completed = 0, can_continue = false })
 end
 
@@ -602,6 +613,7 @@ function on_message(self, message_id, message, sender)
     if message_id == hash("show_menu") then
         self.visible = true
         gui.set_enabled(gui.get_node("menu_root"), true)
+        apply_menu_visibility()
         start_glitch_loop(self)
 
     elseif message_id == hash("hide_menu") then
@@ -627,15 +639,17 @@ function on_input(self, action_id, action)
     if action_id ~= hash("touch") or not action.pressed then return false end
 
     for _, item in ipairs(MENU_ITEMS) do
-        local n = gui.get_node(item.id)
-        if gui.pick_node(n, action.x, action.y) then
-            if item.id == "mi_continue" and not self.can_continue then
+        if not HIDDEN_MENU_ITEMS[item.id] then
+            local n = gui.get_node(item.id)
+            if gui.pick_node(n, action.x, action.y) then
+                if item.id == "mi_continue" and not self.can_continue then
+                    return true
+                end
+                click_flash(n)
+                gui.set_color(n, COLOR_ACTIVE)
+                msg.post(UI_MGR, item.msg)
                 return true
             end
-            click_flash(n)
-            gui.set_color(n, COLOR_ACTIVE)
-            msg.post(UI_MGR, item.msg)
-            return true
         end
     end
 

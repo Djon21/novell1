@@ -58,6 +58,7 @@
   - ведёт рабочие `AUTO/SKIP` режимы диалога, а не только локальную подсветку кнопок
   - синхронизирует `map_v2` через `set_points` и обрабатывает `route/save/share` как реальные runtime-действия
   - двусторонне зеркалит legacy inventory flags `has_mug/has_phone` в реальные предметы `mug/phone`, чтобы derived-инвентарь не зависал в устаревшем состоянии
+  - `open_achievements` больше не торчит в активном main menu: achievements-пункт скрыт до отдельного UI-этапа
 
 - `main/gui/components_v2/inventory_v2.gui_script`
   - показывает только рабочие MVP verbs `use`, `inspect`, `read`
