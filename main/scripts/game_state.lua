@@ -23,6 +23,11 @@ local _sms         = {}
 local _sms_unread  = {}
 local _notes       = {}
 
+local function sms_read_flag(contact_id)
+    if not contact_id or contact_id == "" then return nil end
+    return "sms_" .. tostring(contact_id) .. "_read"
+end
+
 function M.reset()
     _flags = {}
     _inventory = {}
@@ -102,9 +107,49 @@ end
 function M.mark_sms_read(contact_id)
     local chat = _sms[contact_id]
     if not chat then return end
-    for _, msg in ipairs(chat) do msg.unread = false end
+    local changed = false
+    for _, msg in ipairs(chat) do
+        if msg.unread then
+            msg.unread = false
+            changed = true
+        end
+    end
+    if (_sms_unread[contact_id] or 0) > 0 then
+        changed = true
+    end
     _sms_unread[contact_id] = 0
-    M._notify()
+    local read_flag = sms_read_flag(contact_id)
+    if read_flag and _flags[read_flag] ~= true then
+        _flags[read_flag] = true
+        changed = true
+    end
+    if changed then
+        M._notify()
+    end
+end
+
+function M.mark_all_sms_read()
+    local changed = false
+    for contact_id, chat in pairs(_sms) do
+        for _, msg in ipairs(chat) do
+            if msg.unread then
+                msg.unread = false
+                changed = true
+            end
+        end
+        if (_sms_unread[contact_id] or 0) > 0 then
+            changed = true
+        end
+        _sms_unread[contact_id] = 0
+        local read_flag = sms_read_flag(contact_id)
+        if read_flag and _flags[read_flag] ~= true then
+            _flags[read_flag] = true
+            changed = true
+        end
+    end
+    if changed then
+        M._notify()
+    end
 end
 
 function M.get_sms(contact_id) return _sms[contact_id] or {} end

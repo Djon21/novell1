@@ -22,6 +22,7 @@ local sm  = require "main.scripts.save_manager"
 local meta = require "main.scripts.meta_state"
 
 local M = {}
+local set_story_value
 
 -- -------------------------------------------------------
 -- Внутреннее состояние
@@ -35,6 +36,12 @@ local pending_question = nil       -- текст-вопрос перед choice 
 local finished         = false     -- Ink истёк до END
 local is_story_end = false
 local pending_loop_intro = nil
+
+local META_NUMERIC_KEYS = {
+    iteration_number = true,
+    completed_iterations = true,
+    loop_awareness = true,
+}
 
 -- Состояние, накапливаемое из тегов
 local bg               = { r = 0, g = 0, b = 0 }
@@ -79,6 +86,34 @@ local function parse_tag(raw)
     local key = s:sub(1, colon - 1):gsub("%s+$", "")
     local val = s:sub(colon + 1):gsub("^%s+", ""):gsub("%s+$", "")
     return key, val
+end
+
+local function parse_scalar_value(raw)
+    if raw == nil then return nil end
+    local value = tostring(raw):gsub("^%s+", ""):gsub("%s+$", "")
+    if value == "true" then return true end
+    if value == "false" then return false end
+    if tonumber(value) then return tonumber(value) end
+    return value
+end
+
+local function current_meta_value(name, default_value)
+    if story and story.variables and story.variables[name] ~= nil then
+        return story.variables[name]
+    end
+    if name == "iteration_label" then
+        return meta.get_iteration_label()
+    end
+    return meta.get(name, default_value)
+end
+
+local function sync_meta_story_value(name, value)
+    if not set_story_value or name == "iteration_label" then return end
+    set_story_value(name, value, true)
+    if name == "iteration_number" then
+        local label = string.format("%03d", tonumber(value) or 1)
+        set_story_value("iteration_label", label, true)
+    end
 end
 
 local function resolve_speaker(value)
@@ -161,11 +196,7 @@ local function apply_tags(tags, trailing)
             if name then
                 name = name:gsub("^%s+", ""):gsub("%s+$", "")
                 val  = val:gsub("^%s+", ""):gsub("%s+$", "")
-                local parsed
-                if val == "true" then parsed = true
-                elseif val == "false" then parsed = false
-                elseif tonumber(val) then parsed = tonumber(val)
-                else parsed = val end
+                local parsed = parse_scalar_value(val)
                 table.insert(pending_commands, { type = "set_flag", flag = name, value = parsed })
             end
         elseif key == "item" and value and not suppress_effects then
@@ -212,6 +243,11 @@ local function apply_tags(tags, trailing)
                                :gsub("^%s*'(.*)'%s*$", "%1")
                     table.insert(pending_commands, { type = "add_sms", contact = contact, text = text })
                 end
+            elseif op == "read" and rest then
+                local contact = rest:gsub("^%s+", ""):gsub("%s+$", "")
+                if contact ~= "" then
+                    table.insert(pending_commands, { type = "mark_sms_read", contact = contact })
+                end
             end
         elseif key == "note" and value and not suppress_effects then
             -- # note:add:Заголовок:Тело
@@ -223,6 +259,34 @@ local function apply_tags(tags, trailing)
                     body  = body:gsub('^%s*"(.*)"%s*$', "%1")
                                 :gsub("^%s*'(.*)'%s*$", "%1")
                     table.insert(pending_commands, { type = "add_note", title = title, body = body })
+                end
+            end
+        elseif key == "meta" and value and not suppress_effects then
+            local op, rest = value:match("(%a+)%s*:%s*(.+)")
+            if op == "add" and rest then
+                local name, raw_delta = rest:match("([^:]+)%s*:%s*(.+)")
+                if name and raw_delta then
+                    name = name:gsub("^%s+", ""):gsub("%s+$", "")
+                    local delta = tonumber(raw_delta)
+                    if delta and META_NUMERIC_KEYS[name] then
+                        local current = tonumber(current_meta_value(name, 0)) or 0
+                        local next_value = current + delta
+                        sync_meta_story_value(name, next_value)
+                        table.insert(pending_commands, { type = "meta_add", key = name, delta = delta })
+                    end
+                end
+            elseif op == "set" and rest then
+                local name, raw_value = rest:match("([^:]+)%s*:%s*(.+)")
+                if name and raw_value then
+                    name = name:gsub("^%s+", ""):gsub("%s+$", "")
+                    local parsed = parse_scalar_value(raw_value)
+                    if META_NUMERIC_KEYS[name] then
+                        parsed = tonumber(parsed)
+                    end
+                    if parsed ~= nil and META_NUMERIC_KEYS[name] then
+                        sync_meta_story_value(name, parsed)
+                        table.insert(pending_commands, { type = "meta_set", key = name, value = parsed })
+                    end
                 end
             end
         elseif key == "phone" and value == "close" and not suppress_effects then
@@ -245,7 +309,7 @@ end
 -- Синхронизация переменных с save_manager
 -- -------------------------------------------------------
 
-local function set_story_value(name, value, track_in_state)
+set_story_value = function(name, value, track_in_state)
     if not story then return end
     if track_in_state and story.assign_value then
         story.assign_value(name, value)

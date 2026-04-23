@@ -40,7 +40,7 @@ main/story/
 - `chapters/02_metro.ink` содержит метро и переход к офису
 - `chapters/03_office.ink` содержит утро в офисе, рабочие выборы и переход на крышу
 - `chapters/04_rooftop.ink` содержит rooftop-разговор и финалы итерации
-- `chapters/90_phone_apps.ink` хранит общие knot'ы телефонных приложений
+- `chapters/90_phone_apps.ink` хранит compatibility-knot'ы телефона; реальный контент телефона живёт в `phone_v2` + `game_state`
 
 Такой порядок даёт два плюса:
 
@@ -146,10 +146,24 @@ tools\compile_ink.bat chapter_01
 | `# item:remove:ID` | убирает предмет |
 | `# quest:start:ID` / `done` / `fail` | меняет статус квеста |
 | `# sms:add:contact:text` | добавляет SMS |
+| `# sms:read:contact` | помечает чат прочитанным и гасит unread |
 | `# note:add:title:body` | добавляет заметку |
+| `# meta:add:loop_awareness:1` | повышает loop-awareness внутри текущей итерации |
+| `# meta:set:loop_awareness:2` | жёстко выставляет значение meta-поля |
 | `# phone:close` | закрывает телефон |
 | `# goto_scene:SCENE_ID` / `# explore:SCENE_ID` | переводит игру в exploration-сцену |
 | `# return_to_scene` | возвращает управление в предыдущую exploration-сцену |
+
+## Телефон и итерации
+
+- `phone_v2` — data-driven UI над `game_state`, а не отдельный сюжетный экран в Ink
+- новые SMS добавляйте из Ink через `# sms:add:contact:text`
+- прочтение чата можно фиксировать через `# sms:read:contact`
+- новые quest-state переходы задавайте из Ink через `# quest:*`
+- если вводите новый `quest_id`, добавьте ему название и описание в `main/scripts/quests.lua`, иначе телефон покажет только сырой id
+- для роста осознания петли внутри главы используйте `# meta:add:loop_awareness:N`
+- compatibility-knot'ы в `chapters/90_phone_apps.ink` больше не должны хранить статичный текст приложений; они оставлены только как безопасные точки входа для старых переходов
+- если новое значение meta-поля должно влиять на ветвление сразу в этом же knot, дублируйте его обычным Ink-присваиванием (`~ loop_awareness = loop_awareness + 1`) и рядом оставляйте `# meta:add:loop_awareness:1` для сохранения в `meta_state`
 
 ## Важный caveat по эффектам
 

@@ -1,6 +1,7 @@
 -- phone_v2.gui_script
 -- Fullscreen 2-col modal per hud_mobile.html (phone section).
--- Step22: app view switcher + stub views for 7 non-SMS apps.
+-- Data-driven phone UI over game_state: SMS/quests/notes are rendered here,
+-- while Ink only feeds content through tags and does not own app screens.
 -- All nodes declared in phone_v2.gui. Views are node groups toggled by enabled flag.
 --
 -- Incoming messages:
@@ -12,11 +13,15 @@
 --
 -- Outgoing messages (to #ui_manager_v2):
 --   "close_phone"            — user hit close button
---   "phone_app_clicked" {id} — user tapped an app tile (informational)
+--   "phone_app_clicked" {id} — user tapped an app tile (for external actions like map)
+--   "phone_sms_viewed"       — SMS list is visible and can clear unread state
 
 local gs = require "main.scripts.game_state"
 
 local UI_MGR = "#ui_manager_v2"
+local EXTERNAL_APPS = {
+    map = true,
+}
 
 -- Палитра цветов (матчим hud_mobile.html для app-вьюх).
 -- Используется в per-view refresh для статусов/missed и т.п.
@@ -129,6 +134,12 @@ local function set_all_enabled(enabled)
     print("[phone_v2] set_all_enabled complete")
 end
 
+local function notify_sms_viewed(self, view_id)
+    if not self.visible then return end
+    if view_id ~= "sms" then return end
+    msg.post(UI_MGR, "phone_sms_viewed")
+end
+
 local function show_view(self, view_id)
     if not VIEWS[view_id] then view_id = "sms" end
     print("[phone_v2] show_view called, switching from '" .. (self.active_view or "none") .. "' to '" .. view_id .. "'")
@@ -143,6 +154,7 @@ local function show_view(self, view_id)
     print("[phone_v2]   showing view '" .. view_id .. "' (" .. #VIEWS[view_id] .. " nodes)")
     set_nodes_enabled(VIEWS[view_id], true)
     self.active_view = view_id
+    notify_sms_viewed(self, view_id)
     print("[phone_v2] show view complete: " .. view_id)
 end
 
@@ -303,8 +315,12 @@ end
 -- Полный pull из game_state + обновление всех app-вьюх + счётчика.
 -- map/camera/terminal данными не обеспечены — остаются как есть (заполнены
 -- статичным текстом в .gui, step22).
-local function refresh_all_views(self)
+local function refresh_all_views(self, force)
     print("[phone_v2] refresh_all_views called, visible=" .. tostring(self.visible))
+    if not force and not self.visible then
+        print("[phone_v2] refresh_all_views skipped while hidden")
+        return
+    end
     local sms   = gs.get_messages  and gs.get_messages()  or {}
     local qs    = gs.get_quests    and gs.get_quests()    or {}
     local mails = gs.get_mails     and gs.get_mails()     or {}
@@ -328,7 +344,6 @@ function init(self)
     self.active_view = "sms"
     set_all_enabled(false)
     -- Заполнить статические ноды текущим состоянием до первого показа.
-    refresh_all_views(self)
     print("[phone_v2] init complete, default view = sms")
 end
 
@@ -338,7 +353,7 @@ function on_message(self, message_id, message, sender)
         set_all_enabled(false)
         set_nodes_enabled(CHROME_NODES, true)
         -- Подтянуть свежие данные до показа (рейс unread с game_state).
-        refresh_all_views(self)
+        refresh_all_views(self, true)
         show_view(self, "sms")
         print("[phone_v2] open_phone")
     elseif message_id == hash("close_phone") then
@@ -402,6 +417,9 @@ function on_input(self, action_id, action)
             print("[phone_v2] app tile clicked: " .. app.id)
             flash_node(bg)
             msg.post(UI_MGR, "phone_app_clicked", { id = app.id })
+            if EXTERNAL_APPS[app.id] then
+                return true
+            end
             if self.active_view == app.id then
                 show_view(self, "sms")
             else

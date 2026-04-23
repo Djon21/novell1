@@ -147,6 +147,12 @@ Persisted meta-state между итерациями:
   - `save_manager`
   - `meta_state`
   - `components_v2/*`
+- применяет Ink-команды для data-driven телефона:
+  - `# sms:add:*`
+  - `# sms:read:*`
+  - `# quest:*`
+  - `# note:add:*`
+  - `# meta:add:*`
 - держит единый helper старта новой игры:
   - `start_game` -> перезапуск текущей итерации без сброса loop-памяти
   - `reset_iteration` -> полный сброс meta-state и запуск с `001`
@@ -178,7 +184,7 @@ Bulk-компиляция по умолчанию пропускает `*_old.in
 - `hud_v2` — локация, inventory badge, phone badge
 - `choice_v2` — экран выбора
 - `inventory_v2` — модальный инвентарь
-- `phone_v2` — приложения телефона, SMS, quests, notes
+- `phone_v2` — data-driven телефон поверх `game_state`; app tiles больше не ведут в статичные Ink-экраны
 - `map_v2` — карта и dossier-панель
 - `effects` — визуальные оверлеи grain/scan/vignette
 

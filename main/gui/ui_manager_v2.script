@@ -41,16 +41,6 @@ local LEGACY_FLAG_ITEMS = {
     has_phone = "phone",
 }
 
-local PHONE_APP_KNOTS = {
-    sms      = "phone_sms",
-    calls    = "phone_stub_soon",
-    clues    = "phone_notes",
-    day      = "phone_tasks",
-    mail     = "phone_contacts",
-    camera   = "phone_stub_soon",
-    terminal = "phone_stub_soon",
-}
-
 local BG_TEXTURE_KEY = "backgrounds"
 local DEDICATED_BG_ANIMATION = "scene_bg"
 
@@ -194,7 +184,7 @@ local function sync_ui_state(self)
     sync_derived_inventory()
 
     local inv = gs.get_inventory and gs.get_inventory() or {}
-    local unread = gs.get_sms_unread_total and gs.get_sms_unread_total() or 0
+    local unread = gs.get_phone_unread_total and gs.get_phone_unread_total() or 0
     local has_phone = gs.get_flag and gs.get_flag("has_phone") == true or false
 
     msg.post(M.components.hud, "set_inventory_count", { n = #inv })
@@ -463,8 +453,14 @@ local function apply_dm_commands(self)
             if gs.set_quest then gs.set_quest(cmd.quest, cmd.status) end
         elseif cmd.type == "add_sms" then
             if gs.add_sms then gs.add_sms(cmd.contact, cmd.text) end
+        elseif cmd.type == "mark_sms_read" then
+            if gs.mark_sms_read then gs.mark_sms_read(cmd.contact) end
         elseif cmd.type == "add_note" then
             if gs.add_note then gs.add_note(cmd.title, cmd.body) end
+        elseif cmd.type == "meta_add" then
+            if meta.inc then meta.inc(cmd.key, cmd.delta) end
+        elseif cmd.type == "meta_set" then
+            if meta.set then meta.set(cmd.key, cmd.value) end
         elseif cmd.type == "phone_close" then
             close_phone(self)
         end
@@ -735,18 +731,15 @@ function on_message(self, message_id, message, sender)
         open_phone(self)
     elseif message_id == hash("close_phone") then
         close_phone(self)
+    elseif message_id == hash("phone_sms_viewed") then
+        if gs.mark_all_sms_read then
+            gs.mark_all_sms_read()
+        end
     elseif message_id == hash("phone_app_clicked") then
         print("[ui_manager_v2] phone_app_clicked", message.id)
         if message.id == "map" then
             close_phone(self)
             open_map(self)
-        else
-            local knot = PHONE_APP_KNOTS[message.id]
-            if knot and dm.jump_to_knot then
-                close_phone(self)
-                dm.jump_to_knot(knot)
-                handle_dialogue_update(self)
-            end
         end
 
     -- --- map ---
