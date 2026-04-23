@@ -32,6 +32,7 @@
   - `dialogue_v2` для реплик
   - `choice_v2` для выборов
   - `main_menu_v2` при возврате в меню после конца главы
+- при `render_dialogue` прокидывает в `dialogue_v2` текущие `iteration_number` / `iteration_label`, чтобы dossier-плашка и loop-counter не жили на старом `#017`
 
 ### 3. Exploration-режим
 

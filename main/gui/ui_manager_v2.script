@@ -654,6 +654,8 @@ handle_dialogue_update = function(self)
             speaker = node.character,
             name    = node.character and tostring(node.character):upper() or "—",
             text    = node.text or "",
+            loop    = meta.get("iteration_number", 1),
+            loop_label = meta.get_iteration_label(),
         })
 
     elseif node.type == "choice" then
@@ -665,6 +667,8 @@ handle_dialogue_update = function(self)
         hide_choice(self)
         msg.post(M.components.dialogue, "render_dialogue", {
             speaker = "narrator",
+            loop    = meta.get("iteration_number", 1),
+            loop_label = meta.get_iteration_label(),
             name    = "КОНЕЦ",
             text    = node.text or "Конец главы. Нажми NEXT чтобы вернуться в меню.",
         })

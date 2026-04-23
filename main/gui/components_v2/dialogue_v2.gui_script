@@ -123,17 +123,24 @@ end
 local function render(self, msg)
     local speaker_key = msg.speaker or msg.char or "_default"
     local c = resolve_speaker(speaker_key)
+    local loop_label = tostring(msg.loop_label or "")
+    if loop_label == "" then
+        loop_label = string.format("%03d", tonumber(msg.loop) or 1)
+    end
     
     print("[dialogue_v2] speaker_key:", speaker_key, "resolved portrait:", c.portrait)
 
     local name = msg.name or (speaker_key ~= "_default" and speaker_key:upper()) or "—"
     set_text("nameplate_name", name:upper())
     set_color("nameplate_name", COLOR_PAPER)
-    set_text("nameplate_tag", msg.tag or c.tag or "")
+    local tag = msg.tag or c.tag or ""
+    if (speaker_key == "mila" or speaker_key == "РјРёР»Р°") and (not msg.tag or msg.tag == "") then
+        tag = "РїРѕРґСЂСѓРіР° В· #" .. loop_label
+    end
+    set_text("nameplate_tag", tag)
     set_color("nameplate_tag", c.color)
-
     -- Loop counter (петля #XXX)
-    local loop_num = msg.loop or 17
+    local loop_num = tonumber(loop_label) or tonumber(msg.loop) or 1
     set_text("loop_counter", string.format("петля #%03d", loop_num))
 
     -- Mood indicator (настроение персонажа)
