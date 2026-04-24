@@ -262,6 +262,78 @@ local function apply_tags(tags, trailing)
                     table.insert(pending_commands, { type = "add_note", title = title, body = body })
                 end
             end
+        elseif key == "mail" and value and not suppress_effects then
+            -- # mail:add:from:subject        — письмо с темой
+            -- # mail:add:from:subject:body   — письмо с отдельным телом
+            -- # mail:read                    — пометить все прочитанными
+            -- # mail:read:INDEX              — пометить одно (1 = самое свежее)
+            local op, rest = value:match("(%a+)%s*:?%s*(.*)")
+            if op == "add" and rest and rest ~= "" then
+                local from, after = rest:match("([^:]+)%s*:%s*(.+)")
+                if from and after then
+                    from = from:gsub("^%s+", ""):gsub("%s+$", "")
+                    local subject, body = after:match("([^:]+)%s*:%s*(.+)")
+                    if not subject then
+                        subject = after
+                        body    = ""
+                    end
+                    subject = subject:gsub("^%s+", ""):gsub("%s+$", "")
+                                     :gsub('^"(.*)"$', "%1")
+                                     :gsub("^'(.*)'$", "%1")
+                    body = (body or ""):gsub('^%s*"(.*)"%s*$', "%1")
+                                       :gsub("^%s*'(.*)'%s*$", "%1")
+                    table.insert(pending_commands, {
+                        type    = "add_mail",
+                        from    = from,
+                        subject = subject,
+                        body    = body,
+                    })
+                end
+            elseif op == "read" then
+                local rest_trim = (rest or ""):gsub("^%s+", ""):gsub("%s+$", "")
+                local idx = tonumber(rest_trim)
+                if idx then
+                    table.insert(pending_commands, { type = "mark_mail_read", index = idx })
+                else
+                    table.insert(pending_commands, { type = "mark_all_mail_read" })
+                end
+            end
+        elseif key == "call" and value and not suppress_effects then
+            -- # call:in:who      — входящий
+            -- # call:out:who     — исходящий
+            -- # call:missed:who  — пропущенный (пополняет бейдж)
+            -- # call:seen        — «журнал отсмотрен», сброс missed-счётчика
+            local op, rest = value:match("(%a+)%s*:?%s*(.*)")
+            if op == "seen" then
+                table.insert(pending_commands, { type = "mark_all_calls_seen" })
+            elseif op and (op == "in" or op == "out" or op == "missed") and rest and rest ~= "" then
+                local who = rest:gsub("^%s+", ""):gsub("%s+$", "")
+                                :gsub('^"(.*)"$', "%1")
+                                :gsub("^'(.*)'$", "%1")
+                if who ~= "" then
+                    table.insert(pending_commands, {
+                        type = "add_call",
+                        who  = who,
+                        kind = op,
+                    })
+                end
+            end
+        elseif key == "clue" and value and not suppress_effects then
+            -- # clue:add:id:Label
+            local op, rest = value:match("(%a+)%s*:%s*(.+)")
+            if op == "add" and rest then
+                local id, label = rest:match("([^:]+)%s*:%s*(.+)")
+                if id and label then
+                    id = id:gsub("^%s+", ""):gsub("%s+$", "")
+                    label = label:gsub('^%s*"(.*)"%s*$', "%1")
+                                 :gsub("^%s*'(.*)'%s*$", "%1")
+                    table.insert(pending_commands, {
+                        type  = "add_clue",
+                        id    = id,
+                        label = label,
+                    })
+                end
+            end
         elseif key == "meta" and value and not suppress_effects then
             local op, rest = value:match("(%a+)%s*:%s*(.+)")
             if op == "add" and rest then

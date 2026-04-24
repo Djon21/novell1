@@ -21,9 +21,17 @@ local _listeners   = {}    -- callback'и на изменения
 --   _sms[contact_id]      = { {text=, unread=true/false, time=, seq=}, ... } — порядок прихода
 --   _sms_unread[contact_id] = N непрочитанных (для бейджа)
 --   _notes                = { {title=, body=, time=}, ... } — порядок создания
+--   _mails                = { {from=, subject=, body=, unread=, time=, seq=}, ... }
+--   _call_log             = { {who=, missed=, kind="in"/"out"/"missed", time=, seq=}, ... }
+--   _clues                = { {id=, label=, time=, seq=}, ... } — уникальные по id
 local _sms         = {}
 local _sms_unread  = {}
 local _notes       = {}
+local _mails       = {}
+local _mails_unread = 0
+local _call_log    = {}
+local _call_missed = 0
+local _clues       = {}
 
 local QUEST_STATUS_PRIORITY = {
     active = 1,
@@ -31,11 +39,17 @@ local QUEST_STATUS_PRIORITY = {
     done = 3,
 }
 
-local SMS_TIME_BASE_MINUTES = 7 * 60 + 12
+local SMS_TIME_BASE_MINUTES  = 7 * 60 + 12
 local NOTE_TIME_BASE_MINUTES = 7 * 60 + 20
+local MAIL_TIME_BASE_MINUTES = 7 * 60 + 30
+local CALL_TIME_BASE_MINUTES = 7 * 60 + 40
+local CLUE_TIME_BASE_MINUTES = 7 * 60 + 50
 
-local _sms_seq = 0
+local _sms_seq  = 0
 local _note_seq = 0
+local _mail_seq = 0
+local _call_seq = 0
+local _clue_seq = 0
 
 local function clone_value(value)
     if type(value) ~= "table" then
@@ -106,6 +120,33 @@ end
 
 local function default_note_time(seq)
     return format_clock(NOTE_TIME_BASE_MINUTES + math.max(0, (tonumber(seq) or 1) - 1))
+end
+
+local function default_mail_time(seq)
+    return format_clock(MAIL_TIME_BASE_MINUTES + math.max(0, (tonumber(seq) or 1) - 1))
+end
+
+local function default_call_time(seq)
+    return format_clock(CALL_TIME_BASE_MINUTES + math.max(0, (tonumber(seq) or 1) - 1))
+end
+
+local function default_clue_time(seq)
+    return format_clock(CLUE_TIME_BASE_MINUTES + math.max(0, (tonumber(seq) or 1) - 1))
+end
+
+local function next_mail_seq()
+    _mail_seq = _mail_seq + 1
+    return _mail_seq
+end
+
+local function next_call_seq()
+    _call_seq = _call_seq + 1
+    return _call_seq
+end
+
+local function next_clue_seq()
+    _clue_seq = _clue_seq + 1
+    return _clue_seq
 end
 
 local function get_contact_last_seq(contact_id)
@@ -195,6 +236,122 @@ local function normalize_notes_state()
     _note_seq = max_seq
 end
 
+local function normalize_mails_state()
+    local raw = type(_mails) == "table" and _mails or {}
+    local normalized = {}
+    local max_seq = 0
+    local unread = 0
+
+    for _, mail in ipairs(raw) do
+        local entry = type(mail) == "table" and mail or { subject = tostring(mail) }
+        local seq = tonumber(entry.seq)
+        if not seq or seq < 1 then
+            seq = max_seq + 1
+        end
+        if seq > max_seq then
+            max_seq = seq
+        end
+        local is_unread = entry.unread == true
+        if is_unread then
+            unread = unread + 1
+        end
+        table.insert(normalized, {
+            from    = tostring(entry.from or ""),
+            subject = tostring(entry.subject or ""),
+            body    = tostring(entry.body or ""),
+            unread  = is_unread,
+            time    = entry.time and tostring(entry.time) or default_mail_time(seq),
+            seq     = seq,
+        })
+    end
+
+    table.sort(normalized, function(a, b)
+        return (tonumber(a.seq) or 0) < (tonumber(b.seq) or 0)
+    end)
+
+    _mails = normalized
+    _mails_unread = unread
+    _mail_seq = max_seq
+end
+
+local CALL_KINDS = { ["in"] = true, out = true, missed = true }
+
+local function normalize_call_log_state()
+    local raw = type(_call_log) == "table" and _call_log or {}
+    local normalized = {}
+    local max_seq = 0
+    local missed = 0
+
+    for _, call in ipairs(raw) do
+        local entry = type(call) == "table" and call or { who = tostring(call) }
+        local seq = tonumber(entry.seq)
+        if not seq or seq < 1 then
+            seq = max_seq + 1
+        end
+        if seq > max_seq then
+            max_seq = seq
+        end
+        local kind = entry.kind
+        if not CALL_KINDS[kind] then
+            kind = entry.missed and "missed" or "in"
+        end
+        local is_missed = (kind == "missed")
+        if is_missed then
+            missed = missed + 1
+        end
+        table.insert(normalized, {
+            who    = tostring(entry.who or ""),
+            kind   = kind,
+            missed = is_missed,
+            time   = entry.time and tostring(entry.time) or default_call_time(seq),
+            seq    = seq,
+        })
+    end
+
+    table.sort(normalized, function(a, b)
+        return (tonumber(a.seq) or 0) < (tonumber(b.seq) or 0)
+    end)
+
+    _call_log = normalized
+    _call_missed = missed
+    _call_seq = max_seq
+end
+
+local function normalize_clues_state()
+    local raw = type(_clues) == "table" and _clues or {}
+    local normalized = {}
+    local seen = {}
+    local max_seq = 0
+
+    for _, clue in ipairs(raw) do
+        local entry = type(clue) == "table" and clue or { label = tostring(clue) }
+        local id = tostring(entry.id or "")
+        if id ~= "" and not seen[id] then
+            seen[id] = true
+            local seq = tonumber(entry.seq)
+            if not seq or seq < 1 then
+                seq = max_seq + 1
+            end
+            if seq > max_seq then
+                max_seq = seq
+            end
+            table.insert(normalized, {
+                id    = id,
+                label = tostring(entry.label or ""),
+                time  = entry.time and tostring(entry.time) or default_clue_time(seq),
+                seq   = seq,
+            })
+        end
+    end
+
+    table.sort(normalized, function(a, b)
+        return (tonumber(a.seq) or 0) < (tonumber(b.seq) or 0)
+    end)
+
+    _clues = normalized
+    _clue_seq = max_seq
+end
+
 function M.reset()
     _flags = {}
     _inventory = {}
@@ -202,9 +359,17 @@ function M.reset()
     _sms = {}
     _sms_unread = {}
     _notes = {}
+    _mails = {}
+    _mails_unread = 0
+    _call_log = {}
+    _call_missed = 0
+    _clues = {}
     _current_scene = nil
     _sms_seq = 0
     _note_seq = 0
+    _mail_seq = 0
+    _call_seq = 0
+    _clue_seq = 0
     M._notify()
 end
 
@@ -389,8 +554,8 @@ end
 
 -- Phone view getters (step23) --------------------------------------------
 -- Возвращают списки в формате, ожидаемом phone_v2.gui_script.
--- Пока что основаны на существующих SMS/notes + пустые стабы для
--- quests/mail/calls/clues, которые будут заполняться ink-тегами позже.
+-- Все сторы (sms, notes, mails, call_log, clues) пополняются через ink-теги
+-- (см. main/story/README_INK.md) и сохраняются в save_manager.
 
 -- Сообщения для SMS-вьюхи: { {from, time, body, unread}, ... }
 -- Берём последние сообщения по каждому контакту и сортируем чаты по
@@ -413,22 +578,144 @@ function M.get_messages()
     return out
 end
 
--- Почта: { {from, subject, unread}, ... }. Пока нет хранилища — пустой список.
--- TODO: добавить _mails + add_mail/mark_mail_read когда появятся ink-теги.
+-- Mail (телефон, приложение «почта») ------------------------------------
+-- Добавить новое письмо. unread=true, чтобы попало в бейдж.
+function M.add_mail(from, subject, body)
+    local seq = next_mail_seq()
+    table.insert(_mails, {
+        from    = tostring(from or ""),
+        subject = tostring(subject or ""),
+        body    = tostring(body or ""),
+        unread  = true,
+        time    = default_mail_time(seq),
+        seq     = seq,
+    })
+    _mails_unread = _mails_unread + 1
+    M._notify()
+    return true
+end
+
+-- Пометить одно письмо прочитанным. index — позиция в get_mails() (1 = свежее).
+function M.mark_mail_read(index)
+    local list = _mails
+    if #list == 0 then return end
+    local i = tonumber(index)
+    local target
+    if i and i >= 1 and i <= #list then
+        -- get_mails() отдаёт newest-first, поэтому переводим внешний индекс
+        -- в внутренний (chronological) через #list - i + 1.
+        target = list[#list - i + 1]
+    end
+    if not target or not target.unread then return end
+    target.unread = false
+    _mails_unread = math.max(0, _mails_unread - 1)
+    M._notify()
+end
+
+function M.mark_all_mail_read()
+    if _mails_unread == 0 then return end
+    for _, mail in ipairs(_mails) do
+        mail.unread = false
+    end
+    _mails_unread = 0
+    M._notify()
+end
+
+-- Почта: { {from, subject, unread, time}, ... }. Свежие — первыми.
 function M.get_mails()
-    return {}
+    local out = {}
+    for i = #_mails, 1, -1 do
+        table.insert(out, clone_value(_mails[i]))
+    end
+    return out
 end
 
--- Журнал звонков: { {who, time, missed}, ... }. Пустой стаб.
--- TODO: добавить _call_log + add_call.
+function M.get_mail_unread_total()
+    return _mails_unread
+end
+
+-- Call log (телефон, журнал звонков) -------------------------------------
+-- kind: "in" (входящий), "out" (исходящий), "missed" (пропущенный).
+function M.add_call(who, kind)
+    local k = kind
+    if not CALL_KINDS[k] then k = "in" end
+    local seq = next_call_seq()
+    local is_missed = (k == "missed")
+    table.insert(_call_log, {
+        who    = tostring(who or ""),
+        kind   = k,
+        missed = is_missed,
+        time   = default_call_time(seq),
+        seq    = seq,
+    })
+    if is_missed then
+        _call_missed = _call_missed + 1
+    end
+    M._notify()
+    return true
+end
+
+-- «Отсмотреть» журнал: сбросить счётчик пропущенных (записи остаются).
+function M.mark_all_calls_seen()
+    if _call_missed == 0 then return end
+    for _, call in ipairs(_call_log) do
+        call.missed = false
+    end
+    _call_missed = 0
+    M._notify()
+end
+
+-- Журнал звонков: { {who, kind, missed, time}, ... }. Свежие — первыми.
 function M.get_call_log()
-    return {}
+    local out = {}
+    for i = #_call_log, 1, -1 do
+        table.insert(out, clone_value(_call_log[i]))
+    end
+    return out
 end
 
--- Улики: { {id, label}, ... }. Пустой стаб.
--- TODO: завести _clues + add_clue (можно шарить с notes).
+function M.get_call_missed_total()
+    return _call_missed
+end
+
+-- Clues (телефон, улики) -------------------------------------------------
+-- Повторный add_clue с тем же id — no-op. Подходит для записей в ink,
+-- которые могут сработать после rewind/замкнутого цикла.
+function M.add_clue(id, label)
+    id = tostring(id or "")
+    if id == "" then return false end
+    for _, existing in ipairs(_clues) do
+        if existing.id == id then
+            return false
+        end
+    end
+    local seq = next_clue_seq()
+    table.insert(_clues, {
+        id    = id,
+        label = tostring(label or ""),
+        time  = default_clue_time(seq),
+        seq   = seq,
+    })
+    M._notify()
+    return true
+end
+
+function M.has_clue(id)
+    id = tostring(id or "")
+    if id == "" then return false end
+    for _, existing in ipairs(_clues) do
+        if existing.id == id then return true end
+    end
+    return false
+end
+
+-- Улики: { {id, label, time}, ... }. Свежие — первыми.
 function M.get_clues()
-    return {}
+    local out = {}
+    for i = #_clues, 1, -1 do
+        table.insert(out, clone_value(_clues[i]))
+    end
+    return out
 end
 
 -- Квесты для phone-вьюхи: { {title, status, progress}, ... }.
@@ -507,6 +794,9 @@ function M.serialize()
         sms           = clone_value(_sms),
         sms_unread    = clone_value(_sms_unread),
         notes         = clone_value(_notes),
+        mails         = clone_value(_mails),
+        call_log      = clone_value(_call_log),
+        clues         = clone_value(_clues),
         current_scene = _current_scene,
     }
 end
@@ -522,9 +812,17 @@ function M.deserialize(data)
     _sms           = data.sms        or {}
     _sms_unread    = data.sms_unread or {}
     _notes         = data.notes      or {}
+    _mails         = data.mails      or {}
+    _mails_unread  = 0
+    _call_log      = data.call_log   or {}
+    _call_missed   = 0
+    _clues         = data.clues      or {}
     _current_scene = data.current_scene
     normalize_sms_state()
     normalize_notes_state()
+    normalize_mails_state()
+    normalize_call_log_state()
+    normalize_clues_state()
     M._notify()
 end
 

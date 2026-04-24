@@ -880,6 +880,18 @@ local function apply_dm_commands(self)
             if gs.mark_sms_read then gs.mark_sms_read(cmd.contact) end
         elseif cmd.type == "add_note" then
             if gs.add_note then gs.add_note(cmd.title, cmd.body) end
+        elseif cmd.type == "add_mail" then
+            if gs.add_mail then gs.add_mail(cmd.from, cmd.subject, cmd.body) end
+        elseif cmd.type == "mark_mail_read" then
+            if gs.mark_mail_read then gs.mark_mail_read(cmd.index) end
+        elseif cmd.type == "mark_all_mail_read" then
+            if gs.mark_all_mail_read then gs.mark_all_mail_read() end
+        elseif cmd.type == "add_call" then
+            if gs.add_call then gs.add_call(cmd.who, cmd.kind) end
+        elseif cmd.type == "mark_all_calls_seen" then
+            if gs.mark_all_calls_seen then gs.mark_all_calls_seen() end
+        elseif cmd.type == "add_clue" then
+            if gs.add_clue then gs.add_clue(cmd.id, cmd.label) end
         elseif cmd.type == "meta_add" then
             if meta.inc then meta.inc(cmd.key, cmd.delta) end
         elseif cmd.type == "meta_set" then
