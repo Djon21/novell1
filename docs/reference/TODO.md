@@ -17,7 +17,6 @@
 
 - [ ] Убрать дубли в `main_menu_v2.gui_script`: файл содержит повторные определения `animate_alpha`, `animate_x`, `animate_y`, `glitch_burst`, `schedule_next_glitch`.
 - [ ] Убрать или хотя бы резко сократить debug-log spam в `ui_manager_v2`, `phone_v2`, `dialogue_v2`, `hotspots_v2` перед следующей волной контентного тестирования.
-- [ ] Пройтись по UI на предмет старых хардкодов `#017`: в проекте уже есть `iteration_number`/`iteration_label`, но часть dossier-style текста всё ещё живёт на старой фиксированной метке.
 - [ ] Решить судьбу `click_001`: либо зарегистрировать его в `sfx_player`, либо вычистить из документации как неиспользуемый asset.
 
 ## Loop system / narrative

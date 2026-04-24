@@ -13,6 +13,7 @@
 --   "map_verb" {pin_id, verb}  — verb ∈ {"route","save","share"}
 
 local theme = require "main.gui.modules.v2_theme"
+local meta = require "main.scripts.meta_state"
 
 local UI_MGR = "#ui_manager_v2"
 
@@ -166,6 +167,10 @@ local function clone_point(point)
         else
             out[k] = v
         end
+    end
+    if out.iter == "#017" then
+        local label = meta.get_iteration_label and meta.get_iteration_label() or "001"
+        out.iter = "#" .. tostring(label)
     end
     return out
 end

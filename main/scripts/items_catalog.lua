@@ -10,6 +10,7 @@
 -- дублируется как `desc`; и старый рендер item_modal'ки использует оба.
 
 local M = {}
+local meta = require "main.scripts.meta_state"
 
 -- Material Icons codepoints (UTF-8 3-byte encoding)
 -- кружка (coffee) U+E541 -> EE 95 81
@@ -142,12 +143,29 @@ M.items = {
     },
 }
 
+local function clone_item(item)
+    local copy = {}
+    for k, v in pairs(item) do
+        copy[k] = v
+    end
+    return copy
+end
+
+local function current_iteration_tag()
+    local label = meta.get_iteration_label and meta.get_iteration_label() or "001"
+    return "#" .. tostring(label)
+end
+
 function M.get(id) return M.items[id] end
 
 function M.get_runtime(id)
     local item = M.items[id]
     if item then
-        return item
+        local runtime = clone_item(item)
+        if runtime.iter == "#017" then
+            runtime.iter = current_iteration_tag()
+        end
+        return runtime
     end
     if not id or id == "" then
         return nil
@@ -156,7 +174,7 @@ function M.get_runtime(id)
         name = tostring(id),
         type = "runtime",
         source = "game_state",
-        iter = "?",
+        iter = current_iteration_tag(),
         clue = "нет",
         desc = "Предмет есть в inventory state, но для него нет описания в items_catalog.lua.",
         description = "Добавьте item_id '" .. tostring(id) .. "' в main/scripts/items_catalog.lua.",

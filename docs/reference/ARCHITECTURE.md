@@ -34,6 +34,7 @@
   - `choice_v2` для выборов
   - `main_menu_v2` при возврате в меню после конца главы
 - при `render_dialogue` прокидывает в `dialogue_v2` текущие `iteration_number` / `iteration_label`, чтобы dossier-плашка и loop-counter не жили на старом `#017`
+- runtime-метки текущей петли больше не захардкожены и в смежном UI: `items_catalog.get_runtime()` подставляет актуальный `iteration_label` для инвентаря, а `map_v2` нормализует только текущие dossier-штампы, не трогая намеренные ссылки на прошлые петли вроде `#015/#016`
 - `AUTO` и `SKIP` в `dialogue_v2` больше не декоративные: `ui_manager_v2` ведёт их как взаимоисключающие режимы автолистания и останавливает на `choice` / `end`
 
 ### 3. Exploration-режим
