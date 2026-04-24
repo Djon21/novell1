@@ -33,6 +33,31 @@ local _call_log    = {}
 local _call_missed = 0
 local _clues       = {}
 
+-- Camera feed (вьюха «камера» в телефоне). Один активный канал.
+--   _camera = { status = "offline"|"online"|"error", message, meta }
+-- Terminal log (вьюха «терминал»). Хронологический список, отображается
+-- последние TERMINAL_MAX_LINES — сверху старые, снизу свежие.
+--   _terminal_lines = { {level = "ok"|"warn"|"err"|"info"|"prompt"|"plain", text}, ... }
+local TERMINAL_MAX_LINES = 4
+local DEFAULT_CAMERA = {
+    status  = "offline",
+    message = "NO SIGNAL",
+    meta    = "CAM-01 · offline",
+}
+local DEFAULT_TERMINAL_LINES = {
+    { level = "prompt", text = "loop --init" },
+    { level = "ok",     text = "monday-worker spawned" },
+    { level = "warn",   text = "cycle drift detected · +14ms" },
+    { level = "err",    text = "reality.check() returned FALSE" },
+}
+
+local _camera = {
+    status  = DEFAULT_CAMERA.status,
+    message = DEFAULT_CAMERA.message,
+    meta    = DEFAULT_CAMERA.meta,
+}
+local _terminal_lines = {}
+
 local QUEST_STATUS_PRIORITY = {
     active = 1,
     failed = 2,
@@ -317,6 +342,54 @@ local function normalize_call_log_state()
     _call_seq = max_seq
 end
 
+local CAMERA_STATUSES = { offline = true, online = true, error = true }
+
+local function normalize_camera_state()
+    local raw = type(_camera) == "table" and _camera or {}
+    local status = raw.status
+    if not CAMERA_STATUSES[status] then
+        status = DEFAULT_CAMERA.status
+    end
+    _camera = {
+        status  = status,
+        message = tostring(raw.message or DEFAULT_CAMERA.message),
+        meta    = tostring(raw.meta    or DEFAULT_CAMERA.meta),
+    }
+end
+
+local TERMINAL_LEVELS = {
+    ok = true, warn = true, err = true, info = true, prompt = true, plain = true,
+}
+
+local function normalize_terminal_state()
+    local raw = type(_terminal_lines) == "table" and _terminal_lines or {}
+    local normalized = {}
+    for _, line in ipairs(raw) do
+        local entry = type(line) == "table" and line or { text = tostring(line) }
+        local level = entry.level
+        if not TERMINAL_LEVELS[level] then
+            level = "plain"
+        end
+        table.insert(normalized, {
+            level = level,
+            text  = tostring(entry.text or ""),
+        })
+    end
+    while #normalized > TERMINAL_MAX_LINES do
+        table.remove(normalized, 1)
+    end
+    _terminal_lines = normalized
+end
+
+local function seed_default_terminal()
+    _terminal_lines = {}
+    for _, entry in ipairs(DEFAULT_TERMINAL_LINES) do
+        table.insert(_terminal_lines, { level = entry.level, text = entry.text })
+    end
+end
+
+seed_default_terminal()
+
 local function normalize_clues_state()
     local raw = type(_clues) == "table" and _clues or {}
     local normalized = {}
@@ -364,6 +437,12 @@ function M.reset()
     _call_log = {}
     _call_missed = 0
     _clues = {}
+    _camera = {
+        status  = DEFAULT_CAMERA.status,
+        message = DEFAULT_CAMERA.message,
+        meta    = DEFAULT_CAMERA.meta,
+    }
+    seed_default_terminal()
     _current_scene = nil
     _sms_seq = 0
     _note_seq = 0
@@ -718,6 +797,82 @@ function M.get_clues()
     return out
 end
 
+-- Camera feed ------------------------------------------------------------
+-- Одна активная вьюха; любые значения опциональны — перезаписываются
+-- только переданные поля, остальное сохраняется.
+function M.set_camera_feed(opts)
+    if type(opts) ~= "table" then return end
+    local changed = false
+    if opts.status ~= nil and CAMERA_STATUSES[opts.status] and _camera.status ~= opts.status then
+        _camera.status = opts.status
+        changed = true
+    end
+    if opts.message ~= nil then
+        local msg_txt = tostring(opts.message)
+        if _camera.message ~= msg_txt then
+            _camera.message = msg_txt
+            changed = true
+        end
+    end
+    if opts.meta ~= nil then
+        local meta_txt = tostring(opts.meta)
+        if _camera.meta ~= meta_txt then
+            _camera.meta = meta_txt
+            changed = true
+        end
+    end
+    if changed then M._notify() end
+end
+
+function M.reset_camera_feed()
+    _camera = {
+        status  = DEFAULT_CAMERA.status,
+        message = DEFAULT_CAMERA.message,
+        meta    = DEFAULT_CAMERA.meta,
+    }
+    M._notify()
+end
+
+function M.get_camera_feed()
+    return {
+        status  = _camera.status,
+        message = _camera.message,
+        meta    = _camera.meta,
+    }
+end
+
+-- Terminal log -----------------------------------------------------------
+-- Новая строка уходит в конец. Храним не больше TERMINAL_MAX_LINES.
+function M.add_terminal_line(level, text)
+    if not TERMINAL_LEVELS[level] then level = "plain" end
+    table.insert(_terminal_lines, { level = level, text = tostring(text or "") })
+    while #_terminal_lines > TERMINAL_MAX_LINES do
+        table.remove(_terminal_lines, 1)
+    end
+    M._notify()
+end
+
+function M.clear_terminal()
+    if #_terminal_lines == 0 then return end
+    _terminal_lines = {}
+    M._notify()
+end
+
+function M.reset_terminal_to_defaults()
+    seed_default_terminal()
+    M._notify()
+end
+
+-- Возвращает до TERMINAL_MAX_LINES записей в хронологическом порядке
+-- (старые — первыми). В phone_v2.gui_script верхний слот = первая запись.
+function M.get_terminal_lines()
+    local out = {}
+    for i = 1, #_terminal_lines do
+        out[i] = { level = _terminal_lines[i].level, text = _terminal_lines[i].text }
+    end
+    return out
+end
+
 -- Квесты для phone-вьюхи: { {title, status, progress}, ... }.
 -- Берём из _quests ({ [id] = "active"|"done"|"failed" }). progress пока пустой.
 function M.get_quests()
@@ -788,16 +943,18 @@ end
 -- Сериализация -----------------------------------------------------------
 function M.serialize()
     return {
-        flags         = _flags,
-        inventory     = clone_array(_inventory),
-        quests        = _quests,
-        sms           = clone_value(_sms),
-        sms_unread    = clone_value(_sms_unread),
-        notes         = clone_value(_notes),
-        mails         = clone_value(_mails),
-        call_log      = clone_value(_call_log),
-        clues         = clone_value(_clues),
-        current_scene = _current_scene,
+        flags          = _flags,
+        inventory      = clone_array(_inventory),
+        quests         = _quests,
+        sms            = clone_value(_sms),
+        sms_unread     = clone_value(_sms_unread),
+        notes          = clone_value(_notes),
+        mails          = clone_value(_mails),
+        call_log       = clone_value(_call_log),
+        clues          = clone_value(_clues),
+        camera         = clone_value(_camera),
+        terminal_lines = clone_value(_terminal_lines),
+        current_scene  = _current_scene,
     }
 end
 
@@ -806,23 +963,31 @@ function M.deserialize(data)
         M.reset()
         return
     end
-    _flags         = data.flags      or {}
-    _inventory     = sanitize_inventory(data.inventory)
-    _quests        = data.quests     or {}
-    _sms           = data.sms        or {}
-    _sms_unread    = data.sms_unread or {}
-    _notes         = data.notes      or {}
-    _mails         = data.mails      or {}
-    _mails_unread  = 0
-    _call_log      = data.call_log   or {}
-    _call_missed   = 0
-    _clues         = data.clues      or {}
-    _current_scene = data.current_scene
+    _flags          = data.flags      or {}
+    _inventory      = sanitize_inventory(data.inventory)
+    _quests         = data.quests     or {}
+    _sms            = data.sms        or {}
+    _sms_unread     = data.sms_unread or {}
+    _notes          = data.notes      or {}
+    _mails          = data.mails      or {}
+    _mails_unread   = 0
+    _call_log       = data.call_log   or {}
+    _call_missed    = 0
+    _clues          = data.clues      or {}
+    _camera         = data.camera     or nil
+    _terminal_lines = data.terminal_lines or nil
+    _current_scene  = data.current_scene
     normalize_sms_state()
     normalize_notes_state()
     normalize_mails_state()
     normalize_call_log_state()
     normalize_clues_state()
+    normalize_camera_state()
+    if _terminal_lines == nil then
+        seed_default_terminal()
+    else
+        normalize_terminal_state()
+    end
     M._notify()
 end
 

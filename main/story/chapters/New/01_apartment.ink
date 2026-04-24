@@ -296,6 +296,10 @@ PATCH temporal_sync.module. Без приветствия, без контекс
 # mail:add:bank:Возврат средств:Уведомление о возврате
 # call:missed:boss
 # clue:add:strange_note:Записка на столе
+# camera:online:LIVE FEED:CAM-01 · 07:15 · rec
+# term:clear
+# term:prompt:auth --user=mc
+# term:err:access denied
 # return_to_scene
 -> DONE
 

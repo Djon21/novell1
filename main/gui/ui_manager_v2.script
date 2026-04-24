@@ -892,6 +892,22 @@ local function apply_dm_commands(self)
             if gs.mark_all_calls_seen then gs.mark_all_calls_seen() end
         elseif cmd.type == "add_clue" then
             if gs.add_clue then gs.add_clue(cmd.id, cmd.label) end
+        elseif cmd.type == "set_camera" then
+            if gs.set_camera_feed then
+                gs.set_camera_feed({
+                    status  = cmd.status,
+                    message = cmd.message,
+                    meta    = cmd.meta,
+                })
+            end
+        elseif cmd.type == "reset_camera" then
+            if gs.reset_camera_feed then gs.reset_camera_feed() end
+        elseif cmd.type == "add_terminal_line" then
+            if gs.add_terminal_line then gs.add_terminal_line(cmd.level, cmd.text) end
+        elseif cmd.type == "clear_terminal" then
+            if gs.clear_terminal then gs.clear_terminal() end
+        elseif cmd.type == "reset_terminal" then
+            if gs.reset_terminal_to_defaults then gs.reset_terminal_to_defaults() end
         elseif cmd.type == "meta_add" then
             if meta.inc then meta.inc(cmd.key, cmd.delta) end
         elseif cmd.type == "meta_set" then

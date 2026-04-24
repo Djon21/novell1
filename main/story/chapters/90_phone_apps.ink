@@ -39,7 +39,3 @@
 === phone_close
 # phone:close
 -> DONE
-
-=== phone_stub_soon
-# goto_scene:phone_home
--> DONE

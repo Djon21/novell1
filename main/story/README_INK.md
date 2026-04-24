@@ -180,6 +180,12 @@ tools\compile_ink.bat chapter_01
 | `# call:missed:who` | пропущенный звонок (подсвечивает журнал) |
 | `# call:seen` | гасит счётчик пропущенных |
 | `# clue:add:id:label` | добавляет улику (дубли по id игнорируются) |
+| `# camera:offline:MSG` / `# camera:online:MSG` / `# camera:error:MSG` | обновляет вьюху «камера» (статус и основной текст) |
+| `# camera:offline:MSG:META` | то же + нижняя мета-строка |
+| `# camera:reset` | сбрасывает камеру к дефолтному offline |
+| `# term:LEVEL:text` | добавляет строку в терминал (LEVEL ∈ ok, warn, err, info, prompt, plain) |
+| `# term:clear` | очищает терминал |
+| `# term:defaults` | перезаливает дефолтный стартовый лог |
 | `# meta:add:loop_awareness:1` | повышает loop-awareness внутри текущей итерации |
 | `# meta:set:loop_awareness:2` | жёстко выставляет значение meta-поля |
 | `# phone:close` | закрывает телефон |

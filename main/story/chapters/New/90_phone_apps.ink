@@ -45,8 +45,3 @@
 === phone_close
 # phone:close
 -> DONE
-
-// DEPRECATED: legacy placeholder. Do not use for new content.
-=== phone_stub_soon
-# phone:close
--> DONE

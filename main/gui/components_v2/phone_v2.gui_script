@@ -29,6 +29,9 @@ local COLOR_CYAN      = vmath.vector4(0.47, 0.94, 1.00, 1.0)  -- active quest
 local COLOR_PAPER_DIM = vmath.vector4(0.80, 0.80, 0.78, 0.7)  -- done / placeholder
 local COLOR_HOT       = vmath.vector4(1.00, 0.30, 0.30, 1.0)  -- failed / missed
 local COLOR_PAPER     = vmath.vector4(0.95, 0.95, 0.90, 1.0)
+local COLOR_TERM_OK   = vmath.vector4(0.31, 0.98, 0.48, 1.0)
+local COLOR_TERM_WARN = vmath.vector4(1.00, 0.70, 0.28, 1.0)
+local COLOR_TERM_ERR  = vmath.vector4(1.00, 0.24, 0.50, 1.0)
 
 -- Shared chrome: always visible when phone open.
 local CHROME_NODES = {
@@ -181,6 +184,15 @@ local function set_node_color(id, c)
     if n then gui.set_color(n, c) end
 end
 
+-- Устанавливает RGB ноды, сохраняя его текущий alpha (чтобы не убить
+-- pre-baked фейды из .gui — например, terminal-строки с alpha=0.8/0.9/0.95).
+local function set_node_rgb_keep_alpha(id, c)
+    local n = gui.get_node(id)
+    if not n then return end
+    local cur = gui.get_color(n)
+    gui.set_color(n, vmath.vector4(c.x, c.y, c.z, cur.w))
+end
+
 -- -------- per-view refreshers --------
 -- Каждый refresh_* получает таблицу данных (list) и ничего не возвращает.
 -- Статические ноды существуют всегда — когда данных меньше слотов, лишние
@@ -319,26 +331,79 @@ local function refresh_clues(self, list)
     end
 end
 
+-- Camera: один активный фид. Цвет основного сообщения зависит от статуса.
+local function refresh_camera(self, feed)
+    feed = feed or {}
+    local status = feed.status or "offline"
+    set_text("v_cam_msg",  feed.message or "NO SIGNAL")
+    set_text("v_cam_meta", feed.meta    or "CAM · offline")
+    local col = COLOR_PAPER_DIM
+    if status == "online" then col = COLOR_CYAN
+    elseif status == "error" then col = COLOR_HOT end
+    set_node_color("v_cam_msg", col)
+end
+
+-- Terminal: 4 слота v_term_l1..l4, сверху старые, снизу свежие. Пустые слоты
+-- прячутся целиком, чтобы не оставалось stale-текста.
+local TERM_SLOTS = 4
+local TERM_COLORS = {
+    ok     = COLOR_TERM_OK,
+    warn   = COLOR_TERM_WARN,
+    err    = COLOR_TERM_ERR,
+    info   = COLOR_CYAN,
+    prompt = COLOR_TERM_OK,
+    plain  = COLOR_PAPER,
+}
+local function format_term_line(entry)
+    local level = entry.level or "plain"
+    local text  = entry.text or ""
+    if level == "prompt" then
+        return "> " .. text
+    elseif level == "plain" then
+        return text
+    end
+    return "[" .. level .. "] " .. text
+end
+local function refresh_terminal(self, list)
+    list = list or {}
+    -- Правый край = свежая запись. Выравниваем список по низу: если строк
+    -- меньше TERM_SLOTS, верхние слоты остаются пустыми (отключаются).
+    local shift = TERM_SLOTS - #list
+    for i = 1, TERM_SLOTS do
+        local node_id = "v_term_l" .. i
+        local entry_idx = i - shift
+        local entry = list[entry_idx]
+        set_node_enabled(node_id, entry ~= nil)
+        if entry then
+            set_text(node_id, format_term_line(entry))
+            set_node_rgb_keep_alpha(node_id, TERM_COLORS[entry.level] or TERM_COLORS.plain)
+        end
+    end
+end
+
 -- Полный pull из game_state + обновление всех app-вьюх + счётчика.
--- map/camera/terminal данными не обеспечены — остаются как есть (заполнены
--- статичным текстом в .gui, step22).
+-- map-вьюха пока без данных — остаётся статичной (step22).
 local function refresh_all_views(self, force)
     print("[phone_v2] refresh_all_views called, visible=" .. tostring(self.visible))
     if not force and not self.visible then
         print("[phone_v2] refresh_all_views skipped while hidden")
         return
     end
-    local sms   = gs.get_messages  and gs.get_messages()  or {}
-    local qs    = gs.get_quests    and gs.get_quests()    or {}
-    local mails = gs.get_mails     and gs.get_mails()     or {}
-    local calls = gs.get_call_log  and gs.get_call_log()  or {}
-    local clues = gs.get_clues     and gs.get_clues()     or {}
+    local sms   = gs.get_messages      and gs.get_messages()      or {}
+    local qs    = gs.get_quests        and gs.get_quests()        or {}
+    local mails = gs.get_mails         and gs.get_mails()         or {}
+    local calls = gs.get_call_log      and gs.get_call_log()      or {}
+    local clues = gs.get_clues         and gs.get_clues()         or {}
+    local cam   = gs.get_camera_feed   and gs.get_camera_feed()   or {}
+    local term  = gs.get_terminal_lines and gs.get_terminal_lines() or {}
 
-    refresh_sms(self,    sms)
-    refresh_quests(self, qs)
-    refresh_mail(self,   mails)
-    refresh_calls(self,  calls)
-    refresh_clues(self,  clues)
+    refresh_sms(self,      sms)
+    refresh_quests(self,   qs)
+    refresh_mail(self,     mails)
+    refresh_calls(self,    calls)
+    refresh_clues(self,    clues)
+    refresh_camera(self,   cam)
+    refresh_terminal(self, term)
 
     local unread = gs.get_phone_unread_total and gs.get_phone_unread_total() or 0
     set_text("stats_msg", "сообщений: " .. tostring(unread))

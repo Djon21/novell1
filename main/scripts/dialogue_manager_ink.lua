@@ -334,6 +334,61 @@ local function apply_tags(tags, trailing)
                     })
                 end
             end
+        elseif key == "camera" and value and not suppress_effects then
+            -- # camera:STATUS:MESSAGE          — status + основной текст
+            -- # camera:STATUS:MESSAGE:META     — ещё и мета-строка внизу
+            -- # camera:reset                   — вернуть к дефолтному offline
+            -- STATUS ∈ offline|online|error
+            local op, rest = value:match("(%a+)%s*:?%s*(.*)")
+            if op == "reset" then
+                table.insert(pending_commands, { type = "reset_camera" })
+            elseif op and (op == "offline" or op == "online" or op == "error") then
+                local message, meta
+                if rest and rest ~= "" then
+                    local m, meta_val = rest:match("([^:]+)%s*:%s*(.+)")
+                    if m then
+                        message = m
+                        meta    = meta_val
+                    else
+                        message = rest
+                    end
+                end
+                local function strip(s)
+                    if not s then return nil end
+                    s = s:gsub("^%s+", ""):gsub("%s+$", "")
+                    s = s:gsub('^"(.*)"$', "%1"):gsub("^'(.*)'$", "%1")
+                    return s
+                end
+                table.insert(pending_commands, {
+                    type    = "set_camera",
+                    status  = op,
+                    message = strip(message),
+                    meta    = strip(meta),
+                })
+            end
+        elseif key == "term" and value and not suppress_effects then
+            -- # term:LEVEL:text           — добавить строку
+            -- # term:clear                — очистить
+            -- # term:defaults             — заново залить дефолтный лог
+            -- LEVEL ∈ ok|warn|err|info|prompt|plain
+            local op, rest = value:match("(%a+)%s*:?%s*(.*)")
+            if op == "clear" then
+                table.insert(pending_commands, { type = "clear_terminal" })
+            elseif op == "defaults" then
+                table.insert(pending_commands, { type = "reset_terminal" })
+            elseif op and rest and rest ~= ""
+                   and (op == "ok" or op == "warn" or op == "err"
+                        or op == "info" or op == "prompt" or op == "plain") then
+                local text = rest:gsub("^%s+", ""):gsub("%s+$", "")
+                                 :gsub('^"(.*)"$', "%1"):gsub("^'(.*)'$", "%1")
+                if text ~= "" then
+                    table.insert(pending_commands, {
+                        type  = "add_terminal_line",
+                        level = op,
+                        text  = text,
+                    })
+                end
+            end
         elseif key == "meta" and value and not suppress_effects then
             local op, rest = value:match("(%a+)%s*:%s*(.+)")
             if op == "add" and rest then
