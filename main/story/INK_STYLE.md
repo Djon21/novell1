@@ -86,7 +86,7 @@ VAR newspaper_kept = false
 | `bg:IMAGE` | `# bg:bg_metro` | Меняет фон. `bg:none` — убрать фон. Для каждого `bg_name` должен существовать `main/images/backgrounds/<bg_name>.atlas` и регистрация в `ui_manager_v2.script` (см. `docs/guides/HOW_TO_ADD_BACKGROUNDS.md`). |
 | `color:R,G,B` | `# color:0.1,0.1,0.15` | Тинт фона (0…1). Используется для подсветки. |
 | `speaker:ID` | `# speaker:mc` / `# speaker:npc` / `# speaker:none` / `# speaker:Аня` | Меняет «имя говорящего» в табличке. `mc` / `npc` резолвятся в `mc_name`/`npc_name`. `none` — без таблички (нарратор). |
-| `sfx:NAME` | `# sfx:phone_pickup` | Одноразовый звук. Файл должен быть в `sounds/sfx/`. |
+| `sfx:NAME` | `# sfx:phone_notify` | Одноразовый звук. Для нового SFX нужны: `.ogg` в `main/sounds/`, `.sound` descriptor, component в `sfx_player` внутри `main/main_v2.collection`, и запись id в `M.SFX_URLS` в `main/gui/ui_manager_v2.script`. |
 | `shake:I,D` | `# shake:0.2,0.5` | Тряска экрана. `I` — сила (0…1), `D` — длительность сек. |
 | `pulse:D,R,G,B` | `# pulse:0.8,0,255,0` | Мерцание цветом (RGB 0…255). |
 
@@ -101,7 +101,15 @@ VAR newspaper_kept = false
 | `quest:done:ID` | `# quest:done:go_to_office` | Закрыть (статус `done`). |
 | `quest:fail:ID` | `# quest:fail:reply_anya` | Провалить. |
 
-⚠️ **`quest:complete` НЕ работает**. Используй `quest:done`.
+❌ `quest:complete` не поддерживается runtime'ом и будет проигнорирован.
+Используйте строго:
+
+- `# quest:start:ID`
+- `# quest:done:ID`
+- `# quest:fail:ID`
+
+Причина: `ui_manager_v2` и `game_state` работают только с этими тремя статусами.
+Любой другой тег не попадёт в систему квестов и приведёт к silent fail.
 
 ### Телефон
 
@@ -292,7 +300,7 @@ hotspot'ы: кликабельные прямоугольники. Каждый 
 - Стартуй **явно** (`quest:start`) — иначе `quest:done` без старта может
   проигнорироваться.
 - ID — латиница/подчёркивания (`make_coffee`, `reply_anya`, `go_to_office`).
-- Текст квеста для UI лежит в `main/scripts/quests_catalog.lua` (если его
+- Текст квеста для UI лежит в `main/scripts/quests.lua` (если его
   нет — спроси у разработчика, куда добавлять).
 
 ---
@@ -321,10 +329,12 @@ hotspot'ы: кликабельные прямоугольники. Каждый 
       `main/images/backgrounds/<bg_name>.atlas` И регистрация в
       `ui_manager_v2.script` (`go.property` + `DEDICATED_BG_ATLAS_PROPS`).
       Без второго фон станет чёрным с warning'ом в консоли.
-- [ ] Все `sfx:NAME` существуют в `sounds/sfx/` (иначе будет silent fail).
+- [ ] Все `sfx:NAME` существуют в `main/sounds/` (иначе будет silent fail).
 - [ ] `{mc_gender == "female":ж|м}` проверен по всем репликам MC-а (нет
       просто `вернулся` без форки).
-- [ ] Не использовал `quest:complete` — только `quest:start`/`done`/`fail`.
+- [ ] Используются только поддерживаемые статусы квестов:
+      `quest:start`, `quest:done`, `quest:fail`
+      (любые другие значения приведут к silent fail)
 - [ ] VAR'ы, на которые завязаны hotspot'ы в `scenes.lua`, продублированы
       `# flag:X=VAL`.
 - [ ] Тестовая компиляция через inklecate прошла без ошибок.
@@ -379,3 +389,19 @@ hotspot'ы: кликабельные прямоугольники. Каждый 
 - Дублирует в Lua-флаг для hotspot'а «Выйти» в квартире.
 - Закрывает один квест, открывает следующий.
 - Возвращает в сцену, где была кофемашина (kitchen).
+
+## Телефон (жёсткое правило)
+
+Телефон НЕ является Ink-сценой.
+
+Запрещено:
+- писать phone-контент в knot'ах
+- делать `=== phone_*`
+- использовать телефон как сцену
+
+Разрешено только:
+- # sms:add
+- # note:add
+- # quest:*
+
+Все остальное — ошибка архитектуры.

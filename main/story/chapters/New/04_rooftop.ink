@@ -1,10 +1,5 @@
 ﻿// ================================================================
 // AVOS_S — 04_rooftop.ink
-// Stage function:
-// - эмоциональная кульминация
-// - проверка параметров TRUST / INSIGHT / SYNC
-// - выдача финала итерации
-// - усиление loop-awareness
 // ================================================================
 
 
@@ -29,105 +24,85 @@
 # speaker:mc
 Потому что деталей не видно.
 
-# speaker:npc
-Или потому что они не нужны.
-
--> rooftop_conversation_start
+-> rooftop_conversation
 
 
 // ================================================================
-// РАЗГОВОР — ПРОВЕРКА TRUST
+// РАЗГОВОР С NPC (TRUST)
 // ================================================================
-=== rooftop_conversation_start
+=== rooftop_conversation
 
 # speaker:npc
 Ты сегодня странно себя вёл{mc_gender == "female":а|}.
 
-* [Снова отшутиться]
+* [Отшутиться]
     ~ TRUST = TRUST - 1
     ~ player_was_honest = false
     # speaker:mc
     Это мой стандартный режим.
-    -> rooftop_conversation_end
+    -> rooftop_after_talk
 
-* [Признать, что день был странным]
+* [Сказать правду]
     ~ TRUST = TRUST + 1
     ~ player_was_honest = true
     # speaker:mc
-    День правда ощущался сломанным.
-    -> rooftop_conversation_truth
+    День был странный.
+    -> rooftop_truth
 
-* {INSIGHT >= 2} [Попробовать объяснить, что происходит]
+* {INSIGHT >= 2} [Попробовать объяснить]
     ~ TRUST = TRUST + 1
     ~ player_was_honest = true
     # speaker:mc
-    Я думаю, это не просто усталость.
-    -> rooftop_conversation_deep
+    Это не просто усталость.
+    -> rooftop_deep
 
 
-// ------------------------------------------------
-// ВЕТКА: ЧЕСТНОЕ ПРИЗНАНИЕ
-// ------------------------------------------------
-=== rooftop_conversation_truth
+=== rooftop_truth
 # speaker:npc
 Ну, ты хотя бы это признаёшь.
 
 # speaker:npc
-Большинство просто делают вид, что всё ок.
+Большинство делают вид, что всё нормально.
 
-# speaker:mc
-Иногда это проще.
-
-# speaker:npc
-И опаснее.
-
--> rooftop_conversation_end
-
-
-// ------------------------------------------------
-// ВЕТКА: ПОПЫТКА ОБЪЯСНЕНИЯ
-// ------------------------------------------------
-=== rooftop_conversation_deep
-# speaker:npc
-И?
-
-# speaker:mc
-Как будто кто-то уже прожил этот день.
-
-# speaker:mc
-И оставил кривые подсказки.
-
-# speaker:npc
-Ты сейчас звучишь как лог с ошибками.
-
-# speaker:mc
-Потому что это и есть лог.
-
-{INSIGHT >= 3:
-# speaker:mc
-И я начинаю понимать, где именно он ломается.
-~ INSIGHT = INSIGHT + 1
+{TRUST >= 1:
+    ~ npc_opened_up = true
+    # speaker:npc
+    Я тоже иногда делаю вид. Так проще не пугаться.
 }
 
--> rooftop_conversation_end
+-> rooftop_after_talk
 
 
-// ------------------------------------------------
-// ОБЩИЙ ВЫХОД ИЗ РАЗГОВОРА
-// ------------------------------------------------
-=== rooftop_conversation_end
-# speaker:none
-Ветер усиливается.
+=== rooftop_deep
+# speaker:mc
+{loop_awareness > 0 or iteration_number > 1:
+Как будто этот день уже был.
+- else:
+Как будто день заранее знает, где я ошибусь.
+}
 
-Город продолжает работать так, будто ничего не произошло.
+# speaker:mc
+И что-то пытается не объяснить, а подтолкнуть.
 
--> rooftop_internal_state
+{INSIGHT >= 3:
+    ~ INSIGHT = INSIGHT + 1
+    # speaker:mc
+    И я начинаю понимать, где именно он ломается.
+}
+
+{TRUST >= 1:
+    ~ npc_opened_up = true
+    # speaker:npc
+    Тогда не отмахивайся. Если страшно — скажи, что страшно.
+}
+
+-> rooftop_after_talk
 
 
 // ================================================================
-// ВНУТРЕННЯЯ ОЦЕНКА ИГРОКА
+// ВНУТРЕННЕЕ СОСТОЯНИЕ
 // ================================================================
-=== rooftop_internal_state
+=== rooftop_after_talk
 
 # speaker:mc
 {used_fallback:
@@ -139,39 +114,55 @@
 
 {understood_uncertainty:
 # speaker:mc
-Проблема не в том, что система ошибается.
-Проблема в том, что она делает вид, что не ошибается.
+Проблема не в данных.
+Проблема в том, как мы делаем вид, что их достаточно.
 }
 
-{decision_deferred and not understood_uncertainty:
-# speaker:mc
-Я просто отложил{mc_gender == "female":а|} решение.
-Это не то же самое, что решить.
+{npc_opened_up && player_was_honest && TRUST >= 2:
+    ~ confession_unlocked = true
+    # speaker:none
+    Между нами появляется пауза, которую уже нельзя списать на ветер.
 }
 
--> rooftop_route_check
+-> rooftop_route
 
 
 // ================================================================
 // РОУТИНГ ФИНАЛОВ
 // ================================================================
-=== rooftop_route_check
+=== rooftop_route
 
-{SYNC >= 2 && INSIGHT >= 2:
+{SYNC >= 2 && INSIGHT >= 2 && TRUST >= 1:
     -> ending_true
 - else:
-    {TRUST >= 2:
-        -> ending_npc
+    {SYNC >= 2 && INSIGHT >= 2:
+        -> ending_true_without_trust
     - else:
-        -> ending_system
+        {TRUST >= 2:
+            -> ending_npc
+        - else:
+            -> ending_system
+        }
     }
 }
 
 
 // ================================================================
-// NPC ENDING — ЭМОЦИОНАЛЬНЫЙ, НО БЕЗ ПРОГРЕССА
+// NPC ENDING
 // ================================================================
 === ending_npc
+{confession_unlocked:
+    -> ending_npc_confession
+- else:
+    {npc_opened_up:
+        -> ending_npc_opened
+    - else:
+        -> ending_npc_soft
+    }
+}
+
+
+=== ending_npc_soft
 # speaker:npc
 Слушай.
 
@@ -179,84 +170,160 @@
 Может, не всё нужно чинить.
 
 # speaker:npc
-Иногда достаточно, чтобы рядом был кто-то, кто понимает.
+Иногда достаточно, чтобы рядом был кто-то.
 
 # speaker:mc
 ...
 
-# speaker:npc
-Мы переживём этот день.
-
-# speaker:npc
-И следующий тоже.
-
 # speaker:none
-В этот момент всё становится проще.
+В этот момент становится легче.
 
-Слишком просто.
-
-# speaker:mc
-Да.
-
-# speaker:none
-Ты не решаешь проблему.
-
-Ты откладываешь её на фоне тепла.
+Слишком легко.
 
 ~ current_iteration_end = "npc"
 ~ TRUST = TRUST + 1
 
+-> rooftop_loop
+
+
+=== ending_npc_opened
+# speaker:npc
+Слушай.
+
+# speaker:npc
+Я не знаю, что именно с тобой происходит.
+
+# speaker:npc
+Но когда ты не шутишь вместо ответа — я хотя бы вижу тебя настоящ{mc_gender == "female":ую|его}.
+
+# speaker:mc
+Это должно успокаивать?
+
+# speaker:npc
+Нет.
+
+# speaker:npc
+Это должно быть честнее.
+
 # speaker:none
-Город внизу продолжает жить.
+Становится легче.
 
-Как будто ничего не сломано.
+Но теперь это не похоже на бегство.
 
--> rooftop_loop_signal
+~ current_iteration_end = "npc"
+~ TRUST = TRUST + 1
+~ npc_opened_up = true
+
+-> rooftop_loop
+
+
+=== ending_npc_confession
+# speaker:npc
+Слушай.
+
+# speaker:npc
+Я весь день пытал{mc_gender == "female":ся|ась} понять, почему ты смотришь так, будто прощаешься заранее.
+
+# speaker:mc
+Потому что я боюсь повторить всё неправильно.
+
+# speaker:npc
+Тогда не повторяй один{mc_gender == "female":а|}.
+
+# speaker:mc
+Я не хочу, чтобы ты стал{mc_gender == "female":а|} просто способом пережить этот день.
+
+# speaker:npc
+А кем?
+
+# speaker:mc
+Тем, ради кого я перестаю искать самый простой выход.
+
+# speaker:none
+Пауза не ломается.
+
+Она выдерживает нас обоих.
+
+~ current_iteration_end = "npc"
+~ TRUST = TRUST + 2
+~ npc_opened_up = true
+~ confession_unlocked = true
+
+# meta:add:loop_awareness:1
+
+-> rooftop_loop
 
 
 // ================================================================
-// SYSTEM ENDING — ЛОЖНЫЙ УСПЕХ
+// SYSTEM ENDING
 // ================================================================
 === ending_system
 # speaker:none
 Всё работает.
 
-Логи чистые.
 Ошибок нет.
 Система стабильна.
 
 # speaker:mc
 ...
 
-# speaker:mc
-Именно это и неправильно.
-
 # speaker:none
-На секунду мир "подвисает".
+На секунду мир “подвисает”.
 
-Как плохо обработанный кейс.
-
-# speaker:none
-И ты видишь строку.
-
-fallback_decision applied
+fallback_decision_applied
 
 # speaker:mc
-Понял{mc_gender == "female":а|}.
+Проблема не исчезла.
 
-# speaker:mc
-Система не ломается.
-
-Она просто начинает игнорировать реальность.
+Она просто скрыта.
 
 ~ current_iteration_end = "system"
 ~ INSIGHT = INSIGHT + 1
 
--> rooftop_loop_signal
+-> rooftop_loop
 
 
 // ================================================================
-// TRUE ENDING — ОСОЗНАНИЕ + ПРИМЕНЕНИЕ
+// TRUE ATTEMPT WITHOUT TRUST
+// ================================================================
+=== ending_true_without_trust
+# speaker:mc
+Я понял{mc_gender == "female":а|}.
+
+# speaker:npc
+Что именно?
+
+# speaker:mc
+Нельзя принимать решение,
+если данных недостаточно.
+
+# speaker:npc
+Ты говоришь так, будто уже решил{mc_gender == "female":а|} уйти туда один{mc_gender == "female":а|}.
+
+# speaker:mc
+...
+
+# speaker:none
+Формула складывается.
+Но в ней не хватает человека рядом.
+
+# speaker:mc
+Я знаю, где ошибка.
+
+# speaker:mc
+Но не знаю, как не повторить её снова.
+
+~ current_iteration_end = "system"
+~ INSIGHT = INSIGHT + 1
+~ SYNC = SYNC + 1
+
+# meta:add:loop_awareness:1
+
+-> rooftop_loop
+
+
+// ================================================================
+// TRUE ENDING
 // ================================================================
 === ending_true
 # speaker:mc
@@ -266,34 +333,25 @@ fallback_decision applied
 Что именно?
 
 # speaker:mc
-Проблема не в данных.
+Нельзя принимать решение,
+если данных недостаточно.
 
 # speaker:mc
-Проблема в том, что мы заставляем систему решать,
-когда она не должна.
+И нельзя делать вид, что всё ок.
 
-# speaker:npc
-И?
+# speaker:none
+В этот момент всё складывается.
+
+экран  
+метро  
+лог  
+решение  
 
 # speaker:mc
-И я сегодня впервые это не сделал{mc_gender == "female":а|}.
-
-# speaker:none
-В этот момент всё сходится:
-
-экран,
-телефон,
-метро,
-лог,
-решение.
-
-# speaker:none
-Это не хаос.
-
 Это цикл.
 
 # speaker:mc
-И его можно разорвать.
+И теперь я знаю, где искать разрыв.
 
 ~ current_iteration_end = "true"
 ~ INSIGHT = INSIGHT + 2
@@ -301,43 +359,33 @@ fallback_decision applied
 
 # meta:add:loop_awareness:1
 
--> rooftop_loop_signal
+-> rooftop_loop
 
 
 // ================================================================
-// СИГНАЛ ПЕТЛИ (ОБЩИЙ ДЛЯ ВСЕХ ФИНАЛОВ)
+// LOOP SIGNAL
 // ================================================================
-=== rooftop_loop_signal
+=== rooftop_loop
 # speaker:none
-Ветер на секунду затихает.
+Ветер замирает.
 
-Город "замирает".
-
-Не буквально.
-Чуть глубже.
-
-Как будто сцена готовится перезапуститься.
+Город на секунду “зависает”.
 
 # speaker:mc
 ...
 
 {current_iteration_end == "true":
-# speaker:mc
-Я запомню.
+    # speaker:mc
+    Я запомню. Не всё, но достаточно для следующего раза.
 - else:
-# speaker:mc
-Что-то здесь не так.
+    # speaker:mc
+    Что-то здесь не так. И это не закончится само.
 }
-
-# speaker:none
-Картинка теряет резкость.
-
-Свет начинает "пересобираться".
 
 # pulse:1.0,255,255,255
 # shake:0.2,0.6
 
 # speaker:none
-И всё обрывается.
+И всё обрывается не как финал, а как сброс.
 
 -> END

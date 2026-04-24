@@ -210,7 +210,7 @@ Bulk-компиляция по умолчанию пропускает `*_old.in
 - `phone_v2` — data-driven телефон поверх `game_state`; app tiles больше не ведут в статичные Ink-экраны
 - `map_v2` — карта и dossier-панель; принимает runtime `set_points`, умеет динамически обновлять pin'ы и шлёт `map_verb` в `ui_manager_v2`
 - `effects` — визуальные оверлеи grain/scan/vignette
-- старые Ink compatibility-переходы `goto_scene:phone_home` всё ещё допустимы, но `ui_manager_v2` перехватывает их как alias на `open_phone()`, а не как вход в отдельную сцену
+- `goto_scene:phone_home` больше не используется в новом контенте, runtime перехватывает его как alias на `open_phone()` тег оставлен только для обратной совместимости старых Ink-файлов
 
 ## Ограничения и открытые хвосты
 

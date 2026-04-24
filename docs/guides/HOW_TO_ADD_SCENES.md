@@ -85,6 +85,13 @@ action = { type = "ink_knot", knot = "take_phone" }
 ```lua
 action = { type = "phone_close" }
 ```
+❗ Телефон не является сценой.
+
+Не используйте:
+- goto_scene:phone_home
+- phone как navigation target
+
+Телефон открывается только через UI (`phone_v2`).
 
 Исторически использовалось для `phone_home`, но в текущем `v2` телефон уже не scene, а overlay. Для новых сцен этот action обычно не нужен.
 

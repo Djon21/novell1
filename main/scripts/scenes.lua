@@ -109,7 +109,7 @@ M.scenes = {
         bg = "bg_bathroom",
         on_enter = {
             knot = "inspect_bathroom",
-            condition = function(gs) return not gs.get_flag("bathroom_intro_seen") end,
+            condition = function(gs) return not gs.get_flag("bathroom_seen") end,
         },
         hotspots = {
             {
