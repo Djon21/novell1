@@ -790,6 +790,16 @@ local function open_map(self)
     sync_map_overlay(resolve_map_selected_pin(), "> карта синхронизирована _")
     msg.post(M.components.map, "open_map")
 end
+local function open_map_hub(self, primary_knot)
+    M.overlays.map = true
+    -- hub-режим заменяет собой ink-выбор маршрута, поэтому под картой не должно
+    -- остаться диалога в состоянии "КОНЕЦ": иначе клик мимо пина попадает
+    -- в btn_next/dbox → dm.advance() → chapter_finished → выкидывает в меню.
+    M.at_end = false
+    msg.post(M.components.dialogue, "hide_dialogue")
+    sync_map_overlay(resolve_map_selected_pin(), "> выбрать маршрут _")
+    msg.post(M.components.map, "open_map_hub", { primary_knot = primary_knot })
+end
 close_map = function(self)
     M.overlays.map = false
     msg.post(M.components.map, "close_map")
@@ -914,6 +924,8 @@ local function apply_dm_commands(self)
             if meta.set then meta.set(cmd.key, cmd.value) end
         elseif cmd.type == "phone_close" then
             close_phone(self)
+        elseif cmd.type == "open_map_hub" then
+            open_map_hub(self, cmd.knot)
         end
     end
 end
@@ -923,6 +935,16 @@ handle_dialogue_update = function(self)
 
     -- 1) Применить команды из ink-тегов (могут поменять сцену)
     apply_dm_commands(self)
+
+    -- 1a) Если apply_dm_commands открыл map hub, не рендерим диалог поверх:
+    -- иначе на `-> DONE` сразу после `# map:hub:KNOT` dialogue уходит в
+    -- end-state, клик мимо пина ловится btn_next → advance → chapter_finished.
+    if M.overlays.map then
+        M.at_end = false
+        msg.post(M.components.dialogue, "hide_dialogue")
+        hide_choice(self)
+        return
+    end
 
     -- 2) Проверить режим ПЕРЕД обновлением фона
     local in_exploration = scene_controller.is_active and scene_controller.is_active()
@@ -1239,6 +1261,13 @@ function on_message(self, message_id, message, sender)
     elseif message_id == hash("map_verb") then
         print("[ui_manager_v2] map_verb", message.pin_id, message.verb)
         handle_map_verb(self, message.pin_id, message.verb)
+    elseif message_id == hash("map_hub_route") then
+        print("[ui_manager_v2] map_hub_route", message and message.knot)
+        local knot = message and message.knot
+        close_map(self)
+        if knot then
+            run_side_dialogue_knot(self, knot, nil)
+        end
 
     -- --- навигация ---
     elseif message_id == hash("nav_go") then

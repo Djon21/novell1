@@ -420,6 +420,18 @@ local function apply_tags(tags, trailing)
         elseif key == "phone" and value == "close" and not suppress_effects then
             -- # phone:close — закрыть телефон и вернуться в сцену-вызыватель.
             table.insert(scene_bucket, { type = "phone_close" })
+        elseif key == "map" and value and not suppress_effects then
+            -- # map:hub:KNOT — открыть карту в hub-режиме. «МАРШРУТ» на пине с
+            -- route_knot=KNOT прыгает в этот ink-узел. KNOT же — primary_knot,
+            -- на который уйдёт карта при закрытии без выбора (safety fallback).
+            local op, rest = value:match("(%a+)%s*:?%s*(.*)")
+            if op == "hub" and rest and rest ~= "" then
+                local knot = rest:gsub("^%s+", ""):gsub("%s+$", "")
+                                 :gsub('^"(.*)"$', "%1"):gsub("^'(.*)'$", "%1")
+                if knot ~= "" then
+                    table.insert(scene_bucket, { type = "open_map_hub", knot = knot })
+                end
+            end
         elseif (key == "goto_scene" or key == "explore") and value and not suppress_effects then
             -- # goto_scene:SCENE_ID  или  # explore:SCENE_ID
             -- Inline (у текстового параграфа) → сразу. Висячий → deferred.

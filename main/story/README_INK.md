@@ -189,6 +189,7 @@ tools\compile_ink.bat chapter_01
 | `# meta:add:loop_awareness:1` | повышает loop-awareness внутри текущей итерации |
 | `# meta:set:loop_awareness:2` | жёстко выставляет значение meta-поля |
 | `# phone:close` | закрывает телефон |
+| `# map:hub:KNOT` | открывает карту в hub-режиме; «МАРШРУТ» пина с `route_knot=KNOT` уводит в этот ink-узел |
 | `# explore:SCENE_ID` | переводит игру в exploration-сцену |
 | `# goto_scene:SCENE_ID` | alias для `# explore:SCENE_ID` |
 | `# return_to_scene` | возвращает управление в предыдущую exploration-сцену |
