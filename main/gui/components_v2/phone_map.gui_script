@@ -1,21 +1,11 @@
 -- phone_map.gui_script
 -- Карта внутри телефона (split-модуль).
 -- Принимает: open_app, close_app
--- Примечание: тайл карты в лаунчере сейчас открывает ВНЕШНЮЮ карту (map_v2)
--- через ui_manager_v2, поэтому этот скрипт пока не вызывается автоматически.
--- Файл готов для будущего in-phone режима карты.
-
--- Верхнеуровневые ноды карты (дочерние прячутся вместе с родителем)
-local NODE_IDS = {
-    "mapfull_screen_bg",
-    "mapfull_grp_map",
-    "mapfull_grp_poi",
-    "mapfull_map_header_scrim",
-    "mapfull_map_eyebrow",
-    "mapfull_map_title",
-    "mapfull_map_terminal",
-    "mapfull_map_terminal_cursor",
-}
+--
+-- phone_map.gui имеет 132 ноды под единым корнем map_root.
+-- Скрываем только его — все дочерние прячутся автоматически (Defold propagates enabled).
+-- Примечание: тайл карты сейчас открывает ВНЕШНЮЮ карту (map_v2) через ui_manager_v2,
+-- этот компонент зарезервирован для будущего in-phone режима.
 
 local function get_node(id)
     local ok, n = pcall(gui.get_node, id)
@@ -23,29 +13,23 @@ local function get_node(id)
     return nil
 end
 
-local function set_node_enabled(id, enabled)
-    local n = get_node(id)
-    if n then gui.set_enabled(n, enabled) end
-end
-
-local function set_nodes_enabled(enabled)
-    for _, id in ipairs(NODE_IDS) do
-        set_node_enabled(id, enabled)
-    end
+local function set_root_enabled(enabled)
+    local root = get_node("map_root")
+    if root then gui.set_enabled(root, enabled) end
 end
 
 function init(self)
     self.visible = false
-    set_nodes_enabled(false)
+    set_root_enabled(false)  -- прячет все 132 дочерних ноды
 end
 
 function on_message(self, message_id, message, sender)
     if message_id == hash("open_app") then
         self.visible = true
-        set_nodes_enabled(true)
+        set_root_enabled(true)
     elseif message_id == hash("close_app") then
         self.visible = false
-        set_nodes_enabled(false)
+        set_root_enabled(false)
     end
 end
 
