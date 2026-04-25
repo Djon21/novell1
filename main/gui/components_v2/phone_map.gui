@@ -1,3 +1,4 @@
+script: "/main/gui/components_v2/phone_map.gui_script"
 fonts {
   name: "jb_mono_10"
   font: "/main/fonts/jb_mono_10.font"
@@ -7,3012 +8,169 @@ fonts {
   font: "/main/fonts/jb_mono_12.font"
 }
 fonts {
+  name: "jb_mono_bold_14"
+  font: "/main/fonts/jb_mono_bold_14.font"
+}
+fonts {
+  name: "unbounded_bold_20"
+  font: "/main/fonts/unbounded_bold_20.font"
+}
+fonts {
   name: "unbounded_bold_32"
   font: "/main/fonts/unbounded_bold_32.font"
 }
 fonts {
-  name: "unbounded_bold_54"
-  font: "/main/fonts/unbounded_bold_54.font"
+  name: "icons"
+  font: "/main/fonts/icons.font"
 }
-textures {
-  name: "phone"
-  texture: "/main/images/phone/phone.atlas"
+fonts {
+  name: "manrope_14"
+  font: "/main/fonts/manrope_14.font"
+}
+fonts {
+  name: "manrope_16"
+  font: "/main/fonts/manrope_16.font"
 }
 textures {
   name: "icon_phone"
   texture: "/main/images/phone/icon_phone.atlas"
 }
 textures {
+  name: "map2"
+  texture: "/main/images/phone/map2.atlas"
+}
+textures {
   name: "map_assets_cyberpunk_v2"
   texture: "/main/images/phone/map_assets_cyberpunk_v2.atlas"
 }
 nodes {
+  size {
+    x: 200.0
+    y: 100.0
+  }
   type: TYPE_BOX
-  id: "grp_bg"
-  adjust_mode: ADJUST_MODE_STRETCH
-  layer: "bg"
+  id: "map_root"
   inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
 }
 nodes {
   position {
-    x: 640.0
-    y: 360.0
+    x: 572.0
+    y: 150.0
+    z: 0.521
   }
   size {
-    x: 1280.0
-    y: 720.0
+    x: 506.0
+    y: 392.0
   }
   color {
-    x: 0.039
-    y: 0.027
-    z: 0.125
+    x: 0.018
+    y: 0.017
+    z: 0.045
   }
   type: TYPE_BOX
-  id: "bg_base"
+  id: "mapfull_screen_bg"
+  pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_bg"
-  layer: "bg"
-  inherit_alpha: true
+  parent: "map_root"
+  alpha: 0.7
+  enabled: false
 }
 nodes {
   type: TYPE_BOX
-  id: "grp_fx"
+  id: "mapfull_grp_map"
   adjust_mode: ADJUST_MODE_STRETCH
-  layer: "fx"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 640.0
-    y: 650.0
-    z: 1.0
-  }
-  size {
-    x: 900.0
-    y: 140.0
-  }
-  color {
-    x: 0.478
-    y: 0.361
-  }
-  type: TYPE_BOX
-  texture: "phone/glow"
-  id: "bg_top_violet_glow_placeholder"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_fx"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.12
-}
-nodes {
-  position {
-    x: 640.0
-    y: 360.0
-    z: 2.0
-  }
-  size {
-    x: 1280.0
-    y: 720.0
-  }
-  type: TYPE_BOX
-  texture: "phone/scanlines"
-  id: "scanlines_placeholder_assign_scanlines_texture"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_fx"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.32
-}
-nodes {
-  position {
-    x: 640.0
-    y: 360.0
-    z: 3.0
-  }
-  size {
-    x: 1280.0
-    y: 720.0
-  }
-  type: TYPE_BOX
-  texture: "phone/vignette"
-  id: "vignette_placeholder_assign_vignette_texture"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_fx"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.55
-}
-nodes {
-  type: TYPE_BOX
-  id: "grp_topbar"
-  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "map_root"
   layer: "ui"
   inherit_alpha: true
-  alpha: 0.0
+  enabled: false
 }
 nodes {
-  position {
-    x: 640.0
-    y: 688.0
-    z: 10.0
-  }
-  size {
-    x: 1280.0
-    y: 64.0
-  }
-  color {
-    x: 0.039
-    y: 0.027
-    z: 0.125
-  }
   type: TYPE_BOX
-  id: "topbar_bg"
+  id: "mapfull_grp_map_layers"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_topbar"
+  parent: "mapfull_grp_map"
   layer: "ui"
   inherit_alpha: true
-  alpha: 0.42
-}
-nodes {
-  position {
-    x: 640.0
-    y: 656.0
-    z: 11.0
-  }
-  size {
-    x: 1184.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "topbar_bottom_line"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_topbar"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.16
-}
-nodes {
-  position {
-    x: 62.0
-    y: 688.0
-    z: 12.0
-  }
-  size {
-    x: 28.0
-    y: 1.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_BOX
-  id: "topbar_dash"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_topbar"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.4
-}
-nodes {
-  position {
-    x: 92.0
-    y: 688.0
-    z: 12.0
-  }
-  size {
-    x: 360.0
-    y: 22.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "phone \302\267 xiaomi mi \302\267 73%"
-  font: "jb_mono_12"
-  id: "topbar_left_text"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_topbar"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.6
+  enabled: false
 }
 nodes {
   position {
     x: 825.0
-    y: 688.0
-    z: 12.0
-  }
-  size {
-    x: 260.0
-    y: 22.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\321\201\320\265\321\202\321\214: \320\234\320\242\320\241 \302\267 4G"
-  font: "jb_mono_12"
-  id: "topbar_network"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_topbar"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.55
-}
-nodes {
-  position {
-    x: 1035.0
-    y: 688.0
-    z: 12.0
-  }
-  size {
-    x: 200.0
-    y: 22.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\321\201\320\276\320\276\320\261\321\211\320\265\320\275\320\270\320\271: 3"
-  font: "jb_mono_12"
-  id: "topbar_messages"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_topbar"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.55
-}
-nodes {
-  type: TYPE_BOX
-  id: "grp_close_button"
-  adjust_mode: ADJUST_MODE_STRETCH
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 1238.0
-    y: 690.0
-    z: 12.0
-  }
-  size {
-    x: 42.0
-    y: 34.0
-  }
-  color {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  type: TYPE_BOX
-  id: "close_button_bg"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_close_button"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.16
-}
-nodes {
-  position {
-    x: 1238.0
-    y: 707.0
-    z: 13.0
-  }
-  size {
-    x: 42.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "close_button_border_top"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_close_button"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.7
-}
-nodes {
-  position {
-    x: 1238.0
-    y: 673.0
-    z: 13.0
-  }
-  size {
-    x: 42.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "close_button_border_bottom"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_close_button"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.7
-}
-nodes {
-  position {
-    x: 1217.0
-    y: 690.0
-    z: 13.0
-  }
-  size {
-    x: 1.0
-    y: 34.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "close_button_border_left"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_close_button"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.7
-}
-nodes {
-  position {
-    x: 1259.0
-    y: 690.0
-    z: 13.0
-  }
-  size {
-    x: 1.0
-    y: 34.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "close_button_border_right"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_close_button"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.7
-}
-nodes {
-  position {
-    x: 1238.0
-    y: 691.0
-    z: 14.0
-  }
-  size {
-    x: 42.0
-    y: 26.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\303\227"
-  font: "jb_mono_12"
-  id: "close_button_text"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_close_button"
-  layer: "text"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 1208.0
-    y: 690.0
-    z: 14.0
-  }
-  size {
-    x: 82.0
-    y: 18.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\267\320\260\320\272\321\200\321\213\321\202\321\214"
-  font: "jb_mono_10"
-  id: "close_button_hint"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_close_button"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.56
-}
-nodes {
-  type: TYPE_BOX
-  id: "grp_brand"
-  adjust_mode: ADJUST_MODE_STRETCH
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.0
-}
-nodes {
-  position {
-    x: 48.0
-    y: 619.0
-    z: 15.0
-  }
-  size {
-    x: 400.0
-    y: 60.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\242\320\225\320\233\320\225\320\244\320\236\320\235"
-  font: "unbounded_bold_32"
-  id: "brand_text"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_brand"
-  layer: "text"
-  inherit_alpha: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "grp_phone"
-  adjust_mode: ADJUST_MODE_STRETCH
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 218.0
-    y: 350.0
-    z: 29.0
-  }
-  size {
-    x: 410.0
-    y: 719.8
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  texture: "phone/glow"
-  id: "phone_glow_fx"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_phone"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.13
-}
-nodes {
-  type: TYPE_BOX
-  id: "grp_phone_frame"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_phone"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 218.0
-    y: 350.0
-    z: 30.0
-  }
-  size {
-    x: 340.0
-    y: 610.0
-  }
-  color {
-    x: 0.051
-    y: 0.039
-    z: 0.149
-  }
-  type: TYPE_BOX
-  id: "phone_body"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_phone_frame"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 218.0
-    y: 655.0
-    z: 31.0
-  }
-  size {
-    x: 340.0
-    y: 2.44
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "phone_outer_border_top"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_phone_frame"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.35
-}
-nodes {
-  position {
-    x: 218.0
-    y: 45.0
-    z: 31.0
-  }
-  size {
-    x: 340.0
-    y: 2.44
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "phone_outer_border_bottom"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_phone_frame"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.35
-}
-nodes {
-  position {
-    x: 48.0
-    y: 350.0
-    z: 31.0
-  }
-  size {
-    x: 2.0
-    y: 610.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "phone_outer_border_left"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_phone_frame"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.35
-}
-nodes {
-  position {
-    x: 388.0
-    y: 350.0
-    z: 31.0
-  }
-  size {
-    x: 2.0
-    y: 610.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "phone_outer_border_right"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_phone_frame"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.35
-}
-nodes {
-  position {
-    x: 218.0
-    y: 647.68
+    y: 336.0
     z: 32.0
   }
   size {
-    x: 328.0
-    y: 7.32
-  }
-  color {
-    x: 0.039
-    y: 0.027
-    z: 0.125
+    x: 462.0
+    y: 292.0
   }
   type: TYPE_BOX
-  id: "phone_inner_dark_frame_top"
+  texture: "map2/map_bg_base"
+  id: "mapfull_map_texture_bg"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_phone_frame"
-  layer: "lines"
+  parent: "mapfull_grp_map_layers"
+  layer: "ui"
   inherit_alpha: true
+  enabled: false
 }
 nodes {
   position {
-    x: 218.0
-    y: 52.32
-    z: 32.0
-  }
-  size {
-    x: 328.0
-    y: 7.32
-  }
-  color {
-    x: 0.039
-    y: 0.027
-    z: 0.125
-  }
-  type: TYPE_BOX
-  id: "phone_inner_dark_frame_bottom"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_phone_frame"
-  layer: "lines"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 54.0
-    y: 350.0
-    z: 32.0
-  }
-  size {
-    x: 6.0
-    y: 595.36
-  }
-  color {
-    x: 0.039
-    y: 0.027
-    z: 0.125
-  }
-  type: TYPE_BOX
-  id: "phone_inner_dark_frame_left"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_phone_frame"
-  layer: "lines"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 382.0
-    y: 350.0
-    z: 32.0
-  }
-  size {
-    x: 6.0
-    y: 595.36
-  }
-  color {
-    x: 0.039
-    y: 0.027
-    z: 0.125
-  }
-  type: TYPE_BOX
-  id: "phone_inner_dark_frame_right"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_phone_frame"
-  layer: "lines"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 218.0
-    y: 646.46
+    x: 825.0
+    y: 336.0
     z: 33.0
   }
   size {
-    x: 326.0
-    y: 1.22
+    x: 462.0
+    y: 292.0
   }
   color {
-    x: 0.49
-    y: 0.976
+    x: 0.55
+    y: 0.72
+    z: 0.98
   }
   type: TYPE_BOX
-  id: "phone_inner_cyan_frame_top"
+  texture: "map2/map_roads"
+  id: "mapfull_map_texture_roads"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_phone_frame"
+  parent: "mapfull_grp_map_layers"
   layer: "lines"
   inherit_alpha: true
-  alpha: 0.2
+  alpha: 0.18
+  enabled: false
 }
 nodes {
   position {
-    x: 218.0
-    y: 53.54
-    z: 33.0
-  }
-  size {
-    x: 326.0
-    y: 1.22
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "phone_inner_cyan_frame_bottom"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_phone_frame"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.2
-}
-nodes {
-  position {
-    x: 55.0
-    y: 350.0
-    z: 33.0
-  }
-  size {
-    x: 1.0
-    y: 592.92
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "phone_inner_cyan_frame_left"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_phone_frame"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.2
-}
-nodes {
-  position {
-    x: 381.0
-    y: 350.0
-    z: 33.0
-  }
-  size {
-    x: 1.0
-    y: 592.92
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "phone_inner_cyan_frame_right"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_phone_frame"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.2
-}
-nodes {
-  type: TYPE_BOX
-  id: "grp_notch"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_phone"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 218.0
-    y: 624.5
-    z: 40.0
-  }
-  size {
-    x: 120.0
-    y: 26.84
-  }
-  color {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  type: TYPE_BOX
-  id: "notch_bg"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_notch"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 218.0
-    y: 637.92
-    z: 41.0
-  }
-  size {
-    x: 120.0
-    y: 1.22
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "notch_border_top"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_notch"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.2
-}
-nodes {
-  position {
-    x: 218.0
-    y: 611.08
-    z: 41.0
-  }
-  size {
-    x: 120.0
-    y: 1.22
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "notch_border_bottom"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_notch"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.2
-}
-nodes {
-  position {
-    x: 158.0
-    y: 624.5
-    z: 41.0
-  }
-  size {
-    x: 1.0
-    y: 26.84
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "notch_border_left"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_notch"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.2
-}
-nodes {
-  position {
-    x: 278.0
-    y: 624.5
-    z: 41.0
-  }
-  size {
-    x: 1.0
-    y: 26.84
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "notch_border_right"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_notch"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.2
-}
-nodes {
-  type: TYPE_BOX
-  id: "grp_screen"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_phone"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    y: 27.0
-  }
-  type: TYPE_BOX
-  id: "grp_status"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_screen"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 88.0
-    y: 600.5
-    z: 45.0
-  }
-  size {
-    x: 100.0
-    y: 22.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "07:12"
-  font: "jb_mono_12"
-  id: "status_time"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_status"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.82
-}
-nodes {
-  position {
-    x: 360.0
-    y: 600.5
-    z: 45.0
-  }
-  size {
-    x: 120.0
-    y: 22.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_TEXT
-  text: "4G  73%"
-  font: "jb_mono_12"
-  id: "status_right"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_status"
-  layer: "text"
-  inherit_alpha: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "grp_wall"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_screen"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "grp_loop_badge"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_wall"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 228.0
-    y: 463.46
-    z: 45.0
-  }
-  size {
-    x: 220.0
-    y: 24.4
-  }
-  color {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  type: TYPE_BOX
-  id: "loop_badge_bg"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_loop_badge"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.0
-}
-nodes {
-  position {
-    x: 228.0
-    y: 475.66
-    z: 46.0
-  }
-  size {
-    x: 220.0
-    y: 1.22
-  }
-  color {
-    x: 0.784
-    y: 0.078
-    z: 0.165
-  }
-  type: TYPE_BOX
-  id: "loop_badge_border_top"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_loop_badge"
-  layer: "lines"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 228.0
-    y: 451.26
-    z: 46.0
-  }
-  size {
-    x: 220.0
-    y: 1.22
-  }
-  color {
-    x: 0.784
-    y: 0.078
-    z: 0.165
-  }
-  type: TYPE_BOX
-  id: "loop_badge_border_bottom"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_loop_badge"
-  layer: "lines"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 118.0
-    y: 463.46
-    z: 46.0
-  }
-  size {
-    x: 1.0
-    y: 24.4
-  }
-  color {
-    x: 0.784
-    y: 0.078
-    z: 0.165
-  }
-  type: TYPE_BOX
-  id: "loop_badge_border_left"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_loop_badge"
-  layer: "lines"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 338.0
-    y: 463.46
-    z: 46.0
-  }
-  size {
-    x: 1.0
-    y: 24.4
-  }
-  color {
-    x: 0.784
-    y: 0.078
-    z: 0.165
-  }
-  type: TYPE_BOX
-  id: "loop_badge_border_right"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_loop_badge"
-  layer: "lines"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 228.0
-    y: 463.46
-    z: 47.0
-  }
-  size {
-    x: 230.0
-    y: 21.96
-  }
-  color {
-    x: 0.784
-    y: 0.078
-    z: 0.165
-  }
-  type: TYPE_TEXT
-  text: "\320\237\320\236\320\235\320\225\320\224\320\225\320\233\320\254\320\235\320\230\320\232 \302\267 \320\237\320\236\320\222\320\242\320\236\320\240 \302\267 017"
-  font: "jb_mono_12"
-  id: "loop_badge_text"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_loop_badge"
-  layer: "text"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 228.0
-    y: 540.32
-    z: 45.0
-  }
-  size {
-    x: 260.0
-    y: 85.4
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "07:12"
-  font: "unbounded_bold_54"
-  id: "clock_text"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_wall"
-  layer: "text"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 228.0
-    y: 492.74
-    z: 45.0
-  }
-  size {
-    x: 300.0
-    y: 29.28
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\237\320\236\320\235\320\225\320\224\320\225\320\233\320\254\320\235\320\230\320\232 \302\267 23 \320\220\320\237\320\240\320\225\320\233\320\257"
-  font: "jb_mono_12"
-  id: "date_text"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_wall"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.65
-}
-nodes {
-  type: TYPE_BOX
-  id: "grp_apps"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_screen"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "grp_app_sms"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_apps"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 123.0
-    y: 302.42
-    z: 50.0
-  }
-  size {
-    x: 46.0
-    y: 46.0
-  }
-  color {
-    y: 0.239
-    z: 0.498
-  }
-  type: TYPE_BOX
-  id: "app_sms_icon_bg"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_sms"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.14
-}
-nodes {
-  position {
-    x: 123.0
-    y: 325.42
-    z: 51.0
-  }
-  size {
-    x: 46.0
-    y: 1.0
-  }
-  color {
-    y: 0.239
-    z: 0.498
-  }
-  type: TYPE_BOX
-  id: "app_sms_icon_border_top"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_sms"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.42
-}
-nodes {
-  position {
-    x: 123.0
-    y: 279.42
-    z: 51.0
-  }
-  size {
-    x: 46.0
-    y: 1.0
-  }
-  color {
-    y: 0.239
-    z: 0.498
-  }
-  type: TYPE_BOX
-  id: "app_sms_icon_border_bottom"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_sms"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.42
-}
-nodes {
-  position {
-    x: 100.0
-    y: 302.42
-    z: 51.0
-  }
-  size {
-    x: 1.0
-    y: 46.0
-  }
-  color {
-    y: 0.239
-    z: 0.498
-  }
-  type: TYPE_BOX
-  id: "app_sms_icon_border_left"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_sms"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.42
-}
-nodes {
-  position {
-    x: 146.0
-    y: 302.42
-    z: 51.0
-  }
-  size {
-    x: 1.0
-    y: 46.0
-  }
-  color {
-    y: 0.239
-    z: 0.498
-  }
-  type: TYPE_BOX
-  id: "app_sms_icon_border_right"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_sms"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.42
-}
-nodes {
-  position {
-    x: 123.0
-    y: 302.42
-    z: 52.0
-  }
-  size {
-    x: 28.0
-    y: 28.0
-  }
-  color {
-    y: 0.239
-    z: 0.498
-  }
-  type: TYPE_BOX
-  texture: "icon_phone/icon_sms"
-  id: "app_sms_glyph"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_sms"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.9
-}
-nodes {
-  position {
-    x: 123.0
-    y: 254.0
-    z: 52.0
-  }
-  size {
-    x: 90.0
-    y: 18.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\241\320\234\320\241"
-  font: "jb_mono_10"
-  id: "app_sms_label"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_sms"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.74
-}
-nodes {
-  position {
-    x: 143.0
-    y: 328.04
-    z: 53.0
-  }
-  size {
-    x: 18.0
-    y: 19.52
-  }
-  color {
-    y: 0.239
-    z: 0.498
-  }
-  type: TYPE_BOX
-  id: "app_sms_badge_bg"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_sms"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 143.0
-    y: 328.04
-    z: 54.0
-  }
-  size {
-    x: 20.0
-    y: 19.52
-  }
-  color {
-    x: 0.039
-    y: 0.027
-    z: 0.125
-  }
-  type: TYPE_TEXT
-  text: "3"
-  font: "jb_mono_12"
-  id: "app_sms_badge_text"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_sms"
-  layer: "text"
-  inherit_alpha: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "grp_app_call"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_apps"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 193.0
-    y: 302.42
-    z: 50.0
-  }
-  size {
-    x: 46.0
-    y: 46.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "app_call_icon_bg"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_call"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.1
-}
-nodes {
-  position {
-    x: 193.0
-    y: 325.42
-    z: 51.0
-  }
-  size {
-    x: 46.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "app_call_icon_border_top"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_call"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.24
-}
-nodes {
-  position {
-    x: 193.0
-    y: 279.42
-    z: 51.0
-  }
-  size {
-    x: 46.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "app_call_icon_border_bottom"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_call"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.24
-}
-nodes {
-  position {
-    x: 170.0
-    y: 302.42
-    z: 51.0
-  }
-  size {
-    x: 1.0
-    y: 46.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "app_call_icon_border_left"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_call"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.24
-}
-nodes {
-  position {
-    x: 216.0
-    y: 302.42
-    z: 51.0
-  }
-  size {
-    x: 1.0
-    y: 46.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "app_call_icon_border_right"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_call"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.24
-}
-nodes {
-  position {
-    x: 193.0
-    y: 302.42
-    z: 52.0
-  }
-  size {
-    x: 28.0
-    y: 28.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  texture: "icon_phone/icon_call"
-  id: "app_call_glyph"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_call"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.9
-}
-nodes {
-  position {
-    x: 193.0
-    y: 254.0
-    z: 52.0
-  }
-  size {
-    x: 90.0
-    y: 18.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\227\320\262\320\276\320\275\320\272\320\270"
-  font: "jb_mono_10"
-  id: "app_call_label"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_call"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.74
-}
-nodes {
-  type: TYPE_BOX
-  id: "grp_app_map"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_apps"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 263.0
-    y: 302.42
-    z: 49.0
-  }
-  size {
-    x: 76.0
-    y: 76.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  texture: "phone/glow"
-  id: "app_map_glow_fx"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_map"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.24
-}
-nodes {
-  position {
-    x: 263.0
-    y: 302.42
-    z: 50.0
-  }
-  size {
-    x: 46.0
-    y: 46.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "app_map_icon_bg"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_map"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.14
-}
-nodes {
-  position {
-    x: 263.0
-    y: 325.42
-    z: 51.0
-  }
-  size {
-    x: 46.0
-    y: 1.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "app_map_icon_border_top"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_map"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.5
-}
-nodes {
-  position {
-    x: 263.0
-    y: 279.42
-    z: 51.0
-  }
-  size {
-    x: 46.0
-    y: 1.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "app_map_icon_border_bottom"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_map"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.5
-}
-nodes {
-  position {
-    x: 240.0
-    y: 302.42
-    z: 51.0
-  }
-  size {
-    x: 1.0
-    y: 46.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "app_map_icon_border_left"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_map"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.5
-}
-nodes {
-  position {
-    x: 286.0
-    y: 302.42
-    z: 51.0
-  }
-  size {
-    x: 1.0
-    y: 46.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "app_map_icon_border_right"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_map"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.5
-}
-nodes {
-  position {
-    x: 263.0
-    y: 302.42
-    z: 52.0
-  }
-  size {
-    x: 28.0
-    y: 28.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  texture: "icon_phone/icon_map"
-  id: "app_map_glyph"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_map"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.98
-}
-nodes {
-  position {
-    x: 263.0
-    y: 254.0
-    z: 52.0
-  }
-  size {
-    x: 90.0
-    y: 18.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\232\320\260\321\200\321\202\320\260"
-  font: "jb_mono_10"
-  id: "app_map_label"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_map"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.74
-}
-nodes {
-  position {
-    x: 263.0
-    y: 327.42
-    z: 55.0
-  }
-  size {
-    x: 50.0
-    y: 2.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "app_map_active_border_top"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_map"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.95
-}
-nodes {
-  position {
-    x: 263.0
-    y: 277.42
-    z: 55.0
-  }
-  size {
-    x: 50.0
-    y: 2.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "app_map_active_border_bottom"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_map"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.95
-}
-nodes {
-  position {
-    x: 238.0
-    y: 302.42
-    z: 55.0
-  }
-  size {
-    x: 2.0
-    y: 50.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "app_map_active_border_left"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_map"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.95
-}
-nodes {
-  position {
-    x: 288.0
-    y: 302.42
-    z: 55.0
-  }
-  size {
-    x: 2.0
-    y: 50.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "app_map_active_border_right"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_map"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.95
-}
-nodes {
-  type: TYPE_BOX
-  id: "grp_app_notes"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_apps"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 333.0
-    y: 302.42
-    z: 50.0
-  }
-  size {
-    x: 46.0
-    y: 46.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_BOX
-  id: "app_notes_icon_bg"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_notes"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.1
-}
-nodes {
-  position {
-    x: 333.0
-    y: 325.42
-    z: 51.0
-  }
-  size {
-    x: 46.0
-    y: 1.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_BOX
-  id: "app_notes_icon_border_top"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_notes"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.24
-}
-nodes {
-  position {
-    x: 333.0
-    y: 279.42
-    z: 51.0
-  }
-  size {
-    x: 46.0
-    y: 1.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_BOX
-  id: "app_notes_icon_border_bottom"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_notes"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.24
-}
-nodes {
-  position {
-    x: 310.0
-    y: 302.42
-    z: 51.0
-  }
-  size {
-    x: 1.0
-    y: 46.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_BOX
-  id: "app_notes_icon_border_left"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_notes"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.24
-}
-nodes {
-  position {
-    x: 356.0
-    y: 302.42
-    z: 51.0
-  }
-  size {
-    x: 1.0
-    y: 46.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_BOX
-  id: "app_notes_icon_border_right"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_notes"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.24
-}
-nodes {
-  position {
-    x: 333.0
-    y: 302.42
-    z: 52.0
-  }
-  size {
-    x: 28.0
-    y: 28.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_BOX
-  texture: "icon_phone/icon_notes"
-  id: "app_notes_glyph"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_notes"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.9
-}
-nodes {
-  position {
-    x: 333.0
-    y: 254.0
-    z: 52.0
-  }
-  size {
-    x: 90.0
-    y: 18.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\243\320\273\320\270\320\272\320\270"
-  font: "jb_mono_10"
-  id: "app_notes_label"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_notes"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.74
-}
-nodes {
-  type: TYPE_BOX
-  id: "grp_app_quests"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_apps"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 123.0
-    y: 214.58
-    z: 50.0
-  }
-  size {
-    x: 46.0
-    y: 46.0
-  }
-  color {
-    x: 0.478
-    y: 0.361
-  }
-  type: TYPE_BOX
-  id: "app_quests_icon_bg"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_quests"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.14
-}
-nodes {
-  position {
-    x: 123.0
-    y: 237.58
-    z: 51.0
-  }
-  size {
-    x: 46.0
-    y: 1.0
-  }
-  color {
-    x: 0.478
-    y: 0.361
-  }
-  type: TYPE_BOX
-  id: "app_quests_icon_border_top"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_quests"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.42
-}
-nodes {
-  position {
-    x: 123.0
-    y: 191.58
-    z: 51.0
-  }
-  size {
-    x: 46.0
-    y: 1.0
-  }
-  color {
-    x: 0.478
-    y: 0.361
-  }
-  type: TYPE_BOX
-  id: "app_quests_icon_border_bottom"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_quests"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.42
-}
-nodes {
-  position {
-    x: 100.0
-    y: 214.58
-    z: 51.0
-  }
-  size {
-    x: 1.0
-    y: 46.0
-  }
-  color {
-    x: 0.478
-    y: 0.361
-  }
-  type: TYPE_BOX
-  id: "app_quests_icon_border_left"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_quests"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.42
-}
-nodes {
-  position {
-    x: 146.0
-    y: 214.58
-    z: 51.0
-  }
-  size {
-    x: 1.0
-    y: 46.0
-  }
-  color {
-    x: 0.478
-    y: 0.361
-  }
-  type: TYPE_BOX
-  id: "app_quests_icon_border_right"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_quests"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.42
-}
-nodes {
-  position {
-    x: 123.0
-    y: 214.58
-    z: 52.0
-  }
-  size {
-    x: 28.0
-    y: 28.0
-  }
-  color {
-    x: 0.478
-    y: 0.361
-  }
-  type: TYPE_BOX
-  texture: "icon_phone/icon_quests"
-  id: "app_quests_glyph"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_quests"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.9
-}
-nodes {
-  position {
-    x: 123.0
-    y: 166.0
-    z: 52.0
-  }
-  size {
-    x: 90.0
-    y: 18.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\232\320\262\320\265\321\201\321\202\321\213"
-  font: "jb_mono_10"
-  id: "app_quests_label"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_quests"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.74
-}
-nodes {
-  position {
-    x: 143.0
-    y: 240.2
-    z: 53.0
-  }
-  size {
-    x: 18.0
-    y: 19.52
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "app_quests_badge_bg"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_quests"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 143.0
-    y: 240.2
-    z: 54.0
-  }
-  size {
-    x: 20.0
-    y: 19.52
-  }
-  color {
-    x: 0.039
-    y: 0.027
-    z: 0.125
-  }
-  type: TYPE_TEXT
-  text: "2"
-  font: "jb_mono_12"
-  id: "app_quests_badge_text"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_quests"
-  layer: "text"
-  inherit_alpha: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "grp_app_mail"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_apps"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 193.0
-    y: 214.58
-    z: 50.0
-  }
-  size {
-    x: 46.0
-    y: 46.0
-  }
-  color {
-    y: 0.239
-    z: 0.498
-  }
-  type: TYPE_BOX
-  id: "app_mail_icon_bg"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_mail"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.1
-}
-nodes {
-  position {
-    x: 193.0
-    y: 237.58
-    z: 51.0
-  }
-  size {
-    x: 46.0
-    y: 1.0
-  }
-  color {
-    y: 0.239
-    z: 0.498
-  }
-  type: TYPE_BOX
-  id: "app_mail_icon_border_top"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_mail"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.24
-}
-nodes {
-  position {
-    x: 193.0
-    y: 191.58
-    z: 51.0
-  }
-  size {
-    x: 46.0
-    y: 1.0
-  }
-  color {
-    y: 0.239
-    z: 0.498
-  }
-  type: TYPE_BOX
-  id: "app_mail_icon_border_bottom"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_mail"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.24
-}
-nodes {
-  position {
-    x: 170.0
-    y: 214.58
-    z: 51.0
-  }
-  size {
-    x: 1.0
-    y: 46.0
-  }
-  color {
-    y: 0.239
-    z: 0.498
-  }
-  type: TYPE_BOX
-  id: "app_mail_icon_border_left"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_mail"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.24
-}
-nodes {
-  position {
-    x: 216.0
-    y: 214.58
-    z: 51.0
-  }
-  size {
-    x: 1.0
-    y: 46.0
-  }
-  color {
-    y: 0.239
-    z: 0.498
-  }
-  type: TYPE_BOX
-  id: "app_mail_icon_border_right"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_mail"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.24
-}
-nodes {
-  position {
-    x: 193.0
-    y: 214.58
-    z: 52.0
-  }
-  size {
-    x: 28.0
-    y: 28.0
-  }
-  color {
-    y: 0.239
-    z: 0.498
-  }
-  type: TYPE_BOX
-  texture: "icon_phone/icon_mail"
-  id: "app_mail_glyph"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_mail"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.9
-}
-nodes {
-  position {
-    x: 193.0
-    y: 166.0
-    z: 52.0
-  }
-  size {
-    x: 90.0
-    y: 18.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\237\320\276\321\207\321\202\320\260"
-  font: "jb_mono_10"
-  id: "app_mail_label"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_mail"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.74
-}
-nodes {
-  type: TYPE_BOX
-  id: "grp_app_camera"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_apps"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 263.0
-    y: 214.58
-    z: 50.0
-  }
-  size {
-    x: 46.0
-    y: 46.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "app_camera_icon_bg"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_camera"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.1
-}
-nodes {
-  position {
-    x: 263.0
-    y: 237.58
-    z: 51.0
-  }
-  size {
-    x: 46.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "app_camera_icon_border_top"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_camera"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.24
-}
-nodes {
-  position {
-    x: 263.0
-    y: 191.58
-    z: 51.0
-  }
-  size {
-    x: 46.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "app_camera_icon_border_bottom"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_camera"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.24
-}
-nodes {
-  position {
-    x: 240.0
-    y: 214.58
-    z: 51.0
-  }
-  size {
-    x: 1.0
-    y: 46.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "app_camera_icon_border_left"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_camera"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.24
-}
-nodes {
-  position {
-    x: 286.0
-    y: 214.58
-    z: 51.0
-  }
-  size {
-    x: 1.0
-    y: 46.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "app_camera_icon_border_right"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_camera"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.24
-}
-nodes {
-  position {
-    x: 263.0
-    y: 214.58
-    z: 52.0
-  }
-  size {
-    x: 28.0
-    y: 28.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  texture: "icon_phone/icon_camera"
-  id: "app_camera_glyph"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_camera"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.9
-}
-nodes {
-  position {
-    x: 263.0
-    y: 166.0
-    z: 52.0
-  }
-  size {
-    x: 90.0
-    y: 18.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\232\320\260\320\274\320\265\321\200\320\260"
-  font: "jb_mono_10"
-  id: "app_camera_label"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_camera"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.74
-}
-nodes {
-  type: TYPE_BOX
-  id: "grp_app_terminal"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_apps"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 333.0
-    y: 214.58
-    z: 50.0
-  }
-  size {
-    x: 46.0
-    y: 46.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "app_terminal_icon_bg"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_terminal"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.1
-}
-nodes {
-  position {
-    x: 333.0
-    y: 237.58
-    z: 51.0
-  }
-  size {
-    x: 46.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "app_terminal_icon_border_top"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_terminal"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.24
-}
-nodes {
-  position {
-    x: 333.0
-    y: 191.58
-    z: 51.0
-  }
-  size {
-    x: 46.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "app_terminal_icon_border_bottom"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_terminal"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.24
-}
-nodes {
-  position {
-    x: 310.0
-    y: 214.58
-    z: 51.0
-  }
-  size {
-    x: 1.0
-    y: 46.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "app_terminal_icon_border_left"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_terminal"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.24
-}
-nodes {
-  position {
-    x: 356.0
-    y: 214.58
-    z: 51.0
-  }
-  size {
-    x: 1.0
-    y: 46.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "app_terminal_icon_border_right"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_terminal"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.24
-}
-nodes {
-  position {
-    x: 333.0
-    y: 214.58
-    z: 52.0
-  }
-  size {
-    x: 28.0
-    y: 28.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  texture: "icon_phone/icon_terminal"
-  id: "app_terminal_glyph"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_terminal"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.9
-}
-nodes {
-  position {
-    x: 333.0
-    y: 166.0
-    z: 52.0
-  }
-  size {
-    x: 90.0
-    y: 18.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\242\320\265\321\200\320\274\320\270\320\275\320\260\320\273"
-  font: "jb_mono_10"
-  id: "app_terminal_label"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_app_terminal"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.74
-}
-nodes {
-  position {
-    x: 228.0
-    y: 340.24
-    z: 35.0
-  }
-  size {
-    x: 316.0
-    y: 527.04
-  }
-  color {
-    x: 0.071
-    y: 0.047
-    z: 0.157
-  }
-  type: TYPE_BOX
-  id: "screen_bg"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_screen"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 228.0
-    y: 340.24
-    z: 36.0
-  }
-  size {
-    x: 316.0
-    y: 527.04
-  }
-  type: TYPE_BOX
-  texture: "phone/scanlines"
-  id: "screen_scanlines_placeholder"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_screen"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.08
-}
-nodes {
-  position {
-    x: 228.0
-    y: 84.04
-    z: 45.0
-  }
-  size {
-    x: 120.0
-    y: 4.88
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_BOX
-  id: "home_indicator"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_screen"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.4
-}
-nodes {
-  position {
-    x: 218.0
-    y: 350.0
-    z: 29.0
-  }
-  size {
-    x: 390.0
-    y: 683.2
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  texture: "phone/glow"
-  id: "phone_glow_placeholder_assign_glow_texture"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_phone"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.1
-}
-nodes {
-  type: TYPE_BOX
-  id: "grp_panel"
-  adjust_mode: ADJUST_MODE_STRETCH
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 832.0
-    y: 358.0
-    z: 30.0
-  }
-  size {
-    x: 800.0
-    y: 632.0
-  }
-  color {
-    x: 0.039
-    y: 0.027
-    z: 0.125
-  }
-  type: TYPE_BOX
-  id: "panel_bg"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_panel"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.42
-}
-nodes {
-  type: TYPE_BOX
-  id: "grp_map"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_panel"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "grp_map_layers"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 832.0
-    y: 358.0
-    z: 32.0
-  }
-  size {
-    x: 800.0
-    y: 632.0
-  }
-  color {
-    x: 0.5
-    y: 0.62
-    z: 0.78
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/map_bg"
-  id: "map_texture_bg"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map_layers"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.8
-}
-nodes {
-  position {
-    x: 832.0
-    y: 358.0
-    z: 33.0
-  }
-  size {
-    x: 800.0
-    y: 632.0
-  }
-  color {
-    x: 0.3
-    y: 0.5
-    z: 0.74
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/map_roads"
-  id: "map_texture_roads"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map_layers"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.13
-}
-nodes {
-  position {
-    x: 832.0
-    y: 358.0
+    x: 825.0
+    y: 336.0
     z: 34.0
   }
   size {
-    x: 800.0
-    y: 632.0
+    x: 462.0
+    y: 292.0
   }
   color {
     x: 0.282
     y: 0.961
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/map_grid"
-  id: "map_texture_grid"
+  texture: "map2/map_grid"
+  id: "mapfull_map_texture_grid"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map_layers"
+  parent: "mapfull_grp_map_layers"
   layer: "lines"
   inherit_alpha: true
-  alpha: 0.1
+  alpha: 0.08
+  enabled: false
 }
 nodes {
   position {
-    x: 832.0
-    y: 358.0
+    x: 825.0
+    y: 336.0
     z: 40.0
   }
   size {
-    x: 800.0
-    y: 632.0
-  }
-  color {
-    x: 0.95
-    y: 0.93
-    z: 0.85
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/map_routes"
-  id: "map_texture_routes"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map_layers"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.115
-}
-nodes {
-  position {
-    x: 832.0
-    y: 358.0
-    z: 41.0
-  }
-  size {
-    x: 800.0
-    y: 632.0
-  }
-  color {
-    y: 0.71
-    z: 0.275
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/map_route_main"
-  id: "map_route_main"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map_layers"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 832.0
-    y: 358.0
-    z: 42.0
-  }
-  size {
-    x: 800.0
-    y: 632.0
-  }
-  color {
-    y: 0.282
-    z: 0.569
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/map_route_dashed"
-  id: "map_route_dashed"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map_layers"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.48
-}
-nodes {
-  position {
-    x: 832.0
-    y: 358.0
-    z: 43.0
-  }
-  size {
-    x: 800.0
-    y: 632.0
+    x: 462.0
+    y: 292.0
   }
   color {
     x: 0.953
@@ -3020,92 +178,96 @@ nodes {
     z: 0.851
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/map_route_nodes"
-  id: "map_route_nodes"
+  texture: "map2/map_routes"
+  id: "mapfull_map_texture_routes"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map_layers"
+  parent: "mapfull_grp_map_layers"
   layer: "ui"
   inherit_alpha: true
-  alpha: 0.72
+  alpha: 0.22
+  enabled: false
 }
 nodes {
   position {
-    x: 832.0
-    y: 358.0
+    x: 825.0
+    y: 336.0
     z: 39.5
   }
   size {
-    x: 806.0
-    y: 639.4
+    x: 468.9
+    y: 296.2
   }
   color {
     y: 0.71
     z: 0.275
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/map_route_main"
-  id: "map_route_main_halo"
+  texture: "map2/map_route_main"
+  id: "mapfull_map_route_main_halo"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map_layers"
+  parent: "mapfull_grp_map_layers"
   layer: "fx"
   inherit_alpha: true
-  alpha: 0.22
+  alpha: 0.34
+  enabled: false
 }
 nodes {
   position {
-    x: 832.0
-    y: 358.0
+    x: 825.0
+    y: 336.0
     z: 39.4
   }
   size {
-    x: 806.0
-    y: 639.4
-  }
-  color {
-    y: 0.282
-    z: 0.569
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/map_route_dashed"
-  id: "map_route_dashed_halo"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map_layers"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.13
-}
-nodes {
-  position {
-    x: 832.0
-    y: 358.0
-    z: 62.0
-  }
-  size {
-    x: 800.0
-    y: 632.0
+    x: 468.9
+    y: 296.2
   }
   color {
     x: 0.282
     y: 0.961
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/fx_scanlines"
-  id: "map_fx_scanlines"
+  texture: "map2/map_route_dashed"
+  id: "mapfull_map_route_dashed_halo"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map"
+  parent: "mapfull_grp_map_layers"
   layer: "fx"
   inherit_alpha: true
-  alpha: 0.1
+  alpha: 0.22
+  enabled: false
 }
 nodes {
   position {
-    x: 832.0
-    y: 358.0
+    x: 825.0
+    y: 336.0
+    z: 62.0
+  }
+  size {
+    x: 462.0
+    y: 292.0
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/fx_scanlines"
+  id: "mapfull_map_fx_scanlines"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.07
+  enabled: false
+}
+nodes {
+  position {
+    x: 825.0
+    y: 336.0
     z: 63.0
   }
   size {
-    x: 800.0
-    y: 632.0
+    x: 462.0
+    y: 292.0
   }
   color {
     x: 0.0
@@ -3113,111 +275,116 @@ nodes {
     z: 0.0
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/fx_vignette"
-  id: "map_fx_vignette"
+  texture: "map2/fx_vignette"
+  id: "mapfull_map_fx_vignette"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map"
+  parent: "mapfull_grp_map"
   layer: "fx"
   inherit_alpha: true
-  alpha: 0.34
+  alpha: 0.22
+  enabled: false
 }
 nodes {
   position {
-    x: 832.0
-    y: 674.0
+    x: 825.0
+    y: 482.0
     z: 66.0
   }
   size {
-    x: 800.0
-    y: 1.0
+    x: 462.0
+    y: 0.5
   }
   color {
     y: 0.71
     z: 0.275
   }
   type: TYPE_BOX
-  id: "map_frame_top"
+  id: "mapfull_map_frame_top"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map"
+  parent: "mapfull_grp_map"
   layer: "lines"
   inherit_alpha: true
   alpha: 0.36
+  enabled: false
 }
 nodes {
   position {
-    x: 832.0
-    y: 42.0
+    x: 825.0
+    y: 190.0
     z: 66.0
   }
   size {
-    x: 800.0
-    y: 1.0
+    x: 462.0
+    y: 0.5
   }
   color {
     y: 0.71
     z: 0.275
   }
   type: TYPE_BOX
-  id: "map_frame_bottom"
+  id: "mapfull_map_frame_bottom"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map"
+  parent: "mapfull_grp_map"
   layer: "lines"
   inherit_alpha: true
   alpha: 0.3
+  enabled: false
 }
 nodes {
   position {
-    x: 432.0
-    y: 358.0
+    x: 594.0
+    y: 336.0
     z: 66.0
   }
   size {
-    x: 1.0
-    y: 632.0
+    x: 0.6
+    y: 292.0
   }
   color {
     y: 0.71
     z: 0.275
   }
   type: TYPE_BOX
-  id: "map_frame_left"
+  id: "mapfull_map_frame_left"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map"
+  parent: "mapfull_grp_map"
   layer: "lines"
   inherit_alpha: true
   alpha: 0.28
+  enabled: false
 }
 nodes {
   position {
-    x: 1232.0
-    y: 358.0
+    x: 1056.0
+    y: 336.0
     z: 66.0
   }
   size {
-    x: 1.0
-    y: 632.0
+    x: 0.6
+    y: 292.0
   }
   color {
     y: 0.71
     z: 0.275
   }
   type: TYPE_BOX
-  id: "map_frame_right"
+  id: "mapfull_map_frame_right"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map"
+  parent: "mapfull_grp_map"
   layer: "lines"
   inherit_alpha: true
   alpha: 0.28
+  enabled: false
 }
 nodes {
   position {
-    x: 660.0
-    y: 621.1
+    x: 725.7
+    y: 457.6
     z: 67.0
   }
   size {
-    x: 450.0
-    y: 64.0
+    x: 259.9
+    y: 29.6
   }
   color {
     x: 0.039
@@ -3225,22 +392,23 @@ nodes {
     z: 0.125
   }
   type: TYPE_BOX
-  id: "map_header_scrim"
+  id: "mapfull_map_header_scrim"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map"
+  parent: "mapfull_grp_map"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.82
+  enabled: false
 }
 nodes {
   position {
-    x: 456.0
-    y: 639.6
+    x: 607.9
+    y: 466.1
     z: 70.0
   }
   size {
-    x: 420.0
-    y: 18.0
+    x: 242.6
+    y: 8.3
   }
   color {
     y: 0.71
@@ -3249,23 +417,24 @@ nodes {
   type: TYPE_TEXT
   text: "\320\235\320\220\320\222\320\230\320\223\320\220\320\242\320\236\320\240 \302\267 \320\234\320\236\320\241\320\232\320\222\320\220 \302\267 \320\237\320\240\320\225\320\241\320\235\320\257"
   font: "jb_mono_12"
-  id: "map_eyebrow"
+  id: "mapfull_map_eyebrow"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map"
+  parent: "mapfull_grp_map"
   layer: "text"
   inherit_alpha: true
   alpha: 0.9
+  enabled: false
 }
 nodes {
   position {
-    x: 456.0
-    y: 600.2
+    x: 607.9
+    y: 447.9
     z: 70.0
   }
   size {
-    x: 200.0
-    y: 36.0
+    x: 115.5
+    y: 16.6
   }
   color {
     x: 0.953
@@ -3275,23 +444,24 @@ nodes {
   type: TYPE_TEXT
   text: "\320\232\320\260\321\200\321\202\320\260"
   font: "unbounded_bold_32"
-  id: "map_title"
+  id: "mapfull_map_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map"
+  parent: "mapfull_grp_map"
   layer: "text"
   inherit_alpha: true
   alpha: 0.96
+  enabled: false
 }
 nodes {
   position {
-    x: 456.0
-    y: 66.6
+    x: 607.9
+    y: 201.4
     z: 70.0
   }
   size {
-    x: 120.0
-    y: 18.0
+    x: 69.3
+    y: 8.3
   }
   color {
     x: 0.282
@@ -3300,23 +470,24 @@ nodes {
   type: TYPE_TEXT
   text: "55.76\302\260 N"
   font: "jb_mono_12"
-  id: "map_coord_n"
+  id: "mapfull_map_coord_n"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map"
+  parent: "mapfull_grp_map"
   layer: "text"
   inherit_alpha: true
   alpha: 0.42
+  enabled: false
 }
 nodes {
   position {
-    x: 1112.0
-    y: 66.6
+    x: 986.7
+    y: 201.4
     z: 70.0
   }
   size {
-    x: 120.0
-    y: 18.0
+    x: 69.3
+    y: 8.3
   }
   color {
     x: 0.282
@@ -3325,23 +496,24 @@ nodes {
   type: TYPE_TEXT
   text: "37.58\302\260 E"
   font: "jb_mono_12"
-  id: "map_coord_e"
+  id: "mapfull_map_coord_e"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map"
+  parent: "mapfull_grp_map"
   layer: "text"
   inherit_alpha: true
   alpha: 0.42
+  enabled: false
 }
 nodes {
   position {
-    x: 456.0
-    y: 101.0
+    x: 607.9
+    y: 217.3
     z: 70.0
   }
   size {
-    x: 240.0
-    y: 18.0
+    x: 138.6
+    y: 8.3
   }
   color {
     x: 0.282
@@ -3350,963 +522,922 @@ nodes {
   type: TYPE_TEXT
   text: "> \320\232\320\220\320\240\320\242\320\220: ONLINE"
   font: "jb_mono_12"
-  id: "map_terminal"
+  id: "mapfull_map_terminal"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map"
+  parent: "mapfull_grp_map"
   layer: "text"
   inherit_alpha: true
   alpha: 0.95
+  enabled: false
 }
 nodes {
   position {
-    x: 596.0
-    y: 101.0
+    x: 688.7
+    y: 217.3
     z: 70.0
   }
   size {
-    x: 8.0
-    y: 13.0
+    x: 4.6
+    y: 6.0
   }
   color {
     x: 0.282
     y: 0.961
   }
   type: TYPE_BOX
-  id: "map_terminal_cursor"
+  id: "mapfull_map_terminal_cursor"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map"
+  parent: "mapfull_grp_map"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.9
+  enabled: false
 }
 nodes {
   type: TYPE_BOX
-  id: "grp_poi"
+  id: "mapfull_grp_poi"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map"
+  parent: "mapfull_grp_map"
   layer: "ui"
   inherit_alpha: true
+  enabled: false
 }
 nodes {
   position {
-    x: 560.0
-    y: 172.3
+    x: 633.3
+    y: 365.6
     z: 50.0
   }
   size {
-    x: 1.0
-    y: 1.0
+    x: 0.6
+    y: 0.5
   }
   type: TYPE_BOX
-  id: "poi_home"
+  id: "mapfull_poi_home"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_poi"
+  parent: "mapfull_grp_poi"
   layer: "ui"
   inherit_alpha: true
+  enabled: false
 }
 nodes {
   position {
     z: 49.0
   }
   size {
-    x: 112.0
-    y: 112.0
+    x: 67.0
+    y: 53.6
   }
   type: TYPE_BOX
-  id: "poi_home_hitbox"
+  id: "mapfull_poi_home_hitbox"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_home"
+  parent: "mapfull_poi_home"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.01
+  enabled: false
 }
 nodes {
   position {
     z: 50.0
   }
   size {
-    x: 156.0
-    y: 156.0
+    x: 82.0
+    y: 65.6
   }
   color {
     x: 0.714
     y: 0.361
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_glow"
-  id: "poi_home_glow"
+  texture: "map2/poi_glow"
+  id: "mapfull_poi_home_glow"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_home"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.26
-}
-nodes {
-  position {
-    z: 51.0
-  }
-  size {
-    x: 104.0
-    y: 104.0
-  }
-  color {
-    x: 0.714
-    y: 0.361
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_glow_ring"
-  id: "poi_home_glow_ring"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_home"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.26
-}
-nodes {
-  position {
-    y: -50.0
-    z: 52.0
-  }
-  size {
-    x: 26.0
-    y: 76.0
-  }
-  color {
-    x: 0.714
-    y: 0.361
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_stem"
-  id: "poi_home_stem"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_home"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.76
-}
-nodes {
-  position {
-    z: 53.0
-  }
-  size {
-    x: 74.0
-    y: 74.0
-  }
-  color {
-    x: 0.714
-    y: 0.361
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_circle"
-  id: "poi_home_circle"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_home"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.82
-}
-nodes {
-  position {
-    z: 54.0
-  }
-  size {
-    x: 54.0
-    y: 54.0
-  }
-  color {
-    x: 0.714
-    y: 0.361
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_center_dark"
-  id: "poi_home_center"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_home"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.92
-}
-nodes {
-  position {
-    z: 55.0
-  }
-  size {
-    x: 50.0
-    y: 50.0
-  }
-  color {
-    x: 0.714
-    y: 0.361
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_icon_home"
-  id: "poi_home_icon"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_home"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    y: -50.0
-    z: 55.0
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    x: 0.714
-    y: 0.361
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_dot"
-  id: "poi_home_dot"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_home"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.78
-}
-nodes {
-  position {
-    x: 816.0
-    y: 467.4
-    z: 50.0
-  }
-  size {
-    x: 1.0
-    y: 1.0
-  }
-  type: TYPE_BOX
-  id: "poi_work"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_poi"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    z: 49.0
-  }
-  size {
-    x: 143.36
-    y: 143.36
-  }
-  type: TYPE_BOX
-  id: "poi_work_hitbox"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_work"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.01
-}
-nodes {
-  position {
-    z: 50.0
-  }
-  size {
-    x: 199.68
-    y: 199.68
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_glow"
-  id: "poi_work_glow"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_work"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.333
-}
-nodes {
-  position {
-    z: 51.0
-  }
-  size {
-    x: 133.12
-    y: 133.12
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_glow_ring"
-  id: "poi_work_glow_ring"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_work"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.333
-}
-nodes {
-  position {
-    y: -50.0
-    z: 52.0
-  }
-  size {
-    x: 33.28
-    y: 97.28
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_stem"
-  id: "poi_work_stem"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_work"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.76
-}
-nodes {
-  position {
-    z: 53.0
-  }
-  size {
-    x: 94.72
-    y: 94.72
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_circle"
-  id: "poi_work_circle"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_work"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.82
-}
-nodes {
-  position {
-    z: 54.0
-  }
-  size {
-    x: 69.12
-    y: 69.12
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_center_dark"
-  id: "poi_work_center"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_work"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.92
-}
-nodes {
-  position {
-    z: 55.0
-  }
-  size {
-    x: 64.0
-    y: 64.0
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_icon_work"
-  id: "poi_work_icon"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_work"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    y: -50.0
-    z: 55.0
-  }
-  size {
-    x: 17.92
-    y: 17.92
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_dot"
-  id: "poi_work_dot"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_work"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.78
-}
-nodes {
-  position {
-    z: 56.5
-  }
-  size {
-    x: 150.0
-    y: 150.0
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_glow_ring"
-  id: "poi_work_active_glow"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_work"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.36
-}
-nodes {
-  position {
-    x: 930.0
-    y: 500.6
-    z: 50.0
-  }
-  size {
-    x: 1.0
-    y: 1.0
-  }
-  type: TYPE_BOX
-  id: "poi_cafe"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_poi"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    z: 49.0
-  }
-  size {
-    x: 118.72
-    y: 118.72
-  }
-  type: TYPE_BOX
-  id: "poi_cafe_hitbox"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_cafe"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.01
-}
-nodes {
-  position {
-    z: 50.0
-  }
-  size {
-    x: 165.36
-    y: 165.36
-  }
-  color {
-    y: 0.71
-    z: 0.275
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_glow"
-  id: "poi_cafe_glow"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_cafe"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.276
-}
-nodes {
-  position {
-    z: 51.0
-  }
-  size {
-    x: 110.24
-    y: 110.24
-  }
-  color {
-    y: 0.71
-    z: 0.275
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_glow_ring"
-  id: "poi_cafe_glow_ring"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_cafe"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.276
-}
-nodes {
-  position {
-    y: -50.0
-    z: 52.0
-  }
-  size {
-    x: 27.56
-    y: 80.56
-  }
-  color {
-    y: 0.71
-    z: 0.275
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_stem"
-  id: "poi_cafe_stem"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_cafe"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.76
-}
-nodes {
-  position {
-    z: 53.0
-  }
-  size {
-    x: 78.44
-    y: 78.44
-  }
-  color {
-    y: 0.71
-    z: 0.275
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_circle"
-  id: "poi_cafe_circle"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_cafe"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.82
-}
-nodes {
-  position {
-    z: 54.0
-  }
-  size {
-    x: 57.24
-    y: 57.24
-  }
-  color {
-    y: 0.71
-    z: 0.275
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_center_dark"
-  id: "poi_cafe_center"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_cafe"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.92
-}
-nodes {
-  position {
-    z: 55.0
-  }
-  size {
-    x: 53.0
-    y: 53.0
-  }
-  color {
-    y: 0.71
-    z: 0.275
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_icon_cafe"
-  id: "poi_cafe_icon"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_cafe"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    y: -50.0
-    z: 55.0
-  }
-  size {
-    x: 14.84
-    y: 14.84
-  }
-  color {
-    y: 0.71
-    z: 0.275
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_dot"
-  id: "poi_cafe_dot"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_cafe"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.78
-}
-nodes {
-  position {
-    x: 1056.0
-    y: 294.1
-    z: 50.0
-  }
-  size {
-    x: 1.0
-    y: 1.0
-  }
-  type: TYPE_BOX
-  id: "poi_park"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_poi"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    z: 49.0
-  }
-  size {
-    x: 127.68
-    y: 127.68
-  }
-  type: TYPE_BOX
-  id: "poi_park_hitbox"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_park"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.01
-}
-nodes {
-  position {
-    z: 50.0
-  }
-  size {
-    x: 177.84
-    y: 177.84
-  }
-  color {
-    x: 0.412
-    y: 0.961
-    z: 0.529
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_glow"
-  id: "poi_park_glow"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_park"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.296
-}
-nodes {
-  position {
-    z: 51.0
-  }
-  size {
-    x: 118.56
-    y: 118.56
-  }
-  color {
-    x: 0.412
-    y: 0.961
-    z: 0.529
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_glow_ring"
-  id: "poi_park_glow_ring"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_park"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.296
-}
-nodes {
-  position {
-    y: -50.0
-    z: 52.0
-  }
-  size {
-    x: 29.64
-    y: 86.64
-  }
-  color {
-    x: 0.412
-    y: 0.961
-    z: 0.529
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_stem"
-  id: "poi_park_stem"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_park"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.76
-}
-nodes {
-  position {
-    z: 53.0
-  }
-  size {
-    x: 84.36
-    y: 84.36
-  }
-  color {
-    x: 0.412
-    y: 0.961
-    z: 0.529
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_circle"
-  id: "poi_park_circle"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_park"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.82
-}
-nodes {
-  position {
-    z: 54.0
-  }
-  size {
-    x: 61.56
-    y: 61.56
-  }
-  color {
-    x: 0.412
-    y: 0.961
-    z: 0.529
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_center_dark"
-  id: "poi_park_center"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_park"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.92
-}
-nodes {
-  position {
-    z: 55.0
-  }
-  size {
-    x: 57.0
-    y: 57.0
-  }
-  color {
-    x: 0.412
-    y: 0.961
-    z: 0.529
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_icon_park"
-  id: "poi_park_icon"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_park"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    y: -50.0
-    z: 55.0
-  }
-  size {
-    x: 15.96
-    y: 15.96
-  }
-  color {
-    x: 0.412
-    y: 0.961
-    z: 0.529
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_dot"
-  id: "poi_park_dot"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_park"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.78
-}
-nodes {
-  position {
-    z: 56.5
-  }
-  size {
-    x: 128.0
-    y: 128.0
-  }
-  color {
-    x: 0.412
-    y: 0.961
-    z: 0.529
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_glow_ring"
-  id: "poi_park_active_glow"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_park"
+  parent: "mapfull_poi_home"
   layer: "fx"
   inherit_alpha: true
   alpha: 0.24
-}
-nodes {
-  position {
-    x: 672.0
-    y: 280.5
-    z: 50.0
-  }
-  size {
-    x: 1.0
-    y: 1.0
-  }
-  type: TYPE_BOX
-  id: "poi_shop"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_poi"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    z: 49.0
-  }
-  size {
-    x: 109.76
-    y: 109.76
-  }
-  type: TYPE_BOX
-  id: "poi_shop_hitbox"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_shop"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.01
-}
-nodes {
-  position {
-    z: 50.0
-  }
-  size {
-    x: 152.88
-    y: 152.88
-  }
-  color {
-    y: 0.282
-    z: 0.569
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_glow"
-  id: "poi_shop_glow"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_shop"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.255
+  enabled: false
 }
 nodes {
   position {
     z: 51.0
   }
   size {
-    x: 101.92
-    y: 101.92
+    x: 61.2
+    y: 49.0
   }
   color {
-    y: 0.282
-    z: 0.569
+    x: 0.714
+    y: 0.361
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_glow_ring"
-  id: "poi_shop_glow_ring"
+  texture: "map2/poi_glow_ring"
+  id: "mapfull_poi_home_glow_ring"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_shop"
+  parent: "mapfull_poi_home"
   layer: "fx"
   inherit_alpha: true
-  alpha: 0.255
+  alpha: 0.22
+  enabled: false
 }
 nodes {
   position {
-    y: -50.0
+    y: 148.4
     z: 52.0
   }
   size {
-    x: 25.48
-    y: 74.48
+    x: 12.7
+    y: 32.3
   }
   color {
-    y: 0.282
-    z: 0.569
+    x: 0.714
+    y: 0.361
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_stem"
-  id: "poi_shop_stem"
+  texture: "map2/poi_stem"
+  id: "mapfull_poi_home_stem"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_shop"
+  parent: "mapfull_poi_home"
   layer: "lines"
   inherit_alpha: true
-  alpha: 0.76
+  alpha: 0.68
+  enabled: false
 }
 nodes {
   position {
     z: 53.0
   }
   size {
-    x: 72.52
-    y: 72.52
+    x: 40.4
+    y: 32.3
   }
   color {
-    y: 0.282
-    z: 0.569
+    x: 0.714
+    y: 0.361
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_circle"
-  id: "poi_shop_circle"
+  texture: "map2/poi_circle"
+  id: "mapfull_poi_home_circle"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_shop"
+  parent: "mapfull_poi_home"
   layer: "ui"
   inherit_alpha: true
-  alpha: 0.82
+  alpha: 0.92
+  enabled: false
 }
 nodes {
   position {
     z: 54.0
   }
   size {
-    x: 52.92
-    y: 52.92
+    x: 27.7
+    y: 22.2
   }
   color {
-    y: 0.282
-    z: 0.569
+    x: 0.714
+    y: 0.361
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_center_dark"
-  id: "poi_shop_center"
+  texture: "map2/poi_center_dark"
+  id: "mapfull_poi_home_center"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_shop"
+  parent: "mapfull_poi_home"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.92
+  enabled: false
 }
 nodes {
   position {
     z: 55.0
   }
   size {
-    x: 49.0
+    x: 25.4
+    y: 20.3
+  }
+  color {
+    x: 0.714
+    y: 0.361
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_icon_home"
+  id: "mapfull_poi_home_icon"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_home"
+  layer: "ui"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    y: 148.4
+    z: 55.0
+  }
+  size {
+    x: 6.9
+    y: 5.5
+  }
+  color {
+    x: 0.714
+    y: 0.361
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_dot"
+  id: "mapfull_poi_home_dot"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_home"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.72
+  enabled: false
+}
+nodes {
+  position {
+    x: 800.7
+    y: 429.3
+    z: 50.0
+  }
+  size {
+    x: 0.6
+    y: 0.5
+  }
+  type: TYPE_BOX
+  id: "mapfull_poi_work"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_poi"
+  layer: "ui"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    z: 49.0
+  }
+  size {
+    x: 78.5
+    y: 62.8
+  }
+  type: TYPE_BOX
+  id: "mapfull_poi_work_hitbox"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_work"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.01
+  enabled: false
+}
+nodes {
+  position {
+    z: 50.0
+  }
+  size {
+    x: 106.3
+    y: 85.0
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_glow"
+  id: "mapfull_poi_work_glow"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_work"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.24
+  enabled: false
+}
+nodes {
+  position {
+    z: 51.0
+  }
+  size {
+    x: 75.1
+    y: 60.1
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_glow_ring"
+  id: "mapfull_poi_work_glow_ring"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_work"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.22
+  enabled: false
+}
+nodes {
+  position {
+    y: 148.4
+    z: 52.0
+  }
+  size {
+    x: 13.9
+    y: 36.0
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_stem"
+  id: "mapfull_poi_work_stem"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_work"
+  layer: "lines"
+  inherit_alpha: true
+  alpha: 0.68
+  enabled: false
+}
+nodes {
+  position {
+    z: 53.0
+  }
+  size {
+    x: 46.2
+    y: 37.0
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_circle"
+  id: "mapfull_poi_work_circle"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_work"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.92
+  enabled: false
+}
+nodes {
+  position {
+    z: 54.0
+  }
+  size {
+    x: 32.3
+    y: 25.9
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_center_dark"
+  id: "mapfull_poi_work_center"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_work"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.92
+  enabled: false
+}
+nodes {
+  position {
+    z: 55.0
+  }
+  size {
+    x: 30.0
+    y: 24.0
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_icon_work"
+  id: "mapfull_poi_work_icon"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_work"
+  layer: "ui"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    y: 148.4
+    z: 55.0
+  }
+  size {
+    x: 7.5
+    y: 6.0
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_dot"
+  id: "mapfull_poi_work_dot"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_work"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.72
+  enabled: false
+}
+nodes {
+  position {
+    z: 56.5
+  }
+  size {
+    x: 104.0
+    y: 83.2
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_glow_ring"
+  id: "mapfull_poi_work_active_glow"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_work"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.34
+  enabled: false
+}
+nodes {
+  position {
+    x: 784.6
+    y: 364.6
+    z: 50.0
+  }
+  size {
+    x: 0.6
+    y: 0.5
+  }
+  type: TYPE_BOX
+  id: "mapfull_poi_cafe"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_poi"
+  layer: "ui"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    z: 49.0
+  }
+  size {
+    x: 67.0
+    y: 53.6
+  }
+  type: TYPE_BOX
+  id: "mapfull_poi_cafe_hitbox"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_cafe"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.01
+  enabled: false
+}
+nodes {
+  position {
+    z: 50.0
+  }
+  size {
+    x: 82.0
+    y: 65.6
+  }
+  color {
+    y: 0.71
+    z: 0.275
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_glow"
+  id: "mapfull_poi_cafe_glow"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_cafe"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.24
+  enabled: false
+}
+nodes {
+  position {
+    z: 51.0
+  }
+  size {
+    x: 61.2
+    y: 49.0
+  }
+  color {
+    y: 0.71
+    z: 0.275
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_glow_ring"
+  id: "mapfull_poi_cafe_glow_ring"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_cafe"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.22
+  enabled: false
+}
+nodes {
+  position {
+    y: 148.4
+    z: 52.0
+  }
+  size {
+    x: 12.7
+    y: 32.3
+  }
+  color {
+    y: 0.71
+    z: 0.275
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_stem"
+  id: "mapfull_poi_cafe_stem"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_cafe"
+  layer: "lines"
+  inherit_alpha: true
+  alpha: 0.68
+  enabled: false
+}
+nodes {
+  position {
+    z: 53.0
+  }
+  size {
+    x: 40.4
+    y: 32.3
+  }
+  color {
+    y: 0.71
+    z: 0.275
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_circle"
+  id: "mapfull_poi_cafe_circle"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_cafe"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.92
+  enabled: false
+}
+nodes {
+  position {
+    z: 54.0
+  }
+  size {
+    x: 27.7
+    y: 22.2
+  }
+  color {
+    y: 0.71
+    z: 0.275
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_center_dark"
+  id: "mapfull_poi_cafe_center"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_cafe"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.92
+  enabled: false
+}
+nodes {
+  position {
+    z: 55.0
+  }
+  size {
+    x: 25.4
+    y: 20.3
+  }
+  color {
+    y: 0.71
+    z: 0.275
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_icon_cafe"
+  id: "mapfull_poi_cafe_icon"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_cafe"
+  layer: "ui"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    y: 148.4
+    z: 55.0
+  }
+  size {
+    x: 6.9
+    y: 5.5
+  }
+  color {
+    y: 0.71
+    z: 0.275
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_dot"
+  id: "mapfull_poi_cafe_dot"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_cafe"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.72
+  enabled: false
+}
+nodes {
+  position {
+    x: 947.4
+    y: 357.7
+    z: 50.0
+  }
+  size {
+    x: 0.6
+    y: 0.5
+  }
+  type: TYPE_BOX
+  id: "mapfull_poi_park"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_poi"
+  layer: "ui"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    z: 49.0
+  }
+  size {
+    x: 67.0
+    y: 53.6
+  }
+  type: TYPE_BOX
+  id: "mapfull_poi_park_hitbox"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_park"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.01
+  enabled: false
+}
+nodes {
+  position {
+    z: 50.0
+  }
+  size {
+    x: 82.0
+    y: 65.6
+  }
+  color {
+    x: 0.412
+    y: 0.961
+    z: 0.529
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_glow"
+  id: "mapfull_poi_park_glow"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_park"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.24
+  enabled: false
+}
+nodes {
+  position {
+    z: 51.0
+  }
+  size {
+    x: 61.2
+    y: 49.0
+  }
+  color {
+    x: 0.412
+    y: 0.961
+    z: 0.529
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_glow_ring"
+  id: "mapfull_poi_park_glow_ring"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_park"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.22
+  enabled: false
+}
+nodes {
+  position {
+    y: 148.4
+    z: 52.0
+  }
+  size {
+    x: 12.7
+    y: 32.3
+  }
+  color {
+    x: 0.412
+    y: 0.961
+    z: 0.529
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_stem"
+  id: "mapfull_poi_park_stem"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_park"
+  layer: "lines"
+  inherit_alpha: true
+  alpha: 0.68
+  enabled: false
+}
+nodes {
+  position {
+    z: 53.0
+  }
+  size {
+    x: 40.4
+    y: 32.3
+  }
+  color {
+    x: 0.412
+    y: 0.961
+    z: 0.529
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_circle"
+  id: "mapfull_poi_park_circle"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_park"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.92
+  enabled: false
+}
+nodes {
+  position {
+    z: 54.0
+  }
+  size {
+    x: 27.7
+    y: 22.2
+  }
+  color {
+    x: 0.412
+    y: 0.961
+    z: 0.529
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_center_dark"
+  id: "mapfull_poi_park_center"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_park"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.92
+  enabled: false
+}
+nodes {
+  position {
+    z: 55.0
+  }
+  size {
+    x: 25.4
+    y: 20.3
+  }
+  color {
+    x: 0.412
+    y: 0.961
+    z: 0.529
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_icon_park"
+  id: "mapfull_poi_park_icon"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_park"
+  layer: "ui"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    y: 148.4
+    z: 55.0
+  }
+  size {
+    x: 6.9
+    y: 5.5
+  }
+  color {
+    x: 0.412
+    y: 0.961
+    z: 0.529
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_dot"
+  id: "mapfull_poi_park_dot"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_park"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.72
+  enabled: false
+}
+nodes {
+  position {
+    z: 56.5
+  }
+  size {
+    x: 79.7
+    y: 63.8
+  }
+  color {
+    x: 0.412
+    y: 0.961
+    z: 0.529
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_glow_ring"
+  id: "mapfull_poi_park_active_glow"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_park"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.16
+  enabled: false
+}
+nodes {
+  position {
+    x: 661.0
+    y: 321.2
+    z: 50.0
+  }
+  size {
+    x: 0.6
+    y: 0.5
+  }
+  type: TYPE_BOX
+  id: "mapfull_poi_shop"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_poi"
+  layer: "ui"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    z: 49.0
+  }
+  size {
+    x: 67.0
+    y: 53.6
+  }
+  type: TYPE_BOX
+  id: "mapfull_poi_shop_hitbox"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_shop"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.01
+  enabled: false
+}
+nodes {
+  position {
+    z: 50.0
+  }
+  size {
+    x: 82.0
+    y: 65.6
+  }
+  color {
+    y: 0.282
+    z: 0.569
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_glow"
+  id: "mapfull_poi_shop_glow"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_shop"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.24
+  enabled: false
+}
+nodes {
+  position {
+    z: 51.0
+  }
+  size {
+    x: 61.2
     y: 49.0
   }
   color {
@@ -4314,797 +1445,926 @@ nodes {
     z: 0.569
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_icon_shop"
-  id: "poi_shop_icon"
+  texture: "map2/poi_glow_ring"
+  id: "mapfull_poi_shop_glow_ring"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_shop"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    y: -50.0
-    z: 55.0
-  }
-  size {
-    x: 13.72
-    y: 13.72
-  }
-  color {
-    y: 0.282
-    z: 0.569
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_dot"
-  id: "poi_shop_dot"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_shop"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.78
-}
-nodes {
-  position {
-    x: 1040.0
-    y: 180.9
-    z: 50.0
-  }
-  size {
-    x: 1.0
-    y: 1.0
-  }
-  type: TYPE_BOX
-  id: "poi_bar"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_poi"
-  layer: "ui"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    z: 49.0
-  }
-  size {
-    x: 112.0
-    y: 112.0
-  }
-  type: TYPE_BOX
-  id: "poi_bar_hitbox"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_bar"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.01
-}
-nodes {
-  position {
-    z: 50.0
-  }
-  size {
-    x: 156.0
-    y: 156.0
-  }
-  color {
-    y: 0.282
-    z: 0.569
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_glow"
-  id: "poi_bar_glow"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_bar"
+  parent: "mapfull_poi_shop"
   layer: "fx"
   inherit_alpha: true
-  alpha: 0.26
+  alpha: 0.22
+  enabled: false
 }
 nodes {
   position {
-    z: 51.0
-  }
-  size {
-    x: 104.0
-    y: 104.0
-  }
-  color {
-    y: 0.282
-    z: 0.569
-  }
-  type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_glow_ring"
-  id: "poi_bar_glow_ring"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_bar"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.26
-}
-nodes {
-  position {
-    y: -50.0
+    y: 148.4
     z: 52.0
   }
   size {
-    x: 26.0
-    y: 76.0
+    x: 12.7
+    y: 32.3
   }
   color {
     y: 0.282
     z: 0.569
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_stem"
-  id: "poi_bar_stem"
+  texture: "map2/poi_stem"
+  id: "mapfull_poi_shop_stem"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_bar"
+  parent: "mapfull_poi_shop"
   layer: "lines"
   inherit_alpha: true
-  alpha: 0.76
+  alpha: 0.68
+  enabled: false
 }
 nodes {
   position {
     z: 53.0
   }
   size {
-    x: 74.0
-    y: 74.0
+    x: 40.4
+    y: 32.3
   }
   color {
     y: 0.282
     z: 0.569
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_circle"
-  id: "poi_bar_circle"
+  texture: "map2/poi_circle"
+  id: "mapfull_poi_shop_circle"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_bar"
+  parent: "mapfull_poi_shop"
   layer: "ui"
   inherit_alpha: true
-  alpha: 0.82
+  alpha: 0.92
+  enabled: false
 }
 nodes {
   position {
     z: 54.0
   }
   size {
-    x: 54.0
-    y: 54.0
+    x: 27.7
+    y: 22.2
   }
   color {
     y: 0.282
     z: 0.569
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_center_dark"
-  id: "poi_bar_center"
+  texture: "map2/poi_center_dark"
+  id: "mapfull_poi_shop_center"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_bar"
+  parent: "mapfull_poi_shop"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.92
+  enabled: false
 }
 nodes {
   position {
     z: 55.0
   }
   size {
-    x: 50.0
-    y: 50.0
+    x: 25.4
+    y: 20.3
   }
   color {
     y: 0.282
     z: 0.569
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_icon_bar"
-  id: "poi_bar_icon"
+  texture: "map2/poi_icon_shop"
+  id: "mapfull_poi_shop_icon"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_bar"
+  parent: "mapfull_poi_shop"
   layer: "ui"
   inherit_alpha: true
+  enabled: false
 }
 nodes {
   position {
-    y: -50.0
+    y: 148.4
     z: 55.0
   }
   size {
-    x: 14.0
-    y: 14.0
+    x: 6.9
+    y: 5.5
   }
   color {
     y: 0.282
     z: 0.569
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_dot"
-  id: "poi_bar_dot"
+  texture: "map2/poi_dot"
+  id: "mapfull_poi_shop_dot"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_bar"
+  parent: "mapfull_poi_shop"
   layer: "ui"
   inherit_alpha: true
-  alpha: 0.78
+  alpha: 0.72
+  enabled: false
 }
 nodes {
   position {
-    x: 1120.0
-    y: 543.7
+    x: 829.6
+    y: 311.1
     z: 50.0
   }
   size {
-    x: 1.0
-    y: 1.0
+    x: 0.6
+    y: 0.5
   }
   type: TYPE_BOX
-  id: "poi_view"
+  id: "mapfull_poi_bar"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_poi"
+  parent: "mapfull_grp_poi"
   layer: "ui"
   inherit_alpha: true
+  enabled: false
 }
 nodes {
   position {
     z: 49.0
   }
   size {
-    x: 114.24
-    y: 114.24
+    x: 67.0
+    y: 53.6
   }
   type: TYPE_BOX
-  id: "poi_view_hitbox"
+  id: "mapfull_poi_bar_hitbox"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_view"
+  parent: "mapfull_poi_bar"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.01
+  enabled: false
 }
 nodes {
   position {
     z: 50.0
   }
   size {
-    x: 159.12
-    y: 159.12
+    x: 82.0
+    y: 65.6
   }
   color {
-    y: 0.71
-    z: 0.275
+    y: 0.282
+    z: 0.569
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_glow"
-  id: "poi_view_glow"
+  texture: "map2/poi_glow"
+  id: "mapfull_poi_bar_glow"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_view"
+  parent: "mapfull_poi_bar"
   layer: "fx"
   inherit_alpha: true
-  alpha: 0.265
+  alpha: 0.24
+  enabled: false
 }
 nodes {
   position {
     z: 51.0
   }
   size {
-    x: 106.08
-    y: 106.08
+    x: 61.2
+    y: 49.0
   }
   color {
-    y: 0.71
-    z: 0.275
+    y: 0.282
+    z: 0.569
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_glow_ring"
-  id: "poi_view_glow_ring"
+  texture: "map2/poi_glow_ring"
+  id: "mapfull_poi_bar_glow_ring"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_view"
+  parent: "mapfull_poi_bar"
   layer: "fx"
   inherit_alpha: true
-  alpha: 0.265
+  alpha: 0.22
+  enabled: false
 }
 nodes {
   position {
-    y: -50.0
+    y: 148.4
     z: 52.0
   }
   size {
-    x: 26.52
-    y: 77.52
+    x: 12.7
+    y: 32.3
   }
   color {
-    y: 0.71
-    z: 0.275
+    y: 0.282
+    z: 0.569
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_stem"
-  id: "poi_view_stem"
+  texture: "map2/poi_stem"
+  id: "mapfull_poi_bar_stem"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_view"
+  parent: "mapfull_poi_bar"
   layer: "lines"
   inherit_alpha: true
-  alpha: 0.76
+  alpha: 0.68
+  enabled: false
 }
 nodes {
   position {
     z: 53.0
   }
   size {
-    x: 75.48
-    y: 75.48
+    x: 40.4
+    y: 32.3
   }
   color {
-    y: 0.71
-    z: 0.275
+    y: 0.282
+    z: 0.569
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_circle"
-  id: "poi_view_circle"
+  texture: "map2/poi_circle"
+  id: "mapfull_poi_bar_circle"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_view"
+  parent: "mapfull_poi_bar"
   layer: "ui"
   inherit_alpha: true
-  alpha: 0.82
+  alpha: 0.92
+  enabled: false
 }
 nodes {
   position {
     z: 54.0
   }
   size {
-    x: 55.08
-    y: 55.08
+    x: 27.7
+    y: 22.2
   }
   color {
-    y: 0.71
-    z: 0.275
+    y: 0.282
+    z: 0.569
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_center_dark"
-  id: "poi_view_center"
+  texture: "map2/poi_center_dark"
+  id: "mapfull_poi_bar_center"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_view"
+  parent: "mapfull_poi_bar"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.92
+  enabled: false
 }
 nodes {
   position {
     z: 55.0
   }
   size {
-    x: 51.0
-    y: 51.0
+    x: 25.4
+    y: 20.3
   }
   color {
-    y: 0.71
-    z: 0.275
+    y: 0.282
+    z: 0.569
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_icon_view"
-  id: "poi_view_icon"
+  texture: "map2/poi_icon_bar"
+  id: "mapfull_poi_bar_icon"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_view"
+  parent: "mapfull_poi_bar"
   layer: "ui"
   inherit_alpha: true
+  enabled: false
 }
 nodes {
   position {
-    y: -50.0
+    y: 148.4
     z: 55.0
   }
   size {
-    x: 14.28
-    y: 14.28
+    x: 6.9
+    y: 5.5
   }
   color {
-    y: 0.71
-    z: 0.275
+    y: 0.282
+    z: 0.569
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_dot"
-  id: "poi_view_dot"
+  texture: "map2/poi_dot"
+  id: "mapfull_poi_bar_dot"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_view"
+  parent: "mapfull_poi_bar"
   layer: "ui"
   inherit_alpha: true
-  alpha: 0.78
+  alpha: 0.72
+  enabled: false
 }
 nodes {
   position {
-    x: 592.0
-    y: 482.2
+    x: 696.8
+    y: 261.2
     z: 50.0
   }
   size {
-    x: 1.0
-    y: 1.0
+    x: 0.6
+    y: 0.5
   }
   type: TYPE_BOX
-  id: "poi_archive"
+  id: "mapfull_poi_view"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_poi"
+  parent: "mapfull_grp_poi"
   layer: "ui"
   inherit_alpha: true
+  enabled: false
 }
 nodes {
   position {
     z: 49.0
   }
   size {
-    x: 107.52
-    y: 107.52
+    x: 67.0
+    y: 53.6
   }
   type: TYPE_BOX
-  id: "poi_archive_hitbox"
+  id: "mapfull_poi_view_hitbox"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_archive"
+  parent: "mapfull_poi_view"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.01
+  enabled: false
 }
 nodes {
   position {
     z: 50.0
   }
   size {
-    x: 149.76
-    y: 149.76
+    x: 82.0
+    y: 65.6
   }
   color {
-    x: 0.714
-    y: 0.361
+    y: 0.71
+    z: 0.275
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_glow"
-  id: "poi_archive_glow"
+  texture: "map2/poi_glow"
+  id: "mapfull_poi_view_glow"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_archive"
+  parent: "mapfull_poi_view"
   layer: "fx"
   inherit_alpha: true
-  alpha: 0.25
+  alpha: 0.24
+  enabled: false
 }
 nodes {
   position {
     z: 51.0
   }
   size {
-    x: 99.84
-    y: 99.84
+    x: 61.2
+    y: 49.0
   }
   color {
-    x: 0.714
-    y: 0.361
+    y: 0.71
+    z: 0.275
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_glow_ring"
-  id: "poi_archive_glow_ring"
+  texture: "map2/poi_glow_ring"
+  id: "mapfull_poi_view_glow_ring"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_archive"
+  parent: "mapfull_poi_view"
   layer: "fx"
   inherit_alpha: true
-  alpha: 0.25
+  alpha: 0.22
+  enabled: false
 }
 nodes {
   position {
-    y: -50.0
+    y: 148.4
     z: 52.0
   }
   size {
-    x: 24.96
-    y: 72.96
+    x: 12.7
+    y: 32.3
   }
   color {
-    x: 0.714
-    y: 0.361
+    y: 0.71
+    z: 0.275
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_stem"
-  id: "poi_archive_stem"
+  texture: "map2/poi_stem"
+  id: "mapfull_poi_view_stem"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_archive"
+  parent: "mapfull_poi_view"
   layer: "lines"
   inherit_alpha: true
-  alpha: 0.76
+  alpha: 0.68
+  enabled: false
 }
 nodes {
   position {
     z: 53.0
   }
   size {
-    x: 71.04
-    y: 71.04
+    x: 40.4
+    y: 32.3
   }
   color {
-    x: 0.714
-    y: 0.361
+    y: 0.71
+    z: 0.275
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_circle"
-  id: "poi_archive_circle"
+  texture: "map2/poi_circle"
+  id: "mapfull_poi_view_circle"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_archive"
+  parent: "mapfull_poi_view"
   layer: "ui"
   inherit_alpha: true
-  alpha: 0.82
+  alpha: 0.92
+  enabled: false
 }
 nodes {
   position {
     z: 54.0
   }
   size {
-    x: 51.84
-    y: 51.84
+    x: 27.7
+    y: 22.2
   }
   color {
-    x: 0.714
-    y: 0.361
+    y: 0.71
+    z: 0.275
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_center_dark"
-  id: "poi_archive_center"
+  texture: "map2/poi_center_dark"
+  id: "mapfull_poi_view_center"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_archive"
+  parent: "mapfull_poi_view"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.92
+  enabled: false
 }
 nodes {
   position {
     z: 55.0
   }
   size {
-    x: 48.0
-    y: 48.0
+    x: 25.4
+    y: 20.3
   }
   color {
-    x: 0.714
-    y: 0.361
+    y: 0.71
+    z: 0.275
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_icon_archive"
-  id: "poi_archive_icon"
+  texture: "map2/poi_icon_view"
+  id: "mapfull_poi_view_icon"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_archive"
+  parent: "mapfull_poi_view"
   layer: "ui"
   inherit_alpha: true
+  enabled: false
 }
 nodes {
   position {
-    y: -50.0
+    y: 148.4
     z: 55.0
   }
   size {
-    x: 13.44
-    y: 13.44
+    x: 6.9
+    y: 5.5
   }
   color {
-    x: 0.714
-    y: 0.361
+    y: 0.71
+    z: 0.275
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_dot"
-  id: "poi_archive_dot"
+  texture: "map2/poi_dot"
+  id: "mapfull_poi_view_dot"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_archive"
+  parent: "mapfull_poi_view"
   layer: "ui"
   inherit_alpha: true
-  alpha: 0.78
+  alpha: 0.72
+  enabled: false
 }
 nodes {
   position {
-    x: 872.0
-    y: 313.7
+    x: 979.8
+    y: 263.0
     z: 50.0
   }
   size {
-    x: 1.0
-    y: 1.0
+    x: 0.6
+    y: 0.5
   }
   type: TYPE_BOX
-  id: "poi_metro"
+  id: "mapfull_poi_archive"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_poi"
+  parent: "mapfull_grp_poi"
   layer: "ui"
   inherit_alpha: true
+  enabled: false
 }
 nodes {
   position {
     z: 49.0
   }
   size {
-    x: 132.16
-    y: 132.16
+    x: 67.0
+    y: 53.6
   }
   type: TYPE_BOX
-  id: "poi_metro_hitbox"
+  id: "mapfull_poi_archive_hitbox"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_metro"
+  parent: "mapfull_poi_archive"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.01
+  enabled: false
 }
 nodes {
   position {
     z: 50.0
   }
   size {
-    x: 184.08
-    y: 184.08
+    x: 82.0
+    y: 65.6
   }
   color {
-    x: 0.282
-    y: 0.961
+    x: 0.714
+    y: 0.361
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_glow"
-  id: "poi_metro_glow"
+  texture: "map2/poi_glow"
+  id: "mapfull_poi_archive_glow"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_metro"
+  parent: "mapfull_poi_archive"
   layer: "fx"
   inherit_alpha: true
-  alpha: 0.307
+  alpha: 0.24
+  enabled: false
 }
 nodes {
   position {
     z: 51.0
   }
   size {
-    x: 122.72
-    y: 122.72
+    x: 61.2
+    y: 49.0
   }
   color {
-    x: 0.282
-    y: 0.961
+    x: 0.714
+    y: 0.361
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_glow_ring"
-  id: "poi_metro_glow_ring"
+  texture: "map2/poi_glow_ring"
+  id: "mapfull_poi_archive_glow_ring"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_metro"
+  parent: "mapfull_poi_archive"
   layer: "fx"
   inherit_alpha: true
-  alpha: 0.307
+  alpha: 0.22
+  enabled: false
 }
 nodes {
   position {
-    y: -50.0
+    y: 148.4
     z: 52.0
   }
   size {
-    x: 30.68
-    y: 89.68
+    x: 12.7
+    y: 32.3
   }
   color {
-    x: 0.282
-    y: 0.961
+    x: 0.714
+    y: 0.361
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_stem"
-  id: "poi_metro_stem"
+  texture: "map2/poi_stem"
+  id: "mapfull_poi_archive_stem"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_metro"
+  parent: "mapfull_poi_archive"
   layer: "lines"
   inherit_alpha: true
-  alpha: 0.76
+  alpha: 0.68
+  enabled: false
 }
 nodes {
   position {
     z: 53.0
   }
   size {
-    x: 87.32
-    y: 87.32
+    x: 40.4
+    y: 32.3
   }
   color {
-    x: 0.282
-    y: 0.961
+    x: 0.714
+    y: 0.361
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_circle"
-  id: "poi_metro_circle"
+  texture: "map2/poi_circle"
+  id: "mapfull_poi_archive_circle"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_metro"
+  parent: "mapfull_poi_archive"
   layer: "ui"
   inherit_alpha: true
-  alpha: 0.82
+  alpha: 0.92
+  enabled: false
 }
 nodes {
   position {
     z: 54.0
   }
   size {
-    x: 63.72
-    y: 63.72
+    x: 27.7
+    y: 22.2
   }
   color {
-    x: 0.282
-    y: 0.961
+    x: 0.714
+    y: 0.361
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_center_dark"
-  id: "poi_metro_center"
+  texture: "map2/poi_center_dark"
+  id: "mapfull_poi_archive_center"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_metro"
+  parent: "mapfull_poi_archive"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.92
+  enabled: false
 }
 nodes {
   position {
     z: 55.0
   }
   size {
-    x: 59.0
-    y: 59.0
+    x: 25.4
+    y: 20.3
   }
   color {
-    x: 0.282
-    y: 0.961
+    x: 0.714
+    y: 0.361
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_icon_metro"
-  id: "poi_metro_icon"
+  texture: "map2/poi_icon_archive"
+  id: "mapfull_poi_archive_icon"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_metro"
+  parent: "mapfull_poi_archive"
   layer: "ui"
   inherit_alpha: true
+  enabled: false
 }
 nodes {
   position {
-    y: -50.0
+    y: 148.4
     z: 55.0
   }
   size {
-    x: 16.52
-    y: 16.52
+    x: 6.9
+    y: 5.5
+  }
+  color {
+    x: 0.714
+    y: 0.361
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_dot"
+  id: "mapfull_poi_archive_dot"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_archive"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.72
+  enabled: false
+}
+nodes {
+  position {
+    x: 773.0
+    y: 328.6
+    z: 50.0
+  }
+  size {
+    x: 0.6
+    y: 0.5
+  }
+  type: TYPE_BOX
+  id: "mapfull_poi_metro"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_poi"
+  layer: "ui"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    z: 49.0
+  }
+  size {
+    x: 67.0
+    y: 53.6
+  }
+  type: TYPE_BOX
+  id: "mapfull_poi_metro_hitbox"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_metro"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.01
+  enabled: false
+}
+nodes {
+  position {
+    z: 50.0
+  }
+  size {
+    x: 82.0
+    y: 65.6
   }
   color {
     x: 0.282
     y: 0.961
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_dot"
-  id: "poi_metro_dot"
+  texture: "map2/poi_glow"
+  id: "mapfull_poi_metro_glow"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_metro"
+  parent: "mapfull_poi_metro"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.24
+  enabled: false
+}
+nodes {
+  position {
+    z: 51.0
+  }
+  size {
+    x: 61.2
+    y: 49.0
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_glow_ring"
+  id: "mapfull_poi_metro_glow_ring"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_metro"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.22
+  enabled: false
+}
+nodes {
+  position {
+    y: 148.4
+    z: 52.0
+  }
+  size {
+    x: 12.7
+    y: 32.3
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_stem"
+  id: "mapfull_poi_metro_stem"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_metro"
+  layer: "lines"
+  inherit_alpha: true
+  alpha: 0.68
+  enabled: false
+}
+nodes {
+  position {
+    z: 53.0
+  }
+  size {
+    x: 40.4
+    y: 32.3
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_circle"
+  id: "mapfull_poi_metro_circle"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_metro"
   layer: "ui"
   inherit_alpha: true
-  alpha: 0.78
+  alpha: 0.92
+  enabled: false
+}
+nodes {
+  position {
+    z: 54.0
+  }
+  size {
+    x: 27.7
+    y: 22.2
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_center_dark"
+  id: "mapfull_poi_metro_center"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_metro"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.92
+  enabled: false
+}
+nodes {
+  position {
+    z: 55.0
+  }
+  size {
+    x: 25.4
+    y: 20.3
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_icon_metro"
+  id: "mapfull_poi_metro_icon"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_metro"
+  layer: "ui"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    y: 148.4
+    z: 55.0
+  }
+  size {
+    x: 6.9
+    y: 5.5
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_dot"
+  id: "mapfull_poi_metro_dot"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_metro"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.72
+  enabled: false
 }
 nodes {
   position {
     z: 56.5
   }
   size {
-    x: 134.0
-    y: 134.0
+    x: 79.7
+    y: 63.8
   }
   color {
     x: 0.282
     y: 0.961
   }
   type: TYPE_BOX
-  texture: "map_assets_cyberpunk_v2/poi_glow_ring"
-  id: "poi_metro_active_glow"
+  texture: "map2/poi_glow_ring"
+  id: "mapfull_poi_metro_active_glow"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "poi_metro"
+  parent: "mapfull_poi_metro"
   layer: "fx"
   inherit_alpha: true
-  alpha: 0.28
+  alpha: 0.16
+  enabled: false
 }
 nodes {
   type: TYPE_BOX
-  id: "grp_map_labels"
+  id: "mapfull_grp_map_labels"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map"
+  parent: "mapfull_grp_map"
   layer: "text"
   inherit_alpha: true
+  enabled: false
 }
 nodes {
   position {
-    x: 596.0
-    y: 184.0
+    x: 661.0
+    y: 367.4
     z: 68.0
   }
   size {
-    x: 120.0
-    y: 16.0
+    x: 86.6
+    y: 8.3
   }
   color {
     x: 0.714
@@ -5113,23 +2373,24 @@ nodes {
   type: TYPE_TEXT
   text: "\320\224\320\276\320\274"
   font: "jb_mono_12"
-  id: "poi_home_title"
+  id: "mapfull_poi_home_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map_labels"
+  parent: "mapfull_grp_map_labels"
   layer: "text"
   inherit_alpha: true
-  alpha: 0.94
+  alpha: 0.96
+  enabled: false
 }
 nodes {
   position {
-    x: 596.0
-    y: 162.0
+    x: 661.0
+    y: 357.7
     z: 68.0
   }
   size {
-    x: 120.0
-    y: 14.0
+    x: 86.6
+    y: 6.5
   }
   color {
     x: 0.953
@@ -5139,23 +2400,24 @@ nodes {
   type: TYPE_TEXT
   text: "\320\272\320\262\320\260\321\200\321\202\320\270\321\200\320\260 48"
   font: "jb_mono_10"
-  id: "poi_home_subtitle"
+  id: "mapfull_poi_home_subtitle"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map_labels"
+  parent: "mapfull_grp_map_labels"
   layer: "text"
   inherit_alpha: true
-  alpha: 0.34
+  alpha: 0.46
+  enabled: false
 }
 nodes {
   position {
-    x: 870.0
-    y: 492.0
+    x: 830.8
+    y: 432.1
     z: 68.0
   }
   size {
-    x: 120.0
-    y: 16.0
+    x: 86.6
+    y: 8.3
   }
   color {
     x: 0.282
@@ -5164,23 +2426,24 @@ nodes {
   type: TYPE_TEXT
   text: "\320\240\320\260\320\261\320\276\321\202\320\260"
   font: "jb_mono_12"
-  id: "poi_work_title"
+  id: "mapfull_poi_work_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map_labels"
+  parent: "mapfull_grp_map_labels"
   layer: "text"
   inherit_alpha: true
-  alpha: 0.94
+  alpha: 0.96
+  enabled: false
 }
 nodes {
   position {
-    x: 870.0
-    y: 470.0
+    x: 830.8
+    y: 422.4
     z: 68.0
   }
   size {
-    x: 120.0
-    y: 14.0
+    x: 86.6
+    y: 6.5
   }
   color {
     x: 0.953
@@ -5190,23 +2453,24 @@ nodes {
   type: TYPE_TEXT
   text: "\320\221\320\246 \320\222\320\265\321\201\320\275\320\260"
   font: "jb_mono_10"
-  id: "poi_work_subtitle"
+  id: "mapfull_poi_work_subtitle"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map_labels"
+  parent: "mapfull_grp_map_labels"
   layer: "text"
   inherit_alpha: true
-  alpha: 0.34
+  alpha: 0.46
+  enabled: false
 }
 nodes {
   position {
-    x: 968.0
-    y: 524.0
+    x: 811.1
+    y: 368.3
     z: 68.0
   }
   size {
-    x: 120.0
-    y: 16.0
+    x: 86.6
+    y: 8.3
   }
   color {
     y: 0.71
@@ -5215,23 +2479,24 @@ nodes {
   type: TYPE_TEXT
   text: "\320\232\320\260\321\204\320\265"
   font: "jb_mono_12"
-  id: "poi_cafe_title"
+  id: "mapfull_poi_cafe_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map_labels"
+  parent: "mapfull_grp_map_labels"
   layer: "text"
   inherit_alpha: true
-  alpha: 0.94
+  alpha: 0.96
+  enabled: false
 }
 nodes {
   position {
-    x: 968.0
-    y: 502.0
+    x: 811.1
+    y: 358.6
     z: 68.0
   }
   size {
-    x: 120.0
-    y: 14.0
+    x: 86.6
+    y: 6.5
   }
   color {
     x: 0.953
@@ -5241,23 +2506,24 @@ nodes {
   type: TYPE_TEXT
   text: "\320\237\320\265\321\202\320\273\321\217"
   font: "jb_mono_10"
-  id: "poi_cafe_subtitle"
+  id: "mapfull_poi_cafe_subtitle"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map_labels"
+  parent: "mapfull_grp_map_labels"
   layer: "text"
   inherit_alpha: true
-  alpha: 0.34
+  alpha: 0.46
+  enabled: false
 }
 nodes {
   position {
-    x: 1098.0
-    y: 314.0
+    x: 976.9
+    y: 361.9
     z: 68.0
   }
   size {
-    x: 120.0
-    y: 16.0
+    x: 86.6
+    y: 8.3
   }
   color {
     x: 0.412
@@ -5267,23 +2533,24 @@ nodes {
   type: TYPE_TEXT
   text: "\320\237\320\260\321\200\320\272 \321\203 \321\200\320\265\320\272\320\270"
   font: "jb_mono_12"
-  id: "poi_park_title"
+  id: "mapfull_poi_park_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map_labels"
+  parent: "mapfull_grp_map_labels"
   layer: "text"
   inherit_alpha: true
-  alpha: 0.94
+  alpha: 0.96
+  enabled: false
 }
 nodes {
   position {
-    x: 1098.0
-    y: 292.0
+    x: 976.9
+    y: 352.2
     z: 68.0
   }
   size {
-    x: 120.0
-    y: 14.0
+    x: 86.6
+    y: 6.5
   }
   color {
     x: 0.953
@@ -5293,23 +2560,24 @@ nodes {
   type: TYPE_TEXT
   text: "\320\261\320\265\321\200\320\265\320\263"
   font: "jb_mono_10"
-  id: "poi_park_subtitle"
+  id: "mapfull_poi_park_subtitle"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map_labels"
+  parent: "mapfull_grp_map_labels"
   layer: "text"
   inherit_alpha: true
-  alpha: 0.34
+  alpha: 0.46
+  enabled: false
 }
 nodes {
   position {
-    x: 638.0
-    y: 302.0
+    x: 691.0
+    y: 324.9
     z: 68.0
   }
   size {
-    x: 120.0
-    y: 16.0
+    x: 86.6
+    y: 8.3
   }
   color {
     y: 0.282
@@ -5318,23 +2586,24 @@ nodes {
   type: TYPE_TEXT
   text: "\320\234\320\260\320\263\320\260\320\267\320\270\320\275 24/7"
   font: "jb_mono_12"
-  id: "poi_shop_title"
+  id: "mapfull_poi_shop_title"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map_labels"
+  parent: "mapfull_grp_map_labels"
   layer: "text"
   inherit_alpha: true
-  alpha: 0.94
+  alpha: 0.96
+  enabled: false
 }
 nodes {
   position {
-    x: 638.0
-    y: 280.0
+    x: 691.0
+    y: 315.2
     z: 68.0
   }
   size {
-    x: 120.0
-    y: 14.0
+    x: 86.6
+    y: 6.5
   }
   color {
     x: 0.953
@@ -5344,23 +2613,24 @@ nodes {
   type: TYPE_TEXT
   text: "\320\275\320\276\321\207\320\275\320\276\320\271 \320\262\321\205\320\276\320\264"
   font: "jb_mono_10"
-  id: "poi_shop_subtitle"
+  id: "mapfull_poi_shop_subtitle"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map_labels"
+  parent: "mapfull_grp_map_labels"
   layer: "text"
   inherit_alpha: true
-  alpha: 0.34
+  alpha: 0.46
+  enabled: false
 }
 nodes {
   position {
-    x: 1085.0
-    y: 205.0
+    x: 855.6
+    y: 313.8
     z: 68.0
   }
   size {
-    x: 120.0
-    y: 16.0
+    x: 86.6
+    y: 8.3
   }
   color {
     y: 0.282
@@ -5369,23 +2639,24 @@ nodes {
   type: TYPE_TEXT
   text: "\320\221\320\260\321\200 Maybe"
   font: "jb_mono_12"
-  id: "poi_bar_title"
+  id: "mapfull_poi_bar_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map_labels"
+  parent: "mapfull_grp_map_labels"
   layer: "text"
   inherit_alpha: true
-  alpha: 0.94
+  alpha: 0.96
+  enabled: false
 }
 nodes {
   position {
-    x: 1085.0
-    y: 183.0
+    x: 855.6
+    y: 304.1
     z: 68.0
   }
   size {
-    x: 120.0
-    y: 14.0
+    x: 86.6
+    y: 6.5
   }
   color {
     x: 0.953
@@ -5395,23 +2666,24 @@ nodes {
   type: TYPE_TEXT
   text: "\320\267\320\260\320\272\321\200\321\213\321\202\320\276?"
   font: "jb_mono_10"
-  id: "poi_bar_subtitle"
+  id: "mapfull_poi_bar_subtitle"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map_labels"
+  parent: "mapfull_grp_map_labels"
   layer: "text"
   inherit_alpha: true
-  alpha: 0.34
+  alpha: 0.46
+  enabled: false
 }
 nodes {
   position {
-    x: 1086.0
-    y: 586.0
+    x: 719.9
+    y: 264.8
     z: 68.0
   }
   size {
-    x: 120.0
-    y: 16.0
+    x: 86.6
+    y: 8.3
   }
   color {
     y: 0.71
@@ -5420,23 +2692,24 @@ nodes {
   type: TYPE_TEXT
   text: "\320\241\320\274\320\276\321\202\321\200\320\276\320\262\320\260\321\217"
   font: "jb_mono_12"
-  id: "poi_view_title"
+  id: "mapfull_poi_view_title"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map_labels"
+  parent: "mapfull_grp_map_labels"
   layer: "text"
   inherit_alpha: true
-  alpha: 0.94
+  alpha: 0.96
+  enabled: false
 }
 nodes {
   position {
-    x: 1086.0
-    y: 564.0
+    x: 719.9
+    y: 255.1
     z: 68.0
   }
   size {
-    x: 120.0
-    y: 14.0
+    x: 86.6
+    y: 6.5
   }
   color {
     x: 0.953
@@ -5446,23 +2719,24 @@ nodes {
   type: TYPE_TEXT
   text: "\320\272\321\200\321\213\321\210\320\260"
   font: "jb_mono_10"
-  id: "poi_view_subtitle"
+  id: "mapfull_poi_view_subtitle"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map_labels"
+  parent: "mapfull_grp_map_labels"
   layer: "text"
   inherit_alpha: true
-  alpha: 0.34
+  alpha: 0.46
+  enabled: false
 }
 nodes {
   position {
-    x: 622.0
-    y: 508.0
+    x: 944.0
+    y: 266.7
     z: 68.0
   }
   size {
-    x: 120.0
-    y: 16.0
+    x: 86.6
+    y: 8.3
   }
   color {
     x: 0.714
@@ -5471,23 +2745,24 @@ nodes {
   type: TYPE_TEXT
   text: "\320\220\321\200\321\205\320\270\320\262"
   font: "jb_mono_12"
-  id: "poi_archive_title"
-  pivot: PIVOT_W
+  id: "mapfull_poi_archive_title"
+  pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map_labels"
+  parent: "mapfull_grp_map_labels"
   layer: "text"
   inherit_alpha: true
-  alpha: 0.94
+  alpha: 0.96
+  enabled: false
 }
 nodes {
   position {
-    x: 622.0
-    y: 486.0
+    x: 944.0
+    y: 257.0
     z: 68.0
   }
   size {
-    x: 120.0
-    y: 14.0
+    x: 86.6
+    y: 6.5
   }
   color {
     x: 0.953
@@ -5497,23 +2772,24 @@ nodes {
   type: TYPE_TEXT
   text: "\320\264\320\265\320\273\320\276 017"
   font: "jb_mono_10"
-  id: "poi_archive_subtitle"
-  pivot: PIVOT_W
+  id: "mapfull_poi_archive_subtitle"
+  pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map_labels"
+  parent: "mapfull_grp_map_labels"
   layer: "text"
   inherit_alpha: true
-  alpha: 0.34
+  alpha: 0.46
+  enabled: false
 }
 nodes {
   position {
-    x: 872.0
-    y: 382.0
+    x: 743.0
+    y: 339.2
     z: 68.0
   }
   size {
-    x: 120.0
-    y: 16.0
+    x: 86.6
+    y: 8.3
   }
   color {
     x: 0.282
@@ -5522,22 +2798,24 @@ nodes {
   type: TYPE_TEXT
   text: "\320\234\320\265\321\202\321\200\320\276"
   font: "jb_mono_12"
-  id: "poi_metro_title"
+  id: "mapfull_poi_metro_title"
+  pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map_labels"
+  parent: "mapfull_grp_map_labels"
   layer: "text"
   inherit_alpha: true
-  alpha: 0.94
+  alpha: 0.96
+  enabled: false
 }
 nodes {
   position {
-    x: 872.0
-    y: 360.0
+    x: 743.0
+    y: 329.5
     z: 68.0
   }
   size {
-    x: 120.0
-    y: 14.0
+    x: 86.6
+    y: 6.5
   }
   color {
     x: 0.953
@@ -5547,100 +2825,135 @@ nodes {
   type: TYPE_TEXT
   text: "\320\262\321\213\321\205\320\276\320\264 2"
   font: "jb_mono_10"
-  id: "poi_metro_subtitle"
+  id: "mapfull_poi_metro_subtitle"
+  pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map_labels"
+  parent: "mapfull_grp_map_labels"
   layer: "text"
   inherit_alpha: true
-  alpha: 0.34
+  alpha: 0.46
+  enabled: false
 }
 nodes {
   position {
-    x: 832.0
-    y: 674.0
-    z: 31.0
+    x: 596.0
+    y: 536.0
+    z: 0.6
   }
   size {
-    x: 800.0
-    y: 1.0
+    x: 460.0
+    y: 12.0
   }
   color {
-    x: 0.49
-    y: 0.976
+    y: 0.702
+    z: 0.278
   }
-  type: TYPE_BOX
-  id: "panel_border_top"
+  type: TYPE_TEXT
+  text: "\320\272\320\260\321\200\321\202\320\260 \302\267 \321\201\320\274. \320\274\320\276\320\264\320\260\320\273\320\272\321\203 \320\272\320\260\321\200\321\202\321\213"
+  font: "jb_mono_10"
+  id: "v_map_eyebrow"
+  pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_panel"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.25
+  parent: "map_root"
+  alpha: 0.92
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 832.0
-    y: 42.0
-    z: 31.0
+    x: 596.0
+    y: 506.0
+    z: 0.6
   }
   size {
-    x: 800.0
-    y: 1.0
+    x: 460.0
+    y: 22.0
   }
   color {
-    x: 0.49
-    y: 0.976
+    x: 0.953
+    y: 0.925
+    z: 0.851
   }
-  type: TYPE_BOX
-  id: "panel_border_bottom"
+  type: TYPE_TEXT
+  text: "\320\232\320\260\321\200\321\202\320\260"
+  font: "unbounded_bold_20"
+  id: "v_map_title"
+  pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_panel"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.25
+  parent: "map_root"
+  alpha: 0.98
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 432.0
-    y: 358.0
-    z: 31.0
+    x: 604.0
+    y: 166.0
+    z: 0.6
   }
   size {
-    x: 1.0
-    y: 632.0
+    x: 438.0
+    y: 14.0
   }
   color {
-    x: 0.49
-    y: 0.976
+    x: 0.953
+    y: 0.925
+    z: 0.851
   }
   type: TYPE_BOX
-  id: "panel_border_left"
+  id: "v_map_placeholder"
+  pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_panel"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.25
+  parent: "map_root"
+  alpha: 0.42
 }
 nodes {
   position {
-    x: 1232.0
-    y: 358.0
-    z: 31.0
+    x: 780.0
+    y: 224.0
+    z: 0.6
   }
   size {
-    x: 1.0
-    y: 632.0
+    x: 250.0
+    y: 12.0
   }
   color {
-    x: 0.49
-    y: 0.976
+    x: 0.282
+    y: 0.961
   }
-  type: TYPE_BOX
-  id: "panel_border_right"
+  type: TYPE_TEXT
+  text: "\320\277\320\276\320\273\320\275\320\276\321\215\320\272\321\200\320\260\320\275\320\275\320\260\321\217 \320\272\320\260\321\200\321\202\320\260 \342\200\224 \320\272\320\275\320\276\320\277\320\272\320\260 M"
+  font: "unbounded_bold_20"
+  id: "v_map_hint"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_panel"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.25
+  parent: "map_root"
+  alpha: 0.62
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 780.0
+    y: 208.0
+    z: 0.6
+  }
+  size {
+    x: 250.0
+    y: 12.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
+  type: TYPE_TEXT
+  text: "\320\267\320\264\320\265\321\201\321\214: \320\274\320\270\320\275\320\270\320\260\321\202\321\216\321\200\320\260 \321\202\320\265\320\272\321\203\321\211\320\265\320\271 \320\273\320\276\320\272\320\260\321\206\320\270\320\270"
+  font: "manrope_14"
+  id: "v_map_hint2"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "map_root"
+  alpha: 0.6
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
 }
 layers {
   name: "bg"

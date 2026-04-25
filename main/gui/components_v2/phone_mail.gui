@@ -1,0 +1,235 @@
+script: "/main/gui/components_v2/phone_mail.gui_script"
+fonts {
+  name: "jb_mono_10"
+  font: "/main/fonts/jb_mono_10.font"
+}
+fonts {
+  name: "jb_mono_12"
+  font: "/main/fonts/jb_mono_12.font"
+}
+fonts {
+  name: "jb_mono_bold_14"
+  font: "/main/fonts/jb_mono_bold_14.font"
+}
+fonts {
+  name: "unbounded_bold_20"
+  font: "/main/fonts/unbounded_bold_20.font"
+}
+fonts {
+  name: "unbounded_bold_32"
+  font: "/main/fonts/unbounded_bold_32.font"
+}
+fonts {
+  name: "icons"
+  font: "/main/fonts/icons.font"
+}
+fonts {
+  name: "manrope_14"
+  font: "/main/fonts/manrope_14.font"
+}
+fonts {
+  name: "manrope_16"
+  font: "/main/fonts/manrope_16.font"
+}
+textures {
+  name: "icon_phone"
+  texture: "/main/images/phone/icon_phone.atlas"
+}
+textures {
+  name: "map2"
+  texture: "/main/images/phone/map2.atlas"
+}
+textures {
+  name: "map_assets_cyberpunk_v2"
+  texture: "/main/images/phone/map_assets_cyberpunk_v2.atlas"
+}
+nodes {
+  position {
+    x: 596.0
+    y: 538.0
+    z: 0.55
+  }
+  size {
+    x: 460.0
+    y: 12.0
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_TEXT
+  text: "\320\277\320\276\321\207\321\202\320\260 \302\267 2 \320\275\320\265\320\277\321\200\320\276\321\207\320\270\321\202\320\260\320\275\320\275\321\213\321\205"
+  font: "jb_mono_10"
+  id: "v_mail_eyebrow"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.9
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 596.0
+    y: 508.0
+    z: 0.55
+  }
+  size {
+    x: 460.0
+    y: 22.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\237\320\276\321\207\321\202\320\260"
+  font: "unbounded_bold_20"
+  id: "v_mail_title"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 592.0
+    y: 400.0
+    z: 0.53
+  }
+  size {
+    x: 476.0
+    y: 76.0
+  }
+  color {
+    x: 0.075
+    y: 0.06
+    z: 0.15
+  }
+  type: TYPE_BOX
+  id: "v_mail_m1_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.72
+}
+nodes {
+  position {
+    x: 604.0
+    y: 460.0
+    z: 0.54
+  }
+  size {
+    x: 400.0
+    y: 12.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "hr@megacorp.ru"
+  font: "jb_mono_bold_14"
+  id: "v_mail_m1_from"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 604.0
+    y: 430.0
+    z: 0.54
+  }
+  size {
+    x: 450.0
+    y: 28.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\270\321\201\320\277\321\213\321\202\320\260\321\202\320\265\320\273\321\214\320\275\321\213\320\271 \321\201\321\200\320\276\320\272: \320\275\320\260\320\277\320\276\320\274\320\270\320\275\320\260\320\275\320\270\320\265 \320\276 \320\264\320\265\320\264\320\273\320\260\320\271\320\275\320\265"
+  font: "manrope_14"
+  id: "v_mail_m1_subj"
+  pivot: PIVOT_NW
+  adjust_mode: ADJUST_MODE_STRETCH
+  line_break: true
+  alpha: 0.66
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 592.0
+    y: 312.0
+    z: 0.53
+  }
+  size {
+    x: 476.0
+    y: 76.0
+  }
+  color {
+    x: 0.075
+    y: 0.06
+    z: 0.15
+  }
+  type: TYPE_BOX
+  id: "v_mail_m2_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.72
+}
+nodes {
+  position {
+    x: 604.0
+    y: 372.0
+    z: 0.54
+  }
+  size {
+    x: 400.0
+    y: 12.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "noreply@loop.system"
+  font: "jb_mono_bold_14"
+  id: "v_mail_m2_from"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 604.0
+    y: 342.0
+    z: 0.54
+  }
+  size {
+    x: 450.0
+    y: 28.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\277\320\276\320\262\321\202\320\276\321\200 \321\206\320\270\320\272\320\273\320\260 017 \302\267 \320\276\321\202\321\207\321\221\321\202"
+  font: "manrope_14"
+  id: "v_mail_m2_subj"
+  pivot: PIVOT_NW
+  adjust_mode: ADJUST_MODE_STRETCH
+  line_break: true
+  alpha: 0.66
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}

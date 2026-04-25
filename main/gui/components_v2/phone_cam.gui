@@ -1,0 +1,159 @@
+script: "/main/gui/components_v2/phone_cam.gui_script"
+fonts {
+  name: "jb_mono_10"
+  font: "/main/fonts/jb_mono_10.font"
+}
+fonts {
+  name: "jb_mono_12"
+  font: "/main/fonts/jb_mono_12.font"
+}
+fonts {
+  name: "jb_mono_bold_14"
+  font: "/main/fonts/jb_mono_bold_14.font"
+}
+fonts {
+  name: "unbounded_bold_20"
+  font: "/main/fonts/unbounded_bold_20.font"
+}
+fonts {
+  name: "unbounded_bold_32"
+  font: "/main/fonts/unbounded_bold_32.font"
+}
+fonts {
+  name: "icons"
+  font: "/main/fonts/icons.font"
+}
+fonts {
+  name: "manrope_14"
+  font: "/main/fonts/manrope_14.font"
+}
+fonts {
+  name: "manrope_16"
+  font: "/main/fonts/manrope_16.font"
+}
+textures {
+  name: "icon_phone"
+  texture: "/main/images/phone/icon_phone.atlas"
+}
+textures {
+  name: "map2"
+  texture: "/main/images/phone/map2.atlas"
+}
+textures {
+  name: "map_assets_cyberpunk_v2"
+  texture: "/main/images/phone/map_assets_cyberpunk_v2.atlas"
+}
+nodes {
+  position {
+    x: 596.0
+    y: 538.0
+    z: 0.55
+  }
+  size {
+    x: 460.0
+    y: 12.0
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_TEXT
+  text: "\320\272\320\260\320\274\320\265\321\200\320\260 \302\267 \320\275\320\265\321\202 \321\201\320\270\320\263\320\275\320\260\320\273\320\260"
+  font: "jb_mono_10"
+  id: "v_cam_eyebrow"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.9
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 596.0
+    y: 508.0
+    z: 0.55
+  }
+  size {
+    x: 460.0
+    y: 22.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\232\320\260\320\274\320\265\321\200\320\260"
+  font: "unbounded_bold_20"
+  id: "v_cam_title"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 592.0
+    y: 200.0
+    z: 0.53
+  }
+  size {
+    x: 476.0
+    y: 280.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "v_cam_screen"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+}
+nodes {
+  position {
+    x: 830.0
+    y: 350.0
+    z: 0.54
+  }
+  size {
+    x: 440.0
+    y: 22.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "NO SIGNAL"
+  font: "unbounded_bold_20"
+  id: "v_cam_msg"
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.9
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 830.0
+    y: 320.0
+    z: 0.54
+  }
+  size {
+    x: 440.0
+    y: 14.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "CAM-01 \302\267 offline \302\267 last: 07:12"
+  font: "jb_mono_10"
+  id: "v_cam_meta"
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.45
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}

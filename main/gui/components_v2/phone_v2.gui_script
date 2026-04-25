@@ -41,6 +41,8 @@ local COLOR_TERM_ERR  = vmath.vector4(1.00, 0.24, 0.50, 1.0)
 
 -- Shared chrome: always visible when phone open.
 local CHROME_NODES = {
+    "mapfull_map_fx_scanlines",
+    "mapfull_map_fx_vignette",
     "backdrop", "modal",
     "modal_border_top", "modal_border_bot",
     "corner_tl_v", "corner_tl_h", "corner_tr_v", "corner_tr_h",
@@ -68,27 +70,38 @@ local CHROME_NODES = {
 local VIEWS = {
     sms = {
         "side_eyebrow", "side_title",
+        "sms_screen_bg", "sms_header_line", "sms_input_bar", "sms_input_dash",
         "msg1_bg", "msg1_border", "msg1_name", "msg1_time", "msg1_body",
         "msg2_bg", "msg2_border", "msg2_name", "msg2_time", "msg2_body",
         "msg3_bg", "msg3_border", "msg3_name", "msg3_time", "msg3_body",
         "msg4_bg", "msg4_border", "msg4_name", "msg4_time", "msg4_body",
     },
     call = {
+        "calls_screen_bg", "calls_header_line", "calls_footer_line", "calls_status_chip",
+        "calls_row1_accent", "calls_row2_accent", "calls_row3_accent",
         "v_calls_eyebrow", "v_calls_title",
         "v_calls_row1_bg", "v_calls_row1_name", "v_calls_row1_meta",
         "v_calls_row2_bg", "v_calls_row2_name", "v_calls_row2_meta",
         "v_calls_row3_bg", "v_calls_row3_name", "v_calls_row3_meta",
     },
     map = {
-        "v_map_eyebrow", "v_map_title",
-        "v_map_placeholder", "v_map_hint", "v_map_hint2",
+        "mapfull_screen_bg",
+        "mapfull_grp_map",
+        "mapfull_grp_poi",
+        "mapfull_map_header_scrim",
+        "mapfull_map_eyebrow",
+        "mapfull_map_title",
+        "mapfull_map_terminal",
+        "mapfull_map_terminal_cursor",
     },
     notes = {
+        "clues_screen_bg", "clues_header_line", "clues_card1_accent", "clues_card2_accent", "clues_footer_line",
         "v_clues_eyebrow", "v_clues_title",
         "v_clues_card1_bg", "v_clues_card1_tag", "v_clues_card1_body",
         "v_clues_card2_bg", "v_clues_card2_tag", "v_clues_card2_body",
     },
     quests = {
+        "quests_screen_bg", "quests_header_line",
         "v_quests_eyebrow", "v_quests_title",
         "v_quests_q1_bg", "v_quests_q1_name", "v_quests_q1_desc",
         "v_quests_q2_bg", "v_quests_q2_name", "v_quests_q2_desc",

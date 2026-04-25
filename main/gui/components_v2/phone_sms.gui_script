@@ -1,0 +1,92 @@
+-- phone_sms.gui_script
+-- SMS-приложение в составе split-телефона.
+-- Принимает: open_app, close_app, refresh_app
+
+local gs     = require "main.scripts.game_state"
+local UI_MGR = "#ui_manager_v2"
+
+local COLOR_CYAN  = vmath.vector4(0.47, 0.94, 1.00, 1.0)
+local COLOR_PAPER = vmath.vector4(0.95, 0.95, 0.90, 1.0)
+
+local NODE_IDS = {
+    "side_eyebrow", "side_title",
+    "sms_screen_bg", "sms_header_line", "sms_input_bar", "sms_input_dash",
+    "msg1_bg", "msg1_border", "msg1_name", "msg1_time", "msg1_body",
+    "msg2_bg", "msg2_border", "msg2_name", "msg2_time", "msg2_body",
+    "msg3_bg", "msg3_border", "msg3_name", "msg3_time", "msg3_body",
+    "msg4_bg", "msg4_border", "msg4_name", "msg4_time", "msg4_body",
+}
+
+local SMS_SLOTS = 4
+
+local function get_node(id)
+    local ok, n = pcall(gui.get_node, id)
+    if ok then return n end
+    return nil
+end
+
+local function set_node_enabled(id, enabled)
+    local n = get_node(id)
+    if n then gui.set_enabled(n, enabled) end
+end
+
+local function set_nodes_enabled(enabled)
+    for _, id in ipairs(NODE_IDS) do
+        set_node_enabled(id, enabled)
+    end
+end
+
+local function set_text(id, s)
+    local n = get_node(id)
+    if n then gui.set_text(n, s or "") end
+end
+
+local function set_node_color(id, c)
+    local n = get_node(id)
+    if n then gui.set_color(n, c) end
+end
+
+local function refresh(self)
+    local list = gs.get_messages and gs.get_messages() or {}
+    for i = 1, SMS_SLOTS do
+        local prefix = "msg" .. i
+        local has = list[i] ~= nil
+        set_node_enabled(prefix .. "_bg",     has)
+        set_node_enabled(prefix .. "_border", has)
+        set_node_enabled(prefix .. "_name",   has)
+        set_node_enabled(prefix .. "_time",   has)
+        set_node_enabled(prefix .. "_body",   has)
+        if has then
+            local m = list[i]
+            set_text(prefix .. "_name", m.from or "—")
+            set_text(prefix .. "_time", m.time or "")
+            set_text(prefix .. "_body", m.body or "")
+            set_node_color(prefix .. "_name", m.unread and COLOR_CYAN or COLOR_PAPER)
+        end
+    end
+end
+
+function init(self)
+    self.visible = false
+    set_nodes_enabled(false)
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash("open_app") then
+        self.visible = true
+        set_nodes_enabled(true)
+        refresh(self)
+        -- Сообщить ui_manager что SMS просматривается → сбросить unread
+        msg.post(UI_MGR, "phone_sms_viewed")
+    elseif message_id == hash("close_app") then
+        self.visible = false
+        set_nodes_enabled(false)
+    elseif message_id == hash("refresh_app") then
+        if self.visible then refresh(self) end
+    end
+end
+
+function on_input(self, action_id, action)
+    if not self.visible then return false end
+    return false
+end

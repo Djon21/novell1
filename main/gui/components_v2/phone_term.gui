@@ -1,0 +1,214 @@
+script: "/main/gui/components_v2/phone_term.gui_script"
+fonts {
+  name: "jb_mono_10"
+  font: "/main/fonts/jb_mono_10.font"
+}
+fonts {
+  name: "jb_mono_12"
+  font: "/main/fonts/jb_mono_12.font"
+}
+fonts {
+  name: "jb_mono_bold_14"
+  font: "/main/fonts/jb_mono_bold_14.font"
+}
+fonts {
+  name: "unbounded_bold_20"
+  font: "/main/fonts/unbounded_bold_20.font"
+}
+fonts {
+  name: "unbounded_bold_32"
+  font: "/main/fonts/unbounded_bold_32.font"
+}
+fonts {
+  name: "icons"
+  font: "/main/fonts/icons.font"
+}
+fonts {
+  name: "manrope_14"
+  font: "/main/fonts/manrope_14.font"
+}
+fonts {
+  name: "manrope_16"
+  font: "/main/fonts/manrope_16.font"
+}
+textures {
+  name: "icon_phone"
+  texture: "/main/images/phone/icon_phone.atlas"
+}
+textures {
+  name: "map2"
+  texture: "/main/images/phone/map2.atlas"
+}
+textures {
+  name: "map_assets_cyberpunk_v2"
+  texture: "/main/images/phone/map_assets_cyberpunk_v2.atlas"
+}
+nodes {
+  position {
+    x: 596.0
+    y: 538.0
+    z: 0.55
+  }
+  size {
+    x: 460.0
+    y: 12.0
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_TEXT
+  text: "terminal \302\267 /dev/loop0"
+  font: "jb_mono_10"
+  id: "v_term_eyebrow"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.9
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 596.0
+    y: 508.0
+    z: 0.55
+  }
+  size {
+    x: 460.0
+    y: 22.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\242\320\265\321\200\320\274\320\270\320\275\320\260\320\273"
+  font: "unbounded_bold_20"
+  id: "v_term_title"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 592.0
+    y: 120.0
+    z: 0.53
+  }
+  size {
+    x: 476.0
+    y: 360.0
+  }
+  color {
+    x: 0.0
+    y: 0.08
+    z: 0.02
+  }
+  type: TYPE_BOX
+  id: "v_term_screen"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+}
+nodes {
+  position {
+    x: 9.0
+    y: 344.0
+    z: 0.54
+  }
+  size {
+    x: 450.0
+    y: 12.0
+  }
+  color {
+    x: 0.31
+    y: 0.98
+    z: 0.48
+  }
+  type: TYPE_TEXT
+  text: "> loop --init"
+  font: "jb_mono_12"
+  id: "v_term_l1"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "v_term_screen"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 9.0
+    y: 324.0
+    z: 0.54
+  }
+  size {
+    x: 450.0
+    y: 12.0
+  }
+  color {
+    x: 0.31
+    y: 0.98
+    z: 0.48
+  }
+  type: TYPE_TEXT
+  text: "[ok] monday-worker spawned \302\267 pid 017"
+  font: "jb_mono_12"
+  id: "v_term_l2"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "v_term_screen"
+  alpha: 0.8
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 9.0
+    y: 304.0
+    z: 0.54
+  }
+  size {
+    x: 450.0
+    y: 12.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
+  type: TYPE_TEXT
+  text: "[warn] cycle drift detected \302\267 +14ms"
+  font: "jb_mono_12"
+  id: "v_term_l3"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "v_term_screen"
+  alpha: 0.9
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 9.0
+    y: 284.0
+    z: 0.54
+  }
+  size {
+    x: 450.0
+    y: 12.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
+  type: TYPE_TEXT
+  text: "[err] reality.check() returned FALSE"
+  font: "jb_mono_12"
+  id: "v_term_l4"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "v_term_screen"
+  alpha: 0.95
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}

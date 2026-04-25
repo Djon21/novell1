@@ -32,7 +32,7 @@ embedded_instances {
   "}\n"
   "components {\n"
   "  id: \"phone_v2\"\n"
-  "  component: \"/main/gui/components_v2/phone_v2.gui\"\n"
+  "  component: \"/main/gui/components_v2/phone_v2_root.gui\"\n"
   "}\n"
   "components {\n"
   "  id: \"map_v2\"\n"
@@ -42,42 +42,47 @@ embedded_instances {
   "  id: \"effects\"\n"
   "  component: \"/main/gui/components_v2/effects.gui\"\n"
   "}\n"
-  position {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
+  "components {\n"
+  "  id: \"phone_sms\"\n"
+  "  component: \"/main/gui/components_v2/phone_sms.gui\"\n"
+  "}\n"
+  "components {\n"
+  "  id: \"phone_call\"\n"
+  "  component: \"/main/gui/components_v2/phone_call.gui\"\n"
+  "}\n"
+  "components {\n"
+  "  id: \"phone_map\"\n"
+  "  component: \"/main/gui/components_v2/phone_map.gui\"\n"
+  "}\n"
+  "components {\n"
+  "  id: \"phone_notes\"\n"
+  "  component: \"/main/gui/components_v2/phone_notes.gui\"\n"
+  "}\n"
+  "components {\n"
+  "  id: \"phone_quests\"\n"
+  "  component: \"/main/gui/components_v2/phone_quests.gui\"\n"
+  "}\n"
+  "components {\n"
+  "  id: \"phone_mail\"\n"
+  "  component: \"/main/gui/components_v2/phone_mail.gui\"\n"
+  "}\n"
+  "components {\n"
+  "  id: \"phone_cam\"\n"
+  "  component: \"/main/gui/components_v2/phone_cam.gui\"\n"
+  "}\n"
+  "components {\n"
+  "  id: \"phone_term\"\n"
+  "  component: \"/main/gui/components_v2/phone_term.gui\"\n"
+  "}\n"
+  ""
 }
 embedded_instances {
   id: "music_player"
-  data: "components {\n  id: \"sound\"\n  component: \"/main/sounds/music_background_loop_01.sound\"\n}\n"
-  position {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
+  data: "components {\n"
+  "  id: \"sound\"\n"
+  "  component: \"/main/sounds/music_background_loop_01.sound\"\n"
+  "}\n"
+  ""
 }
 embedded_instances {
   id: "sfx_player"
@@ -101,20 +106,5 @@ embedded_instances {
   "  id: \"paper_rustle\"\n"
   "  component: \"/main/sounds/paper_rustle.sound\"\n"
   "}\n"
-  position {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
+  ""
 }

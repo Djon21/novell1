@@ -1,0 +1,101 @@
+-- phone_quests.gui_script
+-- Задачи в составе split-телефона.
+-- Принимает: open_app, close_app, refresh_app
+
+local gs = require "main.scripts.game_state"
+
+local COLOR_CYAN      = vmath.vector4(0.47, 0.94, 1.00, 1.0)
+local COLOR_PAPER     = vmath.vector4(0.95, 0.95, 0.90, 1.0)
+local COLOR_PAPER_DIM = vmath.vector4(0.80, 0.80, 0.78, 0.7)
+local COLOR_HOT       = vmath.vector4(1.00, 0.30, 0.30, 1.0)
+
+local NODE_IDS = {
+    "quests_screen_bg", "quests_header_line",
+    "v_quests_eyebrow", "v_quests_title",
+    "v_quests_q1_bg", "v_quests_q1_name", "v_quests_q1_desc",
+    "v_quests_q2_bg", "v_quests_q2_name", "v_quests_q2_desc",
+}
+
+local QUEST_SLOTS = 2
+
+local function get_node(id)
+    local ok, n = pcall(gui.get_node, id)
+    if ok then return n end
+    return nil
+end
+
+local function set_node_enabled(id, enabled)
+    local n = get_node(id)
+    if n then gui.set_enabled(n, enabled) end
+end
+
+local function set_nodes_enabled(enabled)
+    for _, id in ipairs(NODE_IDS) do
+        set_node_enabled(id, enabled)
+    end
+end
+
+local function set_text(id, s)
+    local n = get_node(id)
+    if n then gui.set_text(n, s or "") end
+end
+
+local function set_node_color(id, c)
+    local n = get_node(id)
+    if n then gui.set_color(n, c) end
+end
+
+local function refresh(self)
+    local list = gs.get_quests and gs.get_quests() or {}
+    if #list == 0 then
+        set_text("v_quests_title", "ЗАДАЧИ [0]")
+    elseif #list > QUEST_SLOTS then
+        set_text("v_quests_title", string.format("ЗАДАЧИ [%d/%d]", QUEST_SLOTS, #list))
+    else
+        set_text("v_quests_title", "ЗАДАЧИ")
+    end
+    for i = 1, QUEST_SLOTS do
+        local prefix = "v_quests_q" .. i
+        local has = list[i] ~= nil
+        set_node_enabled(prefix .. "_bg",   has)
+        set_node_enabled(prefix .. "_name", has)
+        set_node_enabled(prefix .. "_desc", has)
+        if has then
+            local q = list[i]
+            local title_text = q.title or "—"
+            if q.progress and q.progress ~= "" then
+                title_text = title_text .. " [" .. q.progress .. "]"
+            end
+            set_text(prefix .. "_name", title_text)
+            set_text(prefix .. "_desc", q.desc or q.status or "")
+            local c = COLOR_PAPER
+            if     q.status == "active" then c = COLOR_CYAN
+            elseif q.status == "done"   then c = COLOR_PAPER_DIM
+            elseif q.status == "failed" then c = COLOR_HOT end
+            set_node_color(prefix .. "_name", c)
+        end
+    end
+end
+
+function init(self)
+    self.visible = false
+    set_nodes_enabled(false)
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash("open_app") then
+        self.visible = true
+        set_nodes_enabled(true)
+        refresh(self)
+    elseif message_id == hash("close_app") then
+        self.visible = false
+        set_nodes_enabled(false)
+    elseif message_id == hash("refresh_app") then
+        if self.visible then refresh(self) end
+    end
+end
+
+function on_input(self, action_id, action)
+    if not self.visible then return false end
+    return false
+end

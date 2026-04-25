@@ -1,0 +1,105 @@
+-- phone_term.gui_script
+-- Терминал в составе split-телефона.
+-- Принимает: open_app, close_app, refresh_app
+
+local gs = require "main.scripts.game_state"
+
+local COLOR_CYAN      = vmath.vector4(0.47, 0.94, 1.00, 1.0)
+local COLOR_PAPER     = vmath.vector4(0.95, 0.95, 0.90, 1.0)
+local COLOR_TERM_OK   = vmath.vector4(0.31, 0.98, 0.48, 1.0)
+local COLOR_TERM_WARN = vmath.vector4(1.00, 0.70, 0.28, 1.0)
+local COLOR_TERM_ERR  = vmath.vector4(1.00, 0.24, 0.50, 1.0)
+
+local TERM_COLORS = {
+    ok     = COLOR_TERM_OK,
+    warn   = COLOR_TERM_WARN,
+    err    = COLOR_TERM_ERR,
+    info   = COLOR_CYAN,
+    prompt = COLOR_TERM_OK,
+    plain  = COLOR_PAPER,
+}
+
+local NODE_IDS = {
+    "v_term_eyebrow", "v_term_title",
+    "v_term_screen",
+    "v_term_l1", "v_term_l2", "v_term_l3", "v_term_l4",
+}
+
+local TERM_SLOTS = 4
+
+local function get_node(id)
+    local ok, n = pcall(gui.get_node, id)
+    if ok then return n end
+    return nil
+end
+
+local function set_node_enabled(id, enabled)
+    local n = get_node(id)
+    if n then gui.set_enabled(n, enabled) end
+end
+
+local function set_nodes_enabled(enabled)
+    for _, id in ipairs(NODE_IDS) do
+        set_node_enabled(id, enabled)
+    end
+end
+
+local function set_text(id, s)
+    local n = get_node(id)
+    if n then gui.set_text(n, s or "") end
+end
+
+-- Устанавливает цвет, сохраняя pre-baked alpha из .gui
+local function set_node_rgb_keep_alpha(id, c)
+    local n = get_node(id)
+    if not n then return end
+    local cur = gui.get_color(n)
+    gui.set_color(n, vmath.vector4(c.x, c.y, c.z, cur.w))
+end
+
+local function format_term_line(entry)
+    local level = entry.level or "plain"
+    local text  = entry.text  or ""
+    if     level == "prompt" then return "> " .. text
+    elseif level == "plain"  then return text
+    end
+    return "[" .. level .. "] " .. text
+end
+
+local function refresh(self)
+    local list  = gs.get_terminal_lines and gs.get_terminal_lines() or {}
+    -- Выравниваем по низу: свежие записи снизу, верхние слоты пустые
+    local shift = TERM_SLOTS - #list
+    for i = 1, TERM_SLOTS do
+        local node_id  = "v_term_l" .. i
+        local entry    = list[i - shift]
+        set_node_enabled(node_id, entry ~= nil)
+        if entry then
+            set_text(node_id, format_term_line(entry))
+            set_node_rgb_keep_alpha(node_id, TERM_COLORS[entry.level] or TERM_COLORS.plain)
+        end
+    end
+end
+
+function init(self)
+    self.visible = false
+    set_nodes_enabled(false)
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash("open_app") then
+        self.visible = true
+        set_nodes_enabled(true)
+        refresh(self)
+    elseif message_id == hash("close_app") then
+        self.visible = false
+        set_nodes_enabled(false)
+    elseif message_id == hash("refresh_app") then
+        if self.visible then refresh(self) end
+    end
+end
+
+function on_input(self, action_id, action)
+    if not self.visible then return false end
+    return false
+end

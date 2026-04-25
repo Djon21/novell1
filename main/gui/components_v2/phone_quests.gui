@@ -1,0 +1,278 @@
+script: "/main/gui/components_v2/phone_quests.gui_script"
+fonts {
+  name: "jb_mono_10"
+  font: "/main/fonts/jb_mono_10.font"
+}
+fonts {
+  name: "jb_mono_12"
+  font: "/main/fonts/jb_mono_12.font"
+}
+fonts {
+  name: "jb_mono_bold_14"
+  font: "/main/fonts/jb_mono_bold_14.font"
+}
+fonts {
+  name: "unbounded_bold_20"
+  font: "/main/fonts/unbounded_bold_20.font"
+}
+fonts {
+  name: "unbounded_bold_32"
+  font: "/main/fonts/unbounded_bold_32.font"
+}
+fonts {
+  name: "icons"
+  font: "/main/fonts/icons.font"
+}
+fonts {
+  name: "manrope_14"
+  font: "/main/fonts/manrope_14.font"
+}
+fonts {
+  name: "manrope_16"
+  font: "/main/fonts/manrope_16.font"
+}
+textures {
+  name: "icon_phone"
+  texture: "/main/images/phone/icon_phone.atlas"
+}
+textures {
+  name: "map2"
+  texture: "/main/images/phone/map2.atlas"
+}
+textures {
+  name: "map_assets_cyberpunk_v2"
+  texture: "/main/images/phone/map_assets_cyberpunk_v2.atlas"
+}
+nodes {
+  position {
+    x: 572.0
+    y: 150.0
+    z: 0.532
+  }
+  size {
+    x: 506.0
+    y: 392.0
+  }
+  color {
+    x: 0.018
+    y: 0.017
+    z: 0.045
+  }
+  type: TYPE_BOX
+  id: "quests_screen_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.7
+  enabled: false
+}
+nodes {
+  position {
+    x: 594.0
+    y: 528.0
+    z: 0.532
+  }
+  size {
+    x: 462.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "quests_header_line"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.08
+  enabled: false
+}
+nodes {
+  position {
+    x: 596.0
+    y: 538.0
+    z: 0.53
+  }
+  size {
+    x: 460.0
+    y: 12.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
+  type: TYPE_TEXT
+  text: "\320\272\320\262\320\265\321\201\321\202\321\213 \302\267 \320\260\320\272\321\202\320\270\320\262\320\275\321\213\321\205 2"
+  font: "jb_mono_10"
+  id: "v_quests_eyebrow"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 596.0
+    y: 514.0
+    z: 0.53
+  }
+  size {
+    x: 460.0
+    y: 22.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "\320\232\320\262\320\265\321\201\321\202\321\213"
+  font: "unbounded_bold_20"
+  id: "v_quests_title"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 604.0
+    y: 438.0
+    z: 0.53
+  }
+  size {
+    x: 438.0
+    y: 78.0
+  }
+  color {
+    x: 0.075
+    y: 0.06
+    z: 0.15
+  }
+  type: TYPE_BOX
+  id: "v_quests_q1_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.09
+}
+nodes {
+  position {
+    x: 626.0
+    y: 480.0
+    z: 0.54
+  }
+  size {
+    x: 300.0
+    y: 12.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\235\320\260\320\271\321\202\320\270 \320\277\321\200\320\270\321\207\320\270\320\275\321\203 \320\277\320\265\321\202\320\273\320\270"
+  font: "jb_mono_bold_14"
+  id: "v_quests_q1_name"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 626.0
+    y: 456.0
+    z: 0.54
+  }
+  size {
+    x: 450.0
+    y: 28.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\321\201\320\276\320\261\321\200\320\260\321\202\321\214 \321\203\320\273\320\270\320\272\320\270 \320\276 \320\277\320\276\320\275\320\265\320\264\320\265\320\273\321\214\320\275\320\270\320\272\320\265 \302\267 1/3"
+  font: "manrope_14"
+  id: "v_quests_q1_desc"
+  pivot: PIVOT_NW
+  adjust_mode: ADJUST_MODE_STRETCH
+  line_break: true
+  alpha: 0.66
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 604.0
+    y: 350.0
+    z: 0.53
+  }
+  size {
+    x: 438.0
+    y: 78.0
+  }
+  color {
+    x: 0.075
+    y: 0.06
+    z: 0.15
+  }
+  type: TYPE_BOX
+  id: "v_quests_q2_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.09
+}
+nodes {
+  position {
+    x: 626.0
+    y: 392.0
+    z: 0.54
+  }
+  size {
+    x: 300.0
+    y: 12.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\235\320\265 \320\276\320\277\320\276\320\267\320\264\320\260\321\202\321\214 \320\275\320\260 \321\200\320\260\320\261\320\276\321\202\321\203"
+  font: "jb_mono_bold_14"
+  id: "v_quests_q2_name"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 626.0
+    y: 368.0
+    z: 0.54
+  }
+  size {
+    x: 450.0
+    y: 28.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\321\203\321\201\320\277\320\265\321\202\321\214 \320\272 09:00 \302\267 0/1"
+  font: "manrope_14"
+  id: "v_quests_q2_desc"
+  pivot: PIVOT_NW
+  adjust_mode: ADJUST_MODE_STRETCH
+  line_break: true
+  alpha: 0.66
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}

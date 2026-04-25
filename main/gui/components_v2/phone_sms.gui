@@ -1,0 +1,647 @@
+script: "/main/gui/components_v2/phone_sms.gui_script"
+fonts {
+  name: "jb_mono_10"
+  font: "/main/fonts/jb_mono_10.font"
+}
+fonts {
+  name: "jb_mono_12"
+  font: "/main/fonts/jb_mono_12.font"
+}
+fonts {
+  name: "jb_mono_bold_14"
+  font: "/main/fonts/jb_mono_bold_14.font"
+}
+fonts {
+  name: "unbounded_bold_20"
+  font: "/main/fonts/unbounded_bold_20.font"
+}
+fonts {
+  name: "unbounded_bold_32"
+  font: "/main/fonts/unbounded_bold_32.font"
+}
+fonts {
+  name: "icons"
+  font: "/main/fonts/icons.font"
+}
+fonts {
+  name: "manrope_14"
+  font: "/main/fonts/manrope_14.font"
+}
+fonts {
+  name: "manrope_16"
+  font: "/main/fonts/manrope_16.font"
+}
+textures {
+  name: "icon_phone"
+  texture: "/main/images/phone/icon_phone.atlas"
+}
+textures {
+  name: "map2"
+  texture: "/main/images/phone/map2.atlas"
+}
+textures {
+  name: "map_assets_cyberpunk_v2"
+  texture: "/main/images/phone/map_assets_cyberpunk_v2.atlas"
+}
+nodes {
+  position {
+    x: 596.0
+    y: 538.0
+    z: 0.55
+  }
+  size {
+    x: 460.0
+    y: 12.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
+  type: TYPE_TEXT
+  text: "\320\262\321\205\320\276\320\264\321\217\321\211\320\270\320\265 \302\267 3 \320\275\320\276\320\262\321\213\321\205"
+  font: "jb_mono_10"
+  id: "side_eyebrow"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.95
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 596.0
+    y: 508.0
+    z: 0.55
+  }
+  size {
+    x: 460.0
+    y: 22.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\241\320\276\320\276\320\261\321\211\320\265\320\275\320\270\321\217"
+  font: "unbounded_bold_20"
+  id: "side_title"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.95
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 572.0
+    y: 150.0
+    z: 0.521
+  }
+  size {
+    x: 506.0
+    y: 392.0
+  }
+  color {
+    x: 0.018
+    y: 0.017
+    z: 0.045
+  }
+  type: TYPE_BOX
+  id: "sms_screen_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.78
+  enabled: false
+}
+nodes {
+  position {
+    x: 594.0
+    y: 528.0
+    z: 0.545
+  }
+  size {
+    x: 462.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "sms_header_line"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.1
+  enabled: false
+}
+nodes {
+  position {
+    x: 606.0
+    y: 162.0
+    z: 0.545
+  }
+  size {
+    x: 438.0
+    y: 38.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "sms_input_bar"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.065
+  enabled: false
+}
+nodes {
+  position {
+    x: 626.0
+    y: 180.0
+    z: 0.552
+  }
+  size {
+    x: 66.0
+    y: 2.0
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  id: "sms_input_dash"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.3
+  enabled: false
+}
+nodes {
+  position {
+    x: 604.0
+    y: 435.0
+    z: 0.532
+  }
+  size {
+    x: 386.0
+    y: 76.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "msg1_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.115
+}
+nodes {
+  position {
+    x: 604.0
+    y: 434.0
+    z: 0.544
+  }
+  size {
+    x: 120.0
+    y: 1.0
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  id: "msg1_border"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 622.0
+    y: 490.0
+    z: 0.555
+  }
+  size {
+    x: 300.0
+    y: 12.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\235. \320\234."
+  font: "jb_mono_bold_14"
+  id: "msg1_name"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.92
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 972.0
+    y: 490.0
+    z: 0.555
+  }
+  size {
+    x: 120.0
+    y: 12.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "07:10"
+  font: "jb_mono_12"
+  id: "msg1_time"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.42
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 622.0
+    y: 468.0
+    z: 0.555
+  }
+  size {
+    x: 350.0
+    y: 34.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\321\202\321\213 \320\276\320\277\321\217\321\202\321\214 \320\276\320\277\320\276\320\267\320\264\320\260\320\265\321\210\321\214. \321\217 \320\266\320\265 \320\263\320\276\320\262\320\276\321\200\320\270\320\273\320\260. \320\276\320\277\321\217\321\202\321\214."
+  font: "manrope_14"
+  id: "msg1_body"
+  pivot: PIVOT_NW
+  adjust_mode: ADJUST_MODE_STRETCH
+  line_break: true
+  alpha: 0.82
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 646.0
+    y: 345.0
+    z: 0.532
+  }
+  size {
+    x: 386.0
+    y: 76.0
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  id: "msg2_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.105
+}
+nodes {
+  position {
+    x: 912.0
+    y: 344.0
+    z: 0.544
+  }
+  size {
+    x: 120.0
+    y: 1.0
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  id: "msg2_border"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.16
+}
+nodes {
+  position {
+    x: 664.0
+    y: 400.0
+    z: 0.555
+  }
+  size {
+    x: 300.0
+    y: 12.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "+7 (???) ???-??-??"
+  font: "jb_mono_bold_14"
+  id: "msg2_name"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.92
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1014.0
+    y: 400.0
+    z: 0.555
+  }
+  size {
+    x: 120.0
+    y: 12.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "03:17"
+  font: "jb_mono_12"
+  id: "msg2_time"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.42
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 664.0
+    y: 378.0
+    z: 0.555
+  }
+  size {
+    x: 350.0
+    y: 34.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\265\321\201\320\273\320\270 \320\277\320\276\320\274\320\275\320\270\321\210\321\214 \320\277\320\276\320\275\320\265\320\264\320\265\320\273\321\214\320\275\320\270\320\272 \342\200\224 \320\276\321\202\320\262\320\265\321\202\321\214. \321\215\321\202\320\276 \320\262\320\260\320\266\320\275\320\276."
+  font: "manrope_14"
+  id: "msg2_body"
+  pivot: PIVOT_NW
+  adjust_mode: ADJUST_MODE_STRETCH
+  line_break: true
+  alpha: 0.82
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 604.0
+    y: 255.0
+    z: 0.532
+  }
+  size {
+    x: 386.0
+    y: 76.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "msg3_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.095
+}
+nodes {
+  position {
+    x: 604.0
+    y: 254.0
+    z: 0.544
+  }
+  size {
+    x: 120.0
+    y: 1.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
+  type: TYPE_BOX
+  id: "msg3_border"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 622.0
+    y: 310.0
+    z: 0.555
+  }
+  size {
+    x: 300.0
+    y: 12.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\236\321\202\320\264\320\265\320\273 \302\267 \320\237\321\200\320\276\320\264"
+  font: "jb_mono_bold_14"
+  id: "msg3_name"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.92
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 972.0
+    y: 310.0
+    z: 0.555
+  }
+  size {
+    x: 120.0
+    y: 12.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\262\321\207\320\265\321\200\320\260"
+  font: "jb_mono_12"
+  id: "msg3_time"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.42
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 622.0
+    y: 288.0
+    z: 0.555
+  }
+  size {
+    x: 350.0
+    y: 34.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\277\321\200\320\276\320\264 \321\203\320\277\320\260\320\273. \321\202\320\265\321\205. \320\264\320\276\320\273\320\263 \320\264\320\276\320\263\320\275\320\260\320\273. \320\277\320\276\320\264\320\275\320\270\320\274\320\270, \320\277\320\276\320\266\320\260\320\273\321\203\320\271\321\201\321\202\320\260."
+  font: "manrope_14"
+  id: "msg3_body"
+  pivot: PIVOT_NW
+  adjust_mode: ADJUST_MODE_STRETCH
+  line_break: true
+  alpha: 0.82
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 646.0
+    y: 205.0
+    z: 0.532
+  }
+  size {
+    x: 386.0
+    y: 42.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
+  type: TYPE_BOX
+  id: "msg4_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.105
+}
+nodes {
+  position {
+    x: 912.0
+    y: 204.0
+    z: 0.544
+  }
+  size {
+    x: 120.0
+    y: 1.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
+  type: TYPE_BOX
+  id: "msg4_border"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 664.0
+    y: 232.0
+    z: 0.555
+  }
+  size {
+    x: 300.0
+    y: 12.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\234\320\260\320\274\320\260"
+  font: "jb_mono_bold_14"
+  id: "msg4_name"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.92
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1014.0
+    y: 232.0
+    z: 0.555
+  }
+  size {
+    x: 120.0
+    y: 12.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\277\320\275"
+  font: "jb_mono_12"
+  id: "msg4_time"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.42
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 664.0
+    y: 214.0
+    z: 0.555
+  }
+  size {
+    x: 350.0
+    y: 18.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\275\320\265 \320\267\320\260\320\261\321\203\320\264\321\214 \320\277\320\276\320\265\321\201\321\202\321\214. \320\270 \320\267\320\276\320\275\321\202 \320\262\320\276\320\267\321\214\320\274\320\270 \342\200\224 \320\276\320\261\320\265\321\211\320\260\321\216\321\202 \320\264\320\276\320\266\320\264\321\214."
+  font: "manrope_14"
+  id: "msg4_body"
+  pivot: PIVOT_NW
+  adjust_mode: ADJUST_MODE_STRETCH
+  line_break: true
+  alpha: 0.82
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}

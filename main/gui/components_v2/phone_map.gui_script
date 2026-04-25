@@ -1,0 +1,55 @@
+-- phone_map.gui_script
+-- Карта внутри телефона (split-модуль).
+-- Принимает: open_app, close_app
+-- Примечание: тайл карты в лаунчере сейчас открывает ВНЕШНЮЮ карту (map_v2)
+-- через ui_manager_v2, поэтому этот скрипт пока не вызывается автоматически.
+-- Файл готов для будущего in-phone режима карты.
+
+-- Верхнеуровневые ноды карты (дочерние прячутся вместе с родителем)
+local NODE_IDS = {
+    "mapfull_screen_bg",
+    "mapfull_grp_map",
+    "mapfull_grp_poi",
+    "mapfull_map_header_scrim",
+    "mapfull_map_eyebrow",
+    "mapfull_map_title",
+    "mapfull_map_terminal",
+    "mapfull_map_terminal_cursor",
+}
+
+local function get_node(id)
+    local ok, n = pcall(gui.get_node, id)
+    if ok then return n end
+    return nil
+end
+
+local function set_node_enabled(id, enabled)
+    local n = get_node(id)
+    if n then gui.set_enabled(n, enabled) end
+end
+
+local function set_nodes_enabled(enabled)
+    for _, id in ipairs(NODE_IDS) do
+        set_node_enabled(id, enabled)
+    end
+end
+
+function init(self)
+    self.visible = false
+    set_nodes_enabled(false)
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash("open_app") then
+        self.visible = true
+        set_nodes_enabled(true)
+    elseif message_id == hash("close_app") then
+        self.visible = false
+        set_nodes_enabled(false)
+    end
+end
+
+function on_input(self, action_id, action)
+    if not self.visible then return false end
+    return false
+end

@@ -31,6 +31,18 @@ fonts {
   name: "manrope_16"
   font: "/main/fonts/manrope_16.font"
 }
+textures {
+  name: "icon_phone"
+  texture: "/main/images/phone/icon_phone.atlas"
+}
+textures {
+  name: "map2"
+  texture: "/main/images/phone/map2.atlas"
+}
+textures {
+  name: "map_assets_cyberpunk_v2"
+  texture: "/main/images/phone/map_assets_cyberpunk_v2.atlas"
+}
 nodes {
   position {
     z: 0.4
@@ -40,15 +52,15 @@ nodes {
     y: 720.0
   }
   color {
-    x: 0.027
-    y: 0.023
-    z: 0.102
+    x: 0.012
+    y: 0.01
+    z: 0.035
   }
   type: TYPE_BOX
   id: "backdrop"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.55
+  alpha: 0.62
 }
 nodes {
   position {
@@ -61,15 +73,15 @@ nodes {
     y: 560.0
   }
   color {
-    x: 0.047
-    y: 0.039
-    z: 0.141
+    x: 0.032
+    y: 0.026
+    z: 0.105
   }
   type: TYPE_BOX
   id: "modal"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.98
+  alpha: 0.985
 }
 nodes {
   position {
@@ -82,14 +94,14 @@ nodes {
     y: 1.0
   }
   color {
-    x: 0.49
-    y: 0.976
+    x: 0.282
+    y: 0.961
   }
   type: TYPE_BOX
   id: "modal_border_top"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.3
+  alpha: 0.22
 }
 nodes {
   position {
@@ -102,14 +114,14 @@ nodes {
     y: 1.0
   }
   color {
-    x: 0.49
-    y: 0.976
+    x: 0.282
+    y: 0.961
   }
   type: TYPE_BOX
   id: "modal_border_bot"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.2
+  alpha: 0.18
 }
 nodes {
   position {
@@ -122,14 +134,14 @@ nodes {
     y: 20.0
   }
   color {
-    x: 0.49
-    y: 0.976
+    x: 0.282
+    y: 0.961
   }
   type: TYPE_BOX
   id: "corner_tl_v"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.6
+  alpha: 0.55
 }
 nodes {
   position {
@@ -142,14 +154,14 @@ nodes {
     y: 1.0
   }
   color {
-    x: 0.49
-    y: 0.976
+    x: 0.282
+    y: 0.961
   }
   type: TYPE_BOX
   id: "corner_tl_h"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.6
+  alpha: 0.55
 }
 nodes {
   position {
@@ -162,14 +174,14 @@ nodes {
     y: 20.0
   }
   color {
-    x: 0.49
-    y: 0.976
+    x: 0.282
+    y: 0.961
   }
   type: TYPE_BOX
   id: "corner_tr_v"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.6
+  alpha: 0.55
 }
 nodes {
   position {
@@ -182,14 +194,14 @@ nodes {
     y: 1.0
   }
   color {
-    x: 0.49
-    y: 0.976
+    x: 0.282
+    y: 0.961
   }
   type: TYPE_BOX
   id: "corner_tr_h"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.6
+  alpha: 0.55
 }
 nodes {
   position {
@@ -202,14 +214,14 @@ nodes {
     y: 20.0
   }
   color {
-    x: 0.49
-    y: 0.976
+    x: 0.282
+    y: 0.961
   }
   type: TYPE_BOX
   id: "corner_bl_v"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.6
+  alpha: 0.38
 }
 nodes {
   position {
@@ -222,14 +234,14 @@ nodes {
     y: 1.0
   }
   color {
-    x: 0.49
-    y: 0.976
+    x: 0.282
+    y: 0.961
   }
   type: TYPE_BOX
   id: "corner_bl_h"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.6
+  alpha: 0.38
 }
 nodes {
   position {
@@ -242,14 +254,14 @@ nodes {
     y: 20.0
   }
   color {
-    x: 0.49
-    y: 0.976
+    x: 0.282
+    y: 0.961
   }
   type: TYPE_BOX
   id: "corner_br_v"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.6
+  alpha: 0.38
 }
 nodes {
   position {
@@ -262,28 +274,28 @@ nodes {
     y: 1.0
   }
   color {
-    x: 0.49
-    y: 0.976
+    x: 0.282
+    y: 0.961
   }
   type: TYPE_BOX
   id: "corner_br_h"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.6
+  alpha: 0.38
 }
 nodes {
   position {
-    x: 204.0
-    y: 622.0
-    z: 0.52
+    x: 202.0
+    y: 620.0
+    z: 0.55
   }
   size {
     x: 400.0
     y: 12.0
   }
   color {
-    x: 0.49
-    y: 0.976
+    x: 0.282
+    y: 0.961
   }
   type: TYPE_TEXT
   text: "phone \302\267 xiaomi mi \302\267 73%"
@@ -291,23 +303,24 @@ nodes {
   id: "title_eyebrow"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.88
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 204.0
-    y: 598.0
-    z: 0.52
+    x: 202.0
+    y: 594.0
+    z: 0.55
   }
   size {
     x: 400.0
     y: 22.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\242\320\225\320\233\320\225\320\244\320\236\320\235"
@@ -315,6 +328,7 @@ nodes {
   id: "title_main"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
@@ -322,16 +336,16 @@ nodes {
   position {
     x: 810.0
     y: 622.0
-    z: 0.52
+    z: 0.55
   }
   size {
     x: 240.0
     y: 12.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\321\201\320\265\321\202\321\214: \320\234\320\242\320\241 \302\267 4G"
@@ -339,15 +353,15 @@ nodes {
   id: "stats_net"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.85
+  alpha: 0.7
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
     x: 810.0
-    y: 602.0
-    z: 0.52
+    y: 600.0
+    z: 0.55
   }
   size {
     x: 240.0
@@ -363,18 +377,19 @@ nodes {
   id: "stats_msg"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1070.0
-    y: 618.0
-    z: 0.52
+    x: 1068.0
+    y: 604.0
+    z: 0.58
   }
   size {
-    x: 28.0
-    y: 28.0
+    x: 46.0
+    y: 46.0
   }
   color {
     y: 0.239
@@ -399,9 +414,9 @@ nodes {
     y: 1.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_BOX
   id: "head_divider"
@@ -416,48 +431,49 @@ nodes {
     z: 0.52
   }
   size {
-    x: 260.0
+    x: 270.0
     y: 460.0
   }
   color {
-    x: 0.102
-    y: 0.082
-    z: 0.173
+    x: 0.07
+    y: 0.055
+    z: 0.15
   }
   type: TYPE_BOX
   id: "phone_case"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.92
 }
 nodes {
   position {
     x: 250.0
     y: 558.0
-    z: 0.53
+    z: 0.535
   }
   size {
-    x: 260.0
+    x: 270.0
     y: 2.0
   }
   color {
-    x: 0.49
-    y: 0.976
+    x: 0.282
+    y: 0.961
   }
   type: TYPE_BOX
   id: "phone_case_top"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.3
+  alpha: 0.32
 }
 nodes {
   position {
-    x: 335.0
-    y: 540.0
-    z: 0.54
+    x: 342.0
+    y: 541.0
+    z: 0.55
   }
   size {
-    x: 90.0
-    y: 14.0
+    x: 96.0
+    y: 13.0
   }
   color {
     x: 0.0
@@ -471,23 +487,24 @@ nodes {
 }
 nodes {
   position {
-    x: 509.0
-    y: 430.0
-    z: 0.53
+    x: 518.0
+    y: 420.0
+    z: 0.54
   }
   size {
     x: 3.0
-    y: 46.0
+    y: 48.0
   }
   color {
-    x: 0.102
-    y: 0.082
-    z: 0.173
+    x: 0.15
+    y: 0.115
+    z: 0.25
   }
   type: TYPE_BOX
   id: "phone_side_btn"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.9
 }
 nodes {
   position {
@@ -496,33 +513,34 @@ nodes {
     z: 0.53
   }
   size {
-    x: 240.0
-    y: 440.0
+    x: 250.0
+    y: 436.0
   }
   color {
-    x: 0.024
-    y: 0.016
-    z: 0.063
+    x: 0.006
+    y: 0.004
+    z: 0.024
   }
   type: TYPE_BOX
   id: "phone_screen"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.97
 }
 nodes {
   position {
-    x: 270.0
-    y: 532.0
-    z: 0.55
+    x: 272.0
+    y: 530.0
+    z: 0.56
   }
   size {
     x: 60.0
     y: 12.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "07:12"
@@ -530,23 +548,23 @@ nodes {
   id: "status_time"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.9
+  alpha: 0.88
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 490.0
-    y: 532.0
-    z: 0.55
+    x: 498.0
+    y: 530.0
+    z: 0.56
   }
   size {
     x: 140.0
     y: 12.0
   }
   color {
-    x: 0.49
-    y: 0.976
+    x: 0.282
+    y: 0.961
   }
   type: TYPE_TEXT
   text: "4G \302\267 73%"
@@ -554,23 +572,24 @@ nodes {
   id: "status_meta"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 380.0
-    y: 492.0
-    z: 0.55
+    x: 385.0
+    y: 482.0
+    z: 0.56
   }
   size {
     x: 220.0
-    y: 36.0
+    y: 40.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "07:12"
@@ -582,33 +601,33 @@ nodes {
 }
 nodes {
   position {
-    x: 380.0
-    y: 468.0
-    z: 0.55
+    x: 385.0
+    y: 454.0
+    z: 0.56
   }
   size {
     x: 220.0
     y: 12.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\237\320\236\320\235\320\225\320\224\320\225\320\233\320\254\320\235\320\230\320\232 \302\267 23 \320\220\320\237\320\240\320\225\320\233\320\257"
   font: "jb_mono_10"
   id: "wall_date"
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.65
+  alpha: 0.58
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 380.0
-    y: 448.0
-    z: 0.55
+    x: 385.0
+    y: 431.0
+    z: 0.56
   }
   size {
     x: 220.0
@@ -629,23 +648,23 @@ nodes {
 }
 nodes {
   position {
-    x: 380.0
-    y: 138.0
-    z: 0.55
+    x: 385.0
+    y: 135.0
+    z: 0.56
   }
   size {
-    x: 100.0
+    x: 110.0
     y: 4.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_BOX
   id: "home_indicator"
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.35
+  alpha: 0.38
 }
 nodes {
   position {
@@ -658,21 +677,21 @@ nodes {
     y: 460.0
   }
   color {
-    x: 0.047
-    y: 0.039
-    z: 0.141
+    x: 0.036
+    y: 0.03
+    z: 0.11
   }
   type: TYPE_BOX
   id: "side_panel"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.85
+  alpha: 0.72
 }
 nodes {
   position {
     x: 596.0
     y: 538.0
-    z: 0.53
+    z: 0.55
   }
   size {
     x: 460.0
@@ -688,23 +707,24 @@ nodes {
   id: "side_eyebrow"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
     x: 596.0
-    y: 514.0
-    z: 0.53
+    y: 508.0
+    z: 0.55
   }
   size {
     x: 460.0
     y: 22.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\241\320\276\320\276\320\261\321\211\320\265\320\275\320\270\321\217"
@@ -712,62 +732,152 @@ nodes {
   id: "side_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 592.0
-    y: 404.0
-    z: 0.53
+    x: 572.0
+    y: 150.0
+    z: 0.521
   }
   size {
-    x: 476.0
+    x: 506.0
+    y: 392.0
+  }
+  color {
+    x: 0.018
+    y: 0.017
+    z: 0.045
+  }
+  type: TYPE_BOX
+  id: "sms_screen_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.78
+  enabled: false
+}
+nodes {
+  position {
+    x: 594.0
+    y: 528.0
+    z: 0.545
+  }
+  size {
+    x: 462.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "sms_header_line"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.1
+  enabled: false
+}
+nodes {
+  position {
+    x: 606.0
+    y: 162.0
+    z: 0.545
+  }
+  size {
+    x: 438.0
+    y: 38.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "sms_input_bar"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.065
+  enabled: false
+}
+nodes {
+  position {
+    x: 626.0
+    y: 180.0
+    z: 0.552
+  }
+  size {
+    x: 66.0
+    y: 2.0
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  id: "sms_input_dash"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.3
+  enabled: false
+}
+nodes {
+  position {
+    x: 604.0
+    y: 435.0
+    z: 0.532
+  }
+  size {
+    x: 386.0
     y: 76.0
   }
   color {
-    y: 0.239
-    z: 0.498
+    x: 0.953
+    y: 0.925
+    z: 0.851
   }
   type: TYPE_BOX
   id: "msg1_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.08
+  alpha: 0.115
 }
 nodes {
   position {
-    x: 592.0
-    y: 480.0
-    z: 0.54
+    x: 604.0
+    y: 434.0
+    z: 0.544
   }
   size {
-    x: 476.0
+    x: 120.0
     y: 1.0
   }
   color {
-    y: 0.239
-    z: 0.498
+    x: 0.282
+    y: 0.961
   }
   type: TYPE_BOX
   id: "msg1_border"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.6
+  alpha: 0.18
 }
 nodes {
   position {
-    x: 604.0
-    y: 464.0
-    z: 0.54
+    x: 622.0
+    y: 490.0
+    z: 0.555
   }
   size {
     x: 300.0
     y: 12.0
   }
   color {
-    y: 0.239
-    z: 0.498
+    x: 0.953
+    y: 0.925
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\235. \320\234."
@@ -775,23 +885,24 @@ nodes {
   id: "msg1_name"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.92
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1056.0
-    y: 464.0
-    z: 0.54
+    x: 972.0
+    y: 490.0
+    z: 0.555
   }
   size {
     x: 120.0
     y: 12.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "07:10"
@@ -799,24 +910,24 @@ nodes {
   id: "msg1_time"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.45
+  alpha: 0.42
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 604.0
-    y: 436.0
-    z: 0.54
+    x: 622.0
+    y: 468.0
+    z: 0.555
   }
   size {
-    x: 450.0
-    y: 36.0
+    x: 350.0
+    y: 34.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\321\202\321\213 \320\276\320\277\321\217\321\202\321\214 \320\276\320\277\320\276\320\267\320\264\320\260\320\265\321\210\321\214. \321\217 \320\266\320\265 \320\263\320\276\320\262\320\276\321\200\320\270\320\273\320\260. \320\276\320\277\321\217\321\202\321\214."
@@ -825,63 +936,64 @@ nodes {
   pivot: PIVOT_NW
   adjust_mode: ADJUST_MODE_STRETCH
   line_break: true
-  alpha: 0.78
+  alpha: 0.82
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 592.0
-    y: 316.0
-    z: 0.53
+    x: 646.0
+    y: 345.0
+    z: 0.532
   }
   size {
-    x: 476.0
+    x: 386.0
     y: 76.0
   }
   color {
-    y: 0.239
-    z: 0.498
+    x: 0.282
+    y: 0.961
   }
   type: TYPE_BOX
   id: "msg2_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.08
+  alpha: 0.105
 }
 nodes {
   position {
-    x: 592.0
-    y: 392.0
-    z: 0.54
+    x: 912.0
+    y: 344.0
+    z: 0.544
   }
   size {
-    x: 476.0
+    x: 120.0
     y: 1.0
   }
   color {
-    y: 0.239
-    z: 0.498
+    x: 0.282
+    y: 0.961
   }
   type: TYPE_BOX
   id: "msg2_border"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.6
+  alpha: 0.16
 }
 nodes {
   position {
-    x: 604.0
-    y: 376.0
-    z: 0.54
+    x: 664.0
+    y: 400.0
+    z: 0.555
   }
   size {
     x: 300.0
     y: 12.0
   }
   color {
-    y: 0.239
-    z: 0.498
+    x: 0.953
+    y: 0.925
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "+7 (???) ???-??-??"
@@ -889,23 +1001,24 @@ nodes {
   id: "msg2_name"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.92
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1056.0
-    y: 376.0
-    z: 0.54
+    x: 1014.0
+    y: 400.0
+    z: 0.555
   }
   size {
     x: 120.0
     y: 12.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "03:17"
@@ -913,24 +1026,24 @@ nodes {
   id: "msg2_time"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.45
+  alpha: 0.42
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 604.0
-    y: 348.0
-    z: 0.54
+    x: 664.0
+    y: 378.0
+    z: 0.555
   }
   size {
-    x: 450.0
-    y: 36.0
+    x: 350.0
+    y: 34.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\265\321\201\320\273\320\270 \320\277\320\276\320\274\320\275\320\270\321\210\321\214 \320\277\320\276\320\275\320\265\320\264\320\265\320\273\321\214\320\275\320\270\320\272 \342\200\224 \320\276\321\202\320\262\320\265\321\202\321\214. \321\215\321\202\320\276 \320\262\320\260\320\266\320\275\320\276."
@@ -939,63 +1052,65 @@ nodes {
   pivot: PIVOT_NW
   adjust_mode: ADJUST_MODE_STRETCH
   line_break: true
-  alpha: 0.78
+  alpha: 0.82
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 592.0
-    y: 228.0
-    z: 0.53
+    x: 604.0
+    y: 255.0
+    z: 0.532
   }
   size {
-    x: 476.0
+    x: 386.0
     y: 76.0
   }
   color {
-    y: 0.239
-    z: 0.498
+    x: 0.953
+    y: 0.925
+    z: 0.851
   }
   type: TYPE_BOX
   id: "msg3_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.08
+  alpha: 0.095
 }
 nodes {
   position {
-    x: 592.0
-    y: 304.0
-    z: 0.54
+    x: 604.0
+    y: 254.0
+    z: 0.544
   }
   size {
-    x: 476.0
+    x: 120.0
     y: 1.0
   }
   color {
-    y: 0.239
-    z: 0.498
+    y: 0.702
+    z: 0.278
   }
   type: TYPE_BOX
   id: "msg3_border"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.6
+  alpha: 0.18
 }
 nodes {
   position {
-    x: 604.0
-    y: 288.0
-    z: 0.54
+    x: 622.0
+    y: 310.0
+    z: 0.555
   }
   size {
     x: 300.0
     y: 12.0
   }
   color {
-    y: 0.239
-    z: 0.498
+    x: 0.953
+    y: 0.925
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\236\321\202\320\264\320\265\320\273 \302\267 \320\237\321\200\320\276\320\264"
@@ -1003,23 +1118,24 @@ nodes {
   id: "msg3_name"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.92
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1056.0
-    y: 288.0
-    z: 0.54
+    x: 972.0
+    y: 310.0
+    z: 0.555
   }
   size {
     x: 120.0
     y: 12.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\262\321\207\320\265\321\200\320\260"
@@ -1027,24 +1143,24 @@ nodes {
   id: "msg3_time"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.45
+  alpha: 0.42
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 604.0
-    y: 260.0
-    z: 0.54
+    x: 622.0
+    y: 288.0
+    z: 0.555
   }
   size {
-    x: 450.0
-    y: 36.0
+    x: 350.0
+    y: 34.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\277\321\200\320\276\320\264 \321\203\320\277\320\260\320\273. \321\202\320\265\321\205. \320\264\320\276\320\273\320\263 \320\264\320\276\320\263\320\275\320\260\320\273. \320\277\320\276\320\264\320\275\320\270\320\274\320\270, \320\277\320\276\320\266\320\260\320\273\321\203\320\271\321\201\321\202\320\260."
@@ -1053,66 +1169,64 @@ nodes {
   pivot: PIVOT_NW
   adjust_mode: ADJUST_MODE_STRETCH
   line_break: true
-  alpha: 0.78
+  alpha: 0.82
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 592.0
-    y: 140.0
-    z: 0.53
+    x: 646.0
+    y: 205.0
+    z: 0.532
   }
   size {
-    x: 476.0
-    y: 76.0
+    x: 386.0
+    y: 42.0
   }
   color {
-    x: 0.047
-    y: 0.039
-    z: 0.141
+    y: 0.239
+    z: 0.498
   }
   type: TYPE_BOX
   id: "msg4_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.5
+  alpha: 0.105
 }
 nodes {
   position {
-    x: 592.0
-    y: 216.0
-    z: 0.54
+    x: 912.0
+    y: 204.0
+    z: 0.544
   }
   size {
-    x: 476.0
+    x: 120.0
     y: 1.0
   }
   color {
-    x: 0.952
-    y: 0.925
-    z: 0.85
+    y: 0.239
+    z: 0.498
   }
   type: TYPE_BOX
   id: "msg4_border"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.15
+  alpha: 0.18
 }
 nodes {
   position {
-    x: 604.0
-    y: 200.0
-    z: 0.54
+    x: 664.0
+    y: 232.0
+    z: 0.555
   }
   size {
     x: 300.0
     y: 12.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\234\320\260\320\274\320\260"
@@ -1120,23 +1234,24 @@ nodes {
   id: "msg4_name"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.92
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1056.0
-    y: 200.0
-    z: 0.54
+    x: 1014.0
+    y: 232.0
+    z: 0.555
   }
   size {
     x: 120.0
     y: 12.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\277\320\275"
@@ -1144,24 +1259,24 @@ nodes {
   id: "msg4_time"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.45
+  alpha: 0.42
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 604.0
-    y: 172.0
-    z: 0.54
+    x: 664.0
+    y: 214.0
+    z: 0.555
   }
   size {
-    x: 450.0
-    y: 36.0
+    x: 350.0
+    y: 18.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\275\320\265 \320\267\320\260\320\261\321\203\320\264\321\214 \320\277\320\276\320\265\321\201\321\202\321\214. \320\270 \320\267\320\276\320\275\321\202 \320\262\320\276\320\267\321\214\320\274\320\270 \342\200\224 \320\276\320\261\320\265\321\211\320\260\321\216\321\202 \320\264\320\276\320\266\320\264\321\214."
@@ -1170,7 +1285,7 @@ nodes {
   pivot: PIVOT_NW
   adjust_mode: ADJUST_MODE_STRETCH
   line_break: true
-  alpha: 0.78
+  alpha: 0.82
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
@@ -1181,8 +1296,8 @@ nodes {
     z: 0.55
   }
   size {
-    x: 40.0
-    y: 40.0
+    x: 52.0
+    y: 52.0
   }
   color {
     y: 0.239
@@ -1191,51 +1306,48 @@ nodes {
   type: TYPE_BOX
   id: "app1_bg"
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.22
+  alpha: 0.24
 }
 nodes {
   position {
     x: 290.0
     y: 340.0
-    z: 0.56
+    z: 0.568
   }
   size {
-    x: 22.0
-    y: 22.0
+    x: 32.0
+    y: 32.0
   }
   color {
     y: 0.239
     z: 0.498
   }
-  type: TYPE_TEXT
-  text: "\356\203\212"
-  font: "icons"
+  type: TYPE_BOX
+  texture: "icon_phone/icon_sms"
   id: "app1_icon"
   adjust_mode: ADJUST_MODE_STRETCH
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
 }
 nodes {
   position {
     x: 290.0
-    y: 310.0
-    z: 0.56
+    y: 307.0
+    z: 0.574
   }
   size {
-    x: 60.0
-    y: 12.0
+    x: 74.0
+    y: 14.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\241\320\234\320\241"
   font: "jb_mono_10"
   id: "app1_label"
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.85
+  alpha: 0.82
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
@@ -1246,61 +1358,58 @@ nodes {
     z: 0.55
   }
   size {
-    x: 40.0
-    y: 40.0
+    x: 52.0
+    y: 52.0
   }
   color {
-    x: 0.49
-    y: 0.976
+    x: 0.282
+    y: 0.961
   }
   type: TYPE_BOX
   id: "app2_bg"
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.22
+  alpha: 0.24
 }
 nodes {
   position {
     x: 350.0
     y: 340.0
-    z: 0.56
+    z: 0.568
   }
   size {
-    x: 22.0
-    y: 22.0
+    x: 32.0
+    y: 32.0
   }
   color {
-    x: 0.49
-    y: 0.976
+    x: 0.282
+    y: 0.961
   }
-  type: TYPE_TEXT
-  text: "\356\202\260"
-  font: "icons"
+  type: TYPE_BOX
+  texture: "icon_phone/icon_call"
   id: "app2_icon"
   adjust_mode: ADJUST_MODE_STRETCH
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
 }
 nodes {
   position {
     x: 350.0
-    y: 310.0
-    z: 0.56
+    y: 307.0
+    z: 0.574
   }
   size {
-    x: 60.0
-    y: 12.0
+    x: 74.0
+    y: 14.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\227\320\262\320\276\320\275\320\272\320\270"
   font: "jb_mono_10"
   id: "app2_label"
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.85
+  alpha: 0.82
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
@@ -1311,8 +1420,8 @@ nodes {
     z: 0.55
   }
   size {
-    x: 40.0
-    y: 40.0
+    x: 54.0
+    y: 54.0
   }
   color {
     y: 0.702
@@ -1321,51 +1430,68 @@ nodes {
   type: TYPE_BOX
   id: "app3_bg"
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.22
+  alpha: 0.34
 }
 nodes {
   position {
     x: 410.0
     y: 340.0
-    z: 0.56
+    z: 0.552
   }
   size {
-    x: 22.0
-    y: 22.0
+    x: 62.0
+    y: 62.0
   }
   color {
     y: 0.702
     z: 0.278
   }
-  type: TYPE_TEXT
-  text: "\356\225\233"
-  font: "icons"
-  id: "app3_icon"
+  type: TYPE_BOX
+  id: "app3_active_ring"
   adjust_mode: ADJUST_MODE_STRETCH
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
+  alpha: 0.12
+  enabled: false
 }
 nodes {
   position {
     x: 410.0
-    y: 310.0
-    z: 0.56
+    y: 340.0
+    z: 0.568
   }
   size {
-    x: 60.0
-    y: 12.0
+    x: 34.0
+    y: 34.0
   }
   color {
-    x: 0.952
+    y: 0.702
+    z: 0.278
+  }
+  type: TYPE_BOX
+  texture: "icon_phone/icon_map"
+  id: "app3_icon"
+  adjust_mode: ADJUST_MODE_STRETCH
+}
+nodes {
+  position {
+    x: 410.0
+    y: 307.0
+    z: 0.574
+  }
+  size {
+    x: 74.0
+    y: 14.0
+  }
+  color {
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\232\320\260\321\200\321\202\320\260"
   font: "jb_mono_10"
   id: "app3_label"
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.85
+  alpha: 0.82
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
@@ -1376,61 +1502,60 @@ nodes {
     z: 0.55
   }
   size {
-    x: 40.0
-    y: 40.0
+    x: 52.0
+    y: 52.0
   }
   color {
-    x: 0.478
-    y: 0.361
+    x: 0.953
+    y: 0.925
+    z: 0.851
   }
   type: TYPE_BOX
   id: "app4_bg"
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.22
+  alpha: 0.24
 }
 nodes {
   position {
     x: 470.0
     y: 340.0
-    z: 0.56
+    z: 0.568
   }
   size {
-    x: 22.0
-    y: 22.0
+    x: 32.0
+    y: 32.0
   }
   color {
-    x: 0.478
-    y: 0.361
+    x: 0.953
+    y: 0.925
+    z: 0.851
   }
-  type: TYPE_TEXT
-  text: "\356\241\263"
-  font: "icons"
+  type: TYPE_BOX
+  texture: "icon_phone/icon_notes"
   id: "app4_icon"
   adjust_mode: ADJUST_MODE_STRETCH
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
 }
 nodes {
   position {
     x: 470.0
-    y: 310.0
-    z: 0.56
+    y: 307.0
+    z: 0.574
   }
   size {
-    x: 60.0
-    y: 12.0
+    x: 74.0
+    y: 14.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\243\320\273\320\270\320\272\320\270"
   font: "jb_mono_10"
   id: "app4_label"
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.85
+  alpha: 0.82
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
@@ -1441,61 +1566,58 @@ nodes {
     z: 0.55
   }
   size {
-    x: 40.0
-    y: 40.0
+    x: 52.0
+    y: 52.0
   }
   color {
-    y: 0.239
-    z: 0.498
+    x: 0.478
+    y: 0.361
   }
   type: TYPE_BOX
   id: "app5_bg"
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.22
+  alpha: 0.24
 }
 nodes {
   position {
     x: 290.0
     y: 240.0
-    z: 0.56
+    z: 0.568
   }
   size {
-    x: 22.0
-    y: 22.0
+    x: 32.0
+    y: 32.0
   }
   color {
-    y: 0.239
-    z: 0.498
+    x: 0.478
+    y: 0.361
   }
-  type: TYPE_TEXT
-  text: "\356\241\235"
-  font: "icons"
+  type: TYPE_BOX
+  texture: "icon_phone/icon_quests"
   id: "app5_icon"
   adjust_mode: ADJUST_MODE_STRETCH
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
 }
 nodes {
   position {
     x: 290.0
-    y: 210.0
-    z: 0.56
+    y: 207.0
+    z: 0.574
   }
   size {
-    x: 60.0
-    y: 12.0
+    x: 74.0
+    y: 14.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\232\320\262\320\265\321\201\321\202\321\213"
   font: "jb_mono_10"
   id: "app5_label"
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.85
+  alpha: 0.82
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
@@ -1506,8 +1628,8 @@ nodes {
     z: 0.55
   }
   size {
-    x: 40.0
-    y: 40.0
+    x: 52.0
+    y: 52.0
   }
   color {
     y: 0.239
@@ -1516,51 +1638,48 @@ nodes {
   type: TYPE_BOX
   id: "app6_bg"
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.22
+  alpha: 0.24
 }
 nodes {
   position {
     x: 350.0
     y: 240.0
-    z: 0.56
+    z: 0.568
   }
   size {
-    x: 22.0
-    y: 22.0
+    x: 32.0
+    y: 32.0
   }
   color {
     y: 0.239
     z: 0.498
   }
-  type: TYPE_TEXT
-  text: "\356\205\230"
-  font: "icons"
+  type: TYPE_BOX
+  texture: "icon_phone/icon_mail"
   id: "app6_icon"
   adjust_mode: ADJUST_MODE_STRETCH
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
 }
 nodes {
   position {
     x: 350.0
-    y: 210.0
-    z: 0.56
+    y: 207.0
+    z: 0.574
   }
   size {
-    x: 60.0
-    y: 12.0
+    x: 74.0
+    y: 14.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\237\320\276\321\207\321\202\320\260"
   font: "jb_mono_10"
   id: "app6_label"
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.85
+  alpha: 0.82
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
@@ -1571,61 +1690,58 @@ nodes {
     z: 0.55
   }
   size {
-    x: 40.0
-    y: 40.0
+    x: 52.0
+    y: 52.0
   }
   color {
-    x: 0.49
-    y: 0.976
+    x: 0.282
+    y: 0.961
   }
   type: TYPE_BOX
   id: "app7_bg"
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.22
+  alpha: 0.24
 }
 nodes {
   position {
     x: 410.0
     y: 240.0
-    z: 0.56
+    z: 0.568
   }
   size {
-    x: 22.0
-    y: 22.0
+    x: 32.0
+    y: 32.0
   }
   color {
-    x: 0.49
-    y: 0.976
+    x: 0.282
+    y: 0.961
   }
-  type: TYPE_TEXT
-  text: "\356\220\222"
-  font: "icons"
+  type: TYPE_BOX
+  texture: "icon_phone/icon_camera"
   id: "app7_icon"
   adjust_mode: ADJUST_MODE_STRETCH
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
 }
 nodes {
   position {
     x: 410.0
-    y: 210.0
-    z: 0.56
+    y: 207.0
+    z: 0.574
   }
   size {
-    x: 60.0
-    y: 12.0
+    x: 74.0
+    y: 14.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\232\320\260\320\274\320\265\321\200\320\260"
   font: "jb_mono_10"
   id: "app7_label"
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.85
+  alpha: 0.82
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
@@ -1636,8 +1752,8 @@ nodes {
     z: 0.55
   }
   size {
-    x: 40.0
-    y: 40.0
+    x: 52.0
+    y: 52.0
   }
   color {
     y: 0.702
@@ -1646,67 +1762,64 @@ nodes {
   type: TYPE_BOX
   id: "app8_bg"
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.22
+  alpha: 0.24
 }
 nodes {
   position {
     x: 470.0
     y: 240.0
-    z: 0.56
+    z: 0.568
   }
   size {
-    x: 22.0
-    y: 22.0
+    x: 32.0
+    y: 32.0
   }
   color {
     y: 0.702
     z: 0.278
   }
-  type: TYPE_TEXT
-  text: "\356\256\216"
-  font: "icons"
+  type: TYPE_BOX
+  texture: "icon_phone/icon_terminal"
   id: "app8_icon"
   adjust_mode: ADJUST_MODE_STRETCH
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
 }
 nodes {
   position {
     x: 470.0
-    y: 210.0
-    z: 0.56
+    y: 207.0
+    z: 0.574
   }
   size {
-    x: 60.0
-    y: 12.0
+    x: 74.0
+    y: 14.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\242\320\265\321\200\320\274\320\270\320\275\320\260\320\273"
   font: "jb_mono_10"
   id: "app8_label"
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.85
+  alpha: 0.82
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1048.0
-    y: 550.0
-    z: 0.54
+    x: 1015.0
+    y: 552.0
+    z: 0.56
   }
   size {
     x: 60.0
     y: 18.0
   }
   color {
-    x: 0.49
-    y: 0.976
+    x: 0.282
+    y: 0.961
   }
   type: TYPE_TEXT
   text: "\342\206\220 \320\264\320\276\320\274\320\276\320\271"
@@ -1714,23 +1827,109 @@ nodes {
   id: "home_btn"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.85
+  alpha: 0.9
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
+    x: 572.0
+    y: 150.0
+    z: 0.521
+  }
+  size {
+    x: 506.0
+    y: 392.0
+  }
+  color {
+    x: 0.018
+    y: 0.017
+    z: 0.045
+  }
+  type: TYPE_BOX
+  id: "calls_screen_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.7
+  enabled: false
+}
+nodes {
+  position {
+    x: 594.0
+    y: 528.0
+    z: 0.545
+  }
+  size {
+    x: 462.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "calls_header_line"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.09
+  enabled: false
+}
+nodes {
+  position {
+    x: 594.0
+    y: 272.0
+    z: 0.545
+  }
+  size {
+    x: 462.0
+    y: 1.0
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  id: "calls_footer_line"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.1
+  enabled: false
+}
+nodes {
+  position {
+    x: 945.0
+    y: 496.0
+    z: 0.546
+  }
+  size {
+    x: 96.0
+    y: 22.0
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  id: "calls_status_chip"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.08
+  enabled: false
+}
+nodes {
+  position {
     x: 596.0
-    y: 538.0
-    z: 0.53
+    y: 536.0
+    z: 0.555
   }
   size {
     x: 460.0
     y: 12.0
   }
   color {
-    x: 0.49
-    y: 0.976
+    x: 0.282
+    y: 0.961
   }
   type: TYPE_TEXT
   text: "\320\266\321\203\321\200\320\275\320\260\320\273 \320\262\321\213\320\267\320\276\320\262\320\276\320\262 \302\267 4 \320\267\320\260\320\277\320\270\321\201\320\270"
@@ -1738,23 +1937,24 @@ nodes {
   id: "v_calls_eyebrow"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.92
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
     x: 596.0
-    y: 514.0
-    z: 0.53
+    y: 506.0
+    z: 0.555
   }
   size {
     x: 460.0
     y: 22.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\227\320\262\320\276\320\275\320\272\320\270"
@@ -1762,42 +1962,64 @@ nodes {
   id: "v_calls_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.97
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 592.0
-    y: 430.0
-    z: 0.53
+    x: 604.0
+    y: 438.0
+    z: 0.548
   }
   size {
-    x: 476.0
-    y: 46.0
+    x: 3.0
+    y: 64.0
   }
   color {
-    x: 0.49
-    y: 0.976
+    y: 0.239
+    z: 0.498
+  }
+  type: TYPE_BOX
+  id: "calls_row1_accent"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.58
+  enabled: false
+}
+nodes {
+  position {
+    x: 604.0
+    y: 438.0
+    z: 0.532
+  }
+  size {
+    x: 438.0
+    y: 64.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
   }
   type: TYPE_BOX
   id: "v_calls_row1_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.08
+  alpha: 0.105
 }
 nodes {
   position {
-    x: 604.0
-    y: 462.0
-    z: 0.54
+    x: 626.0
+    y: 480.0
+    z: 0.555
   }
   size {
-    x: 300.0
-    y: 12.0
+    x: 280.0
+    y: 16.0
   }
   color {
-    x: 0.49
-    y: 0.976
+    y: 0.239
+    z: 0.498
   }
   type: TYPE_TEXT
   text: "\320\235. \320\234."
@@ -1805,23 +2027,24 @@ nodes {
   id: "v_calls_row1_name"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.96
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 604.0
-    y: 442.0
-    z: 0.54
+    x: 626.0
+    y: 458.0
+    z: 0.555
   }
   size {
-    x: 440.0
-    y: 12.0
+    x: 390.0
+    y: 13.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\277\321\200\320\276\320\277\321\203\321\211\320\265\320\275\320\275\321\213\320\271 \302\267 06:42"
@@ -1829,45 +2052,67 @@ nodes {
   id: "v_calls_row1_meta"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.55
+  alpha: 0.5
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 592.0
-    y: 372.0
-    z: 0.53
+    x: 604.0
+    y: 360.0
+    z: 0.548
   }
   size {
-    x: 476.0
-    y: 46.0
+    x: 3.0
+    y: 64.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "calls_row2_accent"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.58
+  enabled: false
+}
+nodes {
+  position {
+    x: 604.0
+    y: 360.0
+    z: 0.532
+  }
+  size {
+    x: 438.0
+    y: 64.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
   }
   type: TYPE_BOX
   id: "v_calls_row2_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.05
+  alpha: 0.08
 }
 nodes {
   position {
-    x: 604.0
-    y: 404.0
-    z: 0.54
+    x: 626.0
+    y: 402.0
+    z: 0.555
   }
   size {
-    x: 300.0
-    y: 12.0
+    x: 280.0
+    y: 16.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\234\320\260\320\274\320\260"
@@ -1875,23 +2120,24 @@ nodes {
   id: "v_calls_row2_name"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.96
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 604.0
-    y: 384.0
-    z: 0.54
+    x: 626.0
+    y: 380.0
+    z: 0.555
   }
   size {
-    x: 440.0
-    y: 12.0
+    x: 390.0
+    y: 13.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\270\321\201\321\205\320\276\320\264\321\217\321\211\320\270\320\271 \302\267 \320\262\321\207\320\265\321\200\320\260 21:05"
@@ -1899,45 +2145,65 @@ nodes {
   id: "v_calls_row2_meta"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.55
+  alpha: 0.5
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 592.0
-    y: 314.0
-    z: 0.53
+    x: 604.0
+    y: 282.0
+    z: 0.548
   }
   size {
-    x: 476.0
-    y: 46.0
+    x: 3.0
+    y: 64.0
   }
   color {
-    x: 0.952
-    y: 0.925
-    z: 0.85
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  id: "calls_row3_accent"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.58
+  enabled: false
+}
+nodes {
+  position {
+    x: 604.0
+    y: 282.0
+    z: 0.532
+  }
+  size {
+    x: 438.0
+    y: 64.0
+  }
+  color {
+    x: 0.282
+    y: 0.961
   }
   type: TYPE_BOX
   id: "v_calls_row3_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.05
+  alpha: 0.075
 }
 nodes {
   position {
-    x: 604.0
-    y: 346.0
-    z: 0.54
+    x: 626.0
+    y: 324.0
+    z: 0.555
   }
   size {
-    x: 300.0
-    y: 12.0
+    x: 280.0
+    y: 16.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "+7 (???) ???-??-??"
@@ -1945,23 +2211,24 @@ nodes {
   id: "v_calls_row3_name"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.96
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 604.0
-    y: 326.0
-    z: 0.54
+    x: 626.0
+    y: 302.0
+    z: 0.555
   }
   size {
-    x: 440.0
-    y: 12.0
+    x: 390.0
+    y: 13.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\262\321\205\320\276\320\264\321\217\321\211\320\270\320\271 \302\267 03:14"
@@ -1969,137 +2236,131 @@ nodes {
   id: "v_calls_row3_meta"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.55
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 596.0
-    y: 538.0
-    z: 0.53
-  }
-  size {
-    x: 460.0
-    y: 12.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_TEXT
-  text: "\320\272\320\260\321\200\321\202\320\260 \302\267 \321\201\320\274. \320\274\320\276\320\264\320\260\320\273\320\272\321\203 \320\272\320\260\321\200\321\202\321\213"
-  font: "jb_mono_10"
-  id: "v_map_eyebrow"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 596.0
-    y: 514.0
-    z: 0.53
-  }
-  size {
-    x: 460.0
-    y: 22.0
-  }
-  color {
-    x: 0.952
-    y: 0.925
-    z: 0.85
-  }
-  type: TYPE_TEXT
-  text: "\320\232\320\260\321\200\321\202\320\260"
-  font: "unbounded_bold_20"
-  id: "v_map_title"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 592.0
-    y: 200.0
-    z: 0.53
-  }
-  size {
-    x: 476.0
-    y: 280.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "v_map_placeholder"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.05
-}
-nodes {
-  position {
-    x: 830.0
-    y: 360.0
-    z: 0.54
-  }
-  size {
-    x: 440.0
-    y: 22.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_TEXT
-  text: "\320\277\320\276\320\273\320\275\320\276\321\215\320\272\321\200\320\260\320\275\320\275\320\260\321\217 \320\272\320\260\321\200\321\202\320\260 \342\200\224 \320\272\320\275\320\276\320\277\320\272\320\260 M"
-  font: "unbounded_bold_20"
-  id: "v_map_hint"
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.9
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 830.0
-    y: 330.0
-    z: 0.54
-  }
-  size {
-    x: 440.0
-    y: 14.0
-  }
-  color {
-    x: 0.952
-    y: 0.925
-    z: 0.85
-  }
-  type: TYPE_TEXT
-  text: "\320\267\320\264\320\265\321\201\321\214: \320\274\320\270\320\275\320\270\320\260\321\202\321\216\321\200\320\260 \321\202\320\265\320\272\321\203\321\211\320\265\320\271 \320\273\320\276\320\272\320\260\321\206\320\270\320\270"
-  font: "manrope_14"
-  id: "v_map_hint2"
-  adjust_mode: ADJUST_MODE_STRETCH
   alpha: 0.5
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
+    x: 572.0
+    y: 150.0
+    z: 0.521
+  }
+  size {
+    x: 506.0
+    y: 392.0
+  }
+  color {
+    x: 0.018
+    y: 0.017
+    z: 0.045
+  }
+  type: TYPE_BOX
+  id: "clues_screen_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.7
+  enabled: false
+}
+nodes {
+  position {
+    x: 594.0
+    y: 528.0
+    z: 0.545
+  }
+  size {
+    x: 462.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "clues_header_line"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.09
+  enabled: false
+}
+nodes {
+  position {
+    x: 604.0
+    y: 368.0
+    z: 0.548
+  }
+  size {
+    x: 3.0
+    y: 106.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "clues_card1_accent"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.42
+  enabled: false
+}
+nodes {
+  position {
+    x: 604.0
+    y: 232.0
+    z: 0.548
+  }
+  size {
+    x: 3.0
+    y: 106.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
+  type: TYPE_BOX
+  id: "clues_card2_accent"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.46
+  enabled: false
+}
+nodes {
+  position {
+    x: 594.0
+    y: 205.0
+    z: 0.545
+  }
+  size {
+    x: 462.0
+    y: 1.0
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  id: "clues_footer_line"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.1
+  enabled: false
+}
+nodes {
+  position {
     x: 596.0
-    y: 538.0
-    z: 0.53
+    y: 536.0
+    z: 0.555
   }
   size {
     x: 460.0
     y: 12.0
   }
   color {
-    x: 0.478
-    y: 0.361
+    y: 0.702
+    z: 0.278
   }
   type: TYPE_TEXT
   text: "\321\203\320\273\320\270\320\272\320\270 \302\267 \320\277\320\276\320\272\320\260 \320\277\321\203\321\201\321\202\320\276"
@@ -2107,23 +2368,24 @@ nodes {
   id: "v_clues_eyebrow"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.92
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
     x: 596.0
-    y: 514.0
-    z: 0.53
+    y: 506.0
+    z: 0.555
   }
   size {
     x: 460.0
     y: 22.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\243\320\273\320\270\320\272\320\270"
@@ -2131,42 +2393,44 @@ nodes {
   id: "v_clues_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.97
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 592.0
-    y: 380.0
-    z: 0.53
+    x: 604.0
+    y: 368.0
+    z: 0.532
   }
   size {
-    x: 230.0
-    y: 100.0
+    x: 438.0
+    y: 106.0
   }
   color {
-    x: 0.478
-    y: 0.361
+    x: 0.953
+    y: 0.925
+    z: 0.851
   }
   type: TYPE_BOX
   id: "v_clues_card1_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.08
+  alpha: 0.075
 }
 nodes {
   position {
-    x: 604.0
-    y: 460.0
-    z: 0.54
+    x: 626.0
+    y: 443.0
+    z: 0.555
   }
   size {
-    x: 200.0
+    x: 390.0
     y: 14.0
   }
   color {
-    x: 0.478
-    y: 0.361
+    y: 0.702
+    z: 0.278
   }
   type: TYPE_TEXT
   text: "CLUE \302\267 01"
@@ -2174,23 +2438,24 @@ nodes {
   id: "v_clues_card1_tag"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 604.0
-    y: 420.0
-    z: 0.54
+    x: 626.0
+    y: 418.0
+    z: 0.555
   }
   size {
-    x: 210.0
-    y: 40.0
+    x: 390.0
+    y: 48.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\321\201\321\202\321\200\320\260\320\275\320\275\320\260\321\217 \320\267\320\260\320\277\320\270\321\201\321\214 \320\262 \320\266\321\203\321\200\320\275\320\260\320\273\320\265"
@@ -2199,44 +2464,43 @@ nodes {
   pivot: PIVOT_NW
   adjust_mode: ADJUST_MODE_STRETCH
   line_break: true
-  alpha: 0.8
+  alpha: 0.68
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 836.0
-    y: 380.0
-    z: 0.53
+    x: 604.0
+    y: 232.0
+    z: 0.532
   }
   size {
-    x: 230.0
-    y: 100.0
+    x: 438.0
+    y: 106.0
   }
   color {
-    x: 0.478
-    y: 0.361
+    y: 0.702
+    z: 0.278
   }
   type: TYPE_BOX
   id: "v_clues_card2_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.05
+  alpha: 0.075
 }
 nodes {
   position {
-    x: 848.0
-    y: 460.0
-    z: 0.54
+    x: 626.0
+    y: 307.0
+    z: 0.555
   }
   size {
-    x: 200.0
+    x: 390.0
     y: 14.0
   }
   color {
-    x: 0.952
-    y: 0.925
-    z: 0.85
+    y: 0.702
+    z: 0.278
   }
   type: TYPE_TEXT
   text: "CLUE \302\267 02 ???"
@@ -2244,24 +2508,24 @@ nodes {
   id: "v_clues_card2_tag"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.45
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 848.0
-    y: 420.0
-    z: 0.54
+    x: 626.0
+    y: 282.0
+    z: 0.555
   }
   size {
-    x: 210.0
-    y: 40.0
+    x: 390.0
+    y: 48.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\267\320\260\320\261\320\273\320\276\320\272\320\270\321\200\320\276\320\262\320\260\320\275\320\276 \342\200\224 \320\275\321\203\320\266\320\275\320\276 \320\261\320\276\320\273\321\214\321\210\320\265 \320\264\320\260\320\275\320\275\321\213\321\205"
@@ -2270,9 +2534,53 @@ nodes {
   pivot: PIVOT_NW
   adjust_mode: ADJUST_MODE_STRETCH
   line_break: true
-  alpha: 0.4
+  alpha: 0.68
   outline_alpha: 0.0
   shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 572.0
+    y: 150.0
+    z: 0.532
+  }
+  size {
+    x: 506.0
+    y: 392.0
+  }
+  color {
+    x: 0.018
+    y: 0.017
+    z: 0.045
+  }
+  type: TYPE_BOX
+  id: "quests_screen_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.7
+  enabled: false
+}
+nodes {
+  position {
+    x: 594.0
+    y: 528.0
+    z: 0.532
+  }
+  size {
+    x: 462.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "quests_header_line"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.08
+  enabled: false
 }
 nodes {
   position {
@@ -2323,28 +2631,29 @@ nodes {
 }
 nodes {
   position {
-    x: 592.0
-    y: 400.0
+    x: 604.0
+    y: 438.0
     z: 0.53
   }
   size {
-    x: 476.0
-    y: 76.0
+    x: 438.0
+    y: 78.0
   }
   color {
-    y: 0.239
-    z: 0.498
+    x: 0.075
+    y: 0.06
+    z: 0.15
   }
   type: TYPE_BOX
   id: "v_quests_q1_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.08
+  alpha: 0.09
 }
 nodes {
   position {
-    x: 604.0
-    y: 460.0
+    x: 626.0
+    y: 480.0
     z: 0.54
   }
   size {
@@ -2352,8 +2661,9 @@ nodes {
     y: 12.0
   }
   color {
-    y: 0.239
-    z: 0.498
+    x: 0.953
+    y: 0.925
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\235\320\260\320\271\321\202\320\270 \320\277\321\200\320\270\321\207\320\270\320\275\321\203 \320\277\320\265\321\202\320\273\320\270"
@@ -2366,8 +2676,8 @@ nodes {
 }
 nodes {
   position {
-    x: 604.0
-    y: 430.0
+    x: 626.0
+    y: 456.0
     z: 0.54
   }
   size {
@@ -2375,9 +2685,9 @@ nodes {
     y: 28.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\321\201\320\276\320\261\321\200\320\260\321\202\321\214 \321\203\320\273\320\270\320\272\320\270 \320\276 \320\277\320\276\320\275\320\265\320\264\320\265\320\273\321\214\320\275\320\270\320\272\320\265 \302\267 1/3"
@@ -2386,35 +2696,35 @@ nodes {
   pivot: PIVOT_NW
   adjust_mode: ADJUST_MODE_STRETCH
   line_break: true
-  alpha: 0.7
+  alpha: 0.66
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 592.0
-    y: 312.0
+    x: 604.0
+    y: 350.0
     z: 0.53
   }
   size {
-    x: 476.0
-    y: 76.0
+    x: 438.0
+    y: 78.0
   }
   color {
-    x: 0.952
-    y: 0.925
-    z: 0.85
+    x: 0.075
+    y: 0.06
+    z: 0.15
   }
   type: TYPE_BOX
   id: "v_quests_q2_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.05
+  alpha: 0.09
 }
 nodes {
   position {
-    x: 604.0
-    y: 372.0
+    x: 626.0
+    y: 392.0
     z: 0.54
   }
   size {
@@ -2422,9 +2732,9 @@ nodes {
     y: 12.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\235\320\265 \320\276\320\277\320\276\320\267\320\264\320\260\321\202\321\214 \320\275\320\260 \321\200\320\260\320\261\320\276\321\202\321\203"
@@ -2437,8 +2747,8 @@ nodes {
 }
 nodes {
   position {
-    x: 604.0
-    y: 342.0
+    x: 626.0
+    y: 368.0
     z: 0.54
   }
   size {
@@ -2446,9 +2756,9 @@ nodes {
     y: 28.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\321\203\321\201\320\277\320\265\321\202\321\214 \320\272 09:00 \302\267 0/1"
@@ -2457,7 +2767,7 @@ nodes {
   pivot: PIVOT_NW
   adjust_mode: ADJUST_MODE_STRETCH
   line_break: true
-  alpha: 0.7
+  alpha: 0.66
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
@@ -2465,15 +2775,15 @@ nodes {
   position {
     x: 596.0
     y: 538.0
-    z: 0.53
+    z: 0.55
   }
   size {
     x: 460.0
     y: 12.0
   }
   color {
-    y: 0.239
-    z: 0.498
+    x: 0.282
+    y: 0.961
   }
   type: TYPE_TEXT
   text: "\320\277\320\276\321\207\321\202\320\260 \302\267 2 \320\275\320\265\320\277\321\200\320\276\321\207\320\270\321\202\320\260\320\275\320\275\321\213\321\205"
@@ -2481,23 +2791,24 @@ nodes {
   id: "v_mail_eyebrow"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.9
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
     x: 596.0
-    y: 514.0
-    z: 0.53
+    y: 508.0
+    z: 0.55
   }
   size {
     x: 460.0
     y: 22.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\237\320\276\321\207\321\202\320\260"
@@ -2519,14 +2830,15 @@ nodes {
     y: 76.0
   }
   color {
-    y: 0.239
-    z: 0.498
+    x: 0.075
+    y: 0.06
+    z: 0.15
   }
   type: TYPE_BOX
   id: "v_mail_m1_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.08
+  alpha: 0.72
 }
 nodes {
   position {
@@ -2539,8 +2851,9 @@ nodes {
     y: 12.0
   }
   color {
-    y: 0.239
-    z: 0.498
+    x: 0.953
+    y: 0.925
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "hr@megacorp.ru"
@@ -2562,9 +2875,9 @@ nodes {
     y: 28.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\270\321\201\320\277\321\213\321\202\320\260\321\202\320\265\320\273\321\214\320\275\321\213\320\271 \321\201\321\200\320\276\320\272: \320\275\320\260\320\277\320\276\320\274\320\270\320\275\320\260\320\275\320\270\320\265 \320\276 \320\264\320\265\320\264\320\273\320\260\320\271\320\275\320\265"
@@ -2573,7 +2886,7 @@ nodes {
   pivot: PIVOT_NW
   adjust_mode: ADJUST_MODE_STRETCH
   line_break: true
-  alpha: 0.8
+  alpha: 0.66
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
@@ -2588,14 +2901,15 @@ nodes {
     y: 76.0
   }
   color {
-    y: 0.239
-    z: 0.498
+    x: 0.075
+    y: 0.06
+    z: 0.15
   }
   type: TYPE_BOX
   id: "v_mail_m2_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.08
+  alpha: 0.72
 }
 nodes {
   position {
@@ -2608,8 +2922,9 @@ nodes {
     y: 12.0
   }
   color {
-    y: 0.239
-    z: 0.498
+    x: 0.953
+    y: 0.925
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "noreply@loop.system"
@@ -2631,9 +2946,9 @@ nodes {
     y: 28.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\277\320\276\320\262\321\202\320\276\321\200 \321\206\320\270\320\272\320\273\320\260 017 \302\267 \320\276\321\202\321\207\321\221\321\202"
@@ -2642,7 +2957,7 @@ nodes {
   pivot: PIVOT_NW
   adjust_mode: ADJUST_MODE_STRETCH
   line_break: true
-  alpha: 0.8
+  alpha: 0.66
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
@@ -2650,15 +2965,15 @@ nodes {
   position {
     x: 596.0
     y: 538.0
-    z: 0.53
+    z: 0.55
   }
   size {
     x: 460.0
     y: 12.0
   }
   color {
-    x: 0.49
-    y: 0.976
+    x: 0.282
+    y: 0.961
   }
   type: TYPE_TEXT
   text: "\320\272\320\260\320\274\320\265\321\200\320\260 \302\267 \320\275\320\265\321\202 \321\201\320\270\320\263\320\275\320\260\320\273\320\260"
@@ -2666,23 +2981,24 @@ nodes {
   id: "v_cam_eyebrow"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.9
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
     x: 596.0
-    y: 514.0
-    z: 0.53
+    y: 508.0
+    z: 0.55
   }
   size {
     x: 460.0
     y: 22.0
   }
   color {
-    x: 0.952
+    x: 0.953
     y: 0.925
-    z: 0.85
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\232\320\260\320\274\320\265\321\200\320\260"
@@ -2763,16 +3079,15 @@ nodes {
   position {
     x: 596.0
     y: 538.0
-    z: 0.53
+    z: 0.55
   }
   size {
     x: 460.0
     y: 12.0
   }
   color {
-    x: 0.31
-    y: 0.98
-    z: 0.48
+    x: 0.282
+    y: 0.961
   }
   type: TYPE_TEXT
   text: "terminal \302\267 /dev/loop0"
@@ -2780,23 +3095,24 @@ nodes {
   id: "v_term_eyebrow"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.9
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
     x: 596.0
-    y: 514.0
-    z: 0.53
+    y: 508.0
+    z: 0.55
   }
   size {
     x: 460.0
     y: 22.0
   }
   color {
-    x: 0.31
-    y: 0.98
-    z: 0.48
+    x: 0.953
+    y: 0.925
+    z: 0.851
   }
   type: TYPE_TEXT
   text: "\320\242\320\265\321\200\320\274\320\270\320\275\320\260\320\273"
@@ -2927,6 +3243,2933 @@ nodes {
   alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
+}
+nodes {
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_BOX
+  id: "map_root"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 572.0
+    y: 150.0
+    z: 0.521
+  }
+  size {
+    x: 506.0
+    y: 392.0
+  }
+  color {
+    x: 0.018
+    y: 0.017
+    z: 0.045
+  }
+  type: TYPE_BOX
+  id: "mapfull_screen_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "map_root"
+  alpha: 0.7
+  enabled: false
+}
+nodes {
+  type: TYPE_BOX
+  id: "mapfull_grp_map"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "map_root"
+  layer: "ui"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  type: TYPE_BOX
+  id: "mapfull_grp_map_layers"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map"
+  layer: "ui"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    x: 825.0
+    y: 336.0
+    z: 32.0
+  }
+  size {
+    x: 462.0
+    y: 292.0
+  }
+  type: TYPE_BOX
+  texture: "map2/map_bg_base"
+  id: "mapfull_map_texture_bg"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map_layers"
+  layer: "ui"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    x: 825.0
+    y: 336.0
+    z: 33.0
+  }
+  size {
+    x: 462.0
+    y: 292.0
+  }
+  color {
+    x: 0.55
+    y: 0.72
+    z: 0.98
+  }
+  type: TYPE_BOX
+  texture: "map2/map_roads"
+  id: "mapfull_map_texture_roads"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map_layers"
+  layer: "lines"
+  inherit_alpha: true
+  alpha: 0.18
+  enabled: false
+}
+nodes {
+  position {
+    x: 825.0
+    y: 336.0
+    z: 34.0
+  }
+  size {
+    x: 462.0
+    y: 292.0
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/map_grid"
+  id: "mapfull_map_texture_grid"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map_layers"
+  layer: "lines"
+  inherit_alpha: true
+  alpha: 0.08
+  enabled: false
+}
+nodes {
+  position {
+    x: 825.0
+    y: 336.0
+    z: 40.0
+  }
+  size {
+    x: 462.0
+    y: 292.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  texture: "map2/map_routes"
+  id: "mapfull_map_texture_routes"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map_layers"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.22
+  enabled: false
+}
+nodes {
+  position {
+    x: 825.0
+    y: 336.0
+    z: 39.5
+  }
+  size {
+    x: 468.9
+    y: 296.2
+  }
+  color {
+    y: 0.71
+    z: 0.275
+  }
+  type: TYPE_BOX
+  texture: "map2/map_route_main"
+  id: "mapfull_map_route_main_halo"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map_layers"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.34
+  enabled: false
+}
+nodes {
+  position {
+    x: 825.0
+    y: 336.0
+    z: 39.4
+  }
+  size {
+    x: 468.9
+    y: 296.2
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/map_route_dashed"
+  id: "mapfull_map_route_dashed_halo"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map_layers"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.22
+  enabled: false
+}
+nodes {
+  position {
+    x: 825.0
+    y: 336.0
+    z: 62.0
+  }
+  size {
+    x: 462.0
+    y: 292.0
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/fx_scanlines"
+  id: "mapfull_map_fx_scanlines"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.07
+  enabled: false
+}
+nodes {
+  position {
+    x: 825.0
+    y: 336.0
+    z: 63.0
+  }
+  size {
+    x: 462.0
+    y: 292.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  texture: "map2/fx_vignette"
+  id: "mapfull_map_fx_vignette"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.22
+  enabled: false
+}
+nodes {
+  position {
+    x: 825.0
+    y: 482.0
+    z: 66.0
+  }
+  size {
+    x: 462.0
+    y: 0.5
+  }
+  color {
+    y: 0.71
+    z: 0.275
+  }
+  type: TYPE_BOX
+  id: "mapfull_map_frame_top"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map"
+  layer: "lines"
+  inherit_alpha: true
+  alpha: 0.36
+  enabled: false
+}
+nodes {
+  position {
+    x: 825.0
+    y: 190.0
+    z: 66.0
+  }
+  size {
+    x: 462.0
+    y: 0.5
+  }
+  color {
+    y: 0.71
+    z: 0.275
+  }
+  type: TYPE_BOX
+  id: "mapfull_map_frame_bottom"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map"
+  layer: "lines"
+  inherit_alpha: true
+  alpha: 0.3
+  enabled: false
+}
+nodes {
+  position {
+    x: 594.0
+    y: 336.0
+    z: 66.0
+  }
+  size {
+    x: 0.6
+    y: 292.0
+  }
+  color {
+    y: 0.71
+    z: 0.275
+  }
+  type: TYPE_BOX
+  id: "mapfull_map_frame_left"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map"
+  layer: "lines"
+  inherit_alpha: true
+  alpha: 0.28
+  enabled: false
+}
+nodes {
+  position {
+    x: 1056.0
+    y: 336.0
+    z: 66.0
+  }
+  size {
+    x: 0.6
+    y: 292.0
+  }
+  color {
+    y: 0.71
+    z: 0.275
+  }
+  type: TYPE_BOX
+  id: "mapfull_map_frame_right"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map"
+  layer: "lines"
+  inherit_alpha: true
+  alpha: 0.28
+  enabled: false
+}
+nodes {
+  position {
+    x: 725.7
+    y: 457.6
+    z: 67.0
+  }
+  size {
+    x: 259.9
+    y: 29.6
+  }
+  color {
+    x: 0.039
+    y: 0.027
+    z: 0.125
+  }
+  type: TYPE_BOX
+  id: "mapfull_map_header_scrim"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.82
+  enabled: false
+}
+nodes {
+  position {
+    x: 607.9
+    y: 466.1
+    z: 70.0
+  }
+  size {
+    x: 242.6
+    y: 8.3
+  }
+  color {
+    y: 0.71
+    z: 0.275
+  }
+  type: TYPE_TEXT
+  text: "\320\235\320\220\320\222\320\230\320\223\320\220\320\242\320\236\320\240 \302\267 \320\234\320\236\320\241\320\232\320\222\320\220 \302\267 \320\237\320\240\320\225\320\241\320\235\320\257"
+  font: "jb_mono_12"
+  id: "mapfull_map_eyebrow"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map"
+  layer: "text"
+  inherit_alpha: true
+  alpha: 0.9
+  enabled: false
+}
+nodes {
+  position {
+    x: 607.9
+    y: 447.9
+    z: 70.0
+  }
+  size {
+    x: 115.5
+    y: 16.6
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\232\320\260\321\200\321\202\320\260"
+  font: "unbounded_bold_32"
+  id: "mapfull_map_title"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map"
+  layer: "text"
+  inherit_alpha: true
+  alpha: 0.96
+  enabled: false
+}
+nodes {
+  position {
+    x: 607.9
+    y: 201.4
+    z: 70.0
+  }
+  size {
+    x: 69.3
+    y: 8.3
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_TEXT
+  text: "55.76\302\260 N"
+  font: "jb_mono_12"
+  id: "mapfull_map_coord_n"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map"
+  layer: "text"
+  inherit_alpha: true
+  alpha: 0.42
+  enabled: false
+}
+nodes {
+  position {
+    x: 986.7
+    y: 201.4
+    z: 70.0
+  }
+  size {
+    x: 69.3
+    y: 8.3
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_TEXT
+  text: "37.58\302\260 E"
+  font: "jb_mono_12"
+  id: "mapfull_map_coord_e"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map"
+  layer: "text"
+  inherit_alpha: true
+  alpha: 0.42
+  enabled: false
+}
+nodes {
+  position {
+    x: 607.9
+    y: 217.3
+    z: 70.0
+  }
+  size {
+    x: 138.6
+    y: 8.3
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_TEXT
+  text: "> \320\232\320\220\320\240\320\242\320\220: ONLINE"
+  font: "jb_mono_12"
+  id: "mapfull_map_terminal"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map"
+  layer: "text"
+  inherit_alpha: true
+  alpha: 0.95
+  enabled: false
+}
+nodes {
+  position {
+    x: 688.7
+    y: 217.3
+    z: 70.0
+  }
+  size {
+    x: 4.6
+    y: 6.0
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  id: "mapfull_map_terminal_cursor"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.9
+  enabled: false
+}
+nodes {
+  type: TYPE_BOX
+  id: "mapfull_grp_poi"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map"
+  layer: "ui"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    x: 633.3
+    y: 365.6
+    z: 50.0
+  }
+  size {
+    x: 0.6
+    y: 0.5
+  }
+  type: TYPE_BOX
+  id: "mapfull_poi_home"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_poi"
+  layer: "ui"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    z: 49.0
+  }
+  size {
+    x: 67.0
+    y: 53.6
+  }
+  type: TYPE_BOX
+  id: "mapfull_poi_home_hitbox"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_home"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.01
+  enabled: false
+}
+nodes {
+  position {
+    z: 50.0
+  }
+  size {
+    x: 82.0
+    y: 65.6
+  }
+  color {
+    x: 0.714
+    y: 0.361
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_glow"
+  id: "mapfull_poi_home_glow"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_home"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.24
+  enabled: false
+}
+nodes {
+  position {
+    z: 51.0
+  }
+  size {
+    x: 61.2
+    y: 49.0
+  }
+  color {
+    x: 0.714
+    y: 0.361
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_glow_ring"
+  id: "mapfull_poi_home_glow_ring"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_home"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.22
+  enabled: false
+}
+nodes {
+  position {
+    y: 148.4
+    z: 52.0
+  }
+  size {
+    x: 12.7
+    y: 32.3
+  }
+  color {
+    x: 0.714
+    y: 0.361
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_stem"
+  id: "mapfull_poi_home_stem"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_home"
+  layer: "lines"
+  inherit_alpha: true
+  alpha: 0.68
+  enabled: false
+}
+nodes {
+  position {
+    z: 53.0
+  }
+  size {
+    x: 40.4
+    y: 32.3
+  }
+  color {
+    x: 0.714
+    y: 0.361
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_circle"
+  id: "mapfull_poi_home_circle"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_home"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.92
+  enabled: false
+}
+nodes {
+  position {
+    z: 54.0
+  }
+  size {
+    x: 27.7
+    y: 22.2
+  }
+  color {
+    x: 0.714
+    y: 0.361
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_center_dark"
+  id: "mapfull_poi_home_center"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_home"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.92
+  enabled: false
+}
+nodes {
+  position {
+    z: 55.0
+  }
+  size {
+    x: 25.4
+    y: 20.3
+  }
+  color {
+    x: 0.714
+    y: 0.361
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_icon_home"
+  id: "mapfull_poi_home_icon"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_home"
+  layer: "ui"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    y: 148.4
+    z: 55.0
+  }
+  size {
+    x: 6.9
+    y: 5.5
+  }
+  color {
+    x: 0.714
+    y: 0.361
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_dot"
+  id: "mapfull_poi_home_dot"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_home"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.72
+  enabled: false
+}
+nodes {
+  position {
+    x: 800.7
+    y: 429.3
+    z: 50.0
+  }
+  size {
+    x: 0.6
+    y: 0.5
+  }
+  type: TYPE_BOX
+  id: "mapfull_poi_work"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_poi"
+  layer: "ui"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    z: 49.0
+  }
+  size {
+    x: 78.5
+    y: 62.8
+  }
+  type: TYPE_BOX
+  id: "mapfull_poi_work_hitbox"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_work"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.01
+  enabled: false
+}
+nodes {
+  position {
+    z: 50.0
+  }
+  size {
+    x: 106.3
+    y: 85.0
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_glow"
+  id: "mapfull_poi_work_glow"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_work"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.24
+  enabled: false
+}
+nodes {
+  position {
+    z: 51.0
+  }
+  size {
+    x: 75.1
+    y: 60.1
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_glow_ring"
+  id: "mapfull_poi_work_glow_ring"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_work"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.22
+  enabled: false
+}
+nodes {
+  position {
+    y: 148.4
+    z: 52.0
+  }
+  size {
+    x: 13.9
+    y: 36.0
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_stem"
+  id: "mapfull_poi_work_stem"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_work"
+  layer: "lines"
+  inherit_alpha: true
+  alpha: 0.68
+  enabled: false
+}
+nodes {
+  position {
+    z: 53.0
+  }
+  size {
+    x: 46.2
+    y: 37.0
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_circle"
+  id: "mapfull_poi_work_circle"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_work"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.92
+  enabled: false
+}
+nodes {
+  position {
+    z: 54.0
+  }
+  size {
+    x: 32.3
+    y: 25.9
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_center_dark"
+  id: "mapfull_poi_work_center"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_work"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.92
+  enabled: false
+}
+nodes {
+  position {
+    z: 55.0
+  }
+  size {
+    x: 30.0
+    y: 24.0
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_icon_work"
+  id: "mapfull_poi_work_icon"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_work"
+  layer: "ui"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    y: 148.4
+    z: 55.0
+  }
+  size {
+    x: 7.5
+    y: 6.0
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_dot"
+  id: "mapfull_poi_work_dot"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_work"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.72
+  enabled: false
+}
+nodes {
+  position {
+    z: 56.5
+  }
+  size {
+    x: 104.0
+    y: 83.2
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_glow_ring"
+  id: "mapfull_poi_work_active_glow"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_work"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.34
+  enabled: false
+}
+nodes {
+  position {
+    x: 784.6
+    y: 364.6
+    z: 50.0
+  }
+  size {
+    x: 0.6
+    y: 0.5
+  }
+  type: TYPE_BOX
+  id: "mapfull_poi_cafe"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_poi"
+  layer: "ui"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    z: 49.0
+  }
+  size {
+    x: 67.0
+    y: 53.6
+  }
+  type: TYPE_BOX
+  id: "mapfull_poi_cafe_hitbox"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_cafe"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.01
+  enabled: false
+}
+nodes {
+  position {
+    z: 50.0
+  }
+  size {
+    x: 82.0
+    y: 65.6
+  }
+  color {
+    y: 0.71
+    z: 0.275
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_glow"
+  id: "mapfull_poi_cafe_glow"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_cafe"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.24
+  enabled: false
+}
+nodes {
+  position {
+    z: 51.0
+  }
+  size {
+    x: 61.2
+    y: 49.0
+  }
+  color {
+    y: 0.71
+    z: 0.275
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_glow_ring"
+  id: "mapfull_poi_cafe_glow_ring"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_cafe"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.22
+  enabled: false
+}
+nodes {
+  position {
+    y: 148.4
+    z: 52.0
+  }
+  size {
+    x: 12.7
+    y: 32.3
+  }
+  color {
+    y: 0.71
+    z: 0.275
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_stem"
+  id: "mapfull_poi_cafe_stem"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_cafe"
+  layer: "lines"
+  inherit_alpha: true
+  alpha: 0.68
+  enabled: false
+}
+nodes {
+  position {
+    z: 53.0
+  }
+  size {
+    x: 40.4
+    y: 32.3
+  }
+  color {
+    y: 0.71
+    z: 0.275
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_circle"
+  id: "mapfull_poi_cafe_circle"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_cafe"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.92
+  enabled: false
+}
+nodes {
+  position {
+    z: 54.0
+  }
+  size {
+    x: 27.7
+    y: 22.2
+  }
+  color {
+    y: 0.71
+    z: 0.275
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_center_dark"
+  id: "mapfull_poi_cafe_center"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_cafe"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.92
+  enabled: false
+}
+nodes {
+  position {
+    z: 55.0
+  }
+  size {
+    x: 25.4
+    y: 20.3
+  }
+  color {
+    y: 0.71
+    z: 0.275
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_icon_cafe"
+  id: "mapfull_poi_cafe_icon"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_cafe"
+  layer: "ui"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    y: 148.4
+    z: 55.0
+  }
+  size {
+    x: 6.9
+    y: 5.5
+  }
+  color {
+    y: 0.71
+    z: 0.275
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_dot"
+  id: "mapfull_poi_cafe_dot"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_cafe"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.72
+  enabled: false
+}
+nodes {
+  position {
+    x: 947.4
+    y: 357.7
+    z: 50.0
+  }
+  size {
+    x: 0.6
+    y: 0.5
+  }
+  type: TYPE_BOX
+  id: "mapfull_poi_park"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_poi"
+  layer: "ui"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    z: 49.0
+  }
+  size {
+    x: 67.0
+    y: 53.6
+  }
+  type: TYPE_BOX
+  id: "mapfull_poi_park_hitbox"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_park"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.01
+  enabled: false
+}
+nodes {
+  position {
+    z: 50.0
+  }
+  size {
+    x: 82.0
+    y: 65.6
+  }
+  color {
+    x: 0.412
+    y: 0.961
+    z: 0.529
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_glow"
+  id: "mapfull_poi_park_glow"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_park"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.24
+  enabled: false
+}
+nodes {
+  position {
+    z: 51.0
+  }
+  size {
+    x: 61.2
+    y: 49.0
+  }
+  color {
+    x: 0.412
+    y: 0.961
+    z: 0.529
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_glow_ring"
+  id: "mapfull_poi_park_glow_ring"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_park"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.22
+  enabled: false
+}
+nodes {
+  position {
+    y: 148.4
+    z: 52.0
+  }
+  size {
+    x: 12.7
+    y: 32.3
+  }
+  color {
+    x: 0.412
+    y: 0.961
+    z: 0.529
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_stem"
+  id: "mapfull_poi_park_stem"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_park"
+  layer: "lines"
+  inherit_alpha: true
+  alpha: 0.68
+  enabled: false
+}
+nodes {
+  position {
+    z: 53.0
+  }
+  size {
+    x: 40.4
+    y: 32.3
+  }
+  color {
+    x: 0.412
+    y: 0.961
+    z: 0.529
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_circle"
+  id: "mapfull_poi_park_circle"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_park"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.92
+  enabled: false
+}
+nodes {
+  position {
+    z: 54.0
+  }
+  size {
+    x: 27.7
+    y: 22.2
+  }
+  color {
+    x: 0.412
+    y: 0.961
+    z: 0.529
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_center_dark"
+  id: "mapfull_poi_park_center"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_park"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.92
+  enabled: false
+}
+nodes {
+  position {
+    z: 55.0
+  }
+  size {
+    x: 25.4
+    y: 20.3
+  }
+  color {
+    x: 0.412
+    y: 0.961
+    z: 0.529
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_icon_park"
+  id: "mapfull_poi_park_icon"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_park"
+  layer: "ui"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    y: 148.4
+    z: 55.0
+  }
+  size {
+    x: 6.9
+    y: 5.5
+  }
+  color {
+    x: 0.412
+    y: 0.961
+    z: 0.529
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_dot"
+  id: "mapfull_poi_park_dot"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_park"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.72
+  enabled: false
+}
+nodes {
+  position {
+    z: 56.5
+  }
+  size {
+    x: 79.7
+    y: 63.8
+  }
+  color {
+    x: 0.412
+    y: 0.961
+    z: 0.529
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_glow_ring"
+  id: "mapfull_poi_park_active_glow"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_park"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.16
+  enabled: false
+}
+nodes {
+  position {
+    x: 661.0
+    y: 321.2
+    z: 50.0
+  }
+  size {
+    x: 0.6
+    y: 0.5
+  }
+  type: TYPE_BOX
+  id: "mapfull_poi_shop"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_poi"
+  layer: "ui"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    z: 49.0
+  }
+  size {
+    x: 67.0
+    y: 53.6
+  }
+  type: TYPE_BOX
+  id: "mapfull_poi_shop_hitbox"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_shop"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.01
+  enabled: false
+}
+nodes {
+  position {
+    z: 50.0
+  }
+  size {
+    x: 82.0
+    y: 65.6
+  }
+  color {
+    y: 0.282
+    z: 0.569
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_glow"
+  id: "mapfull_poi_shop_glow"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_shop"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.24
+  enabled: false
+}
+nodes {
+  position {
+    z: 51.0
+  }
+  size {
+    x: 61.2
+    y: 49.0
+  }
+  color {
+    y: 0.282
+    z: 0.569
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_glow_ring"
+  id: "mapfull_poi_shop_glow_ring"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_shop"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.22
+  enabled: false
+}
+nodes {
+  position {
+    y: 148.4
+    z: 52.0
+  }
+  size {
+    x: 12.7
+    y: 32.3
+  }
+  color {
+    y: 0.282
+    z: 0.569
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_stem"
+  id: "mapfull_poi_shop_stem"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_shop"
+  layer: "lines"
+  inherit_alpha: true
+  alpha: 0.68
+  enabled: false
+}
+nodes {
+  position {
+    z: 53.0
+  }
+  size {
+    x: 40.4
+    y: 32.3
+  }
+  color {
+    y: 0.282
+    z: 0.569
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_circle"
+  id: "mapfull_poi_shop_circle"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_shop"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.92
+  enabled: false
+}
+nodes {
+  position {
+    z: 54.0
+  }
+  size {
+    x: 27.7
+    y: 22.2
+  }
+  color {
+    y: 0.282
+    z: 0.569
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_center_dark"
+  id: "mapfull_poi_shop_center"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_shop"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.92
+  enabled: false
+}
+nodes {
+  position {
+    z: 55.0
+  }
+  size {
+    x: 25.4
+    y: 20.3
+  }
+  color {
+    y: 0.282
+    z: 0.569
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_icon_shop"
+  id: "mapfull_poi_shop_icon"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_shop"
+  layer: "ui"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    y: 148.4
+    z: 55.0
+  }
+  size {
+    x: 6.9
+    y: 5.5
+  }
+  color {
+    y: 0.282
+    z: 0.569
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_dot"
+  id: "mapfull_poi_shop_dot"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_shop"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.72
+  enabled: false
+}
+nodes {
+  position {
+    x: 829.6
+    y: 311.1
+    z: 50.0
+  }
+  size {
+    x: 0.6
+    y: 0.5
+  }
+  type: TYPE_BOX
+  id: "mapfull_poi_bar"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_poi"
+  layer: "ui"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    z: 49.0
+  }
+  size {
+    x: 67.0
+    y: 53.6
+  }
+  type: TYPE_BOX
+  id: "mapfull_poi_bar_hitbox"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_bar"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.01
+  enabled: false
+}
+nodes {
+  position {
+    z: 50.0
+  }
+  size {
+    x: 82.0
+    y: 65.6
+  }
+  color {
+    y: 0.282
+    z: 0.569
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_glow"
+  id: "mapfull_poi_bar_glow"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_bar"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.24
+  enabled: false
+}
+nodes {
+  position {
+    z: 51.0
+  }
+  size {
+    x: 61.2
+    y: 49.0
+  }
+  color {
+    y: 0.282
+    z: 0.569
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_glow_ring"
+  id: "mapfull_poi_bar_glow_ring"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_bar"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.22
+  enabled: false
+}
+nodes {
+  position {
+    y: 148.4
+    z: 52.0
+  }
+  size {
+    x: 12.7
+    y: 32.3
+  }
+  color {
+    y: 0.282
+    z: 0.569
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_stem"
+  id: "mapfull_poi_bar_stem"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_bar"
+  layer: "lines"
+  inherit_alpha: true
+  alpha: 0.68
+  enabled: false
+}
+nodes {
+  position {
+    z: 53.0
+  }
+  size {
+    x: 40.4
+    y: 32.3
+  }
+  color {
+    y: 0.282
+    z: 0.569
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_circle"
+  id: "mapfull_poi_bar_circle"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_bar"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.92
+  enabled: false
+}
+nodes {
+  position {
+    z: 54.0
+  }
+  size {
+    x: 27.7
+    y: 22.2
+  }
+  color {
+    y: 0.282
+    z: 0.569
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_center_dark"
+  id: "mapfull_poi_bar_center"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_bar"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.92
+  enabled: false
+}
+nodes {
+  position {
+    z: 55.0
+  }
+  size {
+    x: 25.4
+    y: 20.3
+  }
+  color {
+    y: 0.282
+    z: 0.569
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_icon_bar"
+  id: "mapfull_poi_bar_icon"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_bar"
+  layer: "ui"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    y: 148.4
+    z: 55.0
+  }
+  size {
+    x: 6.9
+    y: 5.5
+  }
+  color {
+    y: 0.282
+    z: 0.569
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_dot"
+  id: "mapfull_poi_bar_dot"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_bar"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.72
+  enabled: false
+}
+nodes {
+  position {
+    x: 696.8
+    y: 261.2
+    z: 50.0
+  }
+  size {
+    x: 0.6
+    y: 0.5
+  }
+  type: TYPE_BOX
+  id: "mapfull_poi_view"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_poi"
+  layer: "ui"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    z: 49.0
+  }
+  size {
+    x: 67.0
+    y: 53.6
+  }
+  type: TYPE_BOX
+  id: "mapfull_poi_view_hitbox"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_view"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.01
+  enabled: false
+}
+nodes {
+  position {
+    z: 50.0
+  }
+  size {
+    x: 82.0
+    y: 65.6
+  }
+  color {
+    y: 0.71
+    z: 0.275
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_glow"
+  id: "mapfull_poi_view_glow"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_view"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.24
+  enabled: false
+}
+nodes {
+  position {
+    z: 51.0
+  }
+  size {
+    x: 61.2
+    y: 49.0
+  }
+  color {
+    y: 0.71
+    z: 0.275
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_glow_ring"
+  id: "mapfull_poi_view_glow_ring"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_view"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.22
+  enabled: false
+}
+nodes {
+  position {
+    y: 148.4
+    z: 52.0
+  }
+  size {
+    x: 12.7
+    y: 32.3
+  }
+  color {
+    y: 0.71
+    z: 0.275
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_stem"
+  id: "mapfull_poi_view_stem"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_view"
+  layer: "lines"
+  inherit_alpha: true
+  alpha: 0.68
+  enabled: false
+}
+nodes {
+  position {
+    z: 53.0
+  }
+  size {
+    x: 40.4
+    y: 32.3
+  }
+  color {
+    y: 0.71
+    z: 0.275
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_circle"
+  id: "mapfull_poi_view_circle"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_view"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.92
+  enabled: false
+}
+nodes {
+  position {
+    z: 54.0
+  }
+  size {
+    x: 27.7
+    y: 22.2
+  }
+  color {
+    y: 0.71
+    z: 0.275
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_center_dark"
+  id: "mapfull_poi_view_center"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_view"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.92
+  enabled: false
+}
+nodes {
+  position {
+    z: 55.0
+  }
+  size {
+    x: 25.4
+    y: 20.3
+  }
+  color {
+    y: 0.71
+    z: 0.275
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_icon_view"
+  id: "mapfull_poi_view_icon"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_view"
+  layer: "ui"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    y: 148.4
+    z: 55.0
+  }
+  size {
+    x: 6.9
+    y: 5.5
+  }
+  color {
+    y: 0.71
+    z: 0.275
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_dot"
+  id: "mapfull_poi_view_dot"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_view"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.72
+  enabled: false
+}
+nodes {
+  position {
+    x: 979.8
+    y: 263.0
+    z: 50.0
+  }
+  size {
+    x: 0.6
+    y: 0.5
+  }
+  type: TYPE_BOX
+  id: "mapfull_poi_archive"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_poi"
+  layer: "ui"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    z: 49.0
+  }
+  size {
+    x: 67.0
+    y: 53.6
+  }
+  type: TYPE_BOX
+  id: "mapfull_poi_archive_hitbox"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_archive"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.01
+  enabled: false
+}
+nodes {
+  position {
+    z: 50.0
+  }
+  size {
+    x: 82.0
+    y: 65.6
+  }
+  color {
+    x: 0.714
+    y: 0.361
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_glow"
+  id: "mapfull_poi_archive_glow"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_archive"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.24
+  enabled: false
+}
+nodes {
+  position {
+    z: 51.0
+  }
+  size {
+    x: 61.2
+    y: 49.0
+  }
+  color {
+    x: 0.714
+    y: 0.361
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_glow_ring"
+  id: "mapfull_poi_archive_glow_ring"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_archive"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.22
+  enabled: false
+}
+nodes {
+  position {
+    y: 148.4
+    z: 52.0
+  }
+  size {
+    x: 12.7
+    y: 32.3
+  }
+  color {
+    x: 0.714
+    y: 0.361
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_stem"
+  id: "mapfull_poi_archive_stem"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_archive"
+  layer: "lines"
+  inherit_alpha: true
+  alpha: 0.68
+  enabled: false
+}
+nodes {
+  position {
+    z: 53.0
+  }
+  size {
+    x: 40.4
+    y: 32.3
+  }
+  color {
+    x: 0.714
+    y: 0.361
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_circle"
+  id: "mapfull_poi_archive_circle"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_archive"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.92
+  enabled: false
+}
+nodes {
+  position {
+    z: 54.0
+  }
+  size {
+    x: 27.7
+    y: 22.2
+  }
+  color {
+    x: 0.714
+    y: 0.361
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_center_dark"
+  id: "mapfull_poi_archive_center"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_archive"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.92
+  enabled: false
+}
+nodes {
+  position {
+    z: 55.0
+  }
+  size {
+    x: 25.4
+    y: 20.3
+  }
+  color {
+    x: 0.714
+    y: 0.361
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_icon_archive"
+  id: "mapfull_poi_archive_icon"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_archive"
+  layer: "ui"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    y: 148.4
+    z: 55.0
+  }
+  size {
+    x: 6.9
+    y: 5.5
+  }
+  color {
+    x: 0.714
+    y: 0.361
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_dot"
+  id: "mapfull_poi_archive_dot"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_archive"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.72
+  enabled: false
+}
+nodes {
+  position {
+    x: 773.0
+    y: 328.6
+    z: 50.0
+  }
+  size {
+    x: 0.6
+    y: 0.5
+  }
+  type: TYPE_BOX
+  id: "mapfull_poi_metro"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_poi"
+  layer: "ui"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    z: 49.0
+  }
+  size {
+    x: 67.0
+    y: 53.6
+  }
+  type: TYPE_BOX
+  id: "mapfull_poi_metro_hitbox"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_metro"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.01
+  enabled: false
+}
+nodes {
+  position {
+    z: 50.0
+  }
+  size {
+    x: 82.0
+    y: 65.6
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_glow"
+  id: "mapfull_poi_metro_glow"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_metro"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.24
+  enabled: false
+}
+nodes {
+  position {
+    z: 51.0
+  }
+  size {
+    x: 61.2
+    y: 49.0
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_glow_ring"
+  id: "mapfull_poi_metro_glow_ring"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_metro"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.22
+  enabled: false
+}
+nodes {
+  position {
+    y: 148.4
+    z: 52.0
+  }
+  size {
+    x: 12.7
+    y: 32.3
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_stem"
+  id: "mapfull_poi_metro_stem"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_metro"
+  layer: "lines"
+  inherit_alpha: true
+  alpha: 0.68
+  enabled: false
+}
+nodes {
+  position {
+    z: 53.0
+  }
+  size {
+    x: 40.4
+    y: 32.3
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_circle"
+  id: "mapfull_poi_metro_circle"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_metro"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.92
+  enabled: false
+}
+nodes {
+  position {
+    z: 54.0
+  }
+  size {
+    x: 27.7
+    y: 22.2
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_center_dark"
+  id: "mapfull_poi_metro_center"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_metro"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.92
+  enabled: false
+}
+nodes {
+  position {
+    z: 55.0
+  }
+  size {
+    x: 25.4
+    y: 20.3
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_icon_metro"
+  id: "mapfull_poi_metro_icon"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_metro"
+  layer: "ui"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    y: 148.4
+    z: 55.0
+  }
+  size {
+    x: 6.9
+    y: 5.5
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_dot"
+  id: "mapfull_poi_metro_dot"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_metro"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.72
+  enabled: false
+}
+nodes {
+  position {
+    z: 56.5
+  }
+  size {
+    x: 79.7
+    y: 63.8
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "map2/poi_glow_ring"
+  id: "mapfull_poi_metro_active_glow"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_poi_metro"
+  layer: "fx"
+  inherit_alpha: true
+  alpha: 0.16
+  enabled: false
+}
+nodes {
+  type: TYPE_BOX
+  id: "mapfull_grp_map_labels"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map"
+  layer: "text"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    x: 661.0
+    y: 367.4
+    z: 68.0
+  }
+  size {
+    x: 86.6
+    y: 8.3
+  }
+  color {
+    x: 0.714
+    y: 0.361
+  }
+  type: TYPE_TEXT
+  text: "\320\224\320\276\320\274"
+  font: "jb_mono_12"
+  id: "mapfull_poi_home_title"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map_labels"
+  layer: "text"
+  inherit_alpha: true
+  alpha: 0.96
+  enabled: false
+}
+nodes {
+  position {
+    x: 661.0
+    y: 357.7
+    z: 68.0
+  }
+  size {
+    x: 86.6
+    y: 6.5
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\272\320\262\320\260\321\200\321\202\320\270\321\200\320\260 48"
+  font: "jb_mono_10"
+  id: "mapfull_poi_home_subtitle"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map_labels"
+  layer: "text"
+  inherit_alpha: true
+  alpha: 0.46
+  enabled: false
+}
+nodes {
+  position {
+    x: 830.8
+    y: 432.1
+    z: 68.0
+  }
+  size {
+    x: 86.6
+    y: 8.3
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_TEXT
+  text: "\320\240\320\260\320\261\320\276\321\202\320\260"
+  font: "jb_mono_12"
+  id: "mapfull_poi_work_title"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map_labels"
+  layer: "text"
+  inherit_alpha: true
+  alpha: 0.96
+  enabled: false
+}
+nodes {
+  position {
+    x: 830.8
+    y: 422.4
+    z: 68.0
+  }
+  size {
+    x: 86.6
+    y: 6.5
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\221\320\246 \320\222\320\265\321\201\320\275\320\260"
+  font: "jb_mono_10"
+  id: "mapfull_poi_work_subtitle"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map_labels"
+  layer: "text"
+  inherit_alpha: true
+  alpha: 0.46
+  enabled: false
+}
+nodes {
+  position {
+    x: 811.1
+    y: 368.3
+    z: 68.0
+  }
+  size {
+    x: 86.6
+    y: 8.3
+  }
+  color {
+    y: 0.71
+    z: 0.275
+  }
+  type: TYPE_TEXT
+  text: "\320\232\320\260\321\204\320\265"
+  font: "jb_mono_12"
+  id: "mapfull_poi_cafe_title"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map_labels"
+  layer: "text"
+  inherit_alpha: true
+  alpha: 0.96
+  enabled: false
+}
+nodes {
+  position {
+    x: 811.1
+    y: 358.6
+    z: 68.0
+  }
+  size {
+    x: 86.6
+    y: 6.5
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\237\320\265\321\202\320\273\321\217"
+  font: "jb_mono_10"
+  id: "mapfull_poi_cafe_subtitle"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map_labels"
+  layer: "text"
+  inherit_alpha: true
+  alpha: 0.46
+  enabled: false
+}
+nodes {
+  position {
+    x: 976.9
+    y: 361.9
+    z: 68.0
+  }
+  size {
+    x: 86.6
+    y: 8.3
+  }
+  color {
+    x: 0.412
+    y: 0.961
+    z: 0.529
+  }
+  type: TYPE_TEXT
+  text: "\320\237\320\260\321\200\320\272 \321\203 \321\200\320\265\320\272\320\270"
+  font: "jb_mono_12"
+  id: "mapfull_poi_park_title"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map_labels"
+  layer: "text"
+  inherit_alpha: true
+  alpha: 0.96
+  enabled: false
+}
+nodes {
+  position {
+    x: 976.9
+    y: 352.2
+    z: 68.0
+  }
+  size {
+    x: 86.6
+    y: 6.5
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\261\320\265\321\200\320\265\320\263"
+  font: "jb_mono_10"
+  id: "mapfull_poi_park_subtitle"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map_labels"
+  layer: "text"
+  inherit_alpha: true
+  alpha: 0.46
+  enabled: false
+}
+nodes {
+  position {
+    x: 691.0
+    y: 324.9
+    z: 68.0
+  }
+  size {
+    x: 86.6
+    y: 8.3
+  }
+  color {
+    y: 0.282
+    z: 0.569
+  }
+  type: TYPE_TEXT
+  text: "\320\234\320\260\320\263\320\260\320\267\320\270\320\275 24/7"
+  font: "jb_mono_12"
+  id: "mapfull_poi_shop_title"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map_labels"
+  layer: "text"
+  inherit_alpha: true
+  alpha: 0.96
+  enabled: false
+}
+nodes {
+  position {
+    x: 691.0
+    y: 315.2
+    z: 68.0
+  }
+  size {
+    x: 86.6
+    y: 6.5
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\275\320\276\321\207\320\275\320\276\320\271 \320\262\321\205\320\276\320\264"
+  font: "jb_mono_10"
+  id: "mapfull_poi_shop_subtitle"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map_labels"
+  layer: "text"
+  inherit_alpha: true
+  alpha: 0.46
+  enabled: false
+}
+nodes {
+  position {
+    x: 855.6
+    y: 313.8
+    z: 68.0
+  }
+  size {
+    x: 86.6
+    y: 8.3
+  }
+  color {
+    y: 0.282
+    z: 0.569
+  }
+  type: TYPE_TEXT
+  text: "\320\221\320\260\321\200 Maybe"
+  font: "jb_mono_12"
+  id: "mapfull_poi_bar_title"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map_labels"
+  layer: "text"
+  inherit_alpha: true
+  alpha: 0.96
+  enabled: false
+}
+nodes {
+  position {
+    x: 855.6
+    y: 304.1
+    z: 68.0
+  }
+  size {
+    x: 86.6
+    y: 6.5
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\267\320\260\320\272\321\200\321\213\321\202\320\276?"
+  font: "jb_mono_10"
+  id: "mapfull_poi_bar_subtitle"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map_labels"
+  layer: "text"
+  inherit_alpha: true
+  alpha: 0.46
+  enabled: false
+}
+nodes {
+  position {
+    x: 719.9
+    y: 264.8
+    z: 68.0
+  }
+  size {
+    x: 86.6
+    y: 8.3
+  }
+  color {
+    y: 0.71
+    z: 0.275
+  }
+  type: TYPE_TEXT
+  text: "\320\241\320\274\320\276\321\202\321\200\320\276\320\262\320\260\321\217"
+  font: "jb_mono_12"
+  id: "mapfull_poi_view_title"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map_labels"
+  layer: "text"
+  inherit_alpha: true
+  alpha: 0.96
+  enabled: false
+}
+nodes {
+  position {
+    x: 719.9
+    y: 255.1
+    z: 68.0
+  }
+  size {
+    x: 86.6
+    y: 6.5
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\272\321\200\321\213\321\210\320\260"
+  font: "jb_mono_10"
+  id: "mapfull_poi_view_subtitle"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map_labels"
+  layer: "text"
+  inherit_alpha: true
+  alpha: 0.46
+  enabled: false
+}
+nodes {
+  position {
+    x: 944.0
+    y: 266.7
+    z: 68.0
+  }
+  size {
+    x: 86.6
+    y: 8.3
+  }
+  color {
+    x: 0.714
+    y: 0.361
+  }
+  type: TYPE_TEXT
+  text: "\320\220\321\200\321\205\320\270\320\262"
+  font: "jb_mono_12"
+  id: "mapfull_poi_archive_title"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map_labels"
+  layer: "text"
+  inherit_alpha: true
+  alpha: 0.96
+  enabled: false
+}
+nodes {
+  position {
+    x: 944.0
+    y: 257.0
+    z: 68.0
+  }
+  size {
+    x: 86.6
+    y: 6.5
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\264\320\265\320\273\320\276 017"
+  font: "jb_mono_10"
+  id: "mapfull_poi_archive_subtitle"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map_labels"
+  layer: "text"
+  inherit_alpha: true
+  alpha: 0.46
+  enabled: false
+}
+nodes {
+  position {
+    x: 743.0
+    y: 339.2
+    z: 68.0
+  }
+  size {
+    x: 86.6
+    y: 8.3
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_TEXT
+  text: "\320\234\320\265\321\202\321\200\320\276"
+  font: "jb_mono_12"
+  id: "mapfull_poi_metro_title"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map_labels"
+  layer: "text"
+  inherit_alpha: true
+  alpha: 0.96
+  enabled: false
+}
+nodes {
+  position {
+    x: 743.0
+    y: 329.5
+    z: 68.0
+  }
+  size {
+    x: 86.6
+    y: 6.5
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\262\321\213\321\205\320\276\320\264 2"
+  font: "jb_mono_10"
+  id: "mapfull_poi_metro_subtitle"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "mapfull_grp_map_labels"
+  layer: "text"
+  inherit_alpha: true
+  alpha: 0.46
+  enabled: false
+}
+nodes {
+  position {
+    x: 596.0
+    y: 536.0
+    z: 0.6
+  }
+  size {
+    x: 460.0
+    y: 12.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
+  type: TYPE_TEXT
+  text: "\320\272\320\260\321\200\321\202\320\260 \302\267 \321\201\320\274. \320\274\320\276\320\264\320\260\320\273\320\272\321\203 \320\272\320\260\321\200\321\202\321\213"
+  font: "jb_mono_10"
+  id: "v_map_eyebrow"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "map_root"
+  alpha: 0.92
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 596.0
+    y: 506.0
+    z: 0.6
+  }
+  size {
+    x: 460.0
+    y: 22.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\232\320\260\321\200\321\202\320\260"
+  font: "unbounded_bold_20"
+  id: "v_map_title"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "map_root"
+  alpha: 0.98
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 604.0
+    y: 166.0
+    z: 0.6
+  }
+  size {
+    x: 438.0
+    y: 14.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "v_map_placeholder"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "map_root"
+  alpha: 0.42
+}
+nodes {
+  position {
+    x: 780.0
+    y: 224.0
+    z: 0.6
+  }
+  size {
+    x: 250.0
+    y: 12.0
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_TEXT
+  text: "\320\277\320\276\320\273\320\275\320\276\321\215\320\272\321\200\320\260\320\275\320\275\320\260\321\217 \320\272\320\260\321\200\321\202\320\260 \342\200\224 \320\272\320\275\320\276\320\277\320\272\320\260 M"
+  font: "unbounded_bold_20"
+  id: "v_map_hint"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "map_root"
+  alpha: 0.62
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 780.0
+    y: 208.0
+    z: 0.6
+  }
+  size {
+    x: 250.0
+    y: 12.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
+  type: TYPE_TEXT
+  text: "\320\267\320\264\320\265\321\201\321\214: \320\274\320\270\320\275\320\270\320\260\321\202\321\216\321\200\320\260 \321\202\320\265\320\272\321\203\321\211\320\265\320\271 \320\273\320\276\320\272\320\260\321\206\320\270\320\270"
+  font: "manrope_14"
+  id: "v_map_hint2"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "map_root"
+  alpha: 0.6
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+layers {
+  name: "bg"
+}
+layers {
+  name: "fx"
+}
+layers {
+  name: "ui"
+}
+layers {
+  name: "lines"
+}
+layers {
+  name: "text"
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT

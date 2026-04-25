@@ -1,0 +1,224 @@
+-- phone_v2_root.gui_script
+-- Chrome + launcher. Роутит open/close к дочерним app-компонентам.
+--
+-- Входящие сообщения (от #ui_manager_v2):
+--   "open_phone"            — показать телефон, открыть SMS по умолчанию
+--   "close_phone"           — закрыть телефон (только скрыть, не постить обратно)
+--   "refresh_phone"         — обновить счётчик + переслать активному приложению
+--   "set_phone_notif" {n}   — обновить "сообщений: N"
+--   "set_phone_time" {time} — обновить время в статус-баре
+--
+-- Исходящие сообщения (к #ui_manager_v2):
+--   "close_phone"           — пользователь нажал X
+--   "phone_app_clicked" {id}— нажат тайл приложения
+
+local gs      = require "main.scripts.game_state"
+local UI_MGR  = "#ui_manager_v2"
+
+local DEBUG_LOG = false
+local function dbg(...) if DEBUG_LOG then print(...) end end
+
+-- Карта app-id → component-id (все на одном game object-е → "#" prefix)
+local APP_COMPONENT = {
+    sms    = "#phone_sms",
+    call   = "#phone_call",
+    map    = "#phone_map",
+    notes  = "#phone_notes",
+    quests = "#phone_quests",
+    mail   = "#phone_mail",
+    cam    = "#phone_cam",
+    term   = "#phone_term",
+}
+
+-- Карта открывается через ui_manager (внешняя), не через phone_map компонент
+local EXTERNAL_APPS = {
+    map = true,
+}
+
+local CHROME_NODES = {
+    "backdrop", "modal",
+    "modal_border_top", "modal_border_bot",
+    "corner_tl_v", "corner_tl_h", "corner_tr_v", "corner_tr_h",
+    "corner_bl_v", "corner_bl_h", "corner_br_v", "corner_br_h",
+    "title_eyebrow", "title_main",
+    "stats_net", "stats_msg",
+    "close_btn", "head_divider",
+    "phone_case", "phone_case_top", "phone_notch", "phone_side_btn",
+    "phone_screen", "status_time", "status_meta",
+    "wall_time", "wall_date", "wall_glitch",
+    "home_indicator",
+    "side_panel",
+    "home_btn",
+    "app1_bg", "app1_icon", "app1_label",
+    "app2_bg", "app2_icon", "app2_label",
+    "app3_bg", "app3_active_ring", "app3_icon", "app3_label",
+    "app4_bg", "app4_icon", "app4_label",
+    "app5_bg", "app5_icon", "app5_label",
+    "app6_bg", "app6_icon", "app6_label",
+    "app7_bg", "app7_icon", "app7_label",
+    "app8_bg", "app8_icon", "app8_label",
+}
+
+local APPS = {
+    { key = "app1", id = "sms"    },
+    { key = "app2", id = "call"   },
+    { key = "app3", id = "map"    },
+    { key = "app4", id = "notes"  },
+    { key = "app5", id = "quests" },
+    { key = "app6", id = "mail"   },
+    { key = "app7", id = "cam"    },
+    { key = "app8", id = "term"   },
+}
+
+local function get_node(id)
+    local ok, n = pcall(gui.get_node, id)
+    if ok then return n end
+    return nil
+end
+
+local function set_node_enabled(id, enabled)
+    local n = get_node(id)
+    if n then gui.set_enabled(n, enabled) end
+end
+
+local function set_nodes_enabled(ids, enabled)
+    for _, id in ipairs(ids) do
+        set_node_enabled(id, enabled)
+    end
+end
+
+local function set_text(id, text)
+    local n = get_node(id)
+    if n then gui.set_text(n, text or "") end
+end
+
+local function flash_node(node)
+    local c  = gui.get_color(node)
+    local c0 = vmath.vector4(c.x, c.y, c.z, c.w)
+    gui.animate(node, "color.w", math.max(0.25, c0.w * 0.3), gui.EASING_OUTQUAD, 0.08, 0, function()
+        gui.animate(node, "color.w", c0.w, gui.EASING_OUTQUAD, 0.18)
+    end)
+end
+
+local function update_notif(self)
+    local unread = gs.get_phone_unread_total and gs.get_phone_unread_total() or 0
+    set_text("stats_msg", "сообщений: " .. tostring(unread))
+end
+
+-- Закрыть текущее активное приложение (если есть)
+local function close_active_app(self)
+    if self.active_app then
+        local comp = APP_COMPONENT[self.active_app]
+        if comp then
+            msg.post(comp, "close_app")
+        end
+        dbg("[phone_v2_root] closed app:", self.active_app)
+        self.active_app = nil
+    end
+end
+
+-- Переключиться на приложение (закрыть предыдущее, открыть новое)
+local function switch_app(self, id)
+    if self.active_app == id then
+        -- тап на активное → вернуться в SMS
+        close_active_app(self)
+        local comp = APP_COMPONENT["sms"]
+        if comp then msg.post(comp, "open_app") end
+        self.active_app = "sms"
+        dbg("[phone_v2_root] toggled back to sms")
+        return
+    end
+    close_active_app(self)
+    local comp = APP_COMPONENT[id]
+    if comp then
+        msg.post(comp, "open_app")
+        self.active_app = id
+        dbg("[phone_v2_root] switched to app:", id)
+    end
+end
+
+-- -----------------------------------------------------------------------
+
+function init(self)
+    self.visible   = false
+    self.active_app = nil
+    set_nodes_enabled(CHROME_NODES, false)
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash("open_phone") then
+        self.visible = true
+        set_nodes_enabled(CHROME_NODES, true)
+        update_notif(self)
+        -- Открыть SMS по умолчанию
+        local comp = APP_COMPONENT["sms"]
+        if comp then msg.post(comp, "open_app") end
+        self.active_app = "sms"
+        msg.post(".", "acquire_input_focus")
+        dbg("[phone_v2_root] open_phone → sms")
+
+    elseif message_id == hash("close_phone") then
+        -- Просто скрыть — НЕ постить обратно в UI_MGR, иначе loop
+        close_active_app(self)
+        set_nodes_enabled(CHROME_NODES, false)
+        self.visible = false
+        msg.post(".", "release_input_focus")
+        dbg("[phone_v2_root] close_phone")
+
+    elseif message_id == hash("refresh_phone") then
+        update_notif(self)
+        if self.active_app then
+            local comp = APP_COMPONENT[self.active_app]
+            if comp then msg.post(comp, "refresh_app") end
+        end
+
+    elseif message_id == hash("set_phone_notif") then
+        local n = tonumber(message and message.n) or 0
+        set_text("stats_msg", "сообщений: " .. tostring(n))
+
+    elseif message_id == hash("set_phone_time") then
+        local t = (message and message.time) or "07:12"
+        set_text("status_time", t)
+        set_text("wall_time", t)
+    end
+end
+
+function on_input(self, action_id, action)
+    if not self.visible then return false end
+    if action_id ~= hash("touch") or not action.pressed then return false end
+
+    -- Кнопка закрытия
+    local close = get_node("close_btn")
+    if close and gui.is_enabled(close) and gui.pick_node(close, action.x, action.y) then
+        flash_node(close)
+        -- Уведомить ui_manager — он обновит состояние и пришлёт нам close_phone
+        msg.post(UI_MGR, "close_phone")
+        return true
+    end
+
+    -- Кнопка Home → SMS
+    local home = get_node("home_btn")
+    if home and gui.is_enabled(home) and gui.pick_node(home, action.x, action.y) then
+        flash_node(home)
+        switch_app(self, "sms")
+        return true
+    end
+
+    -- Тайлы приложений
+    for _, app in ipairs(APPS) do
+        local n = get_node(app.key .. "_bg")
+        if n and gui.is_enabled(n) and gui.pick_node(n, action.x, action.y) then
+            dbg("[phone_v2_root] tile clicked:", app.id)
+            flash_node(n)
+            -- Всегда уведомляем ui_manager (он обрабатывает map и статистику)
+            msg.post(UI_MGR, "phone_app_clicked", { id = app.id })
+            -- Внешние приложения (map) закрывают телефон через ui_manager — сами не переключаем
+            if not EXTERNAL_APPS[app.id] then
+                switch_app(self, app.id)
+            end
+            return true
+        end
+    end
+
+    return true  -- поглощаем все тапы пока телефон открыт
+end
