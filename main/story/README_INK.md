@@ -190,6 +190,8 @@ tools\compile_ink.bat chapter_01
 | `# meta:set:loop_awareness:2` | жёстко выставляет значение meta-поля |
 | `# phone:close` | закрывает телефон |
 | `# map:hub:KNOT` | открывает карту в hub-режиме; «МАРШРУТ» пина с `route_knot=KNOT` уводит в этот ink-узел |
+| `# loop:end:false:ending_a` | ложная концовка — `meta.record_false_ending("ending_a")` (+1 awareness если впервые), перезапускает ту же итерацию |
+| `# loop:end:true` | истинная концовка — доступна когда `false_endings_count >= 2`; при успехе переходит в следующую итерацию |
 | `# explore:SCENE_ID` | переводит игру в exploration-сцену |
 | `# goto_scene:SCENE_ID` | alias для `# explore:SCENE_ID` |
 | `# return_to_scene` | возвращает управление в предыдущую exploration-сцену |

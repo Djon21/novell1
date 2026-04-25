@@ -3,9 +3,13 @@ local M = {}
 local SAVE_PATH = sys.get_save_file("novell1", "meta_state.dat")
 
 local DEFAULT = {
-    iteration_number = 1,
+    iteration_number     = 1,
     completed_iterations = 0,
-    loop_awareness = 0,
+    loop_awareness       = 0,
+    -- Ложные концовки, найденные в текущей итерации (сбрасываются при переходе
+    -- на следующую). Ключ = id концовки, значение = true.
+    false_endings_seen   = {},
+    false_endings_count  = 0,
 }
 
 local state = nil
@@ -79,12 +83,46 @@ function M.get_iteration_label()
     return string.format("%03d", tonumber(state.iteration_number) or 1)
 end
 
-function M.complete_iteration(loop_awareness_delta)
+-- Вызывается при нахождении ложной концовки.
+-- Возвращает true, если эта концовка была найдена впервые.
+-- loop_awareness растёт только при первом открытии каждой ложной концовки.
+function M.record_false_ending(id)
+    ensure_loaded()
+    if not state.false_endings_seen then state.false_endings_seen = {} end
+    if not state.false_endings_count then state.false_endings_count = 0 end
+
+    if state.false_endings_seen[id] then
+        return false  -- уже видели, awareness не меняем
+    end
+
+    state.false_endings_seen[id] = true
+    state.false_endings_count = (state.false_endings_count or 0) + 1
+    state.loop_awareness = (tonumber(state.loop_awareness) or 0) + 1
+    M.save()
+    return true  -- новая концовка
+end
+
+-- Истинная концовка доступна, когда найдены обе ложных.
+function M.is_true_ending_unlocked()
+    ensure_loaded()
+    return (state.false_endings_count or 0) >= 2
+end
+
+function M.get_false_endings_count()
+    ensure_loaded()
+    return state.false_endings_count or 0
+end
+
+-- Вызывается при прохождении истинной концовки.
+-- Сдвигает итерацию вперёд и сбрасывает счётчики ложных концовок для следующей главы.
+-- loop_awareness НЕ меняется здесь — он уже был накоплен через record_false_ending.
+function M.complete_iteration()
     ensure_loaded()
 
     state.completed_iterations = (tonumber(state.completed_iterations) or 0) + 1
-    state.iteration_number = (tonumber(state.iteration_number) or 1) + 1
-    state.loop_awareness = math.max(0, (tonumber(state.loop_awareness) or 0) + (loop_awareness_delta or 1))
+    state.iteration_number     = (tonumber(state.iteration_number) or 1) + 1
+    state.false_endings_seen   = {}
+    state.false_endings_count  = 0
 
     M.save()
     return M.snapshot()

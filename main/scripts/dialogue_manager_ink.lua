@@ -34,14 +34,19 @@ local current_index    = 1         -- индекс текущего парагр
 local current_answers  = nil       -- массив вариантов (если есть choice)
 local pending_question = nil       -- текст-вопрос перед choice (последний paragraph)
 local finished         = false     -- Ink истёк до END
-local is_story_end = false
+local is_story_end     = false
 local pending_loop_intro = nil
+-- Тип концовки, найденный тегом # loop:end:* до достижения END.
+-- nil = обычный chapter_finished (iter 001 и всё что без тега)
+-- { type = "false", id = "ending_a" }  или  { type = "true" }
+local pending_end_type = nil
 local story_knot_index = {}
 
 local META_NUMERIC_KEYS = {
-    iteration_number = true,
+    iteration_number     = true,
     completed_iterations = true,
-    loop_awareness = true,
+    loop_awareness       = true,
+    false_endings_count  = true,
 }
 
 -- Состояние, накапливаемое из тегов
@@ -417,6 +422,19 @@ local function apply_tags(tags, trailing)
                     end
                 end
             end
+        elseif key == "loop" and value and not suppress_effects then
+            -- # loop:end:false:ending_a  — ложная концовка (перезапуск итерации)
+            -- # loop:end:true            — истинная концовка (переход в следующую итерацию)
+            local op, rest = value:match("^(%a+)%s*:?%s*(.*)")
+            if op == "end" and rest then
+                local end_type, end_id = rest:match("^(%a+)%s*:?%s*(.*)")
+                if end_type == "false" then
+                    end_id = end_id:gsub("^%s+", ""):gsub("%s+$", "")
+                    pending_end_type = { type = "false", id = (end_id ~= "" and end_id or "unknown") }
+                elseif end_type == "true" then
+                    pending_end_type = { type = "true" }
+                end
+            end
         elseif key == "phone" and value == "close" and not suppress_effects then
             -- # phone:close — закрыть телефон и вернуться в сцену-вызыватель.
             table.insert(scene_bucket, { type = "phone_close" })
@@ -467,10 +485,11 @@ local function push_vars_to_ink(track_in_state)
     set_story_value("mc_gender", sm.get_gender() or "male", track_in_state)
     set_story_value("mc_name", sm.get_mc_name(), track_in_state)
     set_story_value("npc_name", sm.get_npc_name(), track_in_state)
-    set_story_value("iteration_number", meta.get("iteration_number", 1), track_in_state)
-    set_story_value("iteration_label", meta.get_iteration_label(), track_in_state)
-    set_story_value("loop_awareness", meta.get("loop_awareness", 0), track_in_state)
-    set_story_value("completed_iterations", meta.get("completed_iterations", 0), track_in_state)
+    set_story_value("iteration_number",    meta.get("iteration_number", 1),    track_in_state)
+    set_story_value("iteration_label",     meta.get_iteration_label(),          track_in_state)
+    set_story_value("loop_awareness",      meta.get("loop_awareness", 0),       track_in_state)
+    set_story_value("completed_iterations",meta.get("completed_iterations", 0), track_in_state)
+    set_story_value("false_endings_count", meta.get_false_endings_count(),      track_in_state)
 end
 
 local function set_inventory_story_context(ctx)
@@ -497,10 +516,11 @@ local function build_restore_history(saved_state)
         { name = "mc_gender", value = sm.get_gender() or "male" },
         { name = "mc_name", value = sm.get_mc_name() },
         { name = "npc_name", value = sm.get_npc_name() },
-        { name = "iteration_number", value = meta.get("iteration_number", 1) },
-        { name = "iteration_label", value = meta.get_iteration_label() },
-        { name = "loop_awareness", value = meta.get("loop_awareness", 0) },
-        { name = "completed_iterations", value = meta.get("completed_iterations", 0) },
+        { name = "iteration_number",    value = meta.get("iteration_number", 1) },
+        { name = "iteration_label",     value = meta.get_iteration_label() },
+        { name = "loop_awareness",      value = meta.get("loop_awareness", 0) },
+        { name = "completed_iterations",value = meta.get("completed_iterations", 0) },
+        { name = "false_endings_count", value = meta.get_false_endings_count() },
     }
 
     for _, entry in ipairs(injected) do
@@ -700,6 +720,7 @@ function M.init(json_bytes)
     pending_question  = nil
     finished          = false
     is_story_end      = false
+    pending_end_type  = nil
     bg                = { r = 0, g = 0, b = 0 }
     bg_image          = nil
     current_speaker   = ""
@@ -894,9 +915,20 @@ function M.advance()
     if not is_story_end then
         is_story_end = true
 
-        print("[DM-Ink] END detected")
-        print("[DM-Ink] chapter_finished SENT")
-        msg.post("#ui_manager_v2", "chapter_finished")
+        local et = pending_end_type
+        pending_end_type = nil  -- сбрасываем сразу
+
+        if et and et.type == "false" then
+            print("[DM-Ink] END: false ending '" .. tostring(et.id) .. "'")
+            msg.post("#ui_manager_v2", "false_ending", { id = et.id })
+        elseif et and et.type == "true" then
+            print("[DM-Ink] END: true ending")
+            msg.post("#ui_manager_v2", "true_ending")
+        else
+            -- Нет тега — обычный конец (итерация 001 или неразмеченный knot)
+            print("[DM-Ink] END: chapter_finished")
+            msg.post("#ui_manager_v2", "chapter_finished")
+        end
     end
 
     return false

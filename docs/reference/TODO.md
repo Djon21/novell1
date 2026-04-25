@@ -22,7 +22,7 @@
 ## Loop system / narrative
 
 - [ ] Расширить loop-aware реплики за пределы `wake_intro`, `wake_after_choice` и финалов главы.
-- [ ] Решить, растёт ли `loop_awareness` всегда на `+1` за конец главы или должен зависеть от выборов и найденных аномалий.
+- [x] Решить, растёт ли `loop_awareness` всегда на `+1` за конец главы или должен зависеть от выборов и найденных аномалий. — принята схема: iter 001 линейная (→ сразу iter 002); с iter 002 три концовки — две ложных и одна истинная. `loop_awareness` растёт +1 за каждую **новую** ложную концовку (`meta.record_false_ending`). Истинная концовка открывается когда `false_endings_count >= 2`. Ink получает переменные `loop_awareness` и `false_endings_count`. Теги: `# loop:end:false:id` и `# loop:end:true`. Обработчики `false_ending`/`true_ending` в `ui_manager_v2`, логика в `meta_state.lua`.
 - [ ] Добавить удобный debug reset для `meta_state`, чтобы не чистить цикл вручную во время тестов.
 
 ## Platform / release
