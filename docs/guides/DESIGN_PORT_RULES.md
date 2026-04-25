@@ -59,14 +59,13 @@ local bg = gui.new_box_node(vmath.vector3(PANEL_X + 0, PANEL_Y + y_local, 0.63),
 ```
 1. main_menu_v2       (фулскрин меню, скрыто в игре)
 2. dialogue_v2        (содержит scene_bg — фон комнаты)
-3. hotspots_v2        (поверх фона)
-4. nav_buttons_v2     (стрелки навигации)
-5. hud_v2             (BAG/PHN баджи)
-6. choice_v2          (модальные оверлеи)
-7. inventory_v2
-8. phone_v2
-9. map_v2
-10. effects           (scan/grain/vignette, самый верх)
+3. hotspots_v2        (поверх фона; навигация между сценами тоже здесь)
+4. hud_v2             (BAG/PHN баджи)
+5. choice_v2          (модальные оверлеи)
+6. inventory_v2
+7. phone_v2
+8. map_v2
+9. effects            (scan/grain/vignette, самый верх)
 ```
 
 Если меняешь порядок — проверь, не перекрыл ли важный контент.

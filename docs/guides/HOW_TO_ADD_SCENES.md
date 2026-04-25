@@ -148,21 +148,21 @@ on_enter = {
 }
 ```
 
-## `exits` для `nav_buttons_v2`
+## Переходы между сценами
 
-Если хотите не только hotspot-переходы, но и направленную навигацию, добавляйте `exits`:
+Игра — point-and-click, поэтому переходы делаются через hotspots, а не через отдельные direction-кнопки. Достаточно добавить hotspot с действием `goto_scene`:
 
 ```lua
-exits = {
-    W = "kitchen",
-    E = { room_id = "bathroom", room_label = "Ванная" },
-    N = { room_id = "stairs", locked_label = "Закрыто" },
-}
+{
+    id = "to_kitchen",
+    rect = { x = 95, y = 0, w = 225, h = 680 },
+    label = "На кухню",
+    icon = "",
+    action = { type = "goto_scene", scene = "kitchen" },
+},
 ```
 
-Поддерживаются ключи `W`, `N`, `E`, `S`.
-
-Если у сцены есть `label` или `name`, `nav_buttons_v2` сможет подставить подпись автоматически.
+Для возврата используется такой же hotspot с `scene = "apartment_hub"`.
 
 ## Координаты и F1-редактор
 

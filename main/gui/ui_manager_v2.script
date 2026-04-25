@@ -1,8 +1,8 @@
 -- ui_manager_v2.script
 -- Оркестратор всех v2 GUI компонентов: main_menu_v2, hud_v2, inventory_v2,
--- phone_v2, map_v2, nav_buttons_v2, dialogue_v2, choice_v2, effects.
+-- phone_v2, map_v2, dialogue_v2, choice_v2, effects.
 --
--- Режимы: menu / nav / exploration / dialogue / choice / inventory / phone / map
+-- Режимы: menu / exploration / dialogue / choice / inventory / phone / map
 -- Поверх модального режима (choice/inventory/phone/map) виден exploration или
 -- dialogue — т.е. модалки не сбрасывают текущий базовый режим.
 --
@@ -124,7 +124,6 @@ M.suppress_run_save = false
 local function init_components()
     M.components.main_menu   = msg.url("#main_menu_v2")
     M.components.hud         = msg.url("#hud_v2")
-    M.components.nav         = msg.url("#nav_buttons_v2")
     M.components.dialogue    = msg.url("#dialogue_v2")
     M.components.choice      = msg.url("#choice_v2")
     M.components.inventory   = msg.url("#inventory_v2")
@@ -577,6 +576,16 @@ local function sync_ui_state(self)
     msg.post(M.components.phone, "refresh_phone")
 end
 
+-- Сохраняет game_state + scene_controller (стек exploration-сцен) в save_manager.
+-- Когда вызывается:
+--   • любое изменение `game_state` → срабатывает gs.subscribe-обработчик (init);
+--     сюда попадают set_flag, add/remove_item, set_quest, add_sms, add_mail,
+--     add_call, add_clue, и КЛЮЧЕВОЕ — gs.set_scene(...) внутри scene_controller.
+--   • при start_new_run после reset.
+-- Ink-состояние сохраняется отдельно через save_ink_state() в dialogue_manager_ink
+-- (вызывается на каждом advance/jump_to_knot/choose).
+-- Overlay-состояние (phone/map/inventory открыт?) НЕ персистится — на load всегда
+-- закрыто, base_mode восстанавливается из ink/scene_controller.
 local function persist_run_state()
     if M.suppress_run_save then return end
     if not gs.serialize or not scene_controller.serialize then return end
@@ -702,7 +711,6 @@ local function show_menu(self)
     reset_dialogue_play_modes(self)
     -- скрыть всё игровое
     msg.post(M.components.hud,       "hide_hud")
-    msg.post(M.components.nav,       "hide_nav")
     msg.post(M.components.dialogue,  "hide_dialogue")
     msg.post(M.components.dialogue,  "hide_bg")
     msg.post(M.components.choice,    "hide_choice")
@@ -728,8 +736,7 @@ local function show_exploration(self)
     msg.post(M.components.dialogue,  "hide_dialogue")
     msg.post(M.components.dialogue,  "show_bg")
     msg.post(M.components.hud,       "show_hud")
-    msg.post(M.components.nav,       "show_nav")
-    
+
     -- Close all overlays when entering exploration mode
     -- ALWAYS close, regardless of overlay state (force close)
     print("[ui_manager_v2] force closing all overlays")
@@ -746,7 +753,6 @@ local function show_dialogue(self)
     msg.post(M.components.main_menu, "hide_menu")
     msg.post(M.components.dialogue,  "show_bg")
     msg.post(M.components.hud,       "show_hud")
-    msg.post(M.components.nav,       "hide_nav")
     msg.post(M.components.hotspots,  "hide_all")
     msg.post(M.components.dialogue,  "show_dialogue")
     print("[ui_manager_v2] mode: dialogue")
@@ -1022,16 +1028,8 @@ handle_dialogue_update = function(self)
 end
 
 -- -------------------------------------------------------
--- scene_controller интеграция — прокидываем выходы в nav_buttons_v2
+-- scene_controller интеграция
 -- -------------------------------------------------------
-
-local function current_scene_exits()
-    if not scenes then return nil end
-    local id = scene_controller.get_current_scene_id and scene_controller.get_current_scene_id()
-    if not id then return nil end
-    local sc = scenes[id] or (scenes.get and scenes.get(id))
-    return sc and sc.exits or nil
-end
 
 local function setup_scene_controller_ui(self)
     scene_controller.set_ui({
@@ -1079,11 +1077,6 @@ local function setup_scene_controller_ui(self)
         end,
     })
 
-    -- Обновить nav_buttons_v2 по текущей сцене
-    local exits = current_scene_exits()
-    if exits then
-        msg.post(M.components.nav, "set_exits", { exits = exits })
-    end
     print("[ui_manager_v2] scene_controller UI настроен")
 end
 
@@ -1269,28 +1262,6 @@ function on_message(self, message_id, message, sender)
             run_side_dialogue_knot(self, knot, nil)
         end
 
-    -- --- навигация ---
-    elseif message_id == hash("nav_go") then
-        print("[ui_manager_v2] nav_go", message.dir, message.scene_id)
-        if scene_controller.enter and message.scene_id then
-            scene_controller.enter(message.scene_id)
-            local exits = current_scene_exits()
-            if exits then
-                msg.post(M.components.nav, "set_exits", { exits = exits })
-            end
-        end
-
-    -- --- exploration ---
-    elseif message_id == hash("exploration_started") then
-        show_exploration(self)
-        local exits = current_scene_exits()
-        if exits then
-            msg.post(M.components.nav, "set_exits", { exits = exits })
-        end
-        persist_run_state()
-    elseif message_id == hash("exploration_ended") then
-        handle_dialogue_update(self)
-        persist_run_state()
     end
 end
 

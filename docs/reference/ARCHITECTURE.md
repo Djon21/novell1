@@ -202,8 +202,7 @@ Bulk-компиляция по умолчанию пропускает `*_old.in
 
 - `main_menu_v2` — стартовое меню и карточка текущей итерации; в активном списке оставлены только рабочие действия
 - `dialogue_v2` — фон, диалоговая панель, портрет, typewriter
-- `hotspots_v2` — интерактивные зоны и scene objects
-- `nav_buttons_v2` — направленная навигация по `exits`
+- `hotspots_v2` — интерактивные зоны и scene objects (вся навигация между сценами идёт здесь же — через `goto_scene` hotspots вроде «На кухню» / «Назад»)
 - `hud_v2` — локация, inventory badge, phone badge
 - `choice_v2` — экран выбора
 - `inventory_v2` — модальный инвентарь; в footer видны только рабочие verbs MVP: `use`, `inspect`, `read`
