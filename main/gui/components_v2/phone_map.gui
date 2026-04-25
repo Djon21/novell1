@@ -48,7 +48,6 @@ nodes {
   id: "grp_panel"
   adjust_mode: ADJUST_MODE_STRETCH
   layer: "ui"
-  inherit_alpha: true
 }
 nodes {
   type: TYPE_BOX
@@ -126,7 +125,7 @@ nodes {
   position {
     x: 832.0
     y: 358.0
-    z: 0.40
+    z: 0.4
   }
   size {
     x: 800.0
@@ -407,13 +406,11 @@ nodes {
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "grp_panel"
   layer: "ui"
-  inherit_alpha: true
 }
 nodes {
   position {
     x: 588.0
     y: 431.0
-    z: 0.50
   }
   size {
     x: 1.0
@@ -533,7 +530,6 @@ nodes {
   position {
     x: 802.0
     y: 160.0
-    z: 0.50
   }
   size {
     x: 1.0
@@ -544,7 +540,6 @@ nodes {
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "grp_poi"
   layer: "ui"
-  inherit_alpha: true
 }
 nodes {
   position {
@@ -648,13 +643,11 @@ nodes {
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "poi_work"
   layer: "ui"
-  inherit_alpha: true
 }
 nodes {
   position {
     x: 1065.0
     y: 240.0
-    z: 0.50
   }
   size {
     x: 1.0
@@ -771,7 +764,6 @@ nodes {
   position {
     x: 880.0
     y: 401.0
-    z: 0.50
   }
   size {
     x: 1.0
@@ -892,7 +884,6 @@ nodes {
   position {
     x: 758.0
     y: 521.0
-    z: 0.50
   }
   size {
     x: 1.0
@@ -1009,7 +1000,6 @@ nodes {
   position {
     x: 700.0
     y: 279.0
-    z: 0.50
   }
   size {
     x: 1.0
@@ -1126,7 +1116,6 @@ nodes {
   position {
     x: 1000.0
     y: 515.0
-    z: 0.50
   }
   size {
     x: 1.0
@@ -1243,7 +1232,6 @@ nodes {
   position {
     x: 1121.0
     y: 394.0
-    z: 0.50
   }
   size {
     x: 1.0

@@ -95,7 +95,6 @@ nodes {
   position {
     x: 592.0
     y: 120.0
-    z: 0.53
   }
   size {
     x: 476.0
@@ -115,7 +114,7 @@ nodes {
   position {
     x: 9.0
     y: 344.0
-    z: 0.54
+    z: 0.2
   }
   size {
     x: 450.0
@@ -140,7 +139,7 @@ nodes {
   position {
     x: 9.0
     y: 324.0
-    z: 0.54
+    z: 0.2
   }
   size {
     x: 450.0
@@ -166,7 +165,7 @@ nodes {
   position {
     x: 9.0
     y: 304.0
-    z: 0.54
+    z: 0.2
   }
   size {
     x: 450.0
@@ -181,7 +180,6 @@ nodes {
   font: "jb_mono_12"
   id: "v_term_l3"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
   parent: "v_term_screen"
   alpha: 0.9
   outline_alpha: 0.0
@@ -189,9 +187,9 @@ nodes {
 }
 nodes {
   position {
-    x: 9.0
-    y: 284.0
-    z: 0.54
+    x: 7.0
+    y: 277.0
+    z: 0.2
   }
   size {
     x: 450.0
@@ -212,3 +210,4 @@ nodes {
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
+material: "/builtins/materials/gui.material"
