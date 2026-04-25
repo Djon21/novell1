@@ -34,6 +34,12 @@ local catalog = require "main.scripts.items_catalog"
 local ok_scenes, scenes = pcall(require, "main.scripts.scenes")
 if not ok_scenes then scenes = nil end
 
+-- Debug-логи: переключить в true для диагностики mode/overlay переходов
+local DEBUG_LOG = false
+local function dbg(...)
+    if DEBUG_LOG then print(...) end
+end
+
 local M = {}
 local handle_dialogue_update
 local close_inventory
@@ -131,7 +137,7 @@ local function init_components()
     M.components.map         = msg.url("#map_v2")
     M.components.hotspots    = msg.url("#hotspots_v2")
     M.components.effects     = msg.url("#effects")
-    print("[ui_manager_v2] компоненты инициализированы")
+    dbg("[ui_manager_v2] компоненты инициализированы")
 end
 
 -- -------------------------------------------------------
@@ -720,32 +726,22 @@ local function show_menu(self)
     msg.post(M.components.hotspots,  "hide_all")
     refresh_menu_state(self)
     msg.post(M.components.main_menu, "show_menu")
-    print("[ui_manager_v2] mode: menu")
+    dbg("[ui_manager_v2] mode: menu")
 end
 
 local function show_exploration(self)
     M.base_mode = "exploration"
     reset_dialogue_autoplay_state(self)
-    print("[ui_manager_v2] show_exploration() called")
-    print("[ui_manager_v2] overlay states: phone=" .. tostring(M.overlays.phone) .. 
-          ", inventory=" .. tostring(M.overlays.inventory) .. 
-          ", map=" .. tostring(M.overlays.map) .. 
-          ", choice=" .. tostring(M.overlays.choice))
-    
+    dbg("[ui_manager_v2] show_exploration()")
     msg.post(M.components.main_menu, "hide_menu")
     msg.post(M.components.dialogue,  "hide_dialogue")
     msg.post(M.components.dialogue,  "show_bg")
     msg.post(M.components.hud,       "show_hud")
-
-    -- Close all overlays when entering exploration mode
-    -- ALWAYS close, regardless of overlay state (force close)
-    print("[ui_manager_v2] force closing all overlays")
     close_phone(self)
     close_inventory(self)
     close_map(self)
     hide_choice(self)
-    
-    print("[ui_manager_v2] mode: exploration")
+    dbg("[ui_manager_v2] mode: exploration")
 end
 
 local function show_dialogue(self)
@@ -755,38 +751,33 @@ local function show_dialogue(self)
     msg.post(M.components.hud,       "show_hud")
     msg.post(M.components.hotspots,  "hide_all")
     msg.post(M.components.dialogue,  "show_dialogue")
-    print("[ui_manager_v2] mode: dialogue")
+    dbg("[ui_manager_v2] mode: dialogue")
 end
 
 -- overlays (поверх exploration/dialogue)
 
 local function open_inventory(self)
-    print("[ui_manager_v2] open_inventory() called")
+    dbg("[ui_manager_v2] open_inventory()")
     M.overlays.inventory = true
-    print("[ui_manager_v2] sending show_inventory to", M.components.inventory)
     msg.post(M.components.inventory, "show_inventory")
-    print("[ui_manager_v2] show_inventory sent")
 end
 close_inventory = function(self)
-    print("[ui_manager_v2] close_inventory() called")
+    dbg("[ui_manager_v2] close_inventory()")
     M.overlays.inventory = false
     msg.post(M.components.inventory, "hide_inventory")
 end
 
 open_phone = function(self)
-    print("[ui_manager_v2] open_phone() called")
+    dbg("[ui_manager_v2] open_phone()")
     if not has_phone_access() then
-        print("[ui_manager_v2] phone is unavailable, aborting")
+        dbg("[ui_manager_v2] phone is unavailable, aborting")
         return
     end
-    print("[ui_manager_v2] phone is available")
     M.overlays.phone = true
-    print("[ui_manager_v2] sending open_phone to", M.components.phone)
     msg.post(M.components.phone, "open_phone")
-    print("[ui_manager_v2] open_phone sent")
 end
 close_phone = function(self)
-    print("[ui_manager_v2] close_phone() called")
+    dbg("[ui_manager_v2] close_phone()")
     M.overlays.phone = false
     msg.post(M.components.phone, "close_phone")
 end
@@ -958,19 +949,19 @@ handle_dialogue_update = function(self)
     -- 3) Обновить фон только если НЕ в exploration (в exploration фон идёт из scene_controller)
     if not in_exploration then
         local bg = dm.get_background_image and dm.get_background_image()
-        print("[ui_manager_v2] dm bg=", bg)
+        dbg("[ui_manager_v2] dm bg=", bg)
         if bg then
             post_dialogue_background(self, bg)
         end
     else
-        print("[ui_manager_v2] in exploration mode, bg from scene_controller")
+        dbg("[ui_manager_v2] in exploration mode, bg from scene_controller")
     end
 
     -- 4) Выбрать режим по scene_controller + отрендерить ноду
     consume_dm_effects()
 
     local node = dm.get_current_node and dm.get_current_node()
-    print("[ui_manager_v2] dm node=", node and node.type, "char=", node and node.character, "text=", node and node.text and node.text:sub(1,40))
+    dbg("[ui_manager_v2] dm node=", node and node.type, "char=", node and node.character, "text=", node and node.text and node.text:sub(1,40))
 
     if in_exploration then
         M.at_end = false
@@ -1042,7 +1033,7 @@ local function setup_scene_controller_ui(self)
             -- Обновляем визуальный фон в dialogue компоненте
             if bg_name then
                 post_dialogue_background(self, bg_name)
-                print("[ui_manager_v2] scene_controller set_background:", bg_name)
+                dbg("[ui_manager_v2] scene_controller set_background:", bg_name)
             end
         end,
 
@@ -1077,7 +1068,7 @@ local function setup_scene_controller_ui(self)
         end,
     })
 
-    print("[ui_manager_v2] scene_controller UI настроен")
+    dbg("[ui_manager_v2] scene_controller UI настроен")
 end
 
 -- -------------------------------------------------------
@@ -1085,7 +1076,7 @@ end
 -- -------------------------------------------------------
 
 function init(self)
-    print("[ui_manager_v2] init")
+    dbg("[ui_manager_v2] init")
     init_components()
     init_background_atlas_state(self)
     setup_scene_controller_ui(self)
@@ -1116,7 +1107,7 @@ function init(self)
     sync_ui_state(self)
     show_menu(self)
     msg.post(".", "acquire_input_focus")
-    print("[ui_manager_v2] init done")
+    dbg("[ui_manager_v2] init done")
 end
 
 function final(self)
@@ -1163,14 +1154,14 @@ function on_message(self, message_id, message, sender)
         end
         M.suppress_run_save = false
 
-        print("[ui_manager_v2] chapter finished; next iteration =", next_loop.iteration_number)
+        dbg("[ui_manager_v2] chapter finished; next iteration =", next_loop.iteration_number)
         show_menu(self)
 
     elseif message_id == hash("reset_iteration") or message_id == hash("open_gallery") then
         reset_iteration_and_restart(self)
 
     elseif message_id == hash("open_achievements") then
-        print("[ui_manager_v2] open_achievements (TODO)")
+        dbg("[ui_manager_v2] open_achievements (TODO)")
 
     -- --- фон ---
     elseif message_id == hash("apply_dialogue_bg") then
@@ -1196,11 +1187,11 @@ function on_message(self, message_id, message, sender)
         end
 
     elseif message_id == hash("dialogue_skip") then
-        print("[ui_manager_v2] dialogue_skip", message.on)
+        dbg("[ui_manager_v2] dialogue_skip", message.on)
         set_dialogue_play_mode(self, "skip", message and message.on)
 
     elseif message_id == hash("dialogue_auto") then
-        print("[ui_manager_v2] dialogue_auto", message.on)
+        dbg("[ui_manager_v2] dialogue_auto", message.on)
         set_dialogue_play_mode(self, "auto", message and message.on)
 
     -- --- выбор ---
@@ -1220,18 +1211,18 @@ function on_message(self, message_id, message, sender)
 
     -- --- inventory ---
     elseif message_id == hash("open_inventory") then
-        print("[ui_manager_v2] received open_inventory message from", sender)
+        dbg("[ui_manager_v2] open_inventory from", sender)
         open_inventory(self)
     elseif message_id == hash("close_inventory") then
-        print("[ui_manager_v2] received close_inventory message")
+        dbg("[ui_manager_v2] close_inventory")
         close_inventory(self)
     elseif message_id == hash("inventory_verb") then
-        print("[ui_manager_v2] inventory_verb", message.item_id, message.verb)
+        dbg("[ui_manager_v2] inventory_verb", message.item_id, message.verb)
         handle_inventory_verb(self, message.item_id, message.verb)
 
     -- --- phone ---
     elseif message_id == hash("open_phone") then
-        print("[ui_manager_v2] received open_phone message from", sender)
+        dbg("[ui_manager_v2] open_phone from", sender)
         open_phone(self)
     elseif message_id == hash("close_phone") then
         close_phone(self)
@@ -1240,7 +1231,7 @@ function on_message(self, message_id, message, sender)
             gs.mark_all_sms_read()
         end
     elseif message_id == hash("phone_app_clicked") then
-        print("[ui_manager_v2] phone_app_clicked", message.id)
+        dbg("[ui_manager_v2] phone_app_clicked", message.id)
         if message.id == "map" then
             close_phone(self)
             open_map(self)
@@ -1252,10 +1243,10 @@ function on_message(self, message_id, message, sender)
     elseif message_id == hash("close_map") then
         close_map(self)
     elseif message_id == hash("map_verb") then
-        print("[ui_manager_v2] map_verb", message.pin_id, message.verb)
+        dbg("[ui_manager_v2] map_verb", message.pin_id, message.verb)
         handle_map_verb(self, message.pin_id, message.verb)
     elseif message_id == hash("map_hub_route") then
-        print("[ui_manager_v2] map_hub_route", message and message.knot)
+        dbg("[ui_manager_v2] map_hub_route", message and message.knot)
         local knot = message and message.knot
         close_map(self)
         if knot then

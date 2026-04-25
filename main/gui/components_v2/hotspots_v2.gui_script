@@ -5,6 +5,12 @@ local scene_controller = require "main.scripts.scene_controller"
 local hotspot_editor = require "main.scripts.hotspot_editor"
 local gui_animations = require "main.gui.modules.gui_animations"
 
+-- Debug-логи: переключить в true для диагностики кликов/инициализации
+local DEBUG_LOG = false
+local function dbg(...)
+    if DEBUG_LOG then print(...) end
+end
+
 -- Состояние hotspots
 local M = {}
 M.HOTSPOT_COUNT = 6
@@ -221,7 +227,7 @@ end
 
 function init(self)
     msg.post(".", "acquire_input_focus")
-    print("[hotspots_v2] init")
+    dbg("[hotspots_v2] init")
     
     -- Получаем ноды hotspots (6 слотов)
     for i = 1, M.HOTSPOT_COUNT do
@@ -315,7 +321,7 @@ function on_input(self, action_id, action)
         for i = 1, M.HOTSPOT_COUNT do
             if M.hotspot_boxes[i] and gui.is_enabled(M.hotspot_boxes[i]) and
                gui.pick_node(M.hotspot_boxes[i], action.x, action.y) then
-                print("[hotspots] HIT slot=" .. i)
+                dbg("[hotspots] HIT slot=" .. i)
                 scene_controller.on_hotspot_click(i)
                 return true
             end

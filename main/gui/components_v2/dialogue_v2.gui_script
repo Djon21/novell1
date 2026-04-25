@@ -21,6 +21,13 @@
 --   "dialogue_auto"  — клик AUTO (переключатель)
 
 local UI_MGR = "#ui_manager_v2"
+
+-- Debug-логи: переключить в true для диагностики speaker/portrait резолвинга
+local DEBUG_LOG = false
+local function dbg(...)
+    if DEBUG_LOG then print(...) end
+end
+
 -- dialogue_manager_ink в старой архитектуре — адрес может отличаться.
 -- Шлём туда же, ui_manager перенаправит при необходимости.
 
@@ -77,12 +84,12 @@ local function resolve_speaker(key)
     if not key then return CHARS._default end
     -- Приводим к нижнему регистру для поиска в CHARS (с поддержкой кириллицы)
     local lower_key = utf8_lower(tostring(key))
-    print("[dialogue_v2] resolve_speaker: key='" .. tostring(key) .. "' lower_key='" .. lower_key .. "'")
+    dbg("[dialogue_v2] resolve_speaker: key='" .. tostring(key) .. "' lower_key='" .. lower_key .. "'")
     local result = CHARS[lower_key]
     if result then
-        print("[dialogue_v2] found in CHARS, portrait:", result.portrait)
+        dbg("[dialogue_v2] found in CHARS, portrait:", result.portrait)
     else
-        print("[dialogue_v2] NOT found in CHARS, using _default")
+        dbg("[dialogue_v2] NOT found in CHARS, using _default")
     end
     return result or CHARS._default
 end
@@ -134,7 +141,7 @@ local function render(self, msg)
         loop_label = string.format("%03d", tonumber(msg.loop) or 1)
     end
     
-    print("[dialogue_v2] speaker_key:", speaker_key, "resolved portrait:", c.portrait)
+    dbg("[dialogue_v2] speaker_key:", speaker_key, "resolved portrait:", c.portrait)
 
     local name = msg.name or (speaker_key ~= "_default" and speaker_key:upper()) or "—"
     set_text("nameplate_name", name:upper())
@@ -162,22 +169,22 @@ local function render(self, msg)
     local portrait_icon = gui.get_node("portrait_icon")
     local portrait_id = msg.portrait or c.portrait
     
-    print("[dialogue_v2] final portrait_id:", portrait_id)
-    
+    dbg("[dialogue_v2] final portrait_id:", portrait_id)
+
     if portrait_id then
         -- Показываем спрайт портрета
         gui.set_texture(portrait_bg, "v2")
         gui.play_flipbook(portrait_bg, portrait_id)
         gui.set_enabled(portrait_bg, true)
         gui.set_enabled(portrait_icon, false)
-        print("[dialogue_v2] showing portrait sprite:", portrait_id)
+        dbg("[dialogue_v2] showing portrait sprite:", portrait_id)
     else
         -- Показываем icon-заглушку
         gui.set_enabled(portrait_bg, true)
         gui.set_enabled(portrait_icon, true)
         set_text("portrait_icon", c.icon)
         set_color("portrait_icon", c.color)
-        print("[dialogue_v2] showing portrait icon for:", speaker_key)
+        dbg("[dialogue_v2] showing portrait icon for:", speaker_key)
     end
 
     local text = msg.text or ""

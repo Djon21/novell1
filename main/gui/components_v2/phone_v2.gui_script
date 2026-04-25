@@ -19,6 +19,12 @@
 local gs = require "main.scripts.game_state"
 
 local UI_MGR = "#ui_manager_v2"
+
+-- Debug-логи: переключить в true для диагностики show_view/refresh/open_close
+local DEBUG_LOG = false
+local function dbg(...)
+    if DEBUG_LOG then print(...) end
+end
 local EXTERNAL_APPS = {
     map = true,
 }
@@ -126,15 +132,15 @@ local function set_nodes_enabled(ids, enabled)
 end
 
 local function set_all_enabled(enabled)
-    print("[phone_v2] set_all_enabled(" .. tostring(enabled) .. ")")
-    print("[phone_v2]   setting CHROME_NODES (" .. #CHROME_NODES .. " nodes)")
+    dbg("[phone_v2] set_all_enabled(" .. tostring(enabled) .. ")")
+    dbg("[phone_v2]   setting CHROME_NODES (" .. #CHROME_NODES .. " nodes)")
     set_nodes_enabled(CHROME_NODES, enabled)
-    print("[phone_v2]   setting VIEW nodes")
+    dbg("[phone_v2]   setting VIEW nodes")
     for view_id, ids in pairs(VIEWS) do
-        print("[phone_v2]     view '" .. view_id .. "' (" .. #ids .. " nodes)")
+        dbg("[phone_v2]     view '" .. view_id .. "' (" .. #ids .. " nodes)")
         set_nodes_enabled(ids, enabled)
     end
-    print("[phone_v2] set_all_enabled complete")
+    dbg("[phone_v2] set_all_enabled complete")
 end
 
 local function notify_sms_viewed(self, view_id)
@@ -145,20 +151,20 @@ end
 
 local function show_view(self, view_id)
     if not VIEWS[view_id] then view_id = "sms" end
-    print("[phone_v2] show_view called, switching from '" .. (self.active_view or "none") .. "' to '" .. view_id .. "'")
-    
+    dbg("[phone_v2] show_view called, switching from '" .. (self.active_view or "none") .. "' to '" .. view_id .. "'")
+
     -- hide all views
     for v_id, ids in pairs(VIEWS) do
-        print("[phone_v2]   hiding view '" .. v_id .. "' (" .. #ids .. " nodes)")
+        dbg("[phone_v2]   hiding view '" .. v_id .. "' (" .. #ids .. " nodes)")
         set_nodes_enabled(ids, false)
     end
-    
+
     -- show target
-    print("[phone_v2]   showing view '" .. view_id .. "' (" .. #VIEWS[view_id] .. " nodes)")
+    dbg("[phone_v2]   showing view '" .. view_id .. "' (" .. #VIEWS[view_id] .. " nodes)")
     set_nodes_enabled(VIEWS[view_id], true)
     self.active_view = view_id
     notify_sms_viewed(self, view_id)
-    print("[phone_v2] show view complete: " .. view_id)
+    dbg("[phone_v2] show view complete: " .. view_id)
 end
 
 local function flash_node(node)
@@ -224,7 +230,7 @@ end
 -- Quests: 2 слота q1..q2.
 local QUEST_SLOTS = 2
 local function refresh_quests(self, list)
-    print("[phone_v2] refresh_quests called, visible=" .. tostring(self.visible) .. ", list size=" .. #(list or {}))
+    dbg("[phone_v2] refresh_quests called, visible=" .. tostring(self.visible) .. ", list size=" .. #(list or {}))
     list = list or {}
     if #list == 0 then
         set_text("v_quests_title", "ЗАДАЧИ [0]")
@@ -236,7 +242,7 @@ local function refresh_quests(self, list)
     for i = 1, QUEST_SLOTS do
         local prefix = "v_quests_q" .. i
         local has = list[i] ~= nil
-        print("[phone_v2]   quest slot " .. i .. ": " .. tostring(has))
+        dbg("[phone_v2]   quest slot " .. i .. ": " .. tostring(has))
         set_node_enabled(prefix .. "_bg",   has)
         set_node_enabled(prefix .. "_name", has)
         set_node_enabled(prefix .. "_desc", has)
@@ -258,7 +264,7 @@ local function refresh_quests(self, list)
             set_node_color(prefix .. "_name", c)
         end
     end
-    print("[phone_v2] refresh_quests complete")
+    dbg("[phone_v2] refresh_quests complete")
 end
 
 -- Mail: 2 слота m1..m2.
@@ -384,9 +390,9 @@ end
 -- Полный pull из game_state + обновление всех app-вьюх + счётчика.
 -- map-вьюха пока без данных — остаётся статичной (step22).
 local function refresh_all_views(self, force)
-    print("[phone_v2] refresh_all_views called, visible=" .. tostring(self.visible))
+    dbg("[phone_v2] refresh_all_views called, visible=" .. tostring(self.visible))
     if not force and not self.visible then
-        print("[phone_v2] refresh_all_views skipped while hidden")
+        dbg("[phone_v2] refresh_all_views skipped while hidden")
         return
     end
     local sms   = gs.get_messages      and gs.get_messages()      or {}
@@ -407,7 +413,7 @@ local function refresh_all_views(self, force)
 
     local unread = gs.get_phone_unread_total and gs.get_phone_unread_total() or 0
     set_text("stats_msg", "сообщений: " .. tostring(unread))
-    print("[phone_v2] refresh_all_views complete")
+    dbg("[phone_v2] refresh_all_views complete")
 end
 
 function init(self)
@@ -416,7 +422,7 @@ function init(self)
     self.active_view = "sms"
     set_all_enabled(false)
     -- Заполнить статические ноды текущим состоянием до первого показа.
-    print("[phone_v2] init complete, default view = sms")
+    dbg("[phone_v2] init complete, default view = sms")
 end
 
 function on_message(self, message_id, message, sender)
@@ -427,32 +433,11 @@ function on_message(self, message_id, message, sender)
         -- Подтянуть свежие данные до показа (рейс unread с game_state).
         refresh_all_views(self, true)
         show_view(self, "sms")
-        print("[phone_v2] open_phone")
+        dbg("[phone_v2] open_phone")
     elseif message_id == hash("close_phone") then
-        print("[phone_v2] close_phone - hiding all nodes")
-        print("[phone_v2] active_view before close:", self.active_view)
+        dbg("[phone_v2] close_phone")
         self.visible = false
         set_all_enabled(false)
-        print("[phone_v2] close_phone complete")
-        
-        -- DEBUG: Check if any nodes are still enabled
-        local still_enabled = {}
-        for view_id, ids in pairs(VIEWS) do
-            for _, id in ipairs(ids) do
-                local n = gui.get_node(id)
-                if n and gui.is_enabled(n) then
-                    table.insert(still_enabled, id .. " (view: " .. view_id .. ")")
-                end
-            end
-        end
-        if #still_enabled > 0 then
-            print("[phone_v2] WARNING: Some nodes still enabled after close:")
-            for _, id in ipairs(still_enabled) do
-                print("  - " .. id)
-            end
-        else
-            print("[phone_v2] All view nodes properly disabled")
-        end
     elseif message_id == hash("refresh_phone") then
         refresh_all_views(self)
     elseif message_id == hash("set_phone_notif") then
@@ -486,7 +471,7 @@ function on_input(self, action_id, action)
     for _, app in ipairs(APPS) do
         local bg = gui.get_node(app.key .. "_bg")
         if gui.is_enabled(bg) and gui.pick_node(bg, action.x, action.y) then
-            print("[phone_v2] app tile clicked: " .. app.id)
+            dbg("[phone_v2] app tile clicked: " .. app.id)
             flash_node(bg)
             msg.post(UI_MGR, "phone_app_clicked", { id = app.id })
             if EXTERNAL_APPS[app.id] then
