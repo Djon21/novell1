@@ -23,7 +23,7 @@
 
 - [x] Расширить loop-aware реплики за пределы `wake_intro`, `wake_after_choice` и финалов главы. — добавлены loop-aware блоки в `rooftop_entry` (3 варианта по уровню awareness), `office_day_end` (2 варианта), `rooftop_conversation` (4-й выбор при `loop_awareness >= 2`); новый knot `rooftop_repeat_known` для игрока с памятью о петле; финальные реплики `rooftop_loop` дифференцированы по типу концовки; `false_endings_count` добавлен в bootstrap VAR; `# meta:add:loop_awareness:1` убраны из концовок (awareness теперь растёт через `record_false_ending` в Lua).
 - [x] Решить, растёт ли `loop_awareness` всегда на `+1` за конец главы или должен зависеть от выборов и найденных аномалий. — принята схема: iter 001 линейная (→ сразу iter 002); с iter 002 три концовки — две ложных и одна истинная. `loop_awareness` растёт +1 за каждую **новую** ложную концовку (`meta.record_false_ending`). Истинная концовка открывается когда `false_endings_count >= 2`. Ink получает переменные `loop_awareness` и `false_endings_count`. Теги: `# loop:end:false:id` и `# loop:end:true`. Обработчики `false_ending`/`true_ending` в `ui_manager_v2`, логика в `meta_state.lua`.
-- [ ] Добавить удобный debug reset для `meta_state`, чтобы не чистить цикл вручную во время тестов.
+- [x] Добавить удобный debug reset для `meta_state`, чтобы не чистить цикл вручную во время тестов. — уже реализован: пункт «СБРОСИТЬ ИТЕРАЦИЮ» в главном меню (`mi_gallery → reset_iteration → reset_iteration_and_restart` в `ui_manager_v2`).
 
 ## Platform / release
 
