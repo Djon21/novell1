@@ -1276,10 +1276,8 @@ function on_message(self, message_id, message, sender)
         end
     elseif message_id == hash("phone_app_clicked") then
         dbg("[ui_manager_v2] phone_app_clicked", message.id)
-        if message.id == "map" then
-            close_phone(self)
-            open_map(self)
-        end
+        -- Карта теперь открывается внутри телефона (phone_map.gui).
+        -- Если в будущем нужно открыть внешнюю карту из телефона — добавь здесь.
 
     -- --- map ---
     elseif message_id == hash("open_map") then

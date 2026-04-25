@@ -30,9 +30,9 @@ local APP_COMPONENT = {
     term   = "#phone_term",
 }
 
--- Карта открывается через ui_manager (внешняя), не через phone_map компонент
+-- Внешние приложения (закрывают телефон и открывают оверлей через ui_manager).
+-- map убран: теперь карта открывается внутри телефона через phone_map.gui.
 local EXTERNAL_APPS = {
-    map = true,
 }
 
 local CHROME_NODES = {
