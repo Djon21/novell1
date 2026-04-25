@@ -19,14 +19,20 @@ end
 
 function init(self)
     self.visible = false
-    set_root_enabled(false)  -- прячет все 132 дочерних ноды
+    local root = get_node("grp_panel")
+    print("[phone_map] init: grp_panel =", tostring(root))
+    set_root_enabled(false)
 end
 
 function on_message(self, message_id, message, sender)
     if message_id == hash("open_app") then
+        print("[phone_map] open_app received")
         self.visible = true
         set_root_enabled(true)
+        local root = get_node("grp_panel")
+        print("[phone_map] grp_panel enabled =", root and tostring(gui.is_enabled(root)) or "node not found!")
     elseif message_id == hash("close_app") then
+        print("[phone_map] close_app received")
         self.visible = false
         set_root_enabled(false)
     end
