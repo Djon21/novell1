@@ -44,6 +44,25 @@ textures {
   texture: "/main/images/phone/map_assets_cyberpunk_v2.atlas"
 }
 nodes {
+  position {
+    x: 640.0
+    y: 360.0
+    z: 0.5
+  }
+  size {
+    x: 300.0
+    y: 300.0
+  }
+  color {
+    x: 1.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "DEBUG_test_box"
+  layer: "ui"
+}
+nodes {
   type: TYPE_BOX
   id: "grp_panel"
   adjust_mode: ADJUST_MODE_STRETCH
