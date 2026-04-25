@@ -15,7 +15,7 @@
 
 ## P3 — нестыковки, cleanup и техдолг
 
-- [ ] Убрать дубли в `main_menu_v2.gui_script`: файл содержит повторные определения `animate_alpha`, `animate_x`, `animate_y`, `glitch_burst`, `schedule_next_glitch`.
+- [x] Убрать дубли в `main_menu_v2.gui_script`: файл содержит повторные определения `animate_alpha`, `animate_x`, `animate_y`, `glitch_burst`, `schedule_next_glitch`. — удалены дублированные определения (старая «мягкая» ветка `glitch_burst`/`schedule_next_glitch` и второй блок `animate_alpha/x/y`). В файле осталась только активная ветка: `start_glitch_loop` → `schedule_next_glitch` (delay `0.35 + rnd*1.35`, до 3 aftershock'ов) → `glitch_burst` (mode-based: violent/hard/normal). Поведение не изменилось.
 - [ ] Убрать или хотя бы резко сократить debug-log spam в `ui_manager_v2`, `phone_v2`, `dialogue_v2`, `hotspots_v2` перед следующей волной контентного тестирования.
 - [ ] Решить судьбу `click_001`: либо зарегистрировать его в `sfx_player`, либо вычистить из документации как неиспользуемый asset.
 
