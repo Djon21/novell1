@@ -15,6 +15,16 @@
 потоки,
 движение без пауз.
 
+{loop_awareness >= 2:
+    # speaker:mc
+    Я помню этот ветер. Не «похоже» — именно этот, с тем же направлением, с той же паузой перед следующим порывом. И это уже не удивляет, а только раздражает, что раньше удивляло.
+    ~ INSIGHT = INSIGHT + 1
+- loop_awareness == 1:
+    # speaker:mc
+    Я помню этот ветер. Или думаю, что помню. Граница между «уже было» и «кажется, что было» здесь особенно тонкая.
+    ~ INSIGHT = INSIGHT + 1
+}
+
 # speaker:npc
 Люблю это место.
 
@@ -22,7 +32,11 @@
 Сверху всё выглядит проще.
 
 # speaker:mc
-Потому что деталей не видно.
+{loop_awareness > 0:
+    Потому что мы слишком далеко, чтобы видеть петлю.
+- else:
+    Потому что деталей не видно.
+}
 
 -> rooftop_conversation
 
@@ -55,6 +69,14 @@
     # speaker:mc
     Это не просто усталость.
     -> rooftop_deep
+
+* {loop_awareness >= 2} [Я уже был здесь]
+    ~ TRUST = TRUST + 1
+    ~ player_was_honest = true
+    ~ INSIGHT = INSIGHT + 1
+    # speaker:mc
+    Это не первый раз. Этот разговор, этот ветер, этот город. Я не могу доказать — но я уже знаю, что ты сейчас скажешь.
+    -> rooftop_repeat_known
 
 
 === rooftop_truth
@@ -99,6 +121,39 @@
 -> rooftop_after_talk
 
 
+=== rooftop_repeat_known
+# speaker:npc
+Что именно?
+
+# speaker:mc
+{loop_awareness >= 3:
+    Что ты скажешь «не надо искать смысл». Или «это просто усталость». Один из двух вариантов — зависит от того, как прошёл твой день.
+- else:
+    Что день выглядит странно. Что это, наверное, усталость. Что нужно просто дожить до вечера.
+}
+
+# speaker:npc
+...
+
+# speaker:npc
+Ты говоришь так, будто читаешь сценарий.
+
+# speaker:mc
+Нет. Я просто уже видел{mc_gender == "female":а|}, как он заканчивается.
+
+# speaker:npc
+И как?
+
+# speaker:mc
+По-разному. Но всегда — не так, как нужно. Пока.
+
+~ npc_opened_up = true
+~ confession_unlocked = true
+~ SYNC = SYNC + 1
+
+-> rooftop_after_talk
+
+
 // ================================================================
 // ВНУТРЕННЕЕ СОСТОЯНИЕ
 // ================================================================
@@ -132,11 +187,13 @@
 // ================================================================
 === rooftop_route
 
-{SYNC >= 2 && INSIGHT >= 2 && TRUST >= 1:
+// Истинная концовка доступна только когда найдены обе ложных (false_endings_count >= 2).
+// Ink получает это значение из meta через push_vars_to_ink.
+{false_endings_count >= 2 && SYNC >= 2 && INSIGHT >= 2 && TRUST >= 1:
     -> ending_true
 - else:
     {SYNC >= 2 && INSIGHT >= 2:
-        -> ending_true_without_trust
+        -> ending_insight_only
     - else:
         {TRUST >= 2:
             -> ending_npc
@@ -182,6 +239,7 @@
 
 ~ current_iteration_end = "npc"
 ~ TRUST = TRUST + 1
+# loop:end:false:ending_npc
 
 -> rooftop_loop
 
@@ -213,6 +271,7 @@
 ~ current_iteration_end = "npc"
 ~ TRUST = TRUST + 1
 ~ npc_opened_up = true
+# loop:end:false:ending_npc
 
 -> rooftop_loop
 
@@ -248,8 +307,7 @@
 ~ TRUST = TRUST + 2
 ~ npc_opened_up = true
 ~ confession_unlocked = true
-
-# meta:add:loop_awareness:1
+# loop:end:false:ending_npc
 
 -> rooftop_loop
 
@@ -277,16 +335,19 @@ fallback_decision_applied
 
 Она просто скрыта.
 
-~ current_iteration_end = "system"
+~ current_iteration_end = “system”
 ~ INSIGHT = INSIGHT + 1
+# loop:end:false:ending_system
 
 -> rooftop_loop
 
 
 // ================================================================
-// TRUE ATTEMPT WITHOUT TRUST
+// ЛОЖНАЯ КОНЦОВКА: INSIGHT БЕЗ СВЯЗИ
+// Игрок понял систему, но пришёл к выводу в одиночку — без человека рядом.
+// Это другая ложная концовка, отличная от ending_npc и ending_system.
 // ================================================================
-=== ending_true_without_trust
+=== ending_insight_only
 # speaker:mc
 Я понял{mc_gender == "female":а|}.
 
@@ -313,11 +374,10 @@ fallback_decision_applied
 # speaker:mc
 Но не знаю, как не повторить её снова.
 
-~ current_iteration_end = "system"
+~ current_iteration_end = "insight"
 ~ INSIGHT = INSIGHT + 1
 ~ SYNC = SYNC + 1
-
-# meta:add:loop_awareness:1
+# loop:end:false:ending_insight
 
 -> rooftop_loop
 
@@ -342,10 +402,10 @@ fallback_decision_applied
 # speaker:none
 В этот момент всё складывается.
 
-экран  
-метро  
-лог  
-решение  
+экран
+метро
+лог
+решение
 
 # speaker:mc
 Это цикл.
@@ -356,8 +416,7 @@ fallback_decision_applied
 ~ current_iteration_end = "true"
 ~ INSIGHT = INSIGHT + 2
 ~ SYNC = SYNC + 2
-
-# meta:add:loop_awareness:1
+# loop:end:true
 
 -> rooftop_loop
 
@@ -374,12 +433,22 @@ fallback_decision_applied
 # speaker:mc
 ...
 
-{current_iteration_end == "true":
+{current_iteration_end == “true”:
     # speaker:mc
     Я запомню. Не всё, но достаточно для следующего раза.
+    Теперь — достаточно.
+- current_iteration_end == “insight”:
+    # speaker:mc
+    Я вижу схему. Но пока не вижу выхода из неё.
+    Значит — ещё раз.
+- current_iteration_end == “npc”:
+    # speaker:mc
+    Стало легче. Но лёгкость — это не ответ.
+    Значит — ещё раз.
 - else:
     # speaker:mc
-    Что-то здесь не так. И это не закончится само.
+    Что-то здесь не так.
+    И это не закончится само.
 }
 
 # pulse:1.0,255,255,255

@@ -11,6 +11,7 @@ VAR iteration_number = 1
 VAR iteration_label = "001"
 VAR loop_awareness = 0
 VAR completed_iterations = 0
+VAR false_endings_count = 0
 
 VAR TRUST = 0
 VAR INSIGHT = 0
