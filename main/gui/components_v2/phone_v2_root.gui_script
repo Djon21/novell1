@@ -140,9 +140,13 @@ end
 -- -----------------------------------------------------------------------
 
 function init(self)
-    self.visible   = false
+    self.visible    = false
     self.active_app = nil
     set_nodes_enabled(CHROME_NODES, false)
+    -- Берём фокус сразу и держим всегда (как исходный phone_v2.gui_script).
+    -- Когда телефон закрыт — on_input возвращает false, инпут проходит дальше.
+    -- Это сохраняет правильный порядок стека acquire_input_focus.
+    msg.post(".", "acquire_input_focus")
 end
 
 function on_message(self, message_id, message, sender)
@@ -154,15 +158,14 @@ function on_message(self, message_id, message, sender)
         local comp = APP_COMPONENT["sms"]
         if comp then msg.post(comp, "open_app") end
         self.active_app = "sms"
-        msg.post(".", "acquire_input_focus")
         dbg("[phone_v2_root] open_phone → sms")
 
     elseif message_id == hash("close_phone") then
-        -- Просто скрыть — НЕ постить обратно в UI_MGR, иначе loop
+        -- Просто скрыть — НЕ постить обратно в UI_MGR (иначе loop),
+        -- НЕ release_input_focus (держим фокус постоянно как phone_v2.gui_script)
         close_active_app(self)
         set_nodes_enabled(CHROME_NODES, false)
         self.visible = false
-        msg.post(".", "release_input_focus")
         dbg("[phone_v2_root] close_phone")
 
     elseif message_id == hash("refresh_phone") then
