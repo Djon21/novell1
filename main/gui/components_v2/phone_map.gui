@@ -44,84 +44,64 @@ textures {
   texture: "/main/images/phone/map_assets_cyberpunk_v2.atlas"
 }
 nodes {
-  size {
-    x: 200.0
-    y: 100.0
-  }
   type: TYPE_BOX
-  id: "map_root"
+  id: "grp_panel"
+  adjust_mode: ADJUST_MODE_STRETCH
+  layer: "ui"
   inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
 }
 nodes {
   position {
-    x: 572.0
-    y: 150.0
-    z: 0.521
+    x: 326.0
+    y: 131.0
   }
-  size {
-    x: 506.0
-    y: 392.0
-  }
-  color {
-    x: 0.018
-    y: 0.017
-    z: 0.045
+  scale {
+    x: 0.6
+    y: 0.6
+    z: 1.0
   }
   type: TYPE_BOX
-  id: "mapfull_screen_bg"
-  pivot: PIVOT_SW
+  id: "grp_map"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "map_root"
-  alpha: 0.7
-  enabled: false
+  parent: "grp_panel"
+  layer: "ui"
+  inherit_alpha: true
 }
 nodes {
   type: TYPE_BOX
-  id: "mapfull_grp_map"
+  id: "grp_map_layers"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "map_root"
+  parent: "grp_map"
   layer: "ui"
   inherit_alpha: true
-  enabled: false
-}
-nodes {
-  type: TYPE_BOX
-  id: "mapfull_grp_map_layers"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map"
-  layer: "ui"
-  inherit_alpha: true
-  enabled: false
 }
 nodes {
   position {
-    x: 825.0
-    y: 336.0
+    x: 832.0
+    y: 358.0
     z: 32.0
   }
   size {
-    x: 462.0
-    y: 292.0
+    x: 800.0
+    y: 632.0
   }
   type: TYPE_BOX
   texture: "map2/map_bg_base"
-  id: "mapfull_map_texture_bg"
+  id: "map_texture_bg"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map_layers"
+  parent: "grp_map_layers"
   layer: "ui"
   inherit_alpha: true
-  enabled: false
 }
 nodes {
   position {
-    x: 825.0
-    y: 336.0
+    x: 832.0
+    y: 358.0
     z: 33.0
   }
   size {
-    x: 462.0
-    y: 292.0
+    x: 800.0
+    y: 632.0
   }
   color {
     x: 0.55
@@ -130,23 +110,22 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/map_roads"
-  id: "mapfull_map_texture_roads"
+  id: "map_texture_roads"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map_layers"
+  parent: "grp_map_layers"
   layer: "lines"
   inherit_alpha: true
   alpha: 0.18
-  enabled: false
 }
 nodes {
   position {
-    x: 825.0
-    y: 336.0
+    x: 832.0
+    y: 358.0
     z: 34.0
   }
   size {
-    x: 462.0
-    y: 292.0
+    x: 800.0
+    y: 632.0
   }
   color {
     x: 0.282
@@ -154,23 +133,22 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/map_grid"
-  id: "mapfull_map_texture_grid"
+  id: "map_texture_grid"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map_layers"
+  parent: "grp_map_layers"
   layer: "lines"
   inherit_alpha: true
   alpha: 0.08
-  enabled: false
 }
 nodes {
   position {
-    x: 825.0
-    y: 336.0
+    x: 832.0
+    y: 358.0
     z: 40.0
   }
   size {
-    x: 462.0
-    y: 292.0
+    x: 800.0
+    y: 632.0
   }
   color {
     x: 0.953
@@ -179,23 +157,22 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/map_routes"
-  id: "mapfull_map_texture_routes"
+  id: "map_texture_routes"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map_layers"
+  parent: "grp_map_layers"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.22
-  enabled: false
 }
 nodes {
   position {
-    x: 825.0
-    y: 336.0
+    x: 832.0
+    y: 358.0
     z: 39.5
   }
   size {
-    x: 468.9
-    y: 296.2
+    x: 812.0
+    y: 641.0
   }
   color {
     y: 0.71
@@ -203,23 +180,22 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/map_route_main"
-  id: "mapfull_map_route_main_halo"
+  id: "map_route_main_halo"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map_layers"
+  parent: "grp_map_layers"
   layer: "fx"
   inherit_alpha: true
   alpha: 0.34
-  enabled: false
 }
 nodes {
   position {
-    x: 825.0
-    y: 336.0
+    x: 832.0
+    y: 358.0
     z: 39.4
   }
   size {
-    x: 468.9
-    y: 296.2
+    x: 812.0
+    y: 641.0
   }
   color {
     x: 0.282
@@ -227,429 +203,62 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/map_route_dashed"
-  id: "mapfull_map_route_dashed_halo"
+  id: "map_route_dashed_halo"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map_layers"
+  parent: "grp_map_layers"
   layer: "fx"
   inherit_alpha: true
   alpha: 0.22
-  enabled: false
 }
 nodes {
-  position {
-    x: 825.0
-    y: 336.0
-    z: 62.0
-  }
-  size {
-    x: 462.0
-    y: 292.0
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
   type: TYPE_BOX
-  texture: "map2/fx_scanlines"
-  id: "mapfull_map_fx_scanlines"
+  id: "grp_poi"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.07
-  enabled: false
-}
-nodes {
-  position {
-    x: 825.0
-    y: 336.0
-    z: 63.0
-  }
-  size {
-    x: 462.0
-    y: 292.0
-  }
-  color {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  type: TYPE_BOX
-  texture: "map2/fx_vignette"
-  id: "mapfull_map_fx_vignette"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.22
-  enabled: false
-}
-nodes {
-  position {
-    x: 825.0
-    y: 482.0
-    z: 66.0
-  }
-  size {
-    x: 462.0
-    y: 0.5
-  }
-  color {
-    y: 0.71
-    z: 0.275
-  }
-  type: TYPE_BOX
-  id: "mapfull_map_frame_top"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.36
-  enabled: false
-}
-nodes {
-  position {
-    x: 825.0
-    y: 190.0
-    z: 66.0
-  }
-  size {
-    x: 462.0
-    y: 0.5
-  }
-  color {
-    y: 0.71
-    z: 0.275
-  }
-  type: TYPE_BOX
-  id: "mapfull_map_frame_bottom"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.3
-  enabled: false
-}
-nodes {
-  position {
-    x: 594.0
-    y: 336.0
-    z: 66.0
-  }
-  size {
-    x: 0.6
-    y: 292.0
-  }
-  color {
-    y: 0.71
-    z: 0.275
-  }
-  type: TYPE_BOX
-  id: "mapfull_map_frame_left"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.28
-  enabled: false
-}
-nodes {
-  position {
-    x: 1056.0
-    y: 336.0
-    z: 66.0
-  }
-  size {
-    x: 0.6
-    y: 292.0
-  }
-  color {
-    y: 0.71
-    z: 0.275
-  }
-  type: TYPE_BOX
-  id: "mapfull_map_frame_right"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.28
-  enabled: false
-}
-nodes {
-  position {
-    x: 725.7
-    y: 457.6
-    z: 67.0
-  }
-  size {
-    x: 259.9
-    y: 29.6
-  }
-  color {
-    x: 0.039
-    y: 0.027
-    z: 0.125
-  }
-  type: TYPE_BOX
-  id: "mapfull_map_header_scrim"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map"
+  parent: "grp_map"
   layer: "ui"
   inherit_alpha: true
-  alpha: 0.82
-  enabled: false
 }
 nodes {
   position {
-    x: 607.9
-    y: 466.1
-    z: 70.0
-  }
-  size {
-    x: 242.6
-    y: 8.3
-  }
-  color {
-    y: 0.71
-    z: 0.275
-  }
-  type: TYPE_TEXT
-  text: "\320\235\320\220\320\222\320\230\320\223\320\220\320\242\320\236\320\240 \302\267 \320\234\320\236\320\241\320\232\320\222\320\220 \302\267 \320\237\320\240\320\225\320\241\320\235\320\257"
-  font: "jb_mono_12"
-  id: "mapfull_map_eyebrow"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.9
-  enabled: false
-}
-nodes {
-  position {
-    x: 607.9
-    y: 447.9
-    z: 70.0
-  }
-  size {
-    x: 115.5
-    y: 16.6
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\232\320\260\321\200\321\202\320\260"
-  font: "unbounded_bold_32"
-  id: "mapfull_map_title"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.96
-  enabled: false
-}
-nodes {
-  position {
-    x: 607.9
-    y: 201.4
-    z: 70.0
-  }
-  size {
-    x: 69.3
-    y: 8.3
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_TEXT
-  text: "55.76\302\260 N"
-  font: "jb_mono_12"
-  id: "mapfull_map_coord_n"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.42
-  enabled: false
-}
-nodes {
-  position {
-    x: 986.7
-    y: 201.4
-    z: 70.0
-  }
-  size {
-    x: 69.3
-    y: 8.3
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_TEXT
-  text: "37.58\302\260 E"
-  font: "jb_mono_12"
-  id: "mapfull_map_coord_e"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.42
-  enabled: false
-}
-nodes {
-  position {
-    x: 607.9
-    y: 217.3
-    z: 70.0
-  }
-  size {
-    x: 138.6
-    y: 8.3
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_TEXT
-  text: "> \320\232\320\220\320\240\320\242\320\220: ONLINE"
-  font: "jb_mono_12"
-  id: "mapfull_map_terminal"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.95
-  enabled: false
-}
-nodes {
-  position {
-    x: 688.7
-    y: 217.3
-    z: 70.0
-  }
-  size {
-    x: 4.6
-    y: 6.0
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_BOX
-  id: "mapfull_map_terminal_cursor"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.9
-  enabled: false
-}
-nodes {
-  type: TYPE_BOX
-  id: "mapfull_grp_poi"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map"
-  layer: "ui"
-  inherit_alpha: true
-  enabled: false
-}
-nodes {
-  position {
-    x: 633.3
-    y: 365.6
+    x: 588.0
+    y: 431.0
     z: 50.0
   }
   size {
-    x: 0.6
-    y: 0.5
+    x: 1.0
+    y: 1.0
   }
   type: TYPE_BOX
-  id: "mapfull_poi_home"
+  id: "poi_home"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_poi"
+  parent: "grp_poi"
   layer: "ui"
   inherit_alpha: true
-  enabled: false
 }
 nodes {
   position {
     z: 49.0
   }
   size {
-    x: 67.0
-    y: 53.6
+    x: 116.0
+    y: 116.0
   }
   type: TYPE_BOX
-  id: "mapfull_poi_home_hitbox"
+  id: "poi_home_hitbox"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_home"
+  parent: "poi_home"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.01
-  enabled: false
 }
 nodes {
   position {
-    z: 50.0
-  }
-  size {
-    x: 82.0
-    y: 65.6
-  }
-  color {
-    x: 0.714
-    y: 0.361
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_glow"
-  id: "mapfull_poi_home_glow"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_home"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.24
-  enabled: false
-}
-nodes {
-  position {
-    z: 51.0
-  }
-  size {
-    x: 61.2
-    y: 49.0
-  }
-  color {
-    x: 0.714
-    y: 0.361
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_glow_ring"
-  id: "mapfull_poi_home_glow_ring"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_home"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.22
-  enabled: false
-}
-nodes {
-  position {
-    y: 148.4
+    y: -48.0
     z: 52.0
   }
   size {
-    x: 12.7
-    y: 32.3
+    x: 22.0
+    y: 70.0
   }
   color {
     x: 0.714
@@ -657,21 +266,21 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/poi_stem"
-  id: "mapfull_poi_home_stem"
+  id: "poi_home_stem"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_home"
+  parent: "poi_home"
   layer: "lines"
   inherit_alpha: true
   alpha: 0.68
-  enabled: false
 }
 nodes {
   position {
+    y: 8.0
     z: 53.0
   }
   size {
-    x: 40.4
-    y: 32.3
+    x: 80.0
+    y: 80.0
   }
   color {
     x: 0.714
@@ -679,21 +288,21 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/poi_circle"
-  id: "mapfull_poi_home_circle"
+  id: "poi_home_circle"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_home"
+  parent: "poi_home"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.92
-  enabled: false
 }
 nodes {
   position {
+    y: 8.0
     z: 54.0
   }
   size {
-    x: 27.7
-    y: 22.2
+    x: 100.0
+    y: 100.0
   }
   color {
     x: 0.714
@@ -701,21 +310,21 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/poi_center_dark"
-  id: "mapfull_poi_home_center"
+  id: "poi_home_center"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_home"
+  parent: "poi_home"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.92
-  enabled: false
 }
 nodes {
   position {
+    y: 12.0
     z: 55.0
   }
   size {
-    x: 25.4
-    y: 20.3
+    x: 44.0
+    y: 44.0
   }
   color {
     x: 0.714
@@ -723,123 +332,54 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/poi_icon_home"
-  id: "mapfull_poi_home_icon"
+  id: "poi_home_icon"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_home"
+  parent: "poi_home"
   layer: "ui"
   inherit_alpha: true
-  enabled: false
 }
 nodes {
   position {
-    y: 148.4
-    z: 55.0
-  }
-  size {
-    x: 6.9
-    y: 5.5
-  }
-  color {
-    x: 0.714
-    y: 0.361
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_dot"
-  id: "mapfull_poi_home_dot"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_home"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.72
-  enabled: false
-}
-nodes {
-  position {
-    x: 800.7
-    y: 429.3
+    x: 802.0
+    y: 160.0
     z: 50.0
   }
   size {
-    x: 0.6
-    y: 0.5
+    x: 1.0
+    y: 1.0
   }
   type: TYPE_BOX
-  id: "mapfull_poi_work"
+  id: "poi_work"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_poi"
+  parent: "grp_poi"
   layer: "ui"
   inherit_alpha: true
-  enabled: false
 }
 nodes {
   position {
+    y: 8.0
     z: 49.0
   }
   size {
-    x: 78.5
-    y: 62.8
+    x: 116.0
+    y: 116.0
   }
   type: TYPE_BOX
-  id: "mapfull_poi_work_hitbox"
+  id: "poi_work_hitbox"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_work"
+  parent: "poi_work"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.01
-  enabled: false
 }
 nodes {
   position {
-    z: 50.0
-  }
-  size {
-    x: 106.3
-    y: 85.0
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_glow"
-  id: "mapfull_poi_work_glow"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_work"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.24
-  enabled: false
-}
-nodes {
-  position {
-    z: 51.0
-  }
-  size {
-    x: 75.1
-    y: 60.1
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_glow_ring"
-  id: "mapfull_poi_work_glow_ring"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_work"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.22
-  enabled: false
-}
-nodes {
-  position {
-    y: 148.4
+    y: -48.0
     z: 52.0
   }
   size {
-    x: 13.9
-    y: 36.0
+    x: 22.0
+    y: 70.0
   }
   color {
     x: 0.282
@@ -847,21 +387,21 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/poi_stem"
-  id: "mapfull_poi_work_stem"
+  id: "poi_work_stem"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_work"
+  parent: "poi_work"
   layer: "lines"
   inherit_alpha: true
   alpha: 0.68
-  enabled: false
 }
 nodes {
   position {
+    y: 8.0
     z: 53.0
   }
   size {
-    x: 46.2
-    y: 37.0
+    x: 80.0
+    y: 80.0
   }
   color {
     x: 0.282
@@ -869,21 +409,21 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/poi_circle"
-  id: "mapfull_poi_work_circle"
+  id: "poi_work_circle"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_work"
+  parent: "poi_work"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.92
-  enabled: false
 }
 nodes {
   position {
+    y: 8.0
     z: 54.0
   }
   size {
-    x: 32.3
-    y: 25.9
+    x: 100.0
+    y: 100.0
   }
   color {
     x: 0.282
@@ -891,21 +431,21 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/poi_center_dark"
-  id: "mapfull_poi_work_center"
+  id: "poi_work_center"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_work"
+  parent: "poi_work"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.92
-  enabled: false
 }
 nodes {
   position {
+    y: 8.0
     z: 55.0
   }
   size {
-    x: 30.0
-    y: 24.0
+    x: 44.0
+    y: 44.0
   }
   color {
     x: 0.282
@@ -913,145 +453,53 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/poi_icon_work"
-  id: "mapfull_poi_work_icon"
+  id: "poi_work_icon"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_work"
+  parent: "poi_work"
   layer: "ui"
   inherit_alpha: true
-  enabled: false
 }
 nodes {
   position {
-    y: 148.4
-    z: 55.0
-  }
-  size {
-    x: 7.5
-    y: 6.0
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_dot"
-  id: "mapfull_poi_work_dot"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_work"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.72
-  enabled: false
-}
-nodes {
-  position {
-    z: 56.5
-  }
-  size {
-    x: 104.0
-    y: 83.2
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_glow_ring"
-  id: "mapfull_poi_work_active_glow"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_work"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.34
-  enabled: false
-}
-nodes {
-  position {
-    x: 784.6
-    y: 364.6
+    x: 1065.0
+    y: 240.0
     z: 50.0
   }
   size {
-    x: 0.6
-    y: 0.5
+    x: 1.0
+    y: 1.0
   }
   type: TYPE_BOX
-  id: "mapfull_poi_cafe"
+  id: "poi_cafe"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_poi"
+  parent: "grp_poi"
   layer: "ui"
   inherit_alpha: true
-  enabled: false
 }
 nodes {
   position {
     z: 49.0
   }
   size {
-    x: 67.0
-    y: 53.6
+    x: 116.0
+    y: 116.0
   }
   type: TYPE_BOX
-  id: "mapfull_poi_cafe_hitbox"
+  id: "poi_cafe_hitbox"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_cafe"
+  parent: "poi_cafe"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.01
-  enabled: false
 }
 nodes {
   position {
-    z: 50.0
-  }
-  size {
-    x: 82.0
-    y: 65.6
-  }
-  color {
-    y: 0.71
-    z: 0.275
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_glow"
-  id: "mapfull_poi_cafe_glow"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_cafe"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.24
-  enabled: false
-}
-nodes {
-  position {
-    z: 51.0
-  }
-  size {
-    x: 61.2
-    y: 49.0
-  }
-  color {
-    y: 0.71
-    z: 0.275
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_glow_ring"
-  id: "mapfull_poi_cafe_glow_ring"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_cafe"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.22
-  enabled: false
-}
-nodes {
-  position {
-    y: 148.4
+    y: -48.0
     z: 52.0
   }
   size {
-    x: 12.7
-    y: 32.3
+    x: 22.0
+    y: 70.0
   }
   color {
     y: 0.71
@@ -1059,21 +507,20 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/poi_stem"
-  id: "mapfull_poi_cafe_stem"
+  id: "poi_cafe_stem"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_cafe"
+  parent: "poi_cafe"
   layer: "lines"
   inherit_alpha: true
   alpha: 0.68
-  enabled: false
 }
 nodes {
   position {
     z: 53.0
   }
   size {
-    x: 40.4
-    y: 32.3
+    x: 80.0
+    y: 80.0
   }
   color {
     y: 0.71
@@ -1081,21 +528,20 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/poi_circle"
-  id: "mapfull_poi_cafe_circle"
+  id: "poi_cafe_circle"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_cafe"
+  parent: "poi_cafe"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.92
-  enabled: false
 }
 nodes {
   position {
     z: 54.0
   }
   size {
-    x: 27.7
-    y: 22.2
+    x: 100.0
+    y: 100.0
   }
   color {
     y: 0.71
@@ -1103,21 +549,20 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/poi_center_dark"
-  id: "mapfull_poi_cafe_center"
+  id: "poi_cafe_center"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_cafe"
+  parent: "poi_cafe"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.92
-  enabled: false
 }
 nodes {
   position {
     z: 55.0
   }
   size {
-    x: 25.4
-    y: 20.3
+    x: 44.0
+    y: 44.0
   }
   color {
     y: 0.71
@@ -1125,125 +570,53 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/poi_icon_cafe"
-  id: "mapfull_poi_cafe_icon"
+  id: "poi_cafe_icon"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_cafe"
+  parent: "poi_cafe"
   layer: "ui"
   inherit_alpha: true
-  enabled: false
 }
 nodes {
   position {
-    y: 148.4
-    z: 55.0
-  }
-  size {
-    x: 6.9
-    y: 5.5
-  }
-  color {
-    y: 0.71
-    z: 0.275
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_dot"
-  id: "mapfull_poi_cafe_dot"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_cafe"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.72
-  enabled: false
-}
-nodes {
-  position {
-    x: 947.4
-    y: 357.7
+    x: 880.0
+    y: 401.0
     z: 50.0
   }
   size {
-    x: 0.6
-    y: 0.5
+    x: 1.0
+    y: 1.0
   }
   type: TYPE_BOX
-  id: "mapfull_poi_park"
+  id: "poi_park"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_poi"
+  parent: "grp_poi"
   layer: "ui"
   inherit_alpha: true
-  enabled: false
 }
 nodes {
   position {
     z: 49.0
   }
   size {
-    x: 67.0
-    y: 53.6
+    x: 116.0
+    y: 116.0
   }
   type: TYPE_BOX
-  id: "mapfull_poi_park_hitbox"
+  id: "poi_park_hitbox"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_park"
+  parent: "poi_park"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.01
-  enabled: false
 }
 nodes {
   position {
-    z: 50.0
-  }
-  size {
-    x: 82.0
-    y: 65.6
-  }
-  color {
-    x: 0.412
-    y: 0.961
-    z: 0.529
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_glow"
-  id: "mapfull_poi_park_glow"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_park"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.24
-  enabled: false
-}
-nodes {
-  position {
-    z: 51.0
-  }
-  size {
-    x: 61.2
-    y: 49.0
-  }
-  color {
-    x: 0.412
-    y: 0.961
-    z: 0.529
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_glow_ring"
-  id: "mapfull_poi_park_glow_ring"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_park"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.22
-  enabled: false
-}
-nodes {
-  position {
-    y: 148.4
+    y: -48.0
     z: 52.0
   }
   size {
-    x: 12.7
-    y: 32.3
+    x: 22.0
+    y: 70.0
   }
   color {
     x: 0.412
@@ -1252,21 +625,20 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/poi_stem"
-  id: "mapfull_poi_park_stem"
+  id: "poi_park_stem"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_park"
+  parent: "poi_park"
   layer: "lines"
   inherit_alpha: true
   alpha: 0.68
-  enabled: false
 }
 nodes {
   position {
     z: 53.0
   }
   size {
-    x: 40.4
-    y: 32.3
+    x: 80.0
+    y: 80.0
   }
   color {
     x: 0.412
@@ -1275,21 +647,20 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/poi_circle"
-  id: "mapfull_poi_park_circle"
+  id: "poi_park_circle"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_park"
+  parent: "poi_park"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.92
-  enabled: false
 }
 nodes {
   position {
     z: 54.0
   }
   size {
-    x: 27.7
-    y: 22.2
+    x: 100.0
+    y: 100.0
   }
   color {
     x: 0.412
@@ -1298,21 +669,20 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/poi_center_dark"
-  id: "mapfull_poi_park_center"
+  id: "poi_park_center"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_park"
+  parent: "poi_park"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.92
-  enabled: false
 }
 nodes {
   position {
     z: 55.0
   }
   size {
-    x: 25.4
-    y: 20.3
+    x: 44.0
+    y: 44.0
   }
   color {
     x: 0.412
@@ -1321,147 +691,53 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/poi_icon_park"
-  id: "mapfull_poi_park_icon"
+  id: "poi_park_icon"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_park"
+  parent: "poi_park"
   layer: "ui"
   inherit_alpha: true
-  enabled: false
 }
 nodes {
   position {
-    y: 148.4
-    z: 55.0
-  }
-  size {
-    x: 6.9
-    y: 5.5
-  }
-  color {
-    x: 0.412
-    y: 0.961
-    z: 0.529
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_dot"
-  id: "mapfull_poi_park_dot"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_park"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.72
-  enabled: false
-}
-nodes {
-  position {
-    z: 56.5
-  }
-  size {
-    x: 79.7
-    y: 63.8
-  }
-  color {
-    x: 0.412
-    y: 0.961
-    z: 0.529
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_glow_ring"
-  id: "mapfull_poi_park_active_glow"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_park"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.16
-  enabled: false
-}
-nodes {
-  position {
-    x: 661.0
-    y: 321.2
+    x: 758.0
+    y: 521.0
     z: 50.0
   }
   size {
-    x: 0.6
-    y: 0.5
+    x: 1.0
+    y: 1.0
   }
   type: TYPE_BOX
-  id: "mapfull_poi_shop"
+  id: "poi_shop"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_poi"
+  parent: "grp_poi"
   layer: "ui"
   inherit_alpha: true
-  enabled: false
 }
 nodes {
   position {
     z: 49.0
   }
   size {
-    x: 67.0
-    y: 53.6
+    x: 116.0
+    y: 116.0
   }
   type: TYPE_BOX
-  id: "mapfull_poi_shop_hitbox"
+  id: "poi_shop_hitbox"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_shop"
+  parent: "poi_shop"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.01
-  enabled: false
 }
 nodes {
   position {
-    z: 50.0
-  }
-  size {
-    x: 82.0
-    y: 65.6
-  }
-  color {
-    y: 0.282
-    z: 0.569
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_glow"
-  id: "mapfull_poi_shop_glow"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_shop"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.24
-  enabled: false
-}
-nodes {
-  position {
-    z: 51.0
-  }
-  size {
-    x: 61.2
-    y: 49.0
-  }
-  color {
-    y: 0.282
-    z: 0.569
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_glow_ring"
-  id: "mapfull_poi_shop_glow_ring"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_shop"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.22
-  enabled: false
-}
-nodes {
-  position {
-    y: 148.4
+    y: -48.0
     z: 52.0
   }
   size {
-    x: 12.7
-    y: 32.3
+    x: 22.0
+    y: 70.0
   }
   color {
     y: 0.282
@@ -1469,21 +745,20 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/poi_stem"
-  id: "mapfull_poi_shop_stem"
+  id: "poi_shop_stem"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_shop"
+  parent: "poi_shop"
   layer: "lines"
   inherit_alpha: true
   alpha: 0.68
-  enabled: false
 }
 nodes {
   position {
     z: 53.0
   }
   size {
-    x: 40.4
-    y: 32.3
+    x: 80.0
+    y: 80.0
   }
   color {
     y: 0.282
@@ -1491,21 +766,20 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/poi_circle"
-  id: "mapfull_poi_shop_circle"
+  id: "poi_shop_circle"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_shop"
+  parent: "poi_shop"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.92
-  enabled: false
 }
 nodes {
   position {
     z: 54.0
   }
   size {
-    x: 27.7
-    y: 22.2
+    x: 100.0
+    y: 100.0
   }
   color {
     y: 0.282
@@ -1513,21 +787,20 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/poi_center_dark"
-  id: "mapfull_poi_shop_center"
+  id: "poi_shop_center"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_shop"
+  parent: "poi_shop"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.92
-  enabled: false
 }
 nodes {
   position {
     z: 55.0
   }
   size {
-    x: 25.4
-    y: 20.3
+    x: 44.0
+    y: 44.0
   }
   color {
     y: 0.282
@@ -1535,123 +808,53 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/poi_icon_shop"
-  id: "mapfull_poi_shop_icon"
+  id: "poi_shop_icon"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_shop"
+  parent: "poi_shop"
   layer: "ui"
   inherit_alpha: true
-  enabled: false
 }
 nodes {
   position {
-    y: 148.4
-    z: 55.0
-  }
-  size {
-    x: 6.9
-    y: 5.5
-  }
-  color {
-    y: 0.282
-    z: 0.569
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_dot"
-  id: "mapfull_poi_shop_dot"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_shop"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.72
-  enabled: false
-}
-nodes {
-  position {
-    x: 829.6
-    y: 311.1
+    x: 700.0
+    y: 279.0
     z: 50.0
   }
   size {
-    x: 0.6
-    y: 0.5
+    x: 1.0
+    y: 1.0
   }
   type: TYPE_BOX
-  id: "mapfull_poi_bar"
+  id: "poi_bar"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_poi"
+  parent: "grp_poi"
   layer: "ui"
   inherit_alpha: true
-  enabled: false
 }
 nodes {
   position {
     z: 49.0
   }
   size {
-    x: 67.0
-    y: 53.6
+    x: 116.0
+    y: 116.0
   }
   type: TYPE_BOX
-  id: "mapfull_poi_bar_hitbox"
+  id: "poi_bar_hitbox"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_bar"
+  parent: "poi_bar"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.01
-  enabled: false
 }
 nodes {
   position {
-    z: 50.0
-  }
-  size {
-    x: 82.0
-    y: 65.6
-  }
-  color {
-    y: 0.282
-    z: 0.569
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_glow"
-  id: "mapfull_poi_bar_glow"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_bar"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.24
-  enabled: false
-}
-nodes {
-  position {
-    z: 51.0
-  }
-  size {
-    x: 61.2
-    y: 49.0
-  }
-  color {
-    y: 0.282
-    z: 0.569
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_glow_ring"
-  id: "mapfull_poi_bar_glow_ring"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_bar"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.22
-  enabled: false
-}
-nodes {
-  position {
-    y: 148.4
+    y: -48.0
     z: 52.0
   }
   size {
-    x: 12.7
-    y: 32.3
+    x: 22.0
+    y: 70.0
   }
   color {
     y: 0.282
@@ -1659,21 +862,20 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/poi_stem"
-  id: "mapfull_poi_bar_stem"
+  id: "poi_bar_stem"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_bar"
+  parent: "poi_bar"
   layer: "lines"
   inherit_alpha: true
   alpha: 0.68
-  enabled: false
 }
 nodes {
   position {
     z: 53.0
   }
   size {
-    x: 40.4
-    y: 32.3
+    x: 80.0
+    y: 80.0
   }
   color {
     y: 0.282
@@ -1681,21 +883,20 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/poi_circle"
-  id: "mapfull_poi_bar_circle"
+  id: "poi_bar_circle"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_bar"
+  parent: "poi_bar"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.92
-  enabled: false
 }
 nodes {
   position {
     z: 54.0
   }
   size {
-    x: 27.7
-    y: 22.2
+    x: 100.0
+    y: 100.0
   }
   color {
     y: 0.282
@@ -1703,21 +904,20 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/poi_center_dark"
-  id: "mapfull_poi_bar_center"
+  id: "poi_bar_center"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_bar"
+  parent: "poi_bar"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.92
-  enabled: false
 }
 nodes {
   position {
     z: 55.0
   }
   size {
-    x: 25.4
-    y: 20.3
+    x: 44.0
+    y: 44.0
   }
   color {
     y: 0.282
@@ -1725,123 +925,53 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/poi_icon_bar"
-  id: "mapfull_poi_bar_icon"
+  id: "poi_bar_icon"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_bar"
+  parent: "poi_bar"
   layer: "ui"
   inherit_alpha: true
-  enabled: false
 }
 nodes {
   position {
-    y: 148.4
-    z: 55.0
-  }
-  size {
-    x: 6.9
-    y: 5.5
-  }
-  color {
-    y: 0.282
-    z: 0.569
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_dot"
-  id: "mapfull_poi_bar_dot"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_bar"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.72
-  enabled: false
-}
-nodes {
-  position {
-    x: 696.8
-    y: 261.2
+    x: 1000.0
+    y: 515.0
     z: 50.0
   }
   size {
-    x: 0.6
-    y: 0.5
+    x: 1.0
+    y: 1.0
   }
   type: TYPE_BOX
-  id: "mapfull_poi_view"
+  id: "poi_view"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_poi"
+  parent: "grp_poi"
   layer: "ui"
   inherit_alpha: true
-  enabled: false
 }
 nodes {
   position {
     z: 49.0
   }
   size {
-    x: 67.0
-    y: 53.6
+    x: 116.0
+    y: 116.0
   }
   type: TYPE_BOX
-  id: "mapfull_poi_view_hitbox"
+  id: "poi_view_hitbox"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_view"
+  parent: "poi_view"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.01
-  enabled: false
 }
 nodes {
   position {
-    z: 50.0
-  }
-  size {
-    x: 82.0
-    y: 65.6
-  }
-  color {
-    y: 0.71
-    z: 0.275
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_glow"
-  id: "mapfull_poi_view_glow"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_view"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.24
-  enabled: false
-}
-nodes {
-  position {
-    z: 51.0
-  }
-  size {
-    x: 61.2
-    y: 49.0
-  }
-  color {
-    y: 0.71
-    z: 0.275
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_glow_ring"
-  id: "mapfull_poi_view_glow_ring"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_view"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.22
-  enabled: false
-}
-nodes {
-  position {
-    y: 148.4
+    y: -48.0
     z: 52.0
   }
   size {
-    x: 12.7
-    y: 32.3
+    x: 22.0
+    y: 70.0
   }
   color {
     y: 0.71
@@ -1849,21 +979,20 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/poi_stem"
-  id: "mapfull_poi_view_stem"
+  id: "poi_view_stem"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_view"
+  parent: "poi_view"
   layer: "lines"
   inherit_alpha: true
   alpha: 0.68
-  enabled: false
 }
 nodes {
   position {
     z: 53.0
   }
   size {
-    x: 40.4
-    y: 32.3
+    x: 80.0
+    y: 80.0
   }
   color {
     y: 0.71
@@ -1871,21 +1000,20 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/poi_circle"
-  id: "mapfull_poi_view_circle"
+  id: "poi_view_circle"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_view"
+  parent: "poi_view"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.92
-  enabled: false
 }
 nodes {
   position {
     z: 54.0
   }
   size {
-    x: 27.7
-    y: 22.2
+    x: 100.0
+    y: 100.0
   }
   color {
     y: 0.71
@@ -1893,21 +1021,20 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/poi_center_dark"
-  id: "mapfull_poi_view_center"
+  id: "poi_view_center"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_view"
+  parent: "poi_view"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.92
-  enabled: false
 }
 nodes {
   position {
     z: 55.0
   }
   size {
-    x: 25.4
-    y: 20.3
+    x: 44.0
+    y: 44.0
   }
   color {
     y: 0.71
@@ -1915,123 +1042,53 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/poi_icon_view"
-  id: "mapfull_poi_view_icon"
+  id: "poi_view_icon"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_view"
+  parent: "poi_view"
   layer: "ui"
   inherit_alpha: true
-  enabled: false
 }
 nodes {
   position {
-    y: 148.4
-    z: 55.0
-  }
-  size {
-    x: 6.9
-    y: 5.5
-  }
-  color {
-    y: 0.71
-    z: 0.275
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_dot"
-  id: "mapfull_poi_view_dot"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_view"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.72
-  enabled: false
-}
-nodes {
-  position {
-    x: 979.8
-    y: 263.0
+    x: 1121.0
+    y: 394.0
     z: 50.0
   }
   size {
-    x: 0.6
-    y: 0.5
+    x: 1.0
+    y: 1.0
   }
   type: TYPE_BOX
-  id: "mapfull_poi_archive"
+  id: "poi_archive"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_poi"
+  parent: "grp_poi"
   layer: "ui"
   inherit_alpha: true
-  enabled: false
 }
 nodes {
   position {
     z: 49.0
   }
   size {
-    x: 67.0
-    y: 53.6
+    x: 116.0
+    y: 116.0
   }
   type: TYPE_BOX
-  id: "mapfull_poi_archive_hitbox"
+  id: "poi_archive_hitbox"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_archive"
+  parent: "poi_archive"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.01
-  enabled: false
 }
 nodes {
   position {
-    z: 50.0
-  }
-  size {
-    x: 82.0
-    y: 65.6
-  }
-  color {
-    x: 0.714
-    y: 0.361
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_glow"
-  id: "mapfull_poi_archive_glow"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_archive"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.24
-  enabled: false
-}
-nodes {
-  position {
-    z: 51.0
-  }
-  size {
-    x: 61.2
-    y: 49.0
-  }
-  color {
-    x: 0.714
-    y: 0.361
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_glow_ring"
-  id: "mapfull_poi_archive_glow_ring"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_archive"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.22
-  enabled: false
-}
-nodes {
-  position {
-    y: 148.4
+    y: -48.0
     z: 52.0
   }
   size {
-    x: 12.7
-    y: 32.3
+    x: 22.0
+    y: 70.0
   }
   color {
     x: 0.714
@@ -2039,21 +1096,20 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/poi_stem"
-  id: "mapfull_poi_archive_stem"
+  id: "poi_archive_stem"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_archive"
+  parent: "poi_archive"
   layer: "lines"
   inherit_alpha: true
   alpha: 0.68
-  enabled: false
 }
 nodes {
   position {
     z: 53.0
   }
   size {
-    x: 40.4
-    y: 32.3
+    x: 80.0
+    y: 80.0
   }
   color {
     x: 0.714
@@ -2061,21 +1117,20 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/poi_circle"
-  id: "mapfull_poi_archive_circle"
+  id: "poi_archive_circle"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_archive"
+  parent: "poi_archive"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.92
-  enabled: false
 }
 nodes {
   position {
     z: 54.0
   }
   size {
-    x: 27.7
-    y: 22.2
+    x: 100.0
+    y: 100.0
   }
   color {
     x: 0.714
@@ -2083,21 +1138,20 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/poi_center_dark"
-  id: "mapfull_poi_archive_center"
+  id: "poi_archive_center"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_archive"
+  parent: "poi_archive"
   layer: "ui"
   inherit_alpha: true
   alpha: 0.92
-  enabled: false
 }
 nodes {
   position {
     z: 55.0
   }
   size {
-    x: 25.4
-    y: 20.3
+    x: 44.0
+    y: 44.0
   }
   color {
     x: 0.714
@@ -2105,266 +1159,29 @@ nodes {
   }
   type: TYPE_BOX
   texture: "map2/poi_icon_archive"
-  id: "mapfull_poi_archive_icon"
+  id: "poi_archive_icon"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_archive"
+  parent: "poi_archive"
   layer: "ui"
   inherit_alpha: true
-  enabled: false
-}
-nodes {
-  position {
-    y: 148.4
-    z: 55.0
-  }
-  size {
-    x: 6.9
-    y: 5.5
-  }
-  color {
-    x: 0.714
-    y: 0.361
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_dot"
-  id: "mapfull_poi_archive_dot"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_archive"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.72
-  enabled: false
-}
-nodes {
-  position {
-    x: 773.0
-    y: 328.6
-    z: 50.0
-  }
-  size {
-    x: 0.6
-    y: 0.5
-  }
-  type: TYPE_BOX
-  id: "mapfull_poi_metro"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_poi"
-  layer: "ui"
-  inherit_alpha: true
-  enabled: false
-}
-nodes {
-  position {
-    z: 49.0
-  }
-  size {
-    x: 67.0
-    y: 53.6
-  }
-  type: TYPE_BOX
-  id: "mapfull_poi_metro_hitbox"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_metro"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.01
-  enabled: false
-}
-nodes {
-  position {
-    z: 50.0
-  }
-  size {
-    x: 82.0
-    y: 65.6
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_glow"
-  id: "mapfull_poi_metro_glow"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_metro"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.24
-  enabled: false
-}
-nodes {
-  position {
-    z: 51.0
-  }
-  size {
-    x: 61.2
-    y: 49.0
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_glow_ring"
-  id: "mapfull_poi_metro_glow_ring"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_metro"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.22
-  enabled: false
-}
-nodes {
-  position {
-    y: 148.4
-    z: 52.0
-  }
-  size {
-    x: 12.7
-    y: 32.3
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_stem"
-  id: "mapfull_poi_metro_stem"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_metro"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.68
-  enabled: false
-}
-nodes {
-  position {
-    z: 53.0
-  }
-  size {
-    x: 40.4
-    y: 32.3
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_circle"
-  id: "mapfull_poi_metro_circle"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_metro"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.92
-  enabled: false
-}
-nodes {
-  position {
-    z: 54.0
-  }
-  size {
-    x: 27.7
-    y: 22.2
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_center_dark"
-  id: "mapfull_poi_metro_center"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_metro"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.92
-  enabled: false
-}
-nodes {
-  position {
-    z: 55.0
-  }
-  size {
-    x: 25.4
-    y: 20.3
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_icon_metro"
-  id: "mapfull_poi_metro_icon"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_metro"
-  layer: "ui"
-  inherit_alpha: true
-  enabled: false
-}
-nodes {
-  position {
-    y: 148.4
-    z: 55.0
-  }
-  size {
-    x: 6.9
-    y: 5.5
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_dot"
-  id: "mapfull_poi_metro_dot"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_metro"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.72
-  enabled: false
-}
-nodes {
-  position {
-    z: 56.5
-  }
-  size {
-    x: 79.7
-    y: 63.8
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_BOX
-  texture: "map2/poi_glow_ring"
-  id: "mapfull_poi_metro_active_glow"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_poi_metro"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.16
-  enabled: false
 }
 nodes {
   type: TYPE_BOX
-  id: "mapfull_grp_map_labels"
+  id: "grp_map_labels"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map"
+  parent: "grp_map"
   layer: "text"
   inherit_alpha: true
-  enabled: false
 }
 nodes {
   position {
-    x: 661.0
-    y: 367.4
+    x: 620.0
+    y: 439.0
     z: 68.0
   }
   size {
-    x: 86.6
-    y: 8.3
+    x: 150.0
+    y: 18.0
   }
   color {
     x: 0.714
@@ -2373,51 +1190,23 @@ nodes {
   type: TYPE_TEXT
   text: "\320\224\320\276\320\274"
   font: "jb_mono_12"
-  id: "mapfull_poi_home_title"
+  id: "poi_home_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map_labels"
+  parent: "grp_map_labels"
   layer: "text"
   inherit_alpha: true
   alpha: 0.96
-  enabled: false
 }
 nodes {
   position {
-    x: 661.0
-    y: 357.7
+    x: 840.0
+    y: 170.0
     z: 68.0
   }
   size {
-    x: 86.6
-    y: 6.5
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\272\320\262\320\260\321\200\321\202\320\270\321\200\320\260 48"
-  font: "jb_mono_10"
-  id: "mapfull_poi_home_subtitle"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map_labels"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.46
-  enabled: false
-}
-nodes {
-  position {
-    x: 830.8
-    y: 432.1
-    z: 68.0
-  }
-  size {
-    x: 86.6
-    y: 8.3
+    x: 150.0
+    y: 18.0
   }
   color {
     x: 0.282
@@ -2426,51 +1215,23 @@ nodes {
   type: TYPE_TEXT
   text: "\320\240\320\260\320\261\320\276\321\202\320\260"
   font: "jb_mono_12"
-  id: "mapfull_poi_work_title"
+  id: "poi_work_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map_labels"
+  parent: "grp_map_labels"
   layer: "text"
   inherit_alpha: true
   alpha: 0.96
-  enabled: false
 }
 nodes {
   position {
-    x: 830.8
-    y: 422.4
+    x: 1098.0
+    y: 239.0
     z: 68.0
   }
   size {
-    x: 86.6
-    y: 6.5
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\221\320\246 \320\222\320\265\321\201\320\275\320\260"
-  font: "jb_mono_10"
-  id: "mapfull_poi_work_subtitle"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map_labels"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.46
-  enabled: false
-}
-nodes {
-  position {
-    x: 811.1
-    y: 368.3
-    z: 68.0
-  }
-  size {
-    x: 86.6
-    y: 8.3
+    x: 150.0
+    y: 18.0
   }
   color {
     y: 0.71
@@ -2479,51 +1240,23 @@ nodes {
   type: TYPE_TEXT
   text: "\320\232\320\260\321\204\320\265"
   font: "jb_mono_12"
-  id: "mapfull_poi_cafe_title"
+  id: "poi_cafe_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map_labels"
+  parent: "grp_map_labels"
   layer: "text"
   inherit_alpha: true
   alpha: 0.96
-  enabled: false
 }
 nodes {
   position {
-    x: 811.1
-    y: 358.6
+    x: 910.0
+    y: 403.0
     z: 68.0
   }
   size {
-    x: 86.6
-    y: 6.5
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\237\320\265\321\202\320\273\321\217"
-  font: "jb_mono_10"
-  id: "mapfull_poi_cafe_subtitle"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map_labels"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.46
-  enabled: false
-}
-nodes {
-  position {
-    x: 976.9
-    y: 361.9
-    z: 68.0
-  }
-  size {
-    x: 86.6
-    y: 8.3
+    x: 150.0
+    y: 18.0
   }
   color {
     x: 0.412
@@ -2533,51 +1266,23 @@ nodes {
   type: TYPE_TEXT
   text: "\320\237\320\260\321\200\320\272 \321\203 \321\200\320\265\320\272\320\270"
   font: "jb_mono_12"
-  id: "mapfull_poi_park_title"
+  id: "poi_park_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map_labels"
+  parent: "grp_map_labels"
   layer: "text"
   inherit_alpha: true
   alpha: 0.96
-  enabled: false
 }
 nodes {
   position {
-    x: 976.9
-    y: 352.2
+    x: 726.0
+    y: 519.0
     z: 68.0
   }
   size {
-    x: 86.6
-    y: 6.5
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\261\320\265\321\200\320\265\320\263"
-  font: "jb_mono_10"
-  id: "mapfull_poi_park_subtitle"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map_labels"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.46
-  enabled: false
-}
-nodes {
-  position {
-    x: 691.0
-    y: 324.9
-    z: 68.0
-  }
-  size {
-    x: 86.6
-    y: 8.3
+    x: 150.0
+    y: 18.0
   }
   color {
     y: 0.282
@@ -2586,51 +1291,23 @@ nodes {
   type: TYPE_TEXT
   text: "\320\234\320\260\320\263\320\260\320\267\320\270\320\275 24/7"
   font: "jb_mono_12"
-  id: "mapfull_poi_shop_title"
+  id: "poi_shop_title"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map_labels"
+  parent: "grp_map_labels"
   layer: "text"
   inherit_alpha: true
   alpha: 0.96
-  enabled: false
 }
 nodes {
   position {
-    x: 691.0
-    y: 315.2
+    x: 727.0
+    y: 280.0
     z: 68.0
   }
   size {
-    x: 86.6
-    y: 6.5
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\275\320\276\321\207\320\275\320\276\320\271 \320\262\321\205\320\276\320\264"
-  font: "jb_mono_10"
-  id: "mapfull_poi_shop_subtitle"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map_labels"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.46
-  enabled: false
-}
-nodes {
-  position {
-    x: 855.6
-    y: 313.8
-    z: 68.0
-  }
-  size {
-    x: 86.6
-    y: 8.3
+    x: 150.0
+    y: 18.0
   }
   color {
     y: 0.282
@@ -2639,51 +1316,23 @@ nodes {
   type: TYPE_TEXT
   text: "\320\221\320\260\321\200 Maybe"
   font: "jb_mono_12"
-  id: "mapfull_poi_bar_title"
+  id: "poi_bar_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map_labels"
+  parent: "grp_map_labels"
   layer: "text"
   inherit_alpha: true
   alpha: 0.96
-  enabled: false
 }
 nodes {
   position {
-    x: 855.6
-    y: 304.1
+    x: 968.0
+    y: 513.0
     z: 68.0
   }
   size {
-    x: 86.6
-    y: 6.5
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\267\320\260\320\272\321\200\321\213\321\202\320\276?"
-  font: "jb_mono_10"
-  id: "mapfull_poi_bar_subtitle"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map_labels"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.46
-  enabled: false
-}
-nodes {
-  position {
-    x: 719.9
-    y: 264.8
-    z: 68.0
-  }
-  size {
-    x: 86.6
-    y: 8.3
+    x: 150.0
+    y: 18.0
   }
   color {
     y: 0.71
@@ -2692,51 +1341,23 @@ nodes {
   type: TYPE_TEXT
   text: "\320\241\320\274\320\276\321\202\321\200\320\276\320\262\320\260\321\217"
   font: "jb_mono_12"
-  id: "mapfull_poi_view_title"
+  id: "poi_view_title"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map_labels"
+  parent: "grp_map_labels"
   layer: "text"
   inherit_alpha: true
   alpha: 0.96
-  enabled: false
 }
 nodes {
   position {
-    x: 719.9
-    y: 255.1
+    x: 1092.0
+    y: 392.0
     z: 68.0
   }
   size {
-    x: 86.6
-    y: 6.5
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\272\321\200\321\213\321\210\320\260"
-  font: "jb_mono_10"
-  id: "mapfull_poi_view_subtitle"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map_labels"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.46
-  enabled: false
-}
-nodes {
-  position {
-    x: 944.0
-    y: 266.7
-    z: 68.0
-  }
-  size {
-    x: 86.6
-    y: 8.3
+    x: 150.0
+    y: 18.0
   }
   color {
     x: 0.714
@@ -2745,215 +1366,13 @@ nodes {
   type: TYPE_TEXT
   text: "\320\220\321\200\321\205\320\270\320\262"
   font: "jb_mono_12"
-  id: "mapfull_poi_archive_title"
+  id: "poi_archive_title"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map_labels"
+  parent: "grp_map_labels"
   layer: "text"
   inherit_alpha: true
   alpha: 0.96
-  enabled: false
-}
-nodes {
-  position {
-    x: 944.0
-    y: 257.0
-    z: 68.0
-  }
-  size {
-    x: 86.6
-    y: 6.5
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\264\320\265\320\273\320\276 017"
-  font: "jb_mono_10"
-  id: "mapfull_poi_archive_subtitle"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map_labels"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.46
-  enabled: false
-}
-nodes {
-  position {
-    x: 743.0
-    y: 339.2
-    z: 68.0
-  }
-  size {
-    x: 86.6
-    y: 8.3
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_TEXT
-  text: "\320\234\320\265\321\202\321\200\320\276"
-  font: "jb_mono_12"
-  id: "mapfull_poi_metro_title"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map_labels"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.96
-  enabled: false
-}
-nodes {
-  position {
-    x: 743.0
-    y: 329.5
-    z: 68.0
-  }
-  size {
-    x: 86.6
-    y: 6.5
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\262\321\213\321\205\320\276\320\264 2"
-  font: "jb_mono_10"
-  id: "mapfull_poi_metro_subtitle"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mapfull_grp_map_labels"
-  layer: "text"
-  inherit_alpha: true
-  alpha: 0.46
-  enabled: false
-}
-nodes {
-  position {
-    x: 596.0
-    y: 536.0
-    z: 0.6
-  }
-  size {
-    x: 460.0
-    y: 12.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_TEXT
-  text: "\320\272\320\260\321\200\321\202\320\260 \302\267 \321\201\320\274. \320\274\320\276\320\264\320\260\320\273\320\272\321\203 \320\272\320\260\321\200\321\202\321\213"
-  font: "jb_mono_10"
-  id: "v_map_eyebrow"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "map_root"
-  alpha: 0.92
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 596.0
-    y: 506.0
-    z: 0.6
-  }
-  size {
-    x: 460.0
-    y: 22.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\232\320\260\321\200\321\202\320\260"
-  font: "unbounded_bold_20"
-  id: "v_map_title"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "map_root"
-  alpha: 0.98
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 604.0
-    y: 166.0
-    z: 0.6
-  }
-  size {
-    x: 438.0
-    y: 14.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_BOX
-  id: "v_map_placeholder"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "map_root"
-  alpha: 0.42
-}
-nodes {
-  position {
-    x: 780.0
-    y: 224.0
-    z: 0.6
-  }
-  size {
-    x: 250.0
-    y: 12.0
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_TEXT
-  text: "\320\277\320\276\320\273\320\275\320\276\321\215\320\272\321\200\320\260\320\275\320\275\320\260\321\217 \320\272\320\260\321\200\321\202\320\260 \342\200\224 \320\272\320\275\320\276\320\277\320\272\320\260 M"
-  font: "unbounded_bold_20"
-  id: "v_map_hint"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "map_root"
-  alpha: 0.62
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 780.0
-    y: 208.0
-    z: 0.6
-  }
-  size {
-    x: 250.0
-    y: 12.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_TEXT
-  text: "\320\267\320\264\320\265\321\201\321\214: \320\274\320\270\320\275\320\270\320\260\321\202\321\216\321\200\320\260 \321\202\320\265\320\272\321\203\321\211\320\265\320\271 \320\273\320\276\320\272\320\260\321\206\320\270\320\270"
-  font: "manrope_14"
-  id: "v_map_hint2"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "map_root"
-  alpha: 0.6
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
 }
 layers {
   name: "bg"

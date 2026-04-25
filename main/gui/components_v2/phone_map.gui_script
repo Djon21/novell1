@@ -13,7 +13,7 @@ local function get_node(id)
 end
 
 local function set_root_enabled(enabled)
-    local root = get_node("map_root")
+    local root = get_node("grp_panel")
     if root then gui.set_enabled(root, enabled) end
 end
 
