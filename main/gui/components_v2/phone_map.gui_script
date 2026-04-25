@@ -2,7 +2,7 @@
 -- Карта внутри телефона (split-модуль).
 -- Принимает: open_app, close_app
 --
--- phone_map.gui имеет 132 ноды под единым корнем map_root.
+-- Все ноды карты находятся под grp_panel.
 -- Скрываем только его — все дочерние прячутся автоматически (Defold propagates enabled).
 -- Внешняя карта (map_v2) по-прежнему открывается из HUD-кнопки — она не затронута.
 
@@ -19,37 +19,14 @@ end
 
 function init(self)
     self.visible = false
-    local root = get_node("grp_panel")
-    print("[phone_map] init: grp_panel =", tostring(root))
     set_root_enabled(false)
 end
 
 function on_message(self, message_id, message, sender)
     if message_id == hash("open_app") then
-        print("[phone_map] open_app received")
         self.visible = true
         set_root_enabled(true)
-        local root = get_node("grp_panel")
-        print("[phone_map] grp_panel enabled =", root and tostring(gui.is_enabled(root)) or "node not found!")
-        -- Проверяем позицию и масштаб grp_map
-        local gm = get_node("grp_map")
-        if gm then
-            local p = gui.get_position(gm)
-            local s = gui.get_scale(gm)
-            print("[phone_map] grp_map pos:", p.x, p.y, "scale:", s.x, s.y, "enabled:", gui.is_enabled(gm))
-        else
-            print("[phone_map] grp_map NOT FOUND")
-        end
-        -- Проверяем текстуру карты
-        local bg = get_node("map_texture_bg")
-        if bg then
-            local p2 = gui.get_position(bg)
-            print("[phone_map] map_texture_bg pos:", p2.x, p2.y, "enabled:", gui.is_enabled(bg))
-        else
-            print("[phone_map] map_texture_bg NOT FOUND")
-        end
     elseif message_id == hash("close_app") then
-        print("[phone_map] close_app received")
         self.visible = false
         set_root_enabled(false)
     end
