@@ -95,8 +95,6 @@ M.SFX_URLS = {
 - `heartbeat`
 - `paper_rustle`
 
-Файл `click_001` лежит в `main/sounds/`, но в текущем `main_v2.collection` не зарегистрирован.
-
 ## Атрибуция
 
 Если звук взят извне, обновите `main/sounds/CREDITS.md`.

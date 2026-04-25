@@ -33,9 +33,6 @@ This file lists all sound effects used in the game and their sources.
 ### coffee_brew.wav
 - **Source:** Internal/Custom
 
-### click_001.ogg
-- **Source:** Internal/Custom
-
 ### music_background_loop_01.ogg
 - **Source:** Internal/Custom
 
