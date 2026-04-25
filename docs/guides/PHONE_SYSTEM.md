@@ -42,7 +42,7 @@
 | `phone_mail.gui` | `phone_mail.gui_script` | `gs.get_mails()` |
 | `phone_cam.gui` | `phone_cam.gui_script` | `gs.get_camera_feed()` |
 | `phone_term.gui` | `phone_term.gui_script` | `gs.get_terminal_lines()` |
-| `phone_map.gui` | `phone_map.gui_script` | — (зарезервирован) |
+| `phone_map.gui` | `phone_map.gui_script` | показывает карту внутри телефона (132 ноды под `map_root`) |
 
 ### Архив (не в коллекции)
 
@@ -400,30 +400,38 @@ end
 
 ---
 
-## 11. Карта — особый случай
+## 11. Карта — внутри телефона
 
-Иконка карты (app3) в лаунчере **открывает внешнюю карту**, а не `phone_map.gui`:
+Иконка карты (app3) в лаунчере **открывает `phone_map.gui` внутри телефонного фрейма**,
+как любое другое приложение:
 
 ```lua
 -- phone_v2_root.gui_script:
-local EXTERNAL_APPS = {
-    map = true,   -- ← не переключаем внутри телефона
-}
+local EXTERNAL_APPS = {}   -- map здесь больше нет
 
 -- on_input при клике на app3:
-msg.post(UI_MGR, "phone_app_clicked", { id = "map" })
--- ui_manager получает → close_phone() → open_map()
--- switch_app() НЕ вызывается для external apps
+msg.post(UI_MGR, "phone_app_clicked", { id = "map" })   -- ui_manager ничего не делает
+switch_app(self, "map")                                  -- → open_app → #phone_map
 ```
 
-`phone_map.gui` и `phone_map.gui_script` существуют, подключены к коллекции,
-но `open_app` им не посылается. `map_root` скрыт в `init` (132 ноды
-под одним родителем — Defold прячет все дочерние автоматически).
+`phone_map.gui` имеет 132 ноды под единым корнем `map_root`.
+`phone_map.gui_script` скрывает/показывает только `map_root` —
+Defold автоматически распространяет `enabled = false` на все дочерние узлы.
 
-Чтобы сделать in-phone карту в будущем:
-1. Убрать `map = true` из `EXTERNAL_APPS`
-2. Убрать обработку `id == "map"` в `ui_manager_v2` (или оставить как fallback)
-3. Наполнить `phone_map.gui_script` логикой отображения
+**Внешняя карта (`map_v2`)** по-прежнему открывается из HUD-кнопки
+(сообщение `open_map` в `ui_manager_v2`) — она не затронута.
+
+Если нужно вернуть старое поведение (карта как внешний оверлей из телефона):
+1. Добавить `map = true` в `EXTERNAL_APPS` в `phone_v2_root.gui_script`
+2. Восстановить обработку `id == "map"` в `phone_app_clicked` в `ui_manager_v2`:
+
+```lua
+elseif message_id == hash("phone_app_clicked") then
+    if message.id == "map" then
+        close_phone(self)
+        open_map(self)
+    end
+```
 
 ---
 
@@ -432,7 +440,7 @@ msg.post(UI_MGR, "phone_app_clicked", { id = "map" })
 | Симптом | Причина | Решение |
 |---|---|---|
 | Ноды телефона видны поверх меню | Нода добавлена в `.gui` но не в `NODE_IDS` скрипта | Добавить в `NODE_IDS` |
-| У `phone_map.gui` 100+ нод видны | `map_root` не скрыт | Скрывать родительский нод, не каждую дочернюю |
+| Карта открывается как внешний оверлей | `map` в `EXTERNAL_APPS` / обработчик в `ui_manager_v2` | Убрать `map` из `EXTERNAL_APPS`; убрать `id=="map"` из `phone_app_clicked` |
 | Меню не реагирует на клики | `acquire_input_focus` убран из `init` root-скрипта | Восстановить, не добавлять `release` при закрытии |
 | При закрытии телефона меню не работает | `release_input_focus` вызывается в `close_phone` | Убрать `release_input_focus` |
 | Данные в вкладке не обновляются | Нет вызова `refresh(self)` в `open_app` | Добавить `refresh(self)` в хэндлер `open_app` |
