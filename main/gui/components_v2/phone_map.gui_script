@@ -2,23 +2,25 @@
 -- Карта внутри телефона (split-модуль).
 -- Принимает: open_app, close_app
 --
--- Клик по POI → msg.post(UI_MGR, "map_travel", { scene = "scene_id" })
+-- Флоу: клик по POI → диалог подтверждения → ДА → map_travel → ui_manager
 -- ui_manager закрывает телефон и вызывает scene_controller.enter(scene_id).
 
 local UI_MGR = "#ui_manager_v2"
 
--- Маппинг poi_NAME → scene_id из scenes.lua.
--- Добавь сюда новые локации по мере добавления хабов в scenes.lua.
+-- Маппинг poi_NAME → { scene, label }
+-- label — строка в диалоге "Перейти в [label]?"
 local POI_SCENES = {
-    poi_home    = "apartment_hub",
-    poi_work    = "work_hub",
-    poi_cafe    = "cafe_hub",
-    poi_park    = "park_hub",
-    poi_shop    = "shop_hub",
-    poi_bar     = "bar_hub",
-    poi_view    = "view_hub",
-    poi_archive = "archive_hub",
+    poi_home    = { scene = "apartment_hub", label = "Домой"       },
+    poi_work    = { scene = "work_hub",      label = "На работу"   },
+    poi_cafe    = { scene = "cafe_hub",      label = "Кафе"        },
+    poi_park    = { scene = "park_hub",      label = "Парк у реки" },
+    poi_shop    = { scene = "shop_hub",      label = "Магазин 24/7"},
+    poi_bar     = { scene = "bar_hub",       label = "Бар Maybe"   },
+    poi_view    = { scene = "view_hub",      label = "Смотровая"   },
+    poi_archive = { scene = "archive_hub",   label = "Архив"       },
 }
+
+-- -----------------------------------------------------------------------
 
 local function get_node(id)
     local ok, n = pcall(gui.get_node, id)
@@ -31,17 +33,40 @@ local function set_root_enabled(enabled)
     if root then gui.set_enabled(root, enabled) end
 end
 
+local function hide_confirm(self)
+    self.confirm_target = nil
+    local n = get_node("grp_confirm")
+    if n then gui.set_enabled(n, false) end
+end
+
+local function show_confirm(self, info)
+    self.confirm_target = info
+    local n = get_node("confirm_location_name")
+    if n then gui.set_text(n, info.label) end
+    local g = get_node("grp_confirm")
+    if g then gui.set_enabled(g, true) end
+end
+
+-- -----------------------------------------------------------------------
+
 function init(self)
-    self.visible = false
+    self.visible        = false
+    self.confirm_target = nil
     set_root_enabled(false)
+    -- явно прячем grp_confirm: его own enabled = false,
+    -- чтобы не всплыл когда set_root_enabled(true) включит родителя
+    local c = get_node("grp_confirm")
+    if c then gui.set_enabled(c, false) end
 end
 
 function on_message(self, message_id, message, sender)
     if message_id == hash("open_app") then
         self.visible = true
         set_root_enabled(true)
+        hide_confirm(self)          -- сбрасываем возможный старый диалог
     elseif message_id == hash("close_app") then
         self.visible = false
+        hide_confirm(self)
         set_root_enabled(false)
     end
 end
@@ -50,11 +75,30 @@ function on_input(self, action_id, action)
     if not self.visible then return false end
     if action_id ~= hash("touch") or not action.pressed then return false end
 
-    for poi_id, scene_id in pairs(POI_SCENES) do
+    -- ── Диалог подтверждения открыт ──────────────────────────────────────
+    if self.confirm_target then
+        local yes = get_node("confirm_yes_btn")
+        if yes and gui.pick_node(yes, action.x, action.y) then
+            local scene_id = self.confirm_target.scene
+            hide_confirm(self)
+            msg.post(UI_MGR, "map_travel", { scene = scene_id })
+            return true
+        end
+        local no = get_node("confirm_no_btn")
+        if no and gui.pick_node(no, action.x, action.y) then
+            hide_confirm(self)
+            return true
+        end
+        -- клик мимо кнопок — закрываем без перехода
+        hide_confirm(self)
+        return true
+    end
+
+    -- ── Клик по POI ──────────────────────────────────────────────────────
+    for poi_id, info in pairs(POI_SCENES) do
         local hitbox = get_node(poi_id .. "_hitbox")
         if hitbox and gui.pick_node(hitbox, action.x, action.y) then
-            print("[phone_map] travel to:", scene_id)
-            msg.post(UI_MGR, "map_travel", { scene = scene_id })
+            show_confirm(self, info)
             return true
         end
     end

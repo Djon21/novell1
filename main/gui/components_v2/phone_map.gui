@@ -59,137 +59,21 @@ nodes {
 }
 nodes {
   position {
-    x: 832.0
-    y: 358.0
+    x: 500.0
+    y: 40.0
     z: 0.32
   }
   size {
-    x: 800.0
-    y: 632.0
+    x: 728.0
+    y: 575.0
   }
   type: TYPE_BOX
   texture: "map2/map_bg_base"
   id: "map_texture_bg"
+  pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "grp_map_layers"
   layer: "ui"
-}
-nodes {
-  position {
-    x: 832.0
-    y: 358.0
-    z: 0.33
-  }
-  size {
-    x: 800.0
-    y: 632.0
-  }
-  color {
-    x: 0.55
-    y: 0.72
-    z: 0.98
-  }
-  type: TYPE_BOX
-  texture: "map2/map_roads"
-  id: "map_texture_roads"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map_layers"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 832.0
-    y: 358.0
-    z: 0.34
-  }
-  size {
-    x: 800.0
-    y: 632.0
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_BOX
-  texture: "map2/map_grid"
-  id: "map_texture_grid"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map_layers"
-  layer: "lines"
-  inherit_alpha: true
-  alpha: 0.08
-}
-nodes {
-  position {
-    x: 832.0
-    y: 358.0
-    z: 0.4
-  }
-  size {
-    x: 800.0
-    y: 632.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_BOX
-  texture: "map2/map_routes"
-  id: "map_texture_routes"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map_layers"
-  layer: "ui"
-  inherit_alpha: true
-  alpha: 0.22
-}
-nodes {
-  position {
-    x: 832.0
-    y: 358.0
-    z: 0.395
-  }
-  size {
-    x: 812.0
-    y: 641.0
-  }
-  color {
-    y: 0.71
-    z: 0.275
-  }
-  type: TYPE_BOX
-  texture: "map2/map_route_main"
-  id: "map_route_main_halo"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map_layers"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.34
-}
-nodes {
-  position {
-    x: 832.0
-    y: 358.0
-    z: 0.394
-  }
-  size {
-    x: 812.0
-    y: 641.0
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_BOX
-  texture: "map2/map_route_dashed"
-  id: "map_route_dashed_halo"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "grp_map_layers"
-  layer: "fx"
-  inherit_alpha: true
-  alpha: 0.22
 }
 nodes {
   type: TYPE_BOX
@@ -201,13 +85,13 @@ nodes {
 }
 nodes {
   position {
-    x: 620.0
-    y: 439.0
+    x: 683.6
+    y: 417.7
     z: 0.68
   }
   size {
-    x: 150.0
-    y: 18.0
+    x: 130.5
+    y: 15.5
   }
   color {
     x: 0.714
@@ -226,13 +110,13 @@ nodes {
 }
 nodes {
   position {
-    x: 840.0
-    y: 170.0
+    x: 875.0
+    y: 186.2
     z: 0.68
   }
   size {
-    x: 150.0
-    y: 18.0
+    x: 130.5
+    y: 15.5
   }
   color {
     x: 0.282
@@ -251,13 +135,13 @@ nodes {
 }
 nodes {
   position {
-    x: 1098.0
-    y: 239.0
+    x: 1099.4
+    y: 245.6
     z: 0.68
   }
   size {
-    x: 150.0
-    y: 18.0
+    x: 130.5
+    y: 15.5
   }
   color {
     y: 0.71
@@ -276,13 +160,13 @@ nodes {
 }
 nodes {
   position {
-    x: 910.0
-    y: 403.0
+    x: 935.9
+    y: 386.7
     z: 0.68
   }
   size {
-    x: 150.0
-    y: 18.0
+    x: 130.5
+    y: 15.5
   }
   color {
     x: 0.412
@@ -302,13 +186,13 @@ nodes {
 }
 nodes {
   position {
-    x: 726.0
-    y: 519.0
+    x: 775.8
+    y: 486.6
     z: 0.68
   }
   size {
-    x: 150.0
-    y: 18.0
+    x: 130.5
+    y: 15.5
   }
   color {
     y: 0.282
@@ -327,13 +211,13 @@ nodes {
 }
 nodes {
   position {
-    x: 727.0
-    y: 280.0
+    x: 776.6
+    y: 280.9
     z: 0.68
   }
   size {
-    x: 150.0
-    y: 18.0
+    x: 130.5
+    y: 15.5
   }
   color {
     y: 0.282
@@ -352,13 +236,13 @@ nodes {
 }
 nodes {
   position {
-    x: 968.0
-    y: 513.0
+    x: 986.3
+    y: 481.4
     z: 0.68
   }
   size {
-    x: 150.0
-    y: 18.0
+    x: 130.5
+    y: 15.5
   }
   color {
     y: 0.71
@@ -377,13 +261,13 @@ nodes {
 }
 nodes {
   position {
-    x: 1092.0
-    y: 392.0
+    x: 1094.2
+    y: 377.3
     z: 0.68
   }
   size {
-    x: 150.0
-    y: 18.0
+    x: 130.5
+    y: 15.5
   }
   color {
     x: 0.714
@@ -413,8 +297,8 @@ nodes {
     y: 431.0
   }
   size {
-    x: 1.0
-    y: 1.0
+    x: 0.9
+    y: 0.9
   }
   type: TYPE_BOX
   id: "poi_home"
@@ -428,8 +312,8 @@ nodes {
     z: 0.49
   }
   size {
-    x: 116.0
-    y: 116.0
+    x: 100.9
+    y: 99.8
   }
   type: TYPE_BOX
   id: "poi_home_hitbox"
@@ -445,8 +329,8 @@ nodes {
     z: 0.52
   }
   size {
-    x: 22.0
-    y: 70.0
+    x: 19.1
+    y: 60.3
   }
   color {
     x: 0.714
@@ -467,8 +351,8 @@ nodes {
     z: 0.53
   }
   size {
-    x: 80.0
-    y: 80.0
+    x: 69.6
+    y: 68.9
   }
   color {
     x: 0.714
@@ -489,8 +373,8 @@ nodes {
     z: 0.54
   }
   size {
-    x: 100.0
-    y: 100.0
+    x: 87.0
+    y: 86.1
   }
   color {
     x: 0.714
@@ -511,8 +395,8 @@ nodes {
     z: 0.55
   }
   size {
-    x: 44.0
-    y: 44.0
+    x: 38.3
+    y: 37.9
   }
   color {
     x: 0.714
@@ -532,8 +416,8 @@ nodes {
     y: 160.0
   }
   size {
-    x: 1.0
-    y: 1.0
+    x: 0.9
+    y: 0.9
   }
   type: TYPE_BOX
   id: "poi_work"
@@ -547,8 +431,8 @@ nodes {
     z: 0.49
   }
   size {
-    x: 116.0
-    y: 116.0
+    x: 100.9
+    y: 99.8
   }
   type: TYPE_BOX
   id: "poi_work_hitbox"
@@ -564,8 +448,8 @@ nodes {
     z: 0.52
   }
   size {
-    x: 22.0
-    y: 70.0
+    x: 19.1
+    y: 60.3
   }
   color {
     x: 0.282
@@ -586,8 +470,8 @@ nodes {
     z: 0.53
   }
   size {
-    x: 80.0
-    y: 80.0
+    x: 69.6
+    y: 68.9
   }
   color {
     x: 0.282
@@ -608,8 +492,8 @@ nodes {
     z: 0.54
   }
   size {
-    x: 100.0
-    y: 100.0
+    x: 87.0
+    y: 86.1
   }
   color {
     x: 0.282
@@ -630,8 +514,8 @@ nodes {
     z: 0.55
   }
   size {
-    x: 44.0
-    y: 44.0
+    x: 38.3
+    y: 37.9
   }
   color {
     x: 0.282
@@ -650,8 +534,8 @@ nodes {
     y: 240.0
   }
   size {
-    x: 1.0
-    y: 1.0
+    x: 0.9
+    y: 0.9
   }
   type: TYPE_BOX
   id: "poi_cafe"
@@ -665,8 +549,8 @@ nodes {
     z: 0.49
   }
   size {
-    x: 116.0
-    y: 116.0
+    x: 100.9
+    y: 99.8
   }
   type: TYPE_BOX
   id: "poi_cafe_hitbox"
@@ -682,8 +566,8 @@ nodes {
     z: 0.52
   }
   size {
-    x: 22.0
-    y: 70.0
+    x: 19.1
+    y: 60.3
   }
   color {
     y: 0.71
@@ -703,8 +587,8 @@ nodes {
     z: 0.53
   }
   size {
-    x: 80.0
-    y: 80.0
+    x: 69.6
+    y: 68.9
   }
   color {
     y: 0.71
@@ -724,8 +608,8 @@ nodes {
     z: 0.54
   }
   size {
-    x: 100.0
-    y: 100.0
+    x: 87.0
+    y: 86.1
   }
   color {
     y: 0.71
@@ -745,8 +629,8 @@ nodes {
     z: 0.55
   }
   size {
-    x: 44.0
-    y: 44.0
+    x: 38.3
+    y: 37.9
   }
   color {
     y: 0.71
@@ -766,8 +650,8 @@ nodes {
     y: 401.0
   }
   size {
-    x: 1.0
-    y: 1.0
+    x: 0.9
+    y: 0.9
   }
   type: TYPE_BOX
   id: "poi_park"
@@ -781,8 +665,8 @@ nodes {
     z: 0.49
   }
   size {
-    x: 116.0
-    y: 116.0
+    x: 100.9
+    y: 99.8
   }
   type: TYPE_BOX
   id: "poi_park_hitbox"
@@ -798,8 +682,8 @@ nodes {
     z: 0.52
   }
   size {
-    x: 22.0
-    y: 70.0
+    x: 19.1
+    y: 60.3
   }
   color {
     x: 0.412
@@ -820,8 +704,8 @@ nodes {
     z: 0.53
   }
   size {
-    x: 80.0
-    y: 80.0
+    x: 69.6
+    y: 68.9
   }
   color {
     x: 0.412
@@ -842,8 +726,8 @@ nodes {
     z: 0.54
   }
   size {
-    x: 100.0
-    y: 100.0
+    x: 87.0
+    y: 86.1
   }
   color {
     x: 0.412
@@ -864,8 +748,8 @@ nodes {
     z: 0.55
   }
   size {
-    x: 44.0
-    y: 44.0
+    x: 38.3
+    y: 37.9
   }
   color {
     x: 0.412
@@ -886,8 +770,8 @@ nodes {
     y: 521.0
   }
   size {
-    x: 1.0
-    y: 1.0
+    x: 0.9
+    y: 0.9
   }
   type: TYPE_BOX
   id: "poi_shop"
@@ -901,8 +785,8 @@ nodes {
     z: 0.49
   }
   size {
-    x: 116.0
-    y: 116.0
+    x: 100.9
+    y: 99.8
   }
   type: TYPE_BOX
   id: "poi_shop_hitbox"
@@ -918,8 +802,8 @@ nodes {
     z: 0.52
   }
   size {
-    x: 22.0
-    y: 70.0
+    x: 19.1
+    y: 60.3
   }
   color {
     y: 0.282
@@ -939,8 +823,8 @@ nodes {
     z: 0.53
   }
   size {
-    x: 80.0
-    y: 80.0
+    x: 69.6
+    y: 68.9
   }
   color {
     y: 0.282
@@ -960,8 +844,8 @@ nodes {
     z: 0.54
   }
   size {
-    x: 100.0
-    y: 100.0
+    x: 87.0
+    y: 86.1
   }
   color {
     y: 0.282
@@ -981,8 +865,8 @@ nodes {
     z: 0.55
   }
   size {
-    x: 44.0
-    y: 44.0
+    x: 38.3
+    y: 37.9
   }
   color {
     y: 0.282
@@ -1002,8 +886,8 @@ nodes {
     y: 279.0
   }
   size {
-    x: 1.0
-    y: 1.0
+    x: 0.9
+    y: 0.9
   }
   type: TYPE_BOX
   id: "poi_bar"
@@ -1017,8 +901,8 @@ nodes {
     z: 0.49
   }
   size {
-    x: 116.0
-    y: 116.0
+    x: 100.9
+    y: 99.8
   }
   type: TYPE_BOX
   id: "poi_bar_hitbox"
@@ -1034,8 +918,8 @@ nodes {
     z: 0.52
   }
   size {
-    x: 22.0
-    y: 70.0
+    x: 19.1
+    y: 60.3
   }
   color {
     y: 0.282
@@ -1055,8 +939,8 @@ nodes {
     z: 0.53
   }
   size {
-    x: 80.0
-    y: 80.0
+    x: 69.6
+    y: 68.9
   }
   color {
     y: 0.282
@@ -1076,8 +960,8 @@ nodes {
     z: 0.54
   }
   size {
-    x: 100.0
-    y: 100.0
+    x: 87.0
+    y: 86.1
   }
   color {
     y: 0.282
@@ -1097,8 +981,8 @@ nodes {
     z: 0.55
   }
   size {
-    x: 44.0
-    y: 44.0
+    x: 38.3
+    y: 37.9
   }
   color {
     y: 0.282
@@ -1118,8 +1002,8 @@ nodes {
     y: 515.0
   }
   size {
-    x: 1.0
-    y: 1.0
+    x: 0.9
+    y: 0.9
   }
   type: TYPE_BOX
   id: "poi_view"
@@ -1133,8 +1017,8 @@ nodes {
     z: 0.49
   }
   size {
-    x: 116.0
-    y: 116.0
+    x: 100.9
+    y: 99.8
   }
   type: TYPE_BOX
   id: "poi_view_hitbox"
@@ -1150,8 +1034,8 @@ nodes {
     z: 0.52
   }
   size {
-    x: 22.0
-    y: 70.0
+    x: 19.1
+    y: 60.3
   }
   color {
     y: 0.71
@@ -1171,8 +1055,8 @@ nodes {
     z: 0.53
   }
   size {
-    x: 80.0
-    y: 80.0
+    x: 69.6
+    y: 68.9
   }
   color {
     y: 0.71
@@ -1192,8 +1076,8 @@ nodes {
     z: 0.54
   }
   size {
-    x: 100.0
-    y: 100.0
+    x: 87.0
+    y: 86.1
   }
   color {
     y: 0.71
@@ -1213,8 +1097,8 @@ nodes {
     z: 0.55
   }
   size {
-    x: 44.0
-    y: 44.0
+    x: 38.3
+    y: 37.9
   }
   color {
     y: 0.71
@@ -1234,8 +1118,8 @@ nodes {
     y: 394.0
   }
   size {
-    x: 1.0
-    y: 1.0
+    x: 0.9
+    y: 0.9
   }
   type: TYPE_BOX
   id: "poi_archive"
@@ -1249,8 +1133,8 @@ nodes {
     z: 0.49
   }
   size {
-    x: 116.0
-    y: 116.0
+    x: 100.9
+    y: 99.8
   }
   type: TYPE_BOX
   id: "poi_archive_hitbox"
@@ -1266,8 +1150,8 @@ nodes {
     z: 0.52
   }
   size {
-    x: 22.0
-    y: 70.0
+    x: 19.1
+    y: 60.3
   }
   color {
     x: 0.714
@@ -1287,8 +1171,8 @@ nodes {
     z: 0.53
   }
   size {
-    x: 80.0
-    y: 80.0
+    x: 69.6
+    y: 68.9
   }
   color {
     x: 0.714
@@ -1308,8 +1192,8 @@ nodes {
     z: 0.54
   }
   size {
-    x: 100.0
-    y: 100.0
+    x: 87.0
+    y: 86.1
   }
   color {
     x: 0.714
@@ -1329,8 +1213,8 @@ nodes {
     z: 0.55
   }
   size {
-    x: 44.0
-    y: 44.0
+    x: 38.3
+    y: 37.9
   }
   color {
     x: 0.714
@@ -1343,6 +1227,222 @@ nodes {
   parent: "poi_archive"
   layer: "ui"
   inherit_alpha: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "grp_confirm"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "grp_panel"
+  layer: "ui"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 832.0
+    y: 358.0
+    z: 0.78
+  }
+  size {
+    x: 700.0
+    y: 400.0
+  }
+  color {
+    x: 0.04
+    y: 0.03
+    z: 0.12
+    w: 1.0
+  }
+  type: TYPE_BOX
+  id: "confirm_backdrop"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "grp_confirm"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.85
+}
+nodes {
+  position {
+    x: 832.0
+    y: 358.0
+    z: 0.79
+  }
+  size {
+    x: 380.0
+    y: 160.0
+  }
+  color {
+    x: 0.067
+    y: 0.055
+    z: 0.173
+    w: 1.0
+  }
+  type: TYPE_BOX
+  id: "confirm_panel"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "grp_confirm"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.97
+}
+nodes {
+  position {
+    x: 832.0
+    y: 408.0
+    z: 0.80
+  }
+  size {
+    x: 360.0
+    y: 24.0
+  }
+  color {
+    x: 0.353
+    y: 1.0
+    z: 0.478
+    w: 1.0
+  }
+  type: TYPE_TEXT
+  text: "\320\237\320\225\320\240\320\225\320\230\320\242\320\230?"
+  font: "jb_mono_bold_14"
+  id: "confirm_title"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "grp_confirm"
+  layer: "text"
+  inherit_alpha: true
+  alpha: 1.0
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 832.0
+    y: 375.0
+    z: 0.80
+  }
+  size {
+    x: 360.0
+    y: 20.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.851
+    w: 1.0
+  }
+  type: TYPE_TEXT
+  text: "..."
+  font: "jb_mono_12"
+  id: "confirm_location_name"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "grp_confirm"
+  layer: "text"
+  inherit_alpha: true
+  alpha: 0.9
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 740.0
+    y: 318.0
+    z: 0.80
+  }
+  size {
+    x: 140.0
+    y: 42.0
+  }
+  color {
+    x: 0.282
+    y: 0.961
+    z: 0.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  id: "confirm_yes_btn"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "grp_confirm"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.9
+}
+nodes {
+  position {
+    x: 740.0
+    y: 318.0
+    z: 0.81
+  }
+  size {
+    x: 130.0
+    y: 32.0
+  }
+  color {
+    x: 0.027
+    y: 0.023
+    z: 0.094
+    w: 1.0
+  }
+  type: TYPE_TEXT
+  text: "\320\224\320\220"
+  font: "jb_mono_bold_14"
+  id: "confirm_yes_label"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "grp_confirm"
+  layer: "text"
+  inherit_alpha: true
+  alpha: 1.0
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 924.0
+    y: 318.0
+    z: 0.80
+  }
+  size {
+    x: 140.0
+    y: 42.0
+  }
+  color {
+    x: 0.714
+    y: 0.361
+    z: 0.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  id: "confirm_no_btn"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "grp_confirm"
+  layer: "ui"
+  inherit_alpha: true
+  alpha: 0.9
+}
+nodes {
+  position {
+    x: 924.0
+    y: 318.0
+    z: 0.81
+  }
+  size {
+    x: 130.0
+    y: 32.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.851
+    w: 1.0
+  }
+  type: TYPE_TEXT
+  text: "\320\235\320\225\320\242"
+  font: "jb_mono_bold_14"
+  id: "confirm_no_label"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "grp_confirm"
+  layer: "text"
+  inherit_alpha: true
+  alpha: 0.9
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
 }
 layers {
   name: "bg"
