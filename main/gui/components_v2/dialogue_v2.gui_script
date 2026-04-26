@@ -35,7 +35,7 @@ end
 local CHARS = {
     mila     = { color = vmath.vector4(1.0, 0.239, 0.498, 1.0), icon = string.char(0xEE, 0x9F, 0xBB), tag = "подруга", portrait = "mila" }, -- face
     artem    = { color = vmath.vector4(0.49, 0.976, 1.0, 1.0),  icon = string.char(0xEE, 0x9F, 0xBB), tag = "МЦ", portrait = "artem" },
-    narrator = { color = vmath.vector4(0.353, 1.0, 0.478, 1.0), icon = string.char(0xEE, 0xA4, 0xB1), tag = "нарратор" }, -- terminal-ish
+    narrator = { color = vmath.vector4(0.353, 1.0, 0.478, 1.0), icon = string.char(0xEE, 0xA4, 0xB1), tag = "нарратор", portrait = "narrator" }, -- terminal-ish
     -- Кириллические алиасы для имён из Ink
     ["мила"]  = { color = vmath.vector4(1.0, 0.239, 0.498, 1.0), icon = string.char(0xEE, 0x9F, 0xBB), tag = "подруга", portrait = "mila" },
     ["артём"] = { color = vmath.vector4(0.49, 0.976, 1.0, 1.0),  icon = string.char(0xEE, 0x9F, 0xBB), tag = "МЦ", portrait = "artem" },
@@ -135,6 +135,7 @@ end
 
 local function render(self, msg)
     local speaker_key = msg.speaker or msg.char or "_default"
+    if speaker_key == "" then speaker_key = "narrator" end
     local c = resolve_speaker(speaker_key)
     local loop_label = tostring(msg.loop_label or "")
     if loop_label == "" then

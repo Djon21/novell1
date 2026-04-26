@@ -1279,6 +1279,15 @@ function on_message(self, message_id, message, sender)
         -- Карта теперь открывается внутри телефона (phone_map.gui).
         -- Если в будущем нужно открыть внешнюю карту из телефона — добавь здесь.
 
+    -- --- map travel (phone_map POI click) ---
+    elseif message_id == hash("map_travel") then
+        local scene_id = message and message.scene
+        dbg("[ui_manager_v2] map_travel →", scene_id)
+        if scene_id then
+            close_phone(self)
+            scene_controller.enter(scene_id)
+        end
+
     -- --- map ---
     elseif message_id == hash("open_map") then
         open_map(self)

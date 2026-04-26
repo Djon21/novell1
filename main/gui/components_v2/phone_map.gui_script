@@ -2,9 +2,23 @@
 -- Карта внутри телефона (split-модуль).
 -- Принимает: open_app, close_app
 --
--- Все ноды карты находятся под grp_panel.
--- Скрываем только его — все дочерние прячутся автоматически (Defold propagates enabled).
--- Внешняя карта (map_v2) по-прежнему открывается из HUD-кнопки — она не затронута.
+-- Клик по POI → msg.post(UI_MGR, "map_travel", { scene = "scene_id" })
+-- ui_manager закрывает телефон и вызывает scene_controller.enter(scene_id).
+
+local UI_MGR = "#ui_manager_v2"
+
+-- Маппинг poi_NAME → scene_id из scenes.lua.
+-- Добавь сюда новые локации по мере добавления хабов в scenes.lua.
+local POI_SCENES = {
+    poi_home    = "apartment_hub",
+    poi_work    = "work_hub",
+    poi_cafe    = "cafe_hub",
+    poi_park    = "park_hub",
+    poi_shop    = "shop_hub",
+    poi_bar     = "bar_hub",
+    poi_view    = "view_hub",
+    poi_archive = "archive_hub",
+}
 
 local function get_node(id)
     local ok, n = pcall(gui.get_node, id)
@@ -34,5 +48,16 @@ end
 
 function on_input(self, action_id, action)
     if not self.visible then return false end
+    if action_id ~= hash("touch") or not action.pressed then return false end
+
+    for poi_id, scene_id in pairs(POI_SCENES) do
+        local hitbox = get_node(poi_id .. "_hitbox")
+        if hitbox and gui.pick_node(hitbox, action.x, action.y) then
+            print("[phone_map] travel to:", scene_id)
+            msg.post(UI_MGR, "map_travel", { scene = scene_id })
+            return true
+        end
+    end
+
     return false
 end

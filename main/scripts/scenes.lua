@@ -172,6 +172,161 @@ M.scenes = {
             },
         },
     },
+    -- =====================================================================
+    -- ХАБЫ КАРТЫ — точки перемещения из phone_map POI
+    -- =====================================================================
+    -- Чтобы добавить новый хаб:
+    --   1. Создай фон (PNG) → добавь в main/images/backgrounds/bg_NAME.atlas
+    --   2. Зарегистрируй сцену здесь (скопируй шаблон ниже)
+    --   3. В phone_map.gui_script в таблице POI_SCENES добавь:
+    --        poi_NAME = "NAME_hub"
+    --   4. Hotspot'ы: rect = { x, y, w, h } где x/y — левый-нижний угол
+    --      в координатах 1280×720 (начало — левый-нижний угол экрана).
+    -- =====================================================================
+
+    work_hub = {
+        bg = "bg_office",        -- заменить на bg_work когда будет фон
+        -- on_enter = {
+        --     knot = "enter_work_first_time",
+        --     condition = function(gs) return not gs.get_flag("work_intro_seen") end,
+        -- },
+        hotspots = {
+            {
+                id = "work_desk",
+                rect = { x = 400, y = 200, w = 300, h = 300 },
+                label = "Рабочий стол",
+                icon = "",
+                action = { type = "ink_knot", knot = "work_desk_interact" },
+            },
+            {
+                id = "leave_work",
+                rect = { x = 0, y = 0, w = 150, h = 200 },
+                label = "Выйти",
+                icon = "",
+                action = { type = "ink_knot", knot = "leave_work" },
+            },
+        },
+    },
+
+    cafe_hub = {
+        bg = "bg_office",        -- заменить на bg_cafe
+        hotspots = {
+            {
+                id = "cafe_bar",
+                rect = { x = 400, y = 200, w = 400, h = 250 },
+                label = "Стойка",
+                icon = "",
+                action = { type = "ink_knot", knot = "cafe_bar_interact" },
+            },
+            {
+                id = "leave_cafe",
+                rect = { x = 0, y = 0, w = 150, h = 200 },
+                label = "Выйти",
+                icon = "",
+                action = { type = "ink_knot", knot = "leave_cafe" },
+            },
+        },
+    },
+
+    park_hub = {
+        bg = "bg_rooftop",       -- заменить на bg_park
+        hotspots = {
+            {
+                id = "park_bench",
+                rect = { x = 450, y = 150, w = 300, h = 200 },
+                label = "Скамейка",
+                icon = "",
+                action = { type = "ink_knot", knot = "park_bench_interact" },
+            },
+            {
+                id = "leave_park",
+                rect = { x = 0, y = 0, w = 150, h = 200 },
+                label = "Уйти",
+                icon = "",
+                action = { type = "ink_knot", knot = "leave_park" },
+            },
+        },
+    },
+
+    shop_hub = {
+        bg = "bg_office",        -- заменить на bg_shop
+        hotspots = {
+            {
+                id = "shop_counter",
+                rect = { x = 350, y = 150, w = 400, h = 300 },
+                label = "Прилавок",
+                icon = "",
+                action = { type = "ink_knot", knot = "shop_counter_interact" },
+            },
+            {
+                id = "leave_shop",
+                rect = { x = 0, y = 0, w = 150, h = 200 },
+                label = "Выйти",
+                icon = "",
+                action = { type = "ink_knot", knot = "leave_shop" },
+            },
+        },
+    },
+
+    bar_hub = {
+        bg = "bg_office",        -- заменить на bg_bar
+        hotspots = {
+            {
+                id = "bar_counter",
+                rect = { x = 300, y = 150, w = 500, h = 300 },
+                label = "Стойка бара",
+                icon = "",
+                action = { type = "ink_knot", knot = "bar_counter_interact" },
+            },
+            {
+                id = "leave_bar",
+                rect = { x = 0, y = 0, w = 150, h = 200 },
+                label = "Выйти",
+                icon = "",
+                action = { type = "ink_knot", knot = "leave_bar" },
+            },
+        },
+    },
+
+    view_hub = {
+        bg = "bg_rooftop",       -- заменить на bg_viewpoint
+        hotspots = {
+            {
+                id = "view_railing",
+                rect = { x = 200, y = 200, w = 800, h = 150 },
+                label = "Поручни",
+                icon = "",
+                action = { type = "ink_knot", knot = "view_railing_interact" },
+            },
+            {
+                id = "leave_view",
+                rect = { x = 0, y = 0, w = 150, h = 200 },
+                label = "Уйти",
+                icon = "",
+                action = { type = "ink_knot", knot = "leave_viewpoint" },
+            },
+        },
+    },
+
+    archive_hub = {
+        bg = "bg_office",        -- заменить на bg_archive
+        hotspots = {
+            {
+                id = "archive_shelves",
+                rect = { x = 150, y = 100, w = 900, h = 400 },
+                label = "Стеллажи",
+                icon = "",
+                action = { type = "ink_knot", knot = "archive_shelves_interact" },
+            },
+            {
+                id = "leave_archive",
+                rect = { x = 0, y = 0, w = 150, h = 200 },
+                label = "Выйти",
+                icon = "",
+                action = { type = "ink_knot", knot = "leave_archive" },
+            },
+        },
+    },
 }
 
 function M.get(id) return M.scenes[id] end
