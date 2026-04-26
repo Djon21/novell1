@@ -30,6 +30,7 @@ local sm = require "main.scripts.save_manager"
 local meta = require "main.scripts.meta_state"
 local scene_controller = require "main.scripts.scene_controller"
 local catalog = require "main.scripts.items_catalog"
+local ui_state = require "main.scripts.ui_state"
 
 local ok_scenes, scenes = pcall(require, "main.scripts.scenes")
 if not ok_scenes then scenes = nil end
@@ -756,14 +757,20 @@ end
 
 -- overlays (поверх exploration/dialogue)
 
+local function sync_modal_state()
+    ui_state.modal_open = (M.overlays.phone or M.overlays.inventory or M.overlays.map) and true or false
+end
+
 local function open_inventory(self)
     dbg("[ui_manager_v2] open_inventory()")
     M.overlays.inventory = true
+    sync_modal_state()
     msg.post(M.components.inventory, "show_inventory")
 end
 close_inventory = function(self)
     dbg("[ui_manager_v2] close_inventory()")
     M.overlays.inventory = false
+    sync_modal_state()
     msg.post(M.components.inventory, "hide_inventory")
 end
 
@@ -774,21 +781,25 @@ open_phone = function(self)
         return
     end
     M.overlays.phone = true
+    sync_modal_state()
     msg.post(M.components.phone, "open_phone")
 end
 close_phone = function(self)
     dbg("[ui_manager_v2] close_phone()")
     M.overlays.phone = false
+    sync_modal_state()
     msg.post(M.components.phone, "close_phone")
 end
 
 local function open_map(self)
     M.overlays.map = true
+    sync_modal_state()
     sync_map_overlay(resolve_map_selected_pin(), "> карта синхронизирована _")
     msg.post(M.components.map, "open_map")
 end
 local function open_map_hub(self, primary_knot)
     M.overlays.map = true
+    sync_modal_state()
     -- hub-режим заменяет собой ink-выбор маршрута, поэтому под картой не должно
     -- остаться диалога в состоянии "КОНЕЦ": иначе клик мимо пина попадает
     -- в btn_next/dbox → dm.advance() → chapter_finished → выкидывает в меню.
@@ -799,6 +810,7 @@ local function open_map_hub(self, primary_knot)
 end
 close_map = function(self)
     M.overlays.map = false
+    sync_modal_state()
     msg.post(M.components.map, "close_map")
 end
 

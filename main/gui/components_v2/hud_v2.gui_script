@@ -12,6 +12,7 @@
 --   "open_phone"     — при клике на PHN
 
 local theme = require "main.gui.modules.v2_theme"
+local ui_state = require "main.scripts.ui_state"
 
 local UI_MGR = "#ui_manager_v2"
 
@@ -98,6 +99,8 @@ end
 function on_input(self, action_id, action)
     if not self.visible then return false end
     if action_id ~= hash("touch") or not action.pressed then return false end
+    -- Не открываем новый оверлей поверх уже открытого
+    if ui_state.modal_open then return false end
 
     local bag_ring = gui.get_node("bag_ring")
     local phn_ring = gui.get_node("phn_ring")
