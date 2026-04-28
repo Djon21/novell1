@@ -10,6 +10,9 @@ local DEFAULT = {
     -- на следующую). Ключ = id концовки, значение = true.
     false_endings_seen   = {},
     false_endings_count  = 0,
+    -- Выбор персонажа сохраняется между итерациями.
+    -- Сбрасывается только при reset_all() (кнопка "СБРОСИТЬ ИТЕРАЦИЮ").
+    mc_gender            = nil,
 }
 
 local state = nil

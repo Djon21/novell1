@@ -538,11 +538,14 @@ end
 
 -- Читает mc_gender из Ink обратно в save_manager, если там изменилось
 -- (после выбора пола в .ink — `~ mc_gender = "female"`).
+-- Также сохраняет выбор в meta_state, чтобы он пережил sm.new_game()
+-- при переходе на следующую итерацию.
 local function pull_gender_from_ink()
     if not story then return end
     local ink_gender = story.variables.mc_gender
     if ink_gender and ink_gender ~= sm.get_gender() then
         sm.set_gender(ink_gender)
+        meta.set("mc_gender", ink_gender)   -- сохраняем навсегда (между итерациями)
         -- Пол изменился → подменяем имена в Ink (mc_name/npc_name
         -- пересчитываются save_manager'ом автоматически).
         story.variables.mc_name  = sm.get_mc_name()
