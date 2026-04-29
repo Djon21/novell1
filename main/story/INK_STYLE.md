@@ -94,12 +94,15 @@ VAR newspaper_kept = false
 
 | Тег | Пример | Что делает |
 |---|---|---|
-| `flag:NAME=VAL` | `# flag:has_phone=true` | Пишет в `game_state`. Читается из `scenes.lua` через `gs.get_flag(...)`. Значения: `true`/`false`/число/строка. |
-| `item:add:ID` | `# item:add:mug` | Добавить предмет в инвентарь. |
-| `item:remove:ID` | `# item:remove:mug` | Убрать. |
+| `set_flag:NAME=VAL` | `# set_flag:has_phone=true` | Пишет флаг в `game_state`. Читается из `scenes.lua` через `gs.get_flag(...)`. Значения: `true`/`false`/число/строка. |
+| `flag:NAME=VAL` | `# flag:has_phone=true` | То же самое — старый синтаксис, тоже работает. |
+| `add_item:ID` | `# add_item:mug` | Добавить предмет в инвентарь. |
+| `remove_item:ID` | `# remove_item:mug` | Убрать предмет. |
+| `item:add:ID` | `# item:add:mug` | То же что `add_item:` — старый синтаксис. |
+| `item:remove:ID` | `# item:remove:mug` | То же что `remove_item:` — старый синтаксис. |
 | `quest:start:ID` | `# quest:start:make_coffee` | Активировать квест (статус `active`). |
 | `quest:done:ID` | `# quest:done:go_to_office` | Закрыть (статус `done`). |
-| `quest:fail:ID` | `# quest:fail:reply_anya` | Провалить. |
+| `quest:fail:ID` | `# quest:fail:reply_mila` | Провалить. |
 
 ❌ `quest:complete` не поддерживается runtime'ом и будет проигнорирован.
 Используйте строго:
@@ -115,9 +118,29 @@ VAR newspaper_kept = false
 
 | Тег | Пример | Что делает |
 |---|---|---|
-| `sms:add:CONTACT:TEXT` | `# sms:add:anya:"PATCH temporal_sync.module"` | Добавить SMS в приложение «Сообщения». Кавычки вокруг текста — опционально, но с ними безопаснее (двоеточия внутри текста не поломают парсинг). |
+| `sms:add:CONTACT:TEXT` | `# sms:add:mila:Есть планы на сегодня?` | Входящее SMS от контакта. Кавычки опциональны, но с ними надёжнее если в тексте есть двоеточие. |
+| `sms:reply:CONTACT:TEXT` | `# sms:reply:mila:Хорошо, позже.` | Исходящее SMS от ГГ. **Автоматически** ставит флаг `sms_<contact>_replied = true`. |
 | `note:add:TITLE:BODY` | `# note:add:Коммит:"хеш 03:47"` | Добавить заметку. |
-| `phone:close` | `# phone:close` | Закрыть активный `phone_v2` overlay и вернуться в предыдущий runtime-контекст. Используется только в knot'е `phone_close`. |
+| `phone:close` | `# phone:close` | Закрыть `phone_v2` overlay и вернуться в контекст. |
+
+**Автоматические флаги SMS (не нужно ставить руками):**
+
+| Событие | Флаг |
+|---|---|
+| Игрок открыл приложение «Сообщения» | `sms_<contact>_read = true` (для всех непрочитанных диалогов) |
+| В ink встретился `# sms:reply:contact:...` | `sms_<contact>_replied = true` |
+
+```ink
+// Пример: ГГ читает сообщение от Милы и отвечает
+=== reply_to_mila ===
+# speaker:none
+Открываю переписку с Милой. Она написала утром.
+# sms:reply:mila:Хорошо, посмотрю. Скоро буду.
+# quest:done:reply_mila
+# return_to_scene
+-> DONE
+// Результат: sms_mila_replied = true (автоматически), квест закрыт.
+```
 
 ### Сцены (point-and-click)
 
@@ -129,37 +152,61 @@ VAR newspaper_kept = false
 
 ---
 
-## 4. VAR против `# flag:` — ЧИТАЙ ВНИМАТЕЛЬНО
+## 4. VAR против `# set_flag:` — ЧИТАЙ ВНИМАТЕЛЬНО
 
 В Ink есть **две параллельные системы состояния**:
 
 1. **`VAR` / `~ присваивание`** — внутренние переменные Ink. Видны в
    `{условиях}` и в `{выражениях}` внутри ink-файла. **НЕ видны** в
    `scenes.lua` и в `game_state`.
-2. **`# flag:X=Y`** — пишет в Lua-состояние (`game_state`). Видно в
+2. **`# set_flag:X=Y`** — пишет в Lua-состояние (`game_state`). Видно в
    `scenes.lua` через `gs.get_flag("X")`. **НЕ видно** из ink-условий.
 
 ### Правило
 
 - Нужно ветвить **внутри истории** (`{coffee_drunk: ...}`) — используй VAR.
-- Нужно открыть/закрыть **hotspot или hide объект на сцене** — используй флаг.
+- Нужно открыть/закрыть **hotspot или скрыть объект на сцене** — используй флаг.
 - Нужно И то, И то — **дублируй**:
 
 ```ink
-~ coffee_drunk = true
-# flag:coffee_drunk=true
+~ coffee_drunk = true          // для ink-условий
+# set_flag:coffee_drunk=true   // для scenes.lua / quests.lua
 ```
 
 Это обязательная договорённость. Не полагайся на «движок сам подтянет» — не
 подтянет.
 
+### Когда нужен только `# set_flag:` (без VAR)
+
+Если флаг используется **только** в `scenes.lua` / `quests.lua` и никогда
+не фигурирует в ink-условиях `{…}` — VAR не нужен:
+
+```ink
+# set_flag:left_apartment=true   // достаточно — ink не использует {left_apartment:}
+```
+
+### Когда нужны оба
+
+Если в ink есть `{has_mug:` или `{not has_phone:` или похожее — нужно
+объявить VAR в `00_bootstrap.ink`:
+
+```ink
+// 00_bootstrap.ink:
+VAR has_mug = false
+
+// knot где берём кружку:
+~ has_mug = true              // ink-переменная
+# set_flag:has_mug=true       // game_state флаг
+```
+
 ### Нейминг
 
 - `has_X` — предмет у игрока (`has_phone`, `has_mug`)
-- `X_seen` — сцена/реплика уже была (`kitchen_intro_seen`, `sms_anya_read`)
+- `X_seen` — сцена/реплика уже была (`kitchen_intro_seen`, `bedroom_morning_seen`)
+- `sms_<contact>_read` — автофлаг: сообщение от контакта прочитано (ставится движком)
+- `sms_<contact>_replied` — автофлаг: ГГ ответил контакту (ставится движком при `# sms:reply:`)
 - `need_X` — промежуточная цель активирована (`need_mug_for_coffee`, `need_phone`)
-- `X_drunk` / `X_done` / `X_active` — результат действия (`coffee_drunk`,
-  `left_apartment`)
+- `X_drunk` / `X_done` / `X_active` — результат действия (`coffee_drunk`, `left_apartment`)
 - `_underscore_в_начале` — служебные, задаются движком (`_phone_return_scene`)
 
 ---
@@ -256,7 +303,7 @@ hotspot'ы: кликабельные прямоугольники. Каждый 
 # speaker:mc
 Подойдёт. Забираю с собой.
 
-# flag:has_mug=true
+# set_flag:has_mug=true
 # return_to_scene
 -> DONE
 ```
@@ -336,7 +383,7 @@ hotspot'ы: кликабельные прямоугольники. Каждый 
       `quest:start`, `quest:done`, `quest:fail`
       (любые другие значения приведут к silent fail)
 - [ ] VAR'ы, на которые завязаны hotspot'ы в `scenes.lua`, продублированы
-      `# flag:X=VAL`.
+      `# set_flag:X=VAL` (или `# flag:X=VAL` — оба работают).
 - [ ] Тестовая компиляция через inklecate прошла без ошибок.
 
 ---
@@ -374,8 +421,8 @@ hotspot'ы: кликабельные прямоугольники. Каждый 
 ~ SYNC = SYNC + 1
 ~ morning_choice = "coffee"
 
-# flag:coffee_drunk=true
-# flag:need_phone=true
+# set_flag:coffee_drunk=true
+# set_flag:need_phone=true
 # quest:done:make_coffee
 # quest:start:find_phone
 # return_to_scene
@@ -392,16 +439,18 @@ hotspot'ы: кликабельные прямоугольники. Каждый 
 
 ## Телефон (жёсткое правило)
 
-Телефон НЕ является Ink-сценой.
+Телефон НЕ является Ink-сценой. Это Lua-оверлей поверх игры.
 
 Запрещено:
-- писать phone-контент в knot'ах
-- делать `=== phone_*`
-- использовать телефон как сцену
+- писать phone-контент в knot'ах напрямую
+- делать `=== phone_*` как сцену
+- управлять UI телефона из ink
 
-Разрешено только:
-- # sms:add
-- # note:add
-- # quest:*
+Разрешено (только теги):
+- `# sms:add:contact:текст` — входящее сообщение
+- `# sms:reply:contact:текст` — исходящее сообщение ГГ
+- `# note:add:Заголовок:Текст` — заметка
+- `# quest:start/done/fail:id` — управление квестами
+- `# phone:close` — закрыть телефон (только в `phone_close` knot'е)
 
 Все остальное — ошибка архитектуры.
