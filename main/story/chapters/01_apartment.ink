@@ -70,6 +70,7 @@
 Есть сообщения. Одно от Ани — пришло ночью.
 # sfx:phone_notify
 # add_item:phone
+~ has_phone = true
 # set_flag:has_phone=true
 # set_flag:phone_active=true
 # set_flag:spot_phone_after_coffee_seen=true
@@ -90,6 +91,7 @@
 
 Это не первая такая запись, но всегда кажется, что видишь впервые.
 # note:add:Странная запись:Не соглашайся сразу. Свой почерк.
+~ first_anomaly_seen = true
 # set_flag:first_anomaly_seen=true
 - else:
 Та запись на месте. Смотришь на неё и снова ничего не понимаешь.
@@ -162,6 +164,7 @@
 Кружка в шкафчике — та самая, с трещиной на ручке.
 Каждый раз она стоит на одном месте.
 # add_item:mug
+~ has_mug = true
 # set_flag:has_mug=true
 # return_to_scene
 -> DONE
