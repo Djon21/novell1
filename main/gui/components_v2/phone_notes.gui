@@ -45,13 +45,13 @@ textures {
 }
 nodes {
   position {
-    x: 572.0
-    y: 150.0
+    x: 524.0
+    y: 116.0
     z: 0.521
   }
   size {
-    x: 506.0
-    y: 392.0
+    x: 680.0
+    y: 410.0
   }
   color {
     x: 0.018
@@ -62,17 +62,17 @@ nodes {
   id: "clues_screen_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.7
+  alpha: 0.62
   enabled: false
 }
 nodes {
   position {
-    x: 594.0
-    y: 528.0
+    x: 524.0
+    y: 542.0
     z: 0.545
   }
   size {
-    x: 462.0
+    x: 656.0
     y: 1.0
   }
   color {
@@ -84,18 +84,18 @@ nodes {
   id: "clues_header_line"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.09
+  alpha: 0.14
   enabled: false
 }
 nodes {
   position {
-    x: 604.0
-    y: 368.0
+    x: 548.0
+    y: 404.0
     z: 0.548
   }
   size {
     x: 3.0
-    y: 106.0
+    y: 96.0
   }
   color {
     x: 0.953
@@ -106,18 +106,18 @@ nodes {
   id: "clues_card1_accent"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.42
+  alpha: 0.5
   enabled: false
 }
 nodes {
   position {
-    x: 604.0
-    y: 232.0
+    x: 548.0
+    y: 282.0
     z: 0.548
   }
   size {
     x: 3.0
-    y: 106.0
+    y: 96.0
   }
   color {
     y: 0.702
@@ -132,12 +132,12 @@ nodes {
 }
 nodes {
   position {
-    x: 594.0
-    y: 205.0
+    x: 548.0
+    y: 154.0
     z: 0.545
   }
   size {
-    x: 462.0
+    x: 632.0
     y: 1.0
   }
   color {
@@ -148,17 +148,17 @@ nodes {
   id: "clues_footer_line"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.1
+  alpha: 0.16
   enabled: false
 }
 nodes {
   position {
-    x: 596.0
-    y: 536.0
+    x: 524.0
+    y: 590.0
     z: 0.555
   }
   size {
-    x: 460.0
+    x: 520.0
     y: 12.0
   }
   color {
@@ -177,13 +177,13 @@ nodes {
 }
 nodes {
   position {
-    x: 596.0
-    y: 506.0
+    x: 524.0
+    y: 562.0
     z: 0.555
   }
   size {
-    x: 460.0
-    y: 22.0
+    x: 520.0
+    y: 24.0
   }
   color {
     x: 0.953
@@ -202,13 +202,13 @@ nodes {
 }
 nodes {
   position {
-    x: 604.0
-    y: 368.0
+    x: 548.0
+    y: 404.0
     z: 0.532
   }
   size {
-    x: 438.0
-    y: 106.0
+    x: 632.0
+    y: 96.0
   }
   color {
     x: 0.953
@@ -219,16 +219,16 @@ nodes {
   id: "v_clues_card1_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.075
+  alpha: 0.085
 }
 nodes {
   position {
-    x: 626.0
-    y: 443.0
+    x: 572.0
+    y: 474.0
     z: 0.555
   }
   size {
-    x: 390.0
+    x: 560.0
     y: 14.0
   }
   color {
@@ -247,13 +247,13 @@ nodes {
 }
 nodes {
   position {
-    x: 626.0
-    y: 418.0
+    x: 572.0
+    y: 448.0
     z: 0.555
   }
   size {
-    x: 390.0
-    y: 48.0
+    x: 580.0
+    y: 42.0
   }
   color {
     x: 0.953
@@ -273,13 +273,13 @@ nodes {
 }
 nodes {
   position {
-    x: 604.0
-    y: 232.0
+    x: 548.0
+    y: 282.0
     z: 0.532
   }
   size {
-    x: 438.0
-    y: 106.0
+    x: 632.0
+    y: 96.0
   }
   color {
     y: 0.702
@@ -293,12 +293,12 @@ nodes {
 }
 nodes {
   position {
-    x: 626.0
-    y: 307.0
+    x: 572.0
+    y: 352.0
     z: 0.555
   }
   size {
-    x: 390.0
+    x: 560.0
     y: 14.0
   }
   color {
@@ -317,13 +317,13 @@ nodes {
 }
 nodes {
   position {
-    x: 626.0
-    y: 282.0
+    x: 572.0
+    y: 326.0
     z: 0.555
   }
   size {
-    x: 390.0
-    y: 48.0
+    x: 580.0
+    y: 42.0
   }
   color {
     x: 0.953

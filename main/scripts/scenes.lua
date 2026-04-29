@@ -1,7 +1,7 @@
 -- scenes.lua
 -- Каталог сцен point-and-click слоя. Данные, не код.
 -- rect = { x, y, w, h } — x/y это ЛЕВЫЙ-НИЖНИЙ угол прямоугольника
--- в коорд. системе .gui (960×640, origin левый-нижний).
+-- в коорд. системе .gui (1280×720, origin левый-нижний).
 -- scene_controller сам пересчитает в центр+size при выставлении ноды.
 --
 -- action.type:
@@ -15,8 +15,214 @@
 
 local M = {}
 
-M.scenes = {
+M.scenes = {    -- =====================================================================
+    -- ДОМ / КВАРТИРА ГГ — утренний onboarding-flow
+    --
+    -- Runtime-home entrypoint остаётся apartment_hub, потому что карта телефона
+    -- уже ведёт домой через poi_home -> apartment_hub.
+    -- =====================================================================
+
     apartment_hub = {
+        bg = "bg_apartment_hall_morning",
+        label = "Коридор",
+        hotspots = {
+            {
+                id = "to_bedroom_morning",
+                rect = { x = 45, y = 115, w = 245, h = 500 },
+                label = "В спальню",
+                icon = "",
+                action = { type = "goto_scene", scene = "apartment_bedroom_morning" },
+            },
+            {
+                id = "to_kitchen_morning",
+                rect = { x = 985, y = 100, w = 250, h = 520 },
+                label = "На кухню",
+                icon = "",
+                action = { type = "goto_scene", scene = "apartment_kitchen_morning" },
+            },
+            {
+                id = "exit_apartment_morning",
+                rect = { x = 525, y = 185, w = 260, h = 430 },
+                label = "Выйти",
+                icon = "",
+                action = { type = "ink_knot", knot = "leave_apartment" },
+                condition = function(gs)
+                    return gs.get_flag("has_phone") and gs.get_flag("coffee_drunk")
+                end,
+            },
+            {
+                id = "hall_mirror",
+                rect = { x = 330, y = 230, w = 135, h = 280 },
+                label = "Зеркало",
+                icon = "",
+                action = { type = "ink_knot", knot = "look_hall_mirror" },
+            },
+        },
+    },
+
+    apartment_hall_morning = {
+        bg = "bg_apartment_hall_morning",
+        label = "Коридор",
+        hotspots = {
+            {
+                id = "to_bedroom_morning",
+                rect = { x = 45, y = 115, w = 245, h = 500 },
+                label = "В спальню",
+                icon = "",
+                action = { type = "goto_scene", scene = "apartment_bedroom_morning" },
+            },
+            {
+                id = "to_kitchen_morning",
+                rect = { x = 985, y = 100, w = 250, h = 520 },
+                label = "На кухню",
+                icon = "",
+                action = { type = "goto_scene", scene = "apartment_kitchen_morning" },
+            },
+            {
+                id = "exit_apartment_morning",
+                rect = { x = 525, y = 185, w = 260, h = 430 },
+                label = "Выйти",
+                icon = "",
+                action = { type = "ink_knot", knot = "leave_apartment" },
+                condition = function(gs)
+                    return gs.get_flag("has_phone") and gs.get_flag("coffee_drunk")
+                end,
+            },
+            {
+                id = "hall_mirror",
+                rect = { x = 330, y = 230, w = 135, h = 280 },
+                label = "Зеркало",
+                icon = "",
+                action = { type = "ink_knot", knot = "look_hall_mirror" },
+            },
+        },
+    },
+
+    apartment_bedroom_morning = {
+        bg = "bg_apartment_bedroom_morning",
+        label = "Спальня",
+        on_enter = {
+            knot = "apartment_bedroom_intro",
+            condition = function(gs)
+                return not gs.get_flag("bedroom_morning_seen")
+            end,
+        },
+        objects = {
+            {
+                id    = "phone_obj",
+                image = "mobile",
+                pos   = { x = 620, y = 260 },
+                size  = { w = 52, h = 22 },
+                visible_when = function(gs)
+                    return not gs.get_flag("has_phone")
+                end,
+            },
+        },
+        hotspots = {
+            {
+                id = "phone_on_bedside",
+                rect = { x = 565, y = 230, w = 180, h = 135 },
+                label = "Телефон",
+                icon = string.char(0xEE, 0xA4, 0x93),
+                action = { type = "ink_knot", knot = "take_phone" },
+                visible_when = function(gs)
+                    return not gs.get_flag("has_phone")
+                end,
+            },
+            {
+                id = "bedroom_desk",
+                rect = { x = 860, y = 215, w = 330, h = 275 },
+                label = "Рабочий стол",
+                icon = "",
+                action = { type = "ink_knot", knot = "bedroom_desk_morning" },
+            },
+            {
+                id = "bedroom_bed",
+                rect = { x = 110, y = 95, w = 460, h = 285 },
+                label = "Кровать",
+                icon = "",
+                action = { type = "ink_knot", knot = "look_bed_morning" },
+            },
+            {
+                id = "bathroom_door_locked",
+                rect = { x = 35, y = 150, w = 125, h = 410 },
+                label = "В ванную",
+                icon = "",
+                action = { type = "ink_knot", knot = "bathroom_not_now" },
+            },
+            {
+                id = "back_to_hall_from_bedroom",
+                rect = { x = 1080, y = 0, w = 200, h = 220 },
+                label = "В коридор",
+                icon = string.char(0xEE, 0x97, 0x84),
+                action = { type = "goto_scene", scene = "apartment_hall_morning" },
+            },
+        },
+    },
+
+    apartment_kitchen_morning = {
+        bg = "bg_apartment_kitchen_morning",
+        label = "Кухня",
+        on_enter = {
+            knot = "enter_kitchen_morning_first",
+            condition = function(gs)
+                return not gs.get_flag("kitchen_morning_seen")
+            end,
+        },
+        hotspots = {
+            {
+                id = "coffee_setup_empty",
+                rect = { x = 545, y = 255, w = 290, h = 260 },
+                label = "Кофе",
+                icon = string.char(0xEE, 0x95, 0x81),
+                action = { type = "ink_knot", knot = "use_coffee_machine_no_cup" },
+                visible_when = function(gs)
+                    return not gs.get_flag("has_mug") and not gs.get_flag("coffee_drunk")
+                end,
+            },
+            {
+                id = "coffee_setup_brew",
+                rect = { x = 545, y = 255, w = 290, h = 260 },
+                label = "Сварить кофе",
+                icon = string.char(0xEE, 0x95, 0x81),
+                action = { type = "ink_knot", knot = "use_coffee_machine_with_cup" },
+                visible_when = function(gs)
+                    return gs.get_flag("has_mug") and not gs.get_flag("coffee_drunk")
+                end,
+            },
+            {
+                id = "take_mug_kitchen",
+                rect = { x = 830, y = 115, w = 260, h = 230 },
+                label = "Кружка",
+                icon = string.char(0xEE, 0x95, 0x81),
+                action = { type = "ink_knot", knot = "take_mug" },
+                visible_when = function(gs)
+                    return not gs.get_flag("has_mug")
+                end,
+            },
+            {
+                id = "kitchen_window",
+                rect = { x = 950, y = 340, w = 285, h = 290 },
+                label = "Окно",
+                icon = "",
+                action = { type = "ink_knot", knot = "look_kitchen_window" },
+            },
+            {
+                id = "back_to_hall_from_kitchen",
+                rect = { x = 0, y = 95, w = 235, h = 515 },
+                label = "В коридор",
+                icon = string.char(0xEE, 0x97, 0x84),
+                action = { type = "goto_scene", scene = "apartment_hall_morning" },
+            },
+        },
+    },
+
+    -- =====================================================================
+    -- LEGACY: старые сцены квартиры оставлены для безопасного отката/сверки.
+    -- Новый основной маршрут использует apartment_*_morning выше.
+    -- =====================================================================
+
+    apartment_hub_legacy = {
         bg = "bg_apartment",
         hotspots = {
             {
@@ -24,21 +230,21 @@ M.scenes = {
                 rect = { x = 95, y = 0, w = 225, h = 680 },
                 label = "На кухню",
                 icon = "",
-                action = { type = "goto_scene", scene = "kitchen" },
+                action = { type = "goto_scene", scene = "kitchen_legacy" },
             },
             {
                 id = "to_bathroom",
                 rect = { x = 805, y = 145, w = 135, h = 370 },
                 label = "В ванную",
                 icon = "",
-                action = { type = "goto_scene", scene = "bathroom" },
+                action = { type = "goto_scene", scene = "bathroom_legacy" },
             },
             {
                 id = "to_bedroom_day",
                 rect = { x = 1055, y = 75, w = 130, h = 515 },
                 label = "В спальню",
                 icon = "",
-                action = { type = "goto_scene", scene = "bedroom_day" },
+                action = { type = "goto_scene", scene = "bedroom_day_legacy" },
             },
             {
                 id = "leave_home",
@@ -53,7 +259,7 @@ M.scenes = {
         },
     },
 
-    kitchen = {
+    kitchen_legacy = {
         bg = "bg_kitchen",
         -- Автотриггер knot при входе. condition проверяет флаг first-visit.
         on_enter = {
@@ -100,12 +306,12 @@ M.scenes = {
                 label = "Назад",
                 -- U+E5C4 arrow_back
                 icon = string.char(0xEE, 0x97, 0x84),
-                action = { type = "goto_scene", scene = "apartment_hub" },
+                action = { type = "goto_scene", scene = "apartment_hub_legacy" },
             },
         },
     },
 
-    bathroom = {
+    bathroom_legacy = {
         bg = "bg_bathroom",
         on_enter = {
             knot = "inspect_bathroom",
@@ -117,12 +323,12 @@ M.scenes = {
                 rect = { x = 30, y = 30, w = 140, h = 80 },
                 label = "Назад",
                 icon = string.char(0xEE, 0x97, 0x84),  -- U+E5C4 arrow_back
-                action = { type = "goto_scene", scene = "apartment_hub" },
+                action = { type = "goto_scene", scene = "apartment_hub_legacy" },
             },
         },
     },
 
-    bedroom_day = {
+    bedroom_day_legacy = {
         bg = "bg_bedroom_03",
         on_enter = {
             knot = "spot_phone_after_coffee",
@@ -168,7 +374,7 @@ M.scenes = {
                 rect = { x = 1100, y = 0, w = 175, h = 235 },
                 label = "Назад",
                 icon = "",
-                action = { type = "goto_scene", scene = "apartment_hub" },
+                action = { type = "goto_scene", scene = "apartment_hub_legacy" },
             },
         },
     },

@@ -1,0 +1,5 @@
+images {
+  image: "/main/images/bg_image/bg_apartment_bedroom_morning.jpg"
+}
+extrude_borders: 2
+rename_patterns: "bg_apartment_bedroom_morning=scene_bg"

@@ -333,7 +333,7 @@ nodes {
     z: 0.85
   }
   type: TYPE_TEXT
-  font: "manrope_16"
+  font: "unbounded_bold_20"
   id: "dlg_text"
   pivot: PIVOT_NW
   adjust_mode: ADJUST_MODE_STRETCH

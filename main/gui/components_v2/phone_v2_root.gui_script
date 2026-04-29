@@ -36,12 +36,12 @@ local EXTERNAL_APPS = {
 }
 
 local CHROME_NODES = {
-    "backdrop", "modal",
+    "phone_screen1", "phone_bg",
     "modal_border_top", "modal_border_bot",
     "corner_tl_v", "corner_tl_h", "corner_tr_v", "corner_tr_h",
     "corner_bl_v", "corner_bl_h", "corner_br_v", "corner_br_h",
     "title_eyebrow", "title_main",
-    "stats_net", "stats_msg",
+    "stats_msg",
     "close_btn", "head_divider",
     "phone_case", "phone_case_top", "phone_notch", "phone_side_btn",
     "phone_screen", "status_time", "status_meta",
@@ -56,7 +56,8 @@ local CHROME_NODES = {
     "app5_bg", "app5_icon", "app5_label",
     "app6_bg", "app6_icon", "app6_label",
     "app7_bg", "app7_icon", "app7_label",
-    "app8_bg", "app8_icon", "app8_label",
+    "app8_bg", "app8_icon", "app8_label", "app1_bg1", "app2_bg1", "app3_bg1",
+    "app4_bg1", "app5_bg1", "app6_bg1", "app7_bg1", "app8_bg1", "side_panel1",
 }
 
 local APPS = {

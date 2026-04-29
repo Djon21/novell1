@@ -1,167 +1,125 @@
 # Loop System
 
-Актуально на `2026-04-23`.
+Актуально на `2026-04-29`.
 
-Это описание минимальной рабочей системы временных петель в `AVOS_S`.
+Система временных петель разделяет run-state текущего прохождения и persistent meta-state между итерациями.
 
-## Что уже делает система
+## State
 
-- после конца главы игра возвращается в меню
-- меню показывает следующую итерацию: `001`, `002`, `003` ...
-- кнопка старта запускает новую итерацию с начала главы
-- кнопка `СБРОСИТЬ ИТЕРАЦИЮ` вручную возвращает игру к `Итерации 001`
-- meta-state сохраняется между циклами
-- run-state текущего прохождения сбрасывается
-- Ink получает номер итерации и уровень осознания петли
-- в `chapter_01.ink` уже можно писать условные loop-aware реплики
-- телефон раскрывает петлю через data-driven SMS/quests из `game_state`, которые добавляются Ink-тегами
+### Run-state
 
-## Разделение состояний
+Хранится через `main/scripts/save_manager.lua` в `save.dat`.
 
-### Persistent meta-state
+Нужен для `Continue`:
 
-Файл: `main/scripts/meta_state.lua`
+- Ink replay state
+- `game_state`
+- выбранный персонаж
+- текущая exploration-сцена
 
-Хранит долгую память петли:
+При старте новой итерации run-state очищается.
+
+### Meta-state
+
+Хранится через `main/scripts/meta_state.lua` в `meta_state.dat`.
+
+Живёт между итерациями:
 
 - `iteration_number`
 - `completed_iterations`
 - `loop_awareness`
+- `false_endings_seen`
+- `false_endings_count`
+- сохранённый выбор персонажа
 
-Это состояние живёт между запусками новых итераций.
+## Flow
 
-### Persisted run-state
+### Start Game
 
-Файл: `main/scripts/save_manager.lua`
-
-Хранит только текущее прохождение:
-
-- `mc_gender`
-- `chapter`
-- `ink_state`
-- `game_state`
-
-Это состояние нужно кнопке `Continue`. При переходе на новую итерацию оно очищается.
-
-### Runtime-state
-
-Файл: `main/scripts/game_state.lua`
-
-Содержит живое состояние текущего запуска:
-
-- flags
-- inventory
-- quests
-- sms / notes / phone data
-- current_scene
-
-Оно сериализуется в `save_manager.lua`, но само по себе не является meta-state.
-
-### Телефон и loop-контент
-
-- `phone_v2` не хранит отдельный сюжет приложений; он показывает текущее содержимое `game_state`
-- Ink добавляет данные телефона через `# sms:add:contact:text`, `# quest:*`, `# note:add:title:body`
-- Ink может помечать чат прочитанным через `# sms:read:contact`
-- Ink может повышать осознание петли внутри самой главы через `# meta:add:loop_awareness:N`
-- новые `quest_id` всё ещё нужно описывать в `main/scripts/quests.lua`, чтобы телефон показывал нормальные title/description
-- если новое meta-значение должно сработать в ветвлении сразу в этом же Ink-knot, рядом с `# meta:add:*` используйте и обычное Ink-присваивание `~ loop_awareness = loop_awareness + 1`
-
-## Поток работы
-
-### Старт новой итерации
-
-1. `main_menu_v2` шлёт `start_game`
-2. `ui_manager_v2.script` делает:
-   - `sm.new_game()`
-   - `gs.reset()`
-   - `scene_controller.reset()`
-3. загружается `chapter_01.json`
-4. `dialogue_manager_ink.lua` поднимает Ink и прокидывает meta vars
-
-### Ручной сброс к `Итерации 001`
-
-1. `main_menu_v2` шлёт `reset_iteration`
-2. `ui_manager_v2.script` вызывает `meta.reset_all()`
-3. затем стартует тот же pipeline новой игры:
-   - `sm.new_game()`
-   - `gs.reset()`
-   - `scene_controller.reset()`
-   - `dm.init(chapter_01.json)`
-
-Итог: игрок начинает заново не только run, но и всю loop-прогрессию.
+1. меню отправляет `start_game`
+2. `ui_manager_v2` очищает run-state
+3. `meta_state` сохраняется
+4. загружается `/main/story/chapter_01.json`
+5. `dialogue_manager_ink.init(bytes)` стартует Ink
 
 ### Continue
 
-1. меню шлёт `continue_game`
-2. `ui_manager_v2.script` проверяет `sm.has_save()`
-3. если save есть:
-   - восстанавливает `game_state`
-   - восстанавливает `scene_controller`
-   - вызывает `dm.load_saved(bytes)`
+1. меню отправляет `continue_game`
+2. `save_manager` восстанавливает run-state
+3. `game_state` и `scene_controller` десериализуются
+4. `dialogue_manager_ink.load_saved(bytes)` replay'ит Ink
 
-### Конец главы
+`Continue` корректен только для совместимого compiled JSON. После крупных правок `.ink` обязательно проверять загрузку.
 
-1. Ink доходит до `END`
-2. `dialogue_manager_ink.lua` шлёт `chapter_finished`
-3. `ui_manager_v2.script` вызывает `meta.complete_iteration(1)`
-4. затем:
-   - `sm.clear_run()`
-   - `gs.reset()`
-   - `scene_controller.reset()`
-   - `show_menu()`
+### Reset Iteration
 
-Итог: следующая попытка стартует как новая итерация, но meta-state не теряется.
+1. меню отправляет `reset_iteration`
+2. `meta.reset_all()`
+3. run-state очищается
+4. игра стартует с `Итерации 001`
 
-## Ink-интеграция
+## False Endings / True Ending
 
-Перед стартом истории `dialogue_manager_ink.lua` прокидывает в Ink:
+Новая схема:
 
-| VAR | Значение |
-| --- | --- |
-| `iteration_number` | номер текущей итерации |
-| `iteration_label` | строка `001`, `002`, `003` |
-| `loop_awareness` | уровень осознания петли |
-| `completed_iterations` | число завершённых циклов |
+- `# loop:end:false:id` — ложная концовка
+- `# loop:end:true` — истинная концовка
 
-Эти переменные уже объявлены в `main/story/chapter_01.ink` и попадают в `chapter_01.json` после компиляции.
+Ложная концовка:
 
-### Важная деталь про `defold-ink`
+- вызывает `meta.record_false_ending(id)`
+- повышает `loop_awareness` только если такой `id` ещё не встречался
+- очищает run-state
+- перезапускает текущую итерацию без увеличения `iteration_number`
 
-`defold-ink` сохраняет историю не как снапшот всех globals, а как replay input history (`story.get_state()` / `story.restore()`).
+Истинная концовка:
 
-Из-за этого внешние переменные, которые мы задаём Lua-стороной, нельзя считать «автоматически сохранёнными» только потому, что они лежат в `story.variables`. Для новых запусков `dialogue_manager_ink.lua` пишет их через `story.assign_value(...)`, чтобы они попадали в replay history и не терялись на `Continue`.
+- доступна, когда `false_endings_count >= 2`
+- завершает главу через `meta.complete_iteration()`
+- очищает список ложных концовок
+- переводит игрока в следующую итерацию
 
-Для обратной совместимости со старыми сейвами restore дополнительно обогащается текущими external vars перед replay.
+## Ink Vars
 
-### Restore policy
+Lua прокидывает в Ink:
 
-`AVOS_S` использует строгий `story.restore(state, with_externals)` без silent ignore mode.
+- `iteration_number`
+- `iteration_label`
+- `loop_awareness`
+- `completed_iterations`
+- `false_endings_count`
 
-Это значит:
+Эти значения пишутся через `story.assign_value(...)`, чтобы `defold-ink` сохранял их в replay history.
 
-- если сохранение совместимо с текущим compiled Ink JSON, `Continue` восстановится точно
-- если `.ink/.json` изменились несовместимо, restore свалится в fallback на новый старт главы вместо тихого частичного восстановления в неправильную точку
+## Авторинг
 
-## Что считается минимальной рабочей версией
+Пример loop-aware текста:
 
-- глава полностью проходима
-- повторный запуск через меню работает
-- `Continue` работает только для незавершённого прохождения
-- у игрока появляется базовое ощущение повторения
-- конец главы отражает актуальный `iteration_label`
-
-## Как расширять дальше
-
-- добавлять больше условных сцен по `iteration_number` и `loop_awareness`
-- делать нелинейный рост `loop_awareness`, а не только `+1` за финал главы
-- добавлять meta unlocks в меню, телефон, предметы и exploration
-- выносить multi-chapter routing из жёсткого `chapter_01.json`
-
-## Обязательный pipeline при изменении Ink
-
-```bash
-tools\compile_ink.bat chapter_01
-./tools/compile_ink.sh chapter_01
+```ink
+{loop_awareness >= 2:
+    Ты уже знаешь, чем закончится этот разговор.
+}
 ```
 
-Без перекомпиляции `chapter_01.json` новые loop-aware реплики в игре не появятся.
+Пример ложной концовки:
+
+```ink
+# loop:end:false:system_trust
+-> DONE
+```
+
+Пример истинной концовки:
+
+```ink
+{false_endings_count >= 2:
+    # loop:end:true
+    -> DONE
+}
+```
+
+## Caveats
+
+- `chapter_01.json` остаётся единственным runtime story-файлом.
+- source-level story уже модульный через `INCLUDE`.
+- `chapters/New/` больше не считается рабочей веткой.
+- если правка меняет Ink structure, проверяйте `Continue`.

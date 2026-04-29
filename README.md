@@ -2,64 +2,57 @@
 
 `AVOS_S` — narrative point-and-click / visual novel на Defold.
 
-Текущий runtime уже работает через `v2`-стек:
+Активный runtime работает через `v2`-стек:
 
-- Ink отвечает за диалоги и ветвления
-- `scene_controller.lua` отвечает за exploration-сцены
-- `game_state.lua` отвечает за runtime-state текущего прохождения
-- `save_manager.lua` хранит persisted run-state
-- `meta_state.lua` хранит долгую прогрессию временной петли
-- `ui_manager_v2.script` и `main/gui/components_v2/` отвечают за интерфейс
+- `game.project -> /main/main_v2.collectionc`
+- `main/gui/ui_manager_v2.script` — главный оркестратор UI
+- `main/gui/components_v2/` — активные GUI-компоненты
+- `main/scripts/dialogue_manager_ink.lua` — обёртка над `defold-ink`
+- `main/scripts/scene_controller.lua` — exploration-сцены и hotspots
+- `main/scripts/game_state.lua` — run-state текущего прохождения
+- `main/scripts/save_manager.lua` — save для `Continue`
+- `main/scripts/meta_state.lua` — meta-state временной петли
 
-## Что уже есть
+## Что Сейчас Есть
 
-- активный bootstrap: `game.project -> /main/main_v2.collectionc`
 - рабочая глава `chapter_01`
-- старт новой итерации через меню
-- возврат в меню после конца главы
-- `Continue` для незавершённого прохождения
-- meta-state между циклами: `iteration_number`, `completed_iterations`, `loop_awareness`
+- модульный Ink-сюжет через `main/story/chapter_01.ink` + `main/story/chapters/*.ink`
+- временные петли, итерации, reset iteration и `Continue`
+- exploration через hotspots
+- data-driven телефон с SMS, почтой, звонками, уликами, камерой и терминалом
+- карта `map_v2`, включая hub-режим для выбора маршрута из Ink
+- инвентарь с действиями `use`, `inspect`, `read` через Ink-knot contract
+- one-shot эффекты Ink: `# sfx`, `# shake`, `# pulse`
 
-## Быстрый старт
+## Быстрый Старт
 
 1. Откройте проект в Defold Editor.
 2. Если меняли `.ink`, перекомпилируйте сценарий:
 
 ```bash
-# Windows
 tools\compile_ink.bat
+```
 
-# Linux/macOS
+Для Git Bash / Linux:
+
+```bash
 ./tools/compile_ink.sh
 ```
 
 3. Запустите `Project -> Build` или `F5`.
 
-## Где читать документацию
+## Где Читать Документацию
 
-Подробная навигация по docs собрана в `docs/README.md`.
+- [docs/README.md](docs/README.md) — карта документации
+- [docs/reference/CODEX_CONTEXT.md](docs/reference/CODEX_CONTEXT.md) — быстрый вход для новой Codex-сессии
+- [docs/reference/ARCHITECTURE.md](docs/reference/ARCHITECTURE.md) — текущая архитектура runtime
+- [docs/reference/TODO.md](docs/reference/TODO.md) — живой backlog
+- [main/story/README_INK.md](main/story/README_INK.md) — правила Ink и поддерживаемые теги
 
-### Читать первым
+## Важные Caveats
 
-- `docs/reference/CODEX_CONTEXT.md`
-- `docs/reference/ARCHITECTURE.md`
-- `docs/reference/LOOP_SYSTEM.md`
-- `main/story/README_INK.md`
-
-### Практические гайды
-
-- `docs/guides/HOW_TO_ADD_SCENES.md`
-- `docs/guides/HOW_TO_ADD_BACKGROUNDS.md`
-- `docs/guides/HOW_TO_ADD_PORTRAITS.md`
-- `docs/guides/HOW_TO_ADD_SOUNDS.md`
-
-## Важные caveats
-
-- активный story-loader пока жёстко читает только `main/story/chapter_01.json`
-- после правок `.ink` обязательно нужен новый compile
-- bulk compile пропускает `*_old.ink`, чтобы архивные story-черновики не создавали лишние `.json`
-- one-shot Ink-эффекты `# sfx`, `# shake`, `# pulse` уже подключены к активному `v2` runtime через `dm.get_effects()`; новые SFX нужно добавлять и в `sfx_player`, и в `M.SFX_URLS` в `ui_manager_v2.script`
-
-## Legacy
-
-Старый GUI и legacy runtime больше не являются fallback-веткой. Они архивированы в `archive/legacy_runtime/`.
+- активный story-loader пока читает `/main/story/chapter_01.json`
+- после любых правок `.ink` нужен новый compile
+- `main/story/chapters/New/` больше не является рабочей веткой сценария; новый текст уже должен попадать в активные `chapters/*.ink`
+- старый GUI и legacy runtime архивированы в `archive/legacy_runtime/` и не являются fallback
+- папку `skills/` не трогаем

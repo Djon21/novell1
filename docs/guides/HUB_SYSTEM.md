@@ -204,14 +204,16 @@ action = { type = "goto_scene", scene = "apartment_hub" }
 
 ### Закрыть хаб и открыть телефон снова
 
-Сделай ink-knot с тегом `# enter_scene:phone_home` — это откроет телефон:
+Телефон больше не является exploration-сценой `phone_home`. Для новых сценарных входов используйте обычный data-driven телефон через `phone_v2`; старый `goto_scene:phone_home` оставлен только как compatibility alias.
 ```ink
 === leave_cafe ===
 # speaker:none
 Ты вышел на улицу и достал телефон.
-# enter_scene:phone_home
+# goto_scene:phone_home
 ->DONE
 ```
+
+Новый контент лучше не должен создавать дополнительные `phone_*` узлы. Содержимое телефона добавляется в `game_state` через Ink-теги `# sms`, `# mail`, `# call`, `# clue`, `# camera`, `# term`.
 
 ---
 

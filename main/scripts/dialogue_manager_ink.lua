@@ -196,14 +196,27 @@ local function apply_tags(tags, trailing)
                     b = tonumber(b) / 255,
                 })
             end
-        elseif key == "flag" and value and not suppress_effects then
-            -- # flag:NAME=VALUE  (value: true/false → bool, число → number, иначе string)
+        elseif (key == "flag" or key == "set_flag") and value and not suppress_effects then
+            -- # flag:NAME=VALUE  или  # set_flag:NAME=VALUE
+            -- (value: true/false → bool, число → number, иначе string)
             local name, val = value:match("([^=]+)=(.+)")
             if name then
                 name = name:gsub("^%s+", ""):gsub("%s+$", "")
                 val  = val:gsub("^%s+", ""):gsub("%s+$", "")
                 local parsed = parse_scalar_value(val)
                 table.insert(pending_commands, { type = "set_flag", flag = name, value = parsed })
+            end
+        elseif key == "add_item" and value and not suppress_effects then
+            -- # add_item:ID  — сокращённый синтаксис для удобства авторов
+            local id = value:gsub("^%s+", ""):gsub("%s+$", "")
+            if id ~= "" then
+                table.insert(pending_commands, { type = "add_item", item = id })
+            end
+        elseif key == "remove_item" and value and not suppress_effects then
+            -- # remove_item:ID  — сокращённый синтаксис
+            local id = value:gsub("^%s+", ""):gsub("%s+$", "")
+            if id ~= "" then
+                table.insert(pending_commands, { type = "remove_item", item = id })
             end
         elseif key == "item" and value and not suppress_effects then
             -- # item:add:ID  или  # item:remove:ID

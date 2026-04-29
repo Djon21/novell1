@@ -1,31 +1,4 @@
 images {
-  image: "/main/images/phone/map_assets_cyberpunk_v2/fx_scanlines.png"
-}
-images {
-  image: "/main/images/phone/map_assets_cyberpunk_v2/fx_vignette.png"
-}
-images {
-  image: "/main/images/phone/map_assets_cyberpunk_v2/map_bg.png"
-}
-images {
-  image: "/main/images/phone/map_assets_cyberpunk_v2/map_grid.png"
-}
-images {
-  image: "/main/images/phone/map_assets_cyberpunk_v2/map_roads.png"
-}
-images {
-  image: "/main/images/phone/map_assets_cyberpunk_v2/map_route_dashed.png"
-}
-images {
-  image: "/main/images/phone/map_assets_cyberpunk_v2/map_route_main.png"
-}
-images {
-  image: "/main/images/phone/map_assets_cyberpunk_v2/map_route_nodes.png"
-}
-images {
-  image: "/main/images/phone/map_assets_cyberpunk_v2/map_routes.png"
-}
-images {
   image: "/main/images/phone/map_assets_cyberpunk_v2/poi_center_dark.png"
 }
 images {

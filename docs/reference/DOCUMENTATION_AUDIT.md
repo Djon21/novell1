@@ -1,64 +1,36 @@
-# Аудит документации
+# Documentation Audit
 
-Актуально на `2026-04-22`.
+Актуально на `2026-04-29`.
 
-Цель этой ревизии — разделить документацию на:
-
-- рабочую, которая описывает текущий `v2` runtime
-- архивную, которая сохраняет историю миграции и legacy UI
-
-Папка `skills/` в этот аудит намеренно не входит.
-
-## Что теперь считается рабочей документацией
+## Что Считается Source Of Truth
 
 - `README.md`
-- `docs/reference/ARCHITECTURE.md`
+- `docs/README.md`
 - `docs/reference/CODEX_CONTEXT.md`
-- `docs/reference/CONTINUE_HERE.md`
+- `docs/reference/ARCHITECTURE.md`
 - `main/story/README_INK.md`
-- `main/story/INK_STYLE.md`
-- `docs/guides/HOW_TO_ADD_SCENES.md`
-- `docs/guides/HOW_TO_ADD_BACKGROUNDS.md`
-- `docs/guides/HOW_TO_ADD_PORTRAITS.md`
-- `docs/guides/HOW_TO_ADD_SOUNDS.md`
-- `docs/guides/GRAPHICS_GUIDE.md`
-- `docs/guides/F1_HOTSPOT_EDITOR.md`
-- `docs/guides/DESIGN_PORT_RULES.md`
-- `docs/reference/ROADMAP.md`
 - `docs/reference/TODO.md`
 
-## Что теперь считается архивом
+## Что Было Обновлено
 
-- `docs/archive/legacy-ui/AVOS_V2_PROGRESS.md`
-- `docs/archive/legacy-ui/GUI_MIGRATION_PLAN.md`
-- `docs/archive/legacy-ui/GUI_AUDIT.md`
-- `docs/archive/legacy-ui/GUI_CREATION_GUIDE.md`
-- `docs/archive/legacy-ui/GUI_VALIDATION_REPORT.md`
-- `docs/archive/legacy-ui/INTEGRATION_REPORT.md`
-- `docs/archive/legacy-ui/MIGRATION_STATUS.md`
-- `docs/archive/legacy-ui/MIGRATION_COMPLETE.md`
-- `docs/archive/legacy-ui/NODE_MAP.md`
+- входные документы сокращены и синхронизированы с текущим `v2` runtime
+- `TODO.md` очищен от закрытых пунктов и снова содержит только живой backlog
+- `ARCHITECTURE.md` обновлён под phone apps, `map_v2` hub-mode, удалённый `nav_buttons_v2` и false endings
+- `README_INK.md` обновлён под актуальные Ink-теги: mail, call, clue, camera, term, map hub, loop endings
+- `L10N_PLAN.md` больше не ссылается на `chapters/New/` как рабочую ветку
+- `CONTINUE_HERE.md` отражает, что новый сюжет должен жить в активных `chapters/*.ink`
 
-## Что было исправлено в этой ревизии
+## Что Не Трогать Как Рабочую Инструкцию
 
-- `README.md` обновлён под активный bootstrap `main_v2.collectionc`
-- добавлен `docs/reference/ARCHITECTURE.md` как короткий source of truth по runtime
-- `docs/reference/CODEX_CONTEXT.md` и `docs/reference/CONTINUE_HERE.md` синхронизированы с текущим состоянием `AVOS_S`
-- `main/story/README_INK.md` обновлён под текущий loader и реальные Ink-теги
-- инструкции по сценам, портретам, звукам, графике и F1-редактору приведены к `v2`-архитектуре
-- roadmap и TODO отделены от завершённой migration-хронологии
-- migration-документы помечены как архивные, чтобы не путать с боевой документацией
+- `docs/archive/legacy-ui/*`
+- `archive/legacy_runtime/*`
+- `.opencode/*.md`
+- `build/default*/main/story/*.md`
 
-## Что ещё остаётся непокрытым
+Эти файлы могут быть полезны как история, но не должны спорить с active docs.
 
-- нет отдельного `BUILD_GUIDE.md` с пошаговой сборкой под Яндекс.Игры
-- нет отдельного `TESTING_GUIDE.md` с release-чеклистом
+## Caveats
 
-## Рекомендация на будущее
-
-Если появляется новый runtime-модуль или новый контент-пайплайн, обновлять нужно как минимум:
-
-1. `README.md`
-2. `docs/reference/ARCHITECTURE.md`
-3. профильный how-to / README рядом с модулем
-4. `docs/reference/TODO.md`, если остался незакрытый хвост
+- В рабочем дереве есть много ручных изменений GUI, assets и Ink. Документация обновлена под это состояние, но сама игра должна быть проверена через Defold.
+- Удаление `docs/guides/INVENTORY_SYSTEM.md` и появление `docs/guides/INVENTORY_SYSTEM_guide.md` учитывается в `docs/README.md`.
+- Если `chapter_01` будет окончательно утверждён как новый канон, можно убрать из docs последние пояснения про бывшую папку `New/`.

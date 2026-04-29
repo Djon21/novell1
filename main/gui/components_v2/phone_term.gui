@@ -45,12 +45,12 @@ textures {
 }
 nodes {
   position {
-    x: 596.0
-    y: 538.0
+    x: 524.0
+    y: 590.0
     z: 0.55
   }
   size {
-    x: 460.0
+    x: 520.0
     y: 12.0
   }
   color {
@@ -69,12 +69,12 @@ nodes {
 }
 nodes {
   position {
-    x: 596.0
-    y: 508.0
+    x: 524.0
+    y: 562.0
     z: 0.55
   }
   size {
-    x: 460.0
+    x: 520.0
     y: 22.0
   }
   color {
@@ -93,12 +93,13 @@ nodes {
 }
 nodes {
   position {
-    x: 592.0
-    y: 120.0
+    x: 524.0
+    y: 116.0
+    z: 0.521
   }
   size {
-    x: 476.0
-    y: 360.0
+    x: 680.0
+    y: 410.0
   }
   color {
     x: 0.0
@@ -112,12 +113,12 @@ nodes {
 }
 nodes {
   position {
-    x: 9.0
-    y: 344.0
-    z: 0.2
+    x: 22.0
+    y: 370.0
+    z: 0.04
   }
   size {
-    x: 450.0
+    x: 632.0
     y: 12.0
   }
   color {
@@ -137,12 +138,12 @@ nodes {
 }
 nodes {
   position {
-    x: 9.0
-    y: 324.0
-    z: 0.2
+    x: 22.0
+    y: 340.0
+    z: 0.04
   }
   size {
-    x: 450.0
+    x: 632.0
     y: 12.0
   }
   color {
@@ -163,12 +164,12 @@ nodes {
 }
 nodes {
   position {
-    x: 9.0
-    y: 304.0
-    z: 0.2
+    x: 22.0
+    y: 310.0
+    z: 0.04
   }
   size {
-    x: 450.0
+    x: 632.0
     y: 12.0
   }
   color {
@@ -187,12 +188,12 @@ nodes {
 }
 nodes {
   position {
-    x: 7.0
-    y: 277.0
-    z: 0.2
+    x: 22.0
+    y: 280.0
+    z: 0.04
   }
   size {
-    x: 450.0
+    x: 632.0
     y: 12.0
   }
   color {

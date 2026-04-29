@@ -1,28 +1,4 @@
 images {
-  image: "/main/images/phone/map2/fx_scanlines.png"
-}
-images {
-  image: "/main/images/phone/map2/fx_vignette.png"
-}
-images {
-  image: "/main/images/phone/map2/map_grid.png"
-}
-images {
-  image: "/main/images/phone/map2/map_roads.png"
-}
-images {
-  image: "/main/images/phone/map2/map_route_dashed.png"
-}
-images {
-  image: "/main/images/phone/map2/map_route_main.png"
-}
-images {
-  image: "/main/images/phone/map2/map_route_nodes.png"
-}
-images {
-  image: "/main/images/phone/map2/map_routes.png"
-}
-images {
   image: "/main/images/phone/map2/poi_center_dark.png"
 }
 images {

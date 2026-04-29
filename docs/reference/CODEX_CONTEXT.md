@@ -1,97 +1,64 @@
 # CODEX_CONTEXT
 
-Актуально на `2026-04-23`, ветка `AVOS_S`.
+Актуально на `2026-04-29`, ветка `AVOS_S`.
 
-Этот файл нужен как короткая стартовая карта проекта для новых Codex-сессий.
+Этот файл — быстрый вход в проект для новой Codex-сессии.
 
-## Что читать первым
+## Читать Первым
 
 1. `README.md`
 2. `docs/reference/ARCHITECTURE.md`
-3. `docs/reference/LOOP_SYSTEM.md`
-4. `docs/reference/TODO.md`
-5. `main/story/README_INK.md`
+3. `main/story/README_INK.md`
+4. `docs/reference/LOOP_SYSTEM.md`
+5. `docs/reference/TODO.md`
 
-Исторические материалы в `docs/archive/legacy-ui/` полезны только как архив, а не как source of truth для текущего runtime.
+## Активный Runtime
 
-## Активная точка входа
+- `game.project -> /main/main_v2.collectionc`
+- главный UI: `main/gui/ui_manager_v2.script`
+- GUI: `main/gui/components_v2/`
+- сценарий: `main/story/chapter_01.ink` + `main/story/chapters/*.ink`
+- compiled story: `main/story/chapter_01.json`
+- старый runtime лежит в `archive/legacy_runtime/` и не участвует в игре
 
-- `game.project` -> `/main/main_v2.collectionc`
-- активная коллекция: `main/main_v2.collection`
-- legacy runtime отключён и архивирован в `archive/legacy_runtime/`
+## Основные Модули
 
-## Текущая карта runtime
+- `dialogue_manager_ink.lua` — `defold-ink`, команды из тегов, one-shot эффекты, jump в knot'ы.
+- `game_state.lua` — состояние текущего прохождения: flags, inventory, quests, SMS, notes, mail, calls, clues, camera, terminal, current_scene.
+- `save_manager.lua` — run-save для `Continue`: Ink history + `game_state`.
+- `meta_state.lua` — долгий meta-state петли: iteration, awareness, false endings, выбор персонажа.
+- `scene_controller.lua` — exploration-сцены, hotspots и scene objects.
+- `ui_manager_v2.script` — меню, диалог, exploration, overlays, phone, map, inventory.
 
-- `main/scripts/dialogue_manager_ink.lua`
-  - Ink runtime
-  - возвращает `current_node`, `commands`, `effects`
-  - прокидывает в Ink и run-state, и meta-state
+## Что Важно Помнить
 
-- `main/scripts/game_state.lua`
-  - runtime-state текущего прохождения
-  - flags, inventory, quests, sms, notes, current_scene
-  - phone-квесты сортируются по приоритету `active -> failed -> done`, чтобы завершённые не вытесняли активные из двух видимых карточек
-  - SMS-чаты сортируются по свежести последнего сообщения; новые SMS/notes автоматически получают fallback `time`, а `get_sms()` / `get_notes()` возвращают копии, а не живые таблицы state
+- После правок `.ink` всегда запускать `tools\compile_ink.bat`.
+- Runtime всё ещё грузит один `/main/story/chapter_01.json`.
+- `main/story/chapters/New/` больше не рабочая ветка. Новый сюжет должен быть уже перенесён в активные `chapters/*.ink`.
+- `Continue` чувствителен к структуре compiled Ink JSON. После крупных правок сценария лучше проверять и новый старт, и загрузку.
+- Телефон data-driven: контент добавляется через Ink-теги и хранится в `game_state`.
+- Карта уже умеет runtime `set_points`, обычные verbs `route/save/share` и hub-режим через `# map:hub:KNOT`.
+- `nav_buttons_v2` удалён из активной схемы. Навигация идёт через hotspots и карту.
+- `open_achievements` остаётся скрытым пунктом будущего этапа.
+- Папку `skills/` не трогаем.
 
-- `main/scripts/save_manager.lua`
-  - persisted run-state текущей попытки
-  - нужен для `Continue`
+## Недавние Закрытые Хвосты
 
-- `main/scripts/meta_state.lua`
-  - persisted meta-state между итерациями
-  - хранит `iteration_number`, `completed_iterations`, `loop_awareness`
+- подключены one-shot эффекты `# sfx`, `# shake`, `# pulse`
+- loop labels больше не сидят на старом `#017`
+- добавлены недостающие квесты `make_coffee` и `find_phone`
+- телефон переведён на data-driven model
+- инвентарь получил Ink-действия `use/inspect/read`
+- `city_map_hub` объединён с `map_v2` через hub-режим
+- phone apps `mail/call/clues/camera/terminal` получили storage/API
+- debug-log spam сокращён через `DEBUG_LOG = false`
 
-- `main/scripts/scene_controller.lua`
-  - управление exploration-сценами
-  - читает `main/scripts/scenes.lua`
-  - умеет `reset()` для чистого старта новой итерации
-  - больше не содержит legacy phone scene: телефон живёт вне `scene_controller`
+## Где Лежит Контент
 
-- `main/gui/ui_manager_v2.script`
-  - главный оркестратор UI
-  - загружает `/main/story/chapter_01.json`
-  - управляет `menu`, `exploration`, `dialogue`
-  - на `chapter_finished` переводит игру в следующую итерацию
-  - поддерживает `reset_iteration`, который вручную возвращает проект к `Итерации 001`
-  - держит compatibility alias `phone_home -> open_phone()`, чтобы старые Ink-knot'ы не ломались после удаления legacy scene
-  - прокидывает текущий `loop_label` в `dialogue_v2`, поэтому диалоговая dossier-плашка теперь берёт номер итерации из `meta_state`
-  - живые loop-метки в UI больше не сидят на старом `#017`: инвентарь получает текущий штамп через `items_catalog.get_runtime()`, а `map_v2` подменяет только текущие dossier-labels, не переписывая намеренные отсылки к прошлым петлям
-  - ведёт рабочие `AUTO/SKIP` режимы диалога, а не только локальную подсветку кнопок
-  - синхронизирует `map_v2` через `set_points` и обрабатывает `route/save/share` как реальные runtime-действия
-  - двусторонне зеркалит legacy inventory flags `has_mug/has_phone` в реальные предметы `mug/phone`, чтобы derived-инвентарь не зависал в устаревшем состоянии
-  - `open_achievements` больше не торчит в активном main menu: achievements-пункт скрыт до отдельного UI-этапа
-
-- `main/gui/components_v2/inventory_v2.gui_script`
-  - показывает только рабочие MVP verbs `use`, `inspect`, `read`
-  - `combine/give` сейчас скрыты из footer целиком, а не висят как фальшивые disabled-кнопки
-
-## Где лежит контент
-
-- сценарий: `main/story/chapter_01.ink` (composition root), `main/story/chapters/*.ink`, `main/story/chapter_01.json`
-- архивный story-черновик: `main/story/chapter_01_old.ink`
+- Ink: `main/story/chapter_01.ink`, `main/story/chapters/*.ink`
 - сцены: `main/scripts/scenes.lua`
 - предметы: `main/scripts/items_catalog.lua`
 - квесты: `main/scripts/quests.lua`
-- фоны: `main/images/backgrounds/<bg_name>.atlas`
-- hotspot sprites: `main/images/hotspots.atlas`
-- scene objects: `main/images/scene_objects.atlas`
-
-## Важные caveats перед работой
-
-- после изменения `.ink` нужно перекомпилировать `.json`
-- bulk compile теперь пропускает `*_old.ink`, чтобы архивные источники не создавали лишние `.json`
-- runtime всё ещё грузит один `chapter_01.json`, но source-level story уже разбит на include-файлы в `main/story/chapters/`
-- `chapter_01.json` всё ещё зашит напрямую в `ui_manager_v2.script`; multi-chapter loader ещё не выделен
-- `dialogue_manager_ink.lua` уже поддерживает `# sfx`, `# shake`, `# pulse`, а `ui_manager_v2` забирает `dm.get_effects()`; новые SFX требуют записи и в `sfx_player`, и в `M.SFX_URLS`
-- в `main_menu_v2` больше нет реального gallery-flow: его место заняла кнопка `СБРОСИТЬ ИТЕРАЦИЮ`
-- `map_v2` уже не purely decorative overlay, но большой хвост по world-map всё ещё живёт в Ink-узле `city_map_hub`; полного объединения схемы пока нет
-
-## Если задача звучит как «изучи проект»
-
-Под этим понимать:
-
-1. сначала прочитать этот файл, `README.md` и `docs/reference/ARCHITECTURE.md`
-2. затем проверить `docs/reference/LOOP_SYSTEM.md`, если задача касается сюжета, сейвов или итераций
-3. только после этого дочитывать конкретные затронутые модули
-
-Полный re-audit всего репозитория без отдельной просьбы не нужен.
+- фоны: `main/images/backgrounds/*.atlas`
+- телефонные GUI: `main/gui/components_v2/phone_*.gui`
+- телефонные ассеты: `main/images/phone/`
