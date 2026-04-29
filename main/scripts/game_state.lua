@@ -202,10 +202,11 @@ local function normalize_sms_state()
                     max_seq = seq
                 end
                 table.insert(out_chat, {
-                    text = tostring(entry.text or ""),
-                    unread = entry.unread == true,
-                    time = entry.time and tostring(entry.time) or default_sms_time(seq),
-                    seq = seq,
+                    text      = tostring(entry.text or ""),
+                    unread    = entry.unread == true,
+                    direction = (entry.direction == "out") and "out" or "in",
+                    time      = entry.time and tostring(entry.time) or default_sms_time(seq),
+                    seq       = seq,
                 })
             end
             table.sort(out_chat, function(a, b)
@@ -526,12 +527,37 @@ function M.add_sms(contact_id, text)
     local seq = next_sms_seq()
     _sms[contact_id] = _sms[contact_id] or {}
     table.insert(_sms[contact_id], {
-        text = tostring(text or ""),
-        unread = true,
-        time = default_sms_time(seq),
-        seq = seq,
+        text      = tostring(text or ""),
+        unread    = true,
+        direction = "in",
+        time      = default_sms_time(seq),
+        seq       = seq,
     })
     _sms_unread[contact_id] = (_sms_unread[contact_id] or 0) + 1
+    M._notify()
+    return true
+end
+
+-- Исходящее сообщение от ГГ (# sms:reply:contact:text).
+-- Автоматически ставит флаг sms_<contact_id>_replied = true.
+function M.reply_sms(contact_id, text)
+    if not contact_id or contact_id == "" then
+        return false
+    end
+    local seq = next_sms_seq()
+    _sms[contact_id] = _sms[contact_id] or {}
+    table.insert(_sms[contact_id], {
+        text      = tostring(text or ""),
+        unread    = false,
+        direction = "out",
+        time      = default_sms_time(seq),
+        seq       = seq,
+    })
+    -- автоматический флаг "ответил"
+    local replied_flag = "sms_" .. tostring(contact_id) .. "_replied"
+    if _flags[replied_flag] ~= true then
+        _flags[replied_flag] = true
+    end
     M._notify()
     return true
 end
@@ -647,10 +673,11 @@ function M.get_messages()
             local last = chat[#chat]
             local unread_n = _sms_unread[id] or 0
             table.insert(out, {
-                from   = id,
-                time   = last.time or "",
-                body   = last.text or "",
-                unread = unread_n > 0,
+                from      = id,
+                time      = last.time or "",
+                body      = last.text or "",
+                direction = last.direction or "in",
+                unread    = unread_n > 0,
             })
         end
     end

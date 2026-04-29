@@ -7,6 +7,7 @@ local UI_MGR = "#ui_manager_v2"
 
 local COLOR_CYAN  = vmath.vector4(0.47, 0.94, 1.00, 1.0)
 local COLOR_PAPER = vmath.vector4(0.95, 0.95, 0.90, 1.0)
+local COLOR_OUT   = vmath.vector4(0.55, 0.85, 0.55, 1.0)  -- исходящее — зелёный
 
 local NODE_IDS = {
     "side_eyebrow", "side_title",
@@ -58,10 +59,15 @@ local function refresh(self)
         set_node_enabled(prefix .. "_body",   has)
         if has then
             local m = list[i]
+            local is_out = (m.direction == "out")
             set_text(prefix .. "_name", m.from or "—")
             set_text(prefix .. "_time", m.time or "")
-            set_text(prefix .. "_body", m.body or "")
-            set_node_color(prefix .. "_name", m.unread and COLOR_CYAN or COLOR_PAPER)
+            set_text(prefix .. "_body", (is_out and "→ " or "") .. (m.body or ""))
+            if is_out then
+                set_node_color(prefix .. "_name", COLOR_OUT)
+            else
+                set_node_color(prefix .. "_name", m.unread and COLOR_CYAN or COLOR_PAPER)
+            end
         end
     end
 end

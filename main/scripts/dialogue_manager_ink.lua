@@ -262,6 +262,16 @@ local function apply_tags(tags, trailing)
                                :gsub("^%s*'(.*)'%s*$", "%1")
                     table.insert(pending_commands, { type = "add_sms", contact = contact, text = text })
                 end
+            elseif op == "reply" and rest then
+                -- # sms:reply:contact:текст  — ГГ отвечает на сообщение.
+                -- Автоматически ставит sms_<contact>_replied = true.
+                local contact, text = rest:match("([^:]+)%s*:%s*(.+)")
+                if contact and text then
+                    contact = contact:gsub("^%s+", ""):gsub("%s+$", "")
+                    text = text:gsub('^%s*"(.*)"%s*$', "%1")
+                                :gsub("^%s*'(.*)'%s*$", "%1")
+                    table.insert(pending_commands, { type = "reply_sms", contact = contact, text = text })
+                end
             elseif op == "read" and rest then
                 local contact = rest:gsub("^%s+", ""):gsub("%s+$", "")
                 if contact ~= "" then
