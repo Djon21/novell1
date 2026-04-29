@@ -1328,7 +1328,16 @@ function on_message(self, message_id, message, sender)
             close_phone(self)
             local knot_name = "sms_thread_" .. tostring(contact_id)
             if dm.has_knot and dm.has_knot(knot_name) then
-                run_side_dialogue_knot(self, knot_name, nil)
+                -- Выходим из сцены до прыжка в knot, иначе handle_dialogue_update
+                -- видит scene_controller.is_active()=true и уходит в show_exploration()
+                -- вместо диалога (тот же паттерн, что в jump_inventory_knot).
+                local keep_bg = nil
+                if scene_controller.is_active and scene_controller.is_active() then
+                    local scene_data = scene_controller.get_current_scene_data and scene_controller.get_current_scene_data()
+                    keep_bg = scene_data and scene_data.bg or nil
+                    if scene_controller.exit then scene_controller.exit() end
+                end
+                run_side_dialogue_knot(self, knot_name, keep_bg)
             end
             -- Если knot'а нет — просто закрыли телефон, ничего не ломается.
         end
