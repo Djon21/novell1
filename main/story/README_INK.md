@@ -73,23 +73,62 @@ Lua до начала истории прокидывает:
 
 ## Поддерживаемые Теги
 
+> Полная инструкция с примерами: `docs/guides/HOW_TO_WRITE_INK.md`  
+> Стиль и соглашения: `main/story/INK_STYLE.md`
+
+### Фон и говорящий
+
 | Тег | Что Делает |
 | --- | --- |
 | `# bg:NAME` | меняет фон |
 | `# bg:none` | скрывает фон |
 | `# color:R,G,B` | задаёт цвет под фоном |
 | `# speaker:mc|npc|none|Имя` | переключает говорящего |
+
+### Эффекты
+
+| Тег | Что Делает |
+| --- | --- |
 | `# sfx:NAME` | одноразовый звук |
 | `# shake:INT,DUR` | тряска экрана |
 | `# pulse:DUR,R,G,B` | цветовая вспышка |
-| `# flag:NAME=VALUE` | пишет flag в `game_state` |
-| `# item:add:ID` | добавляет предмет |
-| `# item:remove:ID` | убирает предмет |
+
+### Флаги и предметы
+
+| Тег | Что Делает |
+| --- | --- |
+| `# set_flag:NAME=VALUE` | пишет flag в `game_state` (канонический синтаксис) |
+| `# flag:NAME=VALUE` | алиас для `set_flag:` (legacy, поддерживается) |
+| `# add_item:ID` | добавляет предмет в инвентарь |
+| `# remove_item:ID` | убирает предмет из инвентаря |
+
+### Квесты
+
+| Тег | Что Делает |
+| --- | --- |
 | `# quest:start:ID` | стартует квест |
 | `# quest:done:ID` | завершает квест |
 | `# quest:fail:ID` | проваливает квест |
-| `# sms:add:contact:text` | добавляет SMS |
-| `# sms:read:contact` | гасит unread чата |
+
+### SMS
+
+| Тег | Что Делает |
+| --- | --- |
+| `# sms:add:contact:text` | входящее SMS от контакта (unread) |
+| `# sms:reply:contact:text` | исходящий ответ ГГ; авто: `sms_<contact>_replied=true` |
+| `# sms:read:contact` | гасит unread-флаг чата вручную |
+
+> **Автоматические флаги SMS:**  
+> - Игрок открыл SMS-приложение → `sms_<contact>_read = true`  
+> - Выполнен `# sms:reply:contact:...` → `sms_<contact>_replied = true`  
+>
+> **Переписка как ink-knot:** тап на строку переписки в телефоне открывает knot  
+> `sms_thread_<contact_id>`. Пример: `sms_thread_mila` в `01_apartment.ink`.
+
+### Заметки, почта, звонки, улики, камера, терминал
+
+| Тег | Что Делает |
+| --- | --- |
 | `# note:add:title:body` | добавляет заметку |
 | `# mail:add:from:subject` | добавляет письмо |
 | `# mail:add:from:subject:body` | добавляет письмо с телом |
@@ -105,6 +144,11 @@ Lua до начала истории прокидывает:
 | `# term:LEVEL:text` | добавляет строку терминала |
 | `# term:clear` | очищает терминал |
 | `# term:defaults` | возвращает дефолтные строки терминала |
+
+### Meta, Loop, Карта, Навигация
+
+| Тег | Что Делает |
+| --- | --- |
 | `# meta:add:loop_awareness:1` | увеличивает meta-поле |
 | `# meta:set:loop_awareness:2` | задаёт meta-поле |
 | `# loop:end:false:id` | ложная концовка, restart текущей итерации |

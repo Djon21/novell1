@@ -1,6 +1,6 @@
 # CODEX_CONTEXT
 
-Актуально на `2026-04-29`, ветка `AVOS_S`.
+Актуально на `2026-04-29` (обновлено), ветка `AVOS_S`.
 
 Этот файл — быстрый вход в проект для новой Codex-сессии.
 
@@ -52,6 +52,12 @@
 - `city_map_hub` объединён с `map_v2` через hub-режим
 - phone apps `mail/call/clues/camera/terminal` получили storage/API
 - debug-log spam сокращён через `DEBUG_LOG = false`
+- исправлен баг с повторным диалогом спальни: `# set_flag:` не парсился в `apply_tags` → флаг `bedroom_morning_seen` никогда не ставился → вечный цикл
+- исправлен `# add_item:` и `# remove_item:` — не распознавались в `apply_tags`
+- добавлена система SMS-ответов: `# sms:reply:contact:text`, авто-флаги `sms_<contact>_replied` и `sms_<contact>_read`
+- SMS-переписка стала кликабельной: тап на строку → `sms_open_contact` → Ink-knot `sms_thread_<contact>`
+- написан knot `sms_thread_mila`, квест `reply_mila` полностью закрыт через ink
+- создана `docs/guides/HOW_TO_WRITE_INK.md` — практическая инструкция по ink для проекта
 
 ## Где Лежит Контент
 

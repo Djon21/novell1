@@ -10,6 +10,7 @@
 - [ ] Проверить `Continue` после крупных правок `chapter_01.json`: сохранение в диалоге, в exploration, после телефона, после карты, после инвентаря.
 - [ ] Проверить новые GUI телефона: SMS, quests, notes, mail, calls, clues, camera, terminal, map entry.
 - [ ] Проверить, что удаление `main/story/chapters/New/` не оставило ссылок в активном runtime и рабочей документации.
+- [ ] **SMS-flow**: взять телефон → открыть SMS-приложение → тапнуть строку Милы → убедиться что knot `sms_thread_mila` открывается, флаги `sms_mila_read` и `sms_mila_replied` ставятся, квест `reply_mila` закрывается, возврат в сцену работает.
 
 ## P2 — Runtime И UX
 
