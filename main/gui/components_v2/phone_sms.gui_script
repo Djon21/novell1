@@ -49,6 +49,8 @@ end
 
 local function refresh(self)
     local list = gs.get_messages and gs.get_messages() or {}
+    -- Сохраняем список для on_input (нужно знать contact_id при клике)
+    self.contact_list = list
     for i = 1, SMS_SLOTS do
         local prefix = "msg" .. i
         local has = list[i] ~= nil
@@ -74,6 +76,7 @@ end
 
 function init(self)
     self.visible = false
+    self.contact_list = {}
     set_nodes_enabled(false)
 end
 
@@ -94,5 +97,21 @@ end
 
 function on_input(self, action_id, action)
     if not self.visible then return false end
+    if action_id ~= hash("touch") or not action.pressed then return false end
+
+    -- Клик по строке переписки → открыть переписку в ink
+    for i = 1, SMS_SLOTS do
+        local bg = get_node("msg" .. i .. "_bg")
+        if bg and gui.is_enabled(bg) and gui.pick_node(bg, action.x, action.y) then
+            local m = self.contact_list and self.contact_list[i]
+            if m and m.from then
+                -- Передаём contact_id в ui_manager: он закроет телефон и
+                -- откроет ink-knot sms_thread_<contact_id>
+                msg.post(UI_MGR, "sms_open_contact", { contact_id = m.from })
+                return true
+            end
+        end
+    end
+
     return false
 end

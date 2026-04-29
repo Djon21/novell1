@@ -14,7 +14,7 @@
 //   first_anomaly_seen        — нашёл странную запись в блокноте
 //   kitchen_intro_seen        — дошёл до кухни (шаг квеста make_coffee)
 //
-// КВЕСТЫ: make_coffee, find_phone, reply_anya, go_to_office
+// КВЕСТЫ: make_coffee, find_phone, reply_mila, go_to_office
 // ================================================================
 
 
@@ -23,16 +23,15 @@
 // ================================================================
 
 === apartment_start ===
-# bg:bg_apartment_hall_morning # speaker:none
-Воскресное утро. Квартира тихая, почти слишком тихая.
+# bg:bg_apartment_bedroom_morning # speaker:none
+Воскресное утро. Комната тихая.
+Сон отпускает не сразу.
 {iteration_number > 1:
 На секунду — странное чувство, что это утро уже пыталось начаться.
 ~ INSIGHT = INSIGHT + 1
 ~ anomaly_noticed = true
 }
-# quest:start:make_coffee
-# quest:start:go_to_office
-# explore:apartment_hub
+# explore:apartment_bedroom_morning
 -> DONE
 
 
@@ -43,17 +42,16 @@
 === apartment_bedroom_intro ===
 # bg:bg_apartment_bedroom_morning # speaker:none
 Комната ещё держит сон: смятая постель, слабый свет через жалюзи.
-На тумбочке что-то лежит экраном вниз.
+Надо просто начать утро.
 # set_flag:bedroom_morning_seen=true
-# quest:start:find_phone
 # return_to_scene
 -> DONE
 
 
 === enter_kitchen_morning_first ===
 # bg:bg_apartment_kitchen_morning # speaker:none
-На кухне пахнет утром — или просто кофе, которого ещё нет.
-Кофемашина на столешнице. Нужна кружка.
+На кухне тихо. За окном редкие машины и слишком спокойный двор.
+Кофе бы не помешал.
 # set_flag:kitchen_morning_seen=true
 # set_flag:kitchen_intro_seen=true
 # return_to_scene
@@ -66,36 +64,26 @@
 
 === take_phone ===
 # speaker:none
-Телефон лежит экраном вниз. Поднимаешь — экран вспыхивает.
-Есть сообщения. Одно от Ани — пришло ночью.
+Телефон лежит экраном вниз. За утро ты почти успел про него забыть.
+Экран вспыхивает: новое сообщение.
 # sfx:phone_notify
 # add_item:phone
 ~ has_phone = true
+~ phone_taken = true
 # set_flag:has_phone=true
 # set_flag:phone_active=true
 # set_flag:spot_phone_after_coffee_seen=true
-# sms:add:anya:Ты видел PATCH к temporal_sync.module? Очень важно. Ответь.
-# quest:done:find_phone
-# quest:start:reply_anya
+# set_flag:phone_taken=true
+# sms:add:mila:Есть планы на сегодня? Может, увидимся?
+# quest:start:reply_mila
 # return_to_scene
 -> DONE
 
 
 === bedroom_desk_morning ===
 # speaker:none
-Рабочий стол. Ноутбук в спящем режиме, стопка распечаток и открытый блокнот.
-{not first_anomaly_seen:
-В блокноте — строчка твоим почерком, которую ты не помнишь:
-
-"Не соглашайся сразу."
-
-Это не первая такая запись, но всегда кажется, что видишь впервые.
-# note:add:Странная запись:Не соглашайся сразу. Свой почерк.
-~ first_anomaly_seen = true
-# set_flag:first_anomaly_seen=true
-- else:
-Та запись на месте. Смотришь на неё и снова ничего не понимаешь.
-}
+Рабочий стол. Ноутбук закрыт, рядом блокнот и зарядка от телефона.
+Сегодня воскресенье. Работу можно не трогать.
 # return_to_scene
 -> DONE
 
@@ -109,17 +97,24 @@
 - else:
 Постель скомкана. Сон был неровным — или слишком длинным.
 }
+Ладно. Пора вставать.
+# set_flag:got_out_of_bed=true
+# return_to_scene
+-> DONE
+
+
+=== wash_up_morning ===
+# speaker:none
+Холодная вода быстро собирает лицо обратно.
+В зеркале — обычное воскресное утро. Ничего героического.
+# set_flag:washed_up=true
 # return_to_scene
 -> DONE
 
 
 === bathroom_not_now ===
 # speaker:none
-{coffee_drunk and has_phone:
-Сначала выйти. Ванная подождёт.
-- else:
-Ванная. Сначала нужно разобраться с кофе и телефоном.
-}
+Ванная уже сделала своё.
 # return_to_scene
 -> DONE
 
@@ -142,6 +137,7 @@
 
 === leave_apartment ===
 # speaker:none
+Ключи, телефон, кофе внутри. Теперь можно выходить.
 Дверь захлопывается за спиной.
 # set_flag:left_apartment=true
 -> metro
@@ -176,7 +172,7 @@
 Запах правильный. Почти успокаивает.
 # sfx:coffee_brew
 # set_flag:coffee_drunk=true
-# quest:done:make_coffee
+# set_flag:morning_ritual_done=true
 # return_to_scene
 -> DONE
 
@@ -190,5 +186,36 @@
 - else:
 Окно выходит во двор. Пусто. Машина у подъезда — не твоя.
 }
+# return_to_scene
+-> DONE
+
+
+// ================================================================
+// SMS — переписка с Милой
+// ================================================================
+
+=== sms_thread_mila ===
+# speaker:none
+Открываешь переписку. Мила написала утром:
+«Есть планы на сегодня? Может, увидимся?»
+
+* [«Давай. Напишу, как освобожусь.»]
+    Тёплый ответ. Не обещаешь конкретику, но дверь открыта.
+    # sms:reply:mila:Давай. Напишу, как освобожусь.
+    ~ TRUST = TRUST + 1
+    -> sms_mila_sent
+* [«Сейчас занят. Потом.»]
+    Коротко. Без объяснений.
+    # sms:reply:mila:Сейчас занят. Потом напишу.
+    -> sms_mila_sent
+* [«Не знаю ещё. Посмотрим.»]
+    Уклончиво. Ни да ни нет.
+    # sms:reply:mila:Не знаю ещё. Посмотрим.
+    -> sms_mila_sent
+
+= sms_mila_sent
+# speaker:none
+Сообщение отправлено.
+# quest:done:reply_mila
 # return_to_scene
 -> DONE

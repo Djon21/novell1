@@ -1317,6 +1317,21 @@ function on_message(self, message_id, message, sender)
         if gs.mark_all_sms_read then
             gs.mark_all_sms_read()
         end
+
+    elseif message_id == hash("sms_open_contact") then
+        -- Игрок тапнул по переписке в телефоне.
+        -- Помечаем контакт прочитанным, закрываем телефон,
+        -- прыгаем в ink-knot sms_thread_<contact_id> (если он существует).
+        local contact_id = message and message.contact_id
+        if contact_id then
+            if gs.mark_sms_read then gs.mark_sms_read(contact_id) end
+            close_phone(self)
+            local knot_name = "sms_thread_" .. tostring(contact_id)
+            if dm.has_knot and dm.has_knot(knot_name) then
+                run_side_dialogue_knot(self, knot_name, nil)
+            end
+            -- Если knot'а нет — просто закрыли телефон, ничего не ломается.
+        end
     elseif message_id == hash("phone_app_clicked") then
         dbg("[ui_manager_v2] phone_app_clicked", message.id)
         -- Карта теперь открывается внутри телефона (phone_map.gui).
