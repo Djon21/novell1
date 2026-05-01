@@ -4,11 +4,6 @@ main_collection = /main/main_v2.collectionc
 [script]
 shared_state = 1
 
-[sys]
-# Увеличен с дефолта 2048: dialogue_backlog (до 80 записей кириллицы)
-# не влезал в стандартный буфер msg.post при отправке в dialogue компонент.
-max_message_data_size = 65536
-
 [display]
 high_dpi = 1
 width = 1280
