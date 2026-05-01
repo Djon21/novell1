@@ -188,6 +188,8 @@ Git Bash / Linux:
 > - В ink встретился `# sms:reply:contact:...` → `sms_<contact>_replied = true`
 
 > **Переписка как ink-knot:** тап на строку переписки в телефоне открывает knot `sms_thread_<contact_id>`. Пример: `sms_thread_mila` в `01_apartment.ink`.
+>
+> **Защита от повторного ответа:** после первого `# sms:reply:contact:...` авто-флаг `sms_<contact>_replied = true` блокирует повторный вход в thread-knot — иначе `*`-выборы появлялись бы снова (`dm.jump_to_knot` сбрасывает visit-counts). Игрок остаётся в SMS-приложении и видит историю.
 
 ### Сцены и навигация (point-and-click)
 

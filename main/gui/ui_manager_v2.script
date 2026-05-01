@@ -17,6 +17,7 @@ go.property("bg_rooftop_atlas", resource.atlas("/main/images/backgrounds/bg_roof
 go.property("bg_apartment_hall_morning_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_hall_morning.atlas"))
 go.property("bg_apartment_bedroom_morning_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_bedroom_morning.atlas"))
 go.property("bg_apartment_kitchen_morning_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_kitchen_morning.atlas"))
+go.property("bg_cafe_morning_atlas", resource.atlas("/main/images/backgrounds/bg_cafe_morning.atlas"))
 
 local dm = require "main.scripts.dialogue_manager_ink"
 local gs = require "main.scripts.game_state"
@@ -94,6 +95,7 @@ local DEDICATED_BG_ATLAS_PROPS = {
     bg_apartment_hall_morning = "bg_apartment_hall_morning_atlas",
     bg_apartment_bedroom_morning = "bg_apartment_bedroom_morning_atlas",
     bg_apartment_kitchen_morning = "bg_apartment_kitchen_morning_atlas",
+    bg_cafe_morning = "bg_cafe_morning_atlas",
 }
 
 -- Базовый режим (menu / nav / exploration / dialogue). choice/inventory/phone/map —
@@ -1558,6 +1560,20 @@ function on_message(self, message_id, message, sender)
         local contact_id = message and message.contact_id
         if contact_id then
             if gs.mark_sms_read then gs.mark_sms_read(contact_id) end
+
+            -- Защита от повторного открытия thread-knot'а.
+            -- dm.jump_to_knot использует ChoosePathString, и он сбрасывает
+            -- visit-counts для * выборов внутри целевого knot'а — поэтому
+            -- если игрок уже ответил, при повторном тапе по переписке выборы
+            -- появились бы снова и можно было бы выбрать другой вариант.
+            -- Авто-флаг sms_<contact>_replied ставится при # sms:reply: и
+            -- надёжно говорит «ответ уже отправлен, knot открывать не надо».
+            -- Игрок остаётся в SMS-приложении и видит историю переписки.
+            local replied_flag = "sms_" .. tostring(contact_id) .. "_replied"
+            if gs.get_flag and gs.get_flag(replied_flag) then
+                return
+            end
+
             close_phone(self)
             local knot_name = "sms_thread_" .. tostring(contact_id)
             if dm.has_knot and dm.has_knot(knot_name) then
