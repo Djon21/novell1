@@ -35,3 +35,4 @@
 
 - [ ] Проверить интеграцию Яндекс SDK в реальной сборке.
 - [ ] Пройти `docs/reference/TESTING_CHECKLIST.md` перед публикацией.
+- [ ] **Custom texture profiles для фонов** (только на финальном этапе, когда контент фонов заморожен и они не дёргаются). Сейчас 13 fullscreen `1920×1080` атласов идут в bundle как RGBA8888 (~16MB на фон, итого ~200MB). Для Яндекс Игр это не пройдёт по лимиту билда. Нужно: создать `.texture_profiles`, привязать через `[graphics] texture_profiles` в game.project, выбрать BASIS Universal (UASTC или ETC1S — определить по визуальному тесту) для path-pattern `/main/images/backgrounds/**`. Прогнать билд под HTML5 / Android, сравнить размер и визуальное качество.
