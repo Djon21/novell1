@@ -14,6 +14,7 @@
 - SDK **не** делает перевод сам — только сообщает язык. Систему переключения строим мы.
 - Турецкий алфавит — латиница + Latin Extended-A (`ş ğ ı ö ü ç İ Ğ Ş`). Один латинский шрифт покрывает EN + TR.
 - Игра на прототипной стадии: Ink-тексты меняются, UI ещё дорабатывается. План рассчитан на постепенное подключение.
+- **Перевод делается через нейронку (LLM).** Все размеры файлов и формат хранения подобраны так, чтобы LLM могла перевести один файл целиком за один заход без потери контекста (см. §4.2.1, §4.3.1, §4.3.2).
 
 ### Что уже есть в коде (на 2026-05-01)
 
@@ -125,59 +126,85 @@ end
 
 **Почему без yagames:** инициализация `yagames.init()` асинхронная и срабатывает позже init'а UI. Если ждать SDK — меню успеет нарисоваться на дефолтном языке. JS-шаблон же выставляет `window.__gameLang` синхронно в момент `YaGames.init().then(...)`, ДО загрузки Defold-движка → к моменту `init` всех скриптов значение уже на месте.
 
-### 4.2 Таблица строк — `main/scripts/l10n.lua`
+### 4.2 Таблица строк — JSON-файлы на язык
+
+**Формат хранения:** один JSON на язык в `main/data/strings/`:
+- `main/data/strings/ru.json` — мастер (правится разработчиком при добавлении фич)
+- `main/data/strings/en.json` — перевод (генерируется через LLM из ru.json)
+- `main/data/strings/tr.json` — перевод (генерируется через LLM из ru.json)
+
+**Почему JSON, а не Lua-таблица:**
+- Перевод делается через нейронку. Нейронка отдаёт JSON чисто, без риска сломать Lua-синтаксис (запятая, кавычка, escape).
+- Размер ru.json даже на 200+ ключах ~10KB — нейронка съест в один заход, переведёт в en/tr целиком.
+- Можно запустить валидатор «все ли ключи из ru.json присутствуют в en.json/tr.json» обычным diff'ом.
+
+**Пример `ru.json`:**
+
+```json
+{
+  "menu_new": "НОВАЯ ИТЕРАЦИЯ",
+  "menu_continue": "ПРОДОЛЖИТЬ",
+  "menu_reset": "СБРОСИТЬ ИТЕРАЦИЮ",
+  "menu_achievements": "ДОСТИЖЕНИЯ",
+
+  "phone_sms": "СООБЩЕНИЯ",
+  "phone_quests": "ЗАДАЧИ",
+  "phone_notes": "ЗАМЕТКИ",
+
+  "map_home": "Дом",
+  "map_work": "Офис",
+  "map_metro": "М. Ул. 1905 года"
+}
+```
+
+**Загрузчик `main/scripts/l10n.lua`:**
 
 ```lua
-M.strings = {
-    ru = {
-        menu_new          = "НОВАЯ ИТЕРАЦИЯ",
-        menu_continue     = "ПРОДОЛЖИТЬ",
-        menu_reset        = "СБРОСИТЬ ИТЕРАЦИЮ",
-        menu_achievements = "ДОСТИЖЕНИЯ",
-        phone_sms         = "СООБЩЕНИЯ",
-        phone_quests      = "ЗАДАЧИ",
-        phone_notes       = "ЗАМЕТКИ",
-        map_home          = "Дом",
-        map_work          = "Офис",
-        map_metro         = "М. Ул. 1905 года",
-        -- ...
-    },
-    en = {
-        menu_new          = "NEW ITERATION",
-        menu_continue     = "CONTINUE",
-        menu_reset        = "RESET ITERATION",
-        menu_achievements = "ACHIEVEMENTS",
-        phone_sms         = "MESSAGES",
-        phone_quests      = "TASKS",
-        phone_notes       = "NOTES",
-        map_home          = "Home",
-        map_work          = "Office",
-        map_metro         = "Metro · 1905 St.",
-    },
-    tr = {
-        menu_new          = "YENİ İTERASYON",
-        menu_continue     = "DEVAM ET",
-        menu_reset        = "İTERASYONU SIFIRLA",
-        menu_achievements = "BAŞARIMLAR",
-        phone_sms         = "MESAJLAR",
-        phone_quests      = "GÖREVLER",
-        phone_notes       = "NOTLAR",
-        map_home          = "Ev",
-        map_work          = "Ofis",
-        map_metro         = "Metro · 1905 Cd.",
-    },
-}
+local M = { lang = "ru", strings = {} }
+
+local SUPPORTED = { ru = true, en = true, tr = true }
+
+local function load_lang(lang)
+    local path = "main/data/strings/" .. lang .. ".json"
+    local data = sys.load_resource("/" .. path)
+    if not data then return nil end
+    local ok, parsed = pcall(json.decode, data)
+    return ok and parsed or nil
+end
+
+function M.init()
+    -- Грузим RU всегда (fallback) + текущий язык
+    M.strings.ru = load_lang("ru") or {}
+    if M.lang ~= "ru" then
+        M.strings[M.lang] = load_lang(M.lang) or {}
+    end
+end
 
 function M.t(key)
-    local table_for_lang = M.strings[M.lang] or M.strings.ru
-    return table_for_lang[key] or M.strings.ru[key] or ("?" .. tostring(key))
+    local cur = M.strings[M.lang]
+    if cur and cur[key] then return cur[key] end
+    return M.strings.ru[key] or ("?" .. tostring(key))
 end
 ```
+
+> **Важно:** все JSON-файлы должны быть указаны в `[project] custom_resources` в `game.project`, чтобы Defold их забандлил, а `sys.load_resource` смог прочитать.
 
 Использование:
 ```lua
 local l10n = require "main.scripts.l10n"
 gui.set_text(node, l10n.t("menu_new"))
+```
+
+### 4.2.1 Промпт нейронке для перевода UI
+
+```
+Переведи значения JSON-файла с русского на английский (или турецкий).
+Ключи (левая часть) НЕ трогай.
+Сохрани форматирование (capslock, регистр) — если в RU "НОВАЯ ИТЕРАЦИЯ"
+капсом, то и в EN "NEW ITERATION" капсом.
+Верни валидный JSON.
+
+[вставка содержимого ru.json]
 ```
 
 ### 4.3 Ink-диалоги — Вариант A (P3)
@@ -198,6 +225,59 @@ gui.set_text(node, l10n.t("menu_new"))
 **Минусы:** нестандартный Ink, ломает читаемость нарратива → отказались.
 
 **Решение:** Вариант A. Откладываем до контентного freeze.
+
+### 4.3.1 Размеры глав и нейронный workflow
+
+Замеры на 2026-05-01 (`wc -w`):
+
+| Файл | Слов | ≈ токенов | В один заход в LLM |
+|---|---:|---:|:---:|
+| `00_bootstrap.ink` | 213 | ~430 | ✅ (только VAR) |
+| `01_apartment.ink` | 2048 | ~4100 | ✅ |
+| `02_metro.ink` | 1316 | ~2630 | ✅ |
+| `03_office.ink` | 2341 | ~4680 | ✅ |
+| `04_rooftop.ink` | 1260 | ~2520 | ✅ |
+| `90_phone_apps.ink` | 161 | ~320 | ✅ |
+| `91_inventory_actions.ink` | 266 | ~530 | ✅ |
+
+Каждая глава влезает в любую современную LLM (~5k токенов). **Перевод делаем по одной главе за раз**, не отправлять всё разом.
+
+### 4.3.2 Промпт нейронке для перевода Ink-главы
+
+⚠️ Главная опасность: LLM может «исправить» теги, имена knot'ов или Ink-переменные. Промпт должен явно их защитить.
+
+```
+Переведи русский текст внутри ink-файла на английский (или турецкий).
+
+ЧТО НЕ ТРОГАТЬ ВООБЩЕ:
+1. Имена knot'ов: === имя_knota === — оставлять как есть
+2. Имена stitch'ей: = имя_stitch — оставлять как есть
+3. ВСЕ строки, начинающиеся с `#` (теги): # bg:..., # set_flag:..., # sms:add:..., # quest:..., # return_to_scene
+   ВКЛЮЧАЯ значения тегов: # set_flag:bedroom_seen=true остаётся буквально
+4. Имена ink-переменных: has_phone, iteration_number, INSIGHT и т.п.
+5. Ink-управляющие конструкции: -> DONE, -> knot_name, ~ переменная = ...
+6. Условия в фигурных скобках: {iteration_number > 1: ...} — само условие не трогать,
+   но текст внутри блока перевести
+7. Комментарии // ... — переводить их не нужно
+8. ID контактов в SMS: # sms:add:mila:текст — "mila" не трогать,
+   переводить только текст после второго двоеточия
+
+ЧТО ПЕРЕВОДИТЬ:
+- Текст реплик и нарратива (между тегами)
+- Текст в квадратных скобках выбора: * [Текст выбора] → переводим
+- Текст SMS после второго двоеточия в # sms:add:contact:ТЕКСТ
+- Текст заметок после второго двоеточия в # note:add:title:body
+
+Верни весь файл целиком — структура должна быть идентична оригиналу.
+
+[вставка содержимого 01_apartment.ink]
+```
+
+После перевода **обязательно**:
+1. Прогнать `tools/compile_ink.bat chapter_01_en` — должна быть `[OK]` без ошибок
+2. Сверить число knot'ов: `grep -c '^=== ' 01_apartment.ink` в RU и `_en` версии = одинаковое
+3. Сверить число хотспот-выборов: `grep -c '^\*' 01_apartment.ink` = одинаковое
+4. Smoke-тест в игре с `?lang=en` — пройти главу, проверить что выборы и SMS видны
 
 ### 4.4 Динамические данные (`scenes.lua`, `quests.lua`, `items_catalog.lua`)
 
