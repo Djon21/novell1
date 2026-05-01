@@ -29,6 +29,11 @@
   - one-shot effects
 - `dialogue_v2` показывает реплики, портреты, typewriter и loop-label из `meta_state`
 - `AUTO/SKIP` реализованы в `ui_manager_v2`, останавливаются на `choice`, `end` и exploration
+- бэклог реплик и выборов хранится в `main/scripts/dialogue_backlog.lua` (общий
+  Lua-модуль через `[script] shared_state = 1`): `ui_manager_v2` пишет через
+  `backlog.add(entry)`, `dialogue_v2` читает через `backlog.get_all()`. Так
+  устранена пересылка большой таблицы через `msg.post`, упиравшаяся в
+  `sys.max_message_data_size`.
 
 ### Exploration
 

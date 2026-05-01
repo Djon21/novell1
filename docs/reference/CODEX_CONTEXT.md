@@ -58,6 +58,8 @@
 - SMS-переписка стала кликабельной: тап на строку → `sms_open_contact` → Ink-knot `sms_thread_<contact>`
 - написан knot `sms_thread_mila`, квест `reply_mila` полностью закрыт через ink
 - создана `docs/guides/HOW_TO_WRITE_INK.md` — практическая инструкция по ink для проекта
+- бэклог реплик вынесен в `main/scripts/dialogue_backlog.lua` (shared-модуль): убрана пересылка таблицы через `msg.post`, упиравшаяся в `sys.max_message_data_size`
+- починена кодировка `AVOS_S_Story_Bible.md` и `AVOS_S_World_Doc_v2.md` (был UTF-8 → CP1251 → UTF-8 mojibake)
 
 ## Где Лежит Контент
 
