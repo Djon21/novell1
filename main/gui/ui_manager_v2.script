@@ -494,7 +494,10 @@ local function append_dialogue_backlog(self, entry)
     while #self.dialogue_backlog > DIALOGUE_BACKLOG_LIMIT do
         table.remove(self.dialogue_backlog, 1)
     end
-    sync_dialogue_backlog(self)
+    -- Не синкаем бэклог в dialogue компонент здесь: при 80 записях кириллицы
+    -- таблица переполняет 2KB-буфер msg.post (script.message_max_size).
+    -- open_dialogue_backlog() сам зовёт sync_dialogue_backlog перед открытием
+    -- → диалоговый компонент получает свежие данные ровно когда они нужны.
 end
 
 local function compute_dialogue_autoplay_delay(text, skip_mode)
