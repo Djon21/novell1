@@ -23,6 +23,7 @@
 
 local catalog = require "main.scripts.items_catalog"
 local gs      = require "main.scripts.game_state"
+local meta    = require "main.scripts.meta_state"
 
 local UI_MGR = "#ui_manager_v2"
 
@@ -39,20 +40,24 @@ local ACTIVE_VERBS = {
 local CHROME_NODES = {
     "backdrop", "modal",
     "modal_border_top", "modal_border_bot",
+    "modal_border_left", "modal_border_right",
     "corner_tl_v", "corner_tl_h",
     "corner_tr_v", "corner_tr_h",
     "corner_bl_v", "corner_bl_h",
     "corner_br_v", "corner_br_h",
     "title_eyebrow", "title_main",
     "stats_slots", "stats_weight", "stats_loop",
-    "close_btn",
+    "close_btn_bg", "close_btn",
     "head_divider", "foot_divider",
     "foot_left", "foot_right",
     "details_bg", "details_border_top",
+    "details_border_bot", "details_border_left", "details_border_right",
     "details_cap", "details_name",
     "details_iter", "details_clue",
     "details_preview_bg", "details_preview_top", "details_preview_bot",
-    "details_icon", "details_desc",
+    "details_preview_left", "details_preview_right",
+    "details_icon", "preview_stamp_bg", "preview_stamp_label",
+    "details_desc",
     "details_stats_divider",
     "stat_src_k", "stat_src_v",
     "stat_iter_k", "stat_iter_v",
@@ -100,9 +105,11 @@ local VERB_LABEL = {
 }
 
 local VERB_SLOT_TO_NAME = {
-    [2] = "use",
-    [3] = "inspect",
+    [1] = "use",
+    [2] = "inspect",
+    [3] = "combine",
     [4] = "read",
+    [5] = "give",
 }
 
 -- Color per item type (paper = consumable, amber = key, hot = clue, violet = rare).
@@ -175,7 +182,7 @@ local function paint_slot_filled(i, item, selected)
     gui.set_color(s.name, COLOR_PAPER)
     local q = item.qty or 1
     if q > 1 then
-        gui.set_text(s.qty, "x" .. tostring(q))
+        gui.set_text(s.qty, "×" .. tostring(q))
     else
         gui.set_text(s.qty, "")
     end
@@ -228,6 +235,7 @@ local function clear_details(self)
     set_text("details_iter", "")
     set_text("details_clue", "")
     set_text("details_icon", "")
+    set_text("preview_stamp_label", "ПУСТО")
     set_text("details_desc", "Выбери предмет в сетке слева. Каждый несёт след одной из прошлых итераций.")
     set_text("stat_src_v",   "—")
     set_text("stat_iter_v",  "—")
@@ -254,6 +262,7 @@ local function show_item_details(self, item_id)
     end
     set_text("details_icon", item.icon or "")
     set_color("details_icon", color_for_type(item.type, item.clue == "да"))
+    set_text("preview_stamp_label", "ОСМОТРЕТЬ")
     set_text("details_desc", item.desc or item.description or "")
     set_text("stat_src_v",  item.source or "—")
     set_text("stat_iter_v", item.iter   or "—")
@@ -294,6 +303,11 @@ local function refresh(self)
         end
     end
     set_text("stats_slots", "слотов: " .. tostring(used) .. "/" .. tostring(SLOT_COUNT))
+    set_text("stats_weight", "вес: —")
+    local loop_label = meta.get_iteration_label and meta.get_iteration_label() or nil
+    if loop_label and loop_label ~= "" then
+        set_text("stats_loop", "петля: #" .. tostring(loop_label))
+    end
 
     -- drop a stale selection (item removed), re-pick first if nothing selected
     if self.selected and not self.inv_ids[self.selected] then
@@ -362,6 +376,10 @@ function on_input(self, action_id, action)
     if action_id ~= hash("touch") or not action.pressed then return false end
 
     -- close button
+    if gui.is_enabled(n("close_btn_bg")) and gui.pick_node(n("close_btn_bg"), action.x, action.y) then
+        msg.post(UI_MGR, "close_inventory")
+        return true
+    end
     if gui.is_enabled(n("close_btn")) and gui.pick_node(n("close_btn"), action.x, action.y) then
         msg.post(UI_MGR, "close_inventory")
         return true

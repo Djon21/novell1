@@ -64,4 +64,4 @@ VAR inventory_item_name = ""
 VAR inventory_item_verb = ""
 VAR inventory_scene_id = ""
 
--> apartment_start
+-> choose_character

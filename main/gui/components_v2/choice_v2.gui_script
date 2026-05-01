@@ -1,137 +1,292 @@
 -- choice_v2.gui_script
--- Модалка выбора 2-4 опций с таймером (countdown).
--- Опции создаются динамически как дети "opts_panel".
---
--- Схема опции:
---   { text = "…", cls = ""|"key"|"danger", hint = "подсказка", hintCls = "hot"|"amber"|"violet" }
+-- Модалка выбора 2-4 опций.
+-- Визуал перенесён из choice_defold.html: центральная панель, header/meta,
+-- prompt/caveat, карточки вариантов с номером и hint, footer label.
 --
 -- Сообщения:
---   "show_choice" {opts = {…}, timer_sec = 18, title = "…"?}
+--   "show_choice" {opts = {…}, title/prompt/caveat/name/tag/meta?}
 --   "hide_choice"
 --
 -- В ui_manager_v2 шлёт:
 --   "choice_picked" {index}
---   "choice_timeout"
---   "choice_cancelled"
 
 local UI_MGR = "#ui_manager_v2"
+local ui_state = require "main.scripts.ui_state"
 
-local CHOICE_NODES = {
-    "backdrop", "modal", "title_eyebrow", "title_main", "opts_panel",
-    "timer_label", "timer_num", "timer_track", "timer_fill",
+-- HUD uses set_location { name, time, loop }. choice_v2 is a separate GUI
+-- component, so it must receive the same message or explicit location fields
+-- inside show_choice. We keep the last HUD-style value here.
+local current_location_name = nil
+local current_location_time = nil
+local current_location_loop = nil
+
+local STATIC_NODES = {
+    "backdrop", "modal",
+    "modal_border_top", "modal_border_bottom", "modal_border_left", "modal_border_right",
+    "corner_tl_v", "corner_tl_h", "corner_tr_v", "corner_tr_h",
+    "corner_bl_v", "corner_bl_h", "corner_br_v", "corner_br_h",
+    "who_tag_bg", "who_tag", "who_name",
+    "meta_loop_bg", "meta_loop_border_top", "meta_loop_border_bottom", "meta_loop_border_left", "meta_loop_border_right",
+    "meta_loop", "meta_tm", "head_divider",
+    "prompt", "caveat", "opts_panel",
+    "foot_divider", "foot_label",
+    -- старые id оставлены пустыми, чтобы внешние/старые вызовы не падали
+    "title_eyebrow", "title_main",
 }
 
+local function get_node(id)
+    local ok, n = pcall(gui.get_node, id)
+    if ok then return n end
+    return nil
+end
+
+local function set_node_enabled(id, enabled)
+    local n = get_node(id)
+    if n then gui.set_enabled(n, enabled) end
+end
+
 local function set_all_enabled(enabled)
-    for _, id in ipairs(CHOICE_NODES) do
-        gui.set_enabled(gui.get_node(id), enabled)
+    for _, id in ipairs(STATIC_NODES) do
+        set_node_enabled(id, enabled)
     end
 end
 
-local OPTS_W, OPTS_H = 640, 300   -- размеры opts_panel
-local OPT_HEIGHT = 60
-local OPT_GAP    = 12
+local function set_text(id, s)
+    local n = get_node(id)
+    if n then gui.set_text(n, s or "") end
+end
+
+local function coalesce(...)
+    for i = 1, select("#", ...) do
+        local v = select(i, ...)
+        if v ~= nil and tostring(v) ~= "" then return v end
+    end
+    return nil
+end
 
 local COLORS = {
-    paper  = vmath.vector4(0.952, 0.925, 0.85, 1.0),
-    accent = vmath.vector4(0.49, 0.976, 1.0, 1.0),
-    hot    = vmath.vector4(1.0, 0.239, 0.498, 1.0),
-    amber  = vmath.vector4(1.0, 0.702, 0.278, 1.0),
-    violet = vmath.vector4(0.478, 0.361, 1.0, 1.0),
-    opt_bg_normal = vmath.vector4(0.067, 0.055, 0.173, 0.95),
-    opt_bg_key    = vmath.vector4(0.049, 0.082, 0.173, 0.9),
-    opt_bg_danger = vmath.vector4(0.235, 0.027, 0.078, 0.9),
-    border_normal = vmath.vector4(0.49, 0.976, 1.0, 0.35),
-    border_key    = vmath.vector4(0.49, 0.976, 1.0, 0.8),
-    border_danger = vmath.vector4(1.0, 0.239, 0.498, 0.8),
+    paper      = vmath.vector4(0.953, 0.925, 0.851, 1.0),
+    paper_dim  = vmath.vector4(0.788, 0.753, 0.659, 1.0),
+    ink0       = vmath.vector4(0.020, 0.012, 0.102, 1.0),
+    panel      = vmath.vector4(0.031, 0.024, 0.094, 0.92),
+    opt_bg     = vmath.vector4(0.047, 0.039, 0.141, 0.72),
+    num_bg     = vmath.vector4(0.020, 0.012, 0.102, 1.0),
+    accent     = vmath.vector4(0.490, 0.976, 1.000, 1.0),
+    accent_dim = vmath.vector4(0.490, 0.976, 1.000, 0.35),
+    hot        = vmath.vector4(1.000, 0.239, 0.498, 1.0),
+    hot_dim    = vmath.vector4(1.000, 0.239, 0.498, 0.55),
+    amber      = vmath.vector4(1.000, 0.702, 0.278, 1.0),
+    amber_dim  = vmath.vector4(1.000, 0.702, 0.278, 0.55),
+    violet     = vmath.vector4(0.478, 0.361, 1.000, 1.0),
+    violet_dim = vmath.vector4(0.478, 0.361, 1.000, 0.55),
+    stamp      = vmath.vector4(0.784, 0.078, 0.165, 1.0),
+    stamp_dim  = vmath.vector4(0.784, 0.078, 0.165, 0.25),
+    transparent = vmath.vector4(0, 0, 0, 0),
 }
 
-local function hint_color(hintCls)
-    if hintCls == "hot"    then return COLORS.hot end
-    if hintCls == "amber"  then return COLORS.amber end
-    if hintCls == "violet" then return COLORS.violet end
-    return COLORS.accent
+local function color_for_class(cls)
+    if cls == "key" then return COLORS.amber, COLORS.amber_dim end
+    if cls == "danger" then return COLORS.hot, COLORS.hot_dim end
+    return COLORS.accent, COLORS.accent_dim
 end
 
-local function bg_for(cls)
-    if cls == "key"    then return COLORS.opt_bg_key, COLORS.border_key end
-    if cls == "danger" then return COLORS.opt_bg_danger, COLORS.border_danger end
-    return COLORS.opt_bg_normal, COLORS.border_normal
+local function hint_color(hint_cls)
+    if hint_cls == "hot" then return COLORS.hot, COLORS.hot_dim end
+    if hint_cls == "amber" then return COLORS.amber, COLORS.amber_dim end
+    if hint_cls == "violet" then return COLORS.violet, COLORS.violet_dim end
+    return COLORS.paper_dim, vmath.vector4(0.953, 0.925, 0.851, 0.35)
 end
 
-local function set_text(id, s) gui.set_text(gui.get_node(id), s or "") end
+local function utf8_len(s)
+    local count = 0
+    for _ in string.gmatch(tostring(s or ""), "([%z\1-\127\194-\244][\128-\191]*)") do
+        count = count + 1
+    end
+    return count
+end
+
+local function new_box(x, y, z, w, h, color)
+    local n = gui.new_box_node(vmath.vector3(x, y, z), vmath.vector3(w, h, 0))
+    gui.set_pivot(n, gui.PIVOT_SW)
+    gui.set_color(n, color)
+    gui.set_adjust_mode(n, gui.ADJUST_FIT)
+    return n
+end
+
+local function new_text(x, y, z, w, h, text, font, color, pivot)
+    local n = gui.new_text_node(vmath.vector3(x, y, z), text or "")
+    gui.set_pivot(n, pivot or gui.PIVOT_W)
+    gui.set_size(n, vmath.vector3(w, h, 0))
+    gui.set_font(n, font)
+    gui.set_color(n, color)
+    gui.set_adjust_mode(n, gui.ADJUST_FIT)
+    pcall(gui.set_line_break, n, true)
+    return n
+end
+
+local function add_line_nodes(list, prefix, x, y, z, w, h, color)
+    list[#list + 1] = new_box(x, y + h - 1, z, w, 1, color)
+    list[#list + 1] = new_box(x, y, z, w, 1, color)
+    list[#list + 1] = new_box(x, y, z, 1, h, color)
+    list[#list + 1] = new_box(x + w - 1, y, z, 1, h, color)
+end
+
+local OPT_X = 310
+local OPT_TOP = 444
+local OPT_W = 660
+local OPT_H = 54
+local OPT_GAP = 10
 
 local function clear_opts(self)
-    for i = 1, #self.opt_nodes do
-        local o = self.opt_nodes[i]
-        gui.delete_node(o.bg)
-        gui.delete_node(o.border)
-        gui.delete_node(o.text)
-        if o.hint then gui.delete_node(o.hint) end
+    for _, opt_group in ipairs(self.opt_nodes or {}) do
+        for _, n in ipairs(opt_group.nodes or {}) do
+            if n then pcall(gui.delete_node, n) end
+        end
     end
     self.opt_nodes = {}
     self.opts = {}
 end
 
--- opts_panel в .gui: position (320, 200), size (640, 300), pivot SW
--- опции создаём TOP-LEVEL с абсолютными координатами (дети opts_panel по непонятной причине не рендерятся)
-local OPTS_PANEL_X = 320
-local OPTS_PANEL_Y = 200
+local function make_opt(self, idx, opt)
+    local y = OPT_TOP - idx * OPT_H - (idx - 1) * OPT_GAP
+    local accent, border = color_for_class(opt.cls)
+    local nodes = {}
 
-local function make_opt(self, idx, opt, total)
-    local w = OPTS_W
-    local h = OPT_HEIGHT
-    local y_top_local = OPTS_H - (idx - 1) * (OPT_HEIGHT + OPT_GAP)
-    local y_local = y_top_local - h
-    local abs_x = OPTS_PANEL_X
-    local abs_y = OPTS_PANEL_Y + y_local
+    local bg = new_box(OPT_X, y, 0.70, OPT_W, OPT_H, COLORS.opt_bg)
+    nodes[#nodes + 1] = bg
+    add_line_nodes(nodes, "opt", OPT_X, y, 0.71, OPT_W, OPT_H, border)
 
-    local bg_c, border_c = bg_for(opt.cls)
+    -- номер слева, как .opt .num в HTML
+    local num_x = OPT_X + 12
+    local num_y = y + 14
+    nodes[#nodes + 1] = new_box(num_x, num_y, 0.72, 30, 26, COLORS.num_bg)
+    add_line_nodes(nodes, "num", num_x, num_y, 0.73, 30, 26, accent)
+    nodes[#nodes + 1] = new_text(num_x + 15, num_y + 13, 0.74, 28, 10, string.format("%02d", idx), "jb_mono_10", accent, gui.PIVOT_CENTER)
 
-    local bg = gui.new_box_node(vmath.vector3(abs_x, abs_y, 0.7), vmath.vector3(w, h, 0))
-    gui.set_pivot(bg, gui.PIVOT_SW)
-    gui.set_color(bg, bg_c)
-    gui.set_adjust_mode(bg, gui.ADJUST_STRETCH)
-    local border = gui.new_box_node(vmath.vector3(abs_x, abs_y, 0.71), vmath.vector3(w, 1, 0))
-    gui.set_pivot(border, gui.PIVOT_SW)
-    gui.set_color(border, border_c)
-    gui.set_adjust_mode(border, gui.ADJUST_STRETCH)
-
-    local label = gui.new_text_node(vmath.vector3(abs_x + 20, abs_y + h - 22, 0.72), opt.text or "—")
-    gui.set_pivot(label, gui.PIVOT_NW)
-    gui.set_font(label, "manrope_16")
-    gui.set_color(label, COLORS.paper)
-    gui.set_adjust_mode(label, gui.ADJUST_STRETCH)
-
-    local hint_node
-    if opt.hint and opt.hint ~= "" then
-        hint_node = gui.new_text_node(vmath.vector3(abs_x + 20, abs_y + 8, 0.72), opt.hint)
-        gui.set_pivot(hint_node, gui.PIVOT_SW)
-        gui.set_font(hint_node, "jb_mono_10")
-        gui.set_color(hint_node, hint_color(opt.hintCls))
-        gui.set_adjust_mode(hint_node, gui.ADJUST_STRETCH)
+    local hint = opt.hint or opt.hint_text or ""
+    local hint_w = 0
+    if hint ~= "" then
+        hint_w = math.max(56, math.min(168, 26 + utf8_len(hint) * 8))
+        local hc, hb = hint_color(opt.hintCls or opt.hint_cls)
+        local hx = OPT_X + OPT_W - 12 - hint_w
+        local hy = y + 16
+        add_line_nodes(nodes, "hint", hx, hy, 0.73, hint_w, 22, hb)
+        nodes[#nodes + 1] = new_text(hx + hint_w * 0.5, hy + 11, 0.74, hint_w - 8, 10, tostring(hint):upper(), "jb_mono_10", hc, gui.PIVOT_CENTER)
     end
 
-    return { bg = bg, border = border, text = label, hint = hint_node, cls = opt.cls }
+    local text_w = OPT_W - 74 - (hint_w > 0 and (hint_w + 26) or 20)
+    nodes[#nodes + 1] = new_text(OPT_X + 56, y + 29, 0.74, text_w, 28, opt.text or "—", "manrope_16", COLORS.paper, gui.PIVOT_W)
+
+    return { bg = bg, nodes = nodes, cls = opt.cls }
 end
 
-local function update_timer(self)
-    local pct = math.max(0, self.time_left / math.max(0.01, self.timer_max))
-    gui.set_text(gui.get_node("timer_num"), tostring(math.ceil(self.time_left)))
-    local fill = gui.get_node("timer_fill")
-    local sz = gui.get_size(fill)
-    sz.x = 640 * pct
-    gui.set_size(fill, sz)
-    -- меняем цвет к красному когда близко к концу
-    if pct < 0.3 then
-        gui.set_color(gui.get_node("timer_num"), COLORS.hot)
-        gui.set_color(fill, COLORS.hot)
-    elseif pct < 0.6 then
-        gui.set_color(gui.get_node("timer_num"), COLORS.amber)
-        gui.set_color(fill, COLORS.amber)
-    else
-        gui.set_color(gui.get_node("timer_num"), COLORS.accent)
-        gui.set_color(fill, COLORS.accent)
+local function normalize_loop_label(v)
+    v = coalesce(v)
+    if not v then return "ПЕТЛЯ · #001" end
+
+    local text = tostring(v)
+    local n = tonumber(text)
+    if n then
+        return string.format("ПЕТЛЯ · #%03d", n)
     end
+
+    if string.find(text, "#") or string.find(string.lower(text), "пет") then
+        return string.upper(text)
+    end
+
+    if string.match(text, "^%d+$") then
+        return "ПЕТЛЯ · #" .. text
+    end
+
+    return string.upper(text)
+end
+
+local function normalize_location_text(v)
+    v = coalesce(v)
+    if not v then return nil end
+    local text = tostring(v)
+    local lower = string.lower(text)
+    if string.find(lower, "location unknown")
+        or string.find(text, "локация неизвест")
+        or string.find(text, "Локация неизвест")
+        or string.find(text, "ЛОКАЦИЯ НЕИЗВЕСТ") then
+        return nil
+    end
+    return string.upper(text)
+end
+
+local function format_location_text(message)
+    message = message or {}
+
+    -- message.name in show_choice is speaker/who_name, not location.
+    local explicit = normalize_location_text(coalesce(
+        message.location_label,
+        message.current_location_label,
+        message.location_name,
+        message.scene_label,
+        message.location,
+        message.current_location
+    ))
+    if explicit then return explicit end
+
+    local from_hud = normalize_location_text(current_location_name)
+    if from_hud then return from_hud end
+
+    local from_shared_state = normalize_location_text(coalesce(
+        ui_state.current_location_name,
+        ui_state.location_name
+    ))
+    if from_shared_state then return from_shared_state end
+
+    local legacy = normalize_location_text(coalesce(message.meta, message.location_time, message.time_label))
+    if legacy then return legacy end
+
+    return ""
+end
+
+local function remember_location(message)
+    message = message or {}
+    if coalesce(message.name) then
+        current_location_name = tostring(message.name)
+        ui_state.current_location_name = current_location_name
+        ui_state.location_name = current_location_name
+    end
+    if message.time ~= nil then
+        current_location_time = message.time
+        ui_state.current_location_time = message.time
+        ui_state.location_time = message.time
+    end
+    if message.loop ~= nil then
+        current_location_loop = message.loop
+        ui_state.current_location_loop = message.loop
+        ui_state.location_loop = message.loop
+    end
+end
+
+local function apply_copy(message)
+    -- Совместимость: старый ui_manager мог присылать только title.
+    local tag = coalesce(message.tag, message.who_tag, "МЫСЛЬ")
+    local name = coalesce(message.name, message.who, message.speaker, "К. АВОСЬЕВ")
+    local prompt = coalesce(message.prompt, message.title, "Выбери вариант.")
+    local caveat = coalesce(message.caveat, message.subtitle, message.note, "")
+    local loop = normalize_loop_label(coalesce(
+        message.loop_label,
+        message.iteration_label,
+        message.loop,
+        message.iteration_number,
+        current_location_loop
+    ))
+    local meta = format_location_text(message)
+
+    set_text("who_tag", tostring(tag):upper())
+    set_text("who_name", tostring(name):upper())
+    set_text("prompt", tostring(prompt))
+    set_text("caveat", tostring(caveat))
+    set_text("meta_loop", loop)
+    set_text("meta_tm", meta)
+
+    local has_caveat = caveat ~= nil and tostring(caveat) ~= ""
+    set_node_enabled("caveat", has_caveat)
 end
 
 function init(self)
@@ -139,59 +294,36 @@ function init(self)
     self.visible = false
     self.opts = {}
     self.opt_nodes = {}
-    self.timer_max = 18
-    self.time_left = 18
-    self.timer_active = false
     set_all_enabled(false)
-end
-
-function update(self, dt)
-    if not self.visible or not self.timer_active then return end
-    self.time_left = self.time_left - dt
-    if self.time_left <= 0 then
-        self.time_left = 0
-        self.timer_active = false
-        update_timer(self)
-        msg.post(UI_MGR, "choice_timeout")
-    else
-        update_timer(self)
-    end
 end
 
 function on_message(self, message_id, message, sender)
     if message_id == hash("show_choice") then
+        message = message or {}
         self.visible = true
         set_all_enabled(true)
         clear_opts(self)
+        apply_copy(message or {})
+
         local opts = message.opts or {}
         self.opts = opts
         for i, opt in ipairs(opts) do
             if i <= 4 then
-                self.opt_nodes[i] = make_opt(self, i, opt, #opts)
+                self.opt_nodes[i] = make_opt(self, i, opt)
             end
         end
-        if message.title then
-            gui.set_text(gui.get_node("title_main"), tostring(message.title):upper())
-        end
-        self.timer_max = tonumber(message.timer_sec) or 18
-        self.time_left = self.timer_max
-        self.timer_active = self.timer_max > 0
-        update_timer(self)
-        if self.timer_max <= 0 then
-            gui.set_enabled(gui.get_node("timer_label"), false)
-            gui.set_enabled(gui.get_node("timer_num"), false)
-            gui.set_enabled(gui.get_node("timer_track"), false)
-            gui.set_enabled(gui.get_node("timer_fill"), false)
-        else
-            gui.set_enabled(gui.get_node("timer_label"), true)
-            gui.set_enabled(gui.get_node("timer_num"), true)
-            gui.set_enabled(gui.get_node("timer_track"), true)
-            gui.set_enabled(gui.get_node("timer_fill"), true)
+
+    elseif message_id == hash("set_location") then
+        remember_location(message or {})
+        if self.visible then
+            set_text("meta_tm", format_location_text({}))
+            if current_location_loop ~= nil then
+                set_text("meta_loop", normalize_loop_label(current_location_loop))
+            end
         end
 
     elseif message_id == hash("hide_choice") then
         self.visible = false
-        self.timer_active = false
         set_all_enabled(false)
         clear_opts(self)
     end
@@ -199,16 +331,16 @@ end
 
 function on_input(self, action_id, action)
     if not self.visible then return false end
-    if action_id ~= hash("touch") or not action.pressed then return false end
+    if action_id ~= hash("touch") or not action.pressed then return true end
 
     for i = 1, #self.opt_nodes do
         local o = self.opt_nodes[i]
-        if gui.pick_node(o.bg, action.x, action.y) then
-            self.timer_active = false
+        if o and o.bg and gui.pick_node(o.bg, action.x, action.y) then
             msg.post(UI_MGR, "choice_picked", { index = i })
             return true
         end
     end
 
-    return false
+    -- Модалка блокирует клик по сцене под ней.
+    return true
 end

@@ -23,111 +23,508 @@ fonts {
   name: "manrope_16"
   font: "/main/fonts/manrope_16.font"
 }
-background_color { x: 0.0 y: 0.0 z: 0.0 w: 0.0 }
-
 nodes {
-  position { x: 0.0 y: 0.0 z: 0.5 }
-  size { x: 1280.0 y: 720.0 }
-  color { x: 0.0 y: 0.0 z: 0.0 w: 0.55 }
+  position {
+    z: 0.5
+  }
+  size {
+    x: 1280.0
+    y: 720.0
+  }
+  color {
+    x: 0.02
+    y: 0.012
+    z: 0.102
+  }
   type: TYPE_BOX
   id: "backdrop"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   inherit_alpha: true
 }
-
 nodes {
-  position { x: 300.0 y: 150.0 z: 0.61 }
-  size { x: 680.0 y: 420.0 }
-  color { x: 0.047 y: 0.039 z: 0.141 w: 0.98 }
+  position {
+    x: 280.0
+    y: 90.0
+    z: 0.6
+  }
+  size {
+    x: 720.0
+    y: 540.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
   type: TYPE_BOX
   id: "modal"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  alpha: 0.92
 }
-
 nodes {
-  position { x: 320.0 y: 540.0 z: 0.62 }
-  size { x: 500.0 y: 14.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 1.0 }
+  position {
+    x: 280.0
+    y: 629.0
+    z: 0.61
+  }
+  size {
+    x: 720.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "modal_border_top"
+  pivot: PIVOT_SW
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 280.0
+    y: 90.0
+    z: 0.61
+  }
+  size {
+    x: 720.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "modal_border_bottom"
+  pivot: PIVOT_SW
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 280.0
+    y: 90.0
+    z: 0.61
+  }
+  size {
+    x: 1.0
+    y: 540.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "modal_border_left"
+  pivot: PIVOT_SW
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 999.0
+    y: 90.0
+    z: 0.61
+  }
+  size {
+    x: 1.0
+    y: 540.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "modal_border_right"
+  pivot: PIVOT_SW
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 310.0
+    y: 580.0
+    z: 0.62
+  }
+  size {
+    x: 78.0
+    y: 22.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "who_tag_bg"
+  pivot: PIVOT_SW
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 349.0
+    y: 591.0
+    z: 0.63
+  }
+  size {
+    x: 70.0
+    y: 12.0
+  }
+  color {
+    x: 0.02
+    y: 0.012
+    z: 0.102
+  }
   type: TYPE_TEXT
-  text: "choice · выбор · ветвление"
+  text: "\320\234\320\253\320\241\320\233\320\254"
   font: "jb_mono_10"
-  id: "title_eyebrow"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
+  id: "who_tag"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 320.0 y: 516.0 z: 0.62 }
-  size { x: 500.0 y: 24.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  position {
+    x: 400.0
+    y: 591.0
+    z: 0.63
+  }
+  size {
+    x: 330.0
+    y: 24.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
   type: TYPE_TEXT
-  text: "КАК ПОСТУПИТЬ?"
+  text: "\320\232. \320\220\320\222\320\236\320\241\320\254\320\225\320\222"
   font: "unbounded_bold_20"
-  id: "title_main"
+  id: "who_name"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
-
 nodes {
-  position { x: 320.0 y: 200.0 z: 0.62 }
-  size { x: 640.0 y: 300.0 }
-  color { x: 0.0 y: 0.0 z: 0.0 w: 0.0 }
+  position {
+    x: 828.0
+    y: 578.0
+    z: 0.62
+  }
+  size {
+    x: 142.0
+    y: 22.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "meta_loop_bg"
+  pivot: PIVOT_SW
+  inherit_alpha: true
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 828.0
+    y: 599.0
+    z: 0.63
+  }
+  size {
+    x: 142.0
+    y: 1.0
+  }
+  color {
+    x: 0.784
+    y: 0.078
+    z: 0.165
+  }
+  type: TYPE_BOX
+  id: "meta_loop_border_top"
+  pivot: PIVOT_SW
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 828.0
+    y: 578.0
+    z: 0.63
+  }
+  size {
+    x: 142.0
+    y: 1.0
+  }
+  color {
+    x: 0.784
+    y: 0.078
+    z: 0.165
+  }
+  type: TYPE_BOX
+  id: "meta_loop_border_bottom"
+  pivot: PIVOT_SW
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 828.0
+    y: 578.0
+    z: 0.63
+  }
+  size {
+    x: 1.0
+    y: 22.0
+  }
+  color {
+    x: 0.784
+    y: 0.078
+    z: 0.165
+  }
+  type: TYPE_BOX
+  id: "meta_loop_border_left"
+  pivot: PIVOT_SW
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 969.0
+    y: 578.0
+    z: 0.63
+  }
+  size {
+    x: 1.0
+    y: 22.0
+  }
+  color {
+    x: 0.784
+    y: 0.078
+    z: 0.165
+  }
+  type: TYPE_BOX
+  id: "meta_loop_border_right"
+  pivot: PIVOT_SW
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 899.0
+    y: 590.0
+    z: 0.64
+  }
+  size {
+    x: 142.0
+    y: 11.0
+  }
+  color {
+    x: 0.784
+    y: 0.078
+    z: 0.165
+  }
+  type: TYPE_TEXT
+  text: "\320\237\320\225\320\242\320\233\320\257 \302\267 #017"
+  font: "jb_mono_10"
+  id: "meta_loop"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 970.0
+    y: 560.0
+    z: 0.63
+  }
+  size {
+    x: 300.0
+    y: 12.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\320\241\320\242. \320\237\320\240\320\225\320\241\320\235\320\257 \302\267 07:34"
+  font: "jb_mono_10"
+  id: "meta_tm"
+  pivot: PIVOT_E
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 310.0
+    y: 545.0
+    z: 0.62
+  }
+  size {
+    x: 660.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "head_divider"
+  pivot: PIVOT_SW
+  inherit_alpha: true
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 310.0
+    y: 523.0
+    z: 0.63
+  }
+  size {
+    x: 660.0
+    y: 56.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\240\320\260\320\261\320\276\321\202\320\260 \321\201\321\202\320\270\321\200\320\260\320\265\321\202 \320\264\320\275\320\270. \320\236\321\201\321\202\320\260\320\262\320\273\321\217\320\265\321\202 \321\202\320\276\320\273\321\214\320\272\320\276 \321\202\320\270\320\272\320\265\321\202\321\213 \320\270 \320\274\320\265\321\200\321\206\320\260\320\275\320\270\320\265 \320\274\320\276\320\275\320\270\321\202\320\276\321\200\320\260."
+  font: "manrope_16"
+  id: "prompt"
+  pivot: PIVOT_NW
+  line_break: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 310.0
+    y: 468.0
+    z: 0.63
+  }
+  size {
+    x: 660.0
+    y: 38.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
+  type: TYPE_TEXT
+  text: "\342\200\224 \321\202\320\265\320\273\320\265\321\204\320\276\320\275 \320\264\321\221\321\200\320\263\320\260\320\265\321\202\321\201\321\217 \320\262\320\276 \320\262\320\275\321\203\321\202\321\200\320\265\320\275\320\275\320\265\320\274 \320\272\320\260\321\200\320\274\320\260\320\275\320\265. \321\202\321\200\320\265\321\202\320\270\320\271 \321\200\320\260\320\267 \320\267\320\260 \320\274\320\270\320\275\321\203\321\202\321\203."
+  font: "manrope_14"
+  id: "caveat"
+  pivot: PIVOT_NW
+  line_break: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 310.0
+    y: 184.0
+    z: 0.62
+  }
+  size {
+    x: 660.0
+    y: 260.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
   type: TYPE_BOX
   id: "opts_panel"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  alpha: 0.0
 }
-
 nodes {
-  position { x: 320.0 y: 170.0 z: 0.62 }
-  size { x: 500.0 y: 12.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.5 }
+  position {
+    x: 310.0
+    y: 170.0
+    z: 0.62
+  }
+  size {
+    x: 660.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "foot_divider"
+  pivot: PIVOT_SW
+  inherit_alpha: true
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 310.0
+    y: 146.0
+    z: 0.63
+  }
+  size {
+    x: 240.0
+    y: 12.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
   type: TYPE_TEXT
-  text: "осталось:"
+  text: "\320\222\320\253\320\221\320\225\320\240\320\230 \320\222\320\220\320\240\320\230\320\220\320\235\320\242"
   font: "jb_mono_10"
-  id: "timer_label"
+  id: "foot_label"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 960.0 y: 170.0 z: 0.62 }
-  size { x: 80.0 y: 20.0 }
-  color { x: 1.0 y: 0.702 z: 0.278 w: 1.0 }
+  position {
+    x: 310.0
+    y: 620.0
+  }
+  size {
+    x: 10.0
+    y: 10.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
   type: TYPE_TEXT
-  text: "18"
-  font: "unbounded_bold_20"
-  id: "timer_num"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
+  font: "jb_mono_10"
+  id: "title_eyebrow"
+  pivot: PIVOT_W
+  alpha: 0.0
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 320.0 y: 164.0 z: 0.62 }
-  size { x: 640.0 y: 2.0 }
-  color { x: 0.067 y: 0.055 z: 0.173 w: 1.0 }
-  type: TYPE_BOX
-  id: "timer_track"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  position {
+    x: 310.0
+    y: 620.0
+  }
+  size {
+    x: 10.0
+    y: 10.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_TEXT
+  font: "unbounded_bold_20"
+  id: "title_main"
+  pivot: PIVOT_W
+  alpha: 0.0
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
 }
-nodes {
-  position { x: 320.0 y: 164.0 z: 0.63 }
-  size { x: 640.0 y: 2.0 }
-  color { x: 1.0 y: 0.702 z: 0.278 w: 1.0 }
-  type: TYPE_BOX
-  id: "timer_fill"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-}
-
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT
-max_nodes: 512

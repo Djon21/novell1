@@ -21,7 +21,7 @@ local M = {}
 M.phone_order = {
     "make_coffee",
     "find_phone",
-    "reply_anya",
+    "reply_mila",
     "go_to_office",
 }
 
@@ -35,7 +35,7 @@ M.quests = {
         name = "Сделать кофе",
         description = "Нужно прийти в себя перед выходом: дойти до кухни, найти кружку и запустить кофемашину.",
         steps = {
-            { text = "Дойти до кухни",         done_when = "kitchen_intro_seen" },
+            { text = "Дойти до кухни",         done_when = "kitchen_morning_seen" },
             { text = "Найти кружку",           done_when = "has_mug" },
             { text = "Сделать кофе",           done_when = "coffee_drunk" },
         },
@@ -51,16 +51,14 @@ M.quests = {
         },
     },
 
-    reply_anya = {
-        name = "Ответить Ане",
-        description = "Аня прислала странные сообщения с ссылкой на " ..
-                      "PATCH temporal_sync.module. Надо разобраться, " ..
-                      "что она имела в виду, и ответить.",
-        steps = {
-            { text = "Прочитать сообщения от Ани", done_when = "sms_anya_read" },
-            { text = "Ответить Ане",               done_when = "sms_anya_replied" },
-        },
+    reply_mila = {
+    name = "Ответить Миле",
+    description = "Мила написала утром. Нужно посмотреть сообщение и решить, что ответить.",
+    steps = {
+        { text = "Прочитать сообщение от Милы", done_when = "sms_mila_read" },
+        { text = "Ответить Миле",               done_when = "sms_mila_replied" },
     },
+},
 
     go_to_office = {
         name = "Добраться до офиса",

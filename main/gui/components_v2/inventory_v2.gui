@@ -31,7 +31,7 @@ background_color { x: 0.0 y: 0.0 z: 0.0 w: 0.0 }
 nodes {
   position { x: 0.0 y: 0.0 z: 0.40 }
   size { x: 1280.0 y: 720.0 }
-  color { x: 0.027 y: 0.023 z: 0.102 w: 0.55 }
+  color { x: 0.020 y: 0.012 z: 0.102 w: 0.650 }
   type: TYPE_BOX
   id: "backdrop"
   pivot: PIVOT_SW
@@ -39,1614 +39,1730 @@ nodes {
   inherit_alpha: false
 }
 nodes {
-  position { x: 180.0 y: 80.0 z: 0.50 }
-  size { x: 920.0 y: 560.0 }
-  color { x: 0.047 y: 0.039 z: 0.141 w: 0.98 }
+  position { x: 150.0 y: 80.0 z: 0.50 }
+  size { x: 980.0 y: 560.0 }
+  color { x: 0.031 y: 0.024 z: 0.094 w: 0.940 }
   type: TYPE_BOX
   id: "modal"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 180.0 y: 639.0 z: 0.51 }
-  size { x: 920.0 y: 1.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.30 }
+  position { x: 150.0 y: 639.0 z: 0.51 }
+  size { x: 980.0 y: 1.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 0.400 }
   type: TYPE_BOX
   id: "modal_border_top"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 180.0 y: 80.0 z: 0.51 }
-  size { x: 920.0 y: 1.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.20 }
+  position { x: 150.0 y: 80.0 z: 0.51 }
+  size { x: 980.0 y: 1.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 0.250 }
   type: TYPE_BOX
   id: "modal_border_bot"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 180.0 y: 620.0 z: 0.51 }
-  size { x: 1.0 y: 20.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.6 }
+  position { x: 150.0 y: 80.0 z: 0.51 }
+  size { x: 1.0 y: 560.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 0.350 }
+  type: TYPE_BOX
+  id: "modal_border_left"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_FIT
+  inherit_alpha: false
+}
+nodes {
+  position { x: 1129.0 y: 80.0 z: 0.51 }
+  size { x: 1.0 y: 560.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 0.350 }
+  type: TYPE_BOX
+  id: "modal_border_right"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_FIT
+  inherit_alpha: false
+}
+nodes {
+  position { x: 150.0 y: 622.0 z: 0.52 }
+  size { x: 2.0 y: 18.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 1.000 }
   type: TYPE_BOX
   id: "corner_tl_v"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 180.0 y: 639.0 z: 0.51 }
-  size { x: 20.0 y: 1.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.6 }
+  position { x: 150.0 y: 638.0 z: 0.52 }
+  size { x: 18.0 y: 2.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 1.000 }
   type: TYPE_BOX
   id: "corner_tl_h"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 1099.0 y: 620.0 z: 0.51 }
-  size { x: 1.0 y: 20.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.6 }
+  position { x: 1128.0 y: 622.0 z: 0.52 }
+  size { x: 2.0 y: 18.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 1.000 }
   type: TYPE_BOX
   id: "corner_tr_v"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 1080.0 y: 639.0 z: 0.51 }
-  size { x: 20.0 y: 1.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.6 }
+  position { x: 1112.0 y: 638.0 z: 0.52 }
+  size { x: 18.0 y: 2.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 1.000 }
   type: TYPE_BOX
   id: "corner_tr_h"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 180.0 y: 80.0 z: 0.51 }
-  size { x: 1.0 y: 20.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.6 }
+  position { x: 150.0 y: 80.0 z: 0.52 }
+  size { x: 2.0 y: 18.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 1.000 }
   type: TYPE_BOX
   id: "corner_bl_v"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 180.0 y: 80.0 z: 0.51 }
-  size { x: 20.0 y: 1.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.6 }
+  position { x: 150.0 y: 80.0 z: 0.52 }
+  size { x: 18.0 y: 2.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 1.000 }
   type: TYPE_BOX
   id: "corner_bl_h"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 1099.0 y: 80.0 z: 0.51 }
-  size { x: 1.0 y: 20.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.6 }
+  position { x: 1128.0 y: 80.0 z: 0.52 }
+  size { x: 2.0 y: 18.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 1.000 }
   type: TYPE_BOX
   id: "corner_br_v"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 1080.0 y: 80.0 z: 0.51 }
-  size { x: 20.0 y: 1.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.6 }
+  position { x: 1112.0 y: 80.0 z: 0.52 }
+  size { x: 18.0 y: 2.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 1.000 }
   type: TYPE_BOX
   id: "corner_br_h"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 204.0 y: 622.0 z: 0.52 }
-  size { x: 400.0 y: 12.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 1.0 }
+  position { x: 174.0 y: 622.0 z: 0.53 }
+  size { x: 420.0 y: 12.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 1.000 }
   type: TYPE_TEXT
-  text: "dossier · inventory · №017"
+  text: "inventory · рюкзак · №7"
   font: "jb_mono_10"
   id: "title_eyebrow"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 204.0 y: 598.0 z: 0.52 }
-  size { x: 400.0 y: 22.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  position { x: 174.0 y: 596.0 z: 0.53 }
+  size { x: 420.0 y: 24.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 1.000 }
   type: TYPE_TEXT
   text: "ИНВЕНТАРЬ"
   font: "unbounded_bold_20"
   id: "title_main"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 810.0 y: 626.0 z: 0.52 }
-  size { x: 240.0 y: 12.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.85 }
+  position { x: 746.0 y: 626.0 z: 0.53 }
+  size { x: 130.0 y: 12.0 }
+  color { x: 0.788 y: 0.753 z: 0.659 w: 1.000 }
   type: TYPE_TEXT
   text: "слотов: 0/12"
   font: "jb_mono_10"
   id: "stats_slots"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 810.0 y: 610.0 z: 0.52 }
-  size { x: 240.0 y: 12.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.85 }
+  position { x: 872.0 y: 626.0 z: 0.53 }
+  size { x: 100.0 y: 12.0 }
+  color { x: 0.788 y: 0.753 z: 0.659 w: 1.000 }
   type: TYPE_TEXT
-  text: "вес: 2.4 кг"
+  text: "вес: —"
   font: "jb_mono_10"
   id: "stats_weight"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 810.0 y: 594.0 z: 0.52 }
-  size { x: 240.0 y: 12.0 }
-  color { x: 1.0 y: 0.239 z: 0.498 w: 1.0 }
+  position { x: 970.0 y: 626.0 z: 0.53 }
+  size { x: 130.0 y: 12.0 }
+  color { x: 1.000 y: 0.239 z: 0.498 w: 1.000 }
   type: TYPE_TEXT
-  text: "петля: #017"
+  text: "петля: #001"
   font: "jb_mono_10"
   id: "stats_loop"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 1070.0 y: 618.0 z: 0.52 }
-  size { x: 28.0 y: 28.0 }
-  color { x: 1.0 y: 0.239 z: 0.498 w: 1.0 }
+  position { x: 1098.0 y: 608.0 z: 0.53 }
+  size { x: 32.0 y: 32.0 }
+  color { x: 0.000 y: 0.000 z: 0.000 w: 0.000 }
+  type: TYPE_BOX
+  id: "close_btn_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_FIT
+  inherit_alpha: false
+}
+nodes {
+  position { x: 1114.0 y: 624.0 z: 0.55 }
+  size { x: 32.0 y: 32.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 1.000 }
   type: TYPE_TEXT
-  text: "\uE5CD"
-  font: "icons"
+  text: "×"
+  font: "jb_mono_12"
   id: "close_btn"
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 200.0 y: 580.0 z: 0.52 }
-  size { x: 880.0 y: 1.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.12 }
+  position { x: 174.0 y: 580.0 z: 0.53 }
+  size { x: 932.0 y: 1.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 0.150 }
   type: TYPE_BOX
   id: "head_divider"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 200.0 y: 112.0 z: 0.52 }
-  size { x: 880.0 y: 1.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.12 }
+  position { x: 174.0 y: 103.0 z: 0.53 }
+  size { x: 932.0 y: 1.0 }
+  color { x: 0.000 y: 0.000 z: 0.000 w: 0.000 }
   type: TYPE_BOX
   id: "foot_divider"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 204.0 y: 96.0 z: 0.52 }
+  position { x: 174.0 y: 96.0 z: 0.53 }
   size { x: 600.0 y: 12.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.55 }
+  color { x: 0.000 y: 0.000 z: 0.000 w: 0.000 }
   type: TYPE_TEXT
-  text: "навигация: кликом · выбор: кликом · закрыть: Esc"
+  text: ""
   font: "jb_mono_10"
   id: "foot_left"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 1074.0 y: 96.0 z: 0.52 }
+  position { x: 1106.0 y: 96.0 z: 0.53 }
   size { x: 260.0 y: 12.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.85 }
+  color { x: 0.000 y: 0.000 z: 0.000 w: 0.000 }
   type: TYPE_TEXT
-  text: "автосохранение ВКЛ"
+  text: ""
   font: "jb_mono_10"
   id: "foot_right"
   pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 640.0 y: 130.0 z: 0.52 }
-  size { x: 420.0 y: 440.0 }
-  color { x: 0.067 y: 0.055 z: 0.173 w: 0.85 }
-  type: TYPE_BOX
-  id: "details_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
-}
-nodes {
-  position { x: 640.0 y: 569.0 z: 0.53 }
-  size { x: 420.0 y: 1.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.35 }
+  position { x: 682.0 y: 561.0 z: 0.52 }
+  size { x: 424.0 y: 1.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 0.250 }
   type: TYPE_BOX
   id: "details_border_top"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 654.0 y: 552.0 z: 0.53 }
-  size { x: 400.0 y: 12.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 1.0 }
+  position { x: 682.0 y: 122.0 z: 0.52 }
+  size { x: 424.0 y: 1.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 0.250 }
+  type: TYPE_BOX
+  id: "details_border_bot"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_FIT
+  inherit_alpha: false
+}
+nodes {
+  position { x: 682.0 y: 122.0 z: 0.52 }
+  size { x: 1.0 y: 440.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 0.250 }
+  type: TYPE_BOX
+  id: "details_border_left"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_FIT
+  inherit_alpha: false
+}
+nodes {
+  position { x: 1105.0 y: 122.0 z: 0.52 }
+  size { x: 1.0 y: 440.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 0.250 }
+  type: TYPE_BOX
+  id: "details_border_right"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_FIT
+  inherit_alpha: false
+}
+nodes {
+  position { x: 683.0 y: 123.0 z: 0.53 }
+  size { x: 422.0 y: 438.0 }
+  color { x: 0.047 y: 0.039 z: 0.141 w: 0.550 }
+  type: TYPE_BOX
+  id: "details_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_FIT
+  inherit_alpha: false
+}
+nodes {
+  position { x: 696.0 y: 545.0 z: 0.54 }
+  size { x: 396.0 y: 12.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 1.000 }
   type: TYPE_TEXT
   text: "details · предмет"
   font: "jb_mono_10"
   id: "details_cap"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 654.0 y: 528.0 z: 0.53 }
-  size { x: 400.0 y: 22.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  position { x: 696.0 y: 520.0 z: 0.54 }
+  size { x: 396.0 y: 24.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 1.000 }
   type: TYPE_TEXT
   text: "Выберите предмет"
   font: "unbounded_bold_20"
   id: "details_name"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 654.0 y: 502.0 z: 0.53 }
-  size { x: 260.0 y: 12.0 }
-  color { x: 1.0 y: 0.702 z: 0.278 w: 1.0 }
+  position { x: 696.0 y: 498.0 z: 0.54 }
+  size { x: 250.0 y: 12.0 }
+  color { x: 1.000 y: 0.702 z: 0.278 w: 1.000 }
   type: TYPE_TEXT
   text: ""
   font: "jb_mono_10"
   id: "details_iter"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 1044.0 y: 502.0 z: 0.53 }
+  position { x: 1092.0 y: 498.0 z: 0.54 }
   size { x: 120.0 y: 12.0 }
-  color { x: 1.0 y: 0.239 z: 0.498 w: 1.0 }
+  color { x: 1.000 y: 0.239 z: 0.498 w: 1.000 }
   type: TYPE_TEXT
   text: ""
   font: "jb_mono_10"
   id: "details_clue"
   pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 654.0 y: 400.0 z: 0.53 }
-  size { x: 392.0 y: 80.0 }
-  color { x: 0.024 y: 0.016 z: 0.063 w: 0.9 }
+  position { x: 696.0 y: 398.0 z: 0.54 }
+  size { x: 396.0 y: 84.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 0.050 }
   type: TYPE_BOX
   id: "details_preview_bg"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 654.0 y: 479.0 z: 0.54 }
-  size { x: 392.0 y: 1.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.20 }
+  position { x: 696.0 y: 481.0 z: 0.55 }
+  size { x: 396.0 y: 1.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 0.180 }
   type: TYPE_BOX
   id: "details_preview_top"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 654.0 y: 400.0 z: 0.54 }
-  size { x: 392.0 y: 1.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.20 }
+  position { x: 696.0 y: 398.0 z: 0.55 }
+  size { x: 396.0 y: 1.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 0.180 }
   type: TYPE_BOX
   id: "details_preview_bot"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 850.0 y: 440.0 z: 0.55 }
+  position { x: 696.0 y: 398.0 z: 0.55 }
+  size { x: 1.0 y: 84.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 0.180 }
+  type: TYPE_BOX
+  id: "details_preview_left"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_FIT
+  inherit_alpha: false
+}
+nodes {
+  position { x: 1091.0 y: 398.0 z: 0.55 }
+  size { x: 1.0 y: 84.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 0.180 }
+  type: TYPE_BOX
+  id: "details_preview_right"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_FIT
+  inherit_alpha: false
+}
+nodes {
+  position { x: 894.0 y: 440.0 z: 0.56 }
   size { x: 80.0 y: 80.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 1.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 1.000 }
   type: TYPE_TEXT
   text: ""
   font: "icons"
   id: "details_icon"
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 654.0 y: 382.0 z: 0.53 }
-  size { x: 392.0 y: 80.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.85 }
+  position { x: 988.0 y: 454.0 z: 0.56 }
+  size { x: 92.0 y: 18.0 }
+  color { x: 0.031 y: 0.024 z: 0.094 w: 0.940 }
+  type: TYPE_BOX
+  id: "preview_stamp_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_FIT
+  inherit_alpha: false
+}
+nodes {
+  position { x: 1034.0 y: 463.0 z: 0.57 }
+  size { x: 88.0 y: 14.0 }
+  color { x: 0.784 y: 0.078 z: 0.165 w: 1.000 }
   type: TYPE_TEXT
-  text: ""
+  text: "ПУСТО"
+  font: "jb_mono_10"
+  id: "preview_stamp_label"
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_FIT
+  inherit_alpha: false
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position { x: 696.0 y: 382.0 z: 0.54 }
+  size { x: 396.0 y: 90.0 }
+  color { x: 0.788 y: 0.753 z: 0.659 w: 1.000 }
+  type: TYPE_TEXT
+  text: "Выбери предмет в сетке слева."
   font: "manrope_14"
   id: "details_desc"
   pivot: PIVOT_NW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
   line_break: true
 }
 nodes {
-  position { x: 654.0 y: 278.0 z: 0.53 }
-  size { x: 392.0 y: 1.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.15 }
+  position { x: 696.0 y: 278.0 z: 0.54 }
+  size { x: 396.0 y: 1.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 0.150 }
   type: TYPE_BOX
   id: "details_stats_divider"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 654.0 y: 262.0 z: 0.53 }
-  size { x: 80.0 y: 10.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.5 }
+  position { x: 696.0 y: 262.0 z: 0.54 }
+  size { x: 180.0 y: 10.0 }
+  color { x: 0.788 y: 0.753 z: 0.659 w: 1.000 }
   type: TYPE_TEXT
   text: "источник"
   font: "jb_mono_10"
   id: "stat_src_k"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 654.0 y: 246.0 z: 0.53 }
-  size { x: 90.0 y: 10.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  position { x: 696.0 y: 246.0 z: 0.54 }
+  size { x: 180.0 y: 10.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 1.000 }
   type: TYPE_TEXT
   text: "—"
   font: "jb_mono_10"
   id: "stat_src_v"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 754.0 y: 262.0 z: 0.53 }
-  size { x: 80.0 y: 10.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.5 }
+  position { x: 896.0 y: 262.0 z: 0.54 }
+  size { x: 180.0 y: 10.0 }
+  color { x: 0.788 y: 0.753 z: 0.659 w: 1.000 }
   type: TYPE_TEXT
   text: "итерация"
   font: "jb_mono_10"
   id: "stat_iter_k"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 754.0 y: 246.0 z: 0.53 }
-  size { x: 90.0 y: 10.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 1.0 }
+  position { x: 896.0 y: 246.0 z: 0.54 }
+  size { x: 180.0 y: 10.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 1.000 }
   type: TYPE_TEXT
   text: "—"
   font: "jb_mono_10"
   id: "stat_iter_v"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 854.0 y: 262.0 z: 0.53 }
-  size { x: 80.0 y: 10.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.5 }
+  position { x: 696.0 y: 222.0 z: 0.54 }
+  size { x: 180.0 y: 10.0 }
+  color { x: 0.788 y: 0.753 z: 0.659 w: 1.000 }
   type: TYPE_TEXT
   text: "тип"
   font: "jb_mono_10"
   id: "stat_type_k"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 854.0 y: 246.0 z: 0.53 }
-  size { x: 90.0 y: 10.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  position { x: 696.0 y: 206.0 z: 0.54 }
+  size { x: 180.0 y: 10.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 1.000 }
   type: TYPE_TEXT
   text: "—"
   font: "jb_mono_10"
   id: "stat_type_v"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 954.0 y: 262.0 z: 0.53 }
-  size { x: 90.0 y: 10.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.5 }
+  position { x: 896.0 y: 222.0 z: 0.54 }
+  size { x: 180.0 y: 10.0 }
+  color { x: 0.788 y: 0.753 z: 0.659 w: 1.000 }
   type: TYPE_TEXT
   text: "улика"
   font: "jb_mono_10"
   id: "stat_clue_k"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 954.0 y: 246.0 z: 0.53 }
-  size { x: 90.0 y: 10.0 }
-  color { x: 1.0 y: 0.239 z: 0.498 w: 1.0 }
+  position { x: 896.0 y: 206.0 z: 0.54 }
+  size { x: 180.0 y: 10.0 }
+  color { x: 1.000 y: 0.239 z: 0.498 w: 1.000 }
   type: TYPE_TEXT
   text: "—"
   font: "jb_mono_10"
   id: "stat_clue_v"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 654.0 y: 226.0 z: 0.53 }
-  size { x: 392.0 y: 1.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.15 }
+  position { x: 696.0 y: 186.0 z: 0.54 }
+  size { x: 396.0 y: 1.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 0.150 }
   type: TYPE_BOX
   id: "details_verbs_divider"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 654.0 y: 180.0 z: 0.53 }
-  size { x: 72.0 y: 36.0 }
-  color { x: 0.067 y: 0.055 z: 0.173 w: 0.9 }
-  type: TYPE_BOX
-  id: "verb1_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
-}
-nodes {
-  position { x: 654.0 y: 215.0 z: 0.54 }
-  size { x: 72.0 y: 1.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.15 }
+  position { x: 695.0 y: 137.0 z: 0.54 }
+  size { x: 76.4 y: 36.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 0.400 }
   type: TYPE_BOX
   id: "verb1_border"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 690.0 y: 198.0 z: 0.55 }
-  size { x: 72.0 y: 16.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.5 }
+  position { x: 696.0 y: 138.0 z: 0.55 }
+  size { x: 74.4 y: 34.0 }
+  color { x: 0.047 y: 0.039 z: 0.141 w: 0.700 }
+  type: TYPE_BOX
+  id: "verb1_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_FIT
+  inherit_alpha: false
+}
+nodes {
+  position { x: 733.2 y: 155.0 z: 0.56 }
+  size { x: 74.4 y: 16.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 1.000 }
   type: TYPE_TEXT
-  text: "ПРИМЕНИТЬ"
+  text: "ИСПОЛЬЗОВАТЬ"
   font: "jb_mono_10"
   id: "verb1_label"
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 734.0 y: 180.0 z: 0.53 }
-  size { x: 72.0 y: 36.0 }
-  color { x: 0.067 y: 0.055 z: 0.173 w: 0.9 }
-  type: TYPE_BOX
-  id: "verb2_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
-}
-nodes {
-  position { x: 734.0 y: 215.0 z: 0.54 }
-  size { x: 72.0 y: 1.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.15 }
+  position { x: 775.4 y: 137.0 z: 0.54 }
+  size { x: 76.4 y: 36.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 0.400 }
   type: TYPE_BOX
   id: "verb2_border"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 770.0 y: 198.0 z: 0.55 }
-  size { x: 72.0 y: 16.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.5 }
+  position { x: 776.4 y: 138.0 z: 0.55 }
+  size { x: 74.4 y: 34.0 }
+  color { x: 0.047 y: 0.039 z: 0.141 w: 0.700 }
+  type: TYPE_BOX
+  id: "verb2_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_FIT
+  inherit_alpha: false
+}
+nodes {
+  position { x: 813.6 y: 155.0 z: 0.56 }
+  size { x: 74.4 y: 16.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 1.000 }
   type: TYPE_TEXT
   text: "ОСМОТРЕТЬ"
   font: "jb_mono_10"
   id: "verb2_label"
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 814.0 y: 180.0 z: 0.53 }
-  size { x: 72.0 y: 36.0 }
-  color { x: 0.067 y: 0.055 z: 0.173 w: 0.9 }
-  type: TYPE_BOX
-  id: "verb3_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
-}
-nodes {
-  position { x: 814.0 y: 215.0 z: 0.54 }
-  size { x: 72.0 y: 1.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.15 }
+  position { x: 855.8 y: 137.0 z: 0.54 }
+  size { x: 76.4 y: 36.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 0.400 }
   type: TYPE_BOX
   id: "verb3_border"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 850.0 y: 198.0 z: 0.55 }
-  size { x: 72.0 y: 16.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.5 }
+  position { x: 856.8 y: 138.0 z: 0.55 }
+  size { x: 74.4 y: 34.0 }
+  color { x: 0.047 y: 0.039 z: 0.141 w: 0.700 }
+  type: TYPE_BOX
+  id: "verb3_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_FIT
+  inherit_alpha: false
+}
+nodes {
+  position { x: 894.0 y: 155.0 z: 0.56 }
+  size { x: 74.4 y: 16.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 1.000 }
   type: TYPE_TEXT
-  text: "КОМБО"
+  text: "СОЕДИНИТЬ"
   font: "jb_mono_10"
   id: "verb3_label"
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 894.0 y: 180.0 z: 0.53 }
-  size { x: 72.0 y: 36.0 }
-  color { x: 0.067 y: 0.055 z: 0.173 w: 0.9 }
-  type: TYPE_BOX
-  id: "verb4_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
-}
-nodes {
-  position { x: 894.0 y: 215.0 z: 0.54 }
-  size { x: 72.0 y: 1.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.15 }
+  position { x: 936.2 y: 137.0 z: 0.54 }
+  size { x: 76.4 y: 36.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 0.400 }
   type: TYPE_BOX
   id: "verb4_border"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 930.0 y: 198.0 z: 0.55 }
-  size { x: 72.0 y: 16.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.5 }
+  position { x: 937.2 y: 138.0 z: 0.55 }
+  size { x: 74.4 y: 34.0 }
+  color { x: 0.047 y: 0.039 z: 0.141 w: 0.700 }
+  type: TYPE_BOX
+  id: "verb4_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_FIT
+  inherit_alpha: false
+}
+nodes {
+  position { x: 974.4 y: 155.0 z: 0.56 }
+  size { x: 74.4 y: 16.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 1.000 }
   type: TYPE_TEXT
   text: "ПРОЧИТАТЬ"
   font: "jb_mono_10"
   id: "verb4_label"
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 974.0 y: 180.0 z: 0.53 }
-  size { x: 72.0 y: 36.0 }
-  color { x: 0.067 y: 0.055 z: 0.173 w: 0.9 }
-  type: TYPE_BOX
-  id: "verb5_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
-}
-nodes {
-  position { x: 974.0 y: 215.0 z: 0.54 }
-  size { x: 72.0 y: 1.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.15 }
+  position { x: 1016.6 y: 137.0 z: 0.54 }
+  size { x: 76.4 y: 36.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 0.400 }
   type: TYPE_BOX
   id: "verb5_border"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 1010.0 y: 198.0 z: 0.55 }
-  size { x: 72.0 y: 16.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.5 }
-  text: "ОТДАТЬ"
+  position { x: 1017.6 y: 138.0 z: 0.55 }
+  size { x: 74.4 y: 34.0 }
+  color { x: 0.047 y: 0.039 z: 0.141 w: 0.700 }
+  type: TYPE_BOX
+  id: "verb5_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_FIT
+  inherit_alpha: false
+}
+nodes {
+  position { x: 1054.8 y: 155.0 z: 0.56 }
+  size { x: 74.4 y: 16.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 1.000 }
   type: TYPE_TEXT
+  text: "ОТДАТЬ"
   font: "jb_mono_10"
   id: "verb5_label"
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 204.0 y: 420.0 z: 0.52 }
-  size { x: 80.0 y: 80.0 }
-  color { x: 0.067 y: 0.055 z: 0.173 w: 0.9 }
-  type: TYPE_BOX
-  id: "slot1_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
-}
-nodes {
-  position { x: 204.0 y: 499.0 z: 0.53 }
-  size { x: 80.0 y: 1.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.35 }
+  position { x: 173.0 y: 421.0 z: 0.52 }
+  size { x: 117.0 y: 142.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 0.180 }
   type: TYPE_BOX
   id: "slot1_border"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 210.0 y: 492.0 z: 0.54 }
+  position { x: 174.0 y: 422.0 z: 0.53 }
+  size { x: 115.0 y: 140.0 }
+  color { x: 0.047 y: 0.039 z: 0.141 w: 0.700 }
+  type: TYPE_BOX
+  id: "slot1_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_FIT
+  inherit_alpha: false
+}
+nodes {
+  position { x: 180.0 y: 552.0 z: 0.54 }
   size { x: 40.0 y: 8.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.4 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 0.450 }
   type: TYPE_TEXT
   text: "A1"
   font: "jb_mono_10"
   id: "slot1_coord"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 244.0 y: 465.0 z: 0.54 }
+  position { x: 231.5 y: 502.0 z: 0.54 }
   size { x: 50.0 y: 42.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 1.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 1.000 }
   type: TYPE_TEXT
   text: ""
   font: "icons"
   id: "slot1_icon"
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 244.0 y: 430.0 z: 0.54 }
-  size { x: 76.0 y: 10.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.85 }
+  position { x: 231.5 y: 450.0 z: 0.54 }
+  size { x: 105.0 y: 22.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 1.000 }
   type: TYPE_TEXT
   text: "—"
   font: "jb_mono_10"
   id: "slot1_name"
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
+  line_break: true
 }
 nodes {
-  position { x: 278.0 y: 426.0 z: 0.54 }
-  size { x: 30.0 y: 10.0 }
-  color { x: 1.0 y: 0.702 z: 0.278 w: 1.0 }
+  position { x: 283.0 y: 431.0 z: 0.54 }
+  size { x: 36.0 y: 10.0 }
+  color { x: 1.000 y: 0.702 z: 0.278 w: 1.000 }
   type: TYPE_TEXT
   text: ""
   font: "jb_mono_10"
   id: "slot1_qty"
   pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 294.0 y: 420.0 z: 0.52 }
-  size { x: 80.0 y: 80.0 }
-  color { x: 0.067 y: 0.055 z: 0.173 w: 0.9 }
-  type: TYPE_BOX
-  id: "slot2_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
-}
-nodes {
-  position { x: 294.0 y: 499.0 z: 0.53 }
-  size { x: 80.0 y: 1.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.35 }
+  position { x: 298.0 y: 421.0 z: 0.52 }
+  size { x: 117.0 y: 142.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 0.180 }
   type: TYPE_BOX
   id: "slot2_border"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 300.0 y: 492.0 z: 0.54 }
+  position { x: 299.0 y: 422.0 z: 0.53 }
+  size { x: 115.0 y: 140.0 }
+  color { x: 0.047 y: 0.039 z: 0.141 w: 0.700 }
+  type: TYPE_BOX
+  id: "slot2_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_FIT
+  inherit_alpha: false
+}
+nodes {
+  position { x: 305.0 y: 552.0 z: 0.54 }
   size { x: 40.0 y: 8.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.4 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 0.450 }
   type: TYPE_TEXT
-  text: "B1"
+  text: "A2"
   font: "jb_mono_10"
   id: "slot2_coord"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 334.0 y: 465.0 z: 0.54 }
+  position { x: 356.5 y: 502.0 z: 0.54 }
   size { x: 50.0 y: 42.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 1.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 1.000 }
   type: TYPE_TEXT
   text: ""
   font: "icons"
   id: "slot2_icon"
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 334.0 y: 430.0 z: 0.54 }
-  size { x: 76.0 y: 10.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.85 }
+  position { x: 356.5 y: 450.0 z: 0.54 }
+  size { x: 105.0 y: 22.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 1.000 }
   type: TYPE_TEXT
   text: "—"
   font: "jb_mono_10"
   id: "slot2_name"
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
+  line_break: true
 }
 nodes {
-  position { x: 368.0 y: 426.0 z: 0.54 }
-  size { x: 30.0 y: 10.0 }
-  color { x: 1.0 y: 0.702 z: 0.278 w: 1.0 }
+  position { x: 408.0 y: 431.0 z: 0.54 }
+  size { x: 36.0 y: 10.0 }
+  color { x: 1.000 y: 0.702 z: 0.278 w: 1.000 }
   type: TYPE_TEXT
   text: ""
   font: "jb_mono_10"
   id: "slot2_qty"
   pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 384.0 y: 420.0 z: 0.52 }
-  size { x: 80.0 y: 80.0 }
-  color { x: 0.067 y: 0.055 z: 0.173 w: 0.9 }
-  type: TYPE_BOX
-  id: "slot3_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
-}
-nodes {
-  position { x: 384.0 y: 499.0 z: 0.53 }
-  size { x: 80.0 y: 1.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.35 }
+  position { x: 423.0 y: 421.0 z: 0.52 }
+  size { x: 117.0 y: 142.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 0.180 }
   type: TYPE_BOX
   id: "slot3_border"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 390.0 y: 492.0 z: 0.54 }
+  position { x: 424.0 y: 422.0 z: 0.53 }
+  size { x: 115.0 y: 140.0 }
+  color { x: 0.047 y: 0.039 z: 0.141 w: 0.700 }
+  type: TYPE_BOX
+  id: "slot3_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_FIT
+  inherit_alpha: false
+}
+nodes {
+  position { x: 430.0 y: 552.0 z: 0.54 }
   size { x: 40.0 y: 8.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.4 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 0.450 }
   type: TYPE_TEXT
-  text: "C1"
+  text: "A3"
   font: "jb_mono_10"
   id: "slot3_coord"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 424.0 y: 465.0 z: 0.54 }
+  position { x: 481.5 y: 502.0 z: 0.54 }
   size { x: 50.0 y: 42.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 1.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 1.000 }
   type: TYPE_TEXT
   text: ""
   font: "icons"
   id: "slot3_icon"
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 424.0 y: 430.0 z: 0.54 }
-  size { x: 76.0 y: 10.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.85 }
+  position { x: 481.5 y: 450.0 z: 0.54 }
+  size { x: 105.0 y: 22.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 1.000 }
   type: TYPE_TEXT
   text: "—"
   font: "jb_mono_10"
   id: "slot3_name"
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
+  line_break: true
 }
 nodes {
-  position { x: 458.0 y: 426.0 z: 0.54 }
-  size { x: 30.0 y: 10.0 }
-  color { x: 1.0 y: 0.702 z: 0.278 w: 1.0 }
+  position { x: 533.0 y: 431.0 z: 0.54 }
+  size { x: 36.0 y: 10.0 }
+  color { x: 1.000 y: 0.702 z: 0.278 w: 1.000 }
   type: TYPE_TEXT
   text: ""
   font: "jb_mono_10"
   id: "slot3_qty"
   pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 474.0 y: 420.0 z: 0.52 }
-  size { x: 80.0 y: 80.0 }
-  color { x: 0.067 y: 0.055 z: 0.173 w: 0.9 }
-  type: TYPE_BOX
-  id: "slot4_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
-}
-nodes {
-  position { x: 474.0 y: 499.0 z: 0.53 }
-  size { x: 80.0 y: 1.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.35 }
+  position { x: 548.0 y: 421.0 z: 0.52 }
+  size { x: 117.0 y: 142.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 0.180 }
   type: TYPE_BOX
   id: "slot4_border"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 480.0 y: 492.0 z: 0.54 }
+  position { x: 549.0 y: 422.0 z: 0.53 }
+  size { x: 115.0 y: 140.0 }
+  color { x: 0.047 y: 0.039 z: 0.141 w: 0.700 }
+  type: TYPE_BOX
+  id: "slot4_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_FIT
+  inherit_alpha: false
+}
+nodes {
+  position { x: 555.0 y: 552.0 z: 0.54 }
   size { x: 40.0 y: 8.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.4 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 0.450 }
   type: TYPE_TEXT
-  text: "D1"
+  text: "A4"
   font: "jb_mono_10"
   id: "slot4_coord"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 514.0 y: 465.0 z: 0.54 }
+  position { x: 606.5 y: 502.0 z: 0.54 }
   size { x: 50.0 y: 42.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 1.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 1.000 }
   type: TYPE_TEXT
   text: ""
   font: "icons"
   id: "slot4_icon"
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 514.0 y: 430.0 z: 0.54 }
-  size { x: 76.0 y: 10.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.85 }
+  position { x: 606.5 y: 450.0 z: 0.54 }
+  size { x: 105.0 y: 22.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 1.000 }
   type: TYPE_TEXT
   text: "—"
   font: "jb_mono_10"
   id: "slot4_name"
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
+  line_break: true
 }
 nodes {
-  position { x: 548.0 y: 426.0 z: 0.54 }
-  size { x: 30.0 y: 10.0 }
-  color { x: 1.0 y: 0.702 z: 0.278 w: 1.0 }
+  position { x: 658.0 y: 431.0 z: 0.54 }
+  size { x: 36.0 y: 10.0 }
+  color { x: 1.000 y: 0.702 z: 0.278 w: 1.000 }
   type: TYPE_TEXT
   text: ""
   font: "jb_mono_10"
   id: "slot4_qty"
   pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 204.0 y: 330.0 z: 0.52 }
-  size { x: 80.0 y: 80.0 }
-  color { x: 0.067 y: 0.055 z: 0.173 w: 0.9 }
-  type: TYPE_BOX
-  id: "slot5_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
-}
-nodes {
-  position { x: 204.0 y: 409.0 z: 0.53 }
-  size { x: 80.0 y: 1.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.35 }
+  position { x: 173.0 y: 271.0 z: 0.52 }
+  size { x: 117.0 y: 142.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 0.180 }
   type: TYPE_BOX
   id: "slot5_border"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 210.0 y: 402.0 z: 0.54 }
+  position { x: 174.0 y: 272.0 z: 0.53 }
+  size { x: 115.0 y: 140.0 }
+  color { x: 0.047 y: 0.039 z: 0.141 w: 0.700 }
+  type: TYPE_BOX
+  id: "slot5_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_FIT
+  inherit_alpha: false
+}
+nodes {
+  position { x: 180.0 y: 402.0 z: 0.54 }
   size { x: 40.0 y: 8.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.4 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 0.450 }
   type: TYPE_TEXT
-  text: "A2"
+  text: "B1"
   font: "jb_mono_10"
   id: "slot5_coord"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 244.0 y: 375.0 z: 0.54 }
+  position { x: 231.5 y: 352.0 z: 0.54 }
   size { x: 50.0 y: 42.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 1.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 1.000 }
   type: TYPE_TEXT
   text: ""
   font: "icons"
   id: "slot5_icon"
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 244.0 y: 340.0 z: 0.54 }
-  size { x: 76.0 y: 10.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.85 }
+  position { x: 231.5 y: 300.0 z: 0.54 }
+  size { x: 105.0 y: 22.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 1.000 }
   type: TYPE_TEXT
   text: "—"
   font: "jb_mono_10"
   id: "slot5_name"
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
+  line_break: true
 }
 nodes {
-  position { x: 278.0 y: 336.0 z: 0.54 }
-  size { x: 30.0 y: 10.0 }
-  color { x: 1.0 y: 0.702 z: 0.278 w: 1.0 }
+  position { x: 283.0 y: 281.0 z: 0.54 }
+  size { x: 36.0 y: 10.0 }
+  color { x: 1.000 y: 0.702 z: 0.278 w: 1.000 }
   type: TYPE_TEXT
   text: ""
   font: "jb_mono_10"
   id: "slot5_qty"
   pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 294.0 y: 330.0 z: 0.52 }
-  size { x: 80.0 y: 80.0 }
-  color { x: 0.067 y: 0.055 z: 0.173 w: 0.9 }
-  type: TYPE_BOX
-  id: "slot6_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
-}
-nodes {
-  position { x: 294.0 y: 409.0 z: 0.53 }
-  size { x: 80.0 y: 1.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.35 }
+  position { x: 298.0 y: 271.0 z: 0.52 }
+  size { x: 117.0 y: 142.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 0.180 }
   type: TYPE_BOX
   id: "slot6_border"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 300.0 y: 402.0 z: 0.54 }
+  position { x: 299.0 y: 272.0 z: 0.53 }
+  size { x: 115.0 y: 140.0 }
+  color { x: 0.047 y: 0.039 z: 0.141 w: 0.700 }
+  type: TYPE_BOX
+  id: "slot6_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_FIT
+  inherit_alpha: false
+}
+nodes {
+  position { x: 305.0 y: 402.0 z: 0.54 }
   size { x: 40.0 y: 8.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.4 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 0.450 }
   type: TYPE_TEXT
   text: "B2"
   font: "jb_mono_10"
   id: "slot6_coord"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 334.0 y: 375.0 z: 0.54 }
+  position { x: 356.5 y: 352.0 z: 0.54 }
   size { x: 50.0 y: 42.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 1.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 1.000 }
   type: TYPE_TEXT
   text: ""
   font: "icons"
   id: "slot6_icon"
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 334.0 y: 340.0 z: 0.54 }
-  size { x: 76.0 y: 10.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.85 }
+  position { x: 356.5 y: 300.0 z: 0.54 }
+  size { x: 105.0 y: 22.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 1.000 }
   type: TYPE_TEXT
   text: "—"
   font: "jb_mono_10"
   id: "slot6_name"
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
+  line_break: true
 }
 nodes {
-  position { x: 368.0 y: 336.0 z: 0.54 }
-  size { x: 30.0 y: 10.0 }
-  color { x: 1.0 y: 0.702 z: 0.278 w: 1.0 }
+  position { x: 408.0 y: 281.0 z: 0.54 }
+  size { x: 36.0 y: 10.0 }
+  color { x: 1.000 y: 0.702 z: 0.278 w: 1.000 }
   type: TYPE_TEXT
   text: ""
   font: "jb_mono_10"
   id: "slot6_qty"
   pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 384.0 y: 330.0 z: 0.52 }
-  size { x: 80.0 y: 80.0 }
-  color { x: 0.067 y: 0.055 z: 0.173 w: 0.9 }
-  type: TYPE_BOX
-  id: "slot7_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
-}
-nodes {
-  position { x: 384.0 y: 409.0 z: 0.53 }
-  size { x: 80.0 y: 1.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.35 }
+  position { x: 423.0 y: 271.0 z: 0.52 }
+  size { x: 117.0 y: 142.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 0.180 }
   type: TYPE_BOX
   id: "slot7_border"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 390.0 y: 402.0 z: 0.54 }
+  position { x: 424.0 y: 272.0 z: 0.53 }
+  size { x: 115.0 y: 140.0 }
+  color { x: 0.047 y: 0.039 z: 0.141 w: 0.700 }
+  type: TYPE_BOX
+  id: "slot7_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_FIT
+  inherit_alpha: false
+}
+nodes {
+  position { x: 430.0 y: 402.0 z: 0.54 }
   size { x: 40.0 y: 8.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.4 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 0.450 }
   type: TYPE_TEXT
-  text: "C2"
+  text: "B3"
   font: "jb_mono_10"
   id: "slot7_coord"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 424.0 y: 375.0 z: 0.54 }
+  position { x: 481.5 y: 352.0 z: 0.54 }
   size { x: 50.0 y: 42.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 1.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 1.000 }
   type: TYPE_TEXT
   text: ""
   font: "icons"
   id: "slot7_icon"
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 424.0 y: 340.0 z: 0.54 }
-  size { x: 76.0 y: 10.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.85 }
+  position { x: 481.5 y: 300.0 z: 0.54 }
+  size { x: 105.0 y: 22.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 1.000 }
   type: TYPE_TEXT
   text: "—"
   font: "jb_mono_10"
   id: "slot7_name"
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
+  line_break: true
 }
 nodes {
-  position { x: 458.0 y: 336.0 z: 0.54 }
-  size { x: 30.0 y: 10.0 }
-  color { x: 1.0 y: 0.702 z: 0.278 w: 1.0 }
+  position { x: 533.0 y: 281.0 z: 0.54 }
+  size { x: 36.0 y: 10.0 }
+  color { x: 1.000 y: 0.702 z: 0.278 w: 1.000 }
   type: TYPE_TEXT
   text: ""
   font: "jb_mono_10"
   id: "slot7_qty"
   pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 474.0 y: 330.0 z: 0.52 }
-  size { x: 80.0 y: 80.0 }
-  color { x: 0.067 y: 0.055 z: 0.173 w: 0.9 }
-  type: TYPE_BOX
-  id: "slot8_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
-}
-nodes {
-  position { x: 474.0 y: 409.0 z: 0.53 }
-  size { x: 80.0 y: 1.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.35 }
+  position { x: 548.0 y: 271.0 z: 0.52 }
+  size { x: 117.0 y: 142.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 0.180 }
   type: TYPE_BOX
   id: "slot8_border"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 480.0 y: 402.0 z: 0.54 }
+  position { x: 549.0 y: 272.0 z: 0.53 }
+  size { x: 115.0 y: 140.0 }
+  color { x: 0.047 y: 0.039 z: 0.141 w: 0.700 }
+  type: TYPE_BOX
+  id: "slot8_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_FIT
+  inherit_alpha: false
+}
+nodes {
+  position { x: 555.0 y: 402.0 z: 0.54 }
   size { x: 40.0 y: 8.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.4 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 0.450 }
   type: TYPE_TEXT
-  text: "D2"
+  text: "B4"
   font: "jb_mono_10"
   id: "slot8_coord"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 514.0 y: 375.0 z: 0.54 }
+  position { x: 606.5 y: 352.0 z: 0.54 }
   size { x: 50.0 y: 42.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 1.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 1.000 }
   type: TYPE_TEXT
   text: ""
   font: "icons"
   id: "slot8_icon"
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 514.0 y: 340.0 z: 0.54 }
-  size { x: 76.0 y: 10.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.85 }
+  position { x: 606.5 y: 300.0 z: 0.54 }
+  size { x: 105.0 y: 22.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 1.000 }
   type: TYPE_TEXT
   text: "—"
   font: "jb_mono_10"
   id: "slot8_name"
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
+  line_break: true
 }
 nodes {
-  position { x: 548.0 y: 336.0 z: 0.54 }
-  size { x: 30.0 y: 10.0 }
-  color { x: 1.0 y: 0.702 z: 0.278 w: 1.0 }
+  position { x: 658.0 y: 281.0 z: 0.54 }
+  size { x: 36.0 y: 10.0 }
+  color { x: 1.000 y: 0.702 z: 0.278 w: 1.000 }
   type: TYPE_TEXT
   text: ""
   font: "jb_mono_10"
   id: "slot8_qty"
   pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 204.0 y: 240.0 z: 0.52 }
-  size { x: 80.0 y: 80.0 }
-  color { x: 0.067 y: 0.055 z: 0.173 w: 0.9 }
-  type: TYPE_BOX
-  id: "slot9_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
-}
-nodes {
-  position { x: 204.0 y: 319.0 z: 0.53 }
-  size { x: 80.0 y: 1.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.35 }
+  position { x: 173.0 y: 121.0 z: 0.52 }
+  size { x: 117.0 y: 142.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 0.180 }
   type: TYPE_BOX
   id: "slot9_border"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 210.0 y: 312.0 z: 0.54 }
+  position { x: 174.0 y: 122.0 z: 0.53 }
+  size { x: 115.0 y: 140.0 }
+  color { x: 0.047 y: 0.039 z: 0.141 w: 0.700 }
+  type: TYPE_BOX
+  id: "slot9_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_FIT
+  inherit_alpha: false
+}
+nodes {
+  position { x: 180.0 y: 252.0 z: 0.54 }
   size { x: 40.0 y: 8.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.4 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 0.450 }
   type: TYPE_TEXT
-  text: "A3"
+  text: "C1"
   font: "jb_mono_10"
   id: "slot9_coord"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 244.0 y: 285.0 z: 0.54 }
+  position { x: 231.5 y: 202.0 z: 0.54 }
   size { x: 50.0 y: 42.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 1.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 1.000 }
   type: TYPE_TEXT
   text: ""
   font: "icons"
   id: "slot9_icon"
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 244.0 y: 250.0 z: 0.54 }
-  size { x: 76.0 y: 10.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.85 }
+  position { x: 231.5 y: 150.0 z: 0.54 }
+  size { x: 105.0 y: 22.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 1.000 }
   type: TYPE_TEXT
   text: "—"
   font: "jb_mono_10"
   id: "slot9_name"
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
+  line_break: true
 }
 nodes {
-  position { x: 278.0 y: 246.0 z: 0.54 }
-  size { x: 30.0 y: 10.0 }
-  color { x: 1.0 y: 0.702 z: 0.278 w: 1.0 }
+  position { x: 283.0 y: 131.0 z: 0.54 }
+  size { x: 36.0 y: 10.0 }
+  color { x: 1.000 y: 0.702 z: 0.278 w: 1.000 }
   type: TYPE_TEXT
   text: ""
   font: "jb_mono_10"
   id: "slot9_qty"
   pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 294.0 y: 240.0 z: 0.52 }
-  size { x: 80.0 y: 80.0 }
-  color { x: 0.067 y: 0.055 z: 0.173 w: 0.9 }
-  type: TYPE_BOX
-  id: "slot10_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
-}
-nodes {
-  position { x: 294.0 y: 319.0 z: 0.53 }
-  size { x: 80.0 y: 1.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.35 }
+  position { x: 298.0 y: 121.0 z: 0.52 }
+  size { x: 117.0 y: 142.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 0.180 }
   type: TYPE_BOX
   id: "slot10_border"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 300.0 y: 312.0 z: 0.54 }
+  position { x: 299.0 y: 122.0 z: 0.53 }
+  size { x: 115.0 y: 140.0 }
+  color { x: 0.047 y: 0.039 z: 0.141 w: 0.700 }
+  type: TYPE_BOX
+  id: "slot10_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_FIT
+  inherit_alpha: false
+}
+nodes {
+  position { x: 305.0 y: 252.0 z: 0.54 }
   size { x: 40.0 y: 8.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.4 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 0.450 }
   type: TYPE_TEXT
-  text: "B3"
+  text: "C2"
   font: "jb_mono_10"
   id: "slot10_coord"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 334.0 y: 285.0 z: 0.54 }
+  position { x: 356.5 y: 202.0 z: 0.54 }
   size { x: 50.0 y: 42.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 1.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 1.000 }
   type: TYPE_TEXT
   text: ""
   font: "icons"
   id: "slot10_icon"
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 334.0 y: 250.0 z: 0.54 }
-  size { x: 76.0 y: 10.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.85 }
+  position { x: 356.5 y: 150.0 z: 0.54 }
+  size { x: 105.0 y: 22.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 1.000 }
   type: TYPE_TEXT
   text: "—"
   font: "jb_mono_10"
   id: "slot10_name"
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
+  line_break: true
 }
 nodes {
-  position { x: 368.0 y: 246.0 z: 0.54 }
-  size { x: 30.0 y: 10.0 }
-  color { x: 1.0 y: 0.702 z: 0.278 w: 1.0 }
+  position { x: 408.0 y: 131.0 z: 0.54 }
+  size { x: 36.0 y: 10.0 }
+  color { x: 1.000 y: 0.702 z: 0.278 w: 1.000 }
   type: TYPE_TEXT
   text: ""
   font: "jb_mono_10"
   id: "slot10_qty"
   pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 384.0 y: 240.0 z: 0.52 }
-  size { x: 80.0 y: 80.0 }
-  color { x: 0.067 y: 0.055 z: 0.173 w: 0.9 }
-  type: TYPE_BOX
-  id: "slot11_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
-}
-nodes {
-  position { x: 384.0 y: 319.0 z: 0.53 }
-  size { x: 80.0 y: 1.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.35 }
+  position { x: 423.0 y: 121.0 z: 0.52 }
+  size { x: 117.0 y: 142.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 0.180 }
   type: TYPE_BOX
   id: "slot11_border"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 390.0 y: 312.0 z: 0.54 }
+  position { x: 424.0 y: 122.0 z: 0.53 }
+  size { x: 115.0 y: 140.0 }
+  color { x: 0.047 y: 0.039 z: 0.141 w: 0.700 }
+  type: TYPE_BOX
+  id: "slot11_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_FIT
+  inherit_alpha: false
+}
+nodes {
+  position { x: 430.0 y: 252.0 z: 0.54 }
   size { x: 40.0 y: 8.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.4 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 0.450 }
   type: TYPE_TEXT
   text: "C3"
   font: "jb_mono_10"
   id: "slot11_coord"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 424.0 y: 285.0 z: 0.54 }
+  position { x: 481.5 y: 202.0 z: 0.54 }
   size { x: 50.0 y: 42.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 1.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 1.000 }
   type: TYPE_TEXT
   text: ""
   font: "icons"
   id: "slot11_icon"
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 424.0 y: 250.0 z: 0.54 }
-  size { x: 76.0 y: 10.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.85 }
+  position { x: 481.5 y: 150.0 z: 0.54 }
+  size { x: 105.0 y: 22.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 1.000 }
   type: TYPE_TEXT
   text: "—"
   font: "jb_mono_10"
   id: "slot11_name"
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
+  line_break: true
 }
 nodes {
-  position { x: 458.0 y: 246.0 z: 0.54 }
-  size { x: 30.0 y: 10.0 }
-  color { x: 1.0 y: 0.702 z: 0.278 w: 1.0 }
+  position { x: 533.0 y: 131.0 z: 0.54 }
+  size { x: 36.0 y: 10.0 }
+  color { x: 1.000 y: 0.702 z: 0.278 w: 1.000 }
   type: TYPE_TEXT
   text: ""
   font: "jb_mono_10"
   id: "slot11_qty"
   pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 474.0 y: 240.0 z: 0.52 }
-  size { x: 80.0 y: 80.0 }
-  color { x: 0.067 y: 0.055 z: 0.173 w: 0.9 }
-  type: TYPE_BOX
-  id: "slot12_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: false
-}
-nodes {
-  position { x: 474.0 y: 319.0 z: 0.53 }
-  size { x: 80.0 y: 1.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.35 }
+  position { x: 548.0 y: 121.0 z: 0.52 }
+  size { x: 117.0 y: 142.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 0.180 }
   type: TYPE_BOX
   id: "slot12_border"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 480.0 y: 312.0 z: 0.54 }
+  position { x: 549.0 y: 122.0 z: 0.53 }
+  size { x: 115.0 y: 140.0 }
+  color { x: 0.047 y: 0.039 z: 0.141 w: 0.700 }
+  type: TYPE_BOX
+  id: "slot12_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_FIT
+  inherit_alpha: false
+}
+nodes {
+  position { x: 555.0 y: 252.0 z: 0.54 }
   size { x: 40.0 y: 8.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.4 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 0.450 }
   type: TYPE_TEXT
-  text: "D3"
+  text: "C4"
   font: "jb_mono_10"
   id: "slot12_coord"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 514.0 y: 285.0 z: 0.54 }
+  position { x: 606.5 y: 202.0 z: 0.54 }
   size { x: 50.0 y: 42.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 1.0 }
+  color { x: 0.490 y: 0.976 z: 1.000 w: 1.000 }
   type: TYPE_TEXT
   text: ""
   font: "icons"
   id: "slot12_icon"
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 514.0 y: 250.0 z: 0.54 }
-  size { x: 76.0 y: 10.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 0.85 }
+  position { x: 606.5 y: 150.0 z: 0.54 }
+  size { x: 105.0 y: 22.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 1.000 }
   type: TYPE_TEXT
   text: "—"
   font: "jb_mono_10"
   id: "slot12_name"
   pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
+  line_break: true
 }
 nodes {
-  position { x: 548.0 y: 246.0 z: 0.54 }
-  size { x: 30.0 y: 10.0 }
-  color { x: 1.0 y: 0.702 z: 0.278 w: 1.0 }
+  position { x: 658.0 y: 131.0 z: 0.54 }
+  size { x: 36.0 y: 10.0 }
+  color { x: 1.000 y: 0.702 z: 0.278 w: 1.000 }
   type: TYPE_TEXT
   text: ""
   font: "jb_mono_10"
   id: "slot12_qty"
   pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position { x: 204.0 y: 420.0 z: 0.56 }
-  size { x: 80.0 y: 80.0 }
-  color { x: 0.49 y: 0.976 z: 1.0 w: 0.0 }
+  position { x: 174.0 y: 122.0 z: 0.58 }
+  size { x: 115.0 y: 140.0 }
+  color { x: 0.000 y: 0.000 z: 0.000 w: 0.000 }
   type: TYPE_BOX
   id: "sel_ring_b"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 nodes {
-  position { x: 204.0 y: 499.0 z: 0.57 }
-  size { x: 80.0 y: 2.0 }
-  color { x: 0.952 y: 0.925 z: 0.85 w: 1.0 }
+  position { x: 174.0 y: 260.0 z: 0.59 }
+  size { x: 115.0 y: 2.0 }
+  color { x: 0.953 y: 0.925 z: 0.851 w: 1.000 }
   type: TYPE_BOX
   id: "sel_ring_t"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: false
 }
 material: "/builtins/materials/gui.material"
