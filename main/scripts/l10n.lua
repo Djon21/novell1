@@ -59,8 +59,9 @@ function M.init()
         M.strings[M.lang] = load_lang(M.lang) or {}
     end
     M.initialized = true
-    print("[l10n] init lang=" .. tostring(M.lang)
-          .. " ru_keys=" .. tostring(#(M.strings.ru and (function() local n=0 for _ in pairs(M.strings.ru) do n=n+1 end return n end)() or 0)))
+    local ru_count = 0
+    for _ in pairs(M.strings.ru or {}) do ru_count = ru_count + 1 end
+    print("[l10n] init lang=" .. tostring(M.lang) .. " ru_keys=" .. tostring(ru_count))
 end
 
 function M.set_lang(lang)
