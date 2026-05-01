@@ -16,6 +16,9 @@ local ui_state = require "main.scripts.ui_state"
 
 local UI_MGR = "#ui_manager_v2"
 
+local COLOR_BTN_BG = vmath.vector4(0.031, 0.023, 0.094, 0.85)
+local COLOR_BTN_TEXT = vmath.vector4(0.952, 0.925, 0.85, 0.9)
+
 local function set_text(id, s)
     gui.set_text(gui.get_node(id), s or "")
 end
@@ -26,6 +29,34 @@ end
 
 local function point_in_node(node, action)
     return gui.pick_node(node, action.x, action.y)
+end
+
+local function make_box(parent, x, y, z, w, h, color)
+    local n = gui.new_box_node(vmath.vector3(x, y, z), vmath.vector3(w, h, 0))
+    gui.set_pivot(n, gui.PIVOT_SW)
+    gui.set_adjust_mode(n, gui.ADJUST_STRETCH)
+    gui.set_color(n, color)
+    if parent then gui.set_parent(n, parent, false) end
+    return n
+end
+
+local function make_text(parent, x, y, z, w, h, text, font, color, pivot)
+    local n = gui.new_text_node(vmath.vector3(x, y, z), text or "")
+    gui.set_pivot(n, pivot or gui.PIVOT_CENTER)
+    gui.set_size(n, vmath.vector3(w, h, 0))
+    gui.set_font(n, font)
+    gui.set_adjust_mode(n, gui.ADJUST_STRETCH)
+    gui.set_color(n, color)
+    pcall(gui.set_line_break, n, true)
+    if parent then gui.set_parent(n, parent, false) end
+    return n
+end
+
+local function ensure_log_button(self)
+    if self.log_button then return end
+    local root = gui.get_node("hud_root")
+    self.log_button = make_box(root, 1004, 649, 0.1, 64, 64, COLOR_BTN_BG)
+    self.log_label = make_text(root, 1036, 682, 0.12, 60, 16, "LOG", "jb_mono_bold_14", COLOR_BTN_TEXT, gui.PIVOT_CENTER)
 end
 
 local function set_phone_slot_visible(enabled, notif_count)
@@ -43,6 +74,7 @@ function init(self)
     self.bag_count  = 0
     self.phn_notif  = 0
     self.phone_enabled = false
+    ensure_log_button(self)
     -- базовые тексты уже стоят в .gui, но занулим бейджи пока нет данных
     set_text("bag_badge_text", "")
     set_visible("bag_badge", false)
@@ -89,6 +121,7 @@ function on_message(self, message_id, message, sender)
     elseif message_id == hash("show_hud") then
         self.visible = true
         gui.set_enabled(gui.get_node("hud_root"), true)
+        ensure_log_button(self)
 
     elseif message_id == hash("hide_hud") then
         self.visible = false
@@ -104,6 +137,14 @@ function on_input(self, action_id, action)
 
     local bag_ring = gui.get_node("bag_ring")
     local phn_ring = gui.get_node("phn_ring")
+    ensure_log_button(self)
+
+    if point_in_node(self.log_button, action) then
+        msg.post(UI_MGR, "open_backlog")
+        gui.animate(self.log_button, "scale", vmath.vector4(0.94, 0.94, 1, 1), gui.EASING_OUTQUAD, 0.08, 0,
+            function() gui.animate(self.log_button, "scale", vmath.vector4(1, 1, 1, 1), gui.EASING_OUTQUAD, 0.15) end)
+        return true
+    end
 
     if point_in_node(bag_ring, action) then
         msg.post(UI_MGR, "open_inventory")

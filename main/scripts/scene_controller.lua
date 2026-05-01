@@ -61,6 +61,15 @@ local function visible_objects()
     return list
 end
 
+local function make_hotspot_payload(entry)
+    local payload = {}
+    for key, value in pairs(entry.ref) do
+        payload[key] = value
+    end
+    payload.locked = entry.locked
+    return payload
+end
+
 local function render()
     if not _active or not _ui then return end
     _ui.set_background(_scene_data.bg)
@@ -77,12 +86,7 @@ local function render()
     for i = 1, _ui.max_hotspots() do
         local entry = visible[i]
         if entry then
-            _ui.set_hotspot(i, {
-                rect   = entry.ref.rect,
-                label  = entry.ref.label,
-                icon   = entry.ref.icon,
-                locked = entry.locked,
-            })
+            _ui.set_hotspot(i, make_hotspot_payload(entry))
         else
             _ui.set_hotspot(i, nil)  -- слот пустой → UI прячет
         end

@@ -19,22 +19,41 @@ nodes {
   position {
     x: 480.0
     y: 320.0
-    z: 0.068
+    z: 0.08
   }
   size {
-    x: 96.0
-    y: 96.0
+    x: 200.0
+    y: 200.0
   }
   color {
-    x: 0.06
-    y: 0.06
-    z: 0.1
+    x: 0.5019608
+    y: 0.0
+    z: 0.5019608
   }
   type: TYPE_BOX
-  texture: "hotspots/hotspot_circle"
-  id: "hotspot_circle_3"
+  id: "hotspot_1"
   adjust_mode: ADJUST_MODE_ZOOM
-  alpha: 0.35
+  alpha: 0.15
+  enabled: false
+}
+nodes {
+  position {
+    y: -92.0
+    z: 0.09
+  }
+  size {
+    x: 180.0
+    y: 40.0
+  }
+  type: TYPE_TEXT
+  text: "label"
+  font: "main"
+  id: "hotspot_label_1"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "hotspot_1"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
   enabled: false
 }
 nodes {
@@ -52,352 +71,6 @@ nodes {
   id: "hotspot_ring_1"
   adjust_mode: ADJUST_MODE_ZOOM
   alpha: 0.9
-  enabled: false
-}
-nodes {
-  position {
-    x: 480.0
-    y: 320.0
-    z: 0.07
-  }
-  size {
-    x: 120.0
-    y: 120.0
-  }
-  type: TYPE_TEXT
-  font: "material_icons"
-  id: "hotspot_icon_5"
-  adjust_mode: ADJUST_MODE_ZOOM
-  shadow_alpha: 0.9
-  enabled: false
-}
-nodes {
-  position {
-    x: 480.0
-    y: 320.0
-    z: 0.067
-  }
-  size {
-    x: 120.0
-    y: 120.0
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_ring"
-  id: "hotspot_ring_5"
-  adjust_mode: ADJUST_MODE_ZOOM
-  alpha: 0.9
-  enabled: false
-}
-nodes {
-  position {
-    x: 480.0
-    y: 320.0
-    z: 0.066
-  }
-  size {
-    x: 1.0
-    y: 1.0
-  }
-  color {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  type: TYPE_BOX
-  id: "hotspot_orbit_6"
-  adjust_mode: ADJUST_MODE_ZOOM
-  alpha: 0.0
-  enabled: false
-}
-nodes {
-  position {
-    x: 72.0
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_6_1"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_6"
-  enabled: false
-}
-nodes {
-  position {
-    x: 36.0
-    y: 62.35
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_6_2"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_6"
-  enabled: false
-}
-nodes {
-  position {
-    x: -36.0
-    y: 62.35
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_6_3"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_6"
-  enabled: false
-}
-nodes {
-  position {
-    x: -72.0
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_6_4"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_6"
-  enabled: false
-}
-nodes {
-  position {
-    x: -36.0
-    y: -62.35
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_6_5"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_6"
-  enabled: false
-}
-nodes {
-  position {
-    x: 36.0
-    y: -62.35
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_6_6"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_6"
-  enabled: false
-}
-nodes {
-  position {
-    x: 480.0
-    y: 320.0
-    z: 0.07
-  }
-  size {
-    x: 120.0
-    y: 120.0
-  }
-  type: TYPE_TEXT
-  font: "material_icons"
-  id: "hotspot_icon_3"
-  adjust_mode: ADJUST_MODE_ZOOM
-  shadow_alpha: 0.9
-  enabled: false
-}
-nodes {
-  position {
-    x: 480.0
-    y: 320.0
-    z: 0.066
-  }
-  size {
-    x: 1.0
-    y: 1.0
-  }
-  color {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  type: TYPE_BOX
-  id: "hotspot_orbit_5"
-  adjust_mode: ADJUST_MODE_ZOOM
-  alpha: 0.0
-  enabled: false
-}
-nodes {
-  position {
-    x: 72.0
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_5_1"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_5"
-  enabled: false
-}
-nodes {
-  position {
-    x: 36.0
-    y: 62.35
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_5_2"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_5"
-  enabled: false
-}
-nodes {
-  position {
-    x: -36.0
-    y: 62.35
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_5_3"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_5"
-  enabled: false
-}
-nodes {
-  position {
-    x: -72.0
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_5_4"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_5"
-  enabled: false
-}
-nodes {
-  position {
-    x: -36.0
-    y: -62.35
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_5_5"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_5"
-  enabled: false
-}
-nodes {
-  position {
-    x: 36.0
-    y: -62.35
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_5_6"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_5"
-  enabled: false
-}
-nodes {
-  position {
-    x: 480.0
-    y: 320.0
-    z: 0.07
-  }
-  size {
-    x: 120.0
-    y: 120.0
-  }
-  type: TYPE_TEXT
-  font: "material_icons"
-  id: "hotspot_icon_2"
-  adjust_mode: ADJUST_MODE_ZOOM
-  shadow_alpha: 0.9
   enabled: false
 }
 nodes {
@@ -426,61 +99,17 @@ nodes {
   position {
     x: 480.0
     y: 320.0
-    z: 0.067
+    z: 0.07
   }
   size {
     x: 120.0
     y: 120.0
   }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_ring"
-  id: "hotspot_ring_3"
+  type: TYPE_TEXT
+  font: "material_icons"
+  id: "hotspot_icon_1"
   adjust_mode: ADJUST_MODE_ZOOM
-  alpha: 0.9
-  enabled: false
-}
-nodes {
-  position {
-    x: 480.0
-    y: 320.0
-    z: 0.068
-  }
-  size {
-    x: 96.0
-    y: 96.0
-  }
-  color {
-    x: 0.06
-    y: 0.06
-    z: 0.1
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_circle"
-  id: "hotspot_circle_6"
-  adjust_mode: ADJUST_MODE_ZOOM
-  alpha: 0.35
-  enabled: false
-}
-nodes {
-  position {
-    x: 480.0
-    y: 320.0
-    z: 0.068
-  }
-  size {
-    x: 96.0
-    y: 96.0
-  }
-  color {
-    x: 0.06
-    y: 0.06
-    z: 0.1
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_circle"
-  id: "hotspot_circle_4"
-  adjust_mode: ADJUST_MODE_ZOOM
-  alpha: 0.35
+  shadow_alpha: 0.9
   enabled: false
 }
 nodes {
@@ -494,17 +123,20 @@ nodes {
     y: 200.0
   }
   color {
+    x: 0.5019608
     y: 0.0
+    z: 0.5019608
   }
   type: TYPE_BOX
-  id: "hotspot_6"
+  id: "hotspot_2"
   adjust_mode: ADJUST_MODE_ZOOM
-  alpha: 0.3
+  alpha: 0.15
   enabled: false
 }
 nodes {
   position {
-    z: 0.005
+    y: -92.0
+    z: 0.09
   }
   size {
     x: 180.0
@@ -513,9 +145,9 @@ nodes {
   type: TYPE_TEXT
   text: "label"
   font: "main"
-  id: "hotspot_label_6"
+  id: "hotspot_label_2"
   adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_6"
+  parent: "hotspot_2"
   inherit_alpha: true
   outline_alpha: 0.0
   shadow_alpha: 0.0
@@ -572,304 +204,9 @@ nodes {
   }
   type: TYPE_TEXT
   font: "material_icons"
-  id: "hotspot_icon_1"
+  id: "hotspot_icon_2"
   adjust_mode: ADJUST_MODE_ZOOM
   shadow_alpha: 0.9
-  enabled: false
-}
-nodes {
-  position {
-    x: 480.0
-    y: 320.0
-    z: 0.067
-  }
-  size {
-    x: 120.0
-    y: 120.0
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_ring"
-  id: "hotspot_ring_6"
-  adjust_mode: ADJUST_MODE_ZOOM
-  alpha: 0.9
-  enabled: false
-}
-nodes {
-  position {
-    x: 480.0
-    y: 320.0
-    z: 0.066
-  }
-  size {
-    x: 1.0
-    y: 1.0
-  }
-  color {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  type: TYPE_BOX
-  id: "hotspot_orbit_3"
-  adjust_mode: ADJUST_MODE_ZOOM
-  alpha: 0.0
-  enabled: false
-}
-nodes {
-  position {
-    x: 72.0
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_3_1"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_3"
-  enabled: false
-}
-nodes {
-  position {
-    x: 36.0
-    y: 62.35
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_3_2"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_3"
-  enabled: false
-}
-nodes {
-  position {
-    x: -36.0
-    y: 62.35
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_3_3"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_3"
-  enabled: false
-}
-nodes {
-  position {
-    x: -72.0
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_3_4"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_3"
-  enabled: false
-}
-nodes {
-  position {
-    x: -36.0
-    y: -62.35
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_3_5"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_3"
-  enabled: false
-}
-nodes {
-  position {
-    x: 36.0
-    y: -62.35
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_3_6"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_3"
-  enabled: false
-}
-nodes {
-  position {
-    x: 480.0
-    y: 320.0
-    z: 0.066
-  }
-  size {
-    x: 1.0
-    y: 1.0
-  }
-  color {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  type: TYPE_BOX
-  id: "hotspot_orbit_2"
-  adjust_mode: ADJUST_MODE_ZOOM
-  alpha: 0.0
-  enabled: false
-}
-nodes {
-  position {
-    x: 72.0
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_2_1"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_2"
-  enabled: false
-}
-nodes {
-  position {
-    x: 36.0
-    y: 62.35
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_2_2"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_2"
-  enabled: false
-}
-nodes {
-  position {
-    x: -36.0
-    y: 62.35
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_2_3"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_2"
-  enabled: false
-}
-nodes {
-  position {
-    x: -72.0
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_2_4"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_2"
-  enabled: false
-}
-nodes {
-  position {
-    x: -36.0
-    y: -62.35
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_2_5"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_2"
-  enabled: false
-}
-nodes {
-  position {
-    x: 36.0
-    y: -62.35
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_2_6"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_2"
   enabled: false
 }
 nodes {
@@ -883,7 +220,9 @@ nodes {
     y: 200.0
   }
   color {
+    x: 0.5019608
     y: 0.0
+    z: 0.5019608
   }
   type: TYPE_BOX
   id: "hotspot_3"
@@ -893,7 +232,8 @@ nodes {
 }
 nodes {
   position {
-    z: 0.005
+    y: -92.0
+    z: 0.09
   }
   size {
     x: 180.0
@@ -914,217 +254,39 @@ nodes {
   position {
     x: 480.0
     y: 320.0
-    z: 0.08
+    z: 0.067
   }
   size {
-    x: 200.0
-    y: 200.0
-  }
-  color {
-    x: 0.5019608
-    y: 0.0
-    z: 0.5019608
+    x: 120.0
+    y: 120.0
   }
   type: TYPE_BOX
-  id: "hotspot_1"
+  texture: "hotspots/hotspot_ring"
+  id: "hotspot_ring_3"
   adjust_mode: ADJUST_MODE_ZOOM
-  alpha: 0.15
-  enabled: false
-}
-nodes {
-  position {
-    z: 0.005
-  }
-  size {
-    x: 180.0
-    y: 40.0
-  }
-  type: TYPE_TEXT
-  text: "label"
-  font: "main"
-  id: "hotspot_label_1"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_1"
-  inherit_alpha: true
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
+  alpha: 0.9
   enabled: false
 }
 nodes {
   position {
     x: 480.0
     y: 320.0
-    z: 0.08
+    z: 0.068
   }
   size {
-    x: 200.0
-    y: 200.0
+    x: 96.0
+    y: 96.0
   }
   color {
-    y: 0.0
+    x: 0.06
+    y: 0.06
+    z: 0.1
   }
   type: TYPE_BOX
-  id: "hotspot_5"
+  texture: "hotspots/hotspot_circle"
+  id: "hotspot_circle_3"
   adjust_mode: ADJUST_MODE_ZOOM
-  alpha: 0.15
-  enabled: false
-}
-nodes {
-  position {
-    z: 0.005
-  }
-  size {
-    x: 180.0
-    y: 40.0
-  }
-  type: TYPE_TEXT
-  text: "label"
-  font: "main"
-  id: "hotspot_label_5"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_5"
-  inherit_alpha: true
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-  enabled: false
-}
-nodes {
-  position {
-    x: 480.0
-    y: 320.0
-    z: 0.066
-  }
-  size {
-    x: 1.0
-    y: 1.0
-  }
-  color {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  type: TYPE_BOX
-  id: "hotspot_orbit_4"
-  adjust_mode: ADJUST_MODE_ZOOM
-  alpha: 0.0
-  enabled: false
-}
-nodes {
-  position {
-    x: 72.0
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_4_1"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_4"
-  enabled: false
-}
-nodes {
-  position {
-    x: 36.0
-    y: 62.35
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_4_2"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_4"
-  enabled: false
-}
-nodes {
-  position {
-    x: -36.0
-    y: 62.35
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_4_3"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_4"
-  enabled: false
-}
-nodes {
-  position {
-    x: -72.0
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_4_4"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_4"
-  enabled: false
-}
-nodes {
-  position {
-    x: -36.0
-    y: -62.35
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_4_5"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_4"
-  enabled: false
-}
-nodes {
-  position {
-    x: 36.0
-    y: -62.35
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_4_6"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_4"
+  alpha: 0.35
   enabled: false
 }
 nodes {
@@ -1139,7 +301,7 @@ nodes {
   }
   type: TYPE_TEXT
   font: "material_icons"
-  id: "hotspot_icon_4"
+  id: "hotspot_icon_3"
   adjust_mode: ADJUST_MODE_ZOOM
   shadow_alpha: 0.9
   enabled: false
@@ -1155,17 +317,20 @@ nodes {
     y: 200.0
   }
   color {
+    x: 0.5019608
     y: 0.0
+    z: 0.5019608
   }
   type: TYPE_BOX
-  id: "hotspot_2"
+  id: "hotspot_4"
   adjust_mode: ADJUST_MODE_ZOOM
   alpha: 0.15
   enabled: false
 }
 nodes {
   position {
-    z: 0.005
+    y: -92.0
+    z: 0.09
   }
   size {
     x: 180.0
@@ -1174,9 +339,9 @@ nodes {
   type: TYPE_TEXT
   text: "label"
   font: "main"
-  id: "hotspot_label_2"
+  id: "hotspot_label_4"
   adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_2"
+  parent: "hotspot_4"
   inherit_alpha: true
   outline_alpha: 0.0
   shadow_alpha: 0.0
@@ -1216,7 +381,7 @@ nodes {
   }
   type: TYPE_BOX
   texture: "hotspots/hotspot_circle"
-  id: "hotspot_circle_5"
+  id: "hotspot_circle_4"
   adjust_mode: ADJUST_MODE_ZOOM
   alpha: 0.35
   enabled: false
@@ -1225,139 +390,17 @@ nodes {
   position {
     x: 480.0
     y: 320.0
-    z: 0.066
+    z: 0.07
   }
   size {
-    x: 1.0
-    y: 1.0
+    x: 120.0
+    y: 120.0
   }
-  color {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  type: TYPE_BOX
-  id: "hotspot_orbit_1"
+  type: TYPE_TEXT
+  font: "material_icons"
+  id: "hotspot_icon_4"
   adjust_mode: ADJUST_MODE_ZOOM
-  alpha: 0.0
-  enabled: false
-}
-nodes {
-  position {
-    x: 72.0
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_1_1"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_1"
-  enabled: false
-}
-nodes {
-  position {
-    x: 36.0
-    y: 62.35
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_1_2"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_1"
-  enabled: false
-}
-nodes {
-  position {
-    x: -36.0
-    y: 62.35
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_1_3"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_1"
-  enabled: false
-}
-nodes {
-  position {
-    x: -72.0
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_1_4"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_1"
-  enabled: false
-}
-nodes {
-  position {
-    x: -36.0
-    y: -62.35
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_1_5"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_1"
-  enabled: false
-}
-nodes {
-  position {
-    x: 36.0
-    y: -62.35
-  }
-  size {
-    x: 14.0
-    y: 14.0
-  }
-  color {
-    y: 0.8
-    z: 0.4
-  }
-  type: TYPE_BOX
-  texture: "hotspots/hotspot_dot"
-  id: "hotspot_dot_1_6"
-  adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_orbit_1"
+  shadow_alpha: 0.9
   enabled: false
 }
 nodes {
@@ -1371,17 +414,20 @@ nodes {
     y: 200.0
   }
   color {
+    x: 0.5019608
     y: 0.0
+    z: 0.5019608
   }
   type: TYPE_BOX
-  id: "hotspot_4"
+  id: "hotspot_5"
   adjust_mode: ADJUST_MODE_ZOOM
   alpha: 0.15
   enabled: false
 }
 nodes {
   position {
-    z: 0.005
+    y: -92.0
+    z: 0.09
   }
   size {
     x: 180.0
@@ -1390,12 +436,165 @@ nodes {
   type: TYPE_TEXT
   text: "label"
   font: "main"
-  id: "hotspot_label_4"
+  id: "hotspot_label_5"
   adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_4"
+  parent: "hotspot_5"
   inherit_alpha: true
   outline_alpha: 0.0
   shadow_alpha: 0.0
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.067
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  type: TYPE_BOX
+  texture: "hotspots/hotspot_ring"
+  id: "hotspot_ring_5"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.9
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.068
+  }
+  size {
+    x: 96.0
+    y: 96.0
+  }
+  color {
+    x: 0.06
+    y: 0.06
+    z: 0.1
+  }
+  type: TYPE_BOX
+  texture: "hotspots/hotspot_circle"
+  id: "hotspot_circle_5"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.35
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.07
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  type: TYPE_TEXT
+  font: "material_icons"
+  id: "hotspot_icon_5"
+  adjust_mode: ADJUST_MODE_ZOOM
+  shadow_alpha: 0.9
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.08
+  }
+  size {
+    x: 200.0
+    y: 200.0
+  }
+  color {
+    x: 0.5019608
+    y: 0.0
+    z: 0.5019608
+  }
+  type: TYPE_BOX
+  id: "hotspot_6"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.15
+  enabled: false
+}
+nodes {
+  position {
+    y: -92.0
+    z: 0.09
+  }
+  size {
+    x: 180.0
+    y: 40.0
+  }
+  type: TYPE_TEXT
+  text: "label"
+  font: "main"
+  id: "hotspot_label_6"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "hotspot_6"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.067
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  type: TYPE_BOX
+  texture: "hotspots/hotspot_ring"
+  id: "hotspot_ring_6"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.9
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.068
+  }
+  size {
+    x: 96.0
+    y: 96.0
+  }
+  color {
+    x: 0.06
+    y: 0.06
+    z: 0.1
+  }
+  type: TYPE_BOX
+  texture: "hotspots/hotspot_circle"
+  id: "hotspot_circle_6"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.35
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.07
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  type: TYPE_TEXT
+  font: "material_icons"
+  id: "hotspot_icon_6"
+  adjust_mode: ADJUST_MODE_ZOOM
+  shadow_alpha: 0.9
   enabled: false
 }
 nodes {
