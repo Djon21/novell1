@@ -202,18 +202,21 @@ action = { type = "goto_scene", scene = "apartment_hub" }
 ```
 Переход мгновенный, без диалога.
 
-### Закрыть хаб и открыть телефон снова
+### Открыть карту телефона из Ink
 
-Телефон больше не является exploration-сценой `phone_home`. Для новых сценарных входов используйте обычный data-driven телефон через `phone_v2`; старый `goto_scene:phone_home` оставлен только как compatibility alias.
+Телефон не является exploration-сценой. Если после текста нужно открыть карту и дать игроку выбрать, куда идти, используй `# phone:map`.
+
 ```ink
-=== leave_cafe ===
+=== leave_apartment ===
 # speaker:none
-Ты вышел на улицу и достал телефон.
-# goto_scene:phone_home
+Ты выходишь на улицу и достаёшь телефон.
+# phone:map
 ->DONE
 ```
 
-Новый контент лучше не должен создавать дополнительные `phone_*` узлы. Содержимое телефона добавляется в `game_state` через Ink-теги `# sms`, `# mail`, `# call`, `# clue`, `# camera`, `# term`.
+`# phone:map` открывает телефон сразу на приложении `phone_map.gui`. После выбора POI телефон закрывается, а `ui_manager_v2` открывает нужный hub.
+
+Новый контент не должен открывать телефон как отдельную scene.
 
 ---
 
@@ -221,7 +224,7 @@ action = { type = "goto_scene", scene = "apartment_hub" }
 
 | POI на карте | scene_id | bg (нужно создать) |
 |-------------|----------|--------------------|
-| 🏠 Дом | `apartment_hub` | `bg_apartment` ✅ уже есть |
+| 🏠 Дом | `apartment_hub` | `bg_apartment_bedroom_morning` ✅ уже есть |
 | 💼 Работа | `work_hub` | `bg_work` — создать |
 | ☕ Кафе | `cafe_hub` | `bg_cafe` — создать |
 | 🌿 Парк | `park_hub` | `bg_park` — создать |

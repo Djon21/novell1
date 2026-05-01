@@ -28,12 +28,12 @@ fonts {
   font: "/main/fonts/icons.font"
 }
 textures {
-  name: "backgrounds"
-  texture: "/main/images/backgrounds/bg_apartment.atlas"
-}
-textures {
   name: "v2"
   texture: "/main/images/v2.atlas"
+}
+textures {
+  name: "backgrounds"
+  texture: "/main/images/backgrounds/bg_apartment_bedroom_morning.atlas"
 }
 nodes {
   position {
@@ -85,7 +85,6 @@ nodes {
   type: TYPE_BOX
   id: "dlg_root"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: true
   alpha: 0.0
 }
@@ -107,14 +106,12 @@ nodes {
   type: TYPE_BOX
   id: "portrait_bg_fon"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_FIT
   parent: "dlg_root"
   alpha: 0.96
 }
 nodes {
   position {
     x: -35.0
-    y: 0.0
     z: 0.01
   }
   size {
@@ -124,88 +121,7 @@ nodes {
   type: TYPE_BOX
   id: "portrait_bg"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_FIT
   parent: "portrait_bg_fon"
-}
-nodes {
-  position {
-    x: 48.0
-    y: 48.0
-    z: 0.03
-  }
-  size {
-    x: 1.0
-    y: 290.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "portrait_border_l"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_FIT
-  parent: "dlg_root"
-}
-nodes {
-  position {
-    x: 267.0
-    y: 48.0
-    z: 0.03
-  }
-  size {
-    x: 1.0
-    y: 290.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "portrait_border_r"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_FIT
-  parent: "dlg_root"
-}
-nodes {
-  position {
-    x: 48.0
-    y: 337.0
-    z: 0.03
-  }
-  size {
-    x: 220.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "portrait_border_t"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_FIT
-  parent: "dlg_root"
-}
-nodes {
-  position {
-    x: 48.0
-    y: 48.0
-    z: 0.03
-  }
-  size {
-    x: 220.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "portrait_border_b"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_FIT
-  parent: "dlg_root"
 }
 nodes {
   position {
@@ -225,10 +141,85 @@ nodes {
   text: "\356\237\275"
   font: "icons"
   id: "portrait_icon"
-  adjust_mode: ADJUST_MODE_FIT
   parent: "portrait_bg_fon"
   outline_alpha: 0.0
   shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 48.0
+    y: 48.0
+    z: 0.03
+  }
+  size {
+    x: 1.0
+    y: 290.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "portrait_border_l"
+  pivot: PIVOT_SW
+  parent: "dlg_root"
+}
+nodes {
+  position {
+    x: 267.0
+    y: 48.0
+    z: 0.03
+  }
+  size {
+    x: 1.0
+    y: 290.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "portrait_border_r"
+  pivot: PIVOT_SW
+  parent: "dlg_root"
+}
+nodes {
+  position {
+    x: 48.0
+    y: 337.0
+    z: 0.03
+  }
+  size {
+    x: 220.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "portrait_border_t"
+  pivot: PIVOT_SW
+  parent: "dlg_root"
+}
+nodes {
+  position {
+    x: 48.0
+    y: 48.0
+    z: 0.03
+  }
+  size {
+    x: 220.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "portrait_border_b"
+  pivot: PIVOT_SW
+  parent: "dlg_root"
 }
 nodes {
   position {
@@ -248,7 +239,6 @@ nodes {
   type: TYPE_BOX
   id: "portrait_chip_stamp_bg"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_FIT
   parent: "dlg_root"
   alpha: 0.92
 }
@@ -270,7 +260,6 @@ nodes {
   type: TYPE_BOX
   id: "portrait_chip_stamp_line"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_FIT
   parent: "dlg_root"
 }
 nodes {
@@ -293,7 +282,6 @@ nodes {
   font: "jb_mono_10"
   id: "portrait_chip_stamp_text"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_FIT
   parent: "dlg_root"
   outline_alpha: 0.0
   shadow_alpha: 0.0
@@ -316,7 +304,6 @@ nodes {
   type: TYPE_BOX
   id: "dbox"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_FIT
   parent: "dlg_root"
   alpha: 0.88
 }
@@ -337,7 +324,6 @@ nodes {
   type: TYPE_BOX
   id: "dbox_border_l"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_FIT
   parent: "dlg_root"
 }
 nodes {
@@ -357,7 +343,6 @@ nodes {
   type: TYPE_BOX
   id: "dbox_border_r"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_FIT
   parent: "dlg_root"
 }
 nodes {
@@ -377,7 +362,6 @@ nodes {
   type: TYPE_BOX
   id: "dbox_top"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_FIT
   parent: "dlg_root"
 }
 nodes {
@@ -397,7 +381,6 @@ nodes {
   type: TYPE_BOX
   id: "dbox_bot"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_FIT
   parent: "dlg_root"
 }
 nodes {
@@ -418,7 +401,6 @@ nodes {
   type: TYPE_BOX
   id: "nameplate_bg"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_FIT
   parent: "dlg_root"
 }
 nodes {
@@ -438,7 +420,6 @@ nodes {
   type: TYPE_BOX
   id: "nameplate_border_l"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_FIT
   parent: "dlg_root"
 }
 nodes {
@@ -458,7 +439,6 @@ nodes {
   type: TYPE_BOX
   id: "nameplate_border_r"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_FIT
   parent: "dlg_root"
 }
 nodes {
@@ -478,7 +458,6 @@ nodes {
   type: TYPE_BOX
   id: "nameplate_border_t"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_FIT
   parent: "dlg_root"
 }
 nodes {
@@ -498,7 +477,6 @@ nodes {
   type: TYPE_BOX
   id: "nameplate_border_b"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_FIT
   parent: "dlg_root"
 }
 nodes {
@@ -521,7 +499,6 @@ nodes {
   font: "unbounded_bold_20"
   id: "nameplate_name"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_FIT
   parent: "dlg_root"
   outline_alpha: 0.0
   shadow_alpha: 0.0
@@ -546,7 +523,6 @@ nodes {
   font: "jb_mono_10"
   id: "nameplate_tag"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_FIT
   parent: "dlg_root"
   alpha: 0.85
   outline_alpha: 0.0
@@ -571,7 +547,6 @@ nodes {
   font: "jb_mono_10"
   id: "nameplate_mood"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_FIT
   parent: "dlg_root"
   alpha: 0.65
   outline_alpha: 0.0
@@ -595,7 +570,6 @@ nodes {
   type: TYPE_BOX
   id: "loop_mark_bg"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_FIT
   parent: "dlg_root"
 }
 nodes {
@@ -616,7 +590,6 @@ nodes {
   type: TYPE_BOX
   id: "loop_mark_border_l"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_FIT
   parent: "dlg_root"
 }
 nodes {
@@ -637,7 +610,6 @@ nodes {
   type: TYPE_BOX
   id: "loop_mark_border_r"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_FIT
   parent: "dlg_root"
 }
 nodes {
@@ -658,7 +630,6 @@ nodes {
   type: TYPE_BOX
   id: "loop_mark_border_t"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_FIT
   parent: "dlg_root"
 }
 nodes {
@@ -679,7 +650,6 @@ nodes {
   type: TYPE_BOX
   id: "loop_mark_border_b"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_FIT
   parent: "dlg_root"
 }
 nodes {
@@ -700,7 +670,6 @@ nodes {
   type: TYPE_BOX
   id: "loop_mark_dot"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_FIT
   parent: "dlg_root"
 }
 nodes {
@@ -723,7 +692,6 @@ nodes {
   font: "jb_mono_10"
   id: "loop_counter"
   pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_FIT
   parent: "dlg_root"
   outline_alpha: 0.0
   shadow_alpha: 0.0
@@ -747,7 +715,6 @@ nodes {
   font: "manrope_16"
   id: "dlg_text"
   pivot: PIVOT_NW
-  adjust_mode: ADJUST_MODE_FIT
   line_break: true
   parent: "dlg_root"
   outline_alpha: 0.0
@@ -773,7 +740,6 @@ nodes {
   font: "jb_mono_10"
   id: "dialog_pager"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_FIT
   parent: "dlg_root"
   outline_alpha: 0.0
   shadow_alpha: 0.0
@@ -796,7 +762,6 @@ nodes {
   type: TYPE_BOX
   id: "btn_skip"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_FIT
   parent: "dlg_root"
   alpha: 0.85
 }
@@ -819,7 +784,6 @@ nodes {
   text: "SKIP"
   font: "jb_mono_bold_14"
   id: "btn_skip_label"
-  adjust_mode: ADJUST_MODE_FIT
   parent: "dlg_root"
   alpha: 0.8
   outline_alpha: 0.0
@@ -843,7 +807,6 @@ nodes {
   type: TYPE_BOX
   id: "btn_auto"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_FIT
   parent: "dlg_root"
   alpha: 0.85
 }
@@ -866,7 +829,6 @@ nodes {
   text: "AUTO"
   font: "jb_mono_bold_14"
   id: "btn_auto_label"
-  adjust_mode: ADJUST_MODE_FIT
   parent: "dlg_root"
   alpha: 0.8
   outline_alpha: 0.0
@@ -890,7 +852,6 @@ nodes {
   type: TYPE_BOX
   id: "btn_next"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_FIT
   parent: "dlg_root"
   alpha: 0.95
 }
@@ -912,7 +873,6 @@ nodes {
   text: "\320\224\320\220\320\233\320\225\320\225 \342\206\222"
   font: "jb_mono_bold_14"
   id: "btn_next_label"
-  adjust_mode: ADJUST_MODE_FIT
   parent: "dlg_root"
   outline_alpha: 0.0
   shadow_alpha: 0.0

@@ -326,7 +326,7 @@ hotspot'ы: кликабельные прямоугольники. Каждый 
 -> apartment_hub
 
 === apartment_hub
-# bg:bg_apartment # explore:apartment_hub # speaker:mc
+# bg:bg_apartment_bedroom_morning # explore:apartment_hub # speaker:mc
 Коридор. Тихо.
 -> DONE
 ```

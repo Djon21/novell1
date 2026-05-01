@@ -50,7 +50,7 @@ M.scenes = {    -- =============================================================
                 icon = "",
                 action = { type = "ink_knot", knot = "leave_apartment" },
                 condition = function(gs)
-                    return gs.get_flag("has_phone") and gs.get_flag("coffee_drunk")
+                    return gs.get_flag("has_phone") and gs.get_flag("coffee_drunk") and gs.get_flag("date_agreed")
                 end,
             },
             {
@@ -69,16 +69,34 @@ M.scenes = {    -- =============================================================
         hotspots = {
             {
                 id = "to_bedroom_morning",
-                rect = { x = 45, y = 115, w = 245, h = 500 },
+                rect = { x = 90, y = 115, w = 245, h = 500 },
                 label = "В спальню",
-                icon = "",
+                icon = "arrow_back",
+				icon_offset_x = -4,
+				icon_offset_y = 0,
+                hotspot_style = {
+                    circle_color = { r = 0.06, g = 0.06, b = 0.10 },
+                    ring_color = { r = 1.00, g = 1.00, b = 1.00 },
+                    icon_color = { r = 1.00, g = 1.00, b = 1.00 },
+                    circle_alpha = 0.78,
+                    ring_alpha = 0.90,
+                },
                 action = { type = "goto_scene", scene = "apartment_bedroom_morning" },
             },
             {
                 id = "to_kitchen_morning",
-                rect = { x = 985, y = 100, w = 250, h = 520 },
+                rect = { x = 965, y = 100, w = 250, h = 520 },
                 label = "На кухню",
-                icon = "",
+                icon = "arrow_forward",
+				icon_offset_x = -4,
+				icon_offset_y = 0,
+                hotspot_style = {
+                    circle_color = { r = 0.06, g = 0.06, b = 0.10 },
+                    ring_color = { r = 1.00, g = 1.00, b = 1.00 },
+                    icon_color = { r = 1.00, g = 1.00, b = 1.00 },
+                    circle_alpha = 0.78,
+                    ring_alpha = 0.90,
+                },
                 action = { type = "goto_scene", scene = "apartment_kitchen_morning" },
                 visible_when = function(gs)
                     return gs.get_flag("washed_up")
@@ -88,17 +106,35 @@ M.scenes = {    -- =============================================================
                 id = "exit_apartment_morning",
                 rect = { x = 525, y = 185, w = 260, h = 430 },
                 label = "Выйти",
-                icon = "",
+				icon = "arrow_up",
+				icon_offset_x = -4,
+				icon_offset_y = 0,
+                hotspot_style = {
+                    circle_color = { r = 0.06, g = 0.06, b = 0.10 },
+                    ring_color = { r = 1.00, g = 1.00, b = 1.00 },
+                    icon_color = { r = 1.00, g = 1.00, b = 1.00 },
+                    circle_alpha = 0.78,
+                    ring_alpha = 0.90,
+                },
                 action = { type = "ink_knot", knot = "leave_apartment" },
                 condition = function(gs)
-                    return gs.get_flag("has_phone") and gs.get_flag("coffee_drunk")
+                    return gs.get_flag("has_phone") and gs.get_flag("coffee_drunk") and gs.get_flag("date_agreed")
                 end,
             },
             {
                 id = "hall_mirror",
-                rect = { x = 330, y = 230, w = 135, h = 280 },
+                rect = { x = 355, y = 330, w = 135, h = 280 },
                 label = "Зеркало",
-                icon = "",
+				icon = "left_click",
+				icon_offset_x = -4,
+				icon_offset_y = 0,
+                hotspot_style = {
+                    circle_color = { r = 0.06, g = 0.06, b = 0.10 },
+                    ring_color = { r = 1.00, g = 1.00, b = 1.00 },
+                    icon_color = { r = 1.00, g = 1.00, b = 1.00 },
+                    circle_alpha = 0.78,
+                    ring_alpha = 0.90,
+                },
                 action = { type = "ink_knot", knot = "look_hall_mirror" },
             },
         },
@@ -117,17 +153,17 @@ M.scenes = {    -- =============================================================
             {
                 id    = "phone_obj",
                 image = "mobile",
-                pos   = { x = 620, y = 260 },
+                pos   = { x = 105, y = 185 },
                 size  = { w = 52, h = 22 },
                 visible_when = function(gs)
-                    return gs.get_flag("morning_ritual_done") and not gs.get_flag("has_phone")
+                    return not gs.get_flag("has_phone")
                 end,
             },
         },
         hotspots = {
             {
                 id = "phone_on_bedside",
-                rect = { x = 565, y = 230, w = 180, h = 135 },
+                rect = { x = 135, y = 205, w = 220, h = 155 },
                 label = "Телефон",
                 icon = "phone",
                 circle_color = { r = 0.03, g = 0.10, b = 0.18 },
@@ -135,14 +171,23 @@ M.scenes = {    -- =============================================================
                 icon_color = { r = 0.85, g = 0.98, b = 1.00 },
                 action = { type = "ink_knot", knot = "take_phone" },
                 visible_when = function(gs)
-                    return gs.get_flag("morning_ritual_done") and not gs.get_flag("has_phone")
+                    return not gs.get_flag("has_phone")
                 end,
             },
             {
                 id = "bedroom_desk",
-                rect = { x = 720, y = 210, w = 165, h = 225 },
+                rect = { x = 690, y = 190, w = 245, h = 245 },
                 label = "Рабочий стол",
-                icon = "",
+				icon = "left_click",
+				icon_offset_x = -4,
+				icon_offset_y = 0,
+                hotspot_style = {
+                    circle_color = { r = 0.06, g = 0.06, b = 0.10 },
+                    ring_color = { r = 1.00, g = 1.00, b = 1.00 },
+                    icon_color = { r = 1.00, g = 1.00, b = 1.00 },
+                    circle_alpha = 0.78,
+                    ring_alpha = 0.90,
+                },
                 action = { type = "ink_knot", knot = "bedroom_desk_morning" },
                 visible_when = function(gs)
                     return gs.get_flag("got_out_of_bed")
@@ -150,7 +195,7 @@ M.scenes = {    -- =============================================================
             },
             {
                 id = "bedroom_bed",
-                rect = { x = 225, y = 115, w = 435, h = 200 },
+                rect = { x = 205, y = 105, w = 460, h = 225 },
                 label = "Кровать",
 				icon = "left_click",
 				icon_offset_x = -4,
@@ -171,7 +216,16 @@ M.scenes = {    -- =============================================================
                 id = "bathroom_door_locked",
                 rect = { x = 920, y = 145, w = 125, h = 480 },
                 label = "Умыться",
-                icon = "",
+				icon = "left_click",
+				icon_offset_x = -4,
+				icon_offset_y = 0,
+                hotspot_style = {
+                    circle_color = { r = 0.06, g = 0.06, b = 0.10 },
+                    ring_color = { r = 1.00, g = 1.00, b = 1.00 },
+                    icon_color = { r = 1.00, g = 1.00, b = 1.00 },
+                    circle_alpha = 0.78,
+                    ring_alpha = 0.90,
+                },
                 action = { type = "ink_knot", knot = "wash_up_morning" },
                 visible_when = function(gs)
                     return gs.get_flag("got_out_of_bed") and not gs.get_flag("washed_up")
@@ -179,7 +233,7 @@ M.scenes = {    -- =============================================================
             },
             {
                 id = "back_to_hall_from_bedroom",
-                rect = { x = 1035, y = 70, w = 170, h = 220 },
+                rect = { x = 1035, y = 70, w = 190, h = 260 },
                 label = "В коридор",
                 icon = "arrow_down",
 				icon_offset_x = -4,
@@ -211,7 +265,7 @@ M.scenes = {    -- =============================================================
         hotspots = {
             {
                 id = "coffee_setup_empty",
-                rect = { x = 545, y = 255, w = 290, h = 260 },
+                rect = { x = 420, y = 245, w = 190, h = 150 },
                 label = "Кофе",
                 icon = "coffee",
                 circle_color = { r = 0.18, g = 0.10, b = 0.04 },
@@ -224,8 +278,8 @@ M.scenes = {    -- =============================================================
             },
             {
                 id = "coffee_setup_brew",
-                rect = { x = 545, y = 255, w = 290, h = 260 },
-                label = "Сварить кофе",
+                rect = { x = 420, y = 245, w = 190, h = 150 },
+                label = "Сделать кофе",
                 icon = "coffee",
                 circle_color = { r = 0.18, g = 0.10, b = 0.04 },
                 ring_color = { r = 1.00, g = 0.68, b = 0.28 },
@@ -238,7 +292,7 @@ M.scenes = {    -- =============================================================
             },
             {
                 id = "take_mug_kitchen",
-                rect = { x = 830, y = 115, w = 260, h = 230 },
+                rect = { x = 910, y = 230, w = 165, h = 140 },
                 label = "Кружка",
                 icon = "mug",
                 circle_color = { r = 0.16, g = 0.12, b = 0.08 },
@@ -251,14 +305,14 @@ M.scenes = {    -- =============================================================
             },
             {
                 id = "kitchen_window",
-                rect = { x = 950, y = 340, w = 285, h = 290 },
+                rect = { x = 600, y = 335, w = 210, h = 230 },
                 label = "Окно",
-                icon = "",
+                icon = "left_click",
                 action = { type = "ink_knot", knot = "look_kitchen_window" },
             },
             {
                 id = "back_to_hall_from_kitchen",
-                rect = { x = 0, y = 95, w = 235, h = 515 },
+                rect = { x = 25, y = 95, w = 205, h = 520 },
                 label = "В коридор",
                 icon = "arrow_back",
                 action = { type = "goto_scene", scene = "apartment_hall_morning" },
@@ -272,7 +326,7 @@ M.scenes = {    -- =============================================================
     -- =====================================================================
 
     apartment_hub_legacy = {
-        bg = "bg_apartment",
+        bg = "bg_apartment_bedroom_morning",   -- bg_apartment удалён; legacy сцена указывает на существующий атлас
         hotspots = {
             {
                 id = "to_kitchen",
@@ -302,7 +356,7 @@ M.scenes = {    -- =============================================================
                 icon = "arrow_up",
                 action = { type = "ink_knot", knot = "leave_apartment" },
                 condition = function(gs)
-                    return gs.get_flag("has_phone") and gs.get_flag("coffee_drunk")
+                    return gs.get_flag("has_phone") and gs.get_flag("coffee_drunk") and gs.get_flag("date_agreed")
                 end,
             },
         },
@@ -332,7 +386,7 @@ M.scenes = {    -- =============================================================
             {
                 id = "coffee_maker_brew",
                 rect = { x = 280, y = 275, w = 160, h = 155 },
-                label = "Сварить кофе",
+                label = "Сделать кофе",
                 icon = "coffee",
                 action = { type = "ink_knot", knot = "use_coffee_machine_with_cup" },
                 visible_when = function(gs)
@@ -465,6 +519,12 @@ M.scenes = {    -- =============================================================
 
     cafe_hub = {
         bg = "bg_office",        -- заменить на bg_cafe
+        on_enter = {
+            knot = "sunday_date_cafe_arrival",
+            condition = function(gs)
+                return gs.get_flag("date_place_cafe") and not gs.get_flag("met_npc_sunday")
+            end,
+        },
         hotspots = {
             {
                 id = "cafe_bar",
@@ -485,6 +545,12 @@ M.scenes = {    -- =============================================================
 
     park_hub = {
         bg = "bg_rooftop",       -- заменить на bg_park
+        on_enter = {
+            knot = "sunday_date_park_arrival",
+            condition = function(gs)
+                return gs.get_flag("date_place_park") and not gs.get_flag("met_npc_sunday")
+            end,
+        },
         hotspots = {
             {
                 id = "park_bench",

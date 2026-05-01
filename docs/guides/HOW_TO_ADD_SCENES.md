@@ -87,13 +87,9 @@ action = { type = "phone_close" }
 ```
 ❗ Телефон не является сценой.
 
-Не используйте:
-- goto_scene:phone_home
-- phone как navigation target
+Не используйте телефон как navigation target.
 
-Телефон открывается только через UI (`phone_v2`).
-
-Исторически использовалось для `phone_home`, но в текущем `v2` телефон уже не scene, а overlay. Для новых сцен этот action обычно не нужен.
+Телефон открывается через UI (`phone_v2`) или через Ink-теги телефона, например `# phone:map`.
 
 ## `condition` и `visible_when`
 
@@ -184,7 +180,7 @@ on_enter = {
 
 ```ink
 === apartment_hub
-# bg:bg_apartment # explore:apartment_hub # speaker:none
+# bg:bg_apartment_bedroom_morning # explore:apartment_hub # speaker:none
 Коридор. Тихо.
 -> DONE
 ```
