@@ -24,7 +24,7 @@ htmlfile = /main/engine_template.html
 
 [project]
 title = АВОСЬ
-custom_resources = /main/story
+custom_resources = /main/story,/main/data
 dependencies#0 = https://github.com/indiesoftby/defold-yagames/archive/master.zip
 dependencies#1 = https://github.com/abadonna/defold-ink/archive/master.zip
 

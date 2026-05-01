@@ -33,6 +33,7 @@ local scene_controller = require "main.scripts.scene_controller"
 local catalog = require "main.scripts.items_catalog"
 local ui_state = require "main.scripts.ui_state"
 local backlog = require "main.scripts.dialogue_backlog"
+local l10n = require "main.scripts.l10n"
 
 local ok_scenes, scenes = pcall(require, "main.scripts.scenes")
 if not ok_scenes then scenes = nil end
@@ -76,15 +77,21 @@ local MAP_HOME_SCENES = {
     bedroom_day = true,
 }
 
-local MAP_PIN_LABELS = {
-    home = "Дом",
-    work = "Офис",
-    cafe = "Кофейня Петля",
-    metro = "М. Ул. 1905 года",
-    shop = "Магазин 24 часа",
-    clue = "След: дежавю",
-    gov = "Администрация",
+-- Лейблы пинов карты теперь идут через l10n. Маппинг pin_id → l10n-ключ.
+local MAP_PIN_LABEL_KEYS = {
+    home  = "map_home",
+    work  = "map_work",
+    cafe  = "map_cafe",
+    metro = "map_metro",
+    shop  = "map_shop",
+    clue  = "map_clue",
+    gov   = "map_gov",
 }
+
+local function get_map_pin_label(pin_id)
+    local key = MAP_PIN_LABEL_KEYS[pin_id]
+    return key and l10n.t(key) or pin_id
+end
 
 local DEDICATED_BG_ATLAS_PROPS = {
     bg_apartment      = "bg_apartment_atlas",
@@ -382,7 +389,7 @@ local function handle_map_verb(self, pin_id, verb)
         return
     end
 
-    local label = MAP_PIN_LABELS[pin_id] or pin_id
+    local label = get_map_pin_label(pin_id)
     local iteration = tostring(meta.get_iteration_label and meta.get_iteration_label() or "001")
     local log_text = nil
 
@@ -1288,6 +1295,10 @@ end
 
 function init(self)
     dbg("[ui_manager_v2] init")
+    -- Локализация: читаем язык из window.__gameLang (выставлен JS-шаблоном
+    -- ДО старта Defold) и грузим JSON-словари. Делаем самым первым шагом —
+    -- остальные init'ы могут уже звать l10n.t().
+    l10n.init()
     init_components()
     init_background_atlas_state(self)
     setup_scene_controller_ui(self)
