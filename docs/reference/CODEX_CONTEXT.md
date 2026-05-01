@@ -8,7 +8,7 @@
 
 1. `README.md`
 2. `docs/reference/ARCHITECTURE.md`
-3. `main/story/README_INK.md`
+3. `docs/guides/HOW_TO_WRITE_INK.md`
 4. `docs/reference/LOOP_SYSTEM.md`
 5. `docs/reference/TODO.md`
 
@@ -37,7 +37,7 @@
 - `main/story/chapters/New/` больше не рабочая ветка. Новый сюжет должен быть уже перенесён в активные `chapters/*.ink`.
 - `Continue` чувствителен к структуре compiled Ink JSON. После крупных правок сценария лучше проверять и новый старт, и загрузку.
 - Телефон data-driven: контент добавляется через Ink-теги и хранится в `game_state`.
-- Карта уже умеет runtime `set_points`, обычные verbs `route/save/share` и hub-режим через `# map:hub:KNOT`.
+- Карта для нового контента вызывается из Ink через `# phone:map`: открывается телефон и приложение `phone_map.gui`, игрок выбирает POI.
 - `nav_buttons_v2` удалён из активной схемы. Навигация идёт через hotspots и карту.
 - `open_achievements` остаётся скрытым пунктом будущего этапа.
 - Папку `skills/` не трогаем.

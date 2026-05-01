@@ -41,16 +41,14 @@
 - `scene_controller.lua` читает сцены из `main/scripts/scenes.lua`
 - навигация сейчас живёт на hotspots и карте
 - `nav_buttons_v2` удалён из активной схемы
-- `phone_home` больше не scene; старые `goto_scene:phone_home` перехватываются как alias на `open_phone()`
+- телефон больше не scene; новый контент открывает телефон через UI/Ink-теги телефона
 
 ### Карта
 
-- `map_v2` работает как overlay
-- обычный режим поддерживает `route`, `save`, `share`
-- hub-режим открывается через Ink-тег `# map:hub:KNOT`
-- в hub-режиме карта получает `open_map_hub { primary_knot }`
-- выбор маршрута отправляет `map_hub_route { knot }` обратно в `ui_manager_v2`
-- если карту закрыть без выбора, используется fallback на `primary_knot`
+- карта для нового контента открывается внутри телефона через Ink-тег `# phone:map`
+- `# phone:map` открывает `phone_v2` и сразу переключает его на `phone_map.gui`
+- выбор POI отправляет `map_travel { scene }` обратно в `ui_manager_v2`
+- `ui_manager_v2` закрывает телефон и открывает выбранный hub через `scene_controller.enter(scene_id)`
 
 ### Телефон
 
@@ -165,5 +163,5 @@ Git Bash / Linux:
 
 - `docs/reference/LOOP_SYSTEM.md`
 - `docs/reference/INVENTORY_SYSTEM.md`
-- `main/story/README_INK.md`
+- `docs/guides/HOW_TO_WRITE_INK.md`
 - `docs/reference/TODO.md`

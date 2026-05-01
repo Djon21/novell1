@@ -47,7 +47,7 @@ tools\compile_ink.bat
 - [docs/reference/CODEX_CONTEXT.md](docs/reference/CODEX_CONTEXT.md) — быстрый вход для новой Codex-сессии
 - [docs/reference/ARCHITECTURE.md](docs/reference/ARCHITECTURE.md) — текущая архитектура runtime
 - [docs/reference/TODO.md](docs/reference/TODO.md) — живой backlog
-- [main/story/README_INK.md](main/story/README_INK.md) — правила Ink и поддерживаемые теги
+- [docs/guides/HOW_TO_WRITE_INK.md](docs/guides/HOW_TO_WRITE_INK.md) — правила Ink и поддерживаемые теги
 
 ## Важные Caveats
 

@@ -7,7 +7,7 @@
 1. `../README.md`
 2. `reference/CODEX_CONTEXT.md`
 3. `reference/ARCHITECTURE.md`
-4. `main/story/README_INK.md`
+4. `docs/guides/HOW_TO_WRITE_INK.md`
 5. `reference/TODO.md`
 
 ## Reference

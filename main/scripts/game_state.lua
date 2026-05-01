@@ -670,7 +670,7 @@ end
 -- Phone view getters (step23) --------------------------------------------
 -- Возвращают списки в формате, ожидаемом phone_v2.gui_script.
 -- Все сторы (sms, notes, mails, call_log, clues) пополняются через ink-теги
--- (см. main/story/README_INK.md) и сохраняются в save_manager.
+-- (см. docs/guides/HOW_TO_WRITE_INK.md) и сохраняются в save_manager.
 
 -- Сообщения для SMS-вьюхи: { {from, time, body, unread}, ... }
 -- Берём последние сообщения по каждому контакту и сортируем чаты по

@@ -1,23 +1,103 @@
-# Как писать ink-файлы для AVOS — полная шпаргалка
+# Как писать ink-файлы для AVOS
 
-> Этот файл отвечает на вопрос: «Я хочу написать ink-knot — что именно нужно написать и в каком порядке?»
-> Все грабли описаны в разделе **Типичные ошибки**.
+> Этот файл — **единственный** источник правды по нашему ink. Если даёшь сценарий
+> на правку нейронке — скопируй его целиком в системный промпт.
+>
+> Движок: `dialogue_manager_ink.lua` + `scene_controller.lua`. Ink-ранером
+> занимается `defold-ink`; наш слой поверх него — только теги (`#`) и VAR.
 
 ---
 
 ## Содержание
 
-1. [Структура одного knot'а — шаблон](#1-структура-одного-knota--шаблон)
-2. [Все поддерживаемые теги — полная таблица](#2-все-поддерживаемые-теги--полная-таблица)
-3. [Двойная система переменных](#3-двойная-система-переменных)
-4. [Как knot связан со сценой](#4-как-knot-связан-со-сценой)
-5. [Чеклист перед тем как писать knot](#5-чеклист-перед-тем-как-писать-knot)
-6. [Типичные ошибки — НЕ ДЕЛАЙ ТАК](#6-типичные-ошибки--не-делай-так)
-7. [Примеры готовых knot'ов](#7-примеры-готовых-knotов)
+1. [Файлы и компиляция](#1-файлы-и-компиляция)
+2. [Скелет ink-файла](#2-скелет-ink-файла)
+3. [Структура knot'а — шаблон](#3-структура-knota--шаблон)
+4. [Все поддерживаемые теги](#4-все-поддерживаемые-теги)
+5. [VAR vs `# set_flag:` — двойная система состояния](#5-var-vs--set_flag--двойная-система-состояния)
+6. [Lua → Ink: переменные от движка](#6-lua--ink-переменные-от-движка)
+7. [Выборы (* и +)](#7-выборы)
+8. [Условные блоки и гендерные форки](#8-условные-блоки-и-гендерные-форки)
+9. [Драм-флаги TRUST / INSIGHT / SYNC](#9-драм-флаги-trust--insight--sync)
+10. [Как knot связан со сценой](#10-как-knot-связан-со-сценой)
+11. [Карта и POI lock](#11-карта-и-poi-lock)
+12. [Телефон — жёсткие правила](#12-телефон--жёсткие-правила)
+13. [Чеклист перед коммитом](#13-чеклист-перед-коммитом)
+14. [Типичные ошибки — НЕ ДЕЛАЙ ТАК](#14-типичные-ошибки--не-делай-так)
+15. [Что не поддерживается](#15-что-не-поддерживается)
+16. [Примеры готовых knot'ов](#16-примеры-готовых-knotов)
 
 ---
 
-## 1. Структура одного knot'а — шаблон
+## 1. Файлы и компиляция
+
+### Где лежит ink
+
+```
+main/story/
+├── chapter_01.ink           ← root, только INCLUDE
+├── chapter_01.json          ← compiled, грузится в runtime
+└── chapters/
+    ├── 00_bootstrap.ink     ← VAR-объявления, общие
+    ├── 01_apartment.ink     ← глава 1
+    ├── 02_sunday_date.ink   ← воскресная встреча (новая глава)
+    ├── 02_metro.ink         ← глава 2 (legacy/в работе)
+    ├── 03_office.ink        ← глава 3
+    ├── 04_rooftop.ink       ← глава 4
+    ├── 90_phone_apps.ink    ← compatibility-knot'ы телефона
+    └── 91_inventory_actions.ink  ← действия предметов
+```
+
+`chapter_01.ink` хранит **только** `INCLUDE chapters/...`. Ничего больше там не пишется.
+
+### Команды компиляции
+
+После любой правки `.ink` обязательно компилировать в JSON:
+
+```bash
+tools\compile_ink.bat              # все главы
+tools\compile_ink.bat chapter_01   # только chapter_01
+```
+
+Git Bash / Linux:
+
+```bash
+./tools/compile_ink.sh
+./tools/compile_ink.sh chapter_01
+```
+
+Без перекомпиляции Defold продолжит играть старый JSON.
+
+### После правки сюжета
+
+1. Перекомпилировать `chapter_01.json`.
+2. Запустить игру, проверить старт новой игры.
+3. Проверить `Continue`, если правка могла затронуть replay history.
+4. Проверить телефон, карту и инвентарь, если добавлялись соответствующие теги.
+
+---
+
+## 2. Скелет ink-файла
+
+```ink
+// Комментарий (две косые черты). Можно в начале строки или в конце.
+
+// Все VAR-объявления глобальные — лежат в 00_bootstrap.ink.
+// В локальных файлах ничего не объявляем — только используем.
+
+=== wake_intro ===
+# bg:bg_apartment_bedroom_morning # speaker:mc
+Текст параграфа. Каждый абзац — отдельный «клик» игрока.
+-> choose_character
+```
+
+- Knot: `=== name ===` (три знака равенства, имя без пробелов и кириллицы — латиница/цифры/подчёркивания).
+- Конец ветки: `-> другой_knot` или `-> DONE` (тупик), или `-> END` (конец истории).
+- Файл `chapter_01.ink` имеет один root-knot — стартовая точка истории.
+
+---
+
+## 3. Структура knot'а — шаблон
 
 ```ink
 === имя_knota ===
@@ -32,209 +112,415 @@
 ```
 
 **Правила:**
-- `# bg:` и `# speaker:` — **первая строка**, до текста
+- `# bg:` и `# speaker:` — **первой строкой**, до текста
 - Текст — середина
 - Флаги, квесты, предметы — **после текста**, перед `# return_to_scene`
 - `# return_to_scene` — **всегда последний** тег (кроме `-> DONE`)
-- `-> DONE` — завершает knot, обязателен
+- `-> DONE` — обязательная последняя строка
 
----
+### Висячие теги в конце knot'а
 
-## 2. Все поддерживаемые теги — полная таблица
-
-### Фон и говорящий
-
-| Что хочешь сделать | Правильный тег |
-|---|---|
-| Поставить фон | `# bg:bg_apartment_hall_morning` |
-| Убрать имя говорящего (нарратив) | `# speaker:none` |
-| Имя главного героя | `# speaker:mc` |
-| Имя NPC (Мила/другой) | `# speaker:npc` |
-| Любое имя напрямую | `# speaker:Аня` |
-
-### Флаги
-
-| Что хочешь сделать | Правильный тег |
-|---|---|
-| Установить флаг в `true` | `# set_flag:название=true` |
-| Установить флаг в `false` | `# set_flag:название=false` |
-| Установить число | `# set_flag:счётчик=5` |
-
-> **Примечание:** тег `# flag:название=true` тоже работает (старый синтаксис).
-
-### Предметы инвентаря
-
-| Что хочешь сделать | Правильный тег |
-|---|---|
-| Добавить предмет | `# add_item:phone` |
-| Убрать предмет | `# remove_item:phone` |
-
-### Квесты
-
-| Что хочешь сделать | Правильный тег |
-|---|---|
-| Начать квест | `# quest:start:id_квеста` |
-| Завершить квест / шаг | `# quest:done:id_квеста` |
-| Провалить квест | `# quest:fail:id_квеста` |
-
-### Навигация по сценам
-
-| Что хочешь сделать | Правильный тег |
-|---|---|
-| Вернуться в последнюю сцену (после монолога) | `# return_to_scene` |
-| Перейти в конкретную сцену | `# explore:id_сцены` |
-
-> `# return_to_scene` — **всегда висит в конце knot'а**, после всего текста. Игрок сначала дочитает текст, потом попадёт обратно в сцену.
-
-### Телефон (SMS, заметки)
-
-| Что хочешь сделать | Правильный тег |
-|---|---|
-| Прислать SMS от контакта (входящее) | `# sms:add:mila:Текст сообщения` |
-| ГГ отвечает на SMS (исходящее) | `# sms:reply:mila:Текст ответа` |
-| Добавить заметку | `# note:add:Заголовок:Тело заметки` |
-| Закрыть телефон | `# phone:close` |
-
-> **Автоматические флаги SMS:**
-> - Когда игрок открывает SMS-приложение → `sms_<contact>_read = true` (для всех диалогов с непрочитанными)
-> - Когда в ink встречается `# sms:reply:contact:...` → `sms_<contact>_replied = true`
->
-> Эти флаги **не нужно** ставить руками через `# set_flag:` — они ставятся автоматически.
-
-### Звук и эффекты
-
-| Что хочешь сделать | Правильный тег |
-|---|---|
-| Звуковой эффект | `# sfx:coffee_brew` |
-| Тряска экрана | `# shake:0.3,0.5` |
-
----
-
-## 3. Двойная система переменных
-
-В проекте есть **два разных хранилища** и их нужно синхронизировать:
-
-| Хранилище | Для чего | Синтаксис |
-|---|---|---|
-| **Ink-переменные** | Условия внутри ink (`{has_phone:}`) | `VAR x = false` + `~ x = true` |
-| **game_state флаги** | Условия в scenes.lua, quests.lua | `# set_flag:x=true` |
-
-### Когда нужно только `# set_flag:`
-
-Если флаг используется только в `scenes.lua` / `quests.lua` — достаточно тега:
+Если после последнего параграфа стоят голые теги и `-> DONE`, они применяются **после того как игрок прочитает всё**. Так удобно вешать возврат в сцену:
 
 ```ink
-# set_flag:left_apartment=true
-```
+=== take_phone ===
+# speaker:mc
+Холодный. Ладно. Нашёлся — уже хорошо.
 
-### Когда нужны ОБА
-
-Если флаг **используется в условии внутри самого ink-файла** — нужны три вещи:
-
-**Шаг 1 — в `00_bootstrap.ink` объявить переменную:**
-```ink
-VAR has_phone = false
-```
-
-**Шаг 2 — в knot'е присвоить значение ink-переменной:**
-```ink
-~ has_phone = true
-```
-
-**Шаг 3 — в knot'е выставить флаг в game_state:**
-```ink
 # set_flag:has_phone=true
+# return_to_scene
+-> DONE
 ```
 
-### Проверка: нужно ли добавлять VAR?
+---
 
-Посмотри в своём ink-файле — есть ли такое:
+## 4. Все поддерживаемые теги
+
+### Фон, говорящий, эффекты
+
+| Тег | Пример | Что делает |
+|---|---|---|
+| `bg:NAME` | `# bg:bg_apartment_bedroom_morning` | Меняет фон. `bg:none` — убрать. Каждому `bg_name` нужен dedicated atlas в `main/images/backgrounds/` И регистрация в `ui_manager_v2.script` (см. `HOW_TO_ADD_BACKGROUNDS.md`). |
+| `color:R,G,B` | `# color:0.1,0.1,0.15` | Тинт фона (0…1). |
+| `speaker:ID` | `# speaker:mc` / `# speaker:npc` / `# speaker:none` / `# speaker:Аня` | Имя говорящего. `mc`/`npc` подменяются на `mc_name`/`npc_name`. `none` — без таблички (нарратор). |
+| `sfx:NAME` | `# sfx:phone_notify` | Одноразовый звук. Добавление: `.ogg` в `main/sounds/` + `.sound` descriptor + component в `sfx_player` в `main_v2.collection` + запись в `M.SFX_URLS` в `ui_manager_v2.script`. |
+| `shake:I,D` | `# shake:0.2,0.5` | Тряска экрана. `I` — сила (0…1), `D` — длительность сек. |
+| `pulse:D,R,G,B` | `# pulse:0.8,0,255,0` | Мерцание цветом (RGB 0…255). |
+
+### Состояние игры
+
+| Тег | Пример | Что делает |
+|---|---|---|
+| `set_flag:NAME=VAL` | `# set_flag:has_phone=true` | Канонический. Пишет флаг в `game_state`. Читается из `scenes.lua` через `gs.get_flag(...)`. Значения: `true`/`false`/число/строка. |
+| `flag:NAME=VAL` | `# flag:has_phone=true` | Алиас, legacy. Работает идентично. |
+| `add_item:ID` | `# add_item:mug` | Канонический. Добавить предмет в инвентарь. |
+| `remove_item:ID` | `# remove_item:mug` | Канонический. Убрать предмет. |
+| `item:add:ID` / `item:remove:ID` | — | Алиасы (legacy), работают. |
+| `quest:start:ID` | `# quest:start:make_coffee` | Активировать квест (статус `active`). |
+| `quest:done:ID` | `# quest:done:go_to_office` | Закрыть квест (статус `done`). |
+| `quest:fail:ID` | `# quest:fail:reply_mila` | Провалить квест. |
+
+> ❌ `quest:complete` НЕ поддерживается. Только `start`/`done`/`fail` — любое другое значение силент-фейлится.
+
+### Телефон (SMS, заметки, почта, звонки, улики, камера, терминал)
+
+| Тег | Пример | Что делает |
+|---|---|---|
+| `sms:add:CONTACT:TEXT` | `# sms:add:mila:Есть планы?` | Входящее SMS от контакта (unread). |
+| `sms:reply:CONTACT:TEXT` | `# sms:reply:mila:Хорошо, позже.` | Исходящее SMS от ГГ. **Auto-flag:** `sms_<contact>_replied = true`. |
+| `sms:read:CONTACT` | `# sms:read:mila` | Гасит unread-флаг чата вручную. |
+| `note:add:TITLE:BODY` | `# note:add:Коммит:хеш 03:47` | Добавить заметку. |
+| `mail:add:FROM:SUBJECT[:BODY]` | `# mail:add:hr:Расписание:Пн 10:00` | Добавить письмо. |
+| `mail:read` / `mail:read:INDEX` | `# mail:read:0` | Помечает почту прочитанной. |
+| `call:add:WHO:KIND` | `# call:add:mila:missed` | Звонок: `in`, `out`, `missed`. |
+| `call:read` | — | Все звонки просмотрены. |
+| `clue:add:ID:LABEL` | `# clue:add:repeat:Повторяющийся сигнал` | Добавить улику. |
+| `camera:STATUS:MESSAGE:META` | `# camera:online:Видна шторка:CAM-01` | Обновить камеру. STATUS: `offline`/`online`/`error`. |
+| `camera:reset` | — | Сбросить камеру. |
+| `term:LEVEL:TEXT` | `# term:warn:cycle drift +14ms` | Строка терминала. LEVEL: `ok`/`warn`/`err`/`info`/`prompt`/`plain`. |
+| `term:clear` / `term:defaults` | — | Очистить / вернуть дефолтные строки. |
+| `phone:close` | `# phone:close` | Закрыть телефон-overlay (только в специальном `phone_close` knot'е). |
+| `phone:map` | `# phone:map` | Открыть телефон сразу на карте. |
+| `phone:app:NAME` | `# phone:app:sms` | Открыть конкретное приложение. NAME: `sms`/`map`/`notes`/etc. |
+
+> **Автоматические флаги SMS** (НЕ ставить руками):
+> - Игрок открыл SMS-приложение → `sms_<contact>_read = true` для всех непрочитанных диалогов
+> - В ink встретился `# sms:reply:contact:...` → `sms_<contact>_replied = true`
+
+> **Переписка как ink-knot:** тап на строку переписки в телефоне открывает knot `sms_thread_<contact_id>`. Пример: `sms_thread_mila` в `01_apartment.ink`.
+
+### Сцены и навигация (point-and-click)
+
+| Тег | Пример | Что делает |
+|---|---|---|
+| `explore:SCENE_ID` | `# explore:apartment_hub` | Отдать управление в point-and-click. Ink ждёт. |
+| `goto_scene:SCENE_ID` | `# goto_scene:kitchen` | Алиас `explore:`. |
+| `return_to_scene` | `# return_to_scene` | Вернуться в **предыдущую** point-and-click сцену. Ставится в самом конце knot'а. |
+
+> `# return_to_scene` всегда висит в конце knot'а, после всего текста. Игрок сначала читает текст, потом попадает в сцену.
+
+### Карта (`# map:*`)
+
+| Тег | Что делает |
+|---|---|
+| `map:hub:KNOT` | Открыть `map_v2` в hub-режиме. Пин с `route_knot=KNOT` прыгнет в этот ink-узел; при закрытии без выбора — fallback на тот же KNOT. |
+| `map:allow:POI_ID` | Разрешить POI на phone_map (добавить в allow-set). |
+| `map:allow:reset` | Сбросить allow-set (все POI снова разрешены, default). |
+| `map:lock_to:POI_ID` | Clear + добавить (только этот POI разрешён, остальные показывают «не туда»). |
+
+### Meta и Loop
+
+| Тег | Что делает |
+|---|---|
+| `meta:add:loop_awareness:1` | Увеличивает meta-поле. |
+| `meta:set:loop_awareness:2` | Задаёт meta-поле. |
+| `loop:end:false:ID` | Ложная концовка, restart текущей итерации. |
+| `loop:end:true` | Истинная концовка, переход дальше. |
+
+---
+
+## 5. VAR vs `# set_flag:` — двойная система состояния
+
+В Ink есть **две параллельные системы**:
+
+| Хранилище | Где видно | Синтаксис |
+|---|---|---|
+| **Ink-переменные** | условия `{x:}` / выражения `{x}` внутри ink | `VAR x = false` + `~ x = true` |
+| **game_state флаги** | `scenes.lua`, `quests.lua` (через `gs.get_flag(name)`) | `# set_flag:x=true` |
+
+### Когда что использовать
+
+| Хочешь… | Что нужно |
+|---|---|
+| Ветвить **внутри ink**: `{coffee_drunk: ...}` | VAR + `~` |
+| Открыть/закрыть **hotspot** или скрыть объект на сцене | `# set_flag:` |
+| Двигать квест | `# quest:*` (game_state, не VAR) |
+| И то, и другое | **дублируй** оба синтаксиса |
+
+```ink
+~ has_mug = true               // для ink-условий {has_mug:}
+# set_flag:has_mug=true        // для scenes.lua и quests.lua
+```
+
+### Когда нужен только `# set_flag:`
+
+Если флаг используется **только** в `scenes.lua` / `quests.lua` и в ink не фигурирует в `{…}` — VAR не нужен:
+
+```ink
+# set_flag:left_apartment=true   // достаточно
+```
+
+### Когда нужны оба
+
+Если в ink есть `{has_mug:` или `{not has_phone:` — обязательно:
+1. Объявить `VAR has_mug = false` в `00_bootstrap.ink`
+2. В knot'е делать `~ has_mug = true`
+3. И дублировать `# set_flag:has_mug=true`
+
+### Проверка: нужен ли VAR?
+
+Посмотри в своём ink — есть ли такое:
 ```ink
 {has_phone:        ← условие? → нужен VAR
 {not coffee_drunk: ← условие? → нужен VAR
-{mug_taken and coffee_drunk: ← условие? → нужен VAR для обоих
+{mug_taken and coffee_drunk: ← нужен VAR для обоих
 ```
 
-Нет условий → VAR не нужен, хватит `# set_flag:`.
+Нет условий → VAR не нужен.
+
+### Нейминг флагов / VAR
+
+- `has_X` — предмет у игрока (`has_phone`, `has_mug`)
+- `X_seen` — сцена/реплика уже была (`bedroom_morning_seen`, `kitchen_intro_seen`)
+- `sms_<contact>_read` / `sms_<contact>_replied` — авто-флаги (ставит движок)
+- `need_X` — промежуточная цель активирована (`need_phone`)
+- `X_drunk` / `X_done` / `X_active` — результат действия
+- `_underscore_в_начале` — служебные, задаются движком
 
 ---
 
-## 4. Как knot связан со сценой
+## 6. Lua → Ink: переменные от движка
+
+Движок до старта истории прокидывает в Ink:
+
+| VAR | Источник |
+|---|---|
+| `mc_gender` | `save_manager` / выбор игрока |
+| `mc_name` | `save_manager` |
+| `npc_name` | `save_manager` |
+| `iteration_number` | `meta_state` |
+| `iteration_label` | `meta_state` |
+| `loop_awareness` | `meta_state` |
+| `completed_iterations` | `meta_state` |
+| `false_endings_count` | `meta_state` |
+
+Эти переменные **не объявляй сам** в bootstrap — они уже есть. Просто используй: `{iteration_number > 1: ...}`, `{mc_name}`, и т.д.
+
+---
+
+## 7. Выборы
+
+```ink
+* [Проверить уведомления]
+    ~ INSIGHT = INSIGHT + 1
+    # speaker:none
+    Открываю приложение. Три патча в очереди.
+    -> metro_continue
+
+* [Отложить]
+    ~ SYNC = SYNC + 1
+    # speaker:mc
+    Потом. Сейчас не до этого.
+    -> metro_continue
+```
+
+- `*` — одноразовый выбор (пропадает после клика). `+` — многоразовый.
+- Текст в `[квадратных скобках]` — **только** на кнопке, как реплика не показывается.
+- Внутри тела выбора: `~`, теги, реплики, `->`.
+- Условный выбор: `* {SYNC >= 2 && INSIGHT >= 2} [<<Синхронизировать ритм>>]` — если условие `false`, пункт скрыт.
+
+---
+
+## 8. Условные блоки и гендерные форки
+
+### Простой условный блок
+
+```ink
+{coffee_drunk:
+    Кофеин ещё действует. Руки не дрожат.
+}
+{not coffee_drunk:
+    Голова немного тяжёлая.
+}
+```
+
+### Гендерные форки (короткая форма)
+
+```ink
+Проснул{mc_gender == "female":ась|ся}.
+В отражении — {mc_gender == "female":женское|мужское} лицо.
+Я не замети{mc_gender == "female":ла|л}.
+```
+
+- Внутри `{...:A|B}`: если условие истинно — `A`, иначе — `B`.
+- Для пустой ветки оставь пусто: `замети{mc_gender == "female":ла|}`.
+
+Имена подставляются автоматически: `{mc_name}`, `{npc_name}`.
+
+---
+
+## 9. Драм-флаги TRUST / INSIGHT / SYNC
+
+Это три счётчика эмоциональной оси. Объявлены в `00_bootstrap.ink`.
+
+```ink
+~ TRUST = TRUST + 1                   // увеличить
+{INSIGHT > 3: текст}                  // проверить в блоке
+* {SYNC >= 2 && INSIGHT >= 2} [ветка] // условный выбор
+```
+
+Диапазон практически любой, но держи инкременты маленькими (±1, ±2). На конец главы — сумма 3–8 по каждой оси.
+
+---
+
+## 10. Как knot связан со сценой
 
 Knot'ы вызываются из `scenes.lua` двумя способами:
 
-### Способ A — on_enter (автоматически при входе в сцену)
+### Способ A — `on_enter` (автоматически при входе в сцену)
 
 В `scenes.lua`:
 ```lua
 on_enter = {
-    knot = "apartment_bedroom_intro",  -- имя knot'а
+    knot = "apartment_bedroom_intro",
     condition = function(gs)
-        return not gs.get_flag("bedroom_morning_seen")  -- имя флага
+        return not gs.get_flag("bedroom_morning_seen")
     end,
 },
 ```
 
 В ink:
 ```ink
-=== apartment_bedroom_intro ===    ← имя должно совпадать с knot =
-# set_flag:bedroom_morning_seen=true   ← флаг должен совпадать с condition
+=== apartment_bedroom_intro ===              ← имя должно совпадать
+# set_flag:bedroom_morning_seen=true         ← флаг должен совпадать с condition
 # return_to_scene
 -> DONE
 ```
 
-> **Главное правило on_enter:** knot должен выставить флаг, который `condition` проверяет на `false`. Иначе — вечный цикл.
+> **Главное правило `on_enter`:** knot обязан выставить флаг, который `condition` проверяет на `false`. Иначе — вечный цикл.
 
 ### Способ B — hotspot (по клику игрока)
 
 В `scenes.lua`:
 ```lua
-action = { type = "ink_knot", knot = "take_phone" },
+action = { type = "ink_knot", knot = "take_phone" }
 ```
 
 В ink:
 ```ink
-=== take_phone ===    ← имя должно совпадать с knot =
-...
+=== take_phone ===
+# speaker:none
+...текст...
+# set_flag:has_phone=true
 # return_to_scene
 -> DONE
 ```
 
----
+После последнего клика игрок возвращается в ту же сцену; hotspot перерисуется (если у него `condition` зависит от флага).
 
-## 5. Чеклист перед тем как писать knot
-
-Перед написанием нового knot'а **пройди по этому списку**:
-
-### [ ] 1. Узнай точное имя knot'а
-
-Открой `scenes.lua`, найди нужный hotspot или `on_enter`, скопируй значение `knot = "..."`.
-
-### [ ] 2. Проверь флаги в condition
-
-Если у сцены есть `on_enter.condition` — посмотри, какой флаг она проверяет.  
-Твой knot **обязан** выставить этот флаг через `# set_flag:`.
-
-### [ ] 3. Проверь квесты в quests.lua
-
-Если knot должен двигать квест, открой `quests.lua` и уточни точный `id` квеста.  
-Используй только те id, которые там есть.
-
-### [ ] 4. Если используешь условие в ink — добавь VAR в bootstrap
+### Паттерн «выход из сюжетной сцены в point-and-click»
 
 ```ink
-{not my_flag:  ← нужен VAR my_flag = false в 00_bootstrap.ink
+=== wake_after_choice ===
+# bg:bg_bedroom_03 # speaker:mc
+...длинный монолог...
+-> apartment_hub
+
+=== apartment_hub ===
+# bg:bg_apartment_bedroom_morning # explore:apartment_hub # speaker:mc
+Коридор. Тихо.
+-> DONE
 ```
 
-### [ ] 5. Не забудь # return_to_scene в конце
-
-Если knot вызван из hotspot'а или on_enter — без `# return_to_scene` игрок застрянет в диалоге.
-
-### [ ] 6. Поставь `-> DONE` последней строкой
+Тег `# explore:apartment_hub` отдаёт управление `scene_controller` на сцене `apartment_hub`. Ink-сторона переходит в состояние «ждёт».
 
 ---
 
-## 6. Типичные ошибки — НЕ ДЕЛАЙ ТАК
+## 11. Карта и POI lock
+
+### Открыть карту в hub-режиме
+
+```ink
+# map:hub:metro
+-> DONE
+```
+
+`map_v2` откроется как hub. Если игрок выбирает пин с `route_knot`, ui_manager прыгнет в этот knot. Если карту закрыли без выбора — fallback на primary knot.
+
+### Phone_map: разрешить только определённые POI
+
+После SMS-ответа, когда сюжет требует определённого места:
+
+```ink
+* [«Давай в кафе.»]
+    # sms:reply:mila:Давай в кафе.
+    # map:lock_to:poi_cafe          ← на phone_map кликабелен только этот POI
+    -> sms_npc_place_sent
+```
+
+После прибытия и закрытия квеста:
+
+```ink
+# quest:done:meet_npc
+# map:allow:reset                   ← все POI снова доступны
+# return_to_scene
+```
+
+POI ID берутся из `phone_map.gui_script` → `POI_SCENES`: `poi_home`, `poi_work`, `poi_cafe`, `poi_park`, `poi_shop`, `poi_bar`, `poi_view`, `poi_archive`.
+
+При клике на запрещённый POI игрок видит «Сейчас не время. Мне туда не надо.»
+
+---
+
+## 12. Телефон — жёсткие правила
+
+Телефон **НЕ является Ink-сценой**. Это Lua-оверлей поверх игры.
+
+### ❌ Запрещено
+
+- Писать phone-контент в knot'ах напрямую
+- Делать `=== phone_*` как сцену
+- Управлять UI телефона из ink
+
+### ✅ Разрешено (только теги)
+
+- `# sms:add:contact:текст` — входящее
+- `# sms:reply:contact:текст` — исходящее ГГ
+- `# note:add:title:body` — заметка
+- `# mail:add:from:subject` / `# call:add:` / `# clue:add:` / `# camera:` / `# term:`
+- `# quest:start/done/fail:id`
+- `# phone:close` — закрыть телефон (только в специальном `phone_close` knot'е)
+- `# phone:map` / `# phone:app:NAME` — открыть телефон на нужной вкладке
+
+Все остальное — ошибка архитектуры.
+
+### Loop-aware контент в телефоне
+
+```ink
+{iteration_number >= 2:
+    # sms:add:anya:Ты тоже это помнишь?
+    # clue:add:repeat_signal:Повторяющийся сигнал
+}
+```
+
+Если тег может сработать повторно внутри одной итерации, защити его ink-флагом:
+```ink
+{not anya_repeat_sms_sent:
+    # sms:add:anya:Ты тоже это помнишь?
+    ~ anya_repeat_sms_sent = true
+}
+```
+
+---
+
+## 13. Чеклист перед коммитом
+
+- [ ] Все knot'ы начинаются с `=== name ===` (имя `latin_snake_case`)
+- [ ] Все ветки заканчиваются `-> name`, `-> DONE`, или `-> END`
+- [ ] Каждому новому фону `bg:NAME` соответствует dedicated atlas в `main/images/backgrounds/` И запись в `ui_manager_v2.script` (`go.property` + `DEDICATED_BG_ATLAS_PROPS`)
+- [ ] Все `sfx:NAME` существуют в `main/sounds/` (иначе silent fail)
+- [ ] `{mc_gender == "female":ж|м}` проверен по всем репликам MC (нет просто `вернулся` без форки)
+- [ ] Используются только поддерживаемые статусы квестов: `quest:start`, `quest:done`, `quest:fail`
+- [ ] VAR'ы, на которые завязаны `{...}` в ink, объявлены в `00_bootstrap.ink`
+- [ ] Флаги для `scenes.lua` / `quests.lua` дублируются `# set_flag:`
+- [ ] Если `on_enter.condition` проверяет флаг — knot его ставит
+- [ ] `# return_to_scene` стоит в конце knot'а, который вызван из hotspot или `on_enter`
+- [ ] `tools/compile_ink.bat chapter_01` прошёл с `[OK]` без ошибок
+- [ ] Smoke-тест: новый старт + Continue работают
+
+---
+
+## 14. Типичные ошибки — НЕ ДЕЛАЙ ТАК
 
 ### Ошибка 1: неправильный синтаксис тегов
 
@@ -244,18 +530,20 @@ action = { type = "ink_knot", knot = "take_phone" },
 | `# additem:phone` | `# add_item:phone` |
 | `# queststart:make_coffee` | `# quest:start:make_coffee` |
 | `# questdone:make_coffee` | `# quest:done:make_coffee` |
+| `# quest:complete:make_coffee` | `# quest:done:make_coffee` |
 
 ### Ошибка 2: имя knot'а не совпадает с scenes.lua
 
 ```lua
 -- scenes.lua говорит:
 knot = "apartment_bedroom_intro"
-
+```
+```ink
 -- а в ink написано:
-=== bedroom_intro ===   ← НЕПРАВИЛЬНО, разные имена
+=== bedroom_intro ===   ← НЕПРАВИЛЬНО
 ```
 
-**Как проверить:** скопируй имя knot'а из scenes.lua и вставь в ink без изменений.
+**Как проверить:** скопируй имя из scenes.lua и вставь в ink без изменений.
 
 ### Ошибка 3: on_enter без флага-заглушки → вечный цикл
 
@@ -263,12 +551,11 @@ knot = "apartment_bedroom_intro"
 -- scenes.lua:
 condition = function(gs) return not gs.get_flag("seen") end
 ```
-
 ```ink
--- ink — нет # set_flag:seen=true:
+-- ink — НЕ ставит флаг:
 === my_intro ===
 Текст.
-# return_to_scene    ← флаг никогда не выставится → цикл!
+# return_to_scene    ← цикл!
 -> DONE
 ```
 
@@ -286,36 +573,42 @@ condition = function(gs) return not gs.get_flag("seen") end
 ```ink
 -- 00_bootstrap.ink — нет VAR has_mug
 -- 01_apartment.ink:
-{has_mug:  ← ОШИБКА компиляции: Unresolved variable: has_mug
+{has_mug:  ← Unresolved variable: has_mug
 ```
 
-**Правильно:** открой `00_bootstrap.ink`, добавь:
-```ink
-VAR has_mug = false
-```
+**Правильно:** добавить `VAR has_mug = false` в `00_bootstrap.ink`.
 
 ### Ошибка 5: несуществующий id квеста
 
 ```ink
-# quest:start:get_coffee   ← такого квеста нет в quests.lua!
+# quest:start:get_coffee   ← такого квеста нет в quests.lua
 ```
 
-**Как проверить:** открой `quests.lua`, найди таблицу с квестами, сверь id.
+**Как проверить:** открой `main/scripts/quests.lua`, сверь id.
 
-### Ошибка 6: теги до текста, флаги — нет
+### Ошибка 6: только VAR без `# set_flag:`, или наоборот
 
 ```ink
-=== my_knot ===
-# set_flag:seen=true    ← поставил флаг ДО текста
-Текст монолога.
-# return_to_scene
+~ has_phone = true
+// scenes.lua проверяет gs.get_flag("has_phone") → false → hotspot не пропадёт
 ```
 
-Технически работает, но флаг выставится до того как игрок увидит текст. Для on_enter-флагов это нормально, но логически лучше держать флаги **после текста**.
+**Правильно:** оба синтаксиса вместе (см. §5).
 
 ---
 
-## 7. Примеры готовых knot'ов
+## 15. Что не поддерживается
+
+- `EXTERNAL` функции, `LIST` — игнорируются
+- Stitches (`= substitch`) — можно, но как «адресуемые» точки используем только `=== knot`
+- Теги на VAR-строках — игнорируются
+- `# TODO`, `# XXX`, любые «заметки разработчика» в тегах — игнорируются (можно использовать как комментарии для себя)
+- Tunnels (`-> tunnel ->`) — технически работают, но не используем
+- `quest:complete` и любые статусы квеста кроме `start`/`done`/`fail`
+
+---
+
+## 16. Примеры готовых knot'ов
 
 ### Простой монолог (осмотр объекта)
 
@@ -340,10 +633,10 @@ VAR has_mug = false
 -> DONE
 ```
 
-> Нужно `~ has_mug = true` потому что в ink есть условие `{has_mug:}`.  
-> `~ has_mug = true` — для ink. `# set_flag:has_mug=true` — для scenes.lua/quests.lua.
+> Нужно `~ has_mug = true` потому что в ink есть условие `{has_mug:}`.
+> Дублируем `# set_flag:has_mug=true` для scenes.lua / quests.lua.
 
-### on_enter-монолог (один раз при входе в сцену)
+### `on_enter`-монолог (один раз при входе в сцену)
 
 ```ink
 === apartment_bedroom_intro ===
@@ -356,10 +649,9 @@ VAR has_mug = false
 -> DONE
 ```
 
-> Флаг `bedroom_morning_seen` выставляется сразу — до того как игрок кликнет «Далее».  
-> Когда после клика сработает `return_to_scene`, `on_enter.condition` уже вернёт `false` — цикла не будет.
+> Флаг `bedroom_morning_seen` выставляется до клика «Далее». Когда после клика сработает `return_to_scene`, `on_enter.condition` уже вернёт `false` — цикла не будет.
 
-### Монолог с SMS и квестом
+### Монолог с SMS, квестом и map lock
 
 ```ink
 === take_phone ===
@@ -370,9 +662,41 @@ VAR has_mug = false
 ~ has_phone = true
 # set_flag:has_phone=true
 # set_flag:phone_active=true
-# sms:add:anya:Ты видел PATCH к temporal_sync.module? Очень важно.
+# sms:add:mila:Есть планы на сегодня?
 # quest:done:find_phone
-# quest:start:reply_anya
+# quest:start:reply_mila
+# return_to_scene
+-> DONE
+```
+
+### Выбор с разветвлением и POI lock
+
+```ink
+=== sms_thread_mila ===
+# speaker:none
+Открываешь переписку. Мила написала:
+«Есть планы на сегодня?»
+
+* [«Давай в кафе.»]
+    # sms:reply:mila:Давай в кафе.
+    # set_flag:date_place_cafe=true
+    # map:lock_to:poi_cafe
+    ~ date_place_cafe = true
+    ~ TRUST = TRUST + 1
+    -> sms_sent
+
+* [«Давай в парк.»]
+    # sms:reply:mila:Давай в парк.
+    # set_flag:date_place_park=true
+    # map:lock_to:poi_park
+    ~ date_place_park = true
+    ~ TRUST = TRUST + 1
+    -> sms_sent
+
+= sms_sent
+# speaker:none
+Сообщение отправлено.
+# quest:done:reply_mila
 # return_to_scene
 -> DONE
 ```
@@ -392,6 +716,24 @@ VAR has_mug = false
 -> DONE
 ```
 
+### Knot с действиями инвентаря (`inv_*`)
+
+Контракт поиска knot'а для предмета:
+1. `inv_<scene_id>_<verb>_<item_id>`
+2. `inv_<verb>_<item_id>`
+3. `inv_<verb>_fallback`
+4. `inv_fallback`
+
+Verbs: `use`, `inspect`, `read`. Особый случай: `phone + use/read` открывает phone_v2 напрямую.
+
+```ink
+=== inv_inspect_mug ===
+# speaker:none
+Кружка с трещиной на ручке. Каждый раз стоит на своём месте.
+# return_to_scene
+-> DONE
+```
+
 ---
 
 ## Быстрая справка — одним взглядом
@@ -400,6 +742,7 @@ VAR has_mug = false
 === имя_из_scenes_lua ===
 # bg:имя_фона # speaker:none          ← первой строкой
 Текст для игрока.
+~ ink_var = true                       ← если есть {ink_var:} условие
 # set_flag:флаг_из_condition=true     ← ОБЯЗАТЕЛЬНО если on_enter
 # quest:start:id_из_quests_lua        ← только существующие id
 # quest:done:id_из_quests_lua

@@ -173,7 +173,7 @@ Rollback к старой схеме смены фонов **не поддерж�
 - `docs/reference/ARCHITECTURE.md`
 - `docs/reference/CODEX_CONTEXT.md`
 - `README.md`
-- `main/story/INK_STYLE.md`
+- `docs/guides/HOW_TO_WRITE_INK.md`
 - `.opencode/skills/avos/SKILL.md`
 - `main/gui/ui_manager_v2.script`
 - `main/gui/components_v2/dialogue_v2.gui`

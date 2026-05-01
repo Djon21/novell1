@@ -6,7 +6,7 @@
 
 1. `docs/reference/CODEX_CONTEXT.md`
 2. `docs/reference/ARCHITECTURE.md`
-3. `main/story/README_INK.md`
+3. `docs/guides/HOW_TO_WRITE_INK.md`
 4. `docs/reference/TODO.md`
 5. `docs/reference/TESTING_CHECKLIST.md`
 
@@ -36,7 +36,7 @@
 - добавлена система SMS-ответов: `# sms:reply:contact:text` + авто-флаги
 - SMS-список стал кликабельным → knot `sms_thread_<contact>`; реализован `sms_thread_mila`
 - квест `reply_mila` закрывается автоматически через ink-теги
-- написана `docs/guides/HOW_TO_WRITE_INK.md`; обновлены `INK_STYLE.md`, `README_INK.md`, `PHONE_SYSTEM.md`
+- `docs/guides/HOW_TO_WRITE_INK.md` стала единственной инструкцией по ink (поглотила `INK_STYLE.md` и `README_INK.md`); обновлены `PHONE_SYSTEM.md`, `ARCHITECTURE.md`
 - бэклог реплик и выборов вынесен в shared-модуль `main/scripts/dialogue_backlog.lua` (раньше пересылался через `msg.post` и упирался в `sys.max_message_data_size`)
 - починена кодировка `AVOS_S_Story_Bible.md` и `AVOS_S_World_Doc_v2.md`
 
