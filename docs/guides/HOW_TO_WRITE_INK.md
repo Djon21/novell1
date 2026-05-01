@@ -140,7 +140,7 @@ Git Bash / Linux:
 
 | Тег | Пример | Что делает |
 |---|---|---|
-| `bg:NAME` | `# bg:bg_apartment_bedroom_morning` | Меняет фон. `bg:none` — убрать. Каждому `bg_name` нужен dedicated atlas в `main/images/backgrounds/` И регистрация в `ui_manager_v2.script` (см. `HOW_TO_ADD_BACKGROUNDS.md`). |
+| `bg:NAME` | `# bg:bg_apartment_bedroom_morning` | Меняет фон. `bg:none` — убрать. Каждому `bg_name` нужен dedicated atlas в `main/images/backgrounds/` И регистрация в `ui_manager_v2.script` (см. `HOW_TO_ADD_SCENES.md`). |
 | `color:R,G,B` | `# color:0.1,0.1,0.15` | Тинт фона (0…1). |
 | `speaker:ID` | `# speaker:mc` / `# speaker:npc` / `# speaker:none` / `# speaker:Аня` | Имя говорящего. `mc`/`npc` подменяются на `mc_name`/`npc_name`. `none` — без таблички (нарратор). |
 | `sfx:NAME` | `# sfx:phone_notify` | Одноразовый звук. Добавление: `.ogg` в `main/sounds/` + `.sound` descriptor + component в `sfx_player` в `main_v2.collection` + запись в `M.SFX_URLS` в `ui_manager_v2.script`. |

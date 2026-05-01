@@ -15,8 +15,7 @@
 - имена фонов: `bg_name.jpg`
 - atlas: `main/images/backgrounds/bg_name.atlas` с `rename_patterns: "bg_name=scene_bg"`
 - внешнее имя `bg_name` должно совпадать в Ink, `scenes.lua` и регистрации
-- подробности — `docs/guides/HOW_TO_ADD_BACKGROUNDS.md`
-- архитектурный план — `docs/reference/BACKGROUND_SYSTEM_MIGRATION_PLAN.md`
+- подробности и архитектура — `docs/guides/HOW_TO_ADD_SCENES.md`
 
 ## 2. Hotspot sprites
 
@@ -83,7 +82,5 @@
 
 ## 8. Быстрые ссылки
 
-- фоны: `docs/guides/HOW_TO_ADD_BACKGROUNDS.md`
+- сцены, фоны, scene objects, архитектура atlas-ов: `docs/guides/HOW_TO_ADD_SCENES.md`
 - портреты: `docs/guides/HOW_TO_ADD_PORTRAITS.md`
-- сцены и scene objects: `docs/guides/HOW_TO_ADD_SCENES.md`
-- архитектура atlas-ов: `docs/reference/BACKGROUND_SYSTEM_MIGRATION_PLAN.md`

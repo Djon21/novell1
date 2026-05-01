@@ -175,10 +175,10 @@ local function apply_dialogue_bg(self, bg_name)
 
     local atlas, animation_id = resolve_dialogue_bg_visual(self, bg_name)
     if not atlas then
-        -- После завершения миграции в `BACKGROUND_SYSTEM_MIGRATION_PLAN.md`
-        -- единственный источник fullscreen-фонов — `DEDICATED_BG_ATLAS_PROPS`.
-        -- Незарегистрированный bg_name здесь — это отсутствующий dedicated
-        -- atlas. Не падаем, но громко логируем, чтобы такой кейс был виден.
+        -- Единственный источник fullscreen-фонов — `DEDICATED_BG_ATLAS_PROPS`
+        -- (см. `docs/guides/HOW_TO_ADD_SCENES.md`). Незарегистрированный
+        -- bg_name = отсутствующий dedicated atlas. Не падаем, но громко
+        -- логируем, чтобы кейс был виден.
         print("[ui_manager_v2] WARNING: no dedicated atlas for bg:", bg_name,
               "— зарегистрируй его в ui_manager_v2.script + main/images/backgrounds/")
         return

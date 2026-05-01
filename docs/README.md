@@ -17,7 +17,6 @@
 - `reference/CONTINUE_HERE.md` — где продолжать работу
 - `reference/LOOP_SYSTEM.md` — итерации и meta-state
 - `reference/INVENTORY_SYSTEM.md` — инвентарь и Ink-действия предметов
-- `reference/BACKGROUND_SYSTEM_MIGRATION_PLAN.md` — история и правила новой системы фонов
 - `reference/TESTING_CHECKLIST.md` — ручной QA перед релизом
 - `reference/L10N_PLAN.md` — план локализации
 - `reference/ROADMAP.md` — крупные направления
@@ -26,7 +25,6 @@
 ## Guides
 
 - `guides/HOW_TO_ADD_SCENES.md`
-- `guides/HOW_TO_ADD_BACKGROUNDS.md`
 - `guides/HOW_TO_ADD_PORTRAITS.md`
 - `guides/HOW_TO_ADD_SOUNDS.md`
 - `guides/GRAPHICS_GUIDE.md`
