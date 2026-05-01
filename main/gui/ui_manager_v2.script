@@ -10,13 +10,6 @@
 -- scene_controller, что и старый ui_manager.script. Включение — через
 -- переключение bootstrap.main_collection на main_v2 (step16 — опциональный).
 
-go.property("bg_apartment_atlas", resource.atlas("/main/images/backgrounds/bg_apartment.atlas"))
-go.property("bg_bathroom_atlas", resource.atlas("/main/images/backgrounds/bg_bathroom.atlas"))
-go.property("bg_bedroom_01_atlas", resource.atlas("/main/images/backgrounds/bg_bedroom_01.atlas"))
-go.property("bg_bedroom_02_atlas", resource.atlas("/main/images/backgrounds/bg_bedroom_02.atlas"))
-go.property("bg_bedroom_03_atlas", resource.atlas("/main/images/backgrounds/bg_bedroom_03.atlas"))
-go.property("bg_city_map_atlas", resource.atlas("/main/images/backgrounds/bg_city_map.atlas"))
-go.property("bg_kitchen_atlas", resource.atlas("/main/images/backgrounds/bg_kitchen.atlas"))
 go.property("bg_metro_atlas", resource.atlas("/main/images/backgrounds/bg_metro.atlas"))
 go.property("bg_office_atlas", resource.atlas("/main/images/backgrounds/bg_office.atlas"))
 go.property("bg_office_evening_atlas", resource.atlas("/main/images/backgrounds/bg_office_evening.atlas"))
@@ -94,13 +87,6 @@ local function get_map_pin_label(pin_id)
 end
 
 local DEDICATED_BG_ATLAS_PROPS = {
-    bg_apartment      = "bg_apartment_atlas",
-    bg_bathroom       = "bg_bathroom_atlas",
-    bg_bedroom_01     = "bg_bedroom_01_atlas",
-    bg_bedroom_02     = "bg_bedroom_02_atlas",
-    bg_bedroom_03     = "bg_bedroom_03_atlas",
-    bg_city_map       = "bg_city_map_atlas",
-    bg_kitchen        = "bg_kitchen_atlas",
     bg_metro          = "bg_metro_atlas",
     bg_office         = "bg_office_atlas",
     bg_office_evening = "bg_office_evening_atlas",
@@ -894,6 +880,14 @@ open_phone = function(self)
     sync_modal_state()
     msg.post(M.components.phone, "open_phone")
 end
+
+local function open_phone_app(self, app_id)
+    open_phone(self)
+    if M.overlays.phone then
+        msg.post(M.components.phone, "open_app", { id = app_id or "sms" })
+    end
+end
+
 close_phone = function(self)
     dbg("[ui_manager_v2] close_phone()")
     M.overlays.phone = false
@@ -901,7 +895,18 @@ close_phone = function(self)
     msg.post(M.components.phone, "close_phone")
 end
 
+local function open_phone_map_app(self)
+    if not M.overlays.phone then
+        return false
+    end
+    msg.post(M.components.phone, "open_app", { id = "map" })
+    return true
+end
+
 local function open_map(self)
+    if open_phone_map_app(self) then
+        return
+    end
     M.overlays.map = true
     sync_modal_state()
     sync_map_overlay(resolve_map_selected_pin(), "> карта синхронизирована _")
@@ -1056,8 +1061,16 @@ local function apply_dm_commands(self)
             if meta.set then meta.set(cmd.key, cmd.value) end
         elseif cmd.type == "phone_close" then
             close_phone(self)
+        elseif cmd.type == "open_phone_app" then
+            open_phone_app(self, cmd.app)
         elseif cmd.type == "open_map_hub" then
             open_map_hub(self, cmd.knot)
+        elseif cmd.type == "map_allow" then
+            if gs.map_allow then gs.map_allow(cmd.poi) end
+        elseif cmd.type == "map_allow_reset" then
+            if gs.map_allow_reset then gs.map_allow_reset() end
+        elseif cmd.type == "map_lock_to" then
+            if gs.map_lock_to then gs.map_lock_to(cmd.poi) end
         end
     end
 end
@@ -1072,6 +1085,12 @@ handle_dialogue_update = function(self)
     -- иначе на `-> DONE` сразу после `# map:hub:KNOT` dialogue уходит в
     -- end-state, клик мимо пина ловится btn_next → advance → chapter_finished.
     if M.overlays.map then
+        M.at_end = false
+        msg.post(M.components.dialogue, "hide_dialogue")
+        hide_choice(self)
+        return
+    end
+    if M.overlays.phone then
         M.at_end = false
         msg.post(M.components.dialogue, "hide_dialogue")
         hide_choice(self)

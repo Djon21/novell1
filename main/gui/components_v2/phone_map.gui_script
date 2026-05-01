@@ -4,8 +4,16 @@
 --
 -- Флоу: клик по POI → диалог подтверждения → ДА → map_travel → ui_manager
 -- ui_manager закрывает телефон и вызывает scene_controller.enter(scene_id).
+--
+-- POI lock: если ink-сценарий ограничил доступные POI через теги
+-- # map:allow:poi_X / # map:lock_to:poi_X, то клик по запрещённому POI
+-- покажет «отказной» диалог вместо confirm. См. game_state.map_is_poi_allowed.
+
+local gs = require "main.scripts.game_state"
 
 local UI_MGR = "#ui_manager_v2"
+
+local BLOCKED_LABEL = "Сейчас не время. Мне туда не надо."
 
 -- Маппинг poi_NAME → { scene, label }
 -- label — строка в диалоге "Перейти в [label]?"
@@ -35,14 +43,27 @@ end
 
 local function hide_confirm(self)
     self.confirm_target = nil
+    self.confirm_blocked = false
     local n = get_node("grp_confirm")
     if n then gui.set_enabled(n, false) end
 end
 
 local function show_confirm(self, info)
     self.confirm_target = info
+    self.confirm_blocked = false
     local n = get_node("confirm_location_name")
     if n then gui.set_text(n, info.label) end
+    local g = get_node("grp_confirm")
+    if g then gui.set_enabled(g, true) end
+end
+
+-- Заблокированный POI: показать тот же диалог с «отказным» текстом.
+-- ДА/НЕТ обе закрывают без map_travel — это просто info-overlay.
+local function show_blocked(self, info)
+    self.confirm_target = info
+    self.confirm_blocked = true
+    local n = get_node("confirm_location_name")
+    if n then gui.set_text(n, BLOCKED_LABEL) end
     local g = get_node("grp_confirm")
     if g then gui.set_enabled(g, true) end
 end
@@ -50,8 +71,9 @@ end
 -- -----------------------------------------------------------------------
 
 function init(self)
-    self.visible        = false
-    self.confirm_target = nil
+    self.visible         = false
+    self.confirm_target  = nil
+    self.confirm_blocked = false
     set_root_enabled(false)
     -- явно прячем grp_confirm: его own enabled = false,
     -- чтобы не всплыл когда set_root_enabled(true) включит родителя
@@ -79,6 +101,11 @@ function on_input(self, action_id, action)
     if self.confirm_target then
         local yes = get_node("confirm_yes_btn")
         if yes and gui.pick_node(yes, action.x, action.y) then
+            -- Заблокированный POI: ДА работает как ОК — закрываем без перехода.
+            if self.confirm_blocked then
+                hide_confirm(self)
+                return true
+            end
             local scene_id = self.confirm_target.scene
             hide_confirm(self)
             msg.post(UI_MGR, "map_travel", { scene = scene_id })
@@ -98,7 +125,13 @@ function on_input(self, action_id, action)
     for poi_id, info in pairs(POI_SCENES) do
         local hitbox = get_node(poi_id .. "_hitbox")
         if hitbox and gui.pick_node(hitbox, action.x, action.y) then
-            show_confirm(self, info)
+            local allowed = (not gs.map_is_poi_allowed)
+                            or gs.map_is_poi_allowed(poi_id)
+            if allowed then
+                show_confirm(self, info)
+            else
+                show_blocked(self, info)
+            end
             return true
         end
     end

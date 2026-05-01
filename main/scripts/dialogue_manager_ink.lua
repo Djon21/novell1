@@ -458,6 +458,14 @@ local function apply_tags(tags, trailing)
                     pending_end_type = { type = "true" }
                 end
             end
+        elseif key == "phone" and value == "map" and not suppress_effects then
+            table.insert(scene_bucket, { type = "open_phone_app", app = "map" })
+        elseif key == "phone" and value and value:match("^app%s*:") and not suppress_effects then
+            local app = value:gsub("^app%s*:%s*", ""):gsub("^%s+", ""):gsub("%s+$", "")
+                             :gsub('^"(.*)"$', "%1"):gsub("^'(.*)'$", "%1")
+            if app ~= "" then
+                table.insert(scene_bucket, { type = "open_phone_app", app = app })
+            end
         elseif key == "phone" and value == "close" and not suppress_effects then
             -- # phone:close — закрыть телефон и вернуться в сцену-вызыватель.
             table.insert(scene_bucket, { type = "phone_close" })
@@ -465,13 +473,27 @@ local function apply_tags(tags, trailing)
             -- # map:hub:KNOT — открыть карту в hub-режиме. «МАРШРУТ» на пине с
             -- route_knot=KNOT прыгает в этот ink-узел. KNOT же — primary_knot,
             -- на который уйдёт карта при закрытии без выбора (safety fallback).
-            local op, rest = value:match("(%a+)%s*:?%s*(.*)")
+            --
+            -- # map:allow:poi_cafe       — добавить POI в allow-set phone_map'а
+            -- # map:allow:reset          — очистить allow-set (все POI разрешены)
+            -- # map:lock_to:poi_cafe     — clear + добавить (только этот разрешён)
+            local op, rest = value:match("([%w_]+)%s*:?%s*(.*)")
             if op == "hub" and rest and rest ~= "" then
                 local knot = rest:gsub("^%s+", ""):gsub("%s+$", "")
                                  :gsub('^"(.*)"$', "%1"):gsub("^'(.*)'$", "%1")
                 if knot ~= "" then
                     table.insert(scene_bucket, { type = "open_map_hub", knot = knot })
                 end
+            elseif op == "allow" and rest then
+                local target = rest:gsub("^%s+", ""):gsub("%s+$", "")
+                if target == "reset" or target == "" then
+                    table.insert(pending_commands, { type = "map_allow_reset" })
+                else
+                    table.insert(pending_commands, { type = "map_allow", poi = target })
+                end
+            elseif op == "lock_to" and rest then
+                local target = rest:gsub("^%s+", ""):gsub("%s+$", "")
+                table.insert(pending_commands, { type = "map_lock_to", poi = target })
             end
         elseif (key == "goto_scene" or key == "explore") and value and not suppress_effects then
             -- # goto_scene:SCENE_ID  или  # explore:SCENE_ID

@@ -154,6 +154,9 @@ Lua до начала истории прокидывает:
 | `# loop:end:false:id` | ложная концовка, restart текущей итерации |
 | `# loop:end:true` | истинная концовка, переход дальше |
 | `# map:hub:KNOT` | открыть `map_v2` в hub-режиме |
+| `# map:allow:poi_X` | разрешить POI на phone_map (добавить в allow-set) |
+| `# map:allow:reset` | сбросить allow-set (все POI снова разрешены) |
+| `# map:lock_to:poi_X` | clear + добавить POI (только этот разрешён, остальные показывают «не туда») |
 | `# goto_scene:SCENE_ID` | перейти в exploration-сцену |
 | `# explore:SCENE_ID` | перейти в exploration-сцену |
 | `# return_to_scene` | вернуться в предыдущую exploration-сцену |

@@ -33,6 +33,15 @@ local _call_log    = {}
 local _call_missed = 0
 local _clues       = {}
 
+-- Map POI lock (для phone_map):
+--   _map_allowed_pois = { [poi_id] = true } — set разрешённых POI
+--   Если пуст → все POI разрешены (default behaviour).
+--   Управляется ink-тегами:
+--     # map:allow:poi_cafe       — добавить POI в allowed
+--     # map:allow:reset          — очистить (вернуть «все разрешены»)
+--     # map:lock_to:poi_cafe     — clear + добавить (только этот разрешён)
+local _map_allowed_pois = {}
+
 -- Camera feed (вьюха «камера» в телефоне). Один активный канал.
 --   _camera = { status = "offline"|"online"|"error", message, meta }
 -- Terminal log (вьюха «терминал»). Хронологический список, отображается
@@ -438,6 +447,7 @@ function M.reset()
     _call_log = {}
     _call_missed = 0
     _clues = {}
+    _map_allowed_pois = {}
     _camera = {
         status  = DEFAULT_CAMERA.status,
         message = DEFAULT_CAMERA.message,
@@ -890,6 +900,38 @@ function M.reset_terminal_to_defaults()
     M._notify()
 end
 
+-- ─── Map POI lock ───────────────────────────────────────────────────────
+
+function M.map_allow(poi_id)
+    if not poi_id or poi_id == "" then return end
+    _map_allowed_pois[poi_id] = true
+    M._notify()
+end
+
+function M.map_allow_reset()
+    if not next(_map_allowed_pois) then return end
+    _map_allowed_pois = {}
+    M._notify()
+end
+
+function M.map_lock_to(poi_id)
+    _map_allowed_pois = {}
+    if poi_id and poi_id ~= "" then
+        _map_allowed_pois[poi_id] = true
+    end
+    M._notify()
+end
+
+function M.map_is_poi_allowed(poi_id)
+    -- Empty allow-set → все POI разрешены (default behaviour).
+    if not next(_map_allowed_pois) then return true end
+    return _map_allowed_pois[poi_id] == true
+end
+
+function M.get_map_allowed_pois()
+    return clone_value(_map_allowed_pois)
+end
+
 -- Возвращает до TERMINAL_MAX_LINES записей в хронологическом порядке
 -- (старые — первыми). В phone_v2.gui_script верхний слот = первая запись.
 function M.get_terminal_lines()
@@ -981,6 +1023,7 @@ function M.serialize()
         clues          = clone_value(_clues),
         camera         = clone_value(_camera),
         terminal_lines = clone_value(_terminal_lines),
+        map_allowed_pois = clone_value(_map_allowed_pois),
         current_scene  = _current_scene,
     }
 end
@@ -1003,6 +1046,7 @@ function M.deserialize(data)
     _clues          = data.clues      or {}
     _camera         = data.camera     or nil
     _terminal_lines = data.terminal_lines or nil
+    _map_allowed_pois = data.map_allowed_pois or {}
     _current_scene  = data.current_scene
     normalize_sms_state()
     normalize_notes_state()
