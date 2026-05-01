@@ -32,6 +32,7 @@ local meta = require "main.scripts.meta_state"
 local scene_controller = require "main.scripts.scene_controller"
 local catalog = require "main.scripts.items_catalog"
 local ui_state = require "main.scripts.ui_state"
+local backlog = require "main.scripts.dialogue_backlog"
 
 local ok_scenes, scenes = pcall(require, "main.scripts.scenes")
 if not ok_scenes then scenes = nil end
@@ -432,26 +433,17 @@ local function reset_dialogue_autoplay_state(self)
     self.dialogue_current_text = ""
 end
 
-local DIALOGUE_BACKLOG_LIMIT = 80
-
-local function sync_dialogue_backlog(self)
-    if M.components.dialogue then
-        msg.post(M.components.dialogue, "set_backlog", {
-            entries = self.dialogue_backlog or {}
-        })
-    end
-end
+-- Бэклог реплик и выборов хранится в shared-модуле dialogue_backlog.
+-- Это снимает необходимость пересылать таблицу через msg.post (упирался
+-- в sys.max_message_data_size). dialogue_v2.gui_script читает модуль напрямую.
 
 local function reset_dialogue_backlog(self)
-    self.dialogue_backlog = {}
-    self.dialogue_backlog_last_key = nil
-    sync_dialogue_backlog(self)
+    backlog.clear()
 end
 
 local function open_dialogue_backlog(self)
     M.overlays.backlog = true
     sync_modal_state()
-    sync_dialogue_backlog(self)
     msg.post(M.components.hotspots, "hide_all")
     msg.post(M.components.dialogue, "open_backlog")
 end
@@ -466,38 +458,8 @@ local function close_dialogue_backlog(self)
     end
 end
 
-local function normalize_backlog_speaker(speaker, fallback)
-    speaker = tostring(speaker or "")
-    if speaker == "" or speaker == "nil" then
-        return fallback or "НАРРАТОР"
-    end
-    return string.upper(speaker)
-end
-
 local function append_dialogue_backlog(self, entry)
-    if not entry or not entry.text or tostring(entry.text) == "" then return end
-    self.dialogue_backlog = self.dialogue_backlog or {}
-
-    local kind = entry.kind or "dialogue"
-    local speaker = normalize_backlog_speaker(entry.speaker, entry.fallback_speaker)
-    local text = tostring(entry.text or "")
-    local key = kind .. "|" .. speaker .. "|" .. text
-    if self.dialogue_backlog_last_key == key then return end
-
-    table.insert(self.dialogue_backlog, {
-        kind = kind,
-        speaker = speaker,
-        text = text,
-    })
-    self.dialogue_backlog_last_key = key
-
-    while #self.dialogue_backlog > DIALOGUE_BACKLOG_LIMIT do
-        table.remove(self.dialogue_backlog, 1)
-    end
-    -- Не синкаем бэклог в dialogue компонент здесь: при 80 записях кириллицы
-    -- таблица переполняет 2KB-буфер msg.post (script.message_max_size).
-    -- open_dialogue_backlog() сам зовёт sync_dialogue_backlog перед открытием
-    -- → диалоговый компонент получает свежие данные ровно когда они нужны.
+    backlog.add(entry)
 end
 
 local function compute_dialogue_autoplay_delay(text, skip_mode)
@@ -1351,13 +1313,11 @@ function init(self)
     self.dialogue_waiting_for_typewriter = false
     self.dialogue_node_type = nil
     self.dialogue_current_text = ""
-    self.dialogue_backlog = {}
-    self.dialogue_backlog_last_key = nil
     self.current_choice_question = nil
     self.current_choice_options = nil
 
+    backlog.clear()
     apply_dialogue_toggle_state(self)
-    sync_dialogue_backlog(self)
     sync_ui_state(self)
     show_menu(self)
     msg.post(".", "acquire_input_focus")

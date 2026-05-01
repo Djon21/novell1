@@ -20,6 +20,8 @@
 --   "dialogue_skip"  — клик SKIP
 --   "dialogue_auto"  — клик AUTO (переключатель)
 
+local backlog = require "main.scripts.dialogue_backlog"
+
 local UI_MGR = "#ui_manager_v2"
 
 local BASE_W = 1280
@@ -219,7 +221,7 @@ end
 
 local function refresh_backlog_view(self)
     ensure_backlog_nodes(self)
-    local entries = self.backlog_entries or {}
+    local entries = backlog.get_all()
     local total = #entries
     if total == 0 then
         self.backlog_index = 0
@@ -248,7 +250,7 @@ local function set_backlog_open(self, open)
     end
     set_dialogue_log_button_visible(self, self.visible and not self.backlog_open)
     if self.backlog_open then
-        self.backlog_index = #(self.backlog_entries or {})
+        self.backlog_index = backlog.size()
         refresh_backlog_view(self)
     end
 end
@@ -461,7 +463,6 @@ function init(self)
     self.visible = true
     self.auto = false
     self.skip = false
-    self.backlog_entries = {}
     self.backlog_index = 0
     self.backlog_open = false
     self.full_text = ""
@@ -530,14 +531,10 @@ function on_message(self, message_id, message, sender)
             typewriter_finish(self)
         end
 
-    elseif message_id == hash("set_backlog") then
-        self.backlog_entries = message and message.entries or {}
-        if self.backlog_open then
-            refresh_backlog_view(self)
-        end
-
     elseif message_id == hash("clear_backlog") then
-        self.backlog_entries = {}
+        -- Бэклог теперь живёт в shared-модуле dialogue_backlog. Сообщение
+        -- оставлено для обратной совместимости — переадресуем на модуль.
+        backlog.clear()
         self.backlog_index = 0
         if self.backlog_open then
             refresh_backlog_view(self)
@@ -570,7 +567,7 @@ function on_input(self, action_id, action)
         end
         if gui.pick_node(n.btn_prev, action.x, action.y) then
             click_flash(n.btn_prev)
-            if (self.backlog_entries and #self.backlog_entries > 0) and self.backlog_index > 1 then
+            if backlog.size() > 0 and self.backlog_index > 1 then
                 self.backlog_index = self.backlog_index - 1
                 refresh_backlog_view(self)
             end
@@ -578,7 +575,7 @@ function on_input(self, action_id, action)
         end
         if gui.pick_node(n.btn_next, action.x, action.y) then
             click_flash(n.btn_next)
-            if self.backlog_entries and self.backlog_index < #self.backlog_entries then
+            if self.backlog_index < backlog.size() then
                 self.backlog_index = self.backlog_index + 1
                 refresh_backlog_view(self)
             end
