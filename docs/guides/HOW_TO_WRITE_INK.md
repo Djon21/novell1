@@ -126,7 +126,7 @@ Git Bash / Linux:
 # speaker:mc
 Холодный. Ладно. Нашёлся — уже хорошо.
 
-# set_flag:has_phone=true
+# set_flag:coffee_drunk=true
 # return_to_scene
 -> DONE
 ```
@@ -150,8 +150,8 @@ Git Bash / Linux:
 
 | Тег | Пример | Что делает |
 |---|---|---|
-| `set_flag:NAME=VAL` | `# set_flag:has_phone=true` | Канонический. Пишет флаг в `game_state`. Читается из `scenes.lua` через `gs.get_flag(...)`. Значения: `true`/`false`/число/строка. |
-| `flag:NAME=VAL` | `# flag:has_phone=true` | Алиас, legacy. Работает идентично. |
+| `set_flag:NAME=VAL` | `# set_flag:coffee_drunk=true` | Канонический. Пишет флаг в `game_state`. Читается из `scenes.lua` через `gs.get_flag(...)`. Значения: `true`/`false`/число/строка. |
+| `flag:NAME=VAL` | `# flag:coffee_drunk=true` | Алиас, legacy. Работает идентично. |
 | `add_item:ID` | `# add_item:mug` | Канонический. Добавить предмет в инвентарь. |
 | `remove_item:ID` | `# remove_item:mug` | Канонический. Убрать предмет. |
 | `item:add:ID` / `item:remove:ID` | — | Алиасы (legacy), работают. |
@@ -239,8 +239,8 @@ Git Bash / Linux:
 | И то, и другое | **дублируй** оба синтаксиса |
 
 ```ink
-~ has_mug = true               // для ink-условий {has_mug:}
-# set_flag:has_mug=true        // для scenes.lua и quests.lua
+~ coffee_drunk = true               // для ink-условий {coffee_drunk:}
+# set_flag:coffee_drunk=true        // для scenes.lua и quests.lua
 ```
 
 ### Когда нужен только `# set_flag:`
@@ -253,16 +253,16 @@ Git Bash / Linux:
 
 ### Когда нужны оба
 
-Если в ink есть `{has_mug:` или `{not has_phone:` — обязательно:
-1. Объявить `VAR has_mug = false` в `00_bootstrap.ink`
-2. В knot'е делать `~ has_mug = true`
-3. И дублировать `# set_flag:has_mug=true`
+Если в ink есть `{coffee_drunk:` или `{not coffee_drunk:` — обязательно:
+1. Объявить `VAR coffee_drunk = false` в `00_bootstrap.ink`
+2. В knot'е делать `~ coffee_drunk = true`
+3. И дублировать `# set_flag:coffee_drunk=true`
 
 ### Проверка: нужен ли VAR?
 
 Посмотри в своём ink — есть ли такое:
 ```ink
-{has_phone:        ← условие? → нужен VAR
+{coffee_drunk:        ← условие? → нужен VAR
 {not coffee_drunk: ← условие? → нужен VAR
 {mug_taken and coffee_drunk: ← нужен VAR для обоих
 ```
@@ -271,7 +271,7 @@ Git Bash / Linux:
 
 ### Нейминг флагов / VAR
 
-- `has_X` — предмет у игрока (`has_phone`, `has_mug`)
+- предметы у игрока — НЕ через флаги, а через `gs.has_item("phone")` в scenes.lua и `# add_item:phone` в ink
 - `X_seen` — сцена/реплика уже была (`bedroom_morning_seen`, `kitchen_intro_seen`)
 - `sms_<contact>_read` / `sms_<contact>_replied` — авто-флаги (ставит движок)
 - `need_X` — промежуточная цель активирована (`need_phone`)
@@ -402,7 +402,7 @@ action = { type = "ink_knot", knot = "take_phone" }
 === take_phone ===
 # speaker:none
 ...текст...
-# set_flag:has_phone=true
+# set_flag:coffee_drunk=true
 # return_to_scene
 -> DONE
 ```
@@ -572,12 +572,12 @@ condition = function(gs) return not gs.get_flag("seen") end
 ### Ошибка 4: VAR не объявлен, но используется в условии
 
 ```ink
--- 00_bootstrap.ink — нет VAR has_mug
+-- 00_bootstrap.ink — нет VAR coffee_drunk
 -- 01_apartment.ink:
-{has_mug:  ← Unresolved variable: has_mug
+{coffee_drunk:  ← Unresolved variable: coffee_drunk
 ```
 
-**Правильно:** добавить `VAR has_mug = false` в `00_bootstrap.ink`.
+**Правильно:** добавить `VAR coffee_drunk = false` в `00_bootstrap.ink`.
 
 ### Ошибка 5: несуществующий id квеста
 
@@ -590,8 +590,8 @@ condition = function(gs) return not gs.get_flag("seen") end
 ### Ошибка 6: только VAR без `# set_flag:`, или наоборот
 
 ```ink
-~ has_phone = true
-// scenes.lua проверяет gs.get_flag("has_phone") → false → hotspot не пропадёт
+~ coffee_drunk = true
+// scenes.lua проверяет gs.get_flag("coffee_drunk") → false → hotspot не пропадёт
 ```
 
 **Правильно:** оба синтаксиса вместе (см. §5).
@@ -628,14 +628,14 @@ condition = function(gs) return not gs.get_flag("seen") end
 # speaker:none
 Кружка в шкафчике. Берёшь её.
 # add_item:mug
-~ has_mug = true
-# set_flag:has_mug=true
+~ coffee_drunk = true
+# set_flag:coffee_drunk=true
 # return_to_scene
 -> DONE
 ```
 
-> Нужно `~ has_mug = true` потому что в ink есть условие `{has_mug:}`.
-> Дублируем `# set_flag:has_mug=true` для scenes.lua / quests.lua.
+> Нужно `~ coffee_drunk = true` потому что в ink есть условие `{coffee_drunk:}`.
+> Дублируем `# set_flag:coffee_drunk=true` для scenes.lua / quests.lua.
 
 ### `on_enter`-монолог (один раз при входе в сцену)
 
@@ -660,8 +660,8 @@ condition = function(gs) return not gs.get_flag("seen") end
 Телефон вспыхивает экраном. Есть сообщения.
 # sfx:phone_notify
 # add_item:phone
-~ has_phone = true
-# set_flag:has_phone=true
+~ coffee_drunk = true
+# set_flag:coffee_drunk=true
 # set_flag:phone_active=true
 # sms:add:mila:Есть планы на сегодня?
 # quest:done:find_phone

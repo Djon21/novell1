@@ -220,9 +220,9 @@ my_room = {
 
 ```lua
 on_enter = {
-    knot = "enter_kitchen",
+    knot = "enter_kitchen_morning_first",
     condition = function(gs)
-        return not gs.get_flag("kitchen_intro_seen")
+        return not gs.get_flag("kitchen_morning_seen")
     end,
 }
 ```
@@ -310,7 +310,7 @@ action = { type = "phone_close" }
     icon = "",
     action = { type = "ink_knot", knot = "leave_apartment" },
     condition = function(gs)
-        return gs.get_flag("has_phone") and gs.get_flag("coffee_drunk")
+        return gs.has_item("phone") and gs.get_flag("coffee_drunk")
     end,
 }
 ```
@@ -331,7 +331,7 @@ objects = {
         pos = { x = 385, y = 260 },          -- левый-нижний угол
         size = { w = 52, h = 22 },
         visible_when = function(gs)
-            return gs.get_flag("coffee_drunk") and not gs.get_flag("has_phone")
+            return gs.get_flag("coffee_drunk") and not gs.has_item("phone")
         end,
     },
 }

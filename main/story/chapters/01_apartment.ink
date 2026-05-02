@@ -189,11 +189,9 @@
 # speaker:mc
 Нет. Сегодня без стандартных решений.
 # add_item:phone
-~ has_phone = true
 ~ phone_taken = true
 ~ phone_active = true
 ~ anomaly_noticed = true
-# set_flag:has_phone=true
 # set_flag:phone_active=true
 # set_flag:phone_taken=true
 {mc_gender == "female":
@@ -279,9 +277,7 @@
 # speaker:mc
 Подойдёт.
 # add_item:mug
-~ has_mug = true
 ~ mug_taken = true
-# set_flag:has_mug=true
 # set_flag:mug_taken=true
 # return_to_scene
 -> DONE
@@ -420,26 +416,3 @@
 // Оставлены, чтобы старые сцены из scenes.lua не падали при случайном входе.
 // ================================================================
 
-=== enter_kitchen ===
--> enter_kitchen_morning_first
-
-=== inspect_bathroom ===
--> wash_up_morning
-
-=== spot_phone_after_coffee ===
-# speaker:none
-На тумбочке рядом с зарядкой лежит телефон.
-Экран вспыхивает, как только ты подходишь ближе.
-# set_flag:spot_phone_after_coffee_seen=true
-~ spot_phone_after_coffee_seen = true
-# return_to_scene
--> DONE
-
-=== bedroom_monitor ===
-# speaker:none
-Ноутбук закрыт. В тёмной крышке отражается светлая комната и твоя рука на краю стола.
-На секунду кажется, что экран под крышкой всё равно мигнул.
-# set_flag:bedroom_monitor_seen=true
-~ bedroom_monitor_seen = true
-# return_to_scene
--> DONE

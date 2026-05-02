@@ -56,11 +56,6 @@ local INVENTORY_MVP_VERBS = {
     read = true,
 }
 
-local LEGACY_FLAG_ITEMS = {
-    has_mug = "mug",
-    has_phone = "phone",
-}
-
 local BG_TEXTURE_KEY = "backgrounds"
 local DEDICATED_BG_ANIMATION = "scene_bg"
 local AUTO_ADVANCE_MIN_DELAY = 1.0
@@ -310,7 +305,7 @@ local function build_map_point_overrides()
         home = {
             iter = iteration,
             stat = at_home and "текущая" or "исходная",
-            clue = gs.get_flag and gs.get_flag("has_phone") and "телефон" or "—",
+            clue = gs.has_item and gs.has_item("phone") and "телефон" or "—",
         },
         metro = {
             iter = iteration,
@@ -577,9 +572,7 @@ local function reset_dialogue_play_modes(self)
 end
 
 local function has_phone_access()
-    local has_flag = gs.get_flag and gs.get_flag("has_phone") == true or false
-    local has_item = gs.has_item and gs.has_item("phone") or false
-    return has_flag or has_item
+    return gs.has_item and gs.has_item("phone") or false
 end
 
 local function run_side_dialogue_knot(self, knot_name, keep_bg)
@@ -665,29 +658,7 @@ local function handle_inventory_verb(self, item_id, verb)
     jump_inventory_knot(self, knot_name)
 end
 
-local function sync_derived_inventory()
-    if M.syncing_inventory then return false end
-
-    M.syncing_inventory = true
-    local changed = false
-
-    for flag, item_id in pairs(LEGACY_FLAG_ITEMS) do
-        local flag_enabled = gs.get_flag and gs.get_flag(flag) == true
-        local has_item = gs.has_item and gs.has_item(item_id)
-        if flag_enabled and not has_item and gs.add_item then
-            changed = gs.add_item(item_id) or changed
-        elseif not flag_enabled and has_item and gs.remove_item then
-            changed = gs.remove_item(item_id) or changed
-        end
-    end
-
-    M.syncing_inventory = false
-    return changed
-end
-
 local function sync_ui_state(self)
-    sync_derived_inventory()
-
     local inv = gs.get_inventory and gs.get_inventory() or {}
     local unread = gs.get_phone_unread_total and gs.get_phone_unread_total() or 0
     local has_phone = has_phone_access()

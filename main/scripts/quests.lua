@@ -28,7 +28,7 @@ M.quests = {
         name = "Найти телефон",
         description = "Телефон вибрирует рядом с кроватью. Нужно взять его и проверить сообщение.",
         steps = {
-            { text = "Подобрать телефон", done_when = "has_phone" },
+            { text = "Подобрать телефон", done_when = "phone_taken" },
             { text = "Включить экран",    done_when = "phone_active" },
         },
     },
@@ -58,7 +58,7 @@ M.quests = {
         steps = {
             { text = "Умыться",         done_when = "washed_up" },
             { text = "Дойти до кухни",  done_when = "kitchen_morning_seen" },
-            { text = "Найти кружку",    done_when = "has_mug" },
+            { text = "Найти кружку",    done_when = "mug_taken" },
             { text = "Сделать кофе",    done_when = "coffee_drunk" },
         },
     },

@@ -59,7 +59,7 @@ M.scenes = {    -- =============================================================
                 icon = "",
                 action = { type = "ink_knot", knot = "leave_apartment" },
                 condition = function(gs)
-                    return gs.get_flag("has_phone") and gs.get_flag("coffee_drunk") and gs.get_flag("date_agreed")
+                    return gs.has_item("phone") and gs.get_flag("coffee_drunk") and gs.get_flag("date_agreed")
                 end,
             },
             {
@@ -127,7 +127,7 @@ M.scenes = {    -- =============================================================
                 },
                 action = { type = "ink_knot", knot = "leave_apartment" },
                 condition = function(gs)
-                    return gs.get_flag("has_phone") and gs.get_flag("coffee_drunk") and gs.get_flag("date_agreed")
+                    return gs.has_item("phone") and gs.get_flag("coffee_drunk") and gs.get_flag("date_agreed")
                 end,
             },
             {
@@ -165,7 +165,7 @@ M.scenes = {    -- =============================================================
                 pos   = { x = 105, y = 185 },
                 size  = { w = 52, h = 22 },
                 visible_when = function(gs)
-                    return not gs.get_flag("has_phone")
+                    return not gs.has_item("phone")
                 end,
             },
         },
@@ -180,7 +180,7 @@ M.scenes = {    -- =============================================================
                 icon_color = { r = 0.85, g = 0.98, b = 1.00 },
                 action = { type = "ink_knot", knot = "take_phone" },
                 visible_when = function(gs)
-                    return not gs.get_flag("has_phone")
+                    return not gs.has_item("phone")
                 end,
             },
             {
@@ -302,7 +302,7 @@ M.scenes = {    -- =============================================================
                 icon_color = { r = 1.00, g = 0.90, b = 0.68 },
                 action = { type = "ink_knot", knot = "use_coffee_machine_no_cup" },
                 visible_when = function(gs)
-                    return not gs.get_flag("has_mug") and not gs.get_flag("coffee_drunk")
+                    return not gs.has_item("mug") and not gs.get_flag("coffee_drunk")
                 end,
             },
             {
@@ -316,7 +316,7 @@ M.scenes = {    -- =============================================================
                 hotspot_scale = 1.08,
                 action = { type = "ink_knot", knot = "use_coffee_machine_with_cup" },
                 visible_when = function(gs)
-                    return gs.get_flag("has_mug") and not gs.get_flag("coffee_drunk")
+                    return gs.has_item("mug") and not gs.get_flag("coffee_drunk")
                 end,
             },
             {
@@ -329,7 +329,7 @@ M.scenes = {    -- =============================================================
                 icon_color = { r = 1.00, g = 0.92, b = 0.74 },
                 action = { type = "ink_knot", knot = "take_mug" },
                 visible_when = function(gs)
-                    return not gs.get_flag("has_mug")
+                    return not gs.has_item("mug")
                 end,
             },
             {

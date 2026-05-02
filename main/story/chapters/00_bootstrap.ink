@@ -19,7 +19,6 @@ VAR SYNC = 0
 
 VAR coffee_drunk = false
 VAR phone_active = false
-VAR spot_phone_after_coffee_seen = false
 VAR can_leave_apt = false
 VAR date_agreed = false
 VAR date_place_cafe = false
@@ -55,11 +54,7 @@ VAR need_mug_for_coffee = false
 VAR need_phone = false
 VAR mug_taken = false
 VAR phone_taken = false
-VAR has_mug = false
-VAR has_phone = false
 VAR first_anomaly_seen = false
-VAR bedroom_monitor_seen = false
-VAR bathroom_seen = false
 
 VAR used_fallback = false
 VAR requested_clarification = false

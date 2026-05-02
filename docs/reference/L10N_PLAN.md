@@ -255,7 +255,7 @@ gui.set_text(node, l10n.t("menu_new"))
 2. Имена stitch'ей: = имя_stitch — оставлять как есть
 3. ВСЕ строки, начинающиеся с `#` (теги): # bg:..., # set_flag:..., # sms:add:..., # quest:..., # return_to_scene
    ВКЛЮЧАЯ значения тегов: # set_flag:bedroom_seen=true остаётся буквально
-4. Имена ink-переменных: has_phone, iteration_number, INSIGHT и т.п.
+4. Имена ink-переменных: coffee_drunk, iteration_number, INSIGHT и т.п.
 5. Ink-управляющие конструкции: -> DONE, -> knot_name, ~ переменная = ...
 6. Условия в фигурных скобках: {iteration_number > 1: ...} — само условие не трогать,
    но текст внутри блока перевести
