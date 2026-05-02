@@ -25,6 +25,15 @@ M.scenes = {    -- =============================================================
     apartment_hub = {
         bg = "bg_apartment_hall_morning",
         label = "Коридор",
+        on_enter = {
+            knot = "sunday_home_after_date_router",
+            condition = function(gs)
+                return gs.get_flag("sunday_after_date_active")
+                    and not gs.get_flag("sunday_finished")
+                    and gs.get_flag("met_npc_sunday")
+                    and not gs.get_flag("sunday_evening_started")
+            end,
+        },
         hotspots = {
             {
                 id = "to_bedroom_morning",
@@ -210,6 +219,26 @@ M.scenes = {    -- =============================================================
                 action = { type = "ink_knot", knot = "look_bed_morning" },
                 visible_when = function(gs)
                     return not gs.get_flag("got_out_of_bed")
+                end,
+            },
+            {
+                id = "bedroom_bed_sleep_sunday",
+                rect = { x = 205, y = 105, w = 460, h = 225 },
+                label = "Лечь спать",
+                icon = "left_click",
+				icon_offset_x = -4,
+				icon_offset_y = 0,
+                hotspot_style = {
+                    circle_color = { r = 0.06, g = 0.06, b = 0.10 },
+                    ring_color = { r = 1.00, g = 1.00, b = 1.00 },
+                    icon_color = { r = 1.00, g = 1.00, b = 1.00 },
+                    circle_alpha = 0.78,
+                    ring_alpha = 0.90,
+                },
+                action = { type = "ink_knot", knot = "sunday_sleep_in_bed" },
+                visible_when = function(gs)
+                    return gs.get_flag("sunday_evening_started")
+                        and not gs.get_flag("sunday_finished")
                 end,
             },
             {
@@ -518,7 +547,8 @@ M.scenes = {    -- =============================================================
     },
 
     cafe_hub = {
-        bg = "bg_office",        -- заменить на bg_cafe
+        bg = "bg_cafe_morning",
+        label = "Кафе",
         on_enter = {
             knot = "sunday_date_cafe_arrival",
             condition = function(gs)
@@ -527,24 +557,35 @@ M.scenes = {    -- =============================================================
         },
         hotspots = {
             {
+                id = "cafe_window_table",
+                rect = { x = 680, y = 170, w = 300, h = 270 },
+                label = "Столик у окна",
+                icon = "left_click",
+                action = { type = "ink_knot", knot = "cafe_window_table" },
+                visible_when = function(gs)
+                    return gs.get_flag("met_npc_sunday")
+                end,
+            },
+            {
                 id = "cafe_bar",
-                rect = { x = 400, y = 200, w = 400, h = 250 },
+                rect = { x = 360, y = 205, w = 380, h = 280 },
                 label = "Стойка",
-                icon = "",
+                icon = "coffee",
                 action = { type = "ink_knot", knot = "cafe_bar_interact" },
             },
             {
                 id = "leave_cafe",
-                rect = { x = 0, y = 0, w = 150, h = 200 },
+                rect = { x = 0, y = 0, w = 170, h = 220 },
                 label = "Выйти",
-                icon = "",
+                icon = "arrow_back",
                 action = { type = "ink_knot", knot = "leave_cafe" },
             },
         },
     },
 
     park_hub = {
-        bg = "bg_rooftop",       -- заменить на bg_park
+        bg = "bg_park_by_the_river_morning",
+        label = "Парк у реки",
         on_enter = {
             knot = "sunday_date_park_arrival",
             condition = function(gs)
@@ -554,23 +595,41 @@ M.scenes = {    -- =============================================================
         hotspots = {
             {
                 id = "park_bench",
-                rect = { x = 450, y = 150, w = 300, h = 200 },
+                rect = { x = 430, y = 135, w = 320, h = 220 },
                 label = "Скамейка",
-                icon = "",
+                icon = "left_click",
                 action = { type = "ink_knot", knot = "park_bench_interact" },
             },
             {
+                id = "park_river_view",
+                rect = { x = 760, y = 250, w = 360, h = 260 },
+                label = "Река",
+                icon = "left_click",
+                action = { type = "ink_knot", knot = "park_river_view" },
+                visible_when = function(gs)
+                    return gs.get_flag("met_npc_sunday")
+                end,
+            },
+            {
                 id = "leave_park",
-                rect = { x = 0, y = 0, w = 150, h = 200 },
+                rect = { x = 0, y = 0, w = 170, h = 220 },
                 label = "Уйти",
-                icon = "",
+                icon = "arrow_back",
                 action = { type = "ink_knot", knot = "leave_park" },
             },
         },
     },
 
     shop_hub = {
-        bg = "bg_office",        -- заменить на bg_shop
+        bg = "bg_shop_day",
+        label = "Магазин 24/7",
+        on_enter = {
+            knot = "sunday_shop_arrival",
+            condition = function(gs)
+                return gs.get_flag("sunday_after_date_active")
+                    and not gs.get_flag("sunday_second_stop_done")
+            end,
+        },
         hotspots = {
             {
                 id = "shop_counter",
@@ -610,7 +669,15 @@ M.scenes = {    -- =============================================================
     },
 
     view_hub = {
-        bg = "bg_rooftop",       -- заменить на bg_viewpoint
+        bg = "bg_observation_day",
+        label = "Смотровая",
+        on_enter = {
+            knot = "sunday_viewpoint_arrival",
+            condition = function(gs)
+                return gs.get_flag("sunday_after_date_active")
+                    and not gs.get_flag("sunday_second_stop_done")
+            end,
+        },
         hotspots = {
             {
                 id = "view_railing",

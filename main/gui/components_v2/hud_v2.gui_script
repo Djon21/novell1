@@ -55,8 +55,8 @@ end
 local function ensure_log_button(self)
     if self.log_button then return end
     local root = gui.get_node("hud_root")
-    self.log_button = make_box(root, 1004, 649, 0.1, 64, 64, COLOR_BTN_BG)
-    self.log_label = make_text(root, 1036, 682, 0.12, 60, 16, "LOG", "jb_mono_bold_14", COLOR_BTN_TEXT, gui.PIVOT_CENTER)
+    self.log_button = make_box(root, 971, 617, 0.1, 64, 64, COLOR_BTN_BG)
+    self.log_label = make_text(root, 1003, 650, 0.12, 60, 16, "LOG", "jb_mono_bold_14", COLOR_BTN_TEXT, gui.PIVOT_CENTER)
 end
 
 local function set_phone_slot_visible(enabled, notif_count)

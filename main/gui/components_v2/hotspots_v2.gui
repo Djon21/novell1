@@ -51,7 +51,6 @@ nodes {
   id: "hotspot_label_1"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_1"
-  inherit_alpha: true
   outline_alpha: 0.0
   shadow_alpha: 0.0
   enabled: false
@@ -148,7 +147,6 @@ nodes {
   id: "hotspot_label_2"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_2"
-  inherit_alpha: true
   outline_alpha: 0.0
   shadow_alpha: 0.0
   enabled: false
@@ -245,7 +243,6 @@ nodes {
   id: "hotspot_label_3"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_3"
-  inherit_alpha: true
   outline_alpha: 0.0
   shadow_alpha: 0.0
   enabled: false
@@ -342,7 +339,6 @@ nodes {
   id: "hotspot_label_4"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_4"
-  inherit_alpha: true
   outline_alpha: 0.0
   shadow_alpha: 0.0
   enabled: false
@@ -439,7 +435,6 @@ nodes {
   id: "hotspot_label_5"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_5"
-  inherit_alpha: true
   outline_alpha: 0.0
   shadow_alpha: 0.0
   enabled: false
@@ -536,7 +531,6 @@ nodes {
   id: "hotspot_label_6"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_6"
-  inherit_alpha: true
   outline_alpha: 0.0
   shadow_alpha: 0.0
   enabled: false

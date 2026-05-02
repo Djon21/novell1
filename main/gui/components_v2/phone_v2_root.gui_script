@@ -176,6 +176,14 @@ function on_message(self, message_id, message, sender)
             if comp then msg.post(comp, "refresh_app") end
         end
 
+    elseif message_id == hash("open_app") then
+        if self.visible then
+            local id = message and message.id or "sms"
+            if self.active_app ~= id then
+                switch_app(self, id)
+            end
+        end
+
     elseif message_id == hash("set_phone_notif") then
         local n = tonumber(message and message.n) or 0
         set_text("stats_msg", "сообщений: " .. tostring(n))

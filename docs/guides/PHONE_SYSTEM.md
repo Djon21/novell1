@@ -471,20 +471,25 @@ switch_app(self, "map")                                  -- → open_app → #ph
 `phone_map.gui_script` скрывает/показывает только `map_root` —
 Defold автоматически распространяет `enabled = false` на все дочерние узлы.
 
-**Внешняя карта (`map_v2`)** по-прежнему открывается из HUD-кнопки
-(сообщение `open_map` в `ui_manager_v2`) — она не затронута.
+### Вызов карты из Ink
 
-Если нужно вернуть старое поведение (карта как внешний оверлей из телефона):
-1. Добавить `map = true` в `EXTERNAL_APPS` в `phone_v2_root.gui_script`
-2. Восстановить обработку `id == "map"` в `phone_app_clicked` в `ui_manager_v2`:
+Для сюжетного вызова карты используй тег:
 
-```lua
-elseif message_id == hash("phone_app_clicked") then
-    if message.id == "map" then
-        close_phone(self)
-        open_map(self)
-    end
+```ink
+# phone:map
 ```
+
+Он открывает телефон и сразу переключает его на приложение карты (`phone_map.gui`). Игрок выбирает POI, `phone_map.gui_script` отправляет `map_travel`, после чего `ui_manager_v2` закрывает телефон и открывает выбранный hub через `scene_controller.enter(scene_id)`.
+
+Универсальная форма для других приложений:
+
+```ink
+# phone:app:map
+# phone:app:sms
+# phone:app:notes
+```
+
+Старый прямой сценарный вызов внешней карты не использовать для нового контента: карта должна открываться внутри телефона.
 
 ---
 

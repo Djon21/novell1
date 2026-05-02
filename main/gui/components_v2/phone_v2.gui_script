@@ -26,7 +26,6 @@ local function dbg(...)
     if DEBUG_LOG then print(...) end
 end
 local EXTERNAL_APPS = {
-    map = true,
 }
 
 -- Палитра цветов (матчим hud_mobile.html для app-вьюх).
@@ -453,6 +452,10 @@ function on_message(self, message_id, message, sender)
         set_all_enabled(false)
     elseif message_id == hash("refresh_phone") then
         refresh_all_views(self)
+    elseif message_id == hash("open_app") then
+        if self.visible then
+            show_view(self, message and message.id or "sms")
+        end
     elseif message_id == hash("set_phone_notif") then
         local n = tonumber(message and message.n) or 0
         set_text("stats_msg", "сообщений: " .. tostring(n))
