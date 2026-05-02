@@ -558,6 +558,19 @@ function on_input(self, action_id, action)
     if action_id ~= hash("touch") or not action.pressed then return false end
     ensure_backlog_nodes(self)
 
+    -- Любой клик во время SKIP отключает SKIP. Иначе игроку приходится
+    -- ловить узкое окно прицельным тыком в маленькую кнопку SKIP, пока
+    -- диалог промотывается с интервалом ~50мс — практически невозможно.
+    -- Бэклог-режим из этого правила исключён (SKIP всё равно не работает
+    -- пока бэклог открыт, а клики по стрелкам нужны для навигации).
+    if self.skip and not self.backlog_open then
+        self.skip = false
+        gui.set_color(gui.get_node("btn_skip"), COLOR_BTN_BG)
+        gui.set_color(gui.get_node("btn_skip_label"), COLOR_LABEL_OFF)
+        msg.post(UI_MGR, "dialogue_skip", { on = false })
+        return true
+    end
+
     if self.backlog_open then
         local n = self.backlog_nodes
         if gui.pick_node(n.btn_close, action.x, action.y) then

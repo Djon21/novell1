@@ -871,6 +871,14 @@ function M.set_inventory_action_context(ctx)
     set_inventory_story_context(ctx)
 end
 
+-- Возвращает true, если текущий параграф — последний в текущей пачке
+-- из Continue(). Используется ui_manager_v2 для паузы SKIP-режима
+-- на последней реплике перед сменой контекста (choice / end / следующая
+-- пачка), чтобы дать игроку время выключить SKIP вручную.
+function M.is_last_in_queue()
+    return current_index >= #paragraph_queue
+end
+
 function M.get_current_node()
     -- 1) Есть ещё непоказанные параграфы → dialogue
     if paragraph_queue[current_index] then

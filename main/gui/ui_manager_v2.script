@@ -18,6 +18,9 @@ go.property("bg_apartment_hall_morning_atlas", resource.atlas("/main/images/back
 go.property("bg_apartment_bedroom_morning_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_bedroom_morning.atlas"))
 go.property("bg_apartment_kitchen_morning_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_kitchen_morning.atlas"))
 go.property("bg_cafe_morning_atlas", resource.atlas("/main/images/backgrounds/bg_cafe_morning.atlas"))
+go.property("bg_park_by_the_river_morning_atlas", resource.atlas("/main/images/backgrounds/bg_park_by_the_river_morning.atlas"))
+go.property("bg_shop_day_atlas", resource.atlas("/main/images/backgrounds/bg_shop_day.atlas"))
+go.property("bg_observation_day_atlas", resource.atlas("/main/images/backgrounds/bg_observation_day.atlas"))
 
 local dm = require "main.scripts.dialogue_manager_ink"
 local gs = require "main.scripts.game_state"
@@ -96,6 +99,9 @@ local DEDICATED_BG_ATLAS_PROPS = {
     bg_apartment_bedroom_morning = "bg_apartment_bedroom_morning_atlas",
     bg_apartment_kitchen_morning = "bg_apartment_kitchen_morning_atlas",
     bg_cafe_morning = "bg_cafe_morning_atlas",
+    bg_park_by_the_river_morning = "bg_park_by_the_river_morning_atlas",
+    bg_shop_day = "bg_shop_day_atlas",
+    bg_observation_day = "bg_observation_day_atlas",
 }
 
 -- Базовый режим (menu / nav / exploration / dialogue). choice/inventory/phone/map —
@@ -491,6 +497,15 @@ local function schedule_dialogue_autoadvance(self)
         return
     end
 
+    -- В SKIP-режиме не автопродвигаемся с последнего параграфа пачки —
+    -- даём игроку время отключить SKIP перед сменой контекста.
+    -- (Эта проверка дублируется здесь, потому что schedule_dialogue_autoadvance
+    -- вызывается из нескольких мест: nudge_dialogue_skip, typewriter_done,
+    -- set_dialogue_play_mode.)
+    if self.dialogue_skip and dm.is_last_in_queue and dm.is_last_in_queue() then
+        return
+    end
+
     local delay = compute_dialogue_autoplay_delay(self.dialogue_current_text, self.dialogue_skip)
     self.dialogue_autoplay_handle = timer.delay(delay, false, function()
         self.dialogue_autoplay_handle = nil
@@ -506,6 +521,20 @@ local function nudge_dialogue_skip(self)
         return
     end
     if self.dialogue_node_type ~= "dialogue" then
+        return
+    end
+    -- Пауза SKIP на последнем параграфе текущей пачки — даём игроку время
+    -- отключить SKIP вручную перед сменой контекста (choice / end / новая
+    -- пачка). Typewriter всё равно достреливается до конца, чтобы реплика
+    -- читалась полностью; но автопереход не выполняется — нужен ручной клик.
+    if dm.is_last_in_queue and dm.is_last_in_queue() then
+        if self.dialogue_waiting_for_typewriter then
+            timer.delay(0, false, function()
+                if self.dialogue_waiting_for_typewriter and self.dialogue_node_type == "dialogue" then
+                    msg.post(M.components.dialogue, "finish_typewriter")
+                end
+            end)
+        end
         return
     end
     if self.dialogue_waiting_for_typewriter then
