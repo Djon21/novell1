@@ -47,8 +47,8 @@
 
 Весь нарратив в `main/story/chapter_01.ink` + `main/story/chapters/*.ink`:
 - `00_bootstrap.ink` (VAR-объявления, переводить не нужно)
-- `01_apartment.ink`, `02_metro.ink`, `03_office.ink`, `04_rooftop.ink`
-- `90_phone_apps.ink`, `91_inventory_actions.ink`
+- `01_apartment.ink`, `02_sunday_date.ink`, `02_metro.ink`, `03_office.ink`, `04_rooftop.ink`
+- `91_inventory_actions.ink`
 
 Объём — тысячи строк. Переводить только после контентного freeze.
 
@@ -237,8 +237,9 @@ gui.set_text(node, l10n.t("menu_new"))
 | `02_metro.ink` | 1316 | ~2630 | ✅ |
 | `03_office.ink` | 2341 | ~4680 | ✅ |
 | `04_rooftop.ink` | 1260 | ~2520 | ✅ |
-| `90_phone_apps.ink` | 161 | ~320 | ✅ |
 | `91_inventory_actions.ink` | 266 | ~530 | ✅ |
+
+> Числа на 2026-05-01. Перепроверяй `wc -w main/story/chapters/*.ink` перед заходом в LLM, если контент изменился.
 
 Каждая глава влезает в любую современную LLM (~5k токенов). **Перевод делаем по одной главе за раз**, не отправлять всё разом.
 

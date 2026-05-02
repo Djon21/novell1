@@ -6,10 +6,10 @@
 
 - `00_bootstrap.ink` — общие `VAR`, стартовый переход, bootstrap
 - `01_apartment.ink` — квартира и выход к карте
+- `02_sunday_date.ink` — воскресная встреча с NPC
 - `02_metro.ink` — метро
 - `03_office.ink` — офис
 - `04_rooftop.ink` — крыша и концовки
-- `90_phone_apps.ink` — compatibility-knot'ы телефона
 - `91_inventory_actions.ink` — действия предметов
 
 ## Правила

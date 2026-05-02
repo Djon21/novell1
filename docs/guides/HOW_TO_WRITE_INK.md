@@ -44,7 +44,6 @@ main/story/
     ├── 02_metro.ink         ← глава 2 (legacy/в работе)
     ├── 03_office.ink        ← глава 3
     ├── 04_rooftop.ink       ← глава 4
-    ├── 90_phone_apps.ink    ← compatibility-knot'ы телефона
     └── 91_inventory_actions.ink  ← действия предметов
 ```
 
