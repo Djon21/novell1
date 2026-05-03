@@ -651,6 +651,25 @@ local function resolve_inventory_knot(item_id, verb, scene_id, target_id)
     return nil
 end
 
+-- Установить/снять armed-state с одновременным управлением баннером в HUD.
+local function set_armed_state(self, item_id, verb)
+    ui_state.set_armed(item_id, verb)
+    local item = catalog.get_runtime and catalog.get_runtime(item_id) or catalog.get(item_id)
+    local item_name = item and item.name or item_id
+    msg.post(M.components.hud, "show_armed_banner", {
+        item_id = item_id,
+        item_name = item_name,
+        verb = verb,
+    })
+end
+
+local function clear_armed_state(self)
+    ui_state.clear_armed()
+    if M.components.hud then
+        msg.post(M.components.hud, "hide_armed_banner")
+    end
+end
+
 -- Запускает inventory-knot с заполнённым контекстом для ink.
 -- target_id/target_kind опциональны: для use-on-hotspot и give.
 local function fire_inventory_knot(self, item_id, verb, scene_id, target_id, target_kind)
@@ -699,13 +718,12 @@ local function handle_inventory_verb(self, item_id, verb)
         return
     end
 
-    -- USE: армируем предмет. Инвентарь закрывается, следующий клик
-    -- по hotspot'у запустит inv_use_<item>_on_<hotspot>. Если hotspot
-    -- не подходит — fallback цепочка отработает как раньше.
+    -- USE: армируем предмет. Инвентарь закрывается, баннер появляется в HUD,
+    -- следующий клик по hotspot'у запустит inv_use_<item>_on_<hotspot>.
+    -- Если hotspot не подходит — fallback цепочка отработает как раньше.
     if verb == "use" then
-        ui_state.set_armed(item_id, "use")
-        print("[ui_manager_v2] armed USE on", item_id, "— click a hotspot or press ESC to cancel")
         close_inventory(self)
+        set_armed_state(self, item_id, "use")
         return
     end
 
@@ -734,7 +752,7 @@ end
 local function handle_armed_hotspot_click(self, hotspot_id)
     local armed = ui_state.get_armed()
     if not armed then return false end
-    ui_state.clear_armed()
+    clear_armed_state(self)
 
     local scene_id = scene_controller.get_current_scene_id and scene_controller.get_current_scene_id() or nil
     if not scene_id or scene_id == "" then return false end
@@ -832,6 +850,10 @@ local function start_new_run(self, reset_iteration_progress)
     if not bytes then
         return false
     end
+
+    -- Сбросить armed-state на случай если игрок начал новую игру/итерацию
+    -- из меню в момент когда был активен use-on-target.
+    clear_armed_state(self)
 
     sm.load()
     meta.init()
@@ -948,7 +970,7 @@ local function open_inventory(self)
     dbg("[ui_manager_v2] open_inventory()")
     -- Открытие инвентаря снимает armed-state — игрок передумал использовать
     -- ранее «взятый» предмет, может выбрать другой.
-    if ui_state.clear_armed then ui_state.clear_armed() end
+    clear_armed_state(self)
     M.overlays.inventory = true
     sync_modal_state()
     msg.post(M.components.inventory, "show_inventory")
@@ -1672,6 +1694,11 @@ function on_message(self, message_id, message, sender)
     elseif message_id == hash("inventory_verb") then
         dbg("[ui_manager_v2] inventory_verb", message.item_id, message.verb)
         handle_inventory_verb(self, message.item_id, message.verb)
+
+    elseif message_id == hash("cancel_armed_inventory") then
+        -- Отмена armed-режима из любого источника:
+        -- ✕ на баннере в HUD, клик мимо hotspot'ов в hotspots_v2.
+        clear_armed_state(self)
 
     -- --- phone ---
     elseif message_id == hash("open_phone") then

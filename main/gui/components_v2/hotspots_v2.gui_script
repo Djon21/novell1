@@ -362,9 +362,9 @@ function on_input(self, action_id, action)
         end
 
         -- Клик мимо всех hotspot'ов в armed-режиме = отмена.
-        -- Игрок передумал использовать предмет; снимаем armed без эффекта.
+        -- Снимаем через ui_manager, чтобы он же спрятал баннер в HUD.
         if ui_state.get_armed and ui_state.get_armed() then
-            ui_state.clear_armed()
+            msg.post("#ui_manager_v2", "cancel_armed_inventory")
             dbg("[hotspots] armed cancelled (click outside hotspots)")
             return true
         end
