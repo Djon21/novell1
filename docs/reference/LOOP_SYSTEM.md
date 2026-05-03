@@ -114,11 +114,20 @@ Ink-история запускается заново и всегда дохо�
 
 ## 4. Концовки и переход итераций
 
-| Тег в ink | Что происходит |
-|---|---|
-| `# chapter_finished` | Обычный конец → `meta.complete_iteration()` → меню |
-| `# loop:end:false:ID` | Ложная концовка → `meta.record_false_ending(ID)` → меню |
-| `# loop:end:true` | Истинная концовка → `meta.complete_iteration()` → меню |
+### Итерация 001 vs 002+: разная логика
+
+- **Итерация 001** — **линейная**. Петля ещё не запущена, ложных концовок нет, true ending недоступен. Концовка одна — переход в следующую итерацию через `# chapter_finished`.
+- **Итерация 002+** — петля активна. Появляются ложные концовки `# loop:end:false:*` и истинная `# loop:end:true` (после двух уникальных ложных).
+
+Runtime-страховка: если на итерации 001 встречается `# loop:end:false:*` или `# loop:end:true` (например, из-за промаха в авторинге), они трактуются как `# chapter_finished` — игрок не «застрянет» в искусственной петле.
+
+### Теги ink
+
+| Тег | Итерация 001 | Итерация 002+ |
+|---|---|---|
+| `# chapter_finished` | → `meta.complete_iteration()` → меню | то же |
+| `# loop:end:false:ID` | трактуется как `chapter_finished` (warn) | `meta.record_false_ending(ID)` → restart той же итерации |
+| `# loop:end:true` | трактуется как `chapter_finished` (warn) | требует `loop_awareness >= 2`; иначе fallback `record_false_ending("early_true")` |
 
 ### Ложная концовка (`# loop:end:false:ID`)
 
@@ -214,23 +223,31 @@ meta.set("my_field", new_value)   -- автосохранение в файл
 }
 ```
 
-### Пример ложной концовки
+### Пример ложной концовки с gate'ом по итерации
+
+Best practice — оборачивать ложные концовки в условие, чтобы итерация 001 шла линейно:
 
 ```ink
 === ending_trusted_system ===
 # bg:bg_office # speaker:none
 ...текст концовки...
-# loop:end:false:system_trust
+{iteration_number > 1:
+    # loop:end:false:system_trust
+- else:
+    # chapter_finished
+}
 -> DONE
 ```
 
-После показа концовки run-state очистится, итерация перезапустится, `loop_awareness` увеличится (если эта ложная концовка ещё не встречалась).
+После показа концовки run-state очистится:
+- На итерации 001 → `complete_iteration()` (переход в 002)
+- На 002+ → `record_false_ending` (рестарт той же итерации, +1 awareness если ID новый)
 
 ### Пример истинной концовки
 
 ```ink
 === final_choice ===
-{false_endings_count >= 2:
+{iteration_number > 1 and false_endings_count >= 2:
     # loop:end:true
     -> ending_truth
 - else:
@@ -239,7 +256,7 @@ meta.set("my_field", new_value)   -- автосохранение в файл
 }
 ```
 
-Истинная концовка должна быть скрыта за условием на `false_endings_count` — иначе игрок попадёт в неё с первой итерации без накопленных ложных.
+Истинная концовка должна быть скрыта за условием на `false_endings_count` — иначе игрок попадёт в неё с первой итерации без накопленных ложных. Runtime подстрахует, но лучше гейтить явно.
 
 ---
 

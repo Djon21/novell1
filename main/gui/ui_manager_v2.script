@@ -1405,6 +1405,27 @@ function on_message(self, message_id, message, sender)
     elseif message_id == hash("false_ending") then
         -- Ложная концовка: запомнить в meta (+1 awareness если впервые),
         -- перезапустить run-state БЕЗ смены номера итерации.
+        --
+        -- ИТЕРАЦИЯ 001 — линейная, петля ещё не запустилась. Если игрок
+        -- дошёл до # loop:end:false на первой итерации (промах автора или
+        -- честный финал линейного prologue), трактуем тег как обычный
+        -- chapter_finished — переход к следующей итерации без петли.
+        -- Best practice в ink: {iteration_number > 1: # loop:end:false:id - else: # chapter_finished}.
+        local iter = meta.get("iteration_number", 1) or 1
+        if iter < 2 then
+            print("[ui_manager_v2] iter 001: ignoring false_ending → chapter_finished")
+            local next_loop = meta.complete_iteration()
+            sm.clear_run()
+            M.suppress_run_save = true
+            gs.reset()
+            if scene_controller.reset then scene_controller.reset()
+            else scene_controller.deserialize({ scene_stack = {} }) end
+            M.suppress_run_save = false
+            dbg("[ui_manager_v2] iter 001 forced-finish → iteration", next_loop.iteration_number)
+            show_menu(self)
+            return
+        end
+
         local id = message and message.id or "unknown"
         local is_new = meta.record_false_ending(id)
         print("[ui_manager_v2] false_ending '" .. id .. "' new=" .. tostring(is_new)
@@ -1423,6 +1444,23 @@ function on_message(self, message_id, message, sender)
     elseif message_id == hash("true_ending") then
         -- Истинная концовка: доступна только когда найдены обе ложных.
         -- Ink сам гейтит ветку через VAR loop_awareness >= 2, но проверяем и здесь.
+        --
+        -- На итерации 001 петля не запущена → true_ending тоже не должна
+        -- срабатывать. Трактуем как chapter_finished.
+        local iter = meta.get("iteration_number", 1) or 1
+        if iter < 2 then
+            print("[ui_manager_v2] iter 001: ignoring true_ending → chapter_finished")
+            local next_loop = meta.complete_iteration()
+            sm.clear_run()
+            M.suppress_run_save = true
+            gs.reset()
+            if scene_controller.reset then scene_controller.reset()
+            else scene_controller.deserialize({ scene_stack = {} }) end
+            M.suppress_run_save = false
+            show_menu(self)
+            return
+        end
+
         if not meta.is_true_ending_unlocked() then
             -- Страховочный fallback: ещё не разблокирована — трактуем как ложную.
             print("[ui_manager_v2] WARNING: true_ending reached but not unlocked — treating as false_ending 'early_true'")

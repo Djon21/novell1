@@ -215,8 +215,21 @@ Git Bash / Linux:
 |---|---|
 | `meta:add:loop_awareness:1` | Увеличивает meta-поле. |
 | `meta:set:loop_awareness:2` | Задаёт meta-поле. |
-| `loop:end:false:ID` | Ложная концовка, restart текущей итерации. |
-| `loop:end:true` | Истинная концовка, переход дальше. |
+| `chapter_finished` | Линейный конец — переход в следующую итерацию. |
+| `loop:end:false:ID` | Ложная концовка (только итер 002+), restart текущей итерации. |
+| `loop:end:true` | Истинная концовка (только итер 002+, требует `loop_awareness >= 2`). |
+
+> **Итерация 001 — линейная:** все `# loop:end:*` на ней трактуются как `# chapter_finished` (страховка). Best practice — гейтить ложные концовки в ink:
+>
+> ```ink
+> {iteration_number > 1:
+>     # loop:end:false:my_ending
+> - else:
+>     # chapter_finished
+> }
+> ```
+>
+> Подробнее — `docs/reference/LOOP_SYSTEM.md` §4.
 
 ---
 
