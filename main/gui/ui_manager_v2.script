@@ -16,11 +16,20 @@ go.property("bg_office_evening_atlas", resource.atlas("/main/images/backgrounds/
 go.property("bg_rooftop_atlas", resource.atlas("/main/images/backgrounds/bg_rooftop.atlas"))
 go.property("bg_apartment_hall_morning_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_hall_morning.atlas"))
 go.property("bg_apartment_bedroom_morning_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_bedroom_morning.atlas"))
+go.property("bg_apartment_bedroom_night_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_bedroom_night.atlas"))
 go.property("bg_apartment_kitchen_morning_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_kitchen_morning.atlas"))
 go.property("bg_cafe_morning_atlas", resource.atlas("/main/images/backgrounds/bg_cafe_morning.atlas"))
 go.property("bg_park_by_the_river_morning_atlas", resource.atlas("/main/images/backgrounds/bg_park_by_the_river_morning.atlas"))
 go.property("bg_shop_day_atlas", resource.atlas("/main/images/backgrounds/bg_shop_day.atlas"))
 go.property("bg_observation_day_atlas", resource.atlas("/main/images/backgrounds/bg_observation_day.atlas"))
+go.property("bg_office_lobby_day_atlas", resource.atlas("/main/images/backgrounds/bg_office_lobby_day.atlas"))
+go.property("bg_office_lobby_night_atlas", resource.atlas("/main/images/backgrounds/bg_office_lobby_night.atlas"))
+go.property("bg_office_workspace_day_atlas", resource.atlas("/main/images/backgrounds/bg_office_workspace_day.atlas"))
+go.property("bg_office_workspace_night_atlas", resource.atlas("/main/images/backgrounds/bg_office_workspace_night.atlas"))
+go.property("bg_office_meeting_room_day_atlas", resource.atlas("/main/images/backgrounds/bg_office_meeting_room_day.atlas"))
+go.property("bg_office_meeting_room_night_atlas", resource.atlas("/main/images/backgrounds/bg_office_meeting_room_night.atlas"))
+go.property("bg_bar_maybe_night_atlas", resource.atlas("/main/images/backgrounds/bg_bar_maybe_night.atlas"))
+go.property("bg_archive_day_atlas", resource.atlas("/main/images/backgrounds/bg_archive_day.atlas"))
 
 local dm = require "main.scripts.dialogue_manager_ink"
 local gs = require "main.scripts.game_state"
@@ -54,6 +63,7 @@ local INVENTORY_MVP_VERBS = {
     use = true,
     inspect = true,
     read = true,
+    give = true,    -- передать предмет NPC текущей сцены (scenes.lua: npc = "...")
 }
 
 local BG_TEXTURE_KEY = "backgrounds"
@@ -92,11 +102,20 @@ local DEDICATED_BG_ATLAS_PROPS = {
     bg_rooftop        = "bg_rooftop_atlas",
     bg_apartment_hall_morning = "bg_apartment_hall_morning_atlas",
     bg_apartment_bedroom_morning = "bg_apartment_bedroom_morning_atlas",
+    bg_apartment_bedroom_night = "bg_apartment_bedroom_night_atlas",
     bg_apartment_kitchen_morning = "bg_apartment_kitchen_morning_atlas",
     bg_cafe_morning = "bg_cafe_morning_atlas",
     bg_park_by_the_river_morning = "bg_park_by_the_river_morning_atlas",
     bg_shop_day = "bg_shop_day_atlas",
     bg_observation_day = "bg_observation_day_atlas",
+	bg_office_lobby_day = "bg_office_lobby_day_atlas",
+	bg_office_lobby_night = "bg_office_lobby_night_atlas",
+	bg_office_workspace_day = "bg_office_workspace_day_atlas",
+	bg_office_workspace_night = "bg_office_workspace_night_atlas",
+	bg_office_meeting_room_day = "bg_office_meeting_room_day_atlas",
+	bg_office_meeting_room_night = "bg_office_meeting_room_night_atlas",
+	bg_bar_maybe_night = "bg_bar_maybe_night_atlas",
+	bg_archive_day = "bg_archive_day_atlas",
 }
 
 -- Базовый режим (menu / nav / exploration / dialogue). choice/inventory/phone/map —
@@ -599,12 +618,28 @@ local function jump_inventory_knot(self, knot_name)
     return run_side_dialogue_knot(self, knot_name, keep_bg)
 end
 
-local function resolve_inventory_knot(item_id, verb, scene_id)
+-- target_id: для use-on-hotspot — id хотспота, для give — npc_id; иначе nil
+local function resolve_inventory_knot(item_id, verb, scene_id, target_id)
     local candidates = {}
-    if scene_id and scene_id ~= "" then
-        table.insert(candidates, "inv_" .. scene_id .. "_" .. verb .. "_" .. item_id)
+    if target_id and target_id ~= "" then
+        -- Цепочка приоритета для use-on-target / give:
+        --   inv_<scene>_<verb>_<item>_on_<target>      (контекстный)
+        --   inv_<verb>_<item>_on_<target>               (общий target)
+        --   inv_<verb>_<item>_on_fallback               (предмет, любой target)
+        --   inv_<verb>_on_<target>                      (любой предмет, конкретный target)
+        if scene_id and scene_id ~= "" then
+            table.insert(candidates, "inv_" .. scene_id .. "_" .. verb .. "_" .. item_id .. "_on_" .. target_id)
+        end
+        table.insert(candidates, "inv_" .. verb .. "_" .. item_id .. "_on_" .. target_id)
+        table.insert(candidates, "inv_" .. verb .. "_" .. item_id .. "_on_fallback")
+        table.insert(candidates, "inv_" .. verb .. "_on_" .. target_id)
+    else
+        if scene_id and scene_id ~= "" then
+            table.insert(candidates, "inv_" .. scene_id .. "_" .. verb .. "_" .. item_id)
+        end
+        table.insert(candidates, "inv_" .. verb .. "_" .. item_id)
     end
-    table.insert(candidates, "inv_" .. verb .. "_" .. item_id)
+    -- Общие fallback'и (для обоих случаев)
     table.insert(candidates, "inv_" .. verb .. "_fallback")
     table.insert(candidates, "inv_fallback")
 
@@ -614,6 +649,31 @@ local function resolve_inventory_knot(item_id, verb, scene_id)
         end
     end
     return nil
+end
+
+-- Запускает inventory-knot с заполнённым контекстом для ink.
+-- target_id/target_kind опциональны: для use-on-hotspot и give.
+local function fire_inventory_knot(self, item_id, verb, scene_id, target_id, target_kind)
+    local item = catalog.get_runtime and catalog.get_runtime(item_id) or catalog.get(item_id)
+    local knot_name = resolve_inventory_knot(item_id, verb, scene_id, target_id)
+    if not knot_name then
+        print("[ui_manager_v2] WARNING: no inventory knot for",
+              item_id, verb, scene_id, target_id or "")
+        return false
+    end
+
+    if dm.set_inventory_action_context then
+        dm.set_inventory_action_context({
+            item_id     = item_id,
+            item_name   = item and item.name or item_id,
+            verb        = verb,
+            scene_id    = scene_id,
+            target_id   = target_id,
+            target_kind = target_kind,
+        })
+    end
+    jump_inventory_knot(self, knot_name)
+    return true
 end
 
 local function handle_inventory_verb(self, item_id, verb)
@@ -632,30 +692,55 @@ local function handle_inventory_verb(self, item_id, verb)
         return
     end
 
+    -- Особый кейс: use/read на телефоне = открыть phone overlay напрямую.
     if item_id == "phone" and (verb == "use" or verb == "read") then
         close_inventory(self)
         open_phone(self)
         return
     end
 
-    local item = catalog.get_runtime and catalog.get_runtime(item_id) or catalog.get(item_id)
-    local knot_name = resolve_inventory_knot(item_id, verb, scene_id)
-    if not knot_name then
-        print("[ui_manager_v2] WARNING: no inventory knot for", item_id, verb, scene_id)
+    -- USE: армируем предмет. Инвентарь закрывается, следующий клик
+    -- по hotspot'у запустит inv_use_<item>_on_<hotspot>. Если hotspot
+    -- не подходит — fallback цепочка отработает как раньше.
+    if verb == "use" then
+        ui_state.set_armed(item_id, "use")
+        print("[ui_manager_v2] armed USE on", item_id, "— click a hotspot or press ESC to cancel")
         close_inventory(self)
         return
     end
 
-    close_inventory(self)
-    if dm.set_inventory_action_context then
-        dm.set_inventory_action_context({
-            item_id = item_id,
-            item_name = item and item.name or item_id,
-            verb = verb,
-            scene_id = scene_id,
-        })
+    -- GIVE: целевой NPC берётся из scenes.lua (поле npc у текущей сцены).
+    -- Если NPC нет — фоллбек на inv_give_fallback.
+    if verb == "give" then
+        local scene_data = scene_controller.get_current_scene_data and scene_controller.get_current_scene_data()
+        local npc_id = scene_data and scene_data.npc or nil
+        close_inventory(self)
+        if npc_id and npc_id ~= "" then
+            fire_inventory_knot(self, item_id, "give", scene_id, npc_id, "npc")
+        else
+            -- Никого нет рядом — стреляем по generic-фоллбеку.
+            fire_inventory_knot(self, item_id, "give", scene_id, nil, nil)
+        end
+        return
     end
-    jump_inventory_knot(self, knot_name)
+
+    -- INSPECT / READ: как раньше — generic action без target.
+    close_inventory(self)
+    fire_inventory_knot(self, item_id, verb, scene_id, nil, nil)
+end
+
+-- Вызывается hotspots_v2 при клике на hotspot, если установлен armed-state.
+-- Запускает use-on-target цепочку и сбрасывает armed.
+local function handle_armed_hotspot_click(self, hotspot_id)
+    local armed = ui_state.get_armed()
+    if not armed then return false end
+    ui_state.clear_armed()
+
+    local scene_id = scene_controller.get_current_scene_id and scene_controller.get_current_scene_id() or nil
+    if not scene_id or scene_id == "" then return false end
+
+    fire_inventory_knot(self, armed.item_id, armed.verb, scene_id, hotspot_id, "hotspot")
+    return true
 end
 
 local function sync_ui_state(self)
@@ -861,6 +946,9 @@ end
 
 local function open_inventory(self)
     dbg("[ui_manager_v2] open_inventory()")
+    -- Открытие инвентаря снимает armed-state — игрок передумал использовать
+    -- ранее «взятый» предмет, может выбрать другой.
+    if ui_state.clear_armed then ui_state.clear_armed() end
     M.overlays.inventory = true
     sync_modal_state()
     msg.post(M.components.inventory, "show_inventory")
@@ -1304,6 +1392,11 @@ local function setup_scene_controller_ui(self)
 
         request_ink_knot = function(knot_name, keep_bg)
             run_side_dialogue_knot(self, knot_name, keep_bg)
+        end,
+        request_use_on_hotspot = function(hotspot_id)
+            -- Вызывается scene_controller'ом, когда игрок кликнул hotspot
+            -- в armed-режиме инвентаря. Запускает inv_use_<item>_on_<hotspot>.
+            return handle_armed_hotspot_click(self, hotspot_id)
         end,
     })
 

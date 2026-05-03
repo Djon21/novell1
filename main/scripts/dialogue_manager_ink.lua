@@ -546,6 +546,8 @@ local function set_inventory_story_context(ctx)
     set_story_value("inventory_item_name", ctx.item_name or "", true)
     set_story_value("inventory_item_verb", ctx.verb or "", true)
     set_story_value("inventory_scene_id", ctx.scene_id or "", true)
+    set_story_value("inventory_target_id", ctx.target_id or "", true)
+    set_story_value("inventory_target_kind", ctx.target_kind or "", true)
 end
 
 -- Для старых сейвов (созданных до фикса assign_value) обогащаем replay history

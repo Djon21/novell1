@@ -9,8 +9,9 @@
 --   request_ink_knot(knot_name)  — вернуться в dialogue-режим на узел
 --   on_exit_explore()            — (опционально) UI-сторона знает что вышли
 
-local scenes = require "main.scripts.scenes"
-local gs     = require "main.scripts.game_state"
+local scenes   = require "main.scripts.scenes"
+local gs       = require "main.scripts.game_state"
+local ui_state = require "main.scripts.ui_state"
 
 local M = {}
 
@@ -180,6 +181,17 @@ function M.on_hotspot_click(index)
     if entry.locked then return false end
 
     local h = entry.ref
+
+    -- Armed-state инвентаря: игрок выбрал предмет с verb=use в инвентаре.
+    -- Вместо обычного action запускаем inv_use_<item>_on_<hotspot> цепочку
+    -- через ui_manager_v2 (callback request_use_on_hotspot).
+    local armed = ui_state.get_armed and ui_state.get_armed()
+    if armed and h and h.id and _ui and _ui.request_use_on_hotspot then
+        if _ui.request_use_on_hotspot(h.id) then
+            return true
+        end
+    end
+
     local action = h.action
     if not action then return false end
 

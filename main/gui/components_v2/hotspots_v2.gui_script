@@ -360,6 +360,14 @@ function on_input(self, action_id, action)
                 return true
             end
         end
+
+        -- Клик мимо всех hotspot'ов в armed-режиме = отмена.
+        -- Игрок передумал использовать предмет; снимаем armed без эффекта.
+        if ui_state.get_armed and ui_state.get_armed() then
+            ui_state.clear_armed()
+            dbg("[hotspots] armed cancelled (click outside hotspots)")
+            return true
+        end
     end
 
     return false

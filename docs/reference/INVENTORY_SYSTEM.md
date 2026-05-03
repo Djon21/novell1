@@ -19,9 +19,48 @@
 ## Ограничения MVP
 
 - максимум `12` уникальных предметов
-- текущие рабочие verbs: `use`, `inspect`, `read`
-- `combine` и `give` пока не входят в рабочий flow и скрыты из footer, чтобы UI не обещал несуществующую механику
+- активные verbs: `use`, `inspect`, `read`, `give`
+- `combine` пока не реализован
 - если `item_id` отсутствует в `items_catalog.lua`, инвентарь всё равно покажет fallback-карточку вместо пустого слота
+
+## Verb flow по типам
+
+### `inspect` / `read`
+
+Простые verbs — закрывают инвентарь и сразу прыгают в ink-knot:
+- `inv_<scene>_<verb>_<item>` → `inv_<verb>_<item>` → `inv_<verb>_fallback` → `inv_fallback`
+
+### `use` — armed-режим (use-on-target)
+
+1. Игрок жмёт `USE` на предмете
+2. Инвентарь закрывается, предмет «в руках» (`ui_state.armed_inventory` = `{item_id, verb="use"}`)
+3. Следующий клик по hotspot'у запускает knot:
+   - `inv_<scene>_use_<item>_on_<hotspot_id>`
+   - `inv_use_<item>_on_<hotspot_id>`
+   - `inv_use_<item>_on_fallback`
+   - `inv_use_on_<hotspot_id>` (любой предмет на этом хотспоте)
+   - `inv_use_fallback`
+   - `inv_fallback`
+4. Клик мимо хотспотов = отмена armed (без эффекта)
+5. Повторное открытие инвентаря тоже снимает armed
+
+В ink-knot доступны переменные `inventory_item_id`, `inventory_target_id` (= hotspot_id), `inventory_target_kind` = `"hotspot"`.
+
+### `give` — передать NPC текущей сцены
+
+1. В `scenes.lua` сцена объявляет NPC: `npc = "npc"` (или конкретное имя)
+2. Игрок жмёт `GIVE` на предмете
+3. Инвентарь закрывается, ui_manager берёт `scene.npc` и стреляет:
+   - `inv_<scene>_give_<item>_on_<npc>`
+   - `inv_give_<item>_on_<npc>`
+   - `inv_give_<item>_on_fallback`
+   - `inv_give_on_<npc>`
+   - `inv_give_fallback` → `inv_fallback`
+4. Если у сцены НЕТ поля `npc` — сразу `inv_give_<item>` → `inv_give_fallback`
+
+В ink-knot: `inventory_target_id` = npc_id, `inventory_target_kind` = `"npc"`.
+
+> Convention: для воскресных сцен (cafe_hub/park_hub) target = `"npc"` (не конкретное имя), потому что NPC меняется по гендеру MC. Внутри knot можно делать `{mc_gender == "female": Артём - else: Мила}`.
 
 ## Flow действия предмета
 
@@ -55,6 +94,8 @@
 - `inventory_item_name`
 - `inventory_item_verb`
 - `inventory_scene_id`
+- `inventory_target_id` — для use-on-target = hotspot id, для give = npc id, иначе `""`
+- `inventory_target_kind` — `"hotspot"` / `"npc"` / `""`
 
 Их можно использовать внутри fallback-реплик или scene-specific действий.
 
