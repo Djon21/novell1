@@ -32,7 +32,6 @@
 - `guides/F1_HOTSPOT_EDITOR.md`
 - `guides/PHONE_SYSTEM.md`
 - `guides/INVENTORY_SYSTEM_guide.md`
-- `guides/ITERATION_SYSTEM.md`
 - `guides/HUB_SYSTEM.md`
 
 ## Archive
