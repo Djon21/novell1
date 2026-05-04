@@ -610,8 +610,7 @@ end
 local function jump_inventory_knot(self, knot_name)
     local keep_bg = nil
     if scene_controller.is_active and scene_controller.is_active() then
-        local scene_data = scene_controller.get_current_scene_data and scene_controller.get_current_scene_data()
-        keep_bg = scene_data and scene_data.bg or nil
+        keep_bg = scene_controller.get_current_bg and scene_controller.get_current_bg() or nil
         if scene_controller.exit then
             scene_controller.exit()
         end
@@ -1768,8 +1767,7 @@ function on_message(self, message_id, message, sender)
                 -- вместо диалога (тот же паттерн, что в jump_inventory_knot).
                 local keep_bg = nil
                 if scene_controller.is_active and scene_controller.is_active() then
-                    local scene_data = scene_controller.get_current_scene_data and scene_controller.get_current_scene_data()
-                    keep_bg = scene_data and scene_data.bg or nil
+                    keep_bg = scene_controller.get_current_bg and scene_controller.get_current_bg() or nil
                     if scene_controller.exit then scene_controller.exit() end
                 end
                 run_side_dialogue_knot(self, knot_name, keep_bg)

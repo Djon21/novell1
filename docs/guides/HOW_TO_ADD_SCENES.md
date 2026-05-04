@@ -189,7 +189,7 @@ my_scene = {
 
 ```lua
 my_room = {
-    bg = "bg_my_room",         -- имя фона из §2
+    bg = "bg_my_room",         -- имя фона из §2 (или функция, см. §3.4)
     label = "Комната",         -- опционально (для nav/exits)
     on_enter = { ... },        -- опционально, см. §3.2
     objects = { ... },         -- опционально, см. §5
@@ -244,6 +244,54 @@ on_enter = {
 ```
 
 Возврат — такой же hotspot с обратной сценой.
+
+### 3.4 Один хаб, разные состояния (утро/день/ночь, дни недели)
+
+Если у локации есть несколько фонов в зависимости от времени или сюжетного дня, **не нужно** создавать отдельные сцены. `bg` поддерживает функцию `function(gs) -> string` — вызывается при каждом render.
+
+```lua
+apartment_hub = {
+    bg = function(gs)
+        if gs.get_flag("is_night")   then return "bg_apartment_hall_night"   end
+        if gs.get_flag("is_evening") then return "bg_apartment_hall_evening" end
+        return "bg_apartment_hall_morning"   -- default утро
+    end,
+    label = "Коридор",
+    hotspots = {
+        -- общие hotspot'ы — без visible_when
+        { id = "to_bedroom", icon = "arrow_back", action = ..., },
+
+        -- понедельник: появляется портфель
+        {
+            id = "monday_briefcase",
+            icon = "briefcase",
+            action = { type = "ink_knot", knot = "take_briefcase" },
+            visible_when = function(gs)
+                return gs.get_flag("monday_morning_started")
+                   and not gs.has_item("briefcase")
+            end,
+        },
+
+        -- вторник: записка на столе
+        {
+            id = "tuesday_note",
+            icon = "note",
+            action = { type = "ink_knot", knot = "read_note" },
+            visible_when = function(gs)
+                return gs.get_flag("tuesday_morning_started")
+            end,
+        },
+    },
+}
+```
+
+**Правила:**
+- `bg = "string"` — статичный фон
+- `bg = function(gs) ... end` — динамический; функция должна вернуть имя зарегистрированного bg (см. §2)
+- Hotspots по дням гейтятся через `visible_when` (показ) или `condition` (locked, см. §4)
+- В одну сцену помещается до **6 hotspot'ов одновременно видимых**. Гейт через `visible_when` не считается, в один кадр видны только активные
+
+Для side-knot (USE-on-target, sms thread) автоматически берётся текущий разрешённый bg через `scene_controller.get_current_bg()` — даже если bg задан функцией, диалог откроется на правильном фоне.
 
 ---
 

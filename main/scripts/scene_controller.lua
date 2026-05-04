@@ -71,9 +71,27 @@ local function make_hotspot_payload(entry)
     return payload
 end
 
+-- bg может быть строкой ("bg_kitchen") или функцией (gs) -> string.
+-- Функция вызывается на каждом render, чтобы фон менялся в зависимости от
+-- состояния игры (утро/день/ночь, день недели и т.п.) без необходимости
+-- заводить отдельные сцены под каждый вариант.
+local function resolve_bg(scene_data)
+    if not scene_data then return nil end
+    local bg = scene_data.bg
+    if type(bg) == "function" then
+        local ok, value = pcall(bg, gs)
+        if not ok then
+            print("[scene_controller] bg function failed:", tostring(value))
+            return nil
+        end
+        return value
+    end
+    return bg
+end
+
 local function render()
     if not _active or not _ui then return end
-    _ui.set_background(_scene_data.bg)
+    _ui.set_background(resolve_bg(_scene_data))
 
     -- Объекты сцены (спрайты-оверлеи)
     if _ui.set_scene_object and _ui.max_scene_objects then
@@ -164,6 +182,11 @@ function M.is_active() return _active end
 function M.get_current_scene_data() return _scene_data end
 function M.get_current_scene_id()   return _scene_id   end
 
+-- Резолвит текущий bg сцены: если scene.bg — функция, вызывает её с gs
+-- и возвращает имя bg как строку. Используется ui_manager_v2 для keep_bg
+-- при прыжках в side-knot (use-on-target, sms thread, и т.п.).
+function M.get_current_bg() return resolve_bg(_scene_data) end
+
 -- Публичный re-render (редактор хотспотов после правки rect'а
 -- перерисовывает сцену, чтобы изменения были видны сразу).
 function M.render_now() render() end
@@ -219,7 +242,7 @@ function M.on_hotspot_click(index)
         -- Сохраняем фон текущей сцены, чтобы короткий ink-монолог
         -- (drink_coffee/take_phone/…) играл на том же фоне, а не на
         -- «последнем ink-фоне» (обычно коридор apartment_hub).
-        local scene_bg = _scene_data and _scene_data.bg
+        local scene_bg = resolve_bg(_scene_data)
         M.exit()
         if _ui and _ui.request_ink_knot then
             _ui.request_ink_knot(action.knot, scene_bg)
