@@ -63,7 +63,8 @@ local INVENTORY_MVP_VERBS = {
     use = true,
     inspect = true,
     read = true,
-    give = true,    -- передать предмет NPC текущей сцены (scenes.lua: npc = "...")
+    give = true,        -- передать предмет NPC текущей сцены (scenes.lua: npc = "...")
+    combine = true,     -- соединить два предмета внутри инвентаря
 }
 
 local BG_TEXTURE_KEY = "backgrounds"
@@ -618,15 +619,24 @@ local function jump_inventory_knot(self, knot_name)
     return run_side_dialogue_knot(self, knot_name, keep_bg)
 end
 
--- target_id: для use-on-hotspot — id хотспота, для give — npc_id; иначе nil
+-- target_id: для use-on-hotspot — id хотспота, для give — npc_id,
+-- для combine — id второго item; иначе nil.
 local function resolve_inventory_knot(item_id, verb, scene_id, target_id)
     local candidates = {}
-    if target_id and target_id ~= "" then
-        -- Цепочка приоритета для use-on-target / give:
+
+    if verb == "combine" and target_id and target_id ~= "" then
+        -- Combine: лексикографическая сортировка двух item_id даёт
+        -- единственное каноническое имя knot'а — автор пишет один файл,
+        -- не нужно дублировать обе перестановки.
+        local low, high = item_id, target_id
+        if low > high then low, high = high, low end
+        table.insert(candidates, "inv_combine_" .. low .. "_with_" .. high)
+    elseif target_id and target_id ~= "" then
+        -- Use-on-target / give:
         --   inv_<scene>_<verb>_<item>_on_<target>      (контекстный)
-        --   inv_<verb>_<item>_on_<target>               (общий target)
-        --   inv_<verb>_<item>_on_fallback               (предмет, любой target)
-        --   inv_<verb>_on_<target>                      (любой предмет, конкретный target)
+        --   inv_<verb>_<item>_on_<target>              (общий target)
+        --   inv_<verb>_<item>_on_fallback              (предмет, любой target)
+        --   inv_<verb>_on_<target>                     (любой предмет, конкретный target)
         if scene_id and scene_id ~= "" then
             table.insert(candidates, "inv_" .. scene_id .. "_" .. verb .. "_" .. item_id .. "_on_" .. target_id)
         end
@@ -639,7 +649,7 @@ local function resolve_inventory_knot(item_id, verb, scene_id, target_id)
         end
         table.insert(candidates, "inv_" .. verb .. "_" .. item_id)
     end
-    -- Общие fallback'и (для обоих случаев)
+    -- Общие fallback'и
     table.insert(candidates, "inv_" .. verb .. "_fallback")
     table.insert(candidates, "inv_fallback")
 
@@ -695,7 +705,7 @@ local function fire_inventory_knot(self, item_id, verb, scene_id, target_id, tar
     return true
 end
 
-local function handle_inventory_verb(self, item_id, verb)
+local function handle_inventory_verb(self, item_id, verb, extra)
     if not item_id or not verb then
         return
     end
@@ -708,6 +718,21 @@ local function handle_inventory_verb(self, item_id, verb)
     if not scene_id or scene_id == "" then
         print("[ui_manager_v2] inventory verbs are only supported from exploration in MVP")
         close_inventory(self)
+        return
+    end
+
+    -- COMBINE: A + B уже выбраны в инвентаре (extra.target_item_id = B).
+    -- Запускаем cпарный knot, инвентарь закрываем (он сам стопится в combine_pending).
+    if verb == "combine" then
+        local target_item = extra and extra.target_item_id or nil
+        close_inventory(self)
+        if target_item and target_item ~= "" then
+            fire_inventory_knot(self, item_id, "combine", scene_id, target_item, "item")
+        else
+            -- Без target_item knot не имеет смысла — это баг inventory_v2, но
+            -- стрелять в fallback всё равно безопаснее чем silent fail.
+            fire_inventory_knot(self, item_id, "combine", scene_id, nil, nil)
+        end
         return
     end
 
@@ -1692,8 +1717,11 @@ function on_message(self, message_id, message, sender)
         dbg("[ui_manager_v2] close_inventory")
         close_inventory(self)
     elseif message_id == hash("inventory_verb") then
-        dbg("[ui_manager_v2] inventory_verb", message.item_id, message.verb)
-        handle_inventory_verb(self, message.item_id, message.verb)
+        dbg("[ui_manager_v2] inventory_verb", message.item_id, message.verb,
+            message.target_item_id or "")
+        handle_inventory_verb(self, message.item_id, message.verb, {
+            target_item_id = message.target_item_id,
+        })
 
     elseif message_id == hash("cancel_armed_inventory") then
         -- Отмена armed-режима из любого источника:

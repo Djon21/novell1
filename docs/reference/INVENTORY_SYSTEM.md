@@ -19,8 +19,7 @@
 ## Ограничения MVP
 
 - максимум `12` уникальных предметов
-- активные verbs: `use`, `inspect`, `read`, `give`
-- `combine` пока не реализован
+- активные verbs: `use`, `inspect`, `read`, `give`, `combine`
 - если `item_id` отсутствует в `items_catalog.lua`, инвентарь всё равно покажет fallback-карточку вместо пустого слота
 
 ## Verb flow по типам
@@ -45,6 +44,30 @@
 5. Повторное открытие инвентаря тоже снимает armed
 
 В ink-knot доступны переменные `inventory_item_id`, `inventory_target_id` (= hotspot_id), `inventory_target_kind` = `"hotspot"`.
+
+### `combine` — соединить два предмета
+
+Двухкликовая операция **внутри инвентаря** (без выхода в сцену):
+
+1. Игрок выделяет item A → жмёт `СОЕДИНИТЬ`
+2. Details panel перерисовывается: «Соединить с …» + инструкция; кнопка `СОЕДИНИТЬ` превращается в `ОТМЕНА`
+3. Клик на другой item B → запускает knot:
+   - **Имена knot'ов канонизированы лексикографической сортировкой** — для пары `(matchbox, lighter)` всегда ищется `inv_combine_lighter_with_matchbox` (потому что `l < m`). Автору не нужно писать оба порядка
+   - Цепочка: `inv_combine_<low>_with_<high>` → `inv_combine_fallback` → `inv_fallback`
+4. Отмена: повторный клик на `ОТМЕНА`, клик на тот же item A, закрытие инвентаря
+
+В ink-knot: `inventory_item_id` = A (первый, который был выделен при клике COMBINE), `inventory_target_id` = B (второй), `inventory_target_kind` = `"item"`.
+
+> **Совет:** результат combine реализуется обычными тегами:
+> ```ink
+> === inv_combine_lighter_with_matchbox ===
+> # speaker:mc
+> Зажигалка прикуривает от спички. Удобно.
+> # remove_item:matchbox
+> # add_item:lit_match
+> # return_to_scene
+> -> DONE
+> ```
 
 ### `give` — передать NPC текущей сцены
 

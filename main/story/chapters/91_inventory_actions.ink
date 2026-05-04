@@ -98,6 +98,32 @@
 -> DONE
 
 
+// ── COMBINE fallback ─────────────────────────────────────────────────
+// Игрок выбрал предмет A в инвентаре и нажал COMBINE, потом кликнул B.
+// Цепочка (item_id'ы сортируются лексикографически — пишем один knot):
+//   inv_combine_<low>_with_<high>     // например, inv_combine_lighter_with_matchbox
+//   inv_combine_fallback              // эта функция
+//   inv_fallback
+//
+// inventory_item_id    = первый item (тот, что был выделен при клике COMBINE)
+// inventory_target_id  = второй item (на который кликнули)
+// inventory_target_kind = "item"
+
+=== inv_combine_fallback ===
+# speaker:mc
+{inventory_item_name != "":
+    {inventory_target_id != "":
+        {inventory_item_name} и {inventory_target_id} не получится соединить.
+    - else:
+        Нечего соединять.
+    }
+- else:
+    Не сейчас.
+}
+# return_to_scene
+-> DONE
+
+
 // ── GIVE fallbacks ───────────────────────────────────────────────────
 // Игрок выбрал предмет с verb=give. Если в текущей сцене есть NPC
 // (scenes.lua: npc = "..."), цепочка:
