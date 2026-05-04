@@ -22,6 +22,10 @@ M.scenes = {    -- =============================================================
     -- уже ведёт домой через poi_home -> apartment_hub.
     -- =====================================================================
 
+    -- Точка входа карты телефона (poi_home → apartment_hub) и hub воскресного
+    -- дня после встречи. Hotspots, иконки и стили совпадают с
+    -- apartment_hall_morning ниже — отличается только on_enter, который
+    -- автоматически открывает sunday_home_after_date_router.
     apartment_hub = {
         bg = "bg_apartment_hall_morning",
         label = "Коридор",
@@ -37,16 +41,34 @@ M.scenes = {    -- =============================================================
         hotspots = {
             {
                 id = "to_bedroom_morning",
-                rect = { x = 45, y = 115, w = 245, h = 500 },
+                rect = { x = 90, y = 115, w = 245, h = 500 },
                 label = "В спальню",
-                icon = "",
+                icon = "arrow_back",
+                icon_offset_x = -4,
+                icon_offset_y = 0,
+                hotspot_style = {
+                    circle_color = { r = 0.06, g = 0.06, b = 0.10 },
+                    ring_color = { r = 1.00, g = 1.00, b = 1.00 },
+                    icon_color = { r = 1.00, g = 1.00, b = 1.00 },
+                    circle_alpha = 0.78,
+                    ring_alpha = 0.90,
+                },
                 action = { type = "goto_scene", scene = "apartment_bedroom_morning" },
             },
             {
                 id = "to_kitchen_morning",
-                rect = { x = 985, y = 100, w = 250, h = 520 },
+                rect = { x = 965, y = 100, w = 250, h = 520 },
                 label = "На кухню",
-                icon = "",
+                icon = "arrow_forward",
+                icon_offset_x = -4,
+                icon_offset_y = 0,
+                hotspot_style = {
+                    circle_color = { r = 0.06, g = 0.06, b = 0.10 },
+                    ring_color = { r = 1.00, g = 1.00, b = 1.00 },
+                    icon_color = { r = 1.00, g = 1.00, b = 1.00 },
+                    circle_alpha = 0.78,
+                    ring_alpha = 0.90,
+                },
                 action = { type = "goto_scene", scene = "apartment_kitchen_morning" },
                 visible_when = function(gs)
                     return gs.get_flag("washed_up")
@@ -56,7 +78,16 @@ M.scenes = {    -- =============================================================
                 id = "exit_apartment_morning",
                 rect = { x = 525, y = 185, w = 260, h = 430 },
                 label = "Выйти",
-                icon = "",
+                icon = "arrow_up",
+                icon_offset_x = -4,
+                icon_offset_y = 0,
+                hotspot_style = {
+                    circle_color = { r = 0.06, g = 0.06, b = 0.10 },
+                    ring_color = { r = 1.00, g = 1.00, b = 1.00 },
+                    icon_color = { r = 1.00, g = 1.00, b = 1.00 },
+                    circle_alpha = 0.78,
+                    ring_alpha = 0.90,
+                },
                 action = { type = "ink_knot", knot = "leave_apartment" },
                 condition = function(gs)
                     return gs.has_item("phone") and gs.get_flag("coffee_drunk") and gs.get_flag("date_agreed")
@@ -64,9 +95,18 @@ M.scenes = {    -- =============================================================
             },
             {
                 id = "hall_mirror",
-                rect = { x = 330, y = 230, w = 135, h = 280 },
+                rect = { x = 355, y = 330, w = 135, h = 280 },
                 label = "Зеркало",
-                icon = "",
+                icon = "left_click",
+                icon_offset_x = -4,
+                icon_offset_y = 0,
+                hotspot_style = {
+                    circle_color = { r = 0.06, g = 0.06, b = 0.10 },
+                    ring_color = { r = 1.00, g = 1.00, b = 1.00 },
+                    icon_color = { r = 1.00, g = 1.00, b = 1.00 },
+                    circle_alpha = 0.78,
+                    ring_alpha = 0.90,
+                },
                 action = { type = "ink_knot", knot = "look_hall_mirror" },
             },
         },
@@ -218,7 +258,9 @@ M.scenes = {    -- =============================================================
                 },
                 action = { type = "ink_knot", knot = "look_bed_morning" },
                 visible_when = function(gs)
-                    return not gs.get_flag("got_out_of_bed")
+                    return gs.get_flag("date_agreed")
+                        and not gs.get_flag("got_out_of_bed")
+                        and not gs.get_flag("sunday_evening_started")
                 end,
             },
             {
@@ -293,30 +335,16 @@ M.scenes = {    -- =============================================================
         },
         hotspots = {
             {
-                id = "coffee_setup_empty",
+                id = "coffee_setup",
                 rect = { x = 420, y = 245, w = 190, h = 150 },
                 label = "Кофе",
                 icon = "coffee",
                 circle_color = { r = 0.18, g = 0.10, b = 0.04 },
                 ring_color = { r = 1.00, g = 0.68, b = 0.28 },
                 icon_color = { r = 1.00, g = 0.90, b = 0.68 },
-                action = { type = "ink_knot", knot = "use_coffee_machine_no_cup" },
+                action = { type = "ink_knot", knot = "use_coffee_setup_no_mug" },
                 visible_when = function(gs)
-                    return not gs.has_item("mug") and not gs.get_flag("coffee_drunk")
-                end,
-            },
-            {
-                id = "coffee_setup_brew",
-                rect = { x = 420, y = 245, w = 190, h = 150 },
-                label = "Сделать кофе",
-                icon = "coffee",
-                circle_color = { r = 0.18, g = 0.10, b = 0.04 },
-                ring_color = { r = 1.00, g = 0.68, b = 0.28 },
-                icon_color = { r = 1.00, g = 0.90, b = 0.68 },
-                hotspot_scale = 1.08,
-                action = { type = "ink_knot", knot = "use_coffee_machine_with_cup" },
-                visible_when = function(gs)
-                    return gs.has_item("mug") and not gs.get_flag("coffee_drunk")
+                    return not gs.get_flag("coffee_drunk")
                 end,
             },
             {
@@ -348,6 +376,39 @@ M.scenes = {    -- =============================================================
             },
         },
     },
+
+-- =====================================================================
+-- ВОСКРЕСЕНЬЕ / КВАРТИРА ГГ — ночь после возвращения домой
+-- =====================================================================
+-- Использует уже зарегистрированный ночной фон спальни:
+-- bg_apartment_bedroom_night
+
+sunday_apartment_bedroom_night = {
+    bg = "bg_apartment_bedroom_night",
+    label = "Спальня",
+    hotspots = {
+        {
+            id = "sun_night_bed_sleep",
+            rect = { x = 205, y = 105, w = 460, h = 225 },
+            label = "Лечь спать",
+            icon = "left_click",
+            icon_offset_x = -4,
+            icon_offset_y = 0,
+            hotspot_style = {
+                circle_color = { r = 0.06, g = 0.06, b = 0.10 },
+                ring_color = { r = 1.00, g = 1.00, b = 1.00 },
+                icon_color = { r = 1.00, g = 1.00, b = 1.00 },
+                circle_alpha = 0.78,
+                ring_alpha = 0.90,
+            },
+            action = { type = "ink_knot", knot = "sunday_sleep_in_bed" },
+            visible_when = function(gs)
+                return gs.get_flag("sunday_evening_started")
+                    and not gs.get_flag("sunday_finished")
+            end,
+        },
+    },
+},
 
     -- =====================================================================
     -- ПОНЕДЕЛЬНИК / КВАРТИРА ГГ — отдельный рабочий morning-flow
