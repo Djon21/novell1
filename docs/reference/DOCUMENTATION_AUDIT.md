@@ -32,5 +32,5 @@
 ## Caveats
 
 - В рабочем дереве есть много ручных изменений GUI, assets и Ink. Документация обновлена под это состояние, но сама игра должна быть проверена через Defold.
-- Удаление `docs/guides/INVENTORY_SYSTEM.md` и появление `docs/guides/INVENTORY_SYSTEM_guide.md` учитывается в `docs/README.md`.
+- `docs/reference/INVENTORY_SYSTEM.md` объединил архитектурный обзор и старый `docs/guides/INVENTORY_SYSTEM_guide.md` (удалён 2026-05).
 - Если `chapter_01` будет окончательно утверждён как новый канон, можно убрать из docs последние пояснения про бывшую папку `New/`.

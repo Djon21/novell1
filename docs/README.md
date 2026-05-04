@@ -31,7 +31,6 @@
 - `guides/DESIGN_PORT_RULES.md`
 - `guides/F1_HOTSPOT_EDITOR.md`
 - `guides/PHONE_SYSTEM.md`
-- `guides/INVENTORY_SYSTEM_guide.md`
 - `guides/HUB_SYSTEM.md`
 
 ## Archive
