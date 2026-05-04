@@ -136,7 +136,7 @@ function M.enter(scene_id)
             print("[scene_controller] triggering on_enter knot:", oe.knot)
             M.exit()
             if _ui and _ui.request_ink_knot then
-                _ui.request_ink_knot(oe.knot, data.bg)
+                _ui.request_ink_knot(oe.knot, resolve_bg(data))
             end
         end
     end
