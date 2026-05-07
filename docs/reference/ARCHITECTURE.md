@@ -1,6 +1,6 @@
 # Архитектура AVOS_S
 
-Актуально на `2026-04-29`.
+Актуально на `2026-05-07`.
 
 ## Entry Point
 
@@ -12,7 +12,7 @@
 
 ### Меню
 
-- `main_menu_v2` открывается из `ui_manager_v2.script`
+- `main_menu_v2` открывается через `ui_manager_v2.script` → `message_flow.lua`/`overlay_flow.lua`
 - `start_game` очищает run-state и стартует текущую итерацию заново
 - `continue_game` доступен только при наличии run-save
 - `reset_iteration` сбрасывает run-state и meta-state, затем стартует с `Итерации 001`
@@ -20,7 +20,7 @@
 
 ### Ink И Диалог
 
-- `ui_manager_v2.script` грузит `/main/story/chapter_01.json`
+- `ui_manager_v2.script` грузит `/main/story/chapter_01.json` через `run_state.lua`
 - байты передаются в `main/scripts/dialogue_manager_ink.lua`
 - `dialogue_manager_ink.lua` оборачивает `defold-ink`, применяет теги и отдаёт UI:
   - текущий node
@@ -28,9 +28,9 @@
   - commands
   - one-shot effects
 - `dialogue_v2` показывает реплики, портреты, typewriter и loop-label из `meta_state`
-- `AUTO/SKIP` реализованы в `ui_manager_v2`, останавливаются на `choice`, `end` и exploration
+- `AUTO/SKIP` реализованы в `main/gui/modules/ui_manager_v2/dialogue_flow.lua`, останавливаются на `choice`, `end` и exploration
 - бэклог реплик и выборов хранится в `main/scripts/dialogue_backlog.lua` (общий
-  Lua-модуль через `[script] shared_state = 1`): `ui_manager_v2` пишет через
+  Lua-модуль через `[script] shared_state = 1`): `dialogue_flow.lua` пишет через
   `backlog.add(entry)`, `dialogue_v2` читает через `backlog.get_all()`. Так
   устранена пересылка большой таблицы через `msg.post`, упиравшаяся в
   `sys.max_message_data_size`.
@@ -47,8 +47,8 @@
 
 - карта для нового контента открывается внутри телефона через Ink-тег `# phone:map`
 - `# phone:map` открывает `phone_v2` и сразу переключает его на `phone_map.gui`
-- выбор POI отправляет `map_travel { scene }` обратно в `ui_manager_v2`
-- `ui_manager_v2` закрывает телефон и открывает выбранный hub через `scene_controller.enter(scene_id)`
+- выбор POI отправляет `map_travel { scene }` обратно в `#ui_manager_v2`
+- `message_flow.lua` закрывает телефон и открывает выбранный hub через `scene_controller.enter(scene_id)`
 
 ### Телефон
 
@@ -72,9 +72,13 @@ Ink добавляет данные через теги `sms`, `quest`, `note`, 
 
 - `game_state` хранит список уникальных `item_id` с лимитом `12`
 - metadata берётся из `main/scripts/items_catalog.lua`
-- рабочие verbs MVP: `use`, `inspect`, `read`
-- `combine/give` скрыты до отдельного этапа
-- `ui_manager_v2` ищет Ink-knot в порядке:
+- рабочие verbs MVP: `use`, `inspect`, `read`, `give`, `combine`
+- `give` работает только в сценах, где задано поле `npc`
+- `combine` работает как двухкликовая операция внутри инвентаря:
+  выбрать предмет A → нажать `СОЕДИНИТЬ` → выбрать предмет B
+- combine-knot ищется по канонической паре:
+  `inv_combine_<low>_with_<high>` → `inv_combine_fallback` → `inv_fallback`
+- `inventory_flow.lua` ищет Ink-knot в порядке:
   - `inv_<scene_id>_<verb>_<item_id>`
   - `inv_<verb>_<item_id>`
   - `inv_<verb>_fallback`
@@ -95,6 +99,14 @@ Run-state текущего прохождения:
 - mail / call log / clues
 - camera feed
 - terminal lines
+
+Важно:
+
+`quests` здесь — это phone quests текущей итерации.
+Они являются частью run-state и очищаются при старте новой итерации вместе с `game_state`.
+
+Не использовать `game_state.quests` как долгосрочный журнал петли.
+Если нужна память между итерациями, она должна жить в `meta_state` или отдельном persistent journal-state.
 
 Все getters для списков возвращают копии, чтобы GUI не мутировал state напрямую.
 
@@ -152,11 +164,31 @@ Git Bash / Linux:
 - `map_v2` — карта, dossier и hub-mode
 - `effects` — screen shake, pulse, scan/vignette overlays
 
+## UI Manager V2 Modules
+
+`main/gui/ui_manager_v2.script` сейчас работает как центральный Defold-адаптер, а не как монолит всей логики.
+
+Основная логика вынесена в `main/gui/modules/ui_manager_v2/`:
+
+- `message_flow.lua` — маршрутизация `on_message`
+- `overlay_flow.lua` — menu/exploration/dialogue/choice/inventory/map overlays
+- `dialogue_flow.lua` — `AUTO`, `SKIP`, backlog
+- `dm_commands.lua` — выполнение команд из Ink-тегов
+- `inventory_flow.lua` — verbs предметов и armed-use
+- `phone_flow.lua` — открыть/закрыть телефон и приложения
+- `map_flow.lua` — map pins, route/save/share, hub-mode
+- `scene_flow.lua` — адаптер `scene_controller -> hotspots_v2`
+- `background_flow.lua` — fullscreen backgrounds и location label
+- `effects_flow.lua` — one-shot effects
+- `run_state.lua` — persist/restore/reset run-state
+
+Подробная карта: `docs/reference/UI_MANAGER_V2_MODULES.md`.
+
 ## Ограничения
 
 - story-loader пока однофайловый: `/main/story/chapter_01.json`
 - каждый новый fullscreen background должен иметь dedicated atlas в `main/images/backgrounds/`
-- новые SFX требуют регистрацию и в `sfx_player`, и в `M.SFX_URLS` внутри `ui_manager_v2.script`
+- новые SFX требуют регистрацию и в `sfx_player`, и в `M.SFX_URLS` внутри `ui_manager_v2.script`; воспроизведение идёт через `effects_flow.lua`
 - legacy GUI и legacy atlas-ы не считаются supported fallback
 
 ## Читать Дальше

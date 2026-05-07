@@ -39,567 +39,1359 @@ textures {
   name: "map2"
   texture: "/main/images/phone/map2.atlas"
 }
-textures {
-  name: "map_assets_cyberpunk_v2"
-  texture: "/main/images/phone/map_assets_cyberpunk_v2.atlas"
-}
 nodes {
-  position {
-    x: 524.0
-    y: 590.0
-    z: 0.55
-  }
-  size {
-    x: 520.0
-    y: 12.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_TEXT
-  text: "\320\262\321\205\320\276\320\264\321\217\321\211\320\270\320\265 \302\267 3 \320\275\320\276\320\262\321\213\321\205"
-  font: "jb_mono_10"
-  id: "side_eyebrow"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.95
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 524.0
-    y: 562.0
-    z: 0.55
-  }
-  size {
-    x: 520.0
-    y: 22.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\241\320\276\320\276\320\261\321\211\320\265\320\275\320\270\321\217"
-  font: "unbounded_bold_20"
-  id: "side_title"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.95
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 524.0
-    y: 116.0
-    z: 0.521
-  }
-  size {
-    x: 680.0
-    y: 410.0
-  }
-  color {
-    x: 0.018
-    y: 0.017
-    z: 0.045
-  }
   type: TYPE_BOX
-  id: "sms_screen_bg"
+  id: "sms_runtime_root"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
   alpha: 0.0
-  enabled: false
 }
 nodes {
   position {
-    x: 524.0
-    y: 542.0
-    z: 0.545
+    x: 500.0
+    y: 40.0
+    z: 0.522
   }
   size {
-    x: 656.0
-    y: 1.0
+    x: 728.0
+    y: 640.0
   }
   color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
+    x: 0.031
+    y: 0.024
+    z: 0.094
   }
   type: TYPE_BOX
-  id: "sms_header_line"
+  id: "sms_app_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.1
-  enabled: false
+  parent: "sms_runtime_root"
+  alpha: 0.84
 }
 nodes {
-  position {
-    x: 548.0
-    y: 438.0
-    z: 0.532
-  }
-  size {
-    x: 520.0
-    y: 70.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
+  type: TYPE_TEMPLATE
+  id: "sms_list"
+  parent: "sms_runtime_root"
+  template: "/main/gui/components_v2/phone_sms_list_template.gui"
+}
+nodes {
   type: TYPE_BOX
-  id: "msg1_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.115
+  id: "sms_list/list_root"
+  parent: "sms_list"
+  template_node_child: true
 }
 nodes {
-  position {
-    x: 548.0
-    y: 437.0
-    z: 0.544
-  }
-  size {
-    x: 150.0
-    y: 1.0
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
+  type: TYPE_TEXT
+  id: "sms_list/side_eyebrow"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/side_title"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
   type: TYPE_BOX
-  id: "msg1_border"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.18
+  id: "sms_list/sms_header_line"
+  parent: "sms_list/list_root"
+  template_node_child: true
 }
 nodes {
-  position {
-    x: 568.0
-    y: 488.0
-    z: 0.555
-  }
-  size {
-    x: 330.0
-    y: 12.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\235. \320\234."
-  font: "jb_mono_bold_14"
-  id: "msg1_name"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.92
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 1048.0
-    y: 488.0
-    z: 0.555
-  }
-  size {
-    x: 120.0
-    y: 12.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "07:10"
-  font: "jb_mono_12"
-  id: "msg1_time"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.42
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 568.0
-    y: 466.0
-    z: 0.555
-  }
-  size {
-    x: 470.0
-    y: 30.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\321\202\321\213 \320\276\320\277\321\217\321\202\321\214 \320\276\320\277\320\276\320\267\320\264\320\260\320\265\321\210\321\214. \321\217 \320\266\320\265 \320\263\320\276\320\262\320\276\321\200\320\270\320\273\320\260. \320\276\320\277\321\217\321\202\321\214."
-  font: "manrope_14"
-  id: "msg1_body"
-  pivot: PIVOT_NW
-  adjust_mode: ADJUST_MODE_STRETCH
-  line_break: true
-  alpha: 0.82
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 620.0
-    y: 354.0
-    z: 0.532
-  }
-  size {
-    x: 520.0
-    y: 70.0
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
   type: TYPE_BOX
-  id: "msg2_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.105
+  id: "sms_list/sms_list_clip"
+  parent: "sms_list/list_root"
+  template_node_child: true
 }
 nodes {
-  position {
-    x: 990.0
-    y: 353.0
-    z: 0.544
-  }
-  size {
-    x: 150.0
-    y: 1.0
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
   type: TYPE_BOX
-  id: "msg2_border"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.16
+  id: "sms_list/sms_scrollbar_track"
+  parent: "sms_list/list_root"
+  template_node_child: true
 }
 nodes {
-  position {
-    x: 640.0
-    y: 404.0
-    z: 0.555
-  }
-  size {
-    x: 330.0
-    y: 12.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "+7 (???) ???-??-??"
-  font: "jb_mono_bold_14"
-  id: "msg2_name"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.92
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 1120.0
-    y: 404.0
-    z: 0.555
-  }
-  size {
-    x: 60.0
-    y: 12.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "03:17"
-  font: "jb_mono_12"
-  id: "msg2_time"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.42
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 640.0
-    y: 382.0
-    z: 0.555
-  }
-  size {
-    x: 470.0
-    y: 30.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\265\321\201\320\273\320\270 \320\277\320\276\320\274\320\275\320\270\321\210\321\214 \320\277\320\276\320\275\320\265\320\264\320\265\320\273\321\214\320\275\320\270\320\272 \342\200\224 \320\276\321\202\320\262\320\265\321\202\321\214. \321\215\321\202\320\276 \320\262\320\260\320\266\320\275\320\276."
-  font: "manrope_14"
-  id: "msg2_body"
-  pivot: PIVOT_NW
-  adjust_mode: ADJUST_MODE_STRETCH
-  line_break: true
-  alpha: 0.82
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 548.0
-    y: 270.0
-    z: 0.532
-  }
-  size {
-    x: 520.0
-    y: 70.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
   type: TYPE_BOX
-  id: "msg3_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.095
+  id: "sms_list/sms_scrollbar_thumb"
+  parent: "sms_list/list_root"
+  template_node_child: true
 }
 nodes {
-  position {
-    x: 548.0
-    y: 269.0
-    z: 0.544
-  }
-  size {
-    x: 150.0
-    y: 1.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
   type: TYPE_BOX
-  id: "msg3_border"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.18
+  id: "sms_list/sms_footer_line"
+  parent: "sms_list/list_root"
+  template_node_child: true
 }
 nodes {
-  position {
-    x: 568.0
-    y: 320.0
-    z: 0.555
-  }
-  size {
-    x: 330.0
-    y: 12.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
   type: TYPE_TEXT
-  text: "\320\236\321\202\320\264\320\265\320\273 \302\267 \320\237\321\200\320\276\320\264"
-  font: "jb_mono_bold_14"
-  id: "msg3_name"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.92
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
+  id: "sms_list/sms_footer_left"
+  parent: "sms_list/list_root"
+  template_node_child: true
 }
 nodes {
-  position {
-    x: 1048.0
-    y: 320.0
-    z: 0.555
-  }
-  size {
-    x: 120.0
-    y: 12.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
   type: TYPE_TEXT
-  text: "\320\262\321\207\320\265\321\200\320\260"
-  font: "jb_mono_12"
-  id: "msg3_time"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.42
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
+  id: "sms_list/sms_footer_right"
+  parent: "sms_list/list_root"
+  template_node_child: true
 }
 nodes {
-  position {
-    x: 568.0
-    y: 298.0
-    z: 0.555
-  }
-  size {
-    x: 470.0
-    y: 30.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\277\321\200\320\276\320\264 \321\203\320\277\320\260\320\273. \321\202\320\265\321\205. \320\264\320\276\320\273\320\263 \320\264\320\276\320\263\320\275\320\260\320\273. \320\277\320\276\320\264\320\275\320\270\320\274\320\270, \320\277\320\276\320\266\320\260\320\273\321\203\320\271\321\201\321\202\320\260."
-  font: "manrope_14"
-  id: "msg3_body"
-  pivot: PIVOT_NW
-  adjust_mode: ADJUST_MODE_STRETCH
-  line_break: true
-  alpha: 0.82
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 620.0
-    y: 194.0
-    z: 0.532
-  }
-  size {
-    x: 520.0
-    y: 54.0
-  }
-  color {
-    y: 0.239
-    z: 0.498
-  }
   type: TYPE_BOX
-  id: "msg4_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.105
+  id: "sms_list/msg1_bg"
+  parent: "sms_list/list_root"
+  template_node_child: true
 }
 nodes {
-  position {
-    x: 990.0
-    y: 193.0
-    z: 0.544
-  }
-  size {
-    x: 150.0
-    y: 1.0
-  }
-  color {
-    y: 0.239
-    z: 0.498
-  }
   type: TYPE_BOX
-  id: "msg4_border"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.18
+  id: "sms_list/msg1_border_t"
+  parent: "sms_list/list_root"
+  template_node_child: true
 }
 nodes {
-  position {
-    x: 640.0
-    y: 232.0
-    z: 0.555
-  }
-  size {
-    x: 330.0
-    y: 12.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\234\320\260\320\274\320\260"
-  font: "jb_mono_bold_14"
-  id: "msg4_name"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.92
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
+  type: TYPE_BOX
+  id: "sms_list/msg1_border_b"
+  parent: "sms_list/list_root"
+  template_node_child: true
 }
 nodes {
-  position {
-    x: 1120.0
-    y: 232.0
-    z: 0.555
-  }
-  size {
-    x: 60.0
-    y: 12.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\277\320\275"
-  font: "jb_mono_12"
-  id: "msg4_time"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.42
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
+  type: TYPE_BOX
+  id: "sms_list/msg1_border_l"
+  parent: "sms_list/list_root"
+  template_node_child: true
 }
 nodes {
-  position {
-    x: 640.0
-    y: 212.0
-    z: 0.555
-  }
-  size {
-    x: 470.0
-    y: 20.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
+  type: TYPE_BOX
+  id: "sms_list/msg1_border_r"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg1_dot"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
   type: TYPE_TEXT
-  text: "\320\275\320\265 \320\267\320\260\320\261\321\203\320\264\321\214 \320\277\320\276\320\265\321\201\321\202\321\214. \320\270 \320\267\320\276\320\275\321\202 \320\262\320\276\320\267\321\214\320\274\320\270 \342\200\224 \320\276\320\261\320\265\321\211\320\260\321\216\321\202 \320\264\320\276\320\266\320\264\321\214."
-  font: "manrope_14"
-  id: "msg4_body"
-  pivot: PIVOT_NW
-  adjust_mode: ADJUST_MODE_STRETCH
-  line_break: true
-  alpha: 0.82
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
+  id: "sms_list/msg1_name"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg1_time"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg1_body"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg1_pin_bg"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg1_pin_border_t"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg1_pin_border_b"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg1_pin_border_l"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg1_pin_border_r"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg1_pin"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg2_bg"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg2_border_t"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg2_border_b"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg2_border_l"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg2_border_r"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg2_dot"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg2_name"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg2_time"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg2_body"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg2_pin_bg"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg2_pin_border_t"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg2_pin_border_b"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg2_pin_border_l"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg2_pin_border_r"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg2_pin"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg3_bg"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg3_border_t"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg3_border_b"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg3_border_l"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg3_border_r"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg3_dot"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg3_name"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg3_time"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg3_body"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg3_pin_bg"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg3_pin_border_t"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg3_pin_border_b"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg3_pin_border_l"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg3_pin_border_r"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg3_pin"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg4_bg"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg4_border_t"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg4_border_b"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg4_border_l"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg4_border_r"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg4_dot"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg4_name"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg4_time"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg4_body"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg4_pin_bg"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg4_pin_border_t"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg4_pin_border_b"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg4_pin_border_l"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg4_pin_border_r"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg4_pin"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg5_bg"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg5_border_t"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg5_border_b"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg5_border_l"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg5_border_r"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg5_dot"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg5_name"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg5_time"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg5_body"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg5_pin_bg"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg5_pin_border_t"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg5_pin_border_b"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg5_pin_border_l"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg5_pin_border_r"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg5_pin"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg6_bg"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg6_border_t"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg6_border_b"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg6_border_l"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg6_border_r"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg6_dot"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg6_name"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg6_time"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg6_body"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg6_pin_bg"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg6_pin_border_t"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg6_pin_border_b"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg6_pin_border_l"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg6_pin_border_r"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg6_pin"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg7_bg"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg7_border_t"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg7_border_b"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg7_border_l"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg7_border_r"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg7_dot"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg7_name"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg7_time"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg7_body"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg7_pin_bg"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg7_pin_border_t"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg7_pin_border_b"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg7_pin_border_l"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg7_pin_border_r"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg7_pin"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "sms_thread"
+  parent: "sms_runtime_root"
+  template: "/main/gui/components_v2/phone_sms_thread_template.gui"
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/thread_root"
+  parent: "sms_thread"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_back_bg"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_back_border_t"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_back_border_b"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_back_border_l"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_back_border_r"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/th_back_label"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/th_name"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/th_num"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_call_bg"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_call_border_t"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_call_border_b"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_call_border_l"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_call_border_r"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/th_call_label"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_info_bg"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_info_border_t"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_info_border_b"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_info_border_l"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_info_border_r"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/th_info_label"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_menu_bg"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_menu_border_t"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_menu_border_b"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_menu_border_l"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_menu_border_r"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/th_menu_label"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_header_line"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_scroll_bg"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/th_empty"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub1_bg"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub1_border_t"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub1_border_b"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub1_border_l"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub1_border_r"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/bub1_text"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/bub1_stamp"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub2_bg"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub2_border_t"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub2_border_b"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub2_border_l"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub2_border_r"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/bub2_text"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/bub2_stamp"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub3_bg"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub3_border_t"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub3_border_b"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub3_border_l"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub3_border_r"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/bub3_text"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/bub3_stamp"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub4_bg"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub4_border_t"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub4_border_b"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub4_border_l"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub4_border_r"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/bub4_text"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/bub4_stamp"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub5_bg"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub5_border_t"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub5_border_b"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub5_border_l"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub5_border_r"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/bub5_text"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/bub5_stamp"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub6_bg"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub6_border_t"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub6_border_b"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub6_border_l"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub6_border_r"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/bub6_text"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/bub6_stamp"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub7_bg"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub7_border_t"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub7_border_b"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub7_border_l"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub7_border_r"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/bub7_text"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/bub7_stamp"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub8_bg"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub8_border_t"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub8_border_b"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub8_border_l"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub8_border_r"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/bub8_text"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/bub8_stamp"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_input_line"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_input_bg"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_input_border_t"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_input_border_b"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_input_border_l"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_input_border_r"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/th_input_text"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_send_bg"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_send_border_t"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_send_border_b"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_send_border_l"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_send_border_r"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/th_send_label"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/th_meter_left"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/th_meter_right"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_footer_line"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/th_footer_left"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/th_footer_right"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
 }
 material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT

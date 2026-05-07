@@ -123,10 +123,11 @@ function M.enter(scene_id)
     _scene_id   = scene_id
     _scene_data = data
     gs.set_scene(scene_id)
-    render()
-    print("[scene_controller] render() called, objects rendered")
 
-    -- Автотриггер on_enter-knot: проверяем condition и запускаем ink-монолог.
+    -- Автотриггер on_enter-knot проверяем ДО render().
+    -- Если on_enter сразу уводит в Ink, не надо сначала рисовать сцену-роутер:
+    -- для apartment_hub после воскресной встречи это давало дневной кадр
+    -- перед ночным вечерним блоком.
     if data.on_enter then
         local oe = data.on_enter
         local ok = true
@@ -134,12 +135,17 @@ function M.enter(scene_id)
         print("[scene_controller] on_enter check:", oe.knot, "condition:", ok)
         if ok and oe.knot then
             print("[scene_controller] triggering on_enter knot:", oe.knot)
+            local scene_bg = resolve_bg(data)
             M.exit()
             if _ui and _ui.request_ink_knot then
-                _ui.request_ink_knot(oe.knot, resolve_bg(data))
+                _ui.request_ink_knot(oe.knot, scene_bg)
             end
+            return
         end
     end
+
+    render()
+    print("[scene_controller] render() called, objects rendered")
 end
 
 function M.exit()

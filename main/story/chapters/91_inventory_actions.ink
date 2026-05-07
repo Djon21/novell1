@@ -16,6 +16,36 @@
 # return_to_scene
 -> DONE
 
+=== inv_apartment_kitchen_use_mug_on_coffee_setup ===
+# speaker:mc
+Ставлю кружку на столешницу рядом с чайником.
+
+Щелчок кнопки. Вода начинает шуметь — сначала тихо, потом всё увереннее.
+Пока чайник греется, я нахожу кофе и насыпаю его в кружку.
+
+Обычный утренний порядок. Почти убедительный.
+
+~ coffee_drunk = true
+# set_flag:coffee_drunk=true
+# quest:done:make_coffee
+# return_to_scene
+-> DONE
+
+=== inv_apartment_kitchen_morning_use_mug_on_coffee_setup ===
+# speaker:mc
+Ставлю кружку на столешницу рядом с чайником.
+
+Щелчок кнопки. Вода начинает шуметь — сначала тихо, потом всё увереннее.
+Пока чайник греется, я нахожу кофе и насыпаю его в кружку.
+
+Обычный утренний порядок. Почти убедительный.
+
+~ coffee_drunk = true
+# set_flag:coffee_drunk=true
+# quest:done:make_coffee
+# return_to_scene
+-> DONE
+
 === inv_read_note ===
 # speaker:none
 На смятом листке всего одна строка:
@@ -34,6 +64,102 @@
 Моя бумага. Мой почерк. Но ощущение, что писал это не я сегодняшний.
 # return_to_scene
 -> DONE
+
+
+// ----------------------------------------------------------------
+// ПОНЕДЕЛЬНИК / ОФИС — playable task
+// ----------------------------------------------------------------
+
+=== inv_work_hub_use_card_on_office_turnstile ===
+# speaker:mc
+Прикладываю пропуск к считывателю.
+
+Короткий писк. Турникет отпускает створку, и офис окончательно перестаёт быть просто зданием.
+
+# speaker:none
+Доступ разрешён.
+
+# set_flag:monday_checked_in_office=true
+# return_to_scene
+-> DONE
+
+=== inv_inspect_report_page ===
+# speaker:mc
+Один лист, несколько полей и слишком много пустых мест между строками.
+
+Если смотреть быстро, похоже на нормальный кейс. Если читать внимательно — на просьбу не задавать лишних вопросов.
+# return_to_scene
+-> DONE
+
+=== inv_read_report_page ===
+# speaker:none
+Кейс 017.
+
+Входные данные: частичные.
+Подтверждение: отсутствует.
+Рекомендованный путь: стандартная обработка при истечении срока.
+
+# speaker:mc
+То есть лист уже почти знает, куда меня подтолкнут.
+# return_to_scene
+-> DONE
+
+=== inv_inspect_folder ===
+# speaker:mc
+Обычная офисная папка. Чем аккуратнее она выглядит, тем легче забыть, что внутри может быть недостающая часть решения.
+# return_to_scene
+-> DONE
+
+=== inv_combine_folder_with_report_page ===
+# speaker:mc
+Вкладываю распечатку в папку, выравниваю край листа и закрываю обложку.
+
+Получается “пакет по кейсу”. Слишком солидное название для одного неполного набора данных.
+
+# remove_item:folder
+# remove_item:report_page
+# add_item:case_file
+# set_flag:monday_case_file_assembled=true
+# return_to_scene
+-> DONE
+
+=== inv_inspect_case_file ===
+# speaker:mc
+Папка выглядит готовой. И в этом проблема: готовый вид легко принять за готовый ответ.
+# return_to_scene
+-> DONE
+
+=== inv_read_case_file ===
+# speaker:none
+Кейс 017.
+
+Собранный пакет содержит первичную распечатку и место для решения. Подтверждающего поля по-прежнему нет.
+
+# speaker:mc
+Форма появилась. Данные — нет.
+# return_to_scene
+-> DONE
+
+=== inv_office_workspace_use_case_file_on_work_desk_submit ===
+# speaker:mc
+Кладу папку рядом с клавиатурой и прикрепляю её к рабочему кейсу.
+
+Теперь система видит не просто красную строку, а собранный пакет. Этого достаточно, чтобы она начала следующий шаг.
+
+# remove_item:case_file
+# set_flag:monday_case_file_submitted=true
+-> mon_office_npc_greeting
+
+=== inv_office_workspace_give_case_file_on_npc ===
+# speaker:mc
+Передаю папку коллеге.
+
+# speaker:npc
+Есть. Тогда открываем кейс и смотрим, почему он так спешит стать “стандартным”.
+
+# remove_item:case_file
+# set_flag:monday_case_file_submitted=true
+-> mon_office_npc_greeting
 
 === inv_use_fallback ===
 # speaker:mc

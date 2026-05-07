@@ -38,7 +38,7 @@
 | `main/gui/components_v2/phone_quests.gui_script` | «ЗАДАЧИ» |
 | `main/gui/components_v2/phone_notes.gui_script`, `phone_mail`, `phone_call`, `phone_cam`, `phone_term` | заголовки и пустые состояния |
 | `main/gui/components_v2/inventory_v2.gui_script` | подписи verbs (use/inspect/read) |
-| `main/gui/ui_manager_v2.script` | `MAP_PIN_LABELS` (Дом, Офис, …) |
+| `main/gui/modules/ui_manager_v2/map_flow.lua` + `main/scripts/l10n.lua` | ключи подписей пинов карты (`map_home`, `map_work`, …) |
 | `main/scripts/scenes.lua` | поле `label` у каждого hotspot'а |
 | `main/scripts/quests.lua` | названия и описания квестов (`name`, `description`, `text` шагов) |
 | `main/scripts/items_catalog.lua` | названия и описания предметов |
@@ -78,7 +78,7 @@
 |---|---|---|
 | **P1** | Lua читает `window.__gameLang` через `html5.run` → `l10n.lang` | До первого публичного теста |
 | **P1** | Создать `main/scripts/l10n.lua` со скелетом и RU-строками | До первого публичного теста |
-| **P1** | Перенести в `l10n` строки `MAP_PIN_LABELS` + меню | Сразу |
+| **P1** | Перенести в `l10n` строки карты + меню | Сразу |
 | **P2** | Перенести остальные UI-строки (phone, inventory, quests, items) | По мере касания |
 | **P2** | EN-перевод UI | После заморозки UI-словаря |
 | **P2** | TR-перевод UI | После EN |
@@ -329,7 +329,7 @@ gui.set_text(node, l10n.t("menu_new"))
 
 - [ ] Создан `main/scripts/l10n.lua` с `detect()`, `t(key)`, таблицами `ru/en/tr`
 - [ ] `ui_manager_v2.init()` зовёт `l10n.detect()` до показа меню (читает `window.__gameLang` через `html5.run`)
-- [ ] `MAP_PIN_LABELS` в `ui_manager_v2` вынесен в `l10n.strings`
+- [x] подписи пинов карты вынесены из `ui_manager_v2` в `map_flow.lua` + `l10n.t(...)`
 - [ ] Главное меню (`main_menu_v2.gui_script`) использует `l10n.t()` вместо хардкод-строк
 
 ### Этап P2 — расширение
@@ -371,7 +371,7 @@ gui.set_text(node, l10n.t("menu_new"))
 
 ## 9. Порядок реализации (рекомендуемый)
 
-1. **`l10n.lua` базовый** (detect + t + RU-словарь с MAP_PIN_LABELS) → `main_menu_v2` подключает → smoke-тест что меню всё ещё видно
+1. **`l10n.lua` базовый** (detect + t + RU-словарь с ключами карты `map_home`, `map_work`, …) → `main_menu_v2` подключает → smoke-тест что меню всё ещё видно
 2. **EN-перевод словаря** (только то что в `l10n.lua` есть)
 3. **HTML5 smoke-тест**: собрать билд, проверить что `l10n.detect()` действительно даёт `en` при `?lang=en` в URL
 4. **Расширение словаря** (HUD, телефон, инвентарь) — постепенно, без блокеров

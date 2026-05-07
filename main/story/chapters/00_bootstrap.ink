@@ -73,6 +73,6 @@ VAR inventory_item_name = ""
 VAR inventory_item_verb = ""
 VAR inventory_scene_id = ""
 VAR inventory_target_id = ""    // hotspot_id для use-on-target или npc_id для give
-VAR inventory_target_kind = ""  // "hotspot" | "npc" | ""
+VAR inventory_target_kind = ""  // "hotspot" | "npc" | "item" | ""
 
 -> choose_character

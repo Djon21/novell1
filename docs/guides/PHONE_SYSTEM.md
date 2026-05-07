@@ -91,7 +91,7 @@ msg.post("#ui_manager_v2", "phone_sms_viewed")  -- уведомить ui_manager
 HUD (кнопка телефона)
   └─ msg.post("#ui_manager_v2", "open_phone")
 
-ui_manager_v2.script
+ui_manager_v2.script -> message_flow.lua -> phone_flow.lua
   └─ проверяет has_phone_access()
   └─ overlays.phone = true
   └─ msg.post("#phone_v2", "open_phone")
@@ -135,6 +135,14 @@ phone_quests.gui_script.on_message("open_app")
   └─ refresh()    -- gs.get_quests() → заполнить ноды
 ```
 
+Важно:
+
+Вкладка Quests показывает только runtime-задачи текущей итерации из `game_state`.
+Она не является persistent loop journal.
+
+Если в дизайне нужен журнал гипотез, переживающий итерации, его нельзя брать из `gs.get_quests()`.
+Для него нужен отдельный источник данных: `meta_state` или отдельный persistent journal module.
+
 **Тап на уже открытое приложение** → возврат в SMS:
 
 ```lua
@@ -154,7 +162,7 @@ end
 phone_sms.gui_script.on_input (тап на msg1_bg..msg4_bg)
   └─ msg.post("#ui_manager_v2", "sms_open_contact", { contact_id = "mila" })
 
-ui_manager_v2.script.on_message("sms_open_contact")
+message_flow.lua handles "sms_open_contact"
   ├─ gs.mark_sms_read(contact_id)   -- ставит sms_<contact>_read=true
   ├─ close_phone(self)              -- закрывает телефон
   └─ run_side_dialogue_knot("sms_thread_mila")   -- прыгает в Ink
@@ -479,7 +487,7 @@ Defold автоматически распространяет `enabled = false`
 # phone:map
 ```
 
-Он открывает телефон и сразу переключает его на приложение карты (`phone_map.gui`). Игрок выбирает POI, `phone_map.gui_script` отправляет `map_travel`, после чего `ui_manager_v2` закрывает телефон и открывает выбранный hub через `scene_controller.enter(scene_id)`.
+Он открывает телефон и сразу переключает его на приложение карты (`phone_map.gui`). Игрок выбирает POI, `phone_map.gui_script` отправляет `map_travel`, после чего `message_flow.lua` закрывает телефон и открывает выбранный hub через `scene_controller.enter(scene_id)`.
 
 Универсальная форма для других приложений:
 
@@ -498,7 +506,7 @@ Defold автоматически распространяет `enabled = false`
 | Симптом | Причина | Решение |
 |---|---|---|
 | Ноды телефона видны поверх меню | Нода добавлена в `.gui` но не в `NODE_IDS` скрипта | Добавить в `NODE_IDS` |
-| Карта открывается как внешний оверлей | `map` в `EXTERNAL_APPS` / обработчик в `ui_manager_v2` | Убрать `map` из `EXTERNAL_APPS`; убрать `id=="map"` из `phone_app_clicked` |
+| Карта открывается как внешний оверлей | `map` в `EXTERNAL_APPS` / обработчик в `message_flow.lua` | Убрать `map` из `EXTERNAL_APPS`; не открывать внешний `map_v2` из `phone_app_clicked` |
 | Меню не реагирует на клики | `acquire_input_focus` убран из `init` root-скрипта | Восстановить, не добавлять `release` при закрытии |
 | При закрытии телефона меню не работает | `release_input_focus` вызывается в `close_phone` | Убрать `release_input_focus` |
 | Данные в вкладке не обновляются | Нет вызова `refresh(self)` в `open_app` | Добавить `refresh(self)` в хэндлер `open_app` |

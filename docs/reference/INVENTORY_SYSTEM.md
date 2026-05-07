@@ -32,7 +32,7 @@
 items_catalog.lua    ← справочник всех предметов (имя, иконка, глаголы, описание)
 game_state.lua       ← инвентарь игрока [массив item_id]
 inventory_v2.gui_script  ← рендер сетки + клики по слотам и verbs
-ui_manager_v2.script     ← resolve_inventory_knot → запускает ink-монолог
+inventory_flow.lua        ← resolve_inventory_knot → запускает ink-монолог
 ink-скрипты              ← сюжетная реакция на глагол
 ui_state.lua             ← armed-state для USE-on-target
 ```
@@ -44,7 +44,8 @@ ui_state.lua             ← armed-state для USE-on-target
 - **runtime-state предметов** хранится в `game_state.lua`
 - **UI-метаданные** живут в `items_catalog.lua`
 - **`inventory_v2`** только рендерит состояние и шлёт `inventory_verb` наружу
-- **`ui_manager_v2`** решает, что делать с verb (включая armed-режим для USE)
+- **`inventory_flow.lua`** решает, что делать с verb (включая armed-режим для USE)
+- **`ui_manager_v2.script`** остаётся мостом между Defold-сообщениями и flow-модулями
 
 `mug` и `phone` — единственный источник правды по этим предметам: hotspots проверяют через `gs.has_item("mug")`/`gs.has_item("phone")`, ink добавляет через `# add_item:mug`/`# add_item:phone`. Старых флагов `has_mug`/`has_phone` больше нет (после рефакторинга 2026-05).
 
@@ -173,7 +174,7 @@ inv_<scene>_<verb>_<item>   →   inv_<verb>_<item>   →   inv_<verb>_fallback 
 
 `phone` не ведёт себя как обычный предмет. На `use` или `read` он **не** прыгает в ink, а открывает `phone_v2` напрямую. Так задумано — телефон data-driven, статичный ink-экран ему не нужен.
 
-Писать `inv_use_phone` или `inv_read_phone` **не нужно** — это обрабатывается автоматически в `ui_manager_v2`.
+Писать `inv_use_phone` или `inv_read_phone` **не нужно** — это обрабатывается автоматически в `inventory_flow.lua`.
 
 Если хочешь короткий текст — используй `inv_inspect_phone`.
 

@@ -1,5 +1,0 @@
-font: "/main/fonts/Unbounded-Bold.ttf"
-material: "/builtins/fonts/font.material"
-size: 54
-all_chars: true
-characters: " !\"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"

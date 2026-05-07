@@ -16,7 +16,7 @@
 |---|---|
 | Список хотспотов, координаты, подписи, иконки, стили | `main/scripts/scenes.lua` |
 | Передача хотспотов из сцены в UI-адаптер | `main/scripts/scene_controller.lua` |
-| Whitelist полей хотспота для отправки в GUI component | `main/gui/ui_manager_v2.script` |
+| Whitelist полей хотспота для отправки в GUI component | `main/gui/modules/ui_manager_v2/scene_flow.lua` |
 | Логика отрисовки хотспотов | `main/gui/components_v2/hotspots_v2.gui_script` |
 | GUI-ноды хотспотов | `main/gui/components_v2/hotspots_v2.gui` |
 | Атлас PNG для круга/кольца/точек | `main/images/hotspots.atlas` |
@@ -36,7 +36,7 @@
     rect = { x = 1035, y = 70, w = 170, h = 220 },
     label = "В коридор",
     icon = "arrow_back",
-    action = { type = "goto_scene", scene = "apartment_hall_morning" },
+    action = { type = "goto_scene", scene = "apartment_hub" },
     visible_when = function(gs)
         return gs.get_flag("washed_up")
     end,
@@ -67,14 +67,14 @@ Material icon         -- стрелка, телефон, кофе и т.п.
 ```text
 scenes.lua
   -> scene_controller.lua
-      -> ui_manager_v2.script
+      -> scene_flow.lua
           -> hotspots_v2.gui_script
               -> hotspots_v2.gui
 ```
 
 Если добавляешь новое поле в хотспот, оно должно дойти по этой цепочке до `hotspots_v2.gui_script`. Сейчас `scene_controller.lua` передаёт весь объект хотспота целиком, поэтому поля вроде `circle_color`, `ring_color`, `icon_color`, `hotspot_style`, `circle_texture` и `ring_texture` доходят до GUI.
 
-`ui_manager_v2.script` дополнительно делает безопасную копию данных перед `msg.post`. Если в будущем появится новое поле стиля, например `pulse_speed`, его нужно добавить в whitelist внутри `set_hotspot = function(i, data)` в `ui_manager_v2.script`.
+`scene_flow.lua` дополнительно делает безопасную копию данных перед `msg.post`. Если в будущем появится новое поле стиля, например `pulse_speed`, его нужно добавить в whitelist внутри `set_hotspot = function(i, data)` в `main/gui/modules/ui_manager_v2/scene_flow.lua`.
 
 ## 2. Откуда берётся стрелка и как задавать иконки
 
@@ -264,7 +264,7 @@ icon_scale = 0.95
     icon = "arrow_back",
     hotspot_scale = 1.12,
     ring_alpha = 1.0,
-    action = { type = "goto_scene", scene = "apartment_hall_morning" },
+    action = { type = "goto_scene", scene = "apartment_hub" },
 }
 ```
 
@@ -294,6 +294,12 @@ icon_offset_y = 4
 ```
 
 Почему по умолчанию `4`, а не `0`: в `hotspots_v2.gui_script` есть базовая компенсация шрифта, потому что текстовая baseline у Material Icons визуально чуть уводит значок. Если иконка кажется слишком низко, попробуй `icon_offset_y = 0` или `icon_offset_y = -2`.
+
+Практическое правило текущих сцен:
+
+- для стрелок в квартире часто используется `icon_offset_x = -4`, `icon_offset_y = 0`;
+- если копируешь существующий стиль из `scenes.lua`, сохраняй offset'ы;
+- если делаешь новый hotspot с нуля, начни с `0, 0` и подгони через F1/debug.
 
 Пример для стрелки вниз:
 
@@ -350,7 +356,7 @@ hotspot_style = {
         circle_alpha = 0.78,
         ring_alpha = 0.90,
     },
-    action = { type = "goto_scene", scene = "apartment_hall_morning" },
+    action = { type = "goto_scene", scene = "apartment_hub" },
 }
 ```
 
@@ -534,6 +540,14 @@ M.HOTSPOT_COUNT = 7
 ```
 
 Без этого скрипт всё равно будет брать только первые 6 слотов.
+
+4. В `main/gui/modules/ui_manager_v2/scene_flow.lua` поменяй лимит:
+
+```lua
+max_hotspots = function() return 7 end
+```
+
+Иначе `scene_controller` всё равно будет отдавать максимум 6 хотспотов в GUI.
 
 ### Что можно менять в GUI руками
 

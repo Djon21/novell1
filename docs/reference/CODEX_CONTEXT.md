@@ -28,7 +28,8 @@
 - `save_manager.lua` — run-save для `Continue`: Ink history + `game_state`.
 - `meta_state.lua` — долгий meta-state петли: iteration, awareness, false endings, выбор персонажа.
 - `scene_controller.lua` — exploration-сцены, hotspots и scene objects.
-- `ui_manager_v2.script` — меню, диалог, exploration, overlays, phone, map, inventory.
+- `ui_manager_v2.script` — центральный Defold-адаптер: компоненты, lifecycle, context wrappers, `handle_dialogue_update`.
+- `main/gui/modules/ui_manager_v2/*.lua` — flow-модули UI: messages, overlays, dialogue, inventory, phone, map, scenes, backgrounds, effects, run-state.
 
 ## Что Важно Помнить
 
@@ -41,6 +42,8 @@
 - `nav_buttons_v2` удалён из активной схемы. Навигация идёт через hotspots и карту.
 - `open_achievements` остаётся скрытым пунктом будущего этапа.
 - Папку `skills/` не трогаем.
+- Если нужно менять обработку `msg.post("#ui_manager_v2", "...")`, сначала смотри `main/gui/modules/ui_manager_v2/message_flow.lua`.
+- Если нужно понять, где теперь лежит логика `ui_manager_v2`, смотри `docs/reference/UI_MANAGER_V2_MODULES.md`.
 
 ## Недавние Закрытые Хвосты
 
@@ -60,6 +63,7 @@
 - создана `docs/guides/HOW_TO_WRITE_INK.md` — практическая инструкция по ink для проекта
 - бэклог реплик вынесен в `main/scripts/dialogue_backlog.lua` (shared-модуль): убрана пересылка таблицы через `msg.post`, упиравшаяся в `sys.max_message_data_size`
 - починена кодировка `AVOS_S_Story_Bible.md` и `AVOS_S_World_Doc_v2.md` (был UTF-8 → CP1251 → UTF-8 mojibake)
+- `ui_manager_v2.script` разрезан на flow-модули в `main/gui/modules/ui_manager_v2/`; `on_message` вынесен в `message_flow.lua`
 
 ## Где Лежит Контент
 

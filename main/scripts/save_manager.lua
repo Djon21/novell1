@@ -54,7 +54,10 @@ end
 
 function M.has_save()
     ensure_loaded()
-    return _data.ink_state ~= nil
+    -- Continue needs both halves of the run. On HTML5/Yandex an interrupted
+    -- write can leave ink_state ahead of game_state; loading that produced
+    -- dialogue over the menu background and could immediately reach END.
+    return _data.ink_state ~= nil and _data.game_state ~= nil
 end
 
 function M.set_ink_state(state)

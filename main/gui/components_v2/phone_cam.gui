@@ -31,18 +31,6 @@ fonts {
   name: "manrope_16"
   font: "/main/fonts/manrope_16.font"
 }
-textures {
-  name: "icon_phone"
-  texture: "/main/images/phone/icon_phone.atlas"
-}
-textures {
-  name: "map2"
-  texture: "/main/images/phone/map2.atlas"
-}
-textures {
-  name: "map_assets_cyberpunk_v2"
-  texture: "/main/images/phone/map_assets_cyberpunk_v2.atlas"
-}
 nodes {
   position {
     x: 524.0
@@ -157,3 +145,4 @@ nodes {
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
+material: "/builtins/materials/gui.material"

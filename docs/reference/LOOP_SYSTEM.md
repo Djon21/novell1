@@ -37,13 +37,26 @@
 - `chapter` — текущая глава
 - `mc_gender` — пол персонажа (НЕ сбрасывается — восстанавливается из meta_state)
 
+### Важно про квесты
+
+Квесты в телефоне (`phone_quests`) относятся к run-state.
+
+Это значит:
+- они сбрасываются при новой итерации;
+- они описывают текущий маршрут игрока;
+- они не являются постоянным журналом гипотез.
+
+Если нужно сохранить выводы игрока между итерациями, это не phone quest,
+а meta-level journal / hypothesis journal. Такой журнал должен храниться
+через `meta_state` или отдельный persistent-модуль.
+
 Run-state используется для кнопки «ПРОДОЛЖИТЬ» в меню.
 
 ### Что живёт в `meta_state` (переживает итерации)
 
 - `iteration_number` — номер текущей итерации (1, 2, 3...)
 - `completed_iterations` — сколько итераций пройдено до конца
-- `loop_awareness` — сколько уникальных ложных концовок найдено
+- `loop_awareness` — накопленное понимание петли; сейчас растёт при первом нахождении уникальной ложной концовки
 - `false_endings_seen` — таблица найденных ложных концовок
 - `false_endings_count` — счётчик уникальных ложных
 - `mc_gender` — выбор персонажа (сохраняется навсегда до полного сброса)
@@ -127,7 +140,7 @@ Runtime-страховка: если на итерации 001 встречае�
 |---|---|---|
 | `# chapter_finished` | → `meta.complete_iteration()` → меню | то же |
 | `# loop:end:false:ID` | трактуется как `chapter_finished` (warn) | `meta.record_false_ending(ID)` → restart той же итерации |
-| `# loop:end:true` | трактуется как `chapter_finished` (warn) | требует `loop_awareness >= 2`; иначе fallback `record_false_ending("early_true")` |
+| `# loop:end:true` | трактуется как `chapter_finished` (warn) | требует `false_endings_count >= 2`; иначе runtime не должен засчитывать True Ending |
 
 ### Ложная концовка (`# loop:end:false:ID`)
 
@@ -229,7 +242,7 @@ Best practice — оборачивать ложные концовки в усл
 
 ```ink
 === ending_trusted_system ===
-# bg:bg_office # speaker:none
+# bg:bg_office_workspace_night # speaker:none
 ...текст концовки...
 {iteration_number > 1:
     # loop:end:false:system_trust
@@ -276,5 +289,5 @@ Best practice — оборачивать ложные концовки в усл
 | `main/scripts/meta_state.lua` | Хранилище между итерациями, автосохранение |
 | `main/scripts/save_manager.lua` | Run-state текущей итерации |
 | `main/scripts/dialogue_manager_ink.lua` | `pull_gender_from_ink()`, `push_vars_to_ink()` — синхронизация |
-| `main/gui/ui_manager_v2.script` | `start_new_run`, `handle_dialogue_update`, обработчики `chapter_finished`, `loop:end:*` |
+| `main/gui/ui_manager_v2.script` + `message_flow.lua` | `start_new_run`, `handle_dialogue_update`, обработчики `chapter_finished`, `loop:end:*` |
 | `main/gui/components_v2/main_menu_v2.gui_script` | Confirm-модалка для «СБРОСИТЬ ИТЕРАЦИЮ» |

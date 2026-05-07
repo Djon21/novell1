@@ -458,6 +458,19 @@ local function apply_tags(tags, trailing)
                     pending_end_type = { type = "true" }
                 end
             end
+        elseif (key == "adv" or key == "ad") and value and not suppress_effects then
+            local kind, rest = value:match("([%w_]+)%s*:?%s*(.*)")
+            kind = kind or value
+            rest = rest and rest:gsub("^%s+", ""):gsub("%s+$", "") or nil
+            if kind == "fullscreen" or kind == "interstitial" then
+                table.insert(scene_bucket, { type = "show_ad", ad_kind = "fullscreen" })
+            elseif kind == "rewarded" then
+                table.insert(scene_bucket, {
+                    type = "show_ad",
+                    ad_kind = "rewarded",
+                    reward_flag = rest and rest ~= "" and rest or nil,
+                })
+            end
         elseif key == "phone" and value == "map" and not suppress_effects then
             table.insert(scene_bucket, { type = "open_phone_app", app = "map" })
         elseif key == "phone" and value and value:match("^app%s*:") and not suppress_effects then

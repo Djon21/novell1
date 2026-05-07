@@ -148,65 +148,6 @@
 		60%      { transform: rotate(-90deg); }
 	}
 	</style>
-  <script type="text/javascript">
-            (function (d) {
-                window.YaGamesPrivate_MsgQueue = [];
-                var send = function (cb_id, message_id, message) {
-                    if (typeof YaGamesPrivate !== "undefined") {
-                        YaGamesPrivate.send(cb_id, message_id, message);
-                    } else {
-                        YaGamesPrivate_MsgQueue.push([cb_id, message_id, message]);
-                    }
-                };
-
-                var t = d.getElementsByTagName("script")[0];
-                var s = d.createElement("script");
-                var url;
-                // 
-                url = "/sdk.js";
-                // 
-                s.src = url || "/sdk.js";
-                s.async = true;
-                t.parentNode.insertBefore(s, t);
-                s.onload = function () {
-                    var options;
-                    // 
-
-                    try {
-                        YaGames.init(options)
-                            .then(function (ysdk) {
-                                // Требование Яндекс Игр 2.14 — автоопределение языка.
-                                // Читаем environment.i18n.lang СРАЗУ после init SDK,
-                                // до загрузки игры. Индикатор 文 должен стать зелёным.
-                                try {
-                                    window.__gameLang = ysdk.environment.i18n.lang;
-                                    console.log("YaGames lang:", window.__gameLang);
-                                } catch (e) {
-                                    console.warn("Cannot read environment.i18n.lang:", e);
-                                }
-
-                                // Сигнал Яндексу: игра загружается (убрать прелоадер).
-                                try {
-                                    ysdk.features.LoadingAPI.ready();
-                                } catch (e) {
-                                    console.warn("LoadingAPI.ready failed:", e);
-                                }
-
-                                send(0, "init", ysdk);
-                            })
-                            .catch(function (err) {
-                                send(0, "error", err + "");
-                            });
-                    } catch (err) {
-                        // In the case that the user specified an incorrect URL and YaGames is undefined.
-                        send(0, "error", "Incorrect SDK. " + err);
-                    }
-                };
-                s.onerror = function () {
-                    send(0, "error", "Error loading SDK. Reload the page.");
-                };
-            })(document);
-        </script>
  </head>
  <body>
   <!-- Portrait overlay: показывается только в вертикальной ориентации на мобильных -->

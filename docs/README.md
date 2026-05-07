@@ -13,6 +13,7 @@
 ## Reference
 
 - `reference/ARCHITECTURE.md` — текущий runtime
+- `reference/UI_MANAGER_V2_MODULES.md` — как сейчас разрезан `ui_manager_v2.script`
 - `reference/CODEX_CONTEXT.md` — краткая карта проекта для новых сессий
 - `reference/CONTINUE_HERE.md` — где продолжать работу
 - `reference/LOOP_SYSTEM.md` — итерации и meta-state
@@ -32,6 +33,7 @@
 - `guides/F1_HOTSPOT_EDITOR.md`
 - `guides/PHONE_SYSTEM.md`
 - `guides/HUB_SYSTEM.md`
+- `guides/YANDEX_SDK_AND_ADS.md`
 
 ## Archive
 

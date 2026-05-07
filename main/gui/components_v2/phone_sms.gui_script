@@ -1,28 +1,128 @@
 -- phone_sms.gui_script
--- SMS-приложение в составе split-телефона.
--- Принимает: open_app, close_app, refresh_app
+-- SMS app v2 with GUI Templates:
+--   phone_sms.gui = host/root only
+--   phone_sms_list_template.gui = inbox list
+--   phone_sms_thread_template.gui = in-phone thread
+--
+-- Runtime rules:
+--   - app scripts do not acquire input focus; phone_v2_root forwards input.
+--   - SMS is hidden in init/close_app by disabling sms_runtime_root.
+--   - list rows support drag/wheel scrolling when more than 7 threads exist.
+--   - input/SEND in thread calls the old sms_open_contact flow through ui_manager.
 
-local gs     = require "main.scripts.game_state"
 local UI_MGR = "#ui_manager_v2"
+local PHONE_ROOT = "#phone_v2"
 
-local COLOR_CYAN  = vmath.vector4(0.47, 0.94, 1.00, 1.0)
-local COLOR_PAPER = vmath.vector4(0.95, 0.95, 0.90, 1.0)
-local COLOR_OUT   = vmath.vector4(0.55, 0.85, 0.55, 1.0)  -- исходящее — зелёный
+local MAX_ROWS = 7
+local MAX_BUBBLES = 8
+local LIST_SCROLL_STEP_PX = 46
+local LIST_DRAG_THRESHOLD_PX = 8
+local DEBUG_LOG = false
+local function dbg(...) if DEBUG_LOG then print(...) end end
 
-local NODE_IDS = {
-    "side_eyebrow", "side_title",
-    "sms_screen_bg", "sms_header_line", "sms_input_bar", "sms_input_dash",
-    "msg1_bg", "msg1_border", "msg1_name", "msg1_time", "msg1_body",
-    "msg2_bg", "msg2_border", "msg2_name", "msg2_time", "msg2_body",
-    "msg3_bg", "msg3_border", "msg3_name", "msg3_time", "msg3_body",
-    "msg4_bg", "msg4_border", "msg4_name", "msg4_time", "msg4_body",
+local gs_cache = nil
+local contacts_cache = nil
+
+local function gs()
+    if gs_cache ~= nil then return gs_cache end
+    local ok, mod = pcall(require, "main.scripts.game_state")
+    gs_cache = ok and mod or false
+    return gs_cache or {}
+end
+
+local fallback_contacts = {}
+function fallback_contacts.get(contact_id)
+    local id = tostring(contact_id or "")
+    local name = id ~= "" and id:gsub("_", " ") or "—"
+    name = name:gsub("(%S+)", function(w) return w:sub(1, 1):upper() .. w:sub(2) end)
+    return { id = id, name = name, number = id ~= "" and id or "—", ink_thread = id ~= "" and ("sms_thread_" .. id) or nil }
+end
+function fallback_contacts.get_name(contact_id) return fallback_contacts.get(contact_id).name end
+function fallback_contacts.get_number(contact_id) return fallback_contacts.get(contact_id).number end
+function fallback_contacts.get_tag(contact_id) return nil, nil end
+function fallback_contacts.get_ink_thread(contact_id) return fallback_contacts.get(contact_id).ink_thread end
+function fallback_contacts.is_readonly(contact_id) return false end
+
+local function contacts()
+    if contacts_cache ~= nil then return contacts_cache end
+    local ok, mod = pcall(require, "main.scripts.phone_contacts")
+    contacts_cache = ok and mod or fallback_contacts
+    return contacts_cache
+end
+
+local HOST_NODE_IDS = {
+    "sms_runtime_root", "sms_app_bg", "sms_list", "sms_thread",
+    "sms_list/list_root", "sms_thread/thread_root",
 }
 
-local SMS_SLOTS = 4
+local LIST_NODE_IDS = {
+    "list_root",
+    "side_eyebrow", "side_title", "sms_header_line",
+    "sms_list_clip", "sms_scrollbar_track", "sms_scrollbar_thumb",
+    "sms_footer_line", "sms_footer_left", "sms_footer_right",
+}
 
-local function get_node(id)
+for i = 1, MAX_ROWS do
+    local p = "msg" .. i
+    for _, suffix in ipairs({
+        "_bg", "_border_t", "_border_b", "_border_l", "_border_r", "_dot",
+        "_name", "_time", "_body", "_pin_bg", "_pin_border_t", "_pin_border_b",
+        "_pin_border_l", "_pin_border_r", "_pin"
+    }) do
+        LIST_NODE_IDS[#LIST_NODE_IDS + 1] = p .. suffix
+    end
+end
+
+local THREAD_NODE_IDS = {
+    "thread_root",
+    "th_back_bg", "th_back_border_t", "th_back_border_b", "th_back_border_l", "th_back_border_r", "th_back_label",
+    "th_name", "th_num",
+    "th_call_bg", "th_call_border_t", "th_call_border_b", "th_call_border_l", "th_call_border_r", "th_call_label",
+    "th_info_bg", "th_info_border_t", "th_info_border_b", "th_info_border_l", "th_info_border_r", "th_info_label",
+    "th_menu_bg", "th_menu_border_t", "th_menu_border_b", "th_menu_border_l", "th_menu_border_r", "th_menu_label",
+    "th_header_line", "th_scroll_bg", "th_empty",
+    "th_input_line", "th_input_bg", "th_input_border_t", "th_input_border_b", "th_input_border_l", "th_input_border_r", "th_input_text",
+    "th_send_bg", "th_send_border_t", "th_send_border_b", "th_send_border_l", "th_send_border_r", "th_send_label",
+    "th_meter_left", "th_meter_right", "th_footer_line", "th_footer_left", "th_footer_right",
+}
+
+for i = 1, MAX_BUBBLES do
+    local p = "bub" .. i
+    for _, suffix in ipairs({ "_bg", "_border_t", "_border_b", "_border_l", "_border_r", "_text", "_stamp" }) do
+        THREAD_NODE_IDS[#THREAD_NODE_IDS + 1] = p .. suffix
+    end
+end
+
+local COLORS = {
+    paper     = vmath.vector4(0.953, 0.925, 0.851, 1),
+    paper_dim = vmath.vector4(0.788, 0.753, 0.659, 1),
+    accent    = vmath.vector4(0.490, 0.976, 1.000, 1),
+    hot       = vmath.vector4(1.000, 0.239, 0.498, 1),
+    amber     = vmath.vector4(1.000, 0.702, 0.278, 1),
+    green     = vmath.vector4(0.290, 0.870, 0.500, 1),
+    card      = vmath.vector4(0.078, 0.071, 0.204, 1),
+    card_hot  = vmath.vector4(0.140, 0.034, 0.115, 1),
+    dark      = vmath.vector4(0.031, 0.024, 0.094, 1),
+}
+
+local function try_get_node(id)
     local ok, n = pcall(gui.get_node, id)
     if ok then return n end
+    return nil
+end
+
+local function get_node(id)
+    local n = try_get_node(id)
+    if n then return n end
+
+    if id:sub(1, 9) ~= "sms_list/" then
+        n = try_get_node("sms_list/" .. id)
+        if n then return n end
+    end
+    if id:sub(1, 11) ~= "sms_thread/" then
+        n = try_get_node("sms_thread/" .. id)
+        if n then return n end
+    end
     return nil
 end
 
@@ -31,87 +131,726 @@ local function set_node_enabled(id, enabled)
     if n then gui.set_enabled(n, enabled) end
 end
 
-local function set_nodes_enabled(enabled)
-    for _, id in ipairs(NODE_IDS) do
-        set_node_enabled(id, enabled)
+local function set_many_enabled(ids, enabled)
+    for _, id in ipairs(ids) do set_node_enabled(id, enabled) end
+end
+
+local function set_host_visible(enabled)
+    -- A single runtime root is the main guard against SMS leaking into menu.
+    set_node_enabled("sms_runtime_root", enabled)
+    set_node_enabled("sms_app_bg", enabled)
+    set_node_enabled("sms_list", enabled)
+    set_node_enabled("sms_thread", enabled)
+end
+
+local function set_all_enabled(enabled)
+    set_host_visible(enabled)
+    set_many_enabled(LIST_NODE_IDS, enabled)
+    set_many_enabled(THREAD_NODE_IDS, enabled)
+end
+
+local function set_text(id, value)
+    local n = get_node(id)
+    if n then gui.set_text(n, value or "") end
+end
+
+local function set_color(id, color, alpha)
+    local n = get_node(id)
+    if n then
+        gui.set_color(n, vmath.vector4(color.x, color.y, color.z, alpha or color.w or 1))
     end
 end
 
-local function set_text(id, s)
+local function set_pos(id, x, y, z)
     local n = get_node(id)
-    if n then gui.set_text(n, s or "") end
+    if n then
+        local p = gui.get_position(n)
+        gui.set_position(n, vmath.vector3(x, y, z or p.z))
+    end
 end
 
-local function set_node_color(id, c)
+local function set_size(id, w, h)
     local n = get_node(id)
-    if n then gui.set_color(n, c) end
+    if n then gui.set_size(n, vmath.vector3(w, h, 0)) end
+end
+
+local function set_box(id, x, y, w, h, color, alpha)
+    set_pos(id, x, y)
+    set_size(id, w, h)
+    if color then set_color(id, color, alpha) end
+end
+
+local function clamp_text(s, max_len)
+    s = tostring(s or "")
+    max_len = tonumber(max_len) or 32
+    if utf8 and utf8.len then
+        local len = utf8.len(s)
+        if len and len > max_len then
+            local out, count = {}, 0
+            for _, code in utf8.codes(s) do
+                count = count + 1
+                if count > max_len - 1 then break end
+                out[#out + 1] = utf8.char(code)
+            end
+            return table.concat(out) .. "…"
+        end
+        return s
+    end
+    if #s > max_len then return s:sub(1, math.max(1, max_len - 2)) .. "…" end
+    return s
+end
+
+local function truthy(v)
+    return v == true or v == 1 or v == "true" or v == "yes" or v == "1"
+end
+
+local function normalize_messages(raw)
+    if type(raw) ~= "table" then return {} end
+    local out = {}
+    if #raw > 0 then
+        for i = 1, #raw do out[#out + 1] = raw[i] end
+    else
+        for id, item in pairs(raw) do
+            if type(item) == "table" then
+                local copy = {}
+                for k, v in pairs(item) do copy[k] = v end
+                copy.contact_id = copy.contact_id or copy.id or tostring(id)
+                out[#out + 1] = copy
+            end
+        end
+        table.sort(out, function(a, b)
+            local ta = tostring((a.listPreview and a.listPreview.time) or a.time or "")
+            local tb = tostring((b.listPreview and b.listPreview.time) or b.time or "")
+            return ta > tb
+        end)
+    end
+    return out
+end
+
+local function msg_contact_id(m)
+    if type(m) ~= "table" then return nil end
+    return m.contact_id or m.contact or m.id or m.key or m.sender_id or m.from_id or m.from
+end
+
+local function msg_name_fallback(m)
+    if type(m) ~= "table" then return "—" end
+    return m.name or m.sender or m.from or m.contact_name or m.title or m.contact_id or m.id or "—"
+end
+
+local function msg_name(m)
+    local id = msg_contact_id(m)
+    if id then return contacts().get_name(id) end
+    return msg_name_fallback(m)
+end
+
+local function msg_time(m)
+    if type(m) ~= "table" then return "" end
+    local lp = m.listPreview or m.preview
+    if type(lp) == "table" and lp.time then return lp.time end
+    return m.time or m.sent_at or m.date or ""
+end
+
+local function msg_body(m)
+    if type(m) ~= "table" then return "" end
+    local lp = m.listPreview or m.preview
+    if type(lp) == "table" then return lp.html or lp.text or lp.body or lp.message or "" end
+    if type(lp) == "string" then return lp end
+    return m.text or m.body or m.message or m.last or m.last_message or ""
+end
+
+local function msg_unread(m)
+    if type(m) ~= "table" then return false end
+    local lp = m.listPreview or m.preview
+    if type(lp) == "table" and lp.unread ~= nil then return truthy(lp.unread) end
+    return truthy(m.unread) or truthy(m.is_unread) or truthy(m.new)
+end
+
+local function msg_tag(m)
+    if type(m) ~= "table" then return nil, nil end
+    local id = msg_contact_id(m)
+    local tone, label = nil, nil
+    if id and contacts().get_tag then
+        tone, label = contacts().get_tag(id)
+    end
+
+    local lp = m.listPreview or m.preview
+    local tag = m.tag or m.pin or m.badge
+    if type(lp) == "table" then tag = tag or lp.tag or lp.pin or lp.badge end
+    if tag and tag ~= "" then
+        tag = tostring(tag)
+        local sep = tag:find(":", 1, true)
+        if sep then
+            tone = tag:sub(1, sep - 1)
+            label = tag:sub(sep + 1)
+        else
+            tone = tone or "amb"
+            label = tag
+        end
+    end
+    return tone, label
+end
+
+local function list_messages()
+    local state = gs()
+    return normalize_messages(state.get_messages and state.get_messages() or {})
+end
+
+local function hide_row(i)
+    local p = "msg" .. i
+    for _, suffix in ipairs({
+        "_bg", "_border_t", "_border_b", "_border_l", "_border_r", "_dot",
+        "_name", "_time", "_body", "_pin_bg", "_pin_border_t", "_pin_border_b",
+        "_pin_border_l", "_pin_border_r", "_pin"
+    }) do
+        set_node_enabled(p .. suffix, false)
+    end
+end
+
+local function show_pin(prefix, tone, label)
+    local enabled = label ~= nil and label ~= ""
+    for _, suffix in ipairs({ "_pin_bg", "_pin_border_t", "_pin_border_b", "_pin_border_l", "_pin_border_r", "_pin" }) do
+        set_node_enabled(prefix .. suffix, enabled)
+    end
+    if not enabled then return end
+
+    local color = COLORS.amber
+    if tone == "hot" or tone == "danger" then color = COLORS.hot end
+    set_color(prefix .. "_pin_bg", color, 0.15)
+    for _, suffix in ipairs({ "_pin_border_t", "_pin_border_b", "_pin_border_l", "_pin_border_r" }) do
+        set_color(prefix .. suffix, color, 0.50)
+    end
+    set_color(prefix .. "_pin", color, 0.95)
+    set_text(prefix .. "_pin", clamp_text(label, 8):upper())
+end
+
+local function show_row(i, m)
+    local p = "msg" .. i
+    local unread = msg_unread(m)
+    local tone, tag = msg_tag(m)
+
+    for _, suffix in ipairs({ "_bg", "_border_t", "_border_b", "_border_l", "_border_r", "_name", "_time", "_body" }) do
+        set_node_enabled(p .. suffix, true)
+    end
+    set_node_enabled(p .. "_dot", unread)
+
+    set_color(p .. "_bg", unread and COLORS.card_hot or COLORS.card, unread and 0.70 or 0.60)
+    local border = unread and COLORS.hot or COLORS.accent
+    local border_alpha = unread and 0.35 or 0.18
+    for _, suffix in ipairs({ "_border_t", "_border_b", "_border_l", "_border_r" }) do
+        set_color(p .. suffix, border, border_alpha)
+    end
+    set_color(p .. "_name", unread and COLORS.hot or COLORS.paper, 0.95)
+    set_color(p .. "_time", COLORS.paper_dim, 0.72)
+    set_color(p .. "_body", unread and COLORS.paper or COLORS.paper_dim, 0.86)
+
+    set_text(p .. "_name", clamp_text(msg_name(m), 32))
+    set_text(p .. "_time", clamp_text(msg_time(m), 14))
+    set_text(p .. "_body", clamp_text(msg_body(m), 76))
+    show_pin(p, tone, tag)
+end
+
+local function clamp_list_offset(self, total)
+    local max_offset = math.max(0, (tonumber(total) or 0) - MAX_ROWS)
+    self.list_offset = math.max(0, math.min(tonumber(self.list_offset) or 0, max_offset))
+    return max_offset
+end
+
+local function update_scrollbar(self, total)
+    local thumb = get_node("sms_scrollbar_thumb")
+    if not thumb then return end
+
+    local track_h = 458
+    local top_y = 112 + track_h
+    local max_offset = clamp_list_offset(self, total)
+    local ratio = math.min(1, MAX_ROWS / math.max(1, total))
+    local h = math.max(46, track_h * ratio)
+    local t = max_offset > 0 and (self.list_offset / max_offset) or 0
+    local y = (top_y - h) - ((track_h - h) * t)
+
+    gui.set_size(thumb, vmath.vector3(4, h, 0))
+    gui.set_position(thumb, vmath.vector3(1188, y, 0.545))
+end
+
+local function refresh_list(self)
+    local messages = list_messages()
+    self.rows = {}
+
+    local total = #messages
+    clamp_list_offset(self, total)
+
+    local unread = 0
+    for _, m in ipairs(messages) do if msg_unread(m) then unread = unread + 1 end end
+    local state = gs()
+    if state.get_sms_unread_total then
+        local n = tonumber(state.get_sms_unread_total())
+        if n then unread = n end
+    elseif state.get_phone_unread_total then
+        local n = tonumber(state.get_phone_unread_total())
+        if n then unread = n end
+    end
+
+    local unread_label = unread > 0 and (tostring(unread) .. " новых") or "нет новых"
+    set_text("side_eyebrow", "входящие · " .. unread_label .. " · " .. tostring(total) .. " всего")
+    set_text("sms_footer_left", "непрочитанных: " .. tostring(unread) .. " · в архиве: 147")
+
+    if total == 0 then
+        for i = 1, MAX_ROWS do hide_row(i) end
+        set_text("side_eyebrow", "входящие · нет новых · 0 всего")
+        set_text("sms_footer_right", "память: 74%")
+        update_scrollbar(self, total)
+        return
+    end
+
+    for i = 1, MAX_ROWS do
+        local m = messages[self.list_offset + i]
+        if m then
+            show_row(i, m)
+            self.rows[i] = msg_contact_id(m)
+        else
+            hide_row(i)
+        end
+    end
+
+    local first = math.min(total, self.list_offset + 1)
+    local last = math.min(total, self.list_offset + MAX_ROWS)
+    if total > MAX_ROWS then
+        set_text("sms_footer_right", "показаны: " .. tostring(first) .. "-" .. tostring(last) .. " / " .. tostring(total))
+    else
+        set_text("sms_footer_right", "память: 74%")
+    end
+    update_scrollbar(self, total)
+end
+
+local function scroll_list(self, delta_rows)
+    local total = #list_messages()
+    local max_offset = clamp_list_offset(self, total)
+    if max_offset <= 0 then return false end
+
+    local old = self.list_offset
+    self.list_offset = math.max(0, math.min(old + delta_rows, max_offset))
+    if self.list_offset ~= old then
+        refresh_list(self)
+        return true
+    end
+    return false
+end
+
+local function hide_bubble(i)
+    local p = "bub" .. i
+    for _, suffix in ipairs({ "_bg", "_border_t", "_border_b", "_border_l", "_border_r", "_text", "_stamp" }) do
+        set_node_enabled(p .. suffix, false)
+    end
+end
+
+local function set_bubble_enabled(i, enabled)
+    local p = "bub" .. i
+    for _, suffix in ipairs({ "_bg", "_border_t", "_border_b", "_border_l", "_border_r", "_text", "_stamp" }) do
+        set_node_enabled(p .. suffix, enabled)
+    end
+end
+
+local function set_border(prefix, x, y, w, h, color, alpha)
+    set_box(prefix .. "_border_t", x, y + h - 1, w, 1, color, alpha)
+    set_box(prefix .. "_border_b", x, y, w, 1, color, alpha)
+    set_box(prefix .. "_border_l", x, y, 1, h, color, alpha)
+    set_box(prefix .. "_border_r", x + w - 1, y, 1, h, color, alpha)
+end
+
+local function message_lines(text, max_chars)
+    text = tostring(text or "")
+    local len = utf8 and utf8.len and utf8.len(text) or #text
+    len = tonumber(len) or #text
+    return math.max(1, math.min(3, math.ceil(len / (max_chars or 34))))
+end
+
+local function render_bubble(slot, sms, y)
+    local p = "bub" .. slot
+    local typ = sms.type or sms.kind
+    local is_sep = typ == "sys" or typ == "daysep"
+    local is_out = sms.direction == "out" or typ == "out"
+    local is_hot = sms.hot == true
+
+    set_bubble_enabled(slot, true)
+
+    if is_sep then
+        local w, h = 440, 24
+        local x = 634
+        set_box(p .. "_bg", x, y, w, h, COLORS.dark, typ == "daysep" and 0.40 or 0.22)
+        set_border(p, x, y, w, h, COLORS.paper_dim, 0.08)
+        set_pos(p .. "_text", x + w / 2, y + 13)
+        set_size(p .. "_text", w - 20, 12)
+        set_text(p .. "_text", clamp_text(sms.text or sms.body or "", 72):upper())
+        set_color(p .. "_text", COLORS.paper_dim, 0.75)
+        local tnode = get_node(p .. "_text")
+        if tnode then gui.set_pivot(tnode, gui.PIVOT_CENTER) end
+        set_text(p .. "_stamp", "")
+        set_node_enabled(p .. "_stamp", false)
+        return h + 8
+    end
+
+    local raw_text = sms.text or sms.body or sms.message or ""
+    local lines = message_lines(raw_text, is_out and 38 or 44)
+    local h = 34 + (lines - 1) * 16
+    local w = is_out and 430 or 500
+    local x = is_out and (1184 - w) or 524
+    local bg = is_out and COLORS.accent or (is_hot and COLORS.card_hot or COLORS.card)
+    local border = is_out and COLORS.accent or (is_hot and COLORS.hot or COLORS.accent)
+    local bg_alpha = is_out and 0.10 or 0.70
+    local border_alpha = is_out and 0.40 or (is_hot and 0.45 or 0.25)
+
+    set_box(p .. "_bg", x, y, w, h, bg, bg_alpha)
+    set_border(p, x, y, w, h, border, border_alpha)
+
+    set_pos(p .. "_text", x + 12, y + h - 14)
+    set_size(p .. "_text", w - 24, h - 20)
+    set_text(p .. "_text", clamp_text(raw_text, is_out and 96 or 112))
+    set_color(p .. "_text", COLORS.paper, 0.95)
+    local tnode = get_node(p .. "_text")
+    if tnode then gui.set_pivot(tnode, gui.PIVOT_W) end
+
+    local status = sms.status or (is_out and "delivered" or nil)
+    local stamp = tostring(sms.time or "")
+    if is_out then
+        if status == "delivered" then stamp = stamp .. " · DELIVERED"
+        elseif status == "sent" then stamp = stamp .. " · SENT"
+        elseif status == "sending" then stamp = stamp .. " · SENDING"
+        elseif status == "failed" then stamp = stamp .. " · FAILED" end
+    end
+    set_pos(p .. "_stamp", x + w - 12, y + 8)
+    set_size(p .. "_stamp", w - 24, 10)
+    set_text(p .. "_stamp", stamp)
+    set_color(p .. "_stamp", status == "delivered" and COLORS.green or COLORS.paper_dim, 0.76)
+    set_node_enabled(p .. "_stamp", stamp ~= "")
+    return h + 8
+end
+
+local function sms_storage_messages(contact_id)
+    local state = gs()
+    local chat = state.get_sms and state.get_sms(contact_id) or {}
+    if type(chat) ~= "table" then return {} end
+    local out = {}
+    for i = 1, #chat do out[#out + 1] = chat[i] end
+    return out
+end
+
+local function render_thread(self)
+    local contact_id = self.active_contact_id
+    local contact = contacts().get(contact_id)
+    local chat = sms_storage_messages(contact_id)
+
+    set_text("th_name", contact.name or "—")
+    set_text("th_num", "SIM 1 · " .. tostring(contact.number or "—"))
+    set_text("th_input_text", contact.readonly and "ответы запрещены оператором" or "нажмите, чтобы выбрать ответ…")
+    set_color("th_input_text", COLORS.paper_dim, contact.readonly and 0.42 or 0.55)
+    set_text("th_meter_left", "кодировка: GSM-7 · сегментов: 1")
+    set_text("th_meter_right", "символов: 0 · осталось: 160")
+    set_text("th_footer_left", "оператор · МТС · сеть 4G · сигнал —75 dBm")
+    set_text("th_footer_right", "в нитке: " .. tostring(#chat) .. " · стоимость: —")
+
+    local count = #chat
+    set_node_enabled("th_empty", count == 0)
+    for i = 1, MAX_BUBBLES do hide_bubble(i) end
+    if count == 0 then return end
+
+    local first = math.max(1, count - MAX_BUBBLES + 1)
+    local y = 552
+    local slot = 1
+    for i = first, count do
+        if slot > MAX_BUBBLES then break end
+        local h = render_bubble(slot, chat[i], y)
+        y = y - h
+        slot = slot + 1
+        if y < 174 then break end
+    end
+end
+
+local function set_view(self, view)
+    self.view = view
+    if not self.visible then
+        set_all_enabled(false)
+        return
+    end
+
+    set_host_visible(true)
+    set_node_enabled("sms_app_bg", true)
+
+    local show_list = view == "list"
+    local show_thread = view == "thread"
+    set_node_enabled("sms_list", show_list)
+    set_node_enabled("sms_thread", show_thread)
+    set_node_enabled("sms_list/list_root", show_list)
+    set_node_enabled("sms_thread/thread_root", show_thread)
+    set_many_enabled(LIST_NODE_IDS, show_list)
+    set_many_enabled(THREAD_NODE_IDS, show_thread)
 end
 
 local function refresh(self)
-    local list = gs.get_messages and gs.get_messages() or {}
-    -- Сохраняем список для on_input (нужно знать contact_id при клике)
-    self.contact_list = list
-    for i = 1, SMS_SLOTS do
-        local prefix = "msg" .. i
-        local has = list[i] ~= nil
-        set_node_enabled(prefix .. "_bg",     has)
-        set_node_enabled(prefix .. "_border", has)
-        set_node_enabled(prefix .. "_name",   has)
-        set_node_enabled(prefix .. "_time",   has)
-        set_node_enabled(prefix .. "_body",   has)
-        if has then
-            local m = list[i]
-            local is_out = (m.direction == "out")
-            set_text(prefix .. "_name", m.from or "—")
-            set_text(prefix .. "_time", m.time or "")
-            set_text(prefix .. "_body", (is_out and "→ " or "") .. (m.body or ""))
-            if is_out then
-                set_node_color(prefix .. "_name", COLOR_OUT)
-            else
-                set_node_color(prefix .. "_name", m.unread and COLOR_CYAN or COLOR_PAPER)
+    if self.view == "thread" then render_thread(self) else refresh_list(self) end
+end
+
+local function open_list(self)
+    self.active_contact_id = nil
+    set_view(self, "list")
+    refresh_list(self)
+end
+
+local function open_thread(self, contact_id)
+    if not contact_id or contact_id == "" then return end
+    self.active_contact_id = tostring(contact_id)
+
+    local state = gs()
+    if state.mark_sms_read then state.mark_sms_read(self.active_contact_id) end
+    msg.post(PHONE_ROOT, "refresh_phone")
+
+    set_view(self, "thread")
+    render_thread(self)
+end
+
+local function flash_node(id)
+    local n = get_node(id)
+    if not n then return end
+    local c = gui.get_color(n)
+    local a0 = c.w
+    gui.animate(n, "color.w", math.max(0.22, a0 * 0.45), gui.EASING_OUTQUAD, 0.06, 0, function()
+        gui.animate(n, "color.w", a0, gui.EASING_OUTQUAD, 0.12)
+    end)
+end
+
+local function is_wheel_down(action_id)
+    return action_id == hash("wheel_down")
+        or action_id == hash("mouse_wheel_down")
+        or action_id == hash("scroll_down")
+end
+
+local function is_wheel_up(action_id)
+    return action_id == hash("wheel_up")
+        or action_id == hash("mouse_wheel_up")
+        or action_id == hash("scroll_up")
+end
+
+local function is_wheel_axis(action_id)
+    return action_id == hash("wheel")
+        or action_id == hash("mouse_wheel")
+        or action_id == hash("scroll")
+end
+
+local function wheel_rows_from_action(action_id, action)
+    if is_wheel_down(action_id) then
+        return 1
+    end
+    if is_wheel_up(action_id) then
+        return -1
+    end
+    if not is_wheel_axis(action_id) then
+        return 0
+    end
+
+    local v = 0
+    if action then
+        -- Depending on input binding/platform, wheel data can arrive as value,
+        -- dy, or even y. Root forwards all of these fields through phone_input.
+        v = tonumber(action.value) or 0
+        if v == 0 then v = tonumber(action.dy) or 0 end
+        if v == 0 and action_id ~= hash("touch") then v = tonumber(action.y) or 0 end
+    end
+    if v == 0 then return 0 end
+
+    -- Defold/custom bindings differ in sign. Common convention:
+    -- positive = wheel up, negative = wheel down. If the project uses explicit
+    -- *_down action ids, the branch above handles that before this sign rule.
+    if v > 0 then return -1 end
+    return 1
+end
+
+local function pick_row(self, x, y)
+    for i = 1, MAX_ROWS do
+        local contact_id = self.rows and self.rows[i]
+        if contact_id then
+            local id = "msg" .. i .. "_bg"
+            local n = get_node(id)
+            if n and gui.is_enabled(n) and gui.pick_node(n, x, y) then
+                return contact_id, id
             end
         end
     end
+    return nil, nil
+end
+
+local function is_inside_list(x, y)
+    local clip = get_node("sms_list_clip")
+    if clip and gui.is_enabled(clip) and gui.pick_node(clip, x, y) then return true end
+    local contact_id = pick_row({ rows = { [1] = true, [2] = true, [3] = true, [4] = true, [5] = true, [6] = true, [7] = true } }, x, y)
+    return contact_id ~= nil
+end
+
+local function trigger_reply_choices(self)
+    if not self.active_contact_id then return false end
+    msg.post(UI_MGR, "sms_open_contact", { contact_id = self.active_contact_id })
+    return true
+end
+
+local function handle_thread_touch(self, action_id, x, y, pressed, released)
+    if action_id ~= hash("touch") then return true end
+    if not pressed then return true end
+
+    local back = get_node("th_back_bg")
+    if back and gui.is_enabled(back) and gui.pick_node(back, x, y) then
+        flash_node("th_back_bg")
+        open_list(self)
+        return true
+    end
+
+    for _, id in ipairs({ "th_input_bg", "th_send_bg" }) do
+        local n = get_node(id)
+        if n and gui.is_enabled(n) and gui.pick_node(n, x, y) then
+            flash_node(id)
+            trigger_reply_choices(self)
+            return true
+        end
+    end
+
+    for _, id in ipairs({ "th_call_bg", "th_info_bg", "th_menu_bg" }) do
+        local n = get_node(id)
+        if n and gui.is_enabled(n) and gui.pick_node(n, x, y) then
+            flash_node(id)
+            return true
+        end
+    end
+    return true
+end
+
+local function handle_list_touch(self, action_id, action)
+    local x = action and action.x or 0
+    local y = action and action.y or 0
+    local pressed = action and action.pressed or false
+    local released = action and action.released or false
+
+    local wheel_rows = wheel_rows_from_action(action_id, action)
+    if wheel_rows ~= 0 then return scroll_list(self, wheel_rows) end
+    if action_id ~= hash("touch") then return false end
+
+    if pressed then
+        self.list_dragging = is_inside_list(x, y)
+        self.list_drag_start_y = y or 0
+        self.list_drag_last_y = y or 0
+        self.list_drag_accum = 0
+        self.list_drag_moved = false
+        return self.list_dragging
+    end
+
+    if self.list_dragging and not released then
+        local current_y = y or self.list_drag_last_y
+        local dy = current_y - self.list_drag_last_y
+        self.list_drag_last_y = current_y
+        self.list_drag_accum = self.list_drag_accum + dy
+
+        if math.abs(current_y - self.list_drag_start_y) >= LIST_DRAG_THRESHOLD_PX then
+            self.list_drag_moved = true
+        end
+        while self.list_drag_accum >= LIST_SCROLL_STEP_PX do
+            scroll_list(self, 1)
+            self.list_drag_accum = self.list_drag_accum - LIST_SCROLL_STEP_PX
+        end
+        while self.list_drag_accum <= -LIST_SCROLL_STEP_PX do
+            scroll_list(self, -1)
+            self.list_drag_accum = self.list_drag_accum + LIST_SCROLL_STEP_PX
+        end
+        return true
+    end
+
+    if released then
+        local was_dragging = self.list_dragging
+        local moved = self.list_drag_moved
+        self.list_dragging = false
+        self.list_drag_accum = 0
+        self.list_drag_moved = false
+
+        if was_dragging and not moved then
+            local contact_id, id = pick_row(self, x, y)
+            if contact_id then
+                flash_node(id)
+                dbg("[phone_sms] open in-phone thread", contact_id)
+                open_thread(self, contact_id)
+                return true
+            end
+        end
+        return was_dragging
+    end
+
+    return false
+end
+
+local function handle_phone_input(self, action_id, action)
+    if not self.visible then return false end
+    local x = action and action.x or 0
+    local y = action and action.y or 0
+    local pressed = action and action.pressed or false
+    local released = action and action.released or false
+    if self.view == "thread" then
+        return handle_thread_touch(self, action_id, x, y, pressed, released)
+    end
+    return handle_list_touch(self, action_id, action or {})
 end
 
 function init(self)
     self.visible = false
-    self.contact_list = {}
-    set_nodes_enabled(false)
+    self.view = "list"
+    self.rows = {}
+    self.list_offset = 0
+    self.list_dragging = false
+    self.list_drag_start_y = 0
+    self.list_drag_last_y = 0
+    self.list_drag_accum = 0
+    self.list_drag_moved = false
+    self.active_contact_id = nil
+    set_all_enabled(false)
+end
+
+function final(self)
+    set_all_enabled(false)
 end
 
 function on_message(self, message_id, message, sender)
     if message_id == hash("open_app") then
         self.visible = true
-        set_nodes_enabled(true)
-        refresh(self)
-        -- Сообщить ui_manager что SMS просматривается → сбросить unread
-        msg.post(UI_MGR, "phone_sms_viewed")
+        self.list_offset = self.list_offset or 0
+        open_list(self)
+
     elseif message_id == hash("close_app") then
         self.visible = false
-        set_nodes_enabled(false)
+        self.rows = {}
+        self.active_contact_id = nil
+        self.list_dragging = false
+        self.view = "list"
+        set_all_enabled(false)
+
     elseif message_id == hash("refresh_app") then
         if self.visible then refresh(self) end
+
+    elseif message_id == hash("open_sms_thread") then
+        if message and message.contact_id then
+            self.visible = true
+            open_thread(self, message.contact_id)
+        end
+
+    elseif message_id == hash("phone_input") then
+        if self.visible then
+            handle_phone_input(self, message and message.action_id or hash("touch"), {
+                x = message and message.x or 0,
+                y = message and message.y or 0,
+                dx = message and message.dx or 0,
+                dy = message and message.dy or 0,
+                value = message and message.value or 0,
+                pressed = message and message.pressed or false,
+                released = message and message.released or false,
+                repeated = message and message.repeated or false,
+            })
+        end
     end
 end
 
 function on_input(self, action_id, action)
-    if not self.visible then return false end
-    if action_id ~= hash("touch") or not action.pressed then return false end
-
-    -- Клик по строке переписки → открыть переписку в ink
-    for i = 1, SMS_SLOTS do
-        local bg = get_node("msg" .. i .. "_bg")
-        if bg and gui.is_enabled(bg) and gui.pick_node(bg, action.x, action.y) then
-            local m = self.contact_list and self.contact_list[i]
-            if m and m.from then
-                -- Передаём contact_id в ui_manager: он закроет телефон и
-                -- откроет ink-knot sms_thread_<contact_id>
-                msg.post(UI_MGR, "sms_open_contact", { contact_id = m.from })
-                return true
-            end
-        end
-    end
-
-    return false
+    -- Normal route is phone_v2_root -> phone_input. This fallback is harmless
+    -- in editor/tests if the app receives input directly.
+    return handle_phone_input(self, action_id, action or {})
 end

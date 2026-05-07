@@ -46,7 +46,7 @@ main/images/
 - память на платформах расходовалась хуже, чем на наборе отдельных
 - мелкие UI-ассеты были связаны с тяжёлым набором сцен
 
-Сейчас фоны переключаются runtime'ом — `ui_manager_v2` через `go.set` подменяет нужный atlas в текущем texture slot dialogue_v2.
+Сейчас фоны переключаются runtime'ом — `ui_manager_v2.script` через `background_flow.lua` и `go.set` подменяет нужный atlas в текущем texture slot dialogue_v2.
 
 ### Runtime-flow смены фона
 
@@ -54,10 +54,10 @@ main/images/
 Ink-тег # bg:bg_kitchen  /  scenes.lua bg = "bg_kitchen"
         │
         ▼
-ui_manager_v2.post_dialogue_background(bg_name)
+background_flow.post_dialogue_bg(bg_name)
         │  msg.post сам себе
         ▼
-ui_manager_v2.apply_dialogue_bg(bg_name)
+message_flow.lua -> ui_manager_v2.apply_dialogue_bg(bg_name)
         │  go.set(dialogue, "textures", atlas, { key = "backgrounds" })
         │  msg.post(dialogue, "set_background", { name, animation = "scene_bg" })
         ▼
@@ -175,7 +175,7 @@ my_scene = {
 ## 3. Добавить point-and-click сцену
 
 Сцены описываются в `main/scripts/scenes.lua`, исполняются `scene_controller.lua`,
-рендерятся через `ui_manager_v2.script` + `hotspots_v2.gui_script`.
+рендерятся через `scene_flow.lua` + `hotspots_v2.gui_script`.
 
 ### Лимиты текущего runtime
 
@@ -183,7 +183,7 @@ my_scene = {
 - **4** scene objects на сцену максимум
 - координатная система: `1280x720`, origin — **левый нижний угол**
 
-Лишние элементы тихо отбрасываются на стороне UI, пока лимиты не расширены в `ui_manager_v2.script`.
+Лишние элементы тихо отбрасываются на стороне UI, пока лимиты не расширены в `main/gui/modules/ui_manager_v2/scene_flow.lua`.
 
 ### Базовая структура сцены
 

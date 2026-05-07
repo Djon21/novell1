@@ -1,10 +1,18 @@
-﻿// chapter_01.ink
-// Root Ink file for iteration 001. The actual story is split into modular chapters.
+// chapter_01.ink
+// Root Ink file for iteration 001+. The actual story is split into modular chapters.
+// Root must contain INCLUDE only.
 
 INCLUDE chapters/00_bootstrap.ink
 INCLUDE chapters/01_apartment.ink
 INCLUDE chapters/02_sunday_date.ink
-INCLUDE chapters/02_metro.ink
-INCLUDE chapters/03_office.ink
-INCLUDE chapters/04_rooftop.ink
+
+INCLUDE chapters/20_monday_home.ink
+INCLUDE chapters/21_monday_commute.ink
+INCLUDE chapters/22_monday_office.ink
+
+INCLUDE chapters/30_tuesday_home.ink
+INCLUDE chapters/31_tuesday_investigation.ink
+INCLUDE chapters/32_tuesday_rooftop.ink
+
 INCLUDE chapters/91_inventory_actions.ink
+INCLUDE chapters/92_phone_sms.ink

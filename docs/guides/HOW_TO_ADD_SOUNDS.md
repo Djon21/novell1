@@ -7,7 +7,7 @@
 - `music_player` в `main/main_v2.collection`
 - `sfx_player` в `main/main_v2.collection`
 - парсинг Ink-тегов `# sfx:name` в `dialogue_manager_ink.lua`
-- playback bridge `dm.get_effects()` в `ui_manager_v2.script`
+- playback bridge `dm.get_effects()` в `main/gui/modules/ui_manager_v2/effects_flow.lua`
 
 То есть одноразовые SFX уже реально проигрываются в `v2`, а `# shake` и `# pulse` работают как one-shot визуальные эффекты через `effects`.
 
@@ -66,7 +66,7 @@ M.SFX_URLS = {
 }
 ```
 
-Без этого `# sfx:door_open` будет валидным для Ink, но `ui_manager_v2` не найдёт URL и выведет warning вместо проигрывания.
+Без этого `# sfx:door_open` будет валидным для Ink, но `effects_flow.lua` не найдёт URL и выведет warning вместо проигрывания.
 
 ## Шаг 4: Использовать звук в Ink
 
@@ -76,7 +76,7 @@ M.SFX_URLS = {
 
 ## Как это работает в активном v2 UI
 
-Сейчас active `v2` runtime уже забирает `dm.get_effects()` и делает следующее:
+Сейчас active `v2` runtime уже забирает `dm.get_effects()` через `effects_flow.lua` и делает следующее:
 
 - `# sfx:name` -> проигрывает звук через `sfx_player`
 - `# shake:intensity,duration` -> шлёт one-shot тряску в `effects`

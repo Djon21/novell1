@@ -55,7 +55,7 @@
 # speaker:mc
 Телефон сначала. Потом уже кофе и всё остальное.
 # quest:start:find_phone
-# explore:apartment_bedroom_morning
+# explore:apartment_bedroom
 -> DONE
 
 
@@ -172,40 +172,44 @@
 
 # sfx:phone_notify
 # speaker:none
-Новое сообщение от {npc_name}:
+Экран забит уведомлениями: банк, дом, доставка, городские сервисы, работа — обычный утренний шум, который успевает жить раньше тебя.
+
+# speaker:mc
+Телефон всегда знает, что день начался, даже если ты ещё нет.
+
+# speaker:none
+Между сервисными строками висит личное сообщение от {npc_name}. Его почему-то хочется открыть первым.
 
 {mc_gender == "female":
-«Доброе утро. Ты сегодня свободна? Может, выберемся куда-нибудь?»
+«Ты сегодня вообще проснулась? Я уже второй кофе пью.»
 - else:
-«Доброе утро. Ты сегодня свободен? Может, выберемся куда-нибудь?»
+«Ты сегодня вообще проснулся? Я уже второй кофе пью.»
 }
 
 # speaker:mc
-{npc_name}. Коллега — слишком сухое слово для человека, чьи сообщения я почему-то читаю быстрее остальных.
-
-# speaker:none
-Под уведомлением на секунду появляется ещё одна строка — будто от системного приложения без иконки:
-
-«ДАННЫХ НЕДОСТАТОЧНО. СТАНДАРТНОЕ РЕШЕНИЕ ОЖИДАЕТСЯ.»
-
-Строка исчезает раньше, чем ты успеваешь нажать.
-
-# speaker:mc
-Нет. Сегодня без стандартных решений.
+{npc_name}. Коллега — слишком сухое слово для человека, чьи сообщения я читаю быстрее остальных.
 # add_item:phone
 ~ phone_taken = true
 ~ phone_active = true
-~ anomaly_noticed = true
 # set_flag:phone_active=true
 # set_flag:phone_taken=true
+# sms:add:mama:Не забудь позавтракать. И ключи проверь, пожалуйста.
+# sms:add:bank:Карта *4821: списание 349 ₽. Кофе и выпечка. 08:41.
+# sms:add:delivery:Курьер не смог дозвониться. Заказ вернётся в ресторан через 10 минут.
+# sms:add:upravdom:Сегодня с 10:00 до 14:00 возможны перебои с горячей водой. Приносим извинения.
+# sms:add:metro:Проездной активен до конца месяца. Хорошей поездки.
+# sms:add:market:Ваш заказ готов к выдаче. Хранение до завтра включительно.
+# sms:add:clinic:Напоминаем: запись на вторник, 16:30. Если планы изменились, отмените визит заранее.
+# sms:add:coffee:Сегодня до 12:00 второй кофе со скидкой. Покажите код из сообщения на кассе.
+# sms:add:prod:Напоминание: в понедельник до 11:00 подтвердите статус по кейсу 017.
 {mc_gender == "female":
-    # sms:add:artem:Доброе утро. Ты сегодня свободна? Может, выберемся куда-нибудь?
+    # sms:add:artem:Ты сегодня вообще проснулась? Я уже второй кофе пью.
 - else:
-    # sms:add:mila:Доброе утро. Ты сегодня свободен? Может, выберемся куда-нибудь?
+    # sms:add:mila:Ты сегодня вообще проснулся? Я уже второй кофе пью.
 }
 # quest:done:find_phone
 # quest:start:reply_npc
-# quest:start:make_coffee
+# phone:app:sms
 # return_to_scene
 -> DONE
 
@@ -255,8 +259,14 @@
 ~ can_leave_apt = true
 # quest:done:make_coffee
 # quest:start:meet_npc
+# adv:fullscreen
 # set_flag:map_opened_after_apartment=true
 ~ map_opened_after_apartment = true
+{date_place_cafe:
+    # map:lock_to:poi_cafe
+- else:
+    # map:lock_to:poi_park
+}
 # phone:map
 -> DONE
 
@@ -265,13 +275,16 @@
 // КУХНЯ
 // ================================================================
 
-=== use_coffee_machine_no_cup ===
-# speaker:none
-На столешнице всё для кофе: чайник, банка, ложка, привычный утренний порядок.
-Не хватает только кружки.
-
+=== use_coffee_setup_no_mug ===
 # speaker:mc
-Кружка. Сначала кружка.
+{mug_taken:
+    Кружка у меня. Надо не просто смотреть на чайник, а использовать её здесь.
+- else:
+    Чайник на месте. Кофе тоже.
+
+    Не хватает только кружки.
+}
+
 # return_to_scene
 -> DONE
 
@@ -297,21 +310,9 @@
 
 
 === use_coffee_machine_with_cup ===
-# speaker:none
-Кружка оказывается на столешнице рядом с чайником.
-Пакет с кофе шуршит слишком громко для такого тихого утра.
-
-# sfx:coffee_brew
-
-Запах кофе заполняет кухню. На пару секунд мир становится проще.
-
 # speaker:mc
-Вот. Уже лучше.
-# set_flag:coffee_drunk=true
-# set_flag:morning_ritual_done=true
-~ coffee_drunk = true
-~ can_leave_apt = true
-# quest:done:make_coffee
+Кружка у меня. Надо не просто смотреть на чайник, а использовать её здесь.
+
 # return_to_scene
 -> DONE
 
@@ -330,162 +331,3 @@
 }
 # return_to_scene
 -> DONE
-
-
-// ================================================================
-// SMS — ПЕРЕПИСКА
-//
-// Технические контакты:
-// - mila  — когда ГГ Артём, NPC Мила.
-// - artem — когда ГГ Мила, NPC Артём.
-// Квест reply_npc засчитывает оба набора флагов через quests.lua.
-// ================================================================
-
-=== sms_thread_mila ===
-# speaker:none
-Открываешь переписку.
-
-Мила написала утром:
-
-«Доброе утро. Ты сегодня свободен? Может, выберемся куда-нибудь?»
-
-# speaker:mc
-Воскресенье. Значит, не офис. Нормальный день. Нормальная встреча.
-
-* [«А тебе куда хочется?»]
-    # speaker:none
-    Ты почти пишешь первое, что приходит в голову: кафе. Тёплое, понятное, безопасное.
-    Палец останавливается.
-
-    # speaker:mc
-    А тебе куда хочется?
-
-    # sms:reply:mila:А тебе куда хочется?
-    # sms:add:mila:Если честно — в парк у реки. Хочется воздуха.
-    # sms:read:mila
-
-    # speaker:npc
-    Если честно — в парк у реки. Хочется воздуха.
-
-    # speaker:mc
-    Тогда в парк. Хорошо.
-
-    # sms:reply:mila:Тогда в парк. Хорошо.
-    # set_flag:date_agreed=true
-    # set_flag:date_place_park=true
-    # map:lock_to:poi_park
-    ~ date_agreed = true
-    ~ date_place_park = true
-    ~ TRUST = TRUST + 1
-    ~ INSIGHT = INSIGHT + 1
-    -> sms_npc_place_sent
-
-* [«Давай в кафе. Спокойно посидим.»]
-    # speaker:none
-    Ты выбираешь самый безопасный вариант: тепло, столик, кофе и разговор без лишней суеты.
-
-    # sms:reply:mila:Давай в кафе. Спокойно посидим.
-    # set_flag:date_agreed=true
-    # set_flag:date_place_cafe=true
-    # map:lock_to:poi_cafe
-    ~ date_agreed = true
-    ~ date_place_cafe = true
-    ~ TRUST = TRUST + 1
-    -> sms_npc_place_sent
-
-* [«Давай в парк у реки. Хочется пройтись.»]
-    # speaker:none
-    В этом ответе больше воздуха, чем уверенности. Но, может, сейчас именно это и нужно.
-
-    # sms:reply:mila:Давай в парк у реки. Хочется пройтись.
-    # set_flag:date_agreed=true
-    # set_flag:date_place_park=true
-    # map:lock_to:poi_park
-    ~ date_agreed = true
-    ~ date_place_park = true
-    ~ SYNC = SYNC + 1
-    -> sms_npc_place_sent
-
-
-=== sms_thread_artem ===
-# speaker:none
-Открываешь переписку.
-
-Артём написал утром:
-
-«Доброе утро. Ты сегодня свободна? Может, выберемся куда-нибудь?»
-
-# speaker:mc
-Воскресенье. Значит, не офис. Нормальный день. Нормальная встреча.
-
-* [«А тебе куда хочется?»]
-    # speaker:none
-    Ты почти пишешь первое, что приходит в голову: кафе. Тёплое, понятное, безопасное.
-    Палец останавливается.
-
-    # speaker:mc
-    А тебе куда хочется?
-
-    # sms:reply:artem:А тебе куда хочется?
-    # sms:add:artem:Если честно — в парк у реки. Хочется воздуха.
-    # sms:read:artem
-
-    # speaker:npc
-    Если честно — в парк у реки. Хочется воздуха.
-
-    # speaker:mc
-    Тогда в парк. Хорошо.
-
-    # sms:reply:artem:Тогда в парк. Хорошо.
-    # set_flag:date_agreed=true
-    # set_flag:date_place_park=true
-    # map:lock_to:poi_park
-    ~ date_agreed = true
-    ~ date_place_park = true
-    ~ TRUST = TRUST + 1
-    ~ INSIGHT = INSIGHT + 1
-    -> sms_npc_place_sent
-
-* [«Давай в кафе. Спокойно посидим.»]
-    # speaker:none
-    Ты выбираешь самый безопасный вариант: тепло, столик, кофе и разговор без лишней суеты.
-
-    # sms:reply:artem:Давай в кафе. Спокойно посидим.
-    # set_flag:date_agreed=true
-    # set_flag:date_place_cafe=true
-    # map:lock_to:poi_cafe
-    ~ date_agreed = true
-    ~ date_place_cafe = true
-    ~ TRUST = TRUST + 1
-    -> sms_npc_place_sent
-
-* [«Давай в парк у реки. Хочется пройтись.»]
-    # speaker:none
-    В этом ответе больше воздуха, чем уверенности. Но, может, сейчас именно это и нужно.
-
-    # sms:reply:artem:Давай в парк у реки. Хочется пройтись.
-    # set_flag:date_agreed=true
-    # set_flag:date_place_park=true
-    # map:lock_to:poi_park
-    ~ date_agreed = true
-    ~ date_place_park = true
-    ~ SYNC = SYNC + 1
-    -> sms_npc_place_sent
-
-
-=== sms_npc_place_sent ===
-# speaker:none
-Сообщение отправлено.
-
-Теперь у утра появляется форма: умыться, сделать кофе, выйти и открыть карту.
-# quest:done:reply_npc
-# quest:start:meet_npc
-# return_to_scene
--> DONE
-
-
-// ================================================================
-// LEGACY-COMPAT KNOTS
-// Оставлены, чтобы старые сцены из scenes.lua не падали при случайном входе.
-// ================================================================
-

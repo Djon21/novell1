@@ -229,7 +229,7 @@ Default 512. Если плодишь динамику (например 8 app-ti
 9. `on_message` — маршрутизация сообщений с проверкой типа.
 10. `msg.post` наружу — только чистые сериализуемые данные (раздел 5).
 11. Добавь компонент в `main_v2.collection` в правильной позиции (раздел 3).
-12. Подключи обработчики в `ui_manager_v2.script` (show/hide, события).
+12. Подключи обработчики через `ui_manager_v2.script` и flow-модули: новые сообщения — в `message_flow.lua`, show/hide overlays — в `overlay_flow.lua`.
 13. Визуальный smoke-test в Defold — сравнение с HTML-макетом.
 14. Commit + push, коммит с префиксом `v2(stepN): ...`.
 

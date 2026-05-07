@@ -32,16 +32,8 @@ fonts {
   font: "/main/fonts/manrope_16.font"
 }
 textures {
-  name: "icon_phone"
-  texture: "/main/images/phone/icon_phone.atlas"
-}
-textures {
   name: "map2"
   texture: "/main/images/phone/map2.atlas"
-}
-textures {
-  name: "map_assets_cyberpunk_v2"
-  texture: "/main/images/phone/map_assets_cyberpunk_v2.atlas"
 }
 nodes {
   type: TYPE_BOX
@@ -85,8 +77,8 @@ nodes {
 }
 nodes {
   position {
-    x: 683.6
-    y: 417.7
+    x: 577.6
+    y: 493.7
     z: 0.68
   }
   size {
@@ -110,8 +102,8 @@ nodes {
 }
 nodes {
   position {
-    x: 875.0
-    y: 186.2
+    x: 783.0
+    y: 230.2
     z: 0.68
   }
   size {
@@ -135,8 +127,8 @@ nodes {
 }
 nodes {
   position {
-    x: 1099.4
-    y: 245.6
+    x: 1049.4
+    y: 301.6
     z: 0.68
   }
   size {
@@ -160,8 +152,8 @@ nodes {
 }
 nodes {
   position {
-    x: 935.9
-    y: 386.7
+    x: 839.9
+    y: 461.7
     z: 0.68
   }
   size {
@@ -186,8 +178,8 @@ nodes {
 }
 nodes {
   position {
-    x: 775.8
-    y: 486.6
+    x: 799.8
+    y: 581.6
     z: 0.68
   }
   size {
@@ -211,8 +203,8 @@ nodes {
 }
 nodes {
   position {
-    x: 776.6
-    y: 280.9
+    x: 666.6
+    y: 339.9
     z: 0.68
   }
   size {
@@ -236,8 +228,8 @@ nodes {
 }
 nodes {
   position {
-    x: 986.3
-    y: 481.4
+    x: 1029.3
+    y: 578.4
     z: 0.68
   }
   size {
@@ -261,8 +253,8 @@ nodes {
 }
 nodes {
   position {
-    x: 1094.2
-    y: 377.3
+    x: 1139.2
+    y: 456.3
     z: 0.68
   }
   size {
@@ -1250,7 +1242,6 @@ nodes {
     x: 0.04
     y: 0.03
     z: 0.12
-    w: 1.0
   }
   type: TYPE_BOX
   id: "confirm_backdrop"
@@ -1274,7 +1265,6 @@ nodes {
     x: 0.067
     y: 0.055
     z: 0.173
-    w: 1.0
   }
   type: TYPE_BOX
   id: "confirm_panel"
@@ -1288,7 +1278,7 @@ nodes {
   position {
     x: 832.0
     y: 408.0
-    z: 0.80
+    z: 0.8
   }
   size {
     x: 360.0
@@ -1296,9 +1286,7 @@ nodes {
   }
   color {
     x: 0.353
-    y: 1.0
     z: 0.478
-    w: 1.0
   }
   type: TYPE_TEXT
   text: "\320\237\320\225\320\240\320\225\320\230\320\242\320\230?"
@@ -1308,7 +1296,6 @@ nodes {
   parent: "grp_confirm"
   layer: "text"
   inherit_alpha: true
-  alpha: 1.0
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
@@ -1316,7 +1303,7 @@ nodes {
   position {
     x: 832.0
     y: 375.0
-    z: 0.80
+    z: 0.8
   }
   size {
     x: 360.0
@@ -1326,7 +1313,6 @@ nodes {
     x: 0.952
     y: 0.925
     z: 0.851
-    w: 1.0
   }
   type: TYPE_TEXT
   text: "..."
@@ -1344,7 +1330,7 @@ nodes {
   position {
     x: 740.0
     y: 318.0
-    z: 0.80
+    z: 0.8
   }
   size {
     x: 140.0
@@ -1354,7 +1340,6 @@ nodes {
     x: 0.282
     y: 0.961
     z: 0.0
-    w: 1.0
   }
   type: TYPE_BOX
   id: "confirm_yes_btn"
@@ -1378,7 +1363,6 @@ nodes {
     x: 0.027
     y: 0.023
     z: 0.094
-    w: 1.0
   }
   type: TYPE_TEXT
   text: "\320\224\320\220"
@@ -1388,7 +1372,6 @@ nodes {
   parent: "grp_confirm"
   layer: "text"
   inherit_alpha: true
-  alpha: 1.0
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
@@ -1396,7 +1379,7 @@ nodes {
   position {
     x: 924.0
     y: 318.0
-    z: 0.80
+    z: 0.8
   }
   size {
     x: 140.0
@@ -1406,7 +1389,6 @@ nodes {
     x: 0.714
     y: 0.361
     z: 0.0
-    w: 1.0
   }
   type: TYPE_BOX
   id: "confirm_no_btn"
@@ -1430,7 +1412,6 @@ nodes {
     x: 0.952
     y: 0.925
     z: 0.851
-    w: 1.0
   }
   type: TYPE_TEXT
   text: "\320\235\320\225\320\242"

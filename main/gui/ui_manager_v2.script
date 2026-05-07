@@ -10,14 +10,13 @@
 -- scene_controller, что и старый ui_manager.script. Включение — через
 -- переключение bootstrap.main_collection на main_v2 (step16 — опциональный).
 
-go.property("bg_metro_atlas", resource.atlas("/main/images/backgrounds/bg_metro.atlas"))
-go.property("bg_office_atlas", resource.atlas("/main/images/backgrounds/bg_office.atlas"))
-go.property("bg_office_evening_atlas", resource.atlas("/main/images/backgrounds/bg_office_evening.atlas"))
 go.property("bg_rooftop_atlas", resource.atlas("/main/images/backgrounds/bg_rooftop.atlas"))
 go.property("bg_apartment_hall_morning_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_hall_morning.atlas"))
+go.property("bg_apartment_hall_night_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_hall_night.atlas"))
 go.property("bg_apartment_bedroom_morning_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_bedroom_morning.atlas"))
 go.property("bg_apartment_bedroom_night_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_bedroom_night.atlas"))
 go.property("bg_apartment_kitchen_morning_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_kitchen_morning.atlas"))
+go.property("bg_apartment_kitchen_night_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_kitchen_night.atlas"))
 go.property("bg_cafe_morning_atlas", resource.atlas("/main/images/backgrounds/bg_cafe_morning.atlas"))
 go.property("bg_park_by_the_river_morning_atlas", resource.atlas("/main/images/backgrounds/bg_park_by_the_river_morning.atlas"))
 go.property("bg_shop_day_atlas", resource.atlas("/main/images/backgrounds/bg_shop_day.atlas"))
@@ -36,10 +35,19 @@ local gs = require "main.scripts.game_state"
 local sm = require "main.scripts.save_manager"
 local meta = require "main.scripts.meta_state"
 local scene_controller = require "main.scripts.scene_controller"
-local catalog = require "main.scripts.items_catalog"
-local ui_state = require "main.scripts.ui_state"
-local backlog = require "main.scripts.dialogue_backlog"
 local l10n = require "main.scripts.l10n"
+local yandex_ads = require "main.scripts.yandex_ads"
+local dm_commands = require "main.gui.modules.ui_manager_v2.dm_commands"
+local map_flow = require "main.gui.modules.ui_manager_v2.map_flow"
+local inventory_flow = require "main.gui.modules.ui_manager_v2.inventory_flow"
+local dialogue_flow = require "main.gui.modules.ui_manager_v2.dialogue_flow"
+local run_state = require "main.gui.modules.ui_manager_v2.run_state"
+local background_flow = require "main.gui.modules.ui_manager_v2.background_flow"
+local phone_flow = require "main.gui.modules.ui_manager_v2.phone_flow"
+local effects_flow = require "main.gui.modules.ui_manager_v2.effects_flow"
+local scene_flow = require "main.gui.modules.ui_manager_v2.scene_flow"
+local overlay_flow = require "main.gui.modules.ui_manager_v2.overlay_flow"
+local message_flow = require "main.gui.modules.ui_manager_v2.message_flow"
 
 local ok_scenes, scenes = pcall(require, "main.scripts.scenes")
 if not ok_scenes then scenes = nil end
@@ -59,52 +67,18 @@ local close_map
 local hide_choice
 local sync_modal_state
 
-local INVENTORY_MVP_VERBS = {
-    use = true,
-    inspect = true,
-    read = true,
-    give = true,        -- передать предмет NPC текущей сцены (scenes.lua: npc = "...")
-    combine = true,     -- соединить два предмета внутри инвентаря
-}
-
-local BG_TEXTURE_KEY = "backgrounds"
-local DEDICATED_BG_ANIMATION = "scene_bg"
 local AUTO_ADVANCE_MIN_DELAY = 1.0
 local AUTO_ADVANCE_MAX_DELAY = 3.0
 local SKIP_ADVANCE_DELAY = 0.05
 
-local MAP_HOME_SCENES = {
-    apartment_hub = true,
-    kitchen = true,
-    bathroom = true,
-    bedroom_day = true,
-}
-
--- Лейблы пинов карты теперь идут через l10n. Маппинг pin_id → l10n-ключ.
-local MAP_PIN_LABEL_KEYS = {
-    home  = "map_home",
-    work  = "map_work",
-    cafe  = "map_cafe",
-    metro = "map_metro",
-    shop  = "map_shop",
-    clue  = "map_clue",
-    gov   = "map_gov",
-}
-
-local function get_map_pin_label(pin_id)
-    local key = MAP_PIN_LABEL_KEYS[pin_id]
-    return key and l10n.t(key) or pin_id
-end
-
 local DEDICATED_BG_ATLAS_PROPS = {
-    bg_metro          = "bg_metro_atlas",
-    bg_office         = "bg_office_atlas",
-    bg_office_evening = "bg_office_evening_atlas",
     bg_rooftop        = "bg_rooftop_atlas",
     bg_apartment_hall_morning = "bg_apartment_hall_morning_atlas",
+	bg_apartment_hall_night = "bg_apartment_hall_night_atlas",
     bg_apartment_bedroom_morning = "bg_apartment_bedroom_morning_atlas",
     bg_apartment_bedroom_night = "bg_apartment_bedroom_night_atlas",
     bg_apartment_kitchen_morning = "bg_apartment_kitchen_morning_atlas",
+	bg_apartment_kitchen_night = "bg_apartment_kitchen_night_atlas",
     bg_cafe_morning = "bg_cafe_morning_atlas",
     bg_park_by_the_river_morning = "bg_park_by_the_river_morning_atlas",
     bg_shop_day = "bg_shop_day_atlas",
@@ -167,442 +141,139 @@ end
 -- -------------------------------------------------------
 
 local function init_background_atlas_state(self)
-    self.dialogue_bg_atlases = {}
-    self.current_dialogue_bg_atlas = nil
-    -- URL на самого себя — нужен чтобы из callback'ов (которые могут
-    -- исполняться в gui_script контексте) перекинуть работу с go.set
-    -- обратно в .script контекст через msg.post.
-    self.self_url = msg.url()
-
-    for bg_name, prop_name in pairs(DEDICATED_BG_ATLAS_PROPS) do
-        self.dialogue_bg_atlases[bg_name] = self[prop_name]
-    end
+    background_flow.init_atlas_state(self, DEDICATED_BG_ATLAS_PROPS)
 end
 
-local function resolve_dialogue_bg_visual(self, bg_name)
-    if bg_name and self.dialogue_bg_atlases[bg_name] then
-        return self.dialogue_bg_atlases[bg_name], DEDICATED_BG_ANIMATION
-    end
-    return nil, nil
-end
-
--- ВНИМАНИЕ: эта функция содержит go.set и ОБЯЗАНА вызываться только
--- из контекста .script (например, on_message ui_manager_v2). Если её
--- дёрнуть из gui_script callback (через scene_controller _ui.set_background),
--- Defold упадёт с "You can only access go.* functions ... from a script instance".
--- Поэтому из callback'ов используем post_dialogue_background, который
--- асинхронно прокидывает запрос обратно сюда через msg.post.
 local function apply_dialogue_bg(self, bg_name)
-    if not self or not M.components.dialogue then return end
-    if not bg_name or bg_name == "" or bg_name == "none" then return end
-
-    local atlas, animation_id = resolve_dialogue_bg_visual(self, bg_name)
-    if not atlas then
-        -- Единственный источник fullscreen-фонов — `DEDICATED_BG_ATLAS_PROPS`
-        -- (см. `docs/guides/HOW_TO_ADD_SCENES.md`). Незарегистрированный
-        -- bg_name = отсутствующий dedicated atlas. Не падаем, но громко
-        -- логируем, чтобы кейс был виден.
-        print("[ui_manager_v2] WARNING: no dedicated atlas for bg:", bg_name,
-              "— зарегистрируй его в ui_manager_v2.script + main/images/backgrounds/")
-        return
-    end
-
-    if self.current_dialogue_bg_atlas ~= atlas then
-        go.set(M.components.dialogue, "textures", atlas, { key = BG_TEXTURE_KEY })
-        self.current_dialogue_bg_atlas = atlas
-    end
-
-    msg.post(M.components.dialogue, "set_background", {
-        name = bg_name,
-        animation = animation_id,
-    })
+    background_flow.apply_dialogue_bg(self, M.components, bg_name)
 end
 
--- Безопасная для любого контекста (script / gui_script) точка входа.
--- Просит ui_manager_v2 переключить atlas и обновить фон через msg.post
--- самому себе — так go.set всегда исполняется в .script контексте.
 local function post_dialogue_background(self, bg_name)
-    if not bg_name then return end
-    local target = (self and self.self_url) or msg.url("#ui_manager_v2")
-    msg.post(target, "apply_dialogue_bg", { name = bg_name })
-end
-
-local function post_map_log(text)
-    msg.post(M.components.map, "set_log", { text = text or "" })
+    background_flow.post_dialogue_bg(self, bg_name)
 end
 
 local function current_scene_id()
     return scene_controller.get_current_scene_id and scene_controller.get_current_scene_id() or nil
 end
 
-local function scene_data_by_id(scene_id)
-    if not scene_id or scene_id == "" or not scenes then
-        return nil
-    end
-    if scenes.get then
-        return scenes.get(scene_id)
-    end
-    if scenes.scenes then
-        return scenes.scenes[scene_id]
-    end
-    return nil
-end
-
 local function resolve_current_location_label(bg_name)
-    local scene_id = current_scene_id()
-    local scene_data = nil
-
-    if scene_controller.get_current_scene_data then
-        scene_data = scene_controller.get_current_scene_data()
-    end
-    if not scene_data then
-        scene_data = scene_data_by_id(scene_id)
-    end
-
-    local label = scene_data and scene_data.label or nil
-    if label and tostring(label) ~= "" then
-        return tostring(label)
-    end
-
-    if scene_id and tostring(scene_id) ~= "" then
-        return tostring(scene_id)
-    end
-
-    if bg_name and tostring(bg_name) ~= "" then
-        return tostring(bg_name)
-    end
-
-    return "—"
+    return background_flow.resolve_location_label(bg_name, scenes)
 end
 
 local function post_location_to_ui(location_label)
-    local name = location_label or resolve_current_location_label()
-    local loop_label = meta.get_iteration_label and meta.get_iteration_label() or nil
-
-    ui_state.location_name = name
-    ui_state.current_location_name = name
-    ui_state.location_loop = loop_label
-    ui_state.current_location_loop = loop_label
-
-    msg.post(M.components.hud, "set_location", {
-        name = name,
-        loop = loop_label,
-    })
-    msg.post(M.components.choice, "set_location", {
-        name = name,
-        loop = loop_label,
-    })
+    background_flow.post_location(M.components, location_label)
 end
 
 local function resolve_map_selected_pin()
-    local scene_id = current_scene_id()
-    if scene_id and MAP_HOME_SCENES[scene_id] then
-        return "home"
-    end
-    if gs.get_flag and gs.get_flag("reached_office") then
-        return "work"
-    end
-    if gs.get_flag and gs.get_flag("reached_metro") then
-        return "metro"
-    end
-    if gs.get_quest and gs.get_quest("go_to_office") == "active" then
-        return "metro"
-    end
-    return "home"
-end
-
-local function build_map_point_overrides()
-    local iteration = "#" .. tostring(meta.get_iteration_label and meta.get_iteration_label() or "001")
-    local loop_awareness = meta.get and (meta.get("loop_awareness", 0) or 0) or 0
-    local scene_id = current_scene_id()
-    local at_home = scene_id and MAP_HOME_SCENES[scene_id] == true or false
-    local reached_metro = gs.get_flag and gs.get_flag("reached_metro") == true or false
-    local reached_office = gs.get_flag and gs.get_flag("reached_office") == true or false
-    local go_to_office_status = gs.get_quest and gs.get_quest("go_to_office") or nil
-    local current_route = gs.get_flag and gs.get_flag("map_route_target") or nil
-
-    return {
-        home = {
-            iter = iteration,
-            stat = at_home and "текущая" or "исходная",
-            clue = gs.has_item and gs.has_item("phone") and "телефон" or "—",
-        },
-        metro = {
-            iter = iteration,
-            stat = reached_metro and "пройдено"
-                or (current_route == "metro" and "маршрут отмечен")
-                or (go_to_office_status == "active" and "следующая точка")
-                or "узел",
-            clue = gs.get_flag and gs.get_flag("map_shared_metro") and "да" or "—",
-        },
-        work = {
-            iter = iteration,
-            stat = reached_office and "достигнуто"
-                or (current_route == "work" and "маршрут отмечен")
-                or (go_to_office_status == "active" and "цель дня")
-                or "ожидают",
-            clue = gs.get_flag and gs.get_flag("map_shared_work") and "да" or "—",
-        },
-        cafe = {
-            iter = iteration,
-            stat = current_route == "cafe" and "маршрут отмечен"
-                or (gs.get_flag and gs.get_flag("map_saved_cafe") and "в заметках" or "ориентир"),
-            clue = gs.get_flag and gs.get_flag("map_shared_cafe") and "да" or "—",
-        },
-        shop = {
-            iter = iteration,
-            stat = current_route == "shop" and "маршрут отмечен"
-                or (gs.get_flag and gs.get_flag("map_saved_shop") and "в заметках" or "открыто 24/7"),
-            clue = gs.get_flag and gs.get_flag("map_shared_shop") and "да" or "—",
-        },
-        clue = {
-            iter = iteration,
-            stat = loop_awareness > 0 and "аномалия" or "скрытый след",
-            clue = loop_awareness > 0 and "да" or "—",
-            visible = loop_awareness > 0,
-        },
-        gov = {
-            iter = iteration,
-            stat = current_route == "gov" and "маршрут отмечен"
-                or (loop_awareness > 1 and "интерес" or "ч/п 9:00–18:00"),
-            clue = gs.get_flag and gs.get_flag("map_shared_gov") and "да" or "—",
-        },
-    }
+    return map_flow.resolve_selected_pin()
 end
 
 local function sync_map_overlay(selected_id, log_text)
-    msg.post(M.components.map, "set_points", {
-        points = build_map_point_overrides(),
-        selected_id = selected_id or resolve_map_selected_pin(),
-    })
-    if log_text then
-        post_map_log(log_text)
-    end
-end
-
-local function add_map_note_once(flag_name, title, body)
-    if gs.get_flag and gs.get_flag(flag_name) then
-        return false
-    end
-    if gs.set_flag then
-        gs.set_flag(flag_name, true)
-    end
-    if gs.add_note then
-        gs.add_note(title, body)
-    end
-    return true
+    map_flow.sync_overlay(M.components.map, selected_id, log_text)
 end
 
 local function handle_map_verb(self, pin_id, verb)
-    if not pin_id or not verb then
-        return
-    end
+    map_flow.handle_verb(M.components.map, pin_id, verb)
+end
 
-    local label = get_map_pin_label(pin_id)
-    local iteration = tostring(meta.get_iteration_label and meta.get_iteration_label() or "001")
-    local log_text = nil
-
-    if verb == "route" then
-        if gs.set_flag then
-            gs.set_flag("map_route_target", pin_id)
-        end
-        local body = "Маршрут до точки «" .. label .. "» отмечен в планировщике. Петля #" .. iteration .. "."
-        if pin_id == "metro" then
-            body = body .. "\nСледующая сюжетная опора: метро."
-        elseif pin_id == "work" then
-            body = body .. "\nЦель рабочего дня закреплена в маршруте."
-        end
-        local added = add_map_note_once("map_note_route_" .. pin_id, "Маршрут: " .. label, body)
-        log_text = added and ("> маршрут сохранён: " .. label .. " _") or ("> маршрут уже сохранён: " .. label .. " _")
-
-    elseif verb == "save" then
-        if gs.set_flag then
-            gs.set_flag("map_saved_" .. pin_id, true)
-        end
-        local body = "Досье по точке «" .. label .. "» добавлено в заметки. Это быстрый якорь для текущей петли #" .. iteration .. "."
-        local added = add_map_note_once("map_note_saved_" .. pin_id, "Досье: " .. label, body)
-        log_text = added and ("> досье сохранено: " .. label .. " _") or ("> досье уже было сохранено: " .. label .. " _")
-
-    elseif verb == "share" then
-        if gs.set_flag then
-            gs.set_flag("map_shared_" .. pin_id, true)
-        end
-        local body = "Точка «" .. label .. "» помечена как важная для петли #" .. iteration .. "."
-        local added = add_map_note_once("map_note_shared_" .. pin_id, "Отметка: " .. label, body)
-        log_text = added and ("> маркер отмечен: " .. label .. " _") or ("> маркер уже отмечен: " .. label .. " _")
-    end
-
-    sync_map_overlay(pin_id, log_text)
+local function dialogue_ctx()
+    return {
+        components = M.components,
+        overlays = M.overlays,
+        auto_advance_min_delay = AUTO_ADVANCE_MIN_DELAY,
+        auto_advance_max_delay = AUTO_ADVANCE_MAX_DELAY,
+        skip_advance_delay = SKIP_ADVANCE_DELAY,
+        base_mode = function()
+            return M.base_mode
+        end,
+        at_end = function()
+            return M.at_end
+        end,
+        sync_modal_state = function()
+            sync_modal_state()
+        end,
+        render_current_scene = function()
+            if scene_controller.is_active and scene_controller.is_active()
+                and scene_controller.render_now then
+                scene_controller.render_now()
+            end
+        end,
+    }
 end
 
 local function cancel_dialogue_autoplay(self)
-    if self.dialogue_autoplay_handle then
-        timer.cancel(self.dialogue_autoplay_handle)
-        self.dialogue_autoplay_handle = nil
-    end
+    dialogue_flow.cancel_autoplay(self)
 end
 
 local function reset_dialogue_autoplay_state(self)
-    cancel_dialogue_autoplay(self)
-    self.dialogue_waiting_for_typewriter = false
-    self.dialogue_node_type = nil
-    self.dialogue_current_text = ""
+    dialogue_flow.reset_autoplay_state(self)
 end
 
--- Бэклог реплик и выборов хранится в shared-модуле dialogue_backlog.
--- Это снимает необходимость пересылать таблицу через msg.post (упирался
--- в sys.max_message_data_size). dialogue_v2.gui_script читает модуль напрямую.
-
 local function reset_dialogue_backlog(self)
-    backlog.clear()
+    dialogue_flow.reset_backlog()
 end
 
 local function open_dialogue_backlog(self)
-    M.overlays.backlog = true
-    sync_modal_state()
-    msg.post(M.components.hotspots, "hide_all")
-    msg.post(M.components.dialogue, "open_backlog")
+    dialogue_flow.open_backlog(dialogue_ctx())
 end
 
 local function close_dialogue_backlog(self)
-    M.overlays.backlog = false
-    sync_modal_state()
-    msg.post(M.components.dialogue, "close_backlog")
-    if scene_controller.is_active and scene_controller.is_active()
-        and scene_controller.render_now then
-        scene_controller.render_now()
-    end
+    dialogue_flow.close_backlog(dialogue_ctx())
 end
 
 local function append_dialogue_backlog(self, entry)
-    backlog.add(entry)
-end
-
-local function compute_dialogue_autoplay_delay(text, skip_mode)
-    if skip_mode then
-        return SKIP_ADVANCE_DELAY
-    end
-    local text_len = #(text or "")
-    return math.min(AUTO_ADVANCE_MAX_DELAY, math.max(AUTO_ADVANCE_MIN_DELAY, 0.75 + (text_len / 28)))
-end
-
-local function dialogue_can_autoadvance(self)
-    return self.dialogue_node_type == "dialogue"
-        and M.base_mode == "dialogue"
-        and not M.overlays.choice
-        and not M.overlays.inventory
-        and not M.overlays.phone
-        and not M.overlays.map
-        and not M.overlays.backlog
-        and not self.dialogue_waiting_for_typewriter
-        and not M.at_end
+    dialogue_flow.append_backlog(entry)
 end
 
 local function apply_dialogue_toggle_state(self)
-    msg.post(M.components.dialogue, "set_auto", { on = self.dialogue_auto == true })
-    msg.post(M.components.dialogue, "set_skip", { on = self.dialogue_skip == true })
+    dialogue_flow.apply_toggle_state(self, dialogue_ctx())
 end
 
 local function schedule_dialogue_autoadvance(self)
-    cancel_dialogue_autoplay(self)
-    if not dialogue_can_autoadvance(self) then
-        return
-    end
-    if not self.dialogue_auto and not self.dialogue_skip then
-        return
-    end
-
-    -- В SKIP-режиме не автопродвигаемся с последнего параграфа пачки —
-    -- даём игроку время отключить SKIP перед сменой контекста.
-    -- (Эта проверка дублируется здесь, потому что schedule_dialogue_autoadvance
-    -- вызывается из нескольких мест: nudge_dialogue_skip, typewriter_done,
-    -- set_dialogue_play_mode.)
-    if self.dialogue_skip and dm.is_last_in_queue and dm.is_last_in_queue() then
-        return
-    end
-
-    local delay = compute_dialogue_autoplay_delay(self.dialogue_current_text, self.dialogue_skip)
-    self.dialogue_autoplay_handle = timer.delay(delay, false, function()
-        self.dialogue_autoplay_handle = nil
-        if not dialogue_can_autoadvance(self) then
-            return
-        end
-        msg.post(".", "dialogue_next")
-    end)
+    dialogue_flow.schedule_autoadvance(self, dialogue_ctx())
 end
 
 local function nudge_dialogue_skip(self)
-    if not self.dialogue_skip then
-        return
-    end
-    if self.dialogue_node_type ~= "dialogue" then
-        return
-    end
-    -- Пауза SKIP на последнем параграфе текущей пачки — даём игроку время
-    -- отключить SKIP вручную перед сменой контекста (choice / end / новая
-    -- пачка). Typewriter всё равно достреливается до конца, чтобы реплика
-    -- читалась полностью; но автопереход не выполняется — нужен ручной клик.
-    if dm.is_last_in_queue and dm.is_last_in_queue() then
-        if self.dialogue_waiting_for_typewriter then
-            timer.delay(0, false, function()
-                if self.dialogue_waiting_for_typewriter and self.dialogue_node_type == "dialogue" then
-                    msg.post(M.components.dialogue, "finish_typewriter")
-                end
-            end)
-        end
-        return
-    end
-    if self.dialogue_waiting_for_typewriter then
-        timer.delay(0, false, function()
-            if self.dialogue_skip and self.dialogue_waiting_for_typewriter and self.dialogue_node_type == "dialogue" then
-                msg.post(M.components.dialogue, "finish_typewriter")
-            end
-        end)
-    else
-        schedule_dialogue_autoadvance(self)
-    end
+    dialogue_flow.nudge_skip(self, dialogue_ctx())
 end
 
 local function set_dialogue_play_mode(self, mode, on)
-    if mode == "auto" then
-        self.dialogue_auto = on and true or false
-        if self.dialogue_auto then
-            self.dialogue_skip = false
-        end
-    elseif mode == "skip" then
-        self.dialogue_skip = on and true or false
-        if self.dialogue_skip then
-            self.dialogue_auto = false
-        end
-    end
-
-    cancel_dialogue_autoplay(self)
-    apply_dialogue_toggle_state(self)
-    nudge_dialogue_skip(self)
-    if not self.dialogue_waiting_for_typewriter then
-        schedule_dialogue_autoadvance(self)
-    end
+    dialogue_flow.set_play_mode(self, mode, on, dialogue_ctx())
 end
 
 local function reset_dialogue_play_modes(self)
-    self.dialogue_auto = false
-    self.dialogue_skip = false
-    reset_dialogue_autoplay_state(self)
-    apply_dialogue_toggle_state(self)
+    dialogue_flow.reset_play_modes(self, dialogue_ctx())
+end
+
+local function phone_ctx()
+    return {
+        components = M.components,
+        overlays = M.overlays,
+        sync_modal_state = function()
+            sync_modal_state()
+        end,
+        dbg = dbg,
+    }
 end
 
 local function has_phone_access()
-    return gs.has_item and gs.has_item("phone") or false
+    return phone_flow.has_access()
 end
 
 local function run_side_dialogue_knot(self, knot_name, keep_bg)
     if not knot_name or not dm.jump_to_knot then
         return false
     end
-    dm.jump_to_knot(knot_name)
+
+    -- keep_bg is the exploration background for side-knot jumps.
+    -- Apply it BEFORE jump_to_knot: if the target Ink has an explicit # bg tag,
+    -- that tag must win. Applying keep_bg after the jump overwrote explicit
+    -- evening/night backgrounds, e.g. sunday_home_after_date_router.
     if keep_bg then
         dm.override_bg(keep_bg)
     end
+
+    dm.jump_to_knot(knot_name)
     handle_dialogue_update(self)
     return true
 end
@@ -618,171 +289,44 @@ local function jump_inventory_knot(self, knot_name)
     return run_side_dialogue_knot(self, knot_name, keep_bg)
 end
 
--- target_id: для use-on-hotspot — id хотспота, для give — npc_id,
--- для combine — id второго item; иначе nil.
-local function resolve_inventory_knot(item_id, verb, scene_id, target_id)
-    local candidates = {}
-
-    if verb == "combine" and target_id and target_id ~= "" then
-        -- Combine: лексикографическая сортировка двух item_id даёт
-        -- единственное каноническое имя knot'а — автор пишет один файл,
-        -- не нужно дублировать обе перестановки.
-        local low, high = item_id, target_id
-        if low > high then low, high = high, low end
-        table.insert(candidates, "inv_combine_" .. low .. "_with_" .. high)
-    elseif target_id and target_id ~= "" then
-        -- Use-on-target / give:
-        --   inv_<scene>_<verb>_<item>_on_<target>      (контекстный)
-        --   inv_<verb>_<item>_on_<target>              (общий target)
-        --   inv_<verb>_<item>_on_fallback              (предмет, любой target)
-        --   inv_<verb>_on_<target>                     (любой предмет, конкретный target)
-        if scene_id and scene_id ~= "" then
-            table.insert(candidates, "inv_" .. scene_id .. "_" .. verb .. "_" .. item_id .. "_on_" .. target_id)
-        end
-        table.insert(candidates, "inv_" .. verb .. "_" .. item_id .. "_on_" .. target_id)
-        table.insert(candidates, "inv_" .. verb .. "_" .. item_id .. "_on_fallback")
-        table.insert(candidates, "inv_" .. verb .. "_on_" .. target_id)
-    else
-        if scene_id and scene_id ~= "" then
-            table.insert(candidates, "inv_" .. scene_id .. "_" .. verb .. "_" .. item_id)
-        end
-        table.insert(candidates, "inv_" .. verb .. "_" .. item_id)
-    end
-    -- Общие fallback'и
-    table.insert(candidates, "inv_" .. verb .. "_fallback")
-    table.insert(candidates, "inv_fallback")
-
-    for _, knot_name in ipairs(candidates) do
-        if dm.has_knot and dm.has_knot(knot_name) then
-            return knot_name
-        end
-    end
-    return nil
-end
-
--- Установить/снять armed-state с одновременным управлением баннером в HUD.
-local function set_armed_state(self, item_id, verb)
-    ui_state.set_armed(item_id, verb)
-    local item = catalog.get_runtime and catalog.get_runtime(item_id) or catalog.get(item_id)
-    local item_name = item and item.name or item_id
-    msg.post(M.components.hud, "show_armed_banner", {
-        item_id = item_id,
-        item_name = item_name,
-        verb = verb,
-    })
+local function inventory_ctx(self)
+    return {
+        current_scene_id = function()
+            return scene_controller.get_current_scene_id and scene_controller.get_current_scene_id() or nil
+        end,
+        current_scene_data = function()
+            return scene_controller.get_current_scene_data and scene_controller.get_current_scene_data() or nil
+        end,
+        close_inventory = function()
+            close_inventory(self)
+        end,
+        open_phone = function()
+            open_phone(self)
+        end,
+        jump_inventory_knot = function(knot_name)
+            jump_inventory_knot(self, knot_name)
+        end,
+        show_armed_banner = function(payload)
+            msg.post(M.components.hud, "show_armed_banner", payload)
+        end,
+        hide_armed_banner = function()
+            if M.components.hud then
+                msg.post(M.components.hud, "hide_armed_banner")
+            end
+        end,
+    }
 end
 
 local function clear_armed_state(self)
-    ui_state.clear_armed()
-    if M.components.hud then
-        msg.post(M.components.hud, "hide_armed_banner")
-    end
-end
-
--- Запускает inventory-knot с заполнённым контекстом для ink.
--- target_id/target_kind опциональны: для use-on-hotspot и give.
-local function fire_inventory_knot(self, item_id, verb, scene_id, target_id, target_kind)
-    local item = catalog.get_runtime and catalog.get_runtime(item_id) or catalog.get(item_id)
-    local knot_name = resolve_inventory_knot(item_id, verb, scene_id, target_id)
-    if not knot_name then
-        print("[ui_manager_v2] WARNING: no inventory knot for",
-              item_id, verb, scene_id, target_id or "")
-        return false
-    end
-
-    if dm.set_inventory_action_context then
-        dm.set_inventory_action_context({
-            item_id     = item_id,
-            item_name   = item and item.name or item_id,
-            verb        = verb,
-            scene_id    = scene_id,
-            target_id   = target_id,
-            target_kind = target_kind,
-        })
-    end
-    jump_inventory_knot(self, knot_name)
-    return true
+    inventory_flow.clear_armed(inventory_ctx(self))
 end
 
 local function handle_inventory_verb(self, item_id, verb, extra)
-    if not item_id or not verb then
-        return
-    end
-    if not INVENTORY_MVP_VERBS[verb] then
-        print("[ui_manager_v2] inventory verb is not enabled in MVP:", tostring(verb))
-        return
-    end
-
-    local scene_id = scene_controller.get_current_scene_id and scene_controller.get_current_scene_id() or nil
-    if not scene_id or scene_id == "" then
-        print("[ui_manager_v2] inventory verbs are only supported from exploration in MVP")
-        close_inventory(self)
-        return
-    end
-
-    -- COMBINE: A + B уже выбраны в инвентаре (extra.target_item_id = B).
-    -- Запускаем cпарный knot, инвентарь закрываем (он сам стопится в combine_pending).
-    if verb == "combine" then
-        local target_item = extra and extra.target_item_id or nil
-        close_inventory(self)
-        if target_item and target_item ~= "" then
-            fire_inventory_knot(self, item_id, "combine", scene_id, target_item, "item")
-        else
-            -- Без target_item knot не имеет смысла — это баг inventory_v2, но
-            -- стрелять в fallback всё равно безопаснее чем silent fail.
-            fire_inventory_knot(self, item_id, "combine", scene_id, nil, nil)
-        end
-        return
-    end
-
-    -- Особый кейс: use/read на телефоне = открыть phone overlay напрямую.
-    if item_id == "phone" and (verb == "use" or verb == "read") then
-        close_inventory(self)
-        open_phone(self)
-        return
-    end
-
-    -- USE: армируем предмет. Инвентарь закрывается, баннер появляется в HUD,
-    -- следующий клик по hotspot'у запустит inv_use_<item>_on_<hotspot>.
-    -- Если hotspot не подходит — fallback цепочка отработает как раньше.
-    if verb == "use" then
-        close_inventory(self)
-        set_armed_state(self, item_id, "use")
-        return
-    end
-
-    -- GIVE: целевой NPC берётся из scenes.lua (поле npc у текущей сцены).
-    -- Если NPC нет — фоллбек на inv_give_fallback.
-    if verb == "give" then
-        local scene_data = scene_controller.get_current_scene_data and scene_controller.get_current_scene_data()
-        local npc_id = scene_data and scene_data.npc or nil
-        close_inventory(self)
-        if npc_id and npc_id ~= "" then
-            fire_inventory_knot(self, item_id, "give", scene_id, npc_id, "npc")
-        else
-            -- Никого нет рядом — стреляем по generic-фоллбеку.
-            fire_inventory_knot(self, item_id, "give", scene_id, nil, nil)
-        end
-        return
-    end
-
-    -- INSPECT / READ: как раньше — generic action без target.
-    close_inventory(self)
-    fire_inventory_knot(self, item_id, verb, scene_id, nil, nil)
+    inventory_flow.handle_verb(item_id, verb, extra, inventory_ctx(self))
 end
 
--- Вызывается hotspots_v2 при клике на hotspot, если установлен armed-state.
--- Запускает use-on-target цепочку и сбрасывает armed.
 local function handle_armed_hotspot_click(self, hotspot_id)
-    local armed = ui_state.get_armed()
-    if not armed then return false end
-    clear_armed_state(self)
-
-    local scene_id = scene_controller.get_current_scene_id and scene_controller.get_current_scene_id() or nil
-    if not scene_id or scene_id == "" then return false end
-
-    fire_inventory_knot(self, armed.item_id, armed.verb, scene_id, hotspot_id, "hotspot")
-    return true
+    return inventory_flow.handle_armed_hotspot(hotspot_id, inventory_ctx(self))
 end
 
 local function sync_ui_state(self)
@@ -799,74 +343,24 @@ local function sync_ui_state(self)
     msg.post(M.components.phone, "refresh_phone")
 end
 
--- Сохраняет game_state + scene_controller (стек exploration-сцен) в save_manager.
--- Когда вызывается:
---   • любое изменение `game_state` → срабатывает gs.subscribe-обработчик (init);
---     сюда попадают set_flag, add/remove_item, set_quest, add_sms, add_mail,
---     add_call, add_clue, и КЛЮЧЕВОЕ — gs.set_scene(...) внутри scene_controller.
---   • при start_new_run после reset.
--- Ink-состояние сохраняется отдельно через save_ink_state() в dialogue_manager_ink
--- (вызывается на каждом advance/jump_to_knot/choose).
--- Overlay-состояние (phone/map/inventory открыт?) НЕ персистится — на load всегда
--- закрыто, base_mode восстанавливается из ink/scene_controller.
-local function persist_run_state()
-    if M.suppress_run_save then return end
-    if not gs.serialize or not scene_controller.serialize then return end
-
-    sm.set_game_state({
-        gs = gs.serialize(),
-        scene_controller = scene_controller.serialize(),
-    })
+local function set_run_save_suppressed(on)
+    M.suppress_run_save = on and true or false
 end
 
-local function restore_run_state()
-    local saved = sm.get_game_state()
+local function persist_run_state()
+    run_state.persist(M.suppress_run_save)
+end
 
-    M.suppress_run_save = true
-
-    if saved and saved.gs then
-        gs.deserialize(saved.gs)
-        scene_controller.deserialize(saved.scene_controller)
-        if saved.scene_controller and saved.scene_controller.active and saved.scene_controller.scene_id then
-            scene_controller.enter(saved.scene_controller.scene_id)
-        end
-    elseif saved then
-        gs.deserialize(saved)
-        if scene_controller.reset then
-            scene_controller.reset()
-        else
-            scene_controller.deserialize({ scene_stack = {} })
-        end
-    else
-        gs.reset()
-        if scene_controller.reset then
-            scene_controller.reset()
-        else
-            scene_controller.deserialize({ scene_stack = {} })
-        end
-    end
-
-    M.suppress_run_save = false
+local function restore_run_state(opts)
+    return run_state.restore(set_run_save_suppressed, opts)
 end
 
 local function load_main_story_bytes()
-    local ok, bytes = pcall(sys.load_resource, "/main/story/chapter_01.json")
-    if not ok or not bytes then
-        print("[ui_manager_v2] ERROR: chapter_01.json not found")
-        return nil
-    end
-    return bytes
+    return run_state.load_main_story_bytes()
 end
 
 local function reset_runtime_state()
-    M.suppress_run_save = true
-    gs.reset()
-    if scene_controller.reset then
-        scene_controller.reset()
-    else
-        scene_controller.deserialize({ scene_stack = {} })
-    end
-    M.suppress_run_save = false
+    run_state.reset_runtime(set_run_save_suppressed)
 end
 
 local function start_new_run(self, reset_iteration_progress)
@@ -941,189 +435,127 @@ local function refresh_menu_state(self)
     })
 end
 
+local function overlay_ctx(self)
+    return {
+        components = M.components,
+        overlays = M.overlays,
+        dbg = dbg,
+        set_base_mode = function(mode)
+            M.base_mode = mode
+        end,
+        set_at_end = function(value)
+            M.at_end = value and true or false
+        end,
+        reset_dialogue_play_modes = function()
+            reset_dialogue_play_modes(self)
+        end,
+        reset_dialogue_autoplay_state = function()
+            reset_dialogue_autoplay_state(self)
+        end,
+        refresh_menu_state = function()
+            refresh_menu_state(self)
+        end,
+        clear_armed_state = function()
+            clear_armed_state(self)
+        end,
+        close_phone = function()
+            close_phone(self)
+        end,
+        close_inventory = function()
+            close_inventory(self)
+        end,
+        close_map = function()
+            close_map(self)
+        end,
+        hide_choice = function()
+            hide_choice(self)
+        end,
+        open_phone_map_app = function()
+            return open_phone_map_app(self)
+        end,
+        resolve_map_selected_pin = function()
+            return resolve_map_selected_pin()
+        end,
+        sync_map_overlay = function(selected_id, log_text)
+            sync_map_overlay(selected_id, log_text)
+        end,
+        resolve_current_location_label = function(bg_name)
+            return resolve_current_location_label(bg_name)
+        end,
+        post_location_to_ui = function(location_label)
+            post_location_to_ui(location_label)
+        end,
+        current_scene_id = function()
+            return current_scene_id()
+        end,
+    }
+end
+
 local function show_menu(self)
-    M.base_mode = "menu"
-    M.at_end = false
-    reset_dialogue_play_modes(self)
-    -- скрыть всё игровое
-    msg.post(M.components.hud,       "hide_hud")
-    msg.post(M.components.dialogue,  "hide_dialogue")
-    msg.post(M.components.dialogue,  "hide_bg")
-    msg.post(M.components.choice,    "hide_choice")
-    msg.post(M.components.inventory, "hide_inventory")
-    msg.post(M.components.phone,     "close_phone")
-    msg.post(M.components.map,       "close_map")
-    msg.post(M.components.hotspots,  "hide_all")
-    refresh_menu_state(self)
-    msg.post(M.components.main_menu, "show_menu")
-    dbg("[ui_manager_v2] mode: menu")
+    overlay_flow.show_menu(overlay_ctx(self))
 end
 
 local function show_exploration(self)
-    M.base_mode = "exploration"
-    reset_dialogue_autoplay_state(self)
-    dbg("[ui_manager_v2] show_exploration()")
-    msg.post(M.components.main_menu, "hide_menu")
-    msg.post(M.components.dialogue,  "hide_dialogue")
-    msg.post(M.components.dialogue,  "show_bg")
-    msg.post(M.components.hud,       "show_hud")
-    close_phone(self)
-    close_inventory(self)
-    close_map(self)
-    hide_choice(self)
-    dbg("[ui_manager_v2] mode: exploration")
+    overlay_flow.show_exploration(overlay_ctx(self))
 end
 
 local function show_dialogue(self)
-    M.base_mode = "dialogue"
-    msg.post(M.components.main_menu, "hide_menu")
-    msg.post(M.components.dialogue,  "show_bg")
-    msg.post(M.components.hud,       "show_hud")
-    msg.post(M.components.hotspots,  "hide_all")
-    msg.post(M.components.dialogue,  "show_dialogue")
-    dbg("[ui_manager_v2] mode: dialogue")
+    overlay_flow.show_dialogue(overlay_ctx(self))
 end
 
--- overlays (поверх exploration/dialogue)
-
 sync_modal_state = function()
-    ui_state.modal_open = (M.overlays.phone or M.overlays.inventory or M.overlays.map or M.overlays.backlog) and true or false
+    overlay_flow.sync_modal_state(M.overlays)
 end
 
 local function open_inventory(self)
-    dbg("[ui_manager_v2] open_inventory()")
-    -- Открытие инвентаря снимает armed-state — игрок передумал использовать
-    -- ранее «взятый» предмет, может выбрать другой.
-    clear_armed_state(self)
-    M.overlays.inventory = true
-    sync_modal_state()
-    msg.post(M.components.inventory, "show_inventory")
+    overlay_flow.open_inventory(overlay_ctx(self))
 end
+
 close_inventory = function(self)
-    dbg("[ui_manager_v2] close_inventory()")
-    M.overlays.inventory = false
-    sync_modal_state()
-    msg.post(M.components.inventory, "hide_inventory")
+    overlay_flow.close_inventory(overlay_ctx(self))
 end
 
 open_phone = function(self)
-    dbg("[ui_manager_v2] open_phone()")
-    if not has_phone_access() then
-        dbg("[ui_manager_v2] phone is unavailable, aborting")
-        return
-    end
-    M.overlays.phone = true
-    sync_modal_state()
-    msg.post(M.components.phone, "open_phone")
+    phone_flow.open(phone_ctx())
 end
 
 local function open_phone_app(self, app_id)
-    open_phone(self)
-    if M.overlays.phone then
-        msg.post(M.components.phone, "open_app", { id = app_id or "sms" })
-    end
+    phone_flow.open_app(phone_ctx(), app_id)
 end
 
 close_phone = function(self)
-    dbg("[ui_manager_v2] close_phone()")
-    M.overlays.phone = false
-    sync_modal_state()
-    msg.post(M.components.phone, "close_phone")
+    phone_flow.close(phone_ctx())
 end
 
 local function open_phone_map_app(self)
-    if not M.overlays.phone then
-        return false
-    end
-    msg.post(M.components.phone, "open_app", { id = "map" })
-    return true
+    return phone_flow.open_map_app(phone_ctx())
 end
 
 local function open_map(self)
-    if open_phone_map_app(self) then
-        return
-    end
-    M.overlays.map = true
-    sync_modal_state()
-    sync_map_overlay(resolve_map_selected_pin(), "> карта синхронизирована _")
-    msg.post(M.components.map, "open_map")
+    overlay_flow.open_map(overlay_ctx(self))
 end
+
 local function open_map_hub(self, primary_knot)
-    M.overlays.map = true
-    sync_modal_state()
-    -- hub-режим заменяет собой ink-выбор маршрута, поэтому под картой не должно
-    -- остаться диалога в состоянии "КОНЕЦ": иначе клик мимо пина попадает
-    -- в btn_next/dbox → dm.advance() → chapter_finished → выкидывает в меню.
-    M.at_end = false
-    msg.post(M.components.dialogue, "hide_dialogue")
-    sync_map_overlay(resolve_map_selected_pin(), "> выбрать маршрут _")
-    msg.post(M.components.map, "open_map_hub", { primary_knot = primary_knot })
+    overlay_flow.open_map_hub(overlay_ctx(self), primary_knot)
 end
+
 close_map = function(self)
-    M.overlays.map = false
-    sync_modal_state()
-    msg.post(M.components.map, "close_map")
+    overlay_flow.close_map(overlay_ctx(self))
 end
 
 local function show_choice(self, opts, timer_sec, title)
-    M.overlays.choice = true
-
-    local location_label = resolve_current_location_label()
-    post_location_to_ui(location_label)
-
-    msg.post(M.components.choice, "show_choice", {
-        opts = opts or {},
-        timer_sec = timer_sec or 18,
-        title = title,
-        loop = meta.get and meta.get("iteration_number", 1) or 1,
-        loop_label = meta.get_iteration_label and meta.get_iteration_label() or nil,
-        iteration_number = meta.get and meta.get("iteration_number", 1) or 1,
-        iteration_label = meta.get_iteration_label and meta.get_iteration_label() or nil,
-        scene_id = current_scene_id(),
-        location_label = location_label,
-        location_name = location_label,
-    })
+    overlay_flow.show_choice(overlay_ctx(self), opts, timer_sec, title)
 end
+
 hide_choice = function(self)
-    M.overlays.choice = false
-    msg.post(M.components.choice, "hide_choice")
-end
-
-local function dispatch_dm_effect(effect)
-    if not effect or not effect.type then
-        return
-    end
-
-    if effect.type == "sfx" then
-        local url = effect.name and M.SFX_URLS[effect.name] or nil
-        if url then
-            msg.post(url, "play_sound", {
-                delay = 0,
-                gain = tonumber(effect.gain) or 0.6,
-            })
-        else
-            print("[ui_manager_v2] WARNING: unknown sfx effect:", tostring(effect.name))
-        end
-    elseif effect.type == "shake" then
-        msg.post(M.components.effects, "play_shake", {
-            intensity = tonumber(effect.intensity) or 0.2,
-            duration = tonumber(effect.duration) or 0.4,
-        })
-    elseif effect.type == "pulse" then
-        msg.post(M.components.effects, "play_pulse", {
-            duration = tonumber(effect.duration) or 0.5,
-            r = tonumber(effect.r) or 1,
-            g = tonumber(effect.g) or 1,
-            b = tonumber(effect.b) or 1,
-        })
-    end
+    overlay_flow.hide_choice(overlay_ctx(self))
 end
 
 local function consume_dm_effects()
-    local effects = dm.get_effects and dm.get_effects() or {}
-    for _, effect in ipairs(effects) do
-        dispatch_dm_effect(effect)
-    end
+    effects_flow.consume({
+        components = M.components,
+        sfx_urls = M.SFX_URLS,
+    })
 end
 
 -- -------------------------------------------------------
@@ -1132,90 +564,22 @@ end
 
 local function apply_dm_commands(self)
     local cmds = dm.get_commands and dm.get_commands() or {}
-    for _, cmd in ipairs(cmds) do
-        if cmd.type == "enter_scene" then
-            -- Compatibility alias: old Ink still emits goto_scene:phone_home,
-            -- but the real runtime phone is the phone_v2 overlay, not a scene.
-            if cmd.scene == "phone_home" then
-                open_phone(self)
-            elseif scene_controller.enter then
-                scene_controller.enter(cmd.scene)
-            elseif scene_controller.enter_scene then
-                scene_controller.enter_scene(cmd.scene)
-            end
-        elseif cmd.type == "return_to_scene" then
-            if scene_controller.return_to_last_scene then
-                scene_controller.return_to_last_scene()
-            end
-        elseif cmd.type == "set_flag" then
-            if gs.set_flag then gs.set_flag(cmd.flag, cmd.value) end
-        elseif cmd.type == "add_item" then
-            if gs.add_item then gs.add_item(cmd.item) end
-        elseif cmd.type == "remove_item" then
-            if gs.remove_item then gs.remove_item(cmd.item) end
-        elseif cmd.type == "set_quest" then
-            if gs.set_quest then gs.set_quest(cmd.quest, cmd.status) end
-        elseif cmd.type == "add_sms" then
-            if gs.add_sms then gs.add_sms(cmd.contact, cmd.text) end
-        elseif cmd.type == "reply_sms" then
-            if gs.reply_sms then gs.reply_sms(cmd.contact, cmd.text) end
-        elseif cmd.type == "mark_sms_read" then
-            if gs.mark_sms_read then gs.mark_sms_read(cmd.contact) end
-        elseif cmd.type == "add_note" then
-            if gs.add_note then gs.add_note(cmd.title, cmd.body) end
-        elseif cmd.type == "add_mail" then
-            if gs.add_mail then gs.add_mail(cmd.from, cmd.subject, cmd.body) end
-        elseif cmd.type == "mark_mail_read" then
-            if gs.mark_mail_read then gs.mark_mail_read(cmd.index) end
-        elseif cmd.type == "mark_all_mail_read" then
-            if gs.mark_all_mail_read then gs.mark_all_mail_read() end
-        elseif cmd.type == "add_call" then
-            if gs.add_call then gs.add_call(cmd.who, cmd.kind) end
-        elseif cmd.type == "mark_all_calls_seen" then
-            if gs.mark_all_calls_seen then gs.mark_all_calls_seen() end
-        elseif cmd.type == "add_clue" then
-            if gs.add_clue then gs.add_clue(cmd.id, cmd.label) end
-        elseif cmd.type == "set_camera" then
-            if gs.set_camera_feed then
-                gs.set_camera_feed({
-                    status  = cmd.status,
-                    message = cmd.message,
-                    meta    = cmd.meta,
-                })
-            end
-        elseif cmd.type == "reset_camera" then
-            if gs.reset_camera_feed then gs.reset_camera_feed() end
-        elseif cmd.type == "add_terminal_line" then
-            if gs.add_terminal_line then gs.add_terminal_line(cmd.level, cmd.text) end
-        elseif cmd.type == "clear_terminal" then
-            if gs.clear_terminal then gs.clear_terminal() end
-        elseif cmd.type == "reset_terminal" then
-            if gs.reset_terminal_to_defaults then gs.reset_terminal_to_defaults() end
-        elseif cmd.type == "meta_add" then
-            if meta.inc then meta.inc(cmd.key, cmd.delta) end
-        elseif cmd.type == "meta_set" then
-            if meta.set then meta.set(cmd.key, cmd.value) end
-        elseif cmd.type == "phone_close" then
-            close_phone(self)
-        elseif cmd.type == "open_phone_app" then
-            open_phone_app(self, cmd.app)
-        elseif cmd.type == "open_map_hub" then
-            open_map_hub(self, cmd.knot)
-        elseif cmd.type == "map_allow" then
-            if gs.map_allow then gs.map_allow(cmd.poi) end
-        elseif cmd.type == "map_allow_reset" then
-            if gs.map_allow_reset then gs.map_allow_reset() end
-        elseif cmd.type == "map_lock_to" then
-            if gs.map_lock_to then gs.map_lock_to(cmd.poi) end
-        end
-    end
+    return dm_commands.apply(cmds, {
+        open_phone = function() open_phone(self) end,
+        close_phone = function() close_phone(self) end,
+        open_phone_app = function(app) open_phone_app(self, app) end,
+        open_map_hub = function(knot) open_map_hub(self, knot) end,
+        on_resume = function() handle_dialogue_update(self) end,
+    })
 end
 
 handle_dialogue_update = function(self)
     cancel_dialogue_autoplay(self)
 
     -- 1) Применить команды из ink-тегов (могут поменять сцену)
-    apply_dm_commands(self)
+    if apply_dm_commands(self) then
+        return
+    end
 
     -- 1a) Если apply_dm_commands открыл map hub, не рендерим диалог поверх:
     -- иначе на `-> DONE` сразу после `# map:hub:KNOT` dialogue уходит в
@@ -1352,101 +716,23 @@ end
 -- -------------------------------------------------------
 
 local function setup_scene_controller_ui(self)
-    local function copy_color(c)
-        if type(c) ~= "table" then return nil end
-        return {
-            r = c.r, g = c.g, b = c.b, a = c.a,
-            c[1], c[2], c[3], c[4],
-        }
-    end
-
-    local function copy_hotspot_style(style)
-        if type(style) ~= "table" then return nil end
-        return {
-            circle_color = copy_color(style.circle_color),
-            ring_color = copy_color(style.ring_color),
-            icon_color = copy_color(style.icon_color),
-            circle_alpha = style.circle_alpha,
-            ring_alpha = style.ring_alpha,
-            icon_alpha = style.icon_alpha,
-            scale = style.scale,
-            hotspot_scale = style.hotspot_scale,
-            circle_scale = style.circle_scale,
-            ring_scale = style.ring_scale,
-            icon_scale = style.icon_scale,
-            icon_offset_x = style.icon_offset_x,
-            icon_offset_y = style.icon_offset_y,
-            circle_texture = style.circle_texture,
-            ring_texture = style.ring_texture,
-        }
-    end
-
-    scene_controller.set_ui({
-        max_hotspots = function() return 6 end,
-        max_scene_objects = function() return 4 end,
-
+    scene_flow.setup({
+        components = M.components,
+        dbg = dbg,
         set_background = function(bg_name)
-            -- HUD и choice показывают человекочитаемое имя сцены, а не technical bg id.
             post_location_to_ui(resolve_current_location_label(bg_name))
-            -- Обновляем визуальный фон в dialogue компоненте
             if bg_name then
                 post_dialogue_background(self, bg_name)
                 dbg("[ui_manager_v2] scene_controller set_background:", bg_name)
             end
         end,
-
-        set_scene_object = function(i, obj)
-            local clean = nil
-            if obj then
-                clean = {
-                    id    = obj.id,
-                    image = obj.image,
-                    pos   = obj.pos and { x = obj.pos.x, y = obj.pos.y } or nil,
-                    size  = obj.size and { w = obj.size.w, h = obj.size.h } or nil,
-                }
-            end
-            msg.post(M.components.hotspots, "set_scene_object", { index = i, obj = clean })
-        end,
-
-        set_hotspot = function(i, data)
-            local clean = nil
-            if data then
-                clean = {
-                    rect   = data.rect and { x = data.rect.x, y = data.rect.y, w = data.rect.w, h = data.rect.h } or nil,
-                    label  = data.label,
-                    icon   = data.icon,
-                    locked = data.locked and true or false,
-                    circle_color = copy_color(data.circle_color),
-                    ring_color = copy_color(data.ring_color),
-                    icon_color = copy_color(data.icon_color),
-                    circle_alpha = data.circle_alpha,
-                    ring_alpha = data.ring_alpha,
-                    icon_alpha = data.icon_alpha,
-                    hotspot_scale = data.hotspot_scale,
-                    circle_scale = data.circle_scale,
-                    ring_scale = data.ring_scale,
-                    icon_scale = data.icon_scale,
-                    icon_offset_x = data.icon_offset_x,
-                    icon_offset_y = data.icon_offset_y,
-                    circle_texture = data.circle_texture,
-                    ring_texture = data.ring_texture,
-                    hotspot_style = copy_hotspot_style(data.hotspot_style or data.style),
-                }
-            end
-            msg.post(M.components.hotspots, "set_hotspot", { index = i, data = clean })
-        end,
-
         request_ink_knot = function(knot_name, keep_bg)
             run_side_dialogue_knot(self, knot_name, keep_bg)
         end,
         request_use_on_hotspot = function(hotspot_id)
-            -- Вызывается scene_controller'ом, когда игрок кликнул hotspot
-            -- в armed-режиме инвентаря. Запускает inv_use_<item>_on_<hotspot>.
             return handle_armed_hotspot_click(self, hotspot_id)
         end,
     })
-
-    dbg("[ui_manager_v2] scene_controller UI настроен")
 end
 
 -- -------------------------------------------------------
@@ -1464,6 +750,7 @@ function init(self)
     setup_scene_controller_ui(self)
     sm.load()
     meta.init()
+    yandex_ads.init()
 
     gs.subscribe(function()
         -- Обновляем счётчики в HUD при изменении game_state
@@ -1487,7 +774,7 @@ function init(self)
     self.current_choice_question = nil
     self.current_choice_options = nil
 
-    backlog.clear()
+    reset_dialogue_backlog(self)
     apply_dialogue_toggle_state(self)
     sync_ui_state(self)
     show_menu(self)
@@ -1499,312 +786,43 @@ function final(self)
     msg.post(".", "release_input_focus")
 end
 
+local function message_ctx(self)
+    return {
+        self = self,
+        dbg = dbg,
+        show_menu = function() show_menu(self) end,
+        start_new_run = function(reset_iteration_progress) start_new_run(self, reset_iteration_progress) end,
+        refresh_menu_state = function() refresh_menu_state(self) end,
+        restore_run_state = function(opts) return restore_run_state(opts) end,
+        enter_restored_scene = function(scene_id) scene_controller.enter(scene_id) end,
+        reset_dialogue_backlog = function() reset_dialogue_backlog(self) end,
+        handle_dialogue_update = function() handle_dialogue_update(self) end,
+        sync_ui_state = function() sync_ui_state(self) end,
+        reset_iteration_and_restart = function() reset_iteration_and_restart(self) end,
+        reset_runtime_state = function() reset_runtime_state() end,
+        apply_dialogue_bg = function(bg_name) apply_dialogue_bg(self, bg_name) end,
+        cancel_dialogue_autoplay = function() cancel_dialogue_autoplay(self) end,
+        schedule_dialogue_autoadvance = function() schedule_dialogue_autoadvance(self) end,
+        set_dialogue_play_mode = function(mode, on) set_dialogue_play_mode(self, mode, on) end,
+        open_dialogue_backlog = function() open_dialogue_backlog(self) end,
+        close_dialogue_backlog = function() close_dialogue_backlog(self) end,
+        append_dialogue_backlog = function(entry) append_dialogue_backlog(self, entry) end,
+        hide_choice = function() hide_choice(self) end,
+        open_inventory = function() open_inventory(self) end,
+        close_inventory = function() close_inventory(self) end,
+        handle_inventory_verb = function(item_id, verb, extra) handle_inventory_verb(self, item_id, verb, extra) end,
+        clear_armed_state = function() clear_armed_state(self) end,
+        open_phone = function() open_phone(self) end,
+        close_phone = function() close_phone(self) end,
+        run_side_dialogue_knot = function(knot_name, keep_bg) run_side_dialogue_knot(self, knot_name, keep_bg) end,
+        open_map = function() open_map(self) end,
+        close_map = function() close_map(self) end,
+        handle_map_verb = function(pin_id, verb) handle_map_verb(self, pin_id, verb) end,
+    }
+end
+
 function on_message(self, message_id, message, sender)
-    -- --- меню ---
-    if message_id == hash("show_menu") then
-        show_menu(self)
-
-    elseif message_id == hash("start_game") then
-        start_new_run(self, false)
-
-    elseif message_id == hash("continue_game") then
-        sm.load()
-        meta.init()
-        if not sm.has_save() then
-            print("[ui_manager_v2] continue_game ignored: no run-state save")
-            refresh_menu_state(self)
-            return
-        end
-
-        local ok, bytes = pcall(sys.load_resource, "/main/story/chapter_01.json")
-        if not ok or not bytes then
-            print("[ui_manager_v2] ERROR: chapter_01.json not found")
-            return
-        end
-        restore_run_state()
-        reset_dialogue_backlog(self)
-        dm.load_saved(bytes)
-        handle_dialogue_update(self)
-        sync_ui_state(self)
-
-    elseif message_id == hash("chapter_finished") then
-        -- Обычный конец без тега (итерация 001 — линейная, всегда переходит вперёд).
-        local next_loop = meta.complete_iteration()
-
-        sm.clear_run()
-        M.suppress_run_save = true
-        gs.reset()
-        if scene_controller.reset then scene_controller.reset()
-        else scene_controller.deserialize({ scene_stack = {} }) end
-        M.suppress_run_save = false
-
-        dbg("[ui_manager_v2] chapter_finished → iteration", next_loop.iteration_number)
-        show_menu(self)
-
-    elseif message_id == hash("false_ending") then
-        -- Ложная концовка: запомнить в meta (+1 awareness если впервые),
-        -- перезапустить run-state БЕЗ смены номера итерации.
-        --
-        -- ИТЕРАЦИЯ 001 — линейная, петля ещё не запустилась. Если игрок
-        -- дошёл до # loop:end:false на первой итерации (промах автора или
-        -- честный финал линейного prologue), трактуем тег как обычный
-        -- chapter_finished — переход к следующей итерации без петли.
-        -- Best practice в ink: {iteration_number > 1: # loop:end:false:id - else: # chapter_finished}.
-        local iter = meta.get("iteration_number", 1) or 1
-        if iter < 2 then
-            print("[ui_manager_v2] iter 001: ignoring false_ending → chapter_finished")
-            local next_loop = meta.complete_iteration()
-            sm.clear_run()
-            M.suppress_run_save = true
-            gs.reset()
-            if scene_controller.reset then scene_controller.reset()
-            else scene_controller.deserialize({ scene_stack = {} }) end
-            M.suppress_run_save = false
-            dbg("[ui_manager_v2] iter 001 forced-finish → iteration", next_loop.iteration_number)
-            show_menu(self)
-            return
-        end
-
-        local id = message and message.id or "unknown"
-        local is_new = meta.record_false_ending(id)
-        print("[ui_manager_v2] false_ending '" .. id .. "' new=" .. tostring(is_new)
-              .. " awareness=" .. tostring(meta.get("loop_awareness"))
-              .. " false_count=" .. tostring(meta.get_false_endings_count()))
-
-        sm.clear_run()
-        M.suppress_run_save = true
-        gs.reset()
-        if scene_controller.reset then scene_controller.reset()
-        else scene_controller.deserialize({ scene_stack = {} }) end
-        M.suppress_run_save = false
-
-        show_menu(self)
-
-    elseif message_id == hash("true_ending") then
-        -- Истинная концовка: доступна только когда найдены обе ложных.
-        -- Ink сам гейтит ветку через VAR loop_awareness >= 2, но проверяем и здесь.
-        --
-        -- На итерации 001 петля не запущена → true_ending тоже не должна
-        -- срабатывать. Трактуем как chapter_finished.
-        local iter = meta.get("iteration_number", 1) or 1
-        if iter < 2 then
-            print("[ui_manager_v2] iter 001: ignoring true_ending → chapter_finished")
-            local next_loop = meta.complete_iteration()
-            sm.clear_run()
-            M.suppress_run_save = true
-            gs.reset()
-            if scene_controller.reset then scene_controller.reset()
-            else scene_controller.deserialize({ scene_stack = {} }) end
-            M.suppress_run_save = false
-            show_menu(self)
-            return
-        end
-
-        if not meta.is_true_ending_unlocked() then
-            -- Страховочный fallback: ещё не разблокирована — трактуем как ложную.
-            print("[ui_manager_v2] WARNING: true_ending reached but not unlocked — treating as false_ending 'early_true'")
-            meta.record_false_ending("early_true")
-            sm.clear_run()
-            M.suppress_run_save = true
-            gs.reset()
-            if scene_controller.reset then scene_controller.reset()
-            else scene_controller.deserialize({ scene_stack = {} }) end
-            M.suppress_run_save = false
-            show_menu(self)
-            return
-        end
-
-        local next_loop = meta.complete_iteration()
-        sm.clear_run()
-        M.suppress_run_save = true
-        gs.reset()
-        if scene_controller.reset then scene_controller.reset()
-        else scene_controller.deserialize({ scene_stack = {} }) end
-        M.suppress_run_save = false
-
-        print("[ui_manager_v2] true_ending → iteration", next_loop.iteration_number)
-        show_menu(self)
-
-    elseif message_id == hash("reset_iteration") or message_id == hash("open_gallery") then
-        reset_iteration_and_restart(self)
-
-    elseif message_id == hash("open_achievements") then
-        dbg("[ui_manager_v2] open_achievements (TODO)")
-
-    -- --- фон ---
-    elseif message_id == hash("apply_dialogue_bg") then
-        -- Прилетает из callback'ов scene_controller.set_background,
-        -- которые могут исполняться из gui_script контекста. go.set
-        -- можно дёрнуть только отсюда, поэтому переключение atlas'а
-        -- для dialogue_v2 делаем в этом хендлере.
-        apply_dialogue_bg(self, message and message.name)
-
-    -- --- диалог ---
-    elseif message_id == hash("dialogue_updated") then
-        handle_dialogue_update(self)
-
-    elseif message_id == hash("dialogue_next") then
-        cancel_dialogue_autoplay(self)
-        if dm.advance then dm.advance() end
-        handle_dialogue_update(self)
-
-    elseif message_id == hash("typewriter_done") then
-        self.dialogue_waiting_for_typewriter = false
-        if self.dialogue_skip or self.dialogue_auto then
-            schedule_dialogue_autoadvance(self)
-        end
-
-    elseif message_id == hash("dialogue_skip") then
-        dbg("[ui_manager_v2] dialogue_skip", message.on)
-        set_dialogue_play_mode(self, "skip", message and message.on)
-
-    elseif message_id == hash("dialogue_auto") then
-        dbg("[ui_manager_v2] dialogue_auto", message.on)
-        set_dialogue_play_mode(self, "auto", message and message.on)
-
-    elseif message_id == hash("open_backlog") then
-        open_dialogue_backlog(self)
-
-    elseif message_id == hash("close_backlog") then
-        close_dialogue_backlog(self)
-
-    -- --- выбор ---
-    elseif message_id == hash("choice_picked") then
-        local idx = message and message.index
-        local opt = self.current_choice_options and self.current_choice_options[idx]
-        if opt then
-            local text = tostring(opt.text or "")
-            if self.current_choice_question and self.current_choice_question ~= "" then
-                text = tostring(self.current_choice_question) .. "\n> " .. text
-            end
-            append_dialogue_backlog(self, {
-                kind = "choice",
-                speaker = "ВЫБОР",
-                text = text,
-            })
-        end
-        hide_choice(self)
-        if dm.choose then dm.choose(message.index) end
-        handle_dialogue_update(self)
-
-    elseif message_id == hash("choice_timeout") then
-        -- по таймауту выбираем первую опцию (default)
-        local opt = self.current_choice_options and self.current_choice_options[1]
-        if opt then
-            local text = tostring(opt.text or "")
-            if self.current_choice_question and self.current_choice_question ~= "" then
-                text = tostring(self.current_choice_question) .. "\n> " .. text
-            end
-            append_dialogue_backlog(self, {
-                kind = "choice",
-                speaker = "АВТО-ВЫБОР",
-                text = text,
-            })
-        end
-        hide_choice(self)
-        if dm.choose then dm.choose(1) end
-        handle_dialogue_update(self)
-
-    elseif message_id == hash("choice_cancelled") then
-        hide_choice(self)
-
-    -- --- inventory ---
-    elseif message_id == hash("open_inventory") then
-        dbg("[ui_manager_v2] open_inventory from", sender)
-        open_inventory(self)
-    elseif message_id == hash("close_inventory") then
-        dbg("[ui_manager_v2] close_inventory")
-        close_inventory(self)
-    elseif message_id == hash("inventory_verb") then
-        dbg("[ui_manager_v2] inventory_verb", message.item_id, message.verb,
-            message.target_item_id or "")
-        handle_inventory_verb(self, message.item_id, message.verb, {
-            target_item_id = message.target_item_id,
-        })
-
-    elseif message_id == hash("cancel_armed_inventory") then
-        -- Отмена armed-режима из любого источника:
-        -- ✕ на баннере в HUD, клик мимо hotspot'ов в hotspots_v2.
-        clear_armed_state(self)
-
-    -- --- phone ---
-    elseif message_id == hash("open_phone") then
-        dbg("[ui_manager_v2] open_phone from", sender)
-        open_phone(self)
-    elseif message_id == hash("close_phone") then
-        close_phone(self)
-    elseif message_id == hash("phone_sms_viewed") then
-        if gs.mark_all_sms_read then
-            gs.mark_all_sms_read()
-        end
-
-    elseif message_id == hash("sms_open_contact") then
-        -- Игрок тапнул по переписке в телефоне.
-        -- Помечаем контакт прочитанным, закрываем телефон,
-        -- прыгаем в ink-knot sms_thread_<contact_id> (если он существует).
-        local contact_id = message and message.contact_id
-        if contact_id then
-            if gs.mark_sms_read then gs.mark_sms_read(contact_id) end
-
-            -- Защита от повторного открытия thread-knot'а.
-            -- dm.jump_to_knot использует ChoosePathString, и он сбрасывает
-            -- visit-counts для * выборов внутри целевого knot'а — поэтому
-            -- если игрок уже ответил, при повторном тапе по переписке выборы
-            -- появились бы снова и можно было бы выбрать другой вариант.
-            -- Авто-флаг sms_<contact>_replied ставится при # sms:reply: и
-            -- надёжно говорит «ответ уже отправлен, knot открывать не надо».
-            -- Игрок остаётся в SMS-приложении и видит историю переписки.
-            local replied_flag = "sms_" .. tostring(contact_id) .. "_replied"
-            if gs.get_flag and gs.get_flag(replied_flag) then
-                return
-            end
-
-            close_phone(self)
-            local knot_name = "sms_thread_" .. tostring(contact_id)
-            if dm.has_knot and dm.has_knot(knot_name) then
-                -- Выходим из сцены до прыжка в knot, иначе handle_dialogue_update
-                -- видит scene_controller.is_active()=true и уходит в show_exploration()
-                -- вместо диалога (тот же паттерн, что в jump_inventory_knot).
-                local keep_bg = nil
-                if scene_controller.is_active and scene_controller.is_active() then
-                    keep_bg = scene_controller.get_current_bg and scene_controller.get_current_bg() or nil
-                    if scene_controller.exit then scene_controller.exit() end
-                end
-                run_side_dialogue_knot(self, knot_name, keep_bg)
-            end
-            -- Если knot'а нет — просто закрыли телефон, ничего не ломается.
-        end
-    elseif message_id == hash("phone_app_clicked") then
-        dbg("[ui_manager_v2] phone_app_clicked", message.id)
-        -- Карта теперь открывается внутри телефона (phone_map.gui).
-        -- Если в будущем нужно открыть внешнюю карту из телефона — добавь здесь.
-
-    -- --- map travel (phone_map POI click) ---
-    elseif message_id == hash("map_travel") then
-        local scene_id = message and message.scene
-        dbg("[ui_manager_v2] map_travel →", scene_id)
-        if scene_id then
-            close_phone(self)
-            scene_controller.enter(scene_id)
-        end
-
-    -- --- map ---
-    elseif message_id == hash("open_map") then
-        open_map(self)
-    elseif message_id == hash("close_map") then
-        close_map(self)
-    elseif message_id == hash("map_verb") then
-        dbg("[ui_manager_v2] map_verb", message.pin_id, message.verb)
-        handle_map_verb(self, message.pin_id, message.verb)
-    elseif message_id == hash("map_hub_route") then
-        dbg("[ui_manager_v2] map_hub_route", message and message.knot)
-        local knot = message and message.knot
-        close_map(self)
-        if knot then
-            run_side_dialogue_knot(self, knot, nil)
-        end
-
-    end
+    message_flow.handle(message_ctx(self), message_id, message, sender)
 end
 
 function on_input(self, action_id, action)

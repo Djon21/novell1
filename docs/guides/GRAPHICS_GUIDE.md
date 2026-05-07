@@ -6,7 +6,7 @@
 
 - исходные файлы: `main/images/bg_*.jpg`
 - по одному dedicated atlas на каждый фон в `main/images/backgrounds/`
-- регистрация в `main/gui/ui_manager_v2.script`
+- регистрация `go.property` в `main/gui/ui_manager_v2.script` и запись в `DEDICATED_BG_ATLAS_PROPS`
 - общий runtime animation id внутри dedicated atlas: `scene_bg`
 
 ### Правила
@@ -74,7 +74,7 @@
 
 ## 7. Практические правила
 
-- fullscreen фон → `main/images/backgrounds/<bg_name>.atlas` + регистрация в `ui_manager_v2`
+- fullscreen фон → `main/images/backgrounds/<bg_name>.atlas` + регистрация `go.property`/`DEDICATED_BG_ATLAS_PROPS` в `ui_manager_v2.script`
 - мелкий overlay-спрайт сцены → `main/images/scene_objects.atlas`
 - портрет персонажа → `main/images/v2.atlas`
 - иконка/декор UI → `main/images/ui_common.atlas` (или новый dedicated atlas)

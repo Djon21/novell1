@@ -35,129 +35,25 @@ textures {
   name: "icon_phone"
   texture: "/main/images/phone/icon_phone.atlas"
 }
-textures {
-  name: "map2"
-  texture: "/main/images/phone/map2.atlas"
-}
-textures {
-  name: "map_assets_cyberpunk_v2"
-  texture: "/main/images/phone/map_assets_cyberpunk_v2.atlas"
-}
 nodes {
   position {
-    z: 0.5
+    z: 0.500
   }
   size {
-    x: 1280.0
-    y: 720.0
+    x: 1280.000
+    y: 720.000
   }
   color {
-    x: 0.026
-    y: 0.02
-    z: 0.075
+    x: 0.02
+    y: 0.012
+    z: 0.102
   }
   type: TYPE_BOX
   id: "phone_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.5
-}
-nodes {
-  position {
-    x: 520.0
-    y: 672.0
-    z: 0.58
-  }
-  size {
-    x: 360.0
-    y: 14.0
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_TEXT
-  text: "AVOS PHONE LINK"
-  font: "jb_mono_10"
-  id: "title_eyebrow"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.74
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 520.0
-    y: 646.0
-    z: 0.58
-  }
-  size {
-    x: 520.0
-    y: 26.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "EXTENDED APP VIEW"
-  font: "unbounded_bold_20"
-  id: "title_main"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.94
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 1230.0
-    y: 664.0
-    z: 0.9
-  }
-  size {
-    x: 46.0
-    y: 46.0
-  }
-  color {
-    y: 0.239
-    z: 0.498
-  }
-  type: TYPE_TEXT
-  text: "\356\227\215"
-  font: "icons"
-  id: "close_btn"
-  adjust_mode: ADJUST_MODE_STRETCH
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 55.0
-    y: 64.0
-    z: 0.53
-  }
-  size {
-    x: 380.0
-    y: 592.0
-  }
-  color {
-    x: 0.03529412
-    y: 0.03137255
-    z: 0.10980392
-  }
-  type: TYPE_BOX
-  id: "phone_screen"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  slice9 {
-    x: 32.0
-    y: 32.0
-    z: 32.0
-    w: 32.0
-  }
+  alpha: 0.550
+  enabled: false
 }
 nodes {
   position {
@@ -174,65 +70,226 @@ nodes {
   id: "phone_case"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
+  enabled: false
 }
 nodes {
   position {
-    x: 82.0
-    y: 620.0
-    z: 0.58
+    x: 53.000
+    y: 62.000
+    z: 0.523
   }
   size {
-    x: 190.0
-    y: 12.0
+    x: 384.000
+    y: 596.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  texture: "icon_phone/rounded_base_256"
+  id: "phone_screen1"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  slice9 {
+    x: 32.000
+    y: 32.000
+    z: 32.000
+    w: 32.000
+  }
+  alpha: 0.220
+  enabled: false
+}
+nodes {
+  position {
+    x: 55.000
+    y: 64.000
+    z: 0.530
+  }
+  size {
+    x: 380.000
+    y: 592.000
+  }
+  color {
+    x: 0.039
+    y: 0.031
+    z: 0.145
+  }
+  type: TYPE_BOX
+  texture: "icon_phone/rounded_base_256"
+  id: "phone_screen"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  slice9 {
+    x: 32.000
+    y: 32.000
+    z: 32.000
+    w: 32.000
+  }
+  alpha: 0.960
+  enabled: false
+}
+nodes {
+  position {
+    x: 193.000
+    y: 626.000
+    z: 0.582
+  }
+  size {
+    x: 110.000
+    y: 22.000
+  }
+  color {
+    x: 0
+    y: 0
+    z: 0
+  }
+  type: TYPE_BOX
+  texture: "icon_phone/rounded_base_256"
+  id: "phone_notch"
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_STRETCH
+  slice9 {
+    x: 12.000
+    y: 12.000
+    z: 12.000
+    w: 12.000
+  }
+  alpha: 0.920
+  enabled: false
+}
+nodes {
+  position {
+    x: 441.000
+    y: 430.000
+    z: 0.521
+  }
+  size {
+    x: 5.000
+    y: 80.000
+  }
+  color {
+    x: 0.122
+    y: 0.145
+    z: 0.278
+  }
+  type: TYPE_BOX
+  id: "phone_side_btn"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.900
+  enabled: false
+}
+nodes {
+  position {
+    x: 74.000
+    y: 608.000
+    z: 0.581
+  }
+  size {
+    x: 344.000
+    y: 1.500
   }
   color {
     x: 0.953
     y: 0.925
     z: 0.851
   }
+  type: TYPE_BOX
+  id: "phone_case_top"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.100
+  enabled: false
+}
+nodes {
+  position {
+    x: 82.000
+    y: 620.000
+    z: 0.590
+  }
+  size {
+    x: 190.000
+    y: 12.000
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
   type: TYPE_TEXT
-  text: "messages: 0"
+  text: "сообщений: 0"
   font: "jb_mono_10"
   id: "stats_msg"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.82
+  alpha: 0.880
   outline_alpha: 0.0
   shadow_alpha: 0.0
+  enabled: false
 }
 nodes {
   position {
-    x: 406.0
-    y: 620.0
-    z: 0.56
+    x: 248.000
+    y: 620.000
+    z: 0.590
   }
   size {
-    x: 140.0
-    y: 12.0
+    x: 90.000
+    y: 12.000
   }
   color {
-    x: 0.282
-    y: 0.961
+    x: 0.788
+    y: 0.753
+    z: 0.659
   }
   type: TYPE_TEXT
-  text: "4G \302\267 73%"
+  text: "07:12"
+  font: "jb_mono_10"
+  id: "status_time"
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.820
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  enabled: false
+}
+nodes {
+  position {
+    x: 406.000
+    y: 620.000
+    z: 0.590
+  }
+  size {
+    x: 140.000
+    y: 12.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_TEXT
+  text: "4G · 73%"
   font: "jb_mono_10"
   id: "status_meta"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.95
+  alpha: 0.950
   outline_alpha: 0.0
   shadow_alpha: 0.0
+  enabled: false
 }
 nodes {
   position {
-    x: 248.0
-    y: 575.0
-    z: 0.56
+    x: 248.000
+    y: 575.000
+    z: 0.588
   }
   size {
-    x: 240.0
-    y: 40.0
+    x: 240.000
+    y: 40.000
   }
   color {
     x: 0.953
@@ -243,110 +300,64 @@ nodes {
   text: "07:12"
   font: "unbounded_bold_32"
   id: "wall_time"
+  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.960
   outline_alpha: 0.0
   shadow_alpha: 0.0
+  enabled: false
 }
 nodes {
   position {
-    x: 248.0
-    y: 540.0
-    z: 0.56
+    x: 248.000
+    y: 540.000
+    z: 0.588
   }
   size {
-    x: 260.0
-    y: 12.0
+    x: 260.000
+    y: 12.000
   }
   color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
+    x: 0.788
+    y: 0.753
+    z: 0.659
   }
   type: TYPE_TEXT
-  text: "\320\237\320\236\320\235\320\225\320\224\320\225\320\233\320\254\320\235\320\230\320\232 \302\267 23 \320\220\320\237\320\240\320\225\320\233\320\257"
+  text: "ПОНЕДЕЛЬНИК · 23 АПРЕЛЯ"
   font: "jb_mono_10"
   id: "wall_date"
+  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.58
+  alpha: 0.620
   outline_alpha: 0.0
   shadow_alpha: 0.0
+  enabled: false
 }
 nodes {
   position {
-    x: 248.0
-    y: 518.0
-    z: 0.56
+    x: 248.000
+    y: 518.000
+    z: 0.588
   }
   size {
-    x: 280.0
-    y: 12.0
+    x: 280.000
+    y: 12.000
   }
   color {
-    x: 0.784
-    y: 0.078
-    z: 0.165
+    x: 1.0
+    y: 0.239
+    z: 0.498
   }
   type: TYPE_TEXT
-  text: "\320\237\320\236\320\235\320\225\320\224\320\225\320\233\320\254\320\235\320\230\320\232 \302\267 \320\237\320\236\320\222\320\242\320\236\320\240 \302\267 017"
+  text: "ПОНЕДЕЛЬНИК · ПОВТОР · 017"
   font: "jb_mono_10"
   id: "wall_glitch"
+  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.920
   outline_alpha: 0.0
   shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 499.0
-    y: 39.0
-    z: 0.52
-  }
-  size {
-    x: 730.0
-    y: 577.0
-  }
-  color {
-    x: 0.49019608
-    y: 0.9764706
-  }
-  type: TYPE_BOX
-  texture: "icon_phone/rounded_base_256"
-  id: "side_panel1"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  slice9 {
-    x: 32.0
-    y: 32.0
-    z: 32.0
-    w: 32.0
-  }
-  alpha: 0.95
-}
-nodes {
-  position {
-    x: 500.0
-    y: 40.0
-    z: 0.52
-  }
-  size {
-    x: 728.0
-    y: 575.0
-  }
-  color {
-    x: 0.036
-    y: 0.03
-    z: 0.11
-  }
-  type: TYPE_BOX
-  texture: "icon_phone/rounded_base_256"
-  id: "side_panel"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  slice9 {
-    x: 32.0
-    y: 32.0
-    z: 32.0
-    w: 32.0
-  }
+  enabled: false
 }
 nodes {
   position {
@@ -372,6 +383,7 @@ nodes {
     z: 0.1
     w: 0.1
   }
+  enabled: false
 }
 nodes {
   position {
@@ -399,6 +411,7 @@ nodes {
     w: 0.1
   }
   alpha: 0.75
+  enabled: false
 }
 nodes {
   position {
@@ -418,6 +431,7 @@ nodes {
   texture: "icon_phone/icon_sms"
   id: "app1_icon"
   adjust_mode: ADJUST_MODE_STRETCH
+  enabled: false
 }
 nodes {
   position {
@@ -442,6 +456,7 @@ nodes {
   alpha: 0.82
   outline_alpha: 0.0
   shadow_alpha: 0.0
+  enabled: false
 }
 nodes {
   position {
@@ -467,6 +482,7 @@ nodes {
     z: 0.1
     w: 0.1
   }
+  enabled: false
 }
 nodes {
   position {
@@ -498,6 +514,7 @@ nodes {
     w: 0.1
   }
   alpha: 0.75
+  enabled: false
 }
 nodes {
   position {
@@ -517,6 +534,7 @@ nodes {
   texture: "icon_phone/icon_call"
   id: "app2_icon"
   adjust_mode: ADJUST_MODE_STRETCH
+  enabled: false
 }
 nodes {
   position {
@@ -541,6 +559,7 @@ nodes {
   alpha: 0.82
   outline_alpha: 0.0
   shadow_alpha: 0.0
+  enabled: false
 }
 nodes {
   position {
@@ -560,6 +579,7 @@ nodes {
   texture: "icon_phone/ico_fon"
   id: "app3_bg"
   adjust_mode: ADJUST_MODE_STRETCH
+  enabled: false
 }
 nodes {
   position {
@@ -585,6 +605,7 @@ nodes {
   id: "app3_bg1"
   adjust_mode: ADJUST_MODE_STRETCH
   alpha: 0.75
+  enabled: false
 }
 nodes {
   position {
@@ -604,6 +625,7 @@ nodes {
   texture: "icon_phone/icon_map"
   id: "app3_icon"
   adjust_mode: ADJUST_MODE_STRETCH
+  enabled: false
 }
 nodes {
   position {
@@ -628,6 +650,7 @@ nodes {
   alpha: 0.82
   outline_alpha: 0.0
   shadow_alpha: 0.0
+  enabled: false
 }
 nodes {
   position {
@@ -648,6 +671,7 @@ nodes {
   texture: "icon_phone/ico_fon"
   id: "app4_bg"
   adjust_mode: ADJUST_MODE_STRETCH
+  enabled: false
 }
 nodes {
   position {
@@ -673,6 +697,7 @@ nodes {
   id: "app4_bg1"
   adjust_mode: ADJUST_MODE_STRETCH
   alpha: 0.75
+  enabled: false
 }
 nodes {
   position {
@@ -693,6 +718,7 @@ nodes {
   texture: "icon_phone/icon_notes"
   id: "app4_icon"
   adjust_mode: ADJUST_MODE_STRETCH
+  enabled: false
 }
 nodes {
   position {
@@ -717,6 +743,7 @@ nodes {
   alpha: 0.82
   outline_alpha: 0.0
   shadow_alpha: 0.0
+  enabled: false
 }
 nodes {
   position {
@@ -736,6 +763,7 @@ nodes {
   texture: "icon_phone/ico_fon"
   id: "app5_bg"
   adjust_mode: ADJUST_MODE_STRETCH
+  enabled: false
 }
 nodes {
   position {
@@ -761,6 +789,7 @@ nodes {
   id: "app5_bg1"
   adjust_mode: ADJUST_MODE_STRETCH
   alpha: 0.75
+  enabled: false
 }
 nodes {
   position {
@@ -780,6 +809,7 @@ nodes {
   texture: "icon_phone/icon_quests"
   id: "app5_icon"
   adjust_mode: ADJUST_MODE_STRETCH
+  enabled: false
 }
 nodes {
   position {
@@ -804,6 +834,7 @@ nodes {
   alpha: 0.82
   outline_alpha: 0.0
   shadow_alpha: 0.0
+  enabled: false
 }
 nodes {
   position {
@@ -824,6 +855,7 @@ nodes {
   id: "app6_bg"
   adjust_mode: ADJUST_MODE_STRETCH
   alpha: 0.75
+  enabled: false
 }
 nodes {
   position {
@@ -849,6 +881,7 @@ nodes {
   id: "app6_bg1"
   adjust_mode: ADJUST_MODE_STRETCH
   alpha: 0.75
+  enabled: false
 }
 nodes {
   position {
@@ -868,6 +901,7 @@ nodes {
   texture: "icon_phone/icon_mail"
   id: "app6_icon"
   adjust_mode: ADJUST_MODE_STRETCH
+  enabled: false
 }
 nodes {
   position {
@@ -892,6 +926,7 @@ nodes {
   alpha: 0.82
   outline_alpha: 0.0
   shadow_alpha: 0.0
+  enabled: false
 }
 nodes {
   position {
@@ -912,6 +947,7 @@ nodes {
   id: "app7_bg"
   adjust_mode: ADJUST_MODE_STRETCH
   alpha: 0.75
+  enabled: false
 }
 nodes {
   position {
@@ -937,6 +973,7 @@ nodes {
   id: "app7_bg1"
   adjust_mode: ADJUST_MODE_STRETCH
   alpha: 0.75
+  enabled: false
 }
 nodes {
   position {
@@ -956,6 +993,7 @@ nodes {
   texture: "icon_phone/icon_camera"
   id: "app7_icon"
   adjust_mode: ADJUST_MODE_STRETCH
+  enabled: false
 }
 nodes {
   position {
@@ -980,6 +1018,7 @@ nodes {
   alpha: 0.82
   outline_alpha: 0.0
   shadow_alpha: 0.0
+  enabled: false
 }
 nodes {
   position {
@@ -1000,6 +1039,7 @@ nodes {
   id: "app8_bg"
   adjust_mode: ADJUST_MODE_STRETCH
   alpha: 0.75
+  enabled: false
 }
 nodes {
   position {
@@ -1025,6 +1065,7 @@ nodes {
   id: "app8_bg1"
   adjust_mode: ADJUST_MODE_STRETCH
   alpha: 0.75
+  enabled: false
 }
 nodes {
   position {
@@ -1044,6 +1085,7 @@ nodes {
   texture: "icon_phone/icon_terminal"
   id: "app8_icon"
   adjust_mode: ADJUST_MODE_STRETCH
+  enabled: false
 }
 nodes {
   position {
@@ -1068,5 +1110,1224 @@ nodes {
   alpha: 0.82
   outline_alpha: 0.0
   shadow_alpha: 0.0
+  enabled: false
+}
+nodes {
+  position {
+    x: 148.000
+    y: 395.000
+    z: 0.585
+  }
+  size {
+    x: 18.000
+    y: 18.000
+  }
+  color {
+    x: 1.0
+    y: 0.239
+    z: 0.498
+  }
+  type: TYPE_BOX
+  texture: "icon_phone/ico_fon"
+  id: "app1_badge_bg"
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_STRETCH
+  slice9 {
+    x: 0.100
+    y: 0.100
+    z: 0.100
+    w: 0.100
+  }
+  alpha: 0.980
+  enabled: false
+}
+nodes {
+  position {
+    x: 148.000
+    y: 395.000
+    z: 0.590
+  }
+  size {
+    x: 18.000
+    y: 11.000
+  }
+  color {
+    x: 0.102
+    y: 0.024
+    z: 0.063
+  }
+  type: TYPE_TEXT
+  text: "0"
+  font: "jb_mono_10"
+  id: "app1_badge_text"
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 1.000
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  enabled: false
+}
+nodes {
+  position {
+    x: 198.000
+    y: 72.000
+    z: 0.590
+  }
+  size {
+    x: 100.000
+    y: 4.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "home_indicator"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.350
+  enabled: false
+}
+nodes {
+  position {
+    x: 188.000
+    y: 58.000
+    z: 0.589
+  }
+  size {
+    x: 120.000
+    y: 28.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "home_btn"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.001
+  enabled: false
+}
+nodes {
+  position {
+    x: 499.000
+    y: 39.000
+    z: 0.520
+  }
+  size {
+    x: 730.000
+    y: 642.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  texture: "icon_phone/rounded_base_256"
+  id: "side_panel1"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  slice9 {
+    x: 32.000
+    y: 32.000
+    z: 32.000
+    w: 32.000
+  }
+  alpha: 0.400
+  enabled: false
+}
+nodes {
+  position {
+    x: 500.000
+    y: 40.000
+    z: 0.521
+  }
+  size {
+    x: 728.000
+    y: 640.000
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "side_panel"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.850
+  enabled: false
+}
+nodes {
+  position {
+    x: 540.000
+    y: 40.000
+    z: 0.521
+  }
+  size {
+    x: 1.000
+    y: 604.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "app_slot_vline_1"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.040
+  enabled: false
+}
+nodes {
+  position {
+    x: 580.000
+    y: 40.000
+    z: 0.521
+  }
+  size {
+    x: 1.000
+    y: 604.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "app_slot_vline_2"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.040
+  enabled: false
+}
+nodes {
+  position {
+    x: 620.000
+    y: 40.000
+    z: 0.521
+  }
+  size {
+    x: 1.000
+    y: 604.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "app_slot_vline_3"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.040
+  enabled: false
+}
+nodes {
+  position {
+    x: 660.000
+    y: 40.000
+    z: 0.521
+  }
+  size {
+    x: 1.000
+    y: 604.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "app_slot_vline_4"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.040
+  enabled: false
+}
+nodes {
+  position {
+    x: 700.000
+    y: 40.000
+    z: 0.521
+  }
+  size {
+    x: 1.000
+    y: 604.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "app_slot_vline_5"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.040
+  enabled: false
+}
+nodes {
+  position {
+    x: 740.000
+    y: 40.000
+    z: 0.521
+  }
+  size {
+    x: 1.000
+    y: 604.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "app_slot_vline_6"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.040
+  enabled: false
+}
+nodes {
+  position {
+    x: 780.000
+    y: 40.000
+    z: 0.521
+  }
+  size {
+    x: 1.000
+    y: 604.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "app_slot_vline_7"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.040
+  enabled: false
+}
+nodes {
+  position {
+    x: 820.000
+    y: 40.000
+    z: 0.521
+  }
+  size {
+    x: 1.000
+    y: 604.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "app_slot_vline_8"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.040
+  enabled: false
+}
+nodes {
+  position {
+    x: 860.000
+    y: 40.000
+    z: 0.521
+  }
+  size {
+    x: 1.000
+    y: 604.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "app_slot_vline_9"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.040
+  enabled: false
+}
+nodes {
+  position {
+    x: 900.000
+    y: 40.000
+    z: 0.521
+  }
+  size {
+    x: 1.000
+    y: 604.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "app_slot_vline_10"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.040
+  enabled: false
+}
+nodes {
+  position {
+    x: 940.000
+    y: 40.000
+    z: 0.521
+  }
+  size {
+    x: 1.000
+    y: 604.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "app_slot_vline_11"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.040
+  enabled: false
+}
+nodes {
+  position {
+    x: 980.000
+    y: 40.000
+    z: 0.521
+  }
+  size {
+    x: 1.000
+    y: 604.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "app_slot_vline_12"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.040
+  enabled: false
+}
+nodes {
+  position {
+    x: 1020.000
+    y: 40.000
+    z: 0.521
+  }
+  size {
+    x: 1.000
+    y: 604.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "app_slot_vline_13"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.040
+  enabled: false
+}
+nodes {
+  position {
+    x: 1060.000
+    y: 40.000
+    z: 0.521
+  }
+  size {
+    x: 1.000
+    y: 604.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "app_slot_vline_14"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.040
+  enabled: false
+}
+nodes {
+  position {
+    x: 1100.000
+    y: 40.000
+    z: 0.521
+  }
+  size {
+    x: 1.000
+    y: 604.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "app_slot_vline_15"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.040
+  enabled: false
+}
+nodes {
+  position {
+    x: 1140.000
+    y: 40.000
+    z: 0.521
+  }
+  size {
+    x: 1.000
+    y: 604.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "app_slot_vline_16"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.040
+  enabled: false
+}
+nodes {
+  position {
+    x: 1180.000
+    y: 40.000
+    z: 0.521
+  }
+  size {
+    x: 1.000
+    y: 604.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "app_slot_vline_17"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.040
+  enabled: false
+}
+nodes {
+  position {
+    x: 500.000
+    y: 80.000
+    z: 0.521
+  }
+  size {
+    x: 728.000
+    y: 1.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "app_slot_hline_1"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.040
+  enabled: false
+}
+nodes {
+  position {
+    x: 500.000
+    y: 120.000
+    z: 0.521
+  }
+  size {
+    x: 728.000
+    y: 1.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "app_slot_hline_2"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.040
+  enabled: false
+}
+nodes {
+  position {
+    x: 500.000
+    y: 160.000
+    z: 0.521
+  }
+  size {
+    x: 728.000
+    y: 1.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "app_slot_hline_3"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.040
+  enabled: false
+}
+nodes {
+  position {
+    x: 500.000
+    y: 200.000
+    z: 0.521
+  }
+  size {
+    x: 728.000
+    y: 1.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "app_slot_hline_4"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.040
+  enabled: false
+}
+nodes {
+  position {
+    x: 500.000
+    y: 240.000
+    z: 0.521
+  }
+  size {
+    x: 728.000
+    y: 1.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "app_slot_hline_5"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.040
+  enabled: false
+}
+nodes {
+  position {
+    x: 500.000
+    y: 280.000
+    z: 0.521
+  }
+  size {
+    x: 728.000
+    y: 1.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "app_slot_hline_6"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.040
+  enabled: false
+}
+nodes {
+  position {
+    x: 500.000
+    y: 320.000
+    z: 0.521
+  }
+  size {
+    x: 728.000
+    y: 1.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "app_slot_hline_7"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.040
+  enabled: false
+}
+nodes {
+  position {
+    x: 500.000
+    y: 360.000
+    z: 0.521
+  }
+  size {
+    x: 728.000
+    y: 1.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "app_slot_hline_8"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.040
+  enabled: false
+}
+nodes {
+  position {
+    x: 500.000
+    y: 400.000
+    z: 0.521
+  }
+  size {
+    x: 728.000
+    y: 1.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "app_slot_hline_9"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.040
+  enabled: false
+}
+nodes {
+  position {
+    x: 500.000
+    y: 440.000
+    z: 0.521
+  }
+  size {
+    x: 728.000
+    y: 1.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "app_slot_hline_10"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.040
+  enabled: false
+}
+nodes {
+  position {
+    x: 500.000
+    y: 480.000
+    z: 0.521
+  }
+  size {
+    x: 728.000
+    y: 1.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "app_slot_hline_11"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.040
+  enabled: false
+}
+nodes {
+  position {
+    x: 500.000
+    y: 520.000
+    z: 0.521
+  }
+  size {
+    x: 728.000
+    y: 1.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "app_slot_hline_12"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.040
+  enabled: false
+}
+nodes {
+  position {
+    x: 500.000
+    y: 560.000
+    z: 0.521
+  }
+  size {
+    x: 728.000
+    y: 1.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "app_slot_hline_13"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.040
+  enabled: false
+}
+nodes {
+  position {
+    x: 500.000
+    y: 600.000
+    z: 0.521
+  }
+  size {
+    x: 728.000
+    y: 1.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "app_slot_hline_14"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.040
+  enabled: false
+}
+nodes {
+  position {
+    x: 499.000
+    y: 663.000
+    z: 0.586
+  }
+  size {
+    x: 2.000
+    y: 18.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "corner_tl_v"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 1.000
+  enabled: false
+}
+nodes {
+  position {
+    x: 499.000
+    y: 679.000
+    z: 0.586
+  }
+  size {
+    x: 18.000
+    y: 2.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "corner_tl_h"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 1.000
+  enabled: false
+}
+nodes {
+  position {
+    x: 1227.000
+    y: 663.000
+    z: 0.586
+  }
+  size {
+    x: 2.000
+    y: 18.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "corner_tr_v"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 1.000
+  enabled: false
+}
+nodes {
+  position {
+    x: 1211.000
+    y: 679.000
+    z: 0.586
+  }
+  size {
+    x: 18.000
+    y: 2.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "corner_tr_h"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 1.000
+  enabled: false
+}
+nodes {
+  position {
+    x: 499.000
+    y: 39.000
+    z: 0.586
+  }
+  size {
+    x: 2.000
+    y: 18.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "corner_bl_v"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 1.000
+  enabled: false
+}
+nodes {
+  position {
+    x: 499.000
+    y: 39.000
+    z: 0.586
+  }
+  size {
+    x: 18.000
+    y: 2.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "corner_bl_h"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 1.000
+  enabled: false
+}
+nodes {
+  position {
+    x: 1227.000
+    y: 39.000
+    z: 0.586
+  }
+  size {
+    x: 2.000
+    y: 18.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "corner_br_v"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 1.000
+  enabled: false
+}
+nodes {
+  position {
+    x: 1211.000
+    y: 39.000
+    z: 0.586
+  }
+  size {
+    x: 18.000
+    y: 2.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "corner_br_h"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 1.000
+  enabled: false
+}
+nodes {
+  position {
+    x: 500.000
+    y: 644.000
+    z: 0.587
+  }
+  size {
+    x: 728.000
+    y: 1.000
+  }
+  color {
+    x: 0.49
+    y: 0.976
+    z: 1.0
+  }
+  type: TYPE_BOX
+  id: "head_divider"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.250
+  enabled: false
+}
+nodes {
+  position {
+    x: 514.000
+    y: 662.000
+    z: 0.590
+  }
+  size {
+    x: 160.000
+    y: 12.000
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "AVOS PHONE LINK"
+  font: "jb_mono_10"
+  id: "title_eyebrow"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.780
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  enabled: false
+}
+nodes {
+  position {
+    x: 682.000
+    y: 662.000
+    z: 0.590
+  }
+  size {
+    x: 320.000
+    y: 18.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "СООБЩЕНИЯ"
+  font: "jb_mono_bold_14"
+  id: "title_main"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.960
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  enabled: false
+}
+nodes {
+  position {
+    x: 1190.000
+    y: 649.000
+    z: 0.590
+  }
+  size {
+    x: 26.000
+    y: 26.000
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "close_btn"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.650
+  enabled: false
+}
+nodes {
+  position {
+    x: 1190.000
+    y: 674.000
+    z: 0.591
+  }
+  size {
+    x: 26.000
+    y: 1.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "close_btn_border_t"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.300
+  enabled: false
+}
+nodes {
+  position {
+    x: 1190.000
+    y: 649.000
+    z: 0.591
+  }
+  size {
+    x: 26.000
+    y: 1.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "close_btn_border_b"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.300
+  enabled: false
+}
+nodes {
+  position {
+    x: 1190.000
+    y: 649.000
+    z: 0.591
+  }
+  size {
+    x: 1.000
+    y: 26.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "close_btn_border_l"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.300
+  enabled: false
+}
+nodes {
+  position {
+    x: 1215.000
+    y: 649.000
+    z: 0.591
+  }
+  size {
+    x: 1.000
+    y: 26.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "close_btn_border_r"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.300
+  enabled: false
+}
+nodes {
+  position {
+    x: 1203.000
+    y: 662.000
+    z: 0.594
+  }
+  size {
+    x: 26.000
+    y: 18.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "×"
+  font: "jb_mono_bold_14"
+  id: "close_x"
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.950
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  enabled: false
 }
 material: "/builtins/materials/gui.material"

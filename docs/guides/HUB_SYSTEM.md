@@ -1,255 +1,233 @@
-# Система хабов — локации на карте телефона
+# Система хабов и POI-карты
 
-Хаб — это point-and-click локация, доступная через карту телефона (phone_map).
-Игрок нажимает на POI-маркер → подтверждает переход → телефон закрывается → открывается хаб.
+Хаб — это point-and-click сцена из `main/scripts/scenes.lua`, в которую игрок попадает через карту телефона. Карта сама не содержит сценарий: она только выбирает `scene_id`, закрывает телефон и передаёт управление `scene_controller`.
 
 ---
 
-## Как это работает (архитектура)
+## 1. Runtime-flow
 
-```
-Игрок кликает на POI
-        ↓
+```text
 phone_map.gui_script
-  показывает диалог "ПЕРЕЙТИ? [ДА] [НЕТ]"
-        ↓ ДА
-  msg.post(ui_manager, "map_travel", { scene = "cafe_hub" })
-        ↓
-ui_manager_v2.script
-  close_phone()
-  scene_controller.enter("cafe_hub")
-        ↓
-scene_controller.lua
-  читает scenes.lua → рендерит фон + hotspot'ы
+  → msg.post(ui_manager, "map_travel", { scene = "cafe_hub" })
+  → message_flow.lua closes phone
+  → scene_controller.enter("cafe_hub")
+  → scenes.lua: M.scenes.cafe_hub
+  → фон + hotspots
 ```
 
----
+Source of truth:
 
-## Быстрый старт: добавить новый хаб
-
-### Шаг 1 — Фон
-
-1. Подготовь PNG-картинку фона (1280×720 или любое соотношение, движок растянет)
-2. Положи в `main/images/backgrounds/`
-3. В Defold: правой кнопкой на папку → **New → Atlas**, назови `bg_НАЗВАНИЕ.atlas`
-4. Добавь PNG в атлас (правой кнопкой → **Add Images**)
-
-Имя атласа (без `.atlas`) — это значение поля `bg` в scenes.lua.
+| Что | Где |
+|---|---|
+| POI на карте и связанный `scene_id` | `phone_map.gui_script`, таблица `POI_SCENES` |
+| Сцена, фон, hotspot'ы, `on_enter`, `npc` | `main/scripts/scenes.lua` |
+| Ink-реакции hotspot'ов | `main/story/chapters/*.ink` |
+| Правила добавления фонов | `HOW_TO_ADD_SCENES.md` |
+| Внешний вид hotspot'ов | `HOTSPOT_VISUALS.md` |
 
 ---
 
-### Шаг 2 — Сцена в `scenes.lua`
+## 2. Добавить или изменить хаб
 
-Открой `main/scripts/scenes.lua`, найди нужный хаб-стаб (уже созданы для всех POI) и замени поля:
+### Шаг 1. Зарегистрировать фон
+
+Фоны регистрируются не в этом документе. Используй `HOW_TO_ADD_SCENES.md`, раздел «Добавить fullscreen-фон».
+
+Коротко: `bg_*` должен пройти всю цепочку:
+
+```text
+main/images/bg_name.jpg или .png
+→ main/images/backgrounds/bg_name.atlas
+→ rename_patterns: "bg_name=scene_bg"
+→ go.property("bg_name_atlas", ...)
+→ DEDICATED_BG_ATLAS_PROPS.bg_name
+→ scenes.lua: bg = "bg_name"
+```
+
+Если хотя бы одного шага нет, фон может стать чёрным.
+
+### Шаг 2. Проверить POI
+
+В `phone_map.gui_script` должен быть POI, который ведёт в нужный `scene_id`:
+
+```lua
+poi_cafe = { scene = "cafe_hub", label = "Кафе" }
+```
+
+`label` — текст в подтверждении перехода. `scene` — ключ в `M.scenes`.
+
+### Шаг 3. Описать сцену в `scenes.lua`
 
 ```lua
 cafe_hub = {
-    bg = "bg_cafe",          -- имя атласа без .atlas
+    bg = "bg_cafe_morning",
+    label = "Кафе",
+    npc = "npc", -- если в сцене разрешён inventory verb=give
 
-    -- Необязательно: ink-монолог при первом визите
     on_enter = {
-        knot = "enter_cafe_first",
+        knot = "sunday_date_cafe_arrival",
         condition = function(gs)
-            return not gs.get_flag("cafe_intro_seen")
+            return gs.get_flag("date_place_cafe")
+               and not gs.get_flag("met_npc_sunday")
         end,
     },
 
     hotspots = {
         {
-            id     = "cafe_barista",
-            rect   = { x = 400, y = 200, w = 300, h = 400 },
-            label  = "Бариста",
-            icon   = "",
-            action = { type = "ink_knot", knot = "talk_to_barista" },
+            id = "cafe_window_table",
+            rect = { x = 680, y = 170, w = 300, h = 270 },
+            label = "Столик у окна",
+            icon = "left_click",
+            action = { type = "ink_knot", knot = "cafe_window_table" },
         },
         {
-            id     = "cafe_exit",
-            rect   = { x = 0, y = 0, w = 150, h = 200 },
-            label  = "Выйти",
-            icon   = "",
+            id = "leave_cafe",
+            rect = { x = 0, y = 0, w = 170, h = 220 },
+            label = "Выйти",
+            icon = "arrow_back",
             action = { type = "ink_knot", knot = "leave_cafe" },
         },
     },
-},
-```
-
----
-
-### Шаг 3 — Проверь POI_SCENES в phone_map.gui_script
-
-Файл `main/gui/components_v2/phone_map.gui_script`, таблица `POI_SCENES` уже содержит все 8 POI:
-
-```lua
-local POI_SCENES = {
-    poi_home    = { scene = "apartment_hub", label = "Домой"       },
-    poi_work    = { scene = "work_hub",      label = "На работу"   },
-    poi_cafe    = { scene = "cafe_hub",      label = "Кафе"        },
-    poi_park    = { scene = "park_hub",      label = "Парк у реки" },
-    poi_shop    = { scene = "shop_hub",      label = "Магазин 24/7"},
-    poi_bar     = { scene = "bar_hub",       label = "Бар Maybe"   },
-    poi_view    = { scene = "view_hub",      label = "Смотровая"   },
-    poi_archive = { scene = "archive_hub",   label = "Архив"       },
 }
 ```
 
-`label` — строка, которая отображается в диалоге подтверждения.
-Менять нужно только если хочешь другое имя в диалоге.
+### Шаг 4. Написать Ink-knot'ы
+
+Каждый `action = { type = "ink_knot", knot = "..." }` обязан иметь `=== ... ===` в подключённом `.ink`.
+
+```ink
+=== leave_cafe ===
+# speaker:none
+Пора идти.
+# return_to_scene
+-> DONE
+```
 
 ---
 
-## Справочник: поля сцены в `scenes.lua`
-
-### Корень сцены
+## 3. Поля сцены
 
 | Поле | Тип | Обязательно | Описание |
-|------|-----|-------------|----------|
-| `bg` | string | ✅ | Имя атласа фона (`"bg_cafe"`) |
-| `hotspots` | table | ✅ | Массив интерактивных зон |
-| `on_enter` | table | ❌ | Монолог при входе |
-| `objects` | table | ❌ | Спрайты поверх фона (предметы) |
+|---|---|---:|---|
+| `bg` | `string` или `function(gs)->string` | да | Имя зарегистрированного фона или функция, возвращающая имя фона. |
+| `label` | `string` | нет | Читаемое имя сцены. |
+| `hotspots` | `table` | да | Интерактивные зоны. |
+| `on_enter` | `table` | нет | Автомонолог при входе. |
+| `objects` | `table` | нет | Спрайты поверх фона. |
+| `npc` | `string` | нет | Цель для inventory verb `give`. |
 
-### `on_enter`
+---
+
+## 4. Universal hubs
+
+Universal hub используется, когда локация та же, hotspot'ы в основном общие, а меняется только фон по времени суток или сюжетному состоянию.
+
+Пример: квартира.
 
 ```lua
-on_enter = {
-    knot = "enter_cafe_first",           -- ink-knot для запуска
-    condition = function(gs)             -- если false — не запускать
-        return not gs.get_flag("cafe_intro_seen")
-    end,
-},
+local function is_apartment_night(gs)
+    return gs.get_flag("sunday_evening_started")
+       and not gs.get_flag("sunday_finished")
+end
+
+local function apartment_bg(room)
+    return function(gs)
+        if is_apartment_night(gs) then
+            return "bg_apartment_" .. room .. "_night"
+        end
+        return "bg_apartment_" .. room .. "_morning"
+    end
+end
+
+apartment_hub = {
+    bg = apartment_bg("hall"),
+    label = "Коридор",
+    hotspots = { ... },
+}
 ```
 
-Не забудь в ink-скрипте выставить флаг, иначе монолог будет играть каждый раз:
-```ink
-=== enter_cafe_first ===
-# set_flag:cafe_intro_seen=true
-Первый раз здесь. Пахнет кофе.
-# return_to_scene
-->DONE
-```
+Правила:
 
-### Hotspot
+- `bg`-функция должна возвращать только зарегистрированные `bg_*`.
+- Если меняется только фон — используй universal hub.
+- Если меняется порядок маршрута, набор обязательных действий или флаги дня — используй отдельный `scene_id`.
+- Hotspot'ы по состояниям гейтятся через `visible_when` или `condition`.
+- `scene_controller.get_current_bg()` возвращает уже разрешённый фон, поэтому side-knot'ы открываются на правильном фоне.
+
+---
+
+## 5. Hotspot: поля и действия
 
 ```lua
 {
-    id     = "уникальный_id",
-    rect   = { x = 400, y = 200, w = 300, h = 400 },
-    label  = "Подпись при наведении",
-    icon   = "",          -- иконка (юникод из icons.font) или "" без иконки
-    action = { ... },
+    id = "уникальный_id",
+    rect = { x = 400, y = 200, w = 300, h = 400 },
+    label = "Подпись",
+    icon = "left_click",
+    hotspot_style = STYLE_NEUTRAL,
+    action = { type = "ink_knot", knot = "talk_to_barista" },
 
-    -- Необязательные условия:
-    condition    = function(gs) return gs.get_flag("door_unlocked") end,
-    --   condition = false  → hotspot виден, но некликабельный (тусклый)
+    visible_when = function(gs)
+        return not gs.get_flag("item_taken")
+    end,
 
-    visible_when = function(gs) return not gs.get_flag("item_taken") end,
-    --   visible_when = false → hotspot полностью скрыт
+    condition = function(gs)
+        return gs.get_flag("door_unlocked")
+    end,
 }
 ```
 
-### Типы `action`
+| Поле | Поведение |
+|---|---|
+| `visible_when=false` | Hotspot полностью скрыт. Используй для взаимоисключающих состояний. |
+| `condition=false` | Hotspot виден, но locked/тусклый и не кликается. Используй для обучения и закрытых действий. |
 
-| type | дополнительные поля | что делает |
-|------|---------------------|-----------|
-| `"goto_scene"` | `scene = "kitchen"` | переход в другую сцену без диалога |
-| `"ink_knot"` | `knot = "talk_barista"` | запускает ink-монолог, потом возвращает в хаб |
-| `"set_flag"` | `flag = "door_open"`, `value = true` | просто ставит флаг |
-| `"add_item"` | `item = "key"` | добавить предмет в инвентарь |
+`action.type`:
 
----
-
-## Координаты hotspot'ов (`rect`)
-
-Система координат: **1280×720**, начало — **левый-нижний угол** экрана.
-
-```
-rect = { x = 400, y = 200, w = 300, h = 400 }
-          ^левый-нижний       ^ширина  ^высота
-```
-
-### Быстрый способ выставить координаты
-
-1. Запусти игру и перейди в хаб
-2. Нажми **F1** — откроется визуальный редактор хотспотов
-3. Выбирай хотспоты стрелками, двигай мышкой, меняй размер `[` `]`
-4. Когда доволен — нажми **P**: в консоль напечатаются готовые числа для `rect`
-5. Скопируй в `scenes.lua`
+| type | Поля | Что делает |
+|---|---|---|
+| `goto_scene` | `scene` | Переход в другую point-and-click сцену. |
+| `ink_knot` | `knot` | Короткий Ink-монолог, потом `# return_to_scene`. |
+| `set_flag` | `flag`, `value` | Поставить флаг в `game_state`. |
+| `add_item` | `item` | Добавить предмет в инвентарь. |
 
 ---
 
-## Ink-интеграция: теги для хабов
+## 6. Карта и POI lock
 
-После диалога в хабе нужно вернуть игрока обратно в хаб (не на стартовый экран):
+Карта может быть ограничена через Ink-теги:
 
 ```ink
-=== talk_to_barista ===
-# speaker:mila
-Мне капучино, пожалуйста.
-# speaker:none
-Бариста кивнул. Через минуту — чашка на стойке.
-# set_flag:cafe_visited=true
-# return_to_scene
-->DONE
+# map:lock_to:poi_cafe   // разрешён только cafe
+# map:allow:poi_park     // добавить park в allow-set
+# map:allow:reset        // очистить allow-set: снова доступны все POI
 ```
 
-`# return_to_scene` — ключевой тег. Без него игрок застрянет в dialogue-режиме.
-
-### Из хаба в другой хаб
-
-Используй `goto_scene`:
-```lua
-action = { type = "goto_scene", scene = "apartment_hub" }
-```
-Переход мгновенный, без диалога.
-
-### Открыть карту телефона из Ink
-
-Телефон не является exploration-сценой. Если после текста нужно открыть карту и дать игроку выбрать, куда идти, используй `# phone:map`.
-
-```ink
-=== leave_apartment ===
-# speaker:none
-Ты выходишь на улицу и достаёшь телефон.
-# phone:map
-->DONE
-```
-
-`# phone:map` открывает телефон сразу на приложении `phone_map.gui`. После выбора POI телефон закрывается, а `ui_manager_v2` открывает нужный hub.
-
-Новый контент не должен открывать телефон как отдельную scene.
+Важно: если allow-set пустой, runtime считает, что доступны все POI. Future-хабы (`bar_hub`, `archive_hub` и т.п.) нельзя открывать игроку, пока у их hotspot'ов нет рабочих Ink-knot'ов. Для линейного маршрута лучше использовать `map:lock_to` или scripted commute без карты.
 
 ---
 
-## Уже готовые хабы
+## 7. Текущие POI-хабы
 
-| POI на карте | scene_id | bg (нужно создать) |
-|-------------|----------|--------------------|
-| 🏠 Дом | `apartment_hub` | `bg_apartment_bedroom_morning` ✅ уже есть |
-| 💼 Работа | `work_hub` | `bg_work` — создать |
-| ☕ Кафе | `cafe_hub` | `bg_cafe` — создать |
-| 🌿 Парк | `park_hub` | `bg_park` — создать |
-| 🛒 Магазин | `shop_hub` | `bg_shop` — создать |
-| 🍸 Бар | `bar_hub` | `bg_bar` — создать |
-| 👁 Смотровая | `view_hub` | `bg_viewpoint` — создать |
-| 📁 Архив | `archive_hub` | `bg_archive` — создать |
-
-Стабы для всех хабов уже есть в `scenes.lua` — осталось только заменить фоны и настроить hotspot'ы.
+| POI | scene_id | Статус |
+|---|---|---|
+| Дом | `apartment_hub` | Рабочий universal hub квартиры. |
+| Работа | `work_hub` | Рабочий офисный entrypoint. |
+| Кафе | `cafe_hub` | Воскресная встреча. |
+| Парк | `park_hub` | Альтернативная воскресная встреча. |
+| Магазин | `shop_hub` | Future / по маршруту после встречи. |
+| Бар | `bar_hub` | Future, не открывать без готовых knot'ов. |
+| Смотровая | `view_hub` | Вторник / крыша-слой. |
+| Архив | `archive_hub` | Future, не открывать без готовых knot'ов. |
 
 ---
 
-## Диалог подтверждения перехода
+## 8. Чеклист хаба
 
-При клике на POI появляется панель:
-
-```
-┌────────────────────────┐
-│      ПЕРЕЙТИ?          │
-│      Кафе              │
-│   [ ДА ]    [ НЕТ ]   │
-└────────────────────────┘
-```
-
-- **ДА** — телефон закрывается, открывается хаб
-- **НЕТ** или клик мимо кнопок — диалог закрывается, карта остаётся
-
-Текст "Кафе" берётся из поля `label` таблицы `POI_SCENES` в `phone_map.gui_script`.
+- [ ] `scene_id` есть в `phone_map.gui_script → POI_SCENES`.
+- [ ] `scene_id` есть в `scenes.lua → M.scenes`.
+- [ ] Все `bg_*`, которые возвращает сцена, зарегистрированы в `ui_manager_v2.script` (`go.property` + `DEDICATED_BG_ATLAS_PROPS`).
+- [ ] Все `ink_knot` из hotspot'ов существуют в подключённых `.ink`.
+- [ ] Каждый `on_enter.condition` гасится флагом внутри соответствующего knot'а.
+- [ ] В `ink_knot` из хаба последним тегом стоит `# return_to_scene`.
+- [ ] Future POI закрыты через map allow-set или ещё не доступны игроку.

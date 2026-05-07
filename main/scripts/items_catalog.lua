@@ -31,6 +31,8 @@ local ICON_USB     = string.char(0xEE, 0x87, 0xA0)
 local ICON_CIG     = string.char(0xEE, 0x9F, 0xB5)
 -- деньги (payments) U+EF63 -> EE BD A3
 local ICON_CASH    = string.char(0xEE, 0xBD, 0xA3)
+-- папка (folder) U+E2C7 -> EE 8B 87
+local ICON_FOLDER  = string.char(0xEE, 0x8B, 0x87)
 
 M.items = {
     mug = {
@@ -140,6 +142,45 @@ M.items = {
         verbs  = { "use", "give" },
         icon   = ICON_CASH,
         qty    = 1200,
+    },
+
+    report_page = {
+        name   = "Распечатка кейса",
+        type   = "документ",
+        source = "рабочий стол",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Лист с кратким описанием кейса. Поля заполнены неровно, часть подтверждений отсутствует.",
+        description = "Распечатка рабочего кейса с неполными входными данными.",
+        verbs  = { "inspect", "read", "combine" },
+        icon   = ICON_NOTE,
+        qty    = 1,
+    },
+
+    folder = {
+        name   = "Папка",
+        type   = "документ",
+        source = "переговорка",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Плотная офисная папка для кейсов. Внутри только разделители и слишком аккуратные стикеры.",
+        description = "Пустая папка для сборки рабочего кейса.",
+        verbs  = { "inspect", "combine" },
+        icon   = ICON_FOLDER,
+        qty    = 1,
+    },
+
+    case_file = {
+        name   = "Папка по кейсу",
+        type   = "ключ",
+        source = "офис",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Собранный кейс: распечатка, разделитель, место для решения. Выглядит готово — хотя данных всё ещё мало.",
+        description = "Собранная папка по рабочему кейсу.",
+        verbs  = { "inspect", "read", "use", "give" },
+        icon   = ICON_FOLDER,
+        qty    = 1,
     },
 }
 

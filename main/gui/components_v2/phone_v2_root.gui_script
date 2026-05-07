@@ -35,29 +35,47 @@ local APP_COMPONENT = {
 local EXTERNAL_APPS = {
 }
 
+local APP_TITLES = {
+    sms    = "СООБЩЕНИЯ",
+    call   = "ЗВОНКИ",
+    map    = "КАРТА",
+    notes  = "УЛИКИ",
+    quests = "КВЕСТЫ",
+    mail   = "ПОЧТА",
+    cam    = "КАМЕРА",
+    term   = "ТЕРМИНАЛ",
+}
+
+
 local CHROME_NODES = {
-    "phone_screen1", "phone_bg",
-    "modal_border_top", "modal_border_bot",
+    "phone_bg",
+    "phone_case", "phone_case_top", "phone_screen1", "phone_screen", "phone_notch", "phone_side_btn",
+    "stats_msg", "status_time", "status_meta",
+    "wall_time", "wall_date", "wall_glitch",
+    "home_indicator", "home_btn",
+    "side_panel1", "side_panel", "head_divider",
     "corner_tl_v", "corner_tl_h", "corner_tr_v", "corner_tr_h",
     "corner_bl_v", "corner_bl_h", "corner_br_v", "corner_br_h",
     "title_eyebrow", "title_main",
-    "stats_msg",
-    "close_btn", "head_divider",
-    "phone_case", "phone_case_top", "phone_notch", "phone_side_btn",
-    "phone_screen", "status_time", "status_meta",
-    "wall_time", "wall_date", "wall_glitch",
-    "home_indicator",
-    "side_panel",
-    "home_btn",
-    "app1_bg", "app1_icon", "app1_label",
-    "app2_bg", "app2_icon", "app2_label",
-    "app3_bg", "app3_active_ring", "app3_icon", "app3_label",
-    "app4_bg", "app4_icon", "app4_label",
-    "app5_bg", "app5_icon", "app5_label",
-    "app6_bg", "app6_icon", "app6_label",
-    "app7_bg", "app7_icon", "app7_label",
-    "app8_bg", "app8_icon", "app8_label", "app1_bg1", "app2_bg1", "app3_bg1",
-    "app4_bg1", "app5_bg1", "app6_bg1", "app7_bg1", "app8_bg1", "side_panel1",
+    "close_btn", "close_x",
+    "close_btn_border_t", "close_btn_border_b", "close_btn_border_l", "close_btn_border_r",
+    "app1_badge_bg", "app1_badge_text",
+    "app_slot_vline_1", "app_slot_vline_2", "app_slot_vline_3", "app_slot_vline_4",
+    "app_slot_vline_5", "app_slot_vline_6", "app_slot_vline_7", "app_slot_vline_8",
+    "app_slot_vline_9", "app_slot_vline_10", "app_slot_vline_11", "app_slot_vline_12",
+    "app_slot_vline_13", "app_slot_vline_14", "app_slot_vline_15", "app_slot_vline_16", "app_slot_vline_17",
+    "app_slot_hline_1", "app_slot_hline_2", "app_slot_hline_3", "app_slot_hline_4",
+    "app_slot_hline_5", "app_slot_hline_6", "app_slot_hline_7", "app_slot_hline_8",
+    "app_slot_hline_9", "app_slot_hline_10", "app_slot_hline_11", "app_slot_hline_12",
+    "app_slot_hline_13", "app_slot_hline_14",
+    "app1_bg", "app1_bg1", "app1_icon", "app1_label",
+    "app2_bg", "app2_bg1", "app2_icon", "app2_label",
+    "app3_bg", "app3_bg1", "app3_icon", "app3_label",
+    "app4_bg", "app4_bg1", "app4_icon", "app4_label",
+    "app5_bg", "app5_bg1", "app5_icon", "app5_label",
+    "app6_bg", "app6_bg1", "app6_icon", "app6_label",
+    "app7_bg", "app7_bg1", "app7_icon", "app7_label",
+    "app8_bg", "app8_bg1", "app8_icon", "app8_label",
 }
 
 local APPS = {
@@ -93,6 +111,37 @@ local function set_text(id, text)
     if n then gui.set_text(n, text or "") end
 end
 
+local function update_app_title(id)
+    set_text("title_main", APP_TITLES[id or "sms"] or "ДОМАШНИЙ ЭКРАН")
+end
+
+local function set_badge(self_or_prefix, prefix_or_value, maybe_value)
+    -- Backward-compatible signature:
+    --   set_badge("app1", n)
+    -- Preferred signature:
+    --   set_badge(self, "app1", n)
+    local ctx, prefix, value
+    if type(self_or_prefix) == "string" then
+        ctx = nil
+        prefix = self_or_prefix
+        value = prefix_or_value
+    else
+        ctx = self_or_prefix
+        prefix = prefix_or_value
+        value = maybe_value
+    end
+
+    if type(prefix) ~= "string" then return end
+
+    local n = tonumber(value) or 0
+    local phone_visible = (not ctx) or ctx.visible == true
+    local show = phone_visible and n > 0
+
+    set_text(prefix .. "_badge_text", tostring(n))
+    set_node_enabled(prefix .. "_badge_bg", show)
+    set_node_enabled(prefix .. "_badge_text", show)
+end
+
 local function flash_node(node)
     local c  = gui.get_color(node)
     local c0 = vmath.vector4(c.x, c.y, c.z, c.w)
@@ -104,6 +153,7 @@ end
 local function update_notif(self)
     local unread = gs.get_phone_unread_total and gs.get_phone_unread_total() or 0
     set_text("stats_msg", "сообщений: " .. tostring(unread))
+    set_badge(self, "app1", unread)
 end
 
 -- Закрыть текущее активное приложение (если есть)
@@ -126,6 +176,7 @@ local function switch_app(self, id)
         local comp = APP_COMPONENT["sms"]
         if comp then msg.post(comp, "open_app") end
         self.active_app = "sms"
+        update_app_title("sms")
         dbg("[phone_v2_root] toggled back to sms")
         return
     end
@@ -134,8 +185,27 @@ local function switch_app(self, id)
     if comp then
         msg.post(comp, "open_app")
         self.active_app = id
+        update_app_title(id)
         dbg("[phone_v2_root] switched to app:", id)
     end
+end
+
+
+local function forward_active_app_input(self, action_id, action)
+    if not self.active_app then return end
+    local comp = APP_COMPONENT[self.active_app]
+    if not comp then return end
+    msg.post(comp, "phone_input", {
+        action_id = action_id,
+        x = action and action.x or 0,
+        y = action and action.y or 0,
+        dx = action and action.dx or 0,
+        dy = action and action.dy or 0,
+        value = action and action.value or 0,
+        pressed = action and action.pressed or false,
+        released = action and action.released or false,
+        repeated = action and action.repeated or false,
+    })
 end
 
 -- -----------------------------------------------------------------------
@@ -144,6 +214,7 @@ function init(self)
     self.visible    = false
     self.active_app = nil
     set_nodes_enabled(CHROME_NODES, false)
+    update_app_title("sms")
     -- Берём фокус сразу и держим всегда (как исходный phone_v2.gui_script).
     -- Когда телефон закрыт — on_input возвращает false, инпут проходит дальше.
     -- Это сохраняет правильный порядок стека acquire_input_focus.
@@ -159,6 +230,7 @@ function on_message(self, message_id, message, sender)
         local comp = APP_COMPONENT["sms"]
         if comp then msg.post(comp, "open_app") end
         self.active_app = "sms"
+        update_app_title("sms")
         dbg("[phone_v2_root] open_phone → sms")
 
     elseif message_id == hash("close_phone") then
@@ -187,6 +259,7 @@ function on_message(self, message_id, message, sender)
     elseif message_id == hash("set_phone_notif") then
         local n = tonumber(message and message.n) or 0
         set_text("stats_msg", "сообщений: " .. tostring(n))
+        set_badge(self, "app1", n)
 
     elseif message_id == hash("set_phone_time") then
         local t = (message and message.time) or "07:12"
@@ -197,40 +270,48 @@ end
 
 function on_input(self, action_id, action)
     if not self.visible then return false end
-    if action_id ~= hash("touch") or not action.pressed then return false end
 
-    -- Кнопка закрытия
-    local close = get_node("close_btn")
-    if close and gui.is_enabled(close) and gui.pick_node(close, action.x, action.y) then
-        flash_node(close)
-        -- Уведомить ui_manager — он обновит состояние и пришлёт нам close_phone
-        msg.post(UI_MGR, "close_phone")
+    -- Non-touch inputs, such as mouse wheel if bound by the project, belong to
+    -- the active app while the phone is open.
+    if action_id ~= hash("touch") then
+        forward_active_app_input(self, action_id, action or {})
         return true
     end
 
-    -- Кнопка Home → SMS
-    local home = get_node("home_btn")
-    if home and gui.is_enabled(home) and gui.pick_node(home, action.x, action.y) then
-        flash_node(home)
-        switch_app(self, "sms")
-        return true
-    end
-
-    -- Тайлы приложений
-    for _, app in ipairs(APPS) do
-        local n = get_node(app.key .. "_bg")
-        if n and gui.is_enabled(n) and gui.pick_node(n, action.x, action.y) then
-            dbg("[phone_v2_root] tile clicked:", app.id)
-            flash_node(n)
-            -- Всегда уведомляем ui_manager (он обрабатывает map и статистику)
-            msg.post(UI_MGR, "phone_app_clicked", { id = app.id })
-            -- Внешние приложения (map) закрывают телефон через ui_manager — сами не переключаем
-            if not EXTERNAL_APPS[app.id] then
-                switch_app(self, app.id)
-            end
+    -- Root owns the input focus. It handles chrome/launcher taps on press,
+    -- then forwards all other touch phases to the active phone app.
+    if action and action.pressed then
+        -- Кнопка закрытия
+        local close = get_node("close_btn")
+        if close and gui.is_enabled(close) and gui.pick_node(close, action.x, action.y) then
+            flash_node(close)
+            msg.post(UI_MGR, "close_phone")
             return true
+        end
+
+        -- Кнопка Home → SMS
+        local home = get_node("home_btn")
+        if home and gui.is_enabled(home) and gui.pick_node(home, action.x, action.y) then
+            flash_node(home)
+            switch_app(self, "sms")
+            return true
+        end
+
+        -- Тайлы приложений
+        for _, app in ipairs(APPS) do
+            local n = get_node(app.key .. "_bg")
+            if n and gui.is_enabled(n) and gui.pick_node(n, action.x, action.y) then
+                dbg("[phone_v2_root] tile clicked:", app.id)
+                flash_node(n)
+                msg.post(UI_MGR, "phone_app_clicked", { id = app.id })
+                if not EXTERNAL_APPS[app.id] then
+                    switch_app(self, app.id)
+                end
+                return true
+            end
         end
     end
 
-    return true  -- поглощаем все тапы пока телефон открыт
+    forward_active_app_input(self, action_id, action or {})
+    return true
 end

@@ -1,11 +1,20 @@
 -- quests.lua
--- Каталог квестов игры. Данные, не код.
+-- Каталог phone quests текущей итерации. Данные, не код.
+--
+-- ВАЖНО:
+-- Это НЕ persistent loop journal.
+-- Эти квесты живут в game_state и сбрасываются при старте новой итерации.
+-- Они нужны для текущих целей игрока внутри run-state:
+-- найти телефон, ответить NPC, собраться, добраться до офиса и т.п.
+--
+-- Долгосрочные выводы о петле, ложных концовках и гипотезах игрока
+-- должны жить в meta_state или отдельном persistent journal module.
 --
 -- Воскресный flow:
 --   find_phone -> reply_npc -> make_coffee -> meet_npc -> spend_sunday
 --
 -- go_to_office остаётся в каталоге, но НЕ стартует в воскресенье.
--- Его запускает понедельничный маршрут / рабочий день.
+-- Его запускает monday_morning_start; воскресенье его не стартует.
 
 local M = {}
 
@@ -16,6 +25,8 @@ M.phone_order = {
     "meet_npc",
     "spend_sunday",
     "go_to_office",
+    "work_monday_case",
+    "follow_monday_trace",
 }
 
 local ORDER_INDEX = {}
@@ -94,11 +105,39 @@ M.quests = {
 
     go_to_office = {
         name = "Добраться до офиса",
-        description = "Понедельник — рабочий день. Сначала до метро, потом две станции, и я на месте.",
+        description = "Понедельник — рабочий день. Офис ближе воскресных маршрутов: собрать рабочие вещи, выйти из дома и дойти до бизнес-центра.",
         steps = {
-            { text = "Выйти из дома",     done_when = "monday_left_home" },
-            { text = "Доехать до метро",  done_when = "reached_metro" },
-            { text = "Добраться до офиса", done_when = "reached_office" },
+            { text = "Собраться к работе",      done_when = "monday_ready_for_work" },
+            { text = "Выйти из дома",           done_when = "monday_left_home" },
+            { text = "Дойти до бизнес-центра",  done_when = "reached_work_district" },
+            { text = "Добраться до офиса",      done_when = "reached_office" },
+        },
+    },
+
+    work_monday_case = {
+        name = "Закрыть рабочий кейс",
+        description = "На рабочем этаже нужно пройти турникет, собрать материалы по кейсу, подготовить папку и передать её в систему.",
+        steps = {
+            { text = "Пройти турникет",          done_when = "monday_checked_in_office" },
+            { text = "Проверить рабочую почту",  done_when = "monday_mail_read" },
+            { text = "Взять распечатку",         done_when = "monday_report_page_taken" },
+            { text = "Найти папку",              done_when = "monday_folder_taken" },
+            { text = "Собрать папку по кейсу",   done_when = "monday_case_file_assembled" },
+            { text = "Передать кейс в работу",   done_when = "monday_case_file_submitted" },
+            { text = "Увидеть стандартное решение", done_when = "mon_office_error_seen" },
+        },
+    },
+
+    follow_monday_trace = {
+        name = "Проверить последствия",
+        description = "Вторник показывает, что вчерашнее стандартное решение не исчезло. Нужно увидеть след, разобраться с кейсом и дойти до разговора на крыше.",
+        steps = {
+            { text = "Проснуться во вторник",       done_when = "tuesday_morning_started" },
+            { text = "Проверить телефон",          done_when = "tuesday_phone_checked" },
+            { text = "Выйти из дома",              done_when = "tuesday_left_home" },
+            { text = "Увидеть последствие кейса",  done_when = "tuesday_consequence_seen" },
+            { text = "Разобрать след",             done_when = "tuesday_investigation_done" },
+            { text = "Подняться на крышу",         done_when = "tuesday_rooftop_reached" },
         },
     },
 }

@@ -18,11 +18,9 @@ Backlog показывает прошлый текст, но не меняет:
 
 ## Где хранится история
 
-История текущей игровой сессии хранится в `main/gui/ui_manager_v2.script`:
+История текущей игровой сессии хранится в shared-модуле `main/scripts/dialogue_backlog.lua`.
 
-```lua
-self.dialogue_backlog = {}
-```
+`main/gui/modules/ui_manager_v2/dialogue_flow.lua` добавляет записи через `backlog.add(entry)`, а `main/gui/components_v2/dialogue_v2.gui_script` читает их через `backlog.get_all()`.
 
 В журнал попадают:
 
@@ -31,10 +29,10 @@ self.dialogue_backlog = {}
 - сделанный выбор после `choice_picked`;
 - автоматический выбор после `choice_timeout`.
 
-Лимит истории:
+Лимит истории задаётся в `dialogue_backlog.lua`:
 
 ```lua
-local DIALOGUE_BACKLOG_LIMIT = 80
+local LIMIT = 80
 ```
 
 Если реплик становится больше, старые записи удаляются с начала списка.
@@ -62,7 +60,16 @@ HUD-кнопка не рисует своё окно. Она отправляе�
 msg.post("#ui_manager_v2", "open_backlog")
 ```
 
-А `ui_manager_v2.script` передаёт актуальную историю в `dialogue_v2.gui_script` и открывает общий backlog overlay:
+Дальше цепочка такая:
+
+```text
+ui_manager_v2.script
+  -> message_flow.lua
+  -> dialogue_flow.lua
+  -> dialogue_v2.gui_script
+```
+
+`dialogue_flow.lua` открывает общий backlog overlay:
 
 ```lua
 msg.post(M.components.dialogue, "open_backlog")
@@ -75,7 +82,7 @@ M.overlays.backlog = true
 ui_state.modal_open = true
 ```
 
-Это важно для exploration-режима: `hotspots_v2.gui_script` видит `ui_state.modal_open` и перестаёт обрабатывать клики по хотспотам. Дополнительно `ui_manager_v2.script` на время журнала отправляет:
+Это важно для exploration-режима: `hotspots_v2.gui_script` видит `ui_state.modal_open` и перестаёт обрабатывать клики по хотспотам. Дополнительно `dialogue_flow.lua` на время журнала отправляет:
 
 ```lua
 msg.post(M.components.hotspots, "hide_all")

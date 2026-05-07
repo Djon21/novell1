@@ -5,15 +5,6 @@ images {
   image: "/main/images/phone/map2/poi_circle.png"
 }
 images {
-  image: "/main/images/phone/map2/poi_dot.png"
-}
-images {
-  image: "/main/images/phone/map2/poi_glow.png"
-}
-images {
-  image: "/main/images/phone/map2/poi_glow_ring.png"
-}
-images {
   image: "/main/images/phone/map2/poi_icon_archive.png"
 }
 images {
@@ -24,9 +15,6 @@ images {
 }
 images {
   image: "/main/images/phone/map2/poi_icon_home.png"
-}
-images {
-  image: "/main/images/phone/map2/poi_icon_metro.png"
 }
 images {
   image: "/main/images/phone/map2/poi_icon_park.png"

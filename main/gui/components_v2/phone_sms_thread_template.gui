@@ -1,0 +1,2377 @@
+fonts {
+  name: "jb_mono_10"
+  font: "/main/fonts/jb_mono_10.font"
+}
+fonts {
+  name: "jb_mono_12"
+  font: "/main/fonts/jb_mono_12.font"
+}
+fonts {
+  name: "jb_mono_bold_14"
+  font: "/main/fonts/jb_mono_bold_14.font"
+}
+fonts {
+  name: "unbounded_bold_20"
+  font: "/main/fonts/unbounded_bold_20.font"
+}
+fonts {
+  name: "unbounded_bold_32"
+  font: "/main/fonts/unbounded_bold_32.font"
+}
+fonts {
+  name: "icons"
+  font: "/main/fonts/icons.font"
+}
+fonts {
+  name: "manrope_14"
+  font: "/main/fonts/manrope_14.font"
+}
+fonts {
+  name: "manrope_16"
+  font: "/main/fonts/manrope_16.font"
+}
+textures {
+  name: "icon_phone"
+  texture: "/main/images/phone/icon_phone.atlas"
+}
+textures {
+  name: "map2"
+  texture: "/main/images/phone/map2.atlas"
+}
+nodes {
+  type: TYPE_BOX
+  id: "thread_root"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 524.0
+    y: 606.0
+    z: 0.552
+  }
+  size {
+    x: 118.0
+    y: 36.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "th_back_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.6
+}
+nodes {
+  position {
+    x: 524.0
+    y: 641.0
+    z: 0.557
+  }
+  size {
+    x: 118.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "th_back_border_t"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.35
+}
+nodes {
+  position {
+    x: 524.0
+    y: 606.0
+    z: 0.557
+  }
+  size {
+    x: 118.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "th_back_border_b"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.35
+}
+nodes {
+  position {
+    x: 524.0
+    y: 606.0
+    z: 0.557
+  }
+  size {
+    x: 1.0
+    y: 36.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "th_back_border_l"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.35
+}
+nodes {
+  position {
+    x: 641.0
+    y: 606.0
+    z: 0.557
+  }
+  size {
+    x: 1.0
+    y: 36.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "th_back_border_r"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.35
+}
+nodes {
+  position {
+    x: 536.0
+    y: 624.0
+    z: 0.559
+  }
+  size {
+    x: 96.0
+    y: 12.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "\342\200\271 \320\222\320\245\320\236\320\224\320\257\320\251\320\230\320\225"
+  font: "jb_mono_10"
+  id: "th_back_label"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.95
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 660.0
+    y: 630.0
+    z: 0.559
+  }
+  size {
+    x: 340.0
+    y: 18.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\342\200\224"
+  font: "jb_mono_bold_14"
+  id: "th_name"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.95
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 660.0
+    y: 610.0
+    z: 0.559
+  }
+  size {
+    x: 370.0
+    y: 12.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "SIM 1 \302\267 \342\200\224"
+  font: "jb_mono_10"
+  id: "th_num"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.82
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1074.0
+    y: 610.0
+    z: 0.552
+  }
+  size {
+    x: 32.0
+    y: 32.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "th_call_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.6
+}
+nodes {
+  position {
+    x: 1074.0
+    y: 641.0
+    z: 0.557
+  }
+  size {
+    x: 32.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "th_call_border_t"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1074.0
+    y: 610.0
+    z: 0.557
+  }
+  size {
+    x: 32.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "th_call_border_b"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1074.0
+    y: 610.0
+    z: 0.557
+  }
+  size {
+    x: 1.0
+    y: 32.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "th_call_border_l"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1105.0
+    y: 610.0
+    z: 0.557
+  }
+  size {
+    x: 1.0
+    y: 32.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "th_call_border_r"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1090.0
+    y: 627.0
+    z: 0.559
+  }
+  size {
+    x: 28.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\342\230\217"
+  font: "jb_mono_bold_14"
+  id: "th_call_label"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.82
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1112.0
+    y: 610.0
+    z: 0.552
+  }
+  size {
+    x: 32.0
+    y: 32.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "th_info_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.6
+}
+nodes {
+  position {
+    x: 1112.0
+    y: 641.0
+    z: 0.557
+  }
+  size {
+    x: 32.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "th_info_border_t"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1112.0
+    y: 610.0
+    z: 0.557
+  }
+  size {
+    x: 32.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "th_info_border_b"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1112.0
+    y: 610.0
+    z: 0.557
+  }
+  size {
+    x: 1.0
+    y: 32.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "th_info_border_l"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1143.0
+    y: 610.0
+    z: 0.557
+  }
+  size {
+    x: 1.0
+    y: 32.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "th_info_border_r"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1128.0
+    y: 627.0
+    z: 0.559
+  }
+  size {
+    x: 28.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "i"
+  font: "jb_mono_bold_14"
+  id: "th_info_label"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.82
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1150.0
+    y: 610.0
+    z: 0.552
+  }
+  size {
+    x: 32.0
+    y: 32.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "th_menu_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.6
+}
+nodes {
+  position {
+    x: 1150.0
+    y: 641.0
+    z: 0.557
+  }
+  size {
+    x: 32.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "th_menu_border_t"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1150.0
+    y: 610.0
+    z: 0.557
+  }
+  size {
+    x: 32.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "th_menu_border_b"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1150.0
+    y: 610.0
+    z: 0.557
+  }
+  size {
+    x: 1.0
+    y: 32.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "th_menu_border_l"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1181.0
+    y: 610.0
+    z: 0.557
+  }
+  size {
+    x: 1.0
+    y: 32.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "th_menu_border_r"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1166.0
+    y: 627.0
+    z: 0.559
+  }
+  size {
+    x: 28.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\342\213\256"
+  font: "jb_mono_bold_14"
+  id: "th_menu_label"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.82
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 524.0
+    y: 592.0
+    z: 0.553
+  }
+  size {
+    x: 660.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "th_header_line"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.15
+}
+nodes {
+  position {
+    x: 524.0
+    y: 168.0
+    z: 0.523
+  }
+  size {
+    x: 660.0
+    y: 410.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "th_scroll_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.01
+}
+nodes {
+  position {
+    x: 854.0
+    y: 382.0
+    z: 0.559
+  }
+  size {
+    x: 420.0
+    y: 16.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\320\275\320\265\321\202 \321\201\320\276\320\276\320\261\321\211\320\265\320\275\320\270\320\271"
+  font: "jb_mono_12"
+  id: "th_empty"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.72
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 540.0
+    y: 520.0
+    z: 0.548
+  }
+  size {
+    x: 420.0
+    y: 40.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "bub1_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 540.0
+    y: 559.0
+    z: 0.556
+  }
+  size {
+    x: 420.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub1_border_t"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 540.0
+    y: 520.0
+    z: 0.556
+  }
+  size {
+    x: 420.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub1_border_b"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 540.0
+    y: 520.0
+    z: 0.556
+  }
+  size {
+    x: 1.0
+    y: 40.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub1_border_l"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 959.0
+    y: 520.0
+    z: 0.556
+  }
+  size {
+    x: 1.0
+    y: 40.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub1_border_r"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 552.0
+    y: 546.0
+    z: 0.559
+  }
+  size {
+    x: 396.0
+    y: 28.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  font: "manrope_14"
+  id: "bub1_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  line_break: true
+  parent: "thread_root"
+  alpha: 0.95
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 948.0
+    y: 528.0
+    z: 0.559
+  }
+  size {
+    x: 396.0
+    y: 10.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_10"
+  id: "bub1_stamp"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.74
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 540.0
+    y: 476.0
+    z: 0.548
+  }
+  size {
+    x: 420.0
+    y: 40.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "bub2_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 540.0
+    y: 515.0
+    z: 0.556
+  }
+  size {
+    x: 420.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub2_border_t"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 540.0
+    y: 476.0
+    z: 0.556
+  }
+  size {
+    x: 420.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub2_border_b"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 540.0
+    y: 476.0
+    z: 0.556
+  }
+  size {
+    x: 1.0
+    y: 40.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub2_border_l"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 959.0
+    y: 476.0
+    z: 0.556
+  }
+  size {
+    x: 1.0
+    y: 40.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub2_border_r"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 552.0
+    y: 502.0
+    z: 0.559
+  }
+  size {
+    x: 396.0
+    y: 28.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  font: "manrope_14"
+  id: "bub2_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  line_break: true
+  parent: "thread_root"
+  alpha: 0.95
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 948.0
+    y: 484.0
+    z: 0.559
+  }
+  size {
+    x: 396.0
+    y: 10.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_10"
+  id: "bub2_stamp"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.74
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 540.0
+    y: 432.0
+    z: 0.548
+  }
+  size {
+    x: 420.0
+    y: 40.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "bub3_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 540.0
+    y: 471.0
+    z: 0.556
+  }
+  size {
+    x: 420.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub3_border_t"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 540.0
+    y: 432.0
+    z: 0.556
+  }
+  size {
+    x: 420.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub3_border_b"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 540.0
+    y: 432.0
+    z: 0.556
+  }
+  size {
+    x: 1.0
+    y: 40.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub3_border_l"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 959.0
+    y: 432.0
+    z: 0.556
+  }
+  size {
+    x: 1.0
+    y: 40.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub3_border_r"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 552.0
+    y: 458.0
+    z: 0.559
+  }
+  size {
+    x: 396.0
+    y: 28.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  font: "manrope_14"
+  id: "bub3_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  line_break: true
+  parent: "thread_root"
+  alpha: 0.95
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 948.0
+    y: 440.0
+    z: 0.559
+  }
+  size {
+    x: 396.0
+    y: 10.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_10"
+  id: "bub3_stamp"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.74
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 540.0
+    y: 388.0
+    z: 0.548
+  }
+  size {
+    x: 420.0
+    y: 40.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "bub4_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 540.0
+    y: 427.0
+    z: 0.556
+  }
+  size {
+    x: 420.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub4_border_t"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 540.0
+    y: 388.0
+    z: 0.556
+  }
+  size {
+    x: 420.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub4_border_b"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 540.0
+    y: 388.0
+    z: 0.556
+  }
+  size {
+    x: 1.0
+    y: 40.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub4_border_l"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 959.0
+    y: 388.0
+    z: 0.556
+  }
+  size {
+    x: 1.0
+    y: 40.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub4_border_r"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 552.0
+    y: 414.0
+    z: 0.559
+  }
+  size {
+    x: 396.0
+    y: 28.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  font: "manrope_14"
+  id: "bub4_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  line_break: true
+  parent: "thread_root"
+  alpha: 0.95
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 948.0
+    y: 396.0
+    z: 0.559
+  }
+  size {
+    x: 396.0
+    y: 10.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_10"
+  id: "bub4_stamp"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.74
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 540.0
+    y: 344.0
+    z: 0.548
+  }
+  size {
+    x: 420.0
+    y: 40.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "bub5_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 540.0
+    y: 383.0
+    z: 0.556
+  }
+  size {
+    x: 420.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub5_border_t"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 540.0
+    y: 344.0
+    z: 0.556
+  }
+  size {
+    x: 420.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub5_border_b"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 540.0
+    y: 344.0
+    z: 0.556
+  }
+  size {
+    x: 1.0
+    y: 40.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub5_border_l"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 959.0
+    y: 344.0
+    z: 0.556
+  }
+  size {
+    x: 1.0
+    y: 40.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub5_border_r"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 552.0
+    y: 370.0
+    z: 0.559
+  }
+  size {
+    x: 396.0
+    y: 28.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  font: "manrope_14"
+  id: "bub5_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  line_break: true
+  parent: "thread_root"
+  alpha: 0.95
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 948.0
+    y: 352.0
+    z: 0.559
+  }
+  size {
+    x: 396.0
+    y: 10.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_10"
+  id: "bub5_stamp"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.74
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 540.0
+    y: 300.0
+    z: 0.548
+  }
+  size {
+    x: 420.0
+    y: 40.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "bub6_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 540.0
+    y: 339.0
+    z: 0.556
+  }
+  size {
+    x: 420.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub6_border_t"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 540.0
+    y: 300.0
+    z: 0.556
+  }
+  size {
+    x: 420.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub6_border_b"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 540.0
+    y: 300.0
+    z: 0.556
+  }
+  size {
+    x: 1.0
+    y: 40.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub6_border_l"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 959.0
+    y: 300.0
+    z: 0.556
+  }
+  size {
+    x: 1.0
+    y: 40.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub6_border_r"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 552.0
+    y: 326.0
+    z: 0.559
+  }
+  size {
+    x: 396.0
+    y: 28.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  font: "manrope_14"
+  id: "bub6_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  line_break: true
+  parent: "thread_root"
+  alpha: 0.95
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 948.0
+    y: 308.0
+    z: 0.559
+  }
+  size {
+    x: 396.0
+    y: 10.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_10"
+  id: "bub6_stamp"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.74
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 540.0
+    y: 256.0
+    z: 0.548
+  }
+  size {
+    x: 420.0
+    y: 40.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "bub7_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 540.0
+    y: 295.0
+    z: 0.556
+  }
+  size {
+    x: 420.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub7_border_t"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 540.0
+    y: 256.0
+    z: 0.556
+  }
+  size {
+    x: 420.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub7_border_b"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 540.0
+    y: 256.0
+    z: 0.556
+  }
+  size {
+    x: 1.0
+    y: 40.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub7_border_l"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 959.0
+    y: 256.0
+    z: 0.556
+  }
+  size {
+    x: 1.0
+    y: 40.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub7_border_r"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 552.0
+    y: 282.0
+    z: 0.559
+  }
+  size {
+    x: 396.0
+    y: 28.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  font: "manrope_14"
+  id: "bub7_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  line_break: true
+  parent: "thread_root"
+  alpha: 0.95
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 948.0
+    y: 264.0
+    z: 0.559
+  }
+  size {
+    x: 396.0
+    y: 10.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_10"
+  id: "bub7_stamp"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.74
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 540.0
+    y: 212.0
+    z: 0.548
+  }
+  size {
+    x: 420.0
+    y: 40.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "bub8_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 540.0
+    y: 251.0
+    z: 0.556
+  }
+  size {
+    x: 420.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub8_border_t"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 540.0
+    y: 212.0
+    z: 0.556
+  }
+  size {
+    x: 420.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub8_border_b"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 540.0
+    y: 212.0
+    z: 0.556
+  }
+  size {
+    x: 1.0
+    y: 40.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub8_border_l"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 959.0
+    y: 212.0
+    z: 0.556
+  }
+  size {
+    x: 1.0
+    y: 40.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub8_border_r"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 552.0
+    y: 238.0
+    z: 0.559
+  }
+  size {
+    x: 396.0
+    y: 28.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  font: "manrope_14"
+  id: "bub8_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  line_break: true
+  parent: "thread_root"
+  alpha: 0.95
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 948.0
+    y: 220.0
+    z: 0.559
+  }
+  size {
+    x: 396.0
+    y: 10.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_10"
+  id: "bub8_stamp"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.74
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 524.0
+    y: 154.0
+    z: 0.553
+  }
+  size {
+    x: 660.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "th_input_line"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.15
+}
+nodes {
+  position {
+    x: 524.0
+    y: 106.0
+    z: 0.552
+  }
+  size {
+    x: 522.0
+    y: 38.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "th_input_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.6
+}
+nodes {
+  position {
+    x: 524.0
+    y: 143.0
+    z: 0.557
+  }
+  size {
+    x: 522.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "th_input_border_t"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.3
+}
+nodes {
+  position {
+    x: 524.0
+    y: 106.0
+    z: 0.557
+  }
+  size {
+    x: 522.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "th_input_border_b"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.3
+}
+nodes {
+  position {
+    x: 524.0
+    y: 106.0
+    z: 0.557
+  }
+  size {
+    x: 1.0
+    y: 38.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "th_input_border_l"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.3
+}
+nodes {
+  position {
+    x: 1045.0
+    y: 106.0
+    z: 0.557
+  }
+  size {
+    x: 1.0
+    y: 38.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "th_input_border_r"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.3
+}
+nodes {
+  position {
+    x: 538.0
+    y: 125.0
+    z: 0.559
+  }
+  size {
+    x: 490.0
+    y: 12.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\320\262\320\262\320\265\320\264\320\270\321\202\320\265 SMS\342\200\246"
+  font: "jb_mono_12"
+  id: "th_input_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.55
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1056.0
+    y: 106.0
+    z: 0.552
+  }
+  size {
+    x: 128.0
+    y: 38.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "th_send_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.15
+}
+nodes {
+  position {
+    x: 1056.0
+    y: 143.0
+    z: 0.557
+  }
+  size {
+    x: 128.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "th_send_border_t"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.2
+}
+nodes {
+  position {
+    x: 1056.0
+    y: 106.0
+    z: 0.557
+  }
+  size {
+    x: 128.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "th_send_border_b"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.2
+}
+nodes {
+  position {
+    x: 1056.0
+    y: 106.0
+    z: 0.557
+  }
+  size {
+    x: 1.0
+    y: 38.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "th_send_border_l"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.2
+}
+nodes {
+  position {
+    x: 1183.0
+    y: 106.0
+    z: 0.557
+  }
+  size {
+    x: 1.0
+    y: 38.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "th_send_border_r"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.2
+}
+nodes {
+  position {
+    x: 1120.0
+    y: 125.0
+    z: 0.559
+  }
+  size {
+    x: 118.0
+    y: 12.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "SEND \342\226\266"
+  font: "jb_mono_10"
+  id: "th_send_label"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.7
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 524.0
+    y: 88.0
+    z: 0.559
+  }
+  size {
+    x: 370.0
+    y: 10.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\320\272\320\276\320\264\320\270\321\200\320\276\320\262\320\272\320\260: GSM-7 \302\267 \321\201\320\265\320\263\320\274\320\265\320\275\321\202\320\276\320\262: 1"
+  font: "jb_mono_10"
+  id: "th_meter_left"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.8
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1184.0
+    y: 88.0
+    z: 0.559
+  }
+  size {
+    x: 370.0
+    y: 10.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\321\201\320\270\320\274\320\262\320\276\320\273\320\276\320\262: 0 \302\267 \320\276\321\201\321\202\320\260\320\273\320\276\321\201\321\214: 160"
+  font: "jb_mono_10"
+  id: "th_meter_right"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.8
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 524.0
+    y: 72.0
+    z: 0.553
+  }
+  size {
+    x: 660.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "th_footer_line"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.12
+}
+nodes {
+  position {
+    x: 524.0
+    y: 54.0
+    z: 0.559
+  }
+  size {
+    x: 420.0
+    y: 10.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\320\276\320\277\320\265\321\200\320\260\321\202\320\276\321\200 \302\267 \320\234\320\242\320\241 \302\267 \321\201\320\265\321\202\321\214 4G \302\267 \321\201\320\270\320\263\320\275\320\260\320\273 \342\200\22475 dBm"
+  font: "jb_mono_10"
+  id: "th_footer_left"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.82
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1184.0
+    y: 54.0
+    z: 0.559
+  }
+  size {
+    x: 360.0
+    y: 10.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\320\262 \320\275\320\270\321\202\320\272\320\265: \342\200\224 \302\267 \321\201\321\202\320\276\320\270\320\274\320\276\321\201\321\202\321\214: \342\200\224"
+  font: "jb_mono_10"
+  id: "th_footer_right"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.82
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT
