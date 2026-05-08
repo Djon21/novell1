@@ -5,6 +5,8 @@
 --   "set_location"       {name, time, loop}     — обновляет заголовок
 --   "set_inventory_count"{n}                    — бейдж BAG
 --   "set_phone_notif"    {n}                    — бейдж PHN
+--   "set_hud_hint"       {target = "phone"|"bag"|"phone:off"|"bag:off"|"reset"}
+--                                                — пульсирует кнопку для подсказки
 --   "show_hud" / "hide_hud"
 --
 -- Шлёт в ui_manager_v2:
@@ -13,11 +15,13 @@
 
 local theme = require "main.gui.modules.v2_theme"
 local ui_state = require "main.scripts.ui_state"
+local backlog = require "main.scripts.dialogue_backlog"
 
 local UI_MGR = "#ui_manager_v2"
 
 local COLOR_BTN_BG = vmath.vector4(0.031, 0.023, 0.094, 0.85)
 local COLOR_BTN_TEXT = vmath.vector4(0.952, 0.925, 0.85, 0.9)
+local COLOR_LABEL_OFF = vmath.vector4(0.952, 0.925, 0.85, 0.8)
 
 -- Armed-banner для inventory use-on-target: показывается сверху по центру
 -- пока игрок выбирает цель для предмета.
@@ -37,6 +41,26 @@ end
 local function point_in_node(node, action)
     return gui.pick_node(node, action.x, action.y)
 end
+
+local BACKLOG_NODE_IDS = {
+    "backlog_shade",
+    "backlog_panel",
+    "backlog_line_top",
+    "backlog_line_bottom",
+    "backlog_line_left",
+    "backlog_line_right",
+    "backlog_title",
+    "backlog_counter",
+    "backlog_speaker",
+    "backlog_text",
+    "backlog_hint",
+    "backlog_btn_prev",
+    "backlog_btn_prev_label",
+    "backlog_btn_next",
+    "backlog_btn_next_label",
+    "backlog_btn_close",
+    "backlog_btn_close_label",
+}
 
 local function make_box(parent, x, y, z, w, h, color)
     local n = gui.new_box_node(vmath.vector3(x, y, z), vmath.vector3(w, h, 0))
@@ -61,9 +85,43 @@ end
 
 local function ensure_log_button(self)
     if self.log_button then return end
-    local root = gui.get_node("hud_root")
-    self.log_button = make_box(root, 971, 617, 0.1, 64, 64, COLOR_BTN_BG)
-    self.log_label = make_text(root, 1003, 650, 0.12, 60, 16, "LOG", "jb_mono_bold_14", COLOR_BTN_TEXT, gui.PIVOT_CENTER)
+    self.log_button = gui.get_node("log_ring")
+    self.log_label = gui.get_node("log_label")
+end
+
+local function set_backlog_nodes_enabled(enabled)
+    for _, id in ipairs(BACKLOG_NODE_IDS) do
+        set_visible(id, enabled)
+    end
+end
+
+local function refresh_backlog_view(self)
+    local entries = backlog.get_all()
+    local total = #entries
+    if total == 0 then
+        self.backlog_index = 0
+        set_text("backlog_counter", "0 / 0")
+        set_text("backlog_speaker", "ЖУРНАЛ ПУСТ")
+        set_text("backlog_text", "Здесь появятся уже прочитанные реплики.")
+        return
+    end
+
+    if not self.backlog_index or self.backlog_index < 1 then self.backlog_index = total end
+    if self.backlog_index > total then self.backlog_index = total end
+
+    local entry = entries[self.backlog_index] or {}
+    set_text("backlog_counter", tostring(self.backlog_index) .. " / " .. tostring(total))
+    set_text("backlog_speaker", tostring(entry.speaker or "НАРРАТОР"))
+    set_text("backlog_text", tostring(entry.text or ""))
+end
+
+local function set_backlog_open(self, open)
+    self.backlog_open = open and true or false
+    set_backlog_nodes_enabled(self.backlog_open)
+    if self.backlog_open then
+        self.backlog_index = backlog.size()
+        refresh_backlog_view(self)
+    end
 end
 
 -- Armed-banner: «Используй <предмет> на цели»  +  кнопка ✕ отмены.
@@ -140,13 +198,66 @@ local function set_phone_slot_visible(enabled, notif_count)
     set_visible("phn_badge_text", show_badge)
 end
 
+-- ─── HUD-hint pulse ───────────────────────────────────────────────────
+-- Когда сюжет требует чтобы игрок открыл телефон (отвечать на SMS) или
+-- инвентарь (применить предмет), ink-тег # hud:hint:phone | bag запускает
+-- циклическую пульсацию соответствующей кнопки. Снимается:
+--   • тапом по кнопке (open_phone/open_inventory чистят hint)
+--   • явным # hud:hint:phone:off / bag:off / reset
+local PULSE_DURATION = 0.7
+local PULSE_SCALE    = 1.12
+
+local function start_pulse(node)
+    if not node then return end
+    gui.cancel_animation(node, gui.PROP_SCALE)
+    gui.set_scale(node, vmath.vector3(1, 1, 1))
+    gui.animate(node, gui.PROP_SCALE,
+        vmath.vector3(PULSE_SCALE, PULSE_SCALE, 1),
+        gui.EASING_INOUTSINE, PULSE_DURATION, 0,
+        nil, gui.PLAYBACK_LOOP_PINGPONG)
+end
+
+local function stop_pulse(node)
+    if not node then return end
+    gui.cancel_animation(node, gui.PROP_SCALE)
+    gui.set_scale(node, vmath.vector3(1, 1, 1))
+end
+
+local function apply_hud_hint(self, target)
+    if not target or target == "" or target == "reset" then
+        stop_pulse(gui.get_node("bag_ring"))
+        stop_pulse(gui.get_node("phn_ring"))
+        self.hint_phone = false
+        self.hint_bag   = false
+        return
+    end
+    if target == "phone" then
+        self.hint_phone = true
+        start_pulse(gui.get_node("phn_ring"))
+    elseif target == "phone:off" then
+        self.hint_phone = false
+        stop_pulse(gui.get_node("phn_ring"))
+    elseif target == "bag" then
+        self.hint_bag = true
+        start_pulse(gui.get_node("bag_ring"))
+    elseif target == "bag:off" then
+        self.hint_bag = false
+        stop_pulse(gui.get_node("bag_ring"))
+    end
+end
+
 function init(self)
     msg.post(".", "acquire_input_focus")
     self.visible = true
     self.bag_count  = 0
     self.phn_notif  = 0
     self.phone_enabled = false
+    self.backlog_open = false
+    self.backlog_index = 0
+    self.hint_phone = false
+    self.hint_bag = false
     ensure_log_button(self)
+    set_backlog_nodes_enabled(false)
     -- базовые тексты уже стоят в .gui, но занулим бейджи пока нет данных
     set_text("bag_badge_text", "")
     set_visible("bag_badge", false)
@@ -194,10 +305,21 @@ function on_message(self, message_id, message, sender)
         self.visible = true
         gui.set_enabled(gui.get_node("hud_root"), true)
         ensure_log_button(self)
+        -- При повторном показе HUD пульс восстанавливаем если он был активен.
+        if self.hint_phone then start_pulse(gui.get_node("phn_ring")) end
+        if self.hint_bag   then start_pulse(gui.get_node("bag_ring")) end
 
     elseif message_id == hash("hide_hud") then
         self.visible = false
+        set_backlog_open(self, false)
+        -- Останавливаем анимации перед скрытием — иначе они продолжают
+        -- крутиться в невидимых узлах и тратят CPU.
+        stop_pulse(gui.get_node("bag_ring"))
+        stop_pulse(gui.get_node("phn_ring"))
         gui.set_enabled(gui.get_node("hud_root"), false)
+
+    elseif message_id == hash("set_hud_hint") then
+        apply_hud_hint(self, message and message.target)
 
     elseif message_id == hash("show_armed_banner") then
         -- Игрок взял предмет в инвентаре с verb=use или give. Показываем
@@ -206,12 +328,56 @@ function on_message(self, message_id, message, sender)
 
     elseif message_id == hash("hide_armed_banner") then
         hide_armed_banner(self)
+
+    elseif message_id == hash("open_backlog") then
+        set_backlog_open(self, true)
+
+    elseif message_id == hash("close_backlog") then
+        set_backlog_open(self, false)
+
+    elseif message_id == hash("clear_backlog") then
+        backlog.clear()
+        self.backlog_index = 0
+        if self.backlog_open then
+            refresh_backlog_view(self)
+        end
     end
 end
 
 function on_input(self, action_id, action)
     if not self.visible then return false end
     if action_id ~= hash("touch") or not action.pressed then return false end
+
+    if self.backlog_open then
+        local btn_close = gui.get_node("backlog_btn_close")
+        local btn_prev = gui.get_node("backlog_btn_prev")
+        local btn_next = gui.get_node("backlog_btn_next")
+        if point_in_node(btn_close, action) then
+            msg.post(UI_MGR, "close_backlog")
+            gui.animate(btn_close, "scale", vmath.vector4(0.94, 0.94, 1, 1), gui.EASING_OUTQUAD, 0.08, 0,
+                function() gui.animate(btn_close, "scale", vmath.vector4(1, 1, 1, 1), gui.EASING_OUTQUAD, 0.15) end)
+            return true
+        end
+        if point_in_node(btn_prev, action) then
+            gui.animate(btn_prev, "scale", vmath.vector4(0.94, 0.94, 1, 1), gui.EASING_OUTQUAD, 0.08, 0,
+                function() gui.animate(btn_prev, "scale", vmath.vector4(1, 1, 1, 1), gui.EASING_OUTQUAD, 0.15) end)
+            if backlog.size() > 0 and self.backlog_index > 1 then
+                self.backlog_index = self.backlog_index - 1
+                refresh_backlog_view(self)
+            end
+            return true
+        end
+        if point_in_node(btn_next, action) then
+            gui.animate(btn_next, "scale", vmath.vector4(0.94, 0.94, 1, 1), gui.EASING_OUTQUAD, 0.08, 0,
+                function() gui.animate(btn_next, "scale", vmath.vector4(1, 1, 1, 1), gui.EASING_OUTQUAD, 0.15) end)
+            if self.backlog_index < backlog.size() then
+                self.backlog_index = self.backlog_index + 1
+                refresh_backlog_view(self)
+            end
+            return true
+        end
+        return true
+    end
 
     -- Кнопка ✕ на armed-баннере проверяется ПЕРВОЙ — она должна работать
     -- даже когда armed-режим (modal_open=false), и должна быть кликабельна

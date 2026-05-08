@@ -69,19 +69,28 @@ local function apply_single(cmd, ctx)
     elseif cmd.type == "phone_close" then
         ctx.close_phone()
     elseif cmd.type == "open_phone_app" then
-        ctx.open_phone_app(cmd.app)
+        return ctx.open_phone_app(cmd.app)
     elseif cmd.type == "open_map_hub" then
         ctx.open_map_hub(cmd.knot)
+        return true
     elseif cmd.type == "map_allow" then
         if gs.map_allow then gs.map_allow(cmd.poi) end
     elseif cmd.type == "map_allow_reset" then
         if gs.map_allow_reset then gs.map_allow_reset() end
     elseif cmd.type == "map_lock_to" then
         if gs.map_lock_to then gs.map_lock_to(cmd.poi) end
+    elseif cmd.type == "map_lock_all" then
+        if gs.map_lock_all then gs.map_lock_all() end
+    elseif cmd.type == "hud_hint" then
+        -- # hud:hint:phone | bag | reset — пульсация HUD-кнопки.
+        -- ctx.set_hud_hint делегирует посыл сообщения в hud_v2.
+        if ctx.set_hud_hint then ctx.set_hud_hint(cmd.target) end
     end
 end
 
 local function apply_from(cmds, start_index, ctx)
+    local should_pause_render = false
+
     for i = start_index or 1, #cmds do
         local cmd = cmds[i]
         if cmd.type == "show_ad" then
@@ -103,9 +112,11 @@ local function apply_from(cmds, start_index, ctx)
             return true
         end
 
-        apply_single(cmd, ctx)
+        if apply_single(cmd, ctx) then
+            should_pause_render = true
+        end
     end
-    return false
+    return should_pause_render
 end
 
 function M.apply(cmds, ctx)

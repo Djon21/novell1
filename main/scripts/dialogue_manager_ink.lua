@@ -41,6 +41,10 @@ local pending_loop_intro = nil
 -- { type = "false", id = "ending_a" }  или  { type = "true" }
 local pending_end_type = nil
 local story_knot_index = {}
+-- Временные/боковые knot'ы (хотспоты, SMS) запускаются через jump_to_knot.
+-- Их обычный -> DONE не должен считаться концом главы. Для сюжетных
+-- маршрутов карты можно передать { allow_chapter_end = true }.
+local side_knot_active = false
 
 local META_NUMERIC_KEYS = {
     iteration_number     = true,
@@ -70,6 +74,7 @@ local deferred_commands = {}
 -- Если true — apply_tags не пушит эффекты в очередь. Нужно при
 -- load_saved replay'е, чтобы не проигрывать sfx/shake от старых параграфов.
 local suppress_effects = false
+local restore_scene_transitions = false
 
 -- -------------------------------------------------------
 -- Парсинг тегов
@@ -471,18 +476,27 @@ local function apply_tags(tags, trailing)
                     reward_flag = rest and rest ~= "" and rest or nil,
                 })
             end
-        elseif key == "phone" and value == "map" and not suppress_effects then
+        elseif key == "phone" and value == "map" and (not suppress_effects or restore_scene_transitions) then
             table.insert(scene_bucket, { type = "open_phone_app", app = "map" })
-        elseif key == "phone" and value and value:match("^app%s*:") and not suppress_effects then
+        elseif key == "phone" and value and value:match("^app%s*:") and (not suppress_effects or restore_scene_transitions) then
             local app = value:gsub("^app%s*:%s*", ""):gsub("^%s+", ""):gsub("%s+$", "")
                              :gsub('^"(.*)"$', "%1"):gsub("^'(.*)'$", "%1")
             if app ~= "" then
                 table.insert(scene_bucket, { type = "open_phone_app", app = app })
             end
-        elseif key == "phone" and value == "close" and not suppress_effects then
+        elseif key == "phone" and value == "close" and (not suppress_effects or restore_scene_transitions) then
             -- # phone:close — закрыть телефон и вернуться в сцену-вызыватель.
             table.insert(scene_bucket, { type = "phone_close" })
-        elseif key == "map" and value and not suppress_effects then
+        elseif key == "hud" and value and not suppress_effects then
+            -- # hud:hint:phone   — пульсирует кнопка телефона в HUD
+            -- # hud:hint:bag     — пульсирует кнопка инвентаря
+            -- # hud:hint:reset   — снимает оба пульса
+            local hint = value:match("^hint%s*:%s*(.+)$")
+            if hint then
+                hint = hint:gsub("^%s+", ""):gsub("%s+$", "")
+                table.insert(pending_commands, { type = "hud_hint", target = hint })
+            end
+        elseif key == "map" and value and (not suppress_effects or restore_scene_transitions) then
             -- # map:hub:KNOT — открыть карту в hub-режиме. «МАРШРУТ» на пине с
             -- route_knot=KNOT прыгает в этот ink-узел. KNOT же — primary_knot,
             -- на который уйдёт карта при закрытии без выбора (safety fallback).
@@ -490,6 +504,8 @@ local function apply_tags(tags, trailing)
             -- # map:allow:poi_cafe       — добавить POI в allow-set phone_map'а
             -- # map:allow:reset          — очистить allow-set (все POI разрешены)
             -- # map:lock_to:poi_cafe     — clear + добавить (только этот разрешён)
+            -- # map:lock_all             — заблокировать все POI
+            -- # map:lock:all             — то же самое, более читаемый вариант
             local op, rest = value:match("([%w_]+)%s*:?%s*(.*)")
             if op == "hub" and rest and rest ~= "" then
                 local knot = rest:gsub("^%s+", ""):gsub("%s+$", "")
@@ -507,12 +523,14 @@ local function apply_tags(tags, trailing)
             elseif op == "lock_to" and rest then
                 local target = rest:gsub("^%s+", ""):gsub("%s+$", "")
                 table.insert(pending_commands, { type = "map_lock_to", poi = target })
+            elseif op == "lock_all" or (op == "lock" and rest and rest:gsub("^%s+", ""):gsub("%s+$", "") == "all") then
+                table.insert(pending_commands, { type = "map_lock_all" })
             end
-        elseif (key == "goto_scene" or key == "explore") and value and not suppress_effects then
+        elseif (key == "goto_scene" or key == "explore") and value and (not suppress_effects or restore_scene_transitions) then
             -- # goto_scene:SCENE_ID  или  # explore:SCENE_ID
             -- Inline (у текстового параграфа) → сразу. Висячий → deferred.
             table.insert(scene_bucket, { type = "enter_scene", scene = value })
-        elseif key == "return_to_scene" and not suppress_effects then
+        elseif key == "return_to_scene" and (not suppress_effects or restore_scene_transitions) then
             -- # return_to_scene — вернуть управление в последнюю exploration-сцену.
             -- Обычно висит в конце knot'а → попадает в deferred и срабатывает
             -- когда игрок прочитает все параграфы монолога.
@@ -784,6 +802,7 @@ function M.init(json_bytes)
     finished          = false
     is_story_end      = false
     pending_end_type  = nil
+    side_knot_active  = false
     bg                = { r = 0, g = 0, b = 0 }
     bg_image          = nil
     current_speaker   = ""
@@ -822,6 +841,7 @@ function M.load_saved(json_bytes)
         ink_history = saved
         saved_index = 1
     end
+    local saved_index_raw = saved_index
 
     json_source       = json_bytes
     story             = create_story(json_bytes)
@@ -832,6 +852,8 @@ function M.load_saved(json_bytes)
     pending_question  = nil
     finished          = false
     is_story_end      = false
+    pending_end_type  = nil
+    side_knot_active  = false
     bg                = { r = 0, g = 0, b = 0 }
     bg_image          = nil
     current_speaker   = ""
@@ -840,10 +862,12 @@ function M.load_saved(json_bytes)
     -- будет срабатывать на всех параграфах старой пачки — глушим эффекты,
     -- чтобы не сыпались sfx/shake от прошлых сцен.
     suppress_effects = true
+    restore_scene_transitions = true
     local restore_history = build_restore_history(ink_history)
     local ok, paragraphs, answers = pcall(story.restore, restore_history, false)
     if not ok then
         suppress_effects = false
+        restore_scene_transitions = false
         print("[DM-Ink] restore failed: " .. tostring(paragraphs) .. " — начинаем сначала")
         M.init(json_bytes)
         return
@@ -858,18 +882,27 @@ function M.load_saved(json_bytes)
     -- current_index до saved_index, попутно применяя теги.
     if saved_index > 1 then
         local max_idx = #paragraph_queue
-        if saved_index > max_idx then saved_index = max_idx end
-        for i = 2, saved_index do
+        local replay_to = saved_index
+        if replay_to > max_idx then replay_to = max_idx end
+        for i = 2, replay_to do
             if paragraph_queue[i] then
                 apply_tags(paragraph_queue[i].tags)
             end
         end
-        current_index = saved_index
+        current_index = saved_index_raw
     end
     suppress_effects = false
+    restore_scene_transitions = false
     pending_effects  = {}  -- на всякий случай
-    pending_commands = {}
-    deferred_commands = {}
+
+    if saved_index_raw > #paragraph_queue then
+        for _, cmd in ipairs(deferred_commands) do
+            table.insert(pending_commands, cmd)
+        end
+        deferred_commands = {}
+    else
+        pending_commands = {}
+    end
 
     -- Синхронизируем лог-флаги (чтобы первое изменение после рестарта
     -- корректно залоггировалось).
@@ -892,6 +925,10 @@ end
 -- пачка), чтобы дать игроку время выключить SKIP вручную.
 function M.is_last_in_queue()
     return current_index >= #paragraph_queue
+end
+
+function M.is_story_end()
+    return is_story_end
 end
 
 function M.get_current_node()
@@ -990,11 +1027,16 @@ function M.advance()
         pending_end_type = nil  -- сбрасываем сразу
 
         if et and et.type == "false" then
+            side_knot_active = false
             print("[DM-Ink] END: false ending '" .. tostring(et.id) .. "'")
             msg.post("#ui_manager_v2", "false_ending", { id = et.id })
         elseif et and et.type == "true" then
+            side_knot_active = false
             print("[DM-Ink] END: true ending")
             msg.post("#ui_manager_v2", "true_ending")
+        elseif side_knot_active then
+            side_knot_active = false
+            print("[DM-Ink] END: side knot DONE, chapter finish suppressed")
         else
             -- Нет тега — обычный конец (итерация 001 или неразмеченный knot)
             print("[DM-Ink] END: chapter_finished")
@@ -1025,14 +1067,19 @@ end
 
 function M.restart()
     is_story_end = false
+    side_knot_active = false
     if json_source then M.init(json_source) end
 end
 
 -- Прыжок в ink-узел (knot) по имени. Используется scene_controller'ом
 -- через request_ink_knot — когда игрок кликает по hotspot с
 -- { type="ink_knot", knot="..." } и надо показать короткий монолог.
-function M.jump_to_knot(knot_name)
+function M.jump_to_knot(knot_name, opts)
     if not story then return end
+    opts = opts or {}
+    side_knot_active = not opts.allow_chapter_end
+    is_story_end = false
+    pending_end_type = nil
     local paragraphs, answers = story.jump(knot_name)
     pull_gender_from_ink()
     consume_continue(paragraphs, answers)

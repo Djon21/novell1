@@ -260,7 +260,7 @@ local function has_phone_access()
     return phone_flow.has_access()
 end
 
-local function run_side_dialogue_knot(self, knot_name, keep_bg)
+local function run_side_dialogue_knot(self, knot_name, keep_bg, opts)
     if not knot_name or not dm.jump_to_knot then
         return false
     end
@@ -273,7 +273,7 @@ local function run_side_dialogue_knot(self, knot_name, keep_bg)
         dm.override_bg(keep_bg)
     end
 
-    dm.jump_to_knot(knot_name)
+    dm.jump_to_knot(knot_name, opts)
     handle_dialogue_update(self)
     return true
 end
@@ -495,6 +495,10 @@ local function show_menu(self)
     overlay_flow.show_menu(overlay_ctx(self))
 end
 
+local function prepare_run_restore(self)
+    overlay_flow.prepare_run_restore(overlay_ctx(self))
+end
+
 local function show_exploration(self)
     overlay_flow.show_exploration(overlay_ctx(self))
 end
@@ -508,6 +512,10 @@ sync_modal_state = function()
 end
 
 local function open_inventory(self)
+    -- Игрок сам открыл BAG → снимаем pulse-подсказку.
+    if M.components.hud then
+        msg.post(M.components.hud, "set_hud_hint", { target = "bag:off" })
+    end
     overlay_flow.open_inventory(overlay_ctx(self))
 end
 
@@ -516,11 +524,15 @@ close_inventory = function(self)
 end
 
 open_phone = function(self)
+    -- Игрок сам открыл телефон → снимаем pulse-подсказку.
+    if M.components.hud then
+        msg.post(M.components.hud, "set_hud_hint", { target = "phone:off" })
+    end
     phone_flow.open(phone_ctx())
 end
 
 local function open_phone_app(self, app_id)
-    phone_flow.open_app(phone_ctx(), app_id)
+    return phone_flow.open_app(phone_ctx(), app_id)
 end
 
 close_phone = function(self)
@@ -567,8 +579,13 @@ local function apply_dm_commands(self)
     return dm_commands.apply(cmds, {
         open_phone = function() open_phone(self) end,
         close_phone = function() close_phone(self) end,
-        open_phone_app = function(app) open_phone_app(self, app) end,
+        open_phone_app = function(app) return open_phone_app(self, app) end,
         open_map_hub = function(knot) open_map_hub(self, knot) end,
+        set_hud_hint = function(target)
+            if M.components.hud then
+                msg.post(M.components.hud, "set_hud_hint", { target = target })
+            end
+        end,
         on_resume = function() handle_dialogue_update(self) end,
     })
 end
@@ -688,26 +705,12 @@ handle_dialogue_update = function(self)
         show_choice(self, node.options or {}, 18, node.question or "КАК ПОСТУПИТЬ?")
 
     elseif node.type == "end" then
-        self.dialogue_node_type = "end"
-        self.dialogue_waiting_for_typewriter = true
-        self.dialogue_current_text = node.text or ""
-        self.current_choice_question = nil
-        self.current_choice_options = nil
-        append_dialogue_backlog(self, {
-            kind = "system",
-            speaker = "КОНЕЦ",
-            text = node.text or "Конец главы.",
-        })
-        show_dialogue(self)
-        hide_choice(self)
-        msg.post(M.components.dialogue, "render_dialogue", {
-            speaker = "narrator",
-            loop    = meta.get("iteration_number", 1),
-            loop_label = meta.get_iteration_label(),
-            name    = "КОНЕЦ",
-            text    = node.text or "Конец главы. Нажми NEXT чтобы вернуться в меню.",
-        })
-        M.at_end = true
+        M.at_end = false
+        reset_dialogue_autoplay_state(self)
+        if not (dm.is_story_end and dm.is_story_end()) then
+            msg.post("#ui_manager_v2", "chapter_finished")
+        end
+        return
     end
 end
 
@@ -791,10 +794,11 @@ local function message_ctx(self)
         self = self,
         dbg = dbg,
         show_menu = function() show_menu(self) end,
+        prepare_run_restore = function() prepare_run_restore(self) end,
         start_new_run = function(reset_iteration_progress) start_new_run(self, reset_iteration_progress) end,
         refresh_menu_state = function() refresh_menu_state(self) end,
         restore_run_state = function(opts) return restore_run_state(opts) end,
-        enter_restored_scene = function(scene_id) scene_controller.enter(scene_id) end,
+        enter_restored_scene = function(scene_id) scene_controller.enter(scene_id, { skip_on_enter = true }) end,
         reset_dialogue_backlog = function() reset_dialogue_backlog(self) end,
         handle_dialogue_update = function() handle_dialogue_update(self) end,
         sync_ui_state = function() sync_ui_state(self) end,
@@ -814,7 +818,7 @@ local function message_ctx(self)
         clear_armed_state = function() clear_armed_state(self) end,
         open_phone = function() open_phone(self) end,
         close_phone = function() close_phone(self) end,
-        run_side_dialogue_knot = function(knot_name, keep_bg) run_side_dialogue_knot(self, knot_name, keep_bg) end,
+        run_side_dialogue_knot = function(knot_name, keep_bg, opts) run_side_dialogue_knot(self, knot_name, keep_bg, opts) end,
         open_map = function() open_map(self) end,
         close_map = function() close_map(self) end,
         handle_map_verb = function(pin_id, verb) handle_map_verb(self, pin_id, verb) end,
