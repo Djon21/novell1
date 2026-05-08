@@ -6,7 +6,9 @@
 --   "set_inventory_count"{n}                    — бейдж BAG
 --   "set_phone_notif"    {n}                    — бейдж PHN
 --   "set_hud_hint"       {target = "phone"|"bag"|"phone:off"|"bag:off"|"reset"}
---                                                — пульсирует кнопку для подсказки
+--                                                — устойчивая подсказка-пульс
+--   "set_overlay_state"  {target = "phone"|"bag", open = bool}
+--                                                — приостанавливает pulse пока overlay открыт
 --   "show_hud" / "hide_hud"
 --
 -- Шлёт в ui_manager_v2:
@@ -201,9 +203,14 @@ end
 -- ─── HUD-hint pulse ───────────────────────────────────────────────────
 -- Когда сюжет требует чтобы игрок открыл телефон (отвечать на SMS) или
 -- инвентарь (применить предмет), ink-тег # hud:hint:phone | bag запускает
--- циклическую пульсацию соответствующей кнопки. Снимается:
---   • тапом по кнопке (open_phone/open_inventory чистят hint)
---   • явным # hud:hint:phone:off / bag:off / reset
+-- циклическую пульсацию соответствующей кнопки.
+--
+-- Hint = устойчивый флаг (self.hint_phone / self.hint_bag).
+-- Pulse визуально активен только когда hint=true И соответствующий overlay
+-- закрыт. Открытие телефона/инвентаря приостанавливает анимацию (флаг
+-- сохраняется), при закрытии анимация возобновляется. Так автор может
+-- держать пульс «до выполнения условия»: ставит # hud:hint:phone один раз,
+-- снимает # hud:hint:phone:off в knot'е ответа на SMS.
 local PULSE_DURATION = 0.7
 local PULSE_SCALE    = 1.12
 
@@ -223,27 +230,46 @@ local function stop_pulse(node)
     gui.set_scale(node, vmath.vector3(1, 1, 1))
 end
 
+-- Решает должна ли pulse-анимация играть прямо сейчас, исходя из hint-флага
+-- и состояния overlay'а. Вызывается при любом изменении состояния.
+local function reconcile_pulse(self)
+    local phn = gui.get_node("phn_ring")
+    local bag = gui.get_node("bag_ring")
+    if self.hint_phone and not self.phone_overlay_open and self.visible then
+        start_pulse(phn)
+    else
+        stop_pulse(phn)
+    end
+    if self.hint_bag and not self.bag_overlay_open and self.visible then
+        start_pulse(bag)
+    else
+        stop_pulse(bag)
+    end
+end
+
 local function apply_hud_hint(self, target)
     if not target or target == "" or target == "reset" then
-        stop_pulse(gui.get_node("bag_ring"))
-        stop_pulse(gui.get_node("phn_ring"))
         self.hint_phone = false
         self.hint_bag   = false
-        return
-    end
-    if target == "phone" then
+    elseif target == "phone" then
         self.hint_phone = true
-        start_pulse(gui.get_node("phn_ring"))
     elseif target == "phone:off" then
         self.hint_phone = false
-        stop_pulse(gui.get_node("phn_ring"))
     elseif target == "bag" then
         self.hint_bag = true
-        start_pulse(gui.get_node("bag_ring"))
     elseif target == "bag:off" then
         self.hint_bag = false
-        stop_pulse(gui.get_node("bag_ring"))
     end
+    reconcile_pulse(self)
+end
+
+local function apply_overlay_state(self, target, open)
+    if target == "phone" then
+        self.phone_overlay_open = open and true or false
+    elseif target == "bag" then
+        self.bag_overlay_open = open and true or false
+    end
+    reconcile_pulse(self)
 end
 
 function init(self)
@@ -256,6 +282,8 @@ function init(self)
     self.backlog_index = 0
     self.hint_phone = false
     self.hint_bag = false
+    self.phone_overlay_open = false
+    self.bag_overlay_open = false
     ensure_log_button(self)
     set_backlog_nodes_enabled(false)
     -- базовые тексты уже стоят в .gui, но занулим бейджи пока нет данных
@@ -305,21 +333,22 @@ function on_message(self, message_id, message, sender)
         self.visible = true
         gui.set_enabled(gui.get_node("hud_root"), true)
         ensure_log_button(self)
-        -- При повторном показе HUD пульс восстанавливаем если он был активен.
-        if self.hint_phone then start_pulse(gui.get_node("phn_ring")) end
-        if self.hint_bag   then start_pulse(gui.get_node("bag_ring")) end
+        reconcile_pulse(self)
 
     elseif message_id == hash("hide_hud") then
         self.visible = false
         set_backlog_open(self, false)
-        -- Останавливаем анимации перед скрытием — иначе они продолжают
-        -- крутиться в невидимых узлах и тратят CPU.
+        gui.set_enabled(gui.get_node("hud_root"), false)
+        -- Анимации останавливаем чтобы не тратить CPU на невидимые узлы;
+        -- self.hint_* остаётся true, при show_hud reconcile_pulse оживит.
         stop_pulse(gui.get_node("bag_ring"))
         stop_pulse(gui.get_node("phn_ring"))
-        gui.set_enabled(gui.get_node("hud_root"), false)
 
     elseif message_id == hash("set_hud_hint") then
         apply_hud_hint(self, message and message.target)
+
+    elseif message_id == hash("set_overlay_state") then
+        apply_overlay_state(self, message and message.target, message and message.open)
 
     elseif message_id == hash("show_armed_banner") then
         -- Игрок взял предмет в инвентаре с verb=use или give. Показываем
