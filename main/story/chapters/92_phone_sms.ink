@@ -18,8 +18,7 @@
 
 Ты машинально улыбаешься. Сообщение из тех, на которые отвечаешь мысленно: да-да, конечно.
 
-# return_to_scene
--> DONE
+-> sms_service_done
 
 
 === sms_thread_bank ===
@@ -33,8 +32,7 @@
 Сумма кажется знакомой. Или просто слишком обычной, чтобы её запоминать.
 }
 
-# return_to_scene
--> DONE
+-> sms_service_done
 
 
 === sms_thread_delivery ===
@@ -44,8 +42,7 @@
 
 Ты не помнишь, чтобы что-то заказывал{mc_gender == "female":а|}. Возможно, это было вчера. Возможно, это просто неважно.
 
-# return_to_scene
--> DONE
+-> sms_service_done
 
 
 === sms_thread_upravdom ===
@@ -55,8 +52,7 @@
 
 Классика дома: проблемы появляются строго тогда, когда ты уже опаздываешь.
 
-# return_to_scene
--> DONE
+-> sms_service_done
 
 
 === sms_thread_taxi ===
@@ -66,8 +62,7 @@
 
 Маршрут не указан. Только время, сумма и вежливая просьба поставить звёзды.
 
-# return_to_scene
--> DONE
+-> sms_service_done
 
 
 === sms_thread_metro ===
@@ -77,8 +72,7 @@
 
 Город уже предполагает, что ты куда-то поедешь. В этом есть что-то утешительное: маршрут хотя бы у кого-то есть.
 
-# return_to_scene
--> DONE
+-> sms_service_done
 
 
 === sms_thread_market ===
@@ -88,8 +82,7 @@
 
 Ты пытаешься вспомнить, что именно заказал{mc_gender == "female":а|}. В голове всплывает только слово «кабель» и смутное чувство, что он был нужен срочно.
 
-# return_to_scene
--> DONE
+-> sms_service_done
 
 
 === sms_thread_clinic ===
@@ -99,8 +92,7 @@
 
 Вторник кажется достаточно далёким, чтобы не думать о нём сейчас.
 
-# return_to_scene
--> DONE
+-> sms_service_done
 
 
 === sms_thread_coffee ===
@@ -110,8 +102,7 @@
 
 Телефон уверен, что знает твои слабости.
 
-# return_to_scene
--> DONE
+-> sms_service_done
 
 
 === sms_thread_prod ===
@@ -121,8 +112,7 @@
 
 Работа умеет добираться до воскресенья без ключей, пропуска и лифта.
 
-# return_to_scene
--> DONE
+-> sms_service_done
 
 
 // -----------------------------------------------------------------------------
@@ -140,8 +130,7 @@
 И всё равно ты уверен{mc_gender == "female":а|}, что этот чат уже был здесь.
 }
 
-# return_to_scene
--> DONE
+-> sms_service_done
 
 
 === sms_thread_nm ===
@@ -151,9 +140,33 @@
 
 Ни даты, ни контекста. Только две строчки и ощущение, что совет опоздал.
 
-# return_to_scene
+-> sms_service_done
+
+
+// -----------------------------------------------------------------------------
+// SAFE RETURN FOR NON-NPC THREADS
+// До ответа NPC нельзя выкидывать игрока обратно в exploration: в спальне ещё
+// может не быть доступных hotspot'ов. Поэтому сервисные SMS возвращают игрока
+// обратно в SMS-приложение, пока date_agreed=false.
+// -----------------------------------------------------------------------------
+
+=== sms_service_done ===
+{date_agreed:
+    -> sms_service_return_scene
+- else:
+    -> sms_service_return_phone
+}
+
+=== sms_service_return_phone ===
+# speaker:mc
+Ладно. Но сначала надо ответить {npc_name}.
+
+# phone:app:sms
 -> DONE
 
+=== sms_service_return_scene ===
+# return_to_scene
+-> DONE
 
 // -----------------------------------------------------------------------------
 // NPC THREADS
@@ -293,11 +306,12 @@
 # speaker:none
 Сообщение отправлено.
 
-Теперь можно наконец встать: умыться, сделать кофе, выйти и открыть карту.
+Теперь можно наконец встать: умыться, собраться, если хочется — зайти на кухню, а потом выйти.
 
 # quest:done:reply_npc
 # quest:start:make_coffee
 # quest:start:meet_npc
 # map:lock_to:poi_home
+# hud:hint:phone:off
 # return_to_scene
 -> DONE

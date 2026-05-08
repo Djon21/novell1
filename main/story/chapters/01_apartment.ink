@@ -43,6 +43,7 @@
 Спальня тихая и светлая. Слева ещё держит тепло смятая кровать, справа у окна молчит рабочий стол.
 За стеклом — обычный город, которому всё равно, проснулся ты или нет.
 
+# sfx:phone_notify
 Где-то рядом коротко вибрирует телефон.
 
 {iteration_number > 1:
@@ -53,7 +54,7 @@
 }
 
 # speaker:mc
-Телефон сначала. Потом уже кофе и всё остальное.
+Сначала до меня доходит вибрация телефона. Потом свет из окна. Потом всё остальное.
 # quest:start:find_phone
 # explore:apartment_bedroom
 -> DONE
@@ -66,7 +67,7 @@
 === apartment_bedroom_intro ===
 # bg:bg_apartment_bedroom_morning # speaker:none
 Комната собирается из привычных деталей: смятая постель, тумбочка у кровати, рабочий стол у окна, дверь в ванную справа.
-Телефон лежит у тумбочки экраном вниз и снова коротко вибрирует.
+Телефон лежит у тумбочки экраном вниз. Экран на мгновение подсвечивается и снова гаснет.
 
 # speaker:mc
 Кто пишет в воскресенье с утра?
@@ -144,6 +145,23 @@
 -> DONE
 
 
+=== look_bedroom_window ===
+# bg:bg_apartment_bedroom_morning # speaker:none
+За окном город выглядит так, будто воскресенье у него началось раньше твоего: редкие машины, свет в стекле, кто-то с собакой у подъезда.
+
+{iteration_number > 1:
+Картинка слишком знакомая. Не похожая — именно та же.
+Ты моргаешь, и ощущение проходит.
+~ INSIGHT = INSIGHT + 1
+- else:
+Нормальное утро. Даже слишком нормальное, если прислушиваться к себе.
+}
+# set_flag:sunday_bedroom_window_seen=true
+~ sunday_bedroom_window_seen = true
+# return_to_scene
+-> DONE
+
+
 === wash_up_morning ===
 # speaker:none
 Холодная вода быстро собирает лицо обратно.
@@ -195,12 +213,6 @@
 # set_flag:phone_taken=true
 # sms:add:mama:Не забудь позавтракать. И ключи проверь, пожалуйста.
 # sms:add:bank:Карта *4821: списание 349 ₽. Кофе и выпечка. 08:41.
-# sms:add:delivery:Курьер не смог дозвониться. Заказ вернётся в ресторан через 10 минут.
-# sms:add:upravdom:Сегодня с 10:00 до 14:00 возможны перебои с горячей водой. Приносим извинения.
-# sms:add:metro:Проездной активен до конца месяца. Хорошей поездки.
-# sms:add:market:Ваш заказ готов к выдаче. Хранение до завтра включительно.
-# sms:add:clinic:Напоминаем: запись на вторник, 16:30. Если планы изменились, отмените визит заранее.
-# sms:add:coffee:Сегодня до 12:00 второй кофе со скидкой. Покажите код из сообщения на кассе.
 # sms:add:prod:Напоминание: в понедельник до 11:00 подтвердите статус по кейсу 017.
 {mc_gender == "female":
     # sms:add:artem:Ты сегодня вообще проснулась? Я уже второй кофе пью.
@@ -209,6 +221,8 @@
 }
 # quest:done:find_phone
 # quest:start:reply_npc
+# map:lock_to:poi_home
+# hud:hint:phone
 # phone:app:sms
 # return_to_scene
 -> DONE
@@ -233,11 +247,52 @@
 -> DONE
 
 
+=== take_sunday_keys ===
+# speaker:none
+Ключи лежат на полке под зеркалом — там, где их оставляют люди, которые хотя бы пытаются не терять важное.
+
+# speaker:mc
+Ключи. Без них воскресенье быстро закончится у двери.
+
+# add_item:key
+# set_flag:sunday_keys_taken=true
+~ sunday_keys_taken = true
+# return_to_scene
+-> DONE
+
+
+=== sunday_get_dressed ===
+# speaker:none
+Куртка с вешалки, обувь у двери. Никакого торжественного выхода — просто бытовая последовательность, без которой человек не попадает в город.
+
+# speaker:mc
+Так. Теперь я хотя бы похож{mc_gender == "female":а|} на человека, который собирается выйти.
+
+# set_flag:sunday_dressed=true
+# set_flag:sunday_ready_to_leave=true
+~ sunday_dressed = true
+~ sunday_ready_to_leave = true
+# return_to_scene
+-> DONE
+
+
 === leave_apartment ===
 # speaker:none
-Кофе выпит. Телефон в кармане. Входная дверь ждёт, как простая точка перехода из дома в воскресенье.
+Телефон в кармане. Ключи на месте. Куртка и обувь наконец делают намерение выйти похожим на действие.
 
-Перед выходом всё оказывается удивительно телесным: ключи, обувь, куртка с крючка, короткая проверка карманов.
+{coffee_drunk:
+Кофе уже работает где-то под рёбрами.
+- else:
+    {breakfast_done:
+    Я даже успел{mc_gender == "female":а|} что-то съесть. Почти взрослая победа.
+    - else:
+        {water_drunk:
+        Хотя бы воды выпил{mc_gender == "female":а|}. Уже не худший старт.
+        - else:
+        Желудок напоминает, что встреча — не завтрак. Но сейчас уже поздно спорить с утром.
+        }
+    }
+}
 
 # speaker:mc
 Телефон. Ключи. Всё.
@@ -249,23 +304,25 @@
 }
 
 # speaker:none
-Ключ ложится в карман привычным весом. Замок щёлкает за спиной не драматично, а по-домашнему: день действительно начался.
+Замок щёлкает за спиной не драматично, а по-домашнему: день действительно начался.
 
-На экране телефона уже открыта карта: осталось выбрать маршрут к месту встречи.
+На экране телефона открывается карта. Можно сразу ехать на встречу — или сделать маленький крюк через магазин у дома.
 
-# add_item:key
-# set_flag:ready_to_leave_sunday=true
+# set_flag:sunday_ready_to_leave=true
 # set_flag:left_apartment=true
+~ sunday_ready_to_leave = true
 ~ can_leave_apt = true
 # quest:done:make_coffee
 # quest:start:meet_npc
 # adv:fullscreen
 # set_flag:map_opened_after_apartment=true
 ~ map_opened_after_apartment = true
+# map:allow:reset
+# map:allow:poi_shop
 {date_place_cafe:
-    # map:lock_to:poi_cafe
+    # map:allow:poi_cafe
 - else:
-    # map:lock_to:poi_park
+    # map:allow:poi_park
 }
 # phone:map
 -> DONE
@@ -331,3 +388,49 @@
 }
 # return_to_scene
 -> DONE
+
+=== take_kitchen_apple ===
+# bg:bg_apartment_kitchen_morning # speaker:none
+В миске на столе лежат зелёные яблоки. Одно холодит ладонь чуть сильнее остальных.
+
+# speaker:mc
+Завтрак уровня “я старал{mc_gender == "female":ась|ся}”.
+
+# set_flag:breakfast_done=true
+~ breakfast_done = true
+# return_to_scene
+-> DONE
+
+
+=== look_kitchen_fridge ===
+# bg:bg_apartment_kitchen_morning # speaker:none
+В холодильнике йогурт, сыр и контейнер, который лучше не открывать без отдельного морального разрешения.
+
+* [Взять йогурт]
+    # speaker:mc
+    Йогурт — это почти завтрак. Если не читать состав.
+    # set_flag:breakfast_done=true
+    # set_flag:fridge_checked=true
+    ~ breakfast_done = true
+    ~ fridge_checked = true
+    # return_to_scene
+    -> DONE
+
+* [Просто закрыть]
+    # speaker:mc
+    Нет. Холодильник сегодня остаётся загадкой.
+    # set_flag:fridge_checked=true
+    ~ fridge_checked = true
+    # return_to_scene
+    -> DONE
+
+
+=== drink_water_kitchen ===
+# bg:bg_apartment_kitchen_morning # speaker:none
+Вода из-под фильтра прохладная и честная. Не кофе, не ритуал, просто способ напомнить телу, что оно существует.
+
+# set_flag:water_drunk=true
+~ water_drunk = true
+# return_to_scene
+-> DONE
+
