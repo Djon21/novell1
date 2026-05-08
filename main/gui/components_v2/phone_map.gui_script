@@ -68,6 +68,50 @@ local function show_blocked(self, info)
     if g then gui.set_enabled(g, true) end
 end
 
+-- ─── POI spin: разблокированные POI крутят свой circle-нод ────────────
+-- 360° за SPIN_DURATION секунд, EASING_LINEAR, LOOP_FORWARD (0→360
+-- идентичны визуально, шва не видно).
+local SPIN_DURATION = 6.0
+
+local function start_poi_spin(node)
+    if not node then return end
+    gui.cancel_animation(node, "euler.z")
+    gui.set_rotation(node, vmath.vector3(0, 0, 0))
+    gui.animate(node, "euler.z", 360, gui.EASING_LINEAR,
+        SPIN_DURATION, 0, nil, gui.PLAYBACK_LOOP_FORWARD)
+end
+
+local function stop_poi_spin(node)
+    if not node then return end
+    gui.cancel_animation(node, "euler.z")
+    gui.set_rotation(node, vmath.vector3(0, 0, 0))
+end
+
+-- Перерисовать состояние всех POI-кружков. Вызывается при open_app,
+-- refresh_app и любом изменении allowed-set из ink-тегов
+-- # map:allow:poi_X / # map:lock_to:poi_X.
+local function refresh_pois(self)
+    for poi_id, _ in pairs(POI_SCENES) do
+        local circle = get_node(poi_id .. "_circle")
+        if circle then
+            local allowed = (not gs.map_is_poi_allowed) or gs.map_is_poi_allowed(poi_id)
+            if allowed then
+                start_poi_spin(circle)
+            else
+                stop_poi_spin(circle)
+            end
+        end
+    end
+end
+
+-- Полный стоп — экономит CPU когда карта закрыта.
+local function stop_all_pois()
+    for poi_id, _ in pairs(POI_SCENES) do
+        local circle = get_node(poi_id .. "_circle")
+        if circle then stop_poi_spin(circle) end
+    end
+end
+
 -- -----------------------------------------------------------------------
 
 function init(self)
@@ -86,9 +130,13 @@ function on_message(self, message_id, message, sender)
         self.visible = true
         set_root_enabled(true)
         hide_confirm(self)          -- сбрасываем возможный старый диалог
+        refresh_pois(self)          -- запустить spin для разблокированных POI
+    elseif message_id == hash("refresh_app") then
+        if self.visible then refresh_pois(self) end
     elseif message_id == hash("close_app") then
         self.visible = false
         hide_confirm(self)
+        stop_all_pois()             -- не крутим в скрытом app — экономия CPU
         set_root_enabled(false)
     end
 end
