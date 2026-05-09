@@ -490,6 +490,11 @@ local function render_chat(self)
     update_chat_scrollbar(self, total)
 end
 
+-- Forward-decl: refresh_send_pulse определена ниже (рядом с handle_reply_tap),
+-- но set_view ниже неё вызывает её. Lua local function не делает forward refs,
+-- поэтому объявляем переменную здесь и присваиваем тело позже.
+local refresh_send_pulse
+
 local function set_view(self, view)
     self.view = view or "list"
     local show_list = self.view == "list"
@@ -498,6 +503,7 @@ local function set_view(self, view)
     set_node_enabled("messenger_runtime_root", true)
     set_node_enabled("messenger_app_bg", true)
     if show_list then render_list(self) else render_chat(self) end
+    if refresh_send_pulse then refresh_send_pulse(self) end
 end
 
 local function open_list(self)
@@ -509,13 +515,12 @@ local function open_chat(self, chat_id)
     if not chat_id then return end
     self.active_chat_id = chat_id
     self.chat_offset = nil
-    -- runtime: помечаем чат прочитанным (auto-flag msg_<chat>_read)
+    -- runtime: помечаем чат прочитанным (auto-flag msg_<chat>_read).
+    -- НЕ прыгаем в ink-knot автоматически — сначала показываем inline
+    -- thread с сообщениями. Если есть возможность ответить, поле ввода
+    -- и кнопка «отправить» начнут пульсировать. Прыжок в ink — только
+    -- когда игрок тапнет на input или send (см. handle_send).
     if gs.mark_msg_read then gs.mark_msg_read(chat_id) end
-    -- Если у автора есть ink-knot msg_thread_<chat> и игрок ещё не отвечал
-    -- (msg_<chat>_replied != true), ui_manager_v2 закроет телефон и
-    -- прыгнет в knot для интерактивного ответа. Если knot'а нет или уже
-    -- ответили — ui_manager игнорирует, inline-вид остаётся открытым.
-    msg.post(UI_MGR, "messenger_open_chat", { chat_id = chat_id })
     set_view(self, "chat")
 end
 
@@ -525,11 +530,60 @@ local function is_inside_rect(id, x, y)
     return gui.pick_node(n, x, y)
 end
 
-local function handle_send_stub(self)
+-- Можно ли отвечать в этом чате. Ответ доступен пока в game_state нет
+-- флага msg_<chat>_replied (его автоматически ставит gs.reply_msg).
+-- Если автор не написал msg_thread_<chat>, ui_manager игнорирует тап
+-- молча (см. message_flow.handle_messenger_open_chat).
+local function can_reply(chat_id)
+    if not chat_id or chat_id == "" then return false end
+    local replied_flag = "msg_" .. tostring(chat_id) .. "_replied"
+    if gs.get_flag and gs.get_flag(replied_flag) then return false end
+    return true
+end
+
+-- Пульсация поля ввода и кнопки «отправить» когда есть возможность ответа.
+local PULSE_TARGETS = { "input_text", "send_text", "send_bg" }
+local PULSE_DURATION = 0.6
+local PULSE_ALPHA_LO = 0.45
+
+local function start_send_pulse()
+    for _, id in ipairs(PULSE_TARGETS) do
+        local n = get_node(id)
+        if n then
+            gui.cancel_animation(n, "color.w")
+            gui.set_color(n, vmath.vector4(gui.get_color(n).x, gui.get_color(n).y, gui.get_color(n).z, 1))
+            gui.animate(n, "color.w", PULSE_ALPHA_LO, gui.EASING_INOUTSINE,
+                PULSE_DURATION, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
+        end
+    end
+end
+
+local function stop_send_pulse()
+    for _, id in ipairs(PULSE_TARGETS) do
+        local n = get_node(id)
+        if n then
+            gui.cancel_animation(n, "color.w")
+            local c = gui.get_color(n)
+            gui.set_color(n, vmath.vector4(c.x, c.y, c.z, 1))
+        end
+    end
+end
+
+refresh_send_pulse = function(self)
+    if self.view == "chat" and can_reply(self.active_chat_id) then
+        start_send_pulse()
+    else
+        stop_send_pulse()
+    end
+end
+
+-- Тап на input_bg или send_bg в открытом чате. Если можно отвечать —
+-- просим ui_manager перейти в ink-knot msg_thread_<chat>. Если нельзя
+-- (флаг replied или нет knot'а у автора) — ничего не делаем.
+local function handle_reply_tap(self)
     if not self.active_chat_id then return end
-    print("[phone_messenger] TODO send_message runtime hook for", self.active_chat_id)
-    -- Intentionally do not mutate local mock data. Future implementation should
-    -- call gs.reply_msg(chat_id, text) or route into msg_thread_<chat_id> Ink.
+    if not can_reply(self.active_chat_id) then return end
+    msg.post(UI_MGR, "messenger_open_chat", { chat_id = self.active_chat_id })
 end
 
 local function handle_scroll(self, action)
@@ -591,7 +645,7 @@ local function handle_phone_input(self, action_id, action)
             open_list(self)
             return true
         elseif is_inside_rect("send_bg", x, y) or is_inside_rect("input_bg", x, y) then
-            handle_send_stub(self)
+            handle_reply_tap(self)
             return true
         elseif is_inside_rect("attach_bg", x, y) then
             print("[phone_messenger] TODO attach runtime hook")
@@ -629,6 +683,7 @@ function on_message(self, message_id, message, sender)
         self.visible = false
         self.view = "list"
         self.active_chat_id = nil
+        stop_send_pulse()  -- не крутим анимации в скрытом app
         set_all_enabled(false)
     elseif message_id == hash("refresh_app") then
         if self.visible then set_view(self, self.view or "list") end
