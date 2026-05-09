@@ -5,6 +5,7 @@
 -- This GUI keeps only presentation metadata for known chat ids.
 
 local gs = require "main.scripts.game_state"
+local dm = require "main.scripts.dialogue_manager_ink"
 
 local UI_MGR = "#ui_manager_v2"
 
@@ -530,12 +531,15 @@ local function is_inside_rect(id, x, y)
     return gui.pick_node(n, x, y)
 end
 
--- Можно ли отвечать в этом чате. Ответ доступен пока в game_state нет
--- флага msg_<chat>_replied (его автоматически ставит gs.reply_msg).
--- Если автор не написал msg_thread_<chat>, ui_manager игнорирует тап
--- молча (см. message_flow.handle_messenger_open_chat).
+-- Можно ли отвечать в этом чате. Должны быть выполнены оба условия:
+--   1) Автор написал ink-knot msg_thread_<chat> (если нет — отвечать нечем,
+--      пульс не нужен; например meme-чаты без интерактивного ответа).
+--   2) Игрок ещё не отвечал (флаг msg_<chat>_replied != true; авто-флаг
+--      ставится при # msg:reply:).
 local function can_reply(chat_id)
     if not chat_id or chat_id == "" then return false end
+    local knot_name = "msg_thread_" .. tostring(chat_id)
+    if not (dm.has_knot and dm.has_knot(knot_name)) then return false end
     local replied_flag = "msg_" .. tostring(chat_id) .. "_replied"
     if gs.get_flag and gs.get_flag(replied_flag) then return false end
     return true
