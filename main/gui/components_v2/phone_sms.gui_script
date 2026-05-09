@@ -15,12 +15,29 @@ local PHONE_ROOT = "#phone_v2"
 
 local MAX_ROWS = 7
 local MAX_BUBBLES = 8
-local LIST_SCROLL_STEP_PX = 46
+local LIST_SCROLL_STEP_PX = 64
 local LIST_DRAG_THRESHOLD_PX = 8
 local DEBUG_LOG = false
 local function dbg(...) if DEBUG_LOG then print(...) end end
 
+-- Right-side SMS application panel. These numbers match the current phone
+-- overlay slot from phone_sms.gui and are intentionally NOT the raw HTML
+-- 878x642 canvas. HTML visual tokens are adapted to this Defold panel.
+local PANEL_X, PANEL_Y = 500, 40
+local PANEL_W, PANEL_H = 728, 640
+local CONTENT_X = 524
+local CONTENT_R = 1184
+local SCROLL_X = 1188
+local LIST_TOP = 594
+local LIST_BOTTOM = 112
+local LIST_H = LIST_TOP - LIST_BOTTOM
+local ROW_W, ROW_H, ROW_GAP = 660, 52, 10
+local THREAD_TOP = 580
+local THREAD_BOTTOM = 154
+local BUBBLE_GAP = 14
+
 local gs_cache = nil
+local dm_cache = nil
 local contacts_cache = nil
 
 local function gs()
@@ -28,6 +45,13 @@ local function gs()
     local ok, mod = pcall(require, "main.scripts.game_state")
     gs_cache = ok and mod or false
     return gs_cache or {}
+end
+
+local function dm()
+    if dm_cache ~= nil then return dm_cache end
+    local ok, mod = pcall(require, "main.scripts.dialogue_manager_ink")
+    dm_cache = ok and mod or false
+    return dm_cache or {}
 end
 
 local fallback_contacts = {}
@@ -57,9 +81,8 @@ local HOST_NODE_IDS = {
 
 local LIST_NODE_IDS = {
     "list_root",
-    "side_eyebrow", "side_title", "sms_header_line",
-    "sms_list_clip", "sms_scrollbar_track", "sms_scrollbar_thumb",
-    "sms_footer_line", "sms_footer_left", "sms_footer_right",
+    "side_title", "sms_header_line",
+    "sms_scrollbar_track", "sms_scrollbar_thumb",
 }
 
 for i = 1, MAX_ROWS do
@@ -80,10 +103,9 @@ local THREAD_NODE_IDS = {
     "th_call_bg", "th_call_border_t", "th_call_border_b", "th_call_border_l", "th_call_border_r", "th_call_label",
     "th_info_bg", "th_info_border_t", "th_info_border_b", "th_info_border_l", "th_info_border_r", "th_info_label",
     "th_menu_bg", "th_menu_border_t", "th_menu_border_b", "th_menu_border_l", "th_menu_border_r", "th_menu_label",
-    "th_header_line", "th_scroll_bg", "th_empty",
+    "th_header_line", "th_empty",
     "th_input_line", "th_input_bg", "th_input_border_t", "th_input_border_b", "th_input_border_l", "th_input_border_r", "th_input_text",
     "th_send_bg", "th_send_border_t", "th_send_border_b", "th_send_border_l", "th_send_border_r", "th_send_label",
-    "th_meter_left", "th_meter_right", "th_footer_line", "th_footer_left", "th_footer_right",
 }
 
 for i = 1, MAX_BUBBLES do
@@ -192,11 +214,11 @@ local function clamp_text(s, max_len)
                 if count > max_len - 1 then break end
                 out[#out + 1] = utf8.char(code)
             end
-            return table.concat(out) .. "…"
+            return table.concat(out) .. "..."
         end
         return s
     end
-    if #s > max_len then return s:sub(1, math.max(1, max_len - 2)) .. "…" end
+    if #s > max_len then return s:sub(1, math.max(1, max_len - 3)) .. "..." end
     return s
 end
 
@@ -345,7 +367,7 @@ local function show_row(i, m)
 
     set_text(p .. "_name", clamp_text(msg_name(m), 32))
     set_text(p .. "_time", clamp_text(msg_time(m), 14))
-    set_text(p .. "_body", clamp_text(msg_body(m), 76))
+    set_text(p .. "_body", clamp_text(msg_body(m), 82))
     show_pin(p, tone, tag)
 end
 
@@ -359,8 +381,8 @@ local function update_scrollbar(self, total)
     local thumb = get_node("sms_scrollbar_thumb")
     if not thumb then return end
 
-    local track_h = 458
-    local top_y = 112 + track_h
+    local track_h = LIST_H
+    local top_y = LIST_BOTTOM + track_h
     local max_offset = clamp_list_offset(self, total)
     local ratio = math.min(1, MAX_ROWS / math.max(1, total))
     local h = math.max(46, track_h * ratio)
@@ -368,7 +390,75 @@ local function update_scrollbar(self, total)
     local y = (top_y - h) - ((track_h - h) * t)
 
     gui.set_size(thumb, vmath.vector3(4, h, 0))
-    gui.set_position(thumb, vmath.vector3(1188, y, 0.545))
+    gui.set_position(thumb, vmath.vector3(SCROLL_X, y, 0.545))
+end
+
+local set_border
+
+local function apply_static_layout()
+    -- Host panel and shared list geometry. This makes template overrides
+    -- deterministic even if the editor file still contains older coordinates.
+    set_box("sms_app_bg", PANEL_X, PANEL_Y, PANEL_W, PANEL_H, COLORS.dark, 0.84)
+    -- Use the free top space: HTML title sits close to the app padding,
+    -- not halfway down the panel.
+    set_pos("side_title", CONTENT_X, 640, 0.556)
+    set_size("side_title", 560, 30)
+    set_box("sms_header_line", CONTENT_X, 610, ROW_W, 1, COLORS.paper, 0.15)
+    set_box("sms_scrollbar_track", SCROLL_X, LIST_BOTTOM, 4, LIST_H, COLORS.paper, 0.08)
+
+    for i = 1, MAX_ROWS do
+        local p = "msg" .. i
+        local y = LIST_TOP - (i - 1) * (ROW_H + ROW_GAP) - ROW_H
+        set_box(p .. "_bg", CONTENT_X, y, ROW_W, ROW_H, COLORS.card, 0.60)
+        set_border(p, CONTENT_X, y, ROW_W, ROW_H, COLORS.accent, 0.18)
+        set_box(p .. "_dot", CONTENT_X - 3, y + ROW_H - 24, 6, 18, COLORS.hot, 1.0)
+        set_pos(p .. "_name", CONTENT_X + 16, y + ROW_H - 15, 0.56)
+        set_pos(p .. "_time", CONTENT_X + ROW_W - 12, y + ROW_H - 15, 0.56)
+        set_pos(p .. "_body", CONTENT_X + 16, y + 18, 0.56)
+        set_size(p .. "_name", 360, 14)
+        set_size(p .. "_time", 92, 10)
+        set_size(p .. "_body", 500, 14)
+        local time_node = get_node(p .. "_time")
+        if time_node then gui.set_pivot(time_node, gui.PIVOT_E) end
+        local pin_w, pin_h = 86, 16
+        local pin_x, pin_y = CONTENT_X + ROW_W - pin_w - 10, y + 8
+        set_box(p .. "_pin_bg", pin_x, pin_y, pin_w, pin_h, COLORS.amber, 0.15)
+        set_border(p .. "_pin", pin_x, pin_y, pin_w, pin_h, COLORS.amber, 0.50)
+        set_pos(p .. "_pin", pin_x + pin_w / 2, pin_y + 8, 0.562)
+        set_size(p .. "_pin", pin_w - 10, 10)
+        local pin_node = get_node(p .. "_pin")
+        if pin_node then gui.set_pivot(pin_node, gui.PIVOT_CENTER) end
+    end
+
+    -- Thread header and input bar. Bubble positions are data-driven in render_bubble.
+    set_box("th_header_line", CONTENT_X, 598, ROW_W, 1, COLORS.paper, 0.15)
+    set_box("th_back_bg", CONTENT_X, 618, 118, 36, COLORS.card, 0.60)
+    set_border("th_back", CONTENT_X, 618, 118, 36, COLORS.accent, 0.35)
+    set_pos("th_back_label", CONTENT_X + 12, 636, 0.559)
+    set_text("th_back_label", "‹ ВХОДЯЩИЕ")
+    set_pos("th_name", 660, 642, 0.559)
+    set_pos("th_num", 660, 622, 0.559)
+    local ax = 1074
+    for _, id in ipairs({ "th_call", "th_info", "th_menu" }) do
+        set_box(id .. "_bg", ax, 624, 32, 32, COLORS.card, 0.60)
+        set_border(id, ax, 624, 32, 32, COLORS.paper_dim, 0.18)
+        set_pos(id .. "_label", ax + 16, 640, 0.559)
+        ax = ax + 38
+    end
+    set_text("th_call_label", "☏")
+    set_text("th_info_label", "i")
+    set_text("th_menu_label", "⋮")
+    set_pos("th_empty", CONTENT_X + ROW_W / 2, 384, 0.559)
+    set_box("th_input_line", CONTENT_X, 140, ROW_W, 1, COLORS.paper, 0.15)
+    set_box("th_input_bg", CONTENT_X, 92, 540, 38, COLORS.card, 0.60)
+    set_border("th_input", CONTENT_X, 92, 540, 38, COLORS.accent, 0.30)
+    set_pos("th_input_text", CONTENT_X + 14, 112, 0.559)
+    set_size("th_input_text", 510, 14)
+    set_box("th_send_bg", CONTENT_X + 548, 92, 112, 38, COLORS.accent, 1.0)
+    set_border("th_send", CONTENT_X + 548, 92, 112, 38, COLORS.accent, 1.0)
+    set_pos("th_send_label", CONTENT_X + 604, 112, 0.559)
+    set_text("th_send_label", "SEND ▶")
+    set_color("th_send_label", COLORS.dark, 0.95)
 end
 
 local function refresh_list(self)
@@ -389,14 +479,8 @@ local function refresh_list(self)
         if n then unread = n end
     end
 
-    local unread_label = unread > 0 and (tostring(unread) .. " новых") or "нет новых"
-    set_text("side_eyebrow", "входящие · " .. unread_label .. " · " .. tostring(total) .. " всего")
-    set_text("sms_footer_left", "непрочитанных: " .. tostring(unread) .. " · в архиве: 147")
-
     if total == 0 then
         for i = 1, MAX_ROWS do hide_row(i) end
-        set_text("side_eyebrow", "входящие · нет новых · 0 всего")
-        set_text("sms_footer_right", "память: 74%")
         update_scrollbar(self, total)
         return
     end
@@ -414,9 +498,7 @@ local function refresh_list(self)
     local first = math.min(total, self.list_offset + 1)
     local last = math.min(total, self.list_offset + MAX_ROWS)
     if total > MAX_ROWS then
-        set_text("sms_footer_right", "показаны: " .. tostring(first) .. "-" .. tostring(last) .. " / " .. tostring(total))
     else
-        set_text("sms_footer_right", "память: 74%")
     end
     update_scrollbar(self, total)
 end
@@ -449,7 +531,7 @@ local function set_bubble_enabled(i, enabled)
     end
 end
 
-local function set_border(prefix, x, y, w, h, color, alpha)
+set_border = function(prefix, x, y, w, h, color, alpha)
     set_box(prefix .. "_border_t", x, y + h - 1, w, 1, color, alpha)
     set_box(prefix .. "_border_b", x, y, w, 1, color, alpha)
     set_box(prefix .. "_border_l", x, y, 1, h, color, alpha)
@@ -460,7 +542,22 @@ local function message_lines(text, max_chars)
     text = tostring(text or "")
     local len = utf8 and utf8.len and utf8.len(text) or #text
     len = tonumber(len) or #text
-    return math.max(1, math.min(3, math.ceil(len / (max_chars or 34))))
+    return math.max(1, math.min(4, math.ceil(len / (max_chars or 34))))
+end
+
+local function bubble_metrics(sms)
+    local typ = sms.type or sms.kind
+    if typ == "sys" or typ == "daysep" then
+        return 440, 24
+    end
+    local is_out = sms.direction == "out" or typ == "out"
+    local raw_text = sms.text or sms.body or sms.message or ""
+    local lines = message_lines(raw_text, is_out and 38 or 44)
+    local w = is_out and 430 or 500
+    -- Defold text nodes render taller than the raw CSS line-height estimate.
+    -- Reserve real text + stamp + padding so consecutive bubbles cannot overlap.
+    local h = 58 + (lines - 1) * 18
+    return w, h
 end
 
 local function render_bubble(slot, sms, y)
@@ -473,8 +570,8 @@ local function render_bubble(slot, sms, y)
     set_bubble_enabled(slot, true)
 
     if is_sep then
-        local w, h = 440, 24
-        local x = 634
+        local w, h = bubble_metrics(sms)
+        local x = CONTENT_X + (ROW_W - w) / 2
         set_box(p .. "_bg", x, y, w, h, COLORS.dark, typ == "daysep" and 0.40 or 0.22)
         set_border(p, x, y, w, h, COLORS.paper_dim, 0.08)
         set_pos(p .. "_text", x + w / 2, y + 13)
@@ -485,14 +582,12 @@ local function render_bubble(slot, sms, y)
         if tnode then gui.set_pivot(tnode, gui.PIVOT_CENTER) end
         set_text(p .. "_stamp", "")
         set_node_enabled(p .. "_stamp", false)
-        return h + 8
+        return h
     end
 
     local raw_text = sms.text or sms.body or sms.message or ""
-    local lines = message_lines(raw_text, is_out and 38 or 44)
-    local h = 34 + (lines - 1) * 16
-    local w = is_out and 430 or 500
-    local x = is_out and (1184 - w) or 524
+    local w, h = bubble_metrics(sms)
+    local x = is_out and (CONTENT_R - w) or CONTENT_X
     local bg = is_out and COLORS.accent or (is_hot and COLORS.card_hot or COLORS.card)
     local border = is_out and COLORS.accent or (is_hot and COLORS.hot or COLORS.accent)
     local bg_alpha = is_out and 0.10 or 0.70
@@ -501,8 +596,8 @@ local function render_bubble(slot, sms, y)
     set_box(p .. "_bg", x, y, w, h, bg, bg_alpha)
     set_border(p, x, y, w, h, border, border_alpha)
 
-    set_pos(p .. "_text", x + 12, y + h - 14)
-    set_size(p .. "_text", w - 24, h - 20)
+    set_pos(p .. "_text", x + 12, y + h - 18)
+    set_size(p .. "_text", w - 24, h - 28)
     set_text(p .. "_text", clamp_text(raw_text, is_out and 96 or 112))
     set_color(p .. "_text", COLORS.paper, 0.95)
     local tnode = get_node(p .. "_text")
@@ -511,17 +606,19 @@ local function render_bubble(slot, sms, y)
     local status = sms.status or (is_out and "delivered" or nil)
     local stamp = tostring(sms.time or "")
     if is_out then
-        if status == "delivered" then stamp = stamp .. " · DELIVERED"
-        elseif status == "sent" then stamp = stamp .. " · SENT"
-        elseif status == "sending" then stamp = stamp .. " · SENDING"
-        elseif status == "failed" then stamp = stamp .. " · FAILED" end
+        local segs = tonumber(sms.segs or sms.segments) or 1
+        if segs > 1 then stamp = stamp .. " · " .. tostring(segs) .. "/" .. tostring(segs) .. " SEG" end
+        if status == "delivered" then stamp = stamp .. " · ДОСТАВЛЕНО"
+        elseif status == "sent" then stamp = stamp .. " · ОТПРАВЛЕНО"
+        elseif status == "sending" then stamp = stamp .. " · ОТПР..."
+        elseif status == "failed" then stamp = stamp .. " · ОШИБКА" end
     end
-    set_pos(p .. "_stamp", x + w - 12, y + 8)
-    set_size(p .. "_stamp", w - 24, 10)
+    set_pos(p .. "_stamp", x + w - 12, y + 12)
+    set_size(p .. "_stamp", w - 24, 12)
     set_text(p .. "_stamp", stamp)
     set_color(p .. "_stamp", status == "delivered" and COLORS.green or COLORS.paper_dim, 0.76)
     set_node_enabled(p .. "_stamp", stamp ~= "")
-    return h + 8
+    return h
 end
 
 local function sms_storage_messages(contact_id)
@@ -533,6 +630,53 @@ local function sms_storage_messages(contact_id)
     return out
 end
 
+-- Можно ли отвечать в этом SMS-чате. Параллель к messenger:
+--   1) автор написал ink-knot sms_thread_<contact> или contact.ink_thread
+--   2) игрок ещё не отвечал (sms_<contact>_replied != true)
+--   3) контакт не readonly
+local function sms_can_reply(contact_id, contact)
+    if not contact_id or contact_id == "" then return false end
+    if contact and contact.readonly then return false end
+    local state = gs()
+    local replied_flag = "sms_" .. tostring(contact_id) .. "_replied"
+    if state.get_flag and state.get_flag(replied_flag) then return false end
+    local manager = dm()
+    if not manager.has_knot then return false end
+    local knot_name = (contact and contact.ink_thread) or ("sms_thread_" .. tostring(contact_id))
+    return manager.has_knot(knot_name) == true
+end
+
+-- Pulse alpha-mod на input/send элементах thread'а — подсказка что ответ
+-- доступен. Применяется только в режиме thread, останавливается при
+-- отсутствии knot'а или после выполнения # sms:reply:.
+local SMS_PULSE_TARGETS = { "th_input_text", "th_send_label", "th_send_bg" }
+local SMS_PULSE_DURATION = 0.6
+local SMS_PULSE_ALPHA_LO = 0.45
+
+local function start_sms_send_pulse()
+    for _, id in ipairs(SMS_PULSE_TARGETS) do
+        local n = get_node(id)
+        if n then
+            gui.cancel_animation(n, "color.w")
+            local c = gui.get_color(n)
+            gui.set_color(n, vmath.vector4(c.x, c.y, c.z, 1))
+            gui.animate(n, "color.w", SMS_PULSE_ALPHA_LO, gui.EASING_INOUTSINE,
+                SMS_PULSE_DURATION, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
+        end
+    end
+end
+
+local function stop_sms_send_pulse()
+    for _, id in ipairs(SMS_PULSE_TARGETS) do
+        local n = get_node(id)
+        if n then
+            gui.cancel_animation(n, "color.w")
+            local c = gui.get_color(n)
+            gui.set_color(n, vmath.vector4(c.x, c.y, c.z, 1))
+        end
+    end
+end
+
 local function render_thread(self)
     local contact_id = self.active_contact_id
     local contact = contacts().get(contact_id)
@@ -540,12 +684,19 @@ local function render_thread(self)
 
     set_text("th_name", contact.name or "—")
     set_text("th_num", "SIM 1 · " .. tostring(contact.number or "—"))
-    set_text("th_input_text", contact.readonly and "ответы запрещены оператором" or "нажмите, чтобы выбрать ответ…")
+    set_text("th_input_text", contact.readonly and "ответы запрещены оператором" or "нажмите, чтобы выбрать ответ...")
     set_color("th_input_text", COLORS.paper_dim, contact.readonly and 0.42 or 0.55)
-    set_text("th_meter_left", "кодировка: GSM-7 · сегментов: 1")
-    set_text("th_meter_right", "символов: 0 · осталось: 160")
-    set_text("th_footer_left", "оператор · МТС · сеть 4G · сигнал —75 dBm")
-    set_text("th_footer_right", "в нитке: " .. tostring(#chat) .. " · стоимость: —")
+    set_text("th_send_label", "SEND ▶")
+    set_color("th_send_bg", contact.readonly and COLORS.paper_dim or COLORS.accent, contact.readonly and 0.18 or 1.0)
+    set_color("th_send_label", contact.readonly and COLORS.paper_dim or COLORS.dark, contact.readonly and 0.70 or 0.95)
+
+    -- Запустить или остановить pulse в зависимости от наличия knot'а
+    -- и состояния replied-флага. Делаем после установки базовых цветов.
+    if sms_can_reply(contact_id, contact) then
+        start_sms_send_pulse()
+    else
+        stop_sms_send_pulse()
+    end
 
     local count = #chat
     set_node_enabled("th_empty", count == 0)
@@ -553,14 +704,16 @@ local function render_thread(self)
     if count == 0 then return end
 
     local first = math.max(1, count - MAX_BUBBLES + 1)
-    local y = 552
+    local current_top = THREAD_TOP
     local slot = 1
     for i = first, count do
         if slot > MAX_BUBBLES then break end
-        local h = render_bubble(slot, chat[i], y)
-        y = y - h
+        local _, h = bubble_metrics(chat[i])
+        local y = current_top - h
+        if y < THREAD_BOTTOM then break end
+        render_bubble(slot, chat[i], y)
+        current_top = y - BUBBLE_GAP
         slot = slot + 1
-        if y < 174 then break end
     end
 end
 
@@ -568,6 +721,7 @@ local function set_view(self, view)
     self.view = view
     if not self.visible then
         set_all_enabled(false)
+        stop_sms_send_pulse()
         return
     end
 
@@ -582,14 +736,18 @@ local function set_view(self, view)
     set_node_enabled("sms_thread/thread_root", show_thread)
     set_many_enabled(LIST_NODE_IDS, show_list)
     set_many_enabled(THREAD_NODE_IDS, show_thread)
+    -- Pulse только в thread-режиме. List-режим — гарантированный stop.
+    if not show_thread then stop_sms_send_pulse() end
 end
 
 local function refresh(self)
+    apply_static_layout()
     if self.view == "thread" then render_thread(self) else refresh_list(self) end
 end
 
 local function open_list(self)
     self.active_contact_id = nil
+    apply_static_layout()
     set_view(self, "list")
     refresh_list(self)
 end
@@ -602,6 +760,7 @@ local function open_thread(self, contact_id)
     if state.mark_sms_read then state.mark_sms_read(self.active_contact_id) end
     msg.post(PHONE_ROOT, "refresh_phone")
 
+    apply_static_layout()
     set_view(self, "thread")
     render_thread(self)
 end
@@ -677,14 +836,20 @@ local function pick_row(self, x, y)
 end
 
 local function is_inside_list(x, y)
-    local clip = get_node("sms_list_clip")
-    if clip and gui.is_enabled(clip) and gui.pick_node(clip, x, y) then return true end
+    -- No invisible helper node: keep editor clean and use explicit list bounds.
+    if x >= CONTENT_X and x <= CONTENT_X + ROW_W and y >= LIST_BOTTOM and y <= LIST_TOP then
+        return true
+    end
     local contact_id = pick_row({ rows = { [1] = true, [2] = true, [3] = true, [4] = true, [5] = true, [6] = true, [7] = true } }, x, y)
     return contact_id ~= nil
 end
 
 local function trigger_reply_choices(self)
     if not self.active_contact_id then return false end
+    -- Защита: тап на input/send когда отвечать нельзя (нет knot, уже
+    -- отвечал, readonly) — молча игнорируем чтобы не дёргать ui_manager.
+    local contact = contacts().get(self.active_contact_id)
+    if not sms_can_reply(self.active_contact_id, contact) then return false end
     msg.post(UI_MGR, "sms_open_contact", { contact_id = self.active_contact_id })
     return true
 end
@@ -803,6 +968,7 @@ function init(self)
     self.list_drag_accum = 0
     self.list_drag_moved = false
     self.active_contact_id = nil
+    apply_static_layout()
     set_all_enabled(false)
 end
 
@@ -822,6 +988,7 @@ function on_message(self, message_id, message, sender)
         self.active_contact_id = nil
         self.list_dragging = false
         self.view = "list"
+        stop_sms_send_pulse()  -- не крутим анимации в скрытом app
         set_all_enabled(false)
 
     elseif message_id == hash("refresh_app") then

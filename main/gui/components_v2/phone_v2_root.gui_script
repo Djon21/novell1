@@ -26,7 +26,7 @@ local APP_COMPONENT = {
     notes  = "#phone_notes",
     quests = "#phone_quests",
     mail   = "#phone_mail",
-    cam    = "#phone_cam",
+    messenger = "#phone_messenger",
     term   = "#phone_term",
 }
 
@@ -42,7 +42,7 @@ local APP_TITLES = {
     notes  = "УЛИКИ",
     quests = "КВЕСТЫ",
     mail   = "ПОЧТА",
-    cam    = "КАМЕРА",
+    messenger = "ЧАТЫ",
     term   = "ТЕРМИНАЛ",
 }
 
@@ -85,7 +85,7 @@ local APPS = {
     { key = "app4", id = "notes"  },
     { key = "app5", id = "quests" },
     { key = "app6", id = "mail"   },
-    { key = "app7", id = "cam"    },
+    { key = "app7", id = "messenger" },
     { key = "app8", id = "term"   },
 }
 
@@ -151,9 +151,17 @@ local function flash_node(node)
 end
 
 local function update_notif(self)
-    local unread = gs.get_phone_unread_total and gs.get_phone_unread_total() or 0
-    set_text("stats_msg", "сообщений: " .. tostring(unread))
-    set_badge(self, "app1", unread)
+    -- Общий счётчик (sms + msg) — для статус-бара «сообщений: N».
+    local total = gs.get_phone_unread_total and gs.get_phone_unread_total() or 0
+    set_text("stats_msg", "сообщений: " .. tostring(total))
+
+    -- На иконке SMS (app1) показываем ТОЛЬКО непрочитанные SMS — раньше
+    -- был get_phone_unread_total, который суммирует и messenger, и баг
+    -- засчитывал msg-сообщения в SMS-бейдж.
+    -- TODO: добавить app7_badge_bg/_text в phone_v2_root.gui и показывать
+    -- здесь msg-непрочитанные на иконке мессенджера.
+    local sms_unread = gs.get_sms_unread_total and gs.get_sms_unread_total() or 0
+    set_badge(self, "app1", sms_unread)
 end
 
 -- Закрыть текущее активное приложение (если есть)
