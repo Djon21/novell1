@@ -1,6 +1,6 @@
 # Телефон — архитектура split-системы
 
-Актуально на `2026-04-25`.  
+Актуально на `2026-05`.  
 Телефон разбит на 9 отдельных Defold GUI-компонентов на одном game object-е.
 
 ---
@@ -36,19 +36,21 @@
 
 | GUI-файл | Script-файл | Данные из game_state |
 |---|---|---|
-| `phone_sms.gui` | `phone_sms.gui_script` | `gs.get_messages()` |
+| `phone_sms.gui` | `phone_sms.gui_script` | `gs.get_messages()` (per-contact thread через `gs.get_sms()`) |
+| `phone_messenger.gui` | `phone_messenger.gui_script` | `gs.get_msg_chats()` / `gs.get_msg(chat_id)` (mock-каталог CHATS — для метаданных контактов) |
 | `phone_call.gui` | `phone_call.gui_script` | `gs.get_call_log()` |
 | `phone_notes.gui` | `phone_notes.gui_script` | `gs.get_clues()` |
 | `phone_quests.gui` | `phone_quests.gui_script` | `gs.get_quests()` |
 | `phone_mail.gui` | `phone_mail.gui_script` | `gs.get_mails()` |
-| `phone_cam.gui` | `phone_cam.gui_script` | `gs.get_camera_feed()` |
 | `phone_term.gui` | `phone_term.gui_script` | `gs.get_terminal_lines()` |
-| `phone_map.gui` | `phone_map.gui_script` | показывает карту внутри телефона (132 ноды под `map_root`) |
+| `phone_map.gui` | `phone_map.gui_script` | POI-кружки крутятся для разрешённых; runtime allow-set из `gs.map_is_poi_allowed()` |
 
 ### Архив (не в коллекции)
 
 - `phone_v2.gui` + `phone_v2.gui_script` — старый монолит, остался на диске для справки,
   в коллекцию не подключён. Можно удалить после стабилизации сплита.
+- `phone_cam.gui` + `phone_cam.gui_script` — приложение «камера», заменено на
+  `phone_messenger`. Файлы остались на диске, в коллекцию больше не включены.
 - `phone_map_beautiful.gui` — заготовка нового дизайна карты, пока не используется.
 
 ---
@@ -68,7 +70,7 @@ embedded_instances { id: "ui_manager_v2"
     "components { id: \"phone_notes\"  component: \"/main/gui/components_v2/phone_notes.gui\" }\n"
     "components { id: \"phone_quests\" component: \"/main/gui/components_v2/phone_quests.gui\" }\n"
     "components { id: \"phone_mail\"   component: \"/main/gui/components_v2/phone_mail.gui\" }\n"
-    "components { id: \"phone_cam\"    component: \"/main/gui/components_v2/phone_cam.gui\" }\n"
+    "components { id: \"phone_messenger\" component: \"/main/gui/components_v2/phone_messenger.gui\" }\n"
     "components { id: \"phone_term\"   component: \"/main/gui/components_v2/phone_term.gui\" }\n"
 ```
 
@@ -202,6 +204,33 @@ message_flow.lua handles "sms_open_contact"
 > 1. `# sms:add:<contact>:<текст>` — прислать входящее (из любого knot'а)
 > 2. Написать knot `sms_thread_<contact>` в нужном `.ink`-файле
 > 3. Готово — ui_manager найдёт knot по имени автоматически
+
+### Messenger — параллельный канал
+
+Messenger-приложение (`phone_messenger`) работает **зеркально** к SMS, но через
+отдельный storage в `game_state` (`_msg`/`_msg_unread`):
+
+| SMS | Messenger |
+|---|---|
+| `# sms:add:mila:текст` | `# msg:add:mila:текст` |
+| `# sms:reply:mila:текст` | `# msg:reply:mila:текст` |
+| `# sms:read:mila` | `# msg:read:mila` |
+| auto-flag `sms_<contact>_read` | auto-flag `msg_<chat>_read` |
+| auto-flag `sms_<contact>_replied` | auto-flag `msg_<chat>_replied` |
+| ink-thread `sms_thread_<contact>` | ink-thread `msg_thread_<chat>` |
+
+Тап на строку чата → `messenger_open_chat {chat_id}` в `ui_manager_v2`:
+- если есть `msg_thread_<chat>` knot и `msg_<chat>_replied != true` →
+  закрытие телефона + jump в knot (как с SMS)
+- иначе → inline bubble-просмотр в самом приложении
+
+Метаданные контакта (имя, аватар, тон) живут в локальной таблице `CHATS`
+внутри `phone_messenger.gui_script` как mock-каталог. Если автор присылает
+`# msg:add:newchar:...` для контакта, которого нет в каталоге — чат всё
+равно появится в списке, но без имени/аватара (пока).
+
+`open_app` сразу делает `gs.mark_all_msg_read()` — все runtime-чаты
+помечаются прочитанными при открытии Messenger.
 
 ---
 
