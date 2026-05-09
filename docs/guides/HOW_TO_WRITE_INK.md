@@ -141,6 +141,9 @@ Git Bash / Linux:
 | `sms:add:CONTACT:TEXT` | `# sms:add:mila:Есть планы?` | Входящее SMS. |
 | `sms:reply:CONTACT:TEXT` | `# sms:reply:mila:Хорошо.` | Исходящее SMS от ГГ. Авто-флаг: `sms_<contact>_replied=true`. |
 | `sms:read:CONTACT` | `# sms:read:mila` | Пометить чат прочитанным вручную. |
+| `msg:add:CHAT:TEXT` | `# msg:add:mila:Привет в мессенджере` | Входящее сообщение в Messenger-приложение (отдельно от SMS). |
+| `msg:reply:CHAT:TEXT` | `# msg:reply:mila:Ок` | Исходящее в Messenger. Авто-флаг: `msg_<chat>_replied=true`. |
+| `msg:read:CHAT` | `# msg:read:mila` | Пометить чат прочитанным вручную. Авто-флаг `msg_<chat>_read=true` ставится при открытии Messenger. |
 | `note:add:TITLE:BODY` | `# note:add:Кейс:не хватает данных` | Добавить заметку. |
 | `mail:add:FROM:SUBJECT[:BODY]` | `# mail:add:system:Кейс 017:Собрать пакет` | Добавить письмо. |
 | `mail:read` / `mail:read:INDEX` | `# mail:read` | Пометить почту прочитанной. |
@@ -425,14 +428,16 @@ Ink:
 Разрешено:
 
 - добавлять SMS / почту / заметки / звонки / улики тегами;
+- добавлять сообщения в Messenger через `# msg:add:` / `# msg:reply:`;
 - открывать карту или приложение через `# phone:*`;
-- писать `sms_thread_<contact>` для side-dialogue переписки.
+- писать `sms_thread_<contact>` для side-dialogue переписки в SMS;
+- писать `msg_thread_<chat>` для интерактивного ответа в Messenger (тап на чат → автоматический jump в этот knot).
 
 Запрещено:
 
 - делать телефон отдельной `scene_id`;
 - писать статичные “экраны телефона” в Ink;
-- вручную ставить авто-флаги `sms_<contact>_read` / `sms_<contact>_replied`.
+- вручную ставить авто-флаги `sms_<contact>_read` / `sms_<contact>_replied` / `msg_<chat>_read` / `msg_<chat>_replied`.
 
 ---
 

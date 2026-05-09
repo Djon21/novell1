@@ -3,6 +3,7 @@ local gs = require "main.scripts.game_state"
 local sm = require "main.scripts.save_manager"
 local meta = require "main.scripts.meta_state"
 local scene_controller = require "main.scripts.scene_controller"
+local contacts = require "main.scripts.phone_contacts"
 
 local M = {}
 
@@ -27,6 +28,7 @@ local function handle_menu(ctx, message_id, message, sender)
             print("[ui_manager_v2] ERROR: chapter_01.json not found")
             return true
         end
+        ctx.prepare_run_restore()
         local restored = ctx.restore_run_state({ defer_scene_enter = true })
         ctx.reset_dialogue_backlog()
         dm.load_saved(bytes)
@@ -219,7 +221,11 @@ local function handle_sms_open_contact(ctx, contact_id)
     end
 
     ctx.close_phone()
-    local knot_name = "sms_thread_" .. tostring(contact_id)
+    local knot_name = nil
+    if contacts and contacts.get_ink_thread then
+        knot_name = contacts.get_ink_thread(contact_id)
+    end
+    knot_name = knot_name or ("sms_thread_" .. tostring(contact_id))
     if dm.has_knot and dm.has_knot(knot_name) then
         local keep_bg = nil
         if scene_controller.is_active and scene_controller.is_active() then
@@ -228,6 +234,24 @@ local function handle_sms_open_contact(ctx, contact_id)
         end
         ctx.run_side_dialogue_knot(knot_name, keep_bg)
     end
+end
+
+-- Параллель к sms: тап на messenger-чат → если есть msg_thread_<chat> knot
+-- и игрок ещё не отвечал, закрываем phone и прыгаем туда. Если knot'а нет
+-- или уже ответили — игнорим (phone_messenger показывает inline view).
+local function handle_messenger_open_chat(ctx, chat_id)
+    if not chat_id then return end
+    local replied_flag = "msg_" .. tostring(chat_id) .. "_replied"
+    if gs.get_flag and gs.get_flag(replied_flag) then return end
+    local knot_name = "msg_thread_" .. tostring(chat_id)
+    if not (dm.has_knot and dm.has_knot(knot_name)) then return end
+    ctx.close_phone()
+    local keep_bg = nil
+    if scene_controller.is_active and scene_controller.is_active() then
+        keep_bg = scene_controller.get_current_bg and scene_controller.get_current_bg() or nil
+        if scene_controller.exit then scene_controller.exit() end
+    end
+    ctx.run_side_dialogue_knot(knot_name, keep_bg)
 end
 
 local function handle_phone(ctx, message_id, message, sender)
@@ -245,6 +269,9 @@ local function handle_phone(ctx, message_id, message, sender)
         return true
     elseif message_id == hash("sms_open_contact") then
         handle_sms_open_contact(ctx, message and message.contact_id)
+        return true
+    elseif message_id == hash("messenger_open_chat") then
+        handle_messenger_open_chat(ctx, message and message.chat_id)
         return true
     elseif message_id == hash("phone_app_clicked") then
         ctx.dbg("[ui_manager_v2] phone_app_clicked", message.id)
@@ -277,7 +304,7 @@ local function handle_map(ctx, message_id, message, sender)
         local knot = message and message.knot
         ctx.close_map()
         if knot then
-            ctx.run_side_dialogue_knot(knot, nil)
+            ctx.run_side_dialogue_knot(knot, nil, { allow_chapter_end = true })
         end
         return true
     end

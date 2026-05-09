@@ -283,6 +283,32 @@ local function apply_tags(tags, trailing)
                     table.insert(pending_commands, { type = "mark_sms_read", contact = contact })
                 end
             end
+        elseif key == "msg" and value and not suppress_effects then
+            -- # msg:add:<chat>:<text> | # msg:reply:<chat>:<text> | # msg:read:<chat>
+            -- Параллельный канал к sms — отдельный storage в game_state.
+            local op, rest = value:match("(%a+)%s*:%s*(.+)")
+            if op == "add" and rest then
+                local chat, text = rest:match("([^:]+)%s*:%s*(.+)")
+                if chat and text then
+                    chat = chat:gsub("^%s+", ""):gsub("%s+$", "")
+                    text = text:gsub('^%s*"(.*)"%s*$', "%1")
+                               :gsub("^%s*'(.*)'%s*$", "%1")
+                    table.insert(pending_commands, { type = "add_msg", chat = chat, text = text })
+                end
+            elseif op == "reply" and rest then
+                local chat, text = rest:match("([^:]+)%s*:%s*(.+)")
+                if chat and text then
+                    chat = chat:gsub("^%s+", ""):gsub("%s+$", "")
+                    text = text:gsub('^%s*"(.*)"%s*$', "%1")
+                               :gsub("^%s*'(.*)'%s*$", "%1")
+                    table.insert(pending_commands, { type = "reply_msg", chat = chat, text = text })
+                end
+            elseif op == "read" and rest then
+                local chat = rest:gsub("^%s+", ""):gsub("%s+$", "")
+                if chat ~= "" then
+                    table.insert(pending_commands, { type = "mark_msg_read", chat = chat })
+                end
+            end
         elseif key == "note" and value and not suppress_effects then
             -- # note:add:Заголовок:Тело
             local op, rest = value:match("(%a+)%s*:%s*(.+)")

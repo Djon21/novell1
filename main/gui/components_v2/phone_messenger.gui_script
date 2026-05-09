@@ -1,0 +1,704 @@
+-- phone_messenger.gui_script
+-- Messenger app. Контакты-каталог (имя, аватар, тон) хранится в локальной
+-- таблице CHATS ниже. Сообщения и unread приходят из game_state через
+-- ink-теги # msg:add: / # msg:reply: / # msg:read: (см. INVENTORY_SYSTEM
+-- и HOW_TO_WRITE_INK §4 — раздел телефон).
+
+local gs = require "main.scripts.game_state"
+
+local UI_MGR = "#ui_manager_v2"
+
+local MAX_LIST_ROWS = 7
+local MAX_BUBBLES = 8
+local LIST_SCROLL_STEP = 1
+local CHAT_SCROLL_STEP = 1
+
+local COLORS = {
+    paper = vmath.vector4(0.953, 0.925, 0.851, 1),
+    dim = vmath.vector4(0.788, 0.753, 0.659, 1),
+    dark = vmath.vector4(0.031, 0.024, 0.094, 1),
+    card = vmath.vector4(0.078, 0.071, 0.204, 1),
+    accent = vmath.vector4(0.490, 0.976, 1.000, 1),
+    hot = vmath.vector4(1.000, 0.239, 0.498, 1),
+    amber = vmath.vector4(1.000, 0.702, 0.278, 1),
+    violet = vmath.vector4(0.690, 0.450, 1.000, 1),
+    green = vmath.vector4(0.290, 0.870, 0.500, 1),
+}
+
+local NODE_IDS = {
+    "messenger_runtime_root", "messenger_app_bg",
+    "list_root", "msgr_title", "search_bg", "search_bt", "search_bb", "search_bl", "search_br", "search_icon", "search_text",
+    "tab_all_bg", "tab_all_bt", "tab_all_bb", "tab_all_bl", "tab_all_br", "tab_all_text", "tab_all_count",
+    "tab_unread_bg", "tab_unread_bt", "tab_unread_bb", "tab_unread_bl", "tab_unread_br", "tab_unread_text", "tab_unread_count",
+    "list_divider", "list_scrollbar_track", "list_scrollbar_thumb", "list_footer_line", "list_footer_left", "list_footer_right",
+    "chat_root", "back_bg", "back_bt", "back_bb", "back_bl", "back_br", "back_text",
+    "head_av_bg", "head_av", "head_name", "head_status",
+    "head_call_bg", "head_call_bt", "head_call_bb", "head_call_bl", "head_call_br", "head_call_text",
+    "head_find_bg", "head_find_bt", "head_find_bb", "head_find_bl", "head_find_br", "head_find_text",
+    "head_menu_bg", "head_menu_bt", "head_menu_bb", "head_menu_bl", "head_menu_br", "head_menu_text",
+    "chat_header_line", "chat_scrollbar_track", "chat_scrollbar_thumb",
+    "input_line", "attach_bg", "attach_bt", "attach_bb", "attach_bl", "attach_br", "attach_text",
+    "input_bg", "input_bt", "input_bb", "input_bl", "input_br", "input_text",
+    "send_bg", "send_bt", "send_bb", "send_bl", "send_br", "send_text",
+    "chat_footer_line", "chat_footer_left", "chat_footer_right",
+}
+
+for i = 1, MAX_LIST_ROWS do
+    local p = "chat" .. i
+    table.insert(NODE_IDS, p .. "_bg")
+    table.insert(NODE_IDS, p .. "_bt")
+    table.insert(NODE_IDS, p .. "_bb")
+    table.insert(NODE_IDS, p .. "_bl")
+    table.insert(NODE_IDS, p .. "_br")
+    table.insert(NODE_IDS, p .. "_av_bg")
+    table.insert(NODE_IDS, p .. "_av")
+    table.insert(NODE_IDS, p .. "_name")
+    table.insert(NODE_IDS, p .. "_icons")
+    table.insert(NODE_IDS, p .. "_preview")
+    table.insert(NODE_IDS, p .. "_time")
+    table.insert(NODE_IDS, p .. "_badge_bg")
+    table.insert(NODE_IDS, p .. "_badge")
+end
+
+for i = 1, MAX_BUBBLES do
+    local p = "bub" .. i
+    table.insert(NODE_IDS, p .. "_bg")
+    table.insert(NODE_IDS, p .. "_bt")
+    table.insert(NODE_IDS, p .. "_bb")
+    table.insert(NODE_IDS, p .. "_bl")
+    table.insert(NODE_IDS, p .. "_br")
+    table.insert(NODE_IDS, p .. "_text")
+    table.insert(NODE_IDS, p .. "_stamp")
+end
+
+local CHATS = {
+    nm = {
+        name = "Н. М.", av = "НМ", tone = "hot", unread = 3, time = "07:10",
+        status = "был(а) в сети 5 мин назад",
+        preview = "опять опоздаешь. опять. опять.",
+        msgs = {
+            { type = "daysep", text = "сегодня" },
+            { dir = "in", text = "опять опоздаешь.", time = "07:08", tone = "hot" },
+            { dir = "in", text = "опять.", time = "07:09", tone = "hot" },
+            { dir = "in", text = "опять.", time = "07:10", tone = "hot" },
+        },
+    },
+    loop = {
+        name = "loop_bot", av = "L", tone = "violet", unread = 1, time = "06:58", bot = true,
+        status = "бот · работает в фоне",
+        preview = "найден кадр в петле #017. ключ: P-0317-NM",
+        msgs = {
+            { type = "sys", text = "session: loop-daemon v0.17.3 · e2e ok" },
+            { dir = "in", text = "сканирование завершено. найдено совпадений: 1.", time = "06:57", tone = "violet" },
+            { dir = "in", text = "кадр #017 · временной разрыв 4с · ключ: P-0317-NM", time = "06:58", tone = "violet" },
+        },
+    },
+    prod = {
+        name = "Отдел · Прод", av = "ПР", tone = "amber", unread = 7, time = "06:42", group = true,
+        status = "группа · 12 участников · 4 онлайн",
+        preview = "Марина: on-call поднял? p1 уже час висит",
+        msgs = {
+            { type = "daysep", text = "сегодня" },
+            { dir = "in", text = "Марина: ребят, opsgenie сдох. p1 на проде.", time = "06:30", tone = "amber" },
+            { dir = "in", text = "Костя: loop-daemon ловит NaN на каждом 17-м тике.", time = "06:34", tone = "amber" },
+            { dir = "in", text = "Марина: on-call поднял? p1 уже час висит.", time = "06:42", tone = "hot" },
+        },
+    },
+    mila = {
+        name = "Мила", av = "МИ", tone = "green", unread = 1, time = "06:14",
+        status = "печатает...",
+        preview = "черновик: петля сегодня в 19:30, столик у окна",
+        msgs = {
+            { type = "daysep", text = "вчера" },
+            { dir = "in", text = "слушай, у меня странное чувство. как будто этот день уже был.", time = "22:14" },
+            { dir = "out", text = "у меня тоже. кадр #017 совпадает 1в1 со вчерашним.", time = "22:18", status = "read" },
+            { dir = "in", text = "может это loop-daemon глючит? проверь логи.", time = "22:20" },
+        },
+    },
+    metro = {
+        name = "Москва · Транспорт", av = "МР", tone = "default", unread = 0, time = "06:02", muted = true,
+        status = "канал · 124k подписчиков",
+        preview = "трамвай №7 опаздывает на 3 мин",
+        msgs = {
+            { type = "daysep", text = "сегодня" },
+            { dir = "in", text = "доброе утро, Москва. на линии задержка ~2 мин.", time = "05:30" },
+            { dir = "in", text = "трамвай №7: опоздание 3 мин. интервал восстановлен.", time = "06:02" },
+            { type = "sys", text = "канал отключён от уведомлений" },
+        },
+    },
+    mama = {
+        name = "Мама", av = "М", tone = "violet", unread = 0, time = "вчера",
+        status = "была в сети вчера, 21:14",
+        preview = "Я: возьму зонт, не переживай. позвоню вечером.",
+        msgs = {
+            { type = "daysep", text = "вчера" },
+            { dir = "in", text = "сынок, в Москве снова дождь. возьми зонт.", time = "08:12" },
+            { dir = "out", text = "возьму зонт, не переживай. позвоню вечером.", time = "08:40", status = "read" },
+        },
+    },
+    kgb = {
+        name = "КГБ-чат · соседи", av = "КН", tone = "dim", unread = 0, time = "вчера", group = true,
+        status = "группа · 8 участников",
+        preview = "Костя: кто-нибудь видел кота в подъезде?",
+        msgs = {
+            { dir = "in", text = "Костя: кто-нибудь видел кота в подъезде?", time = "21:02" },
+            { dir = "in", text = "рыжий, ошейник синий, на Барсик откликается.", time = "21:03" },
+        },
+    },
+    changelog = {
+        name = "avos · changelog", av = "АВ", tone = "amber", unread = 0, time = "пт", channel = true,
+        status = "канал · 2.1k подписчиков",
+        preview = "релиз v0.17.3 · фикс утечки памяти",
+        msgs = {
+            { type = "daysep", text = "пятница" },
+            { dir = "in", text = "v0.17.3 — фикс утечки памяти в loop-daemon.", time = "18:00", tone = "amber" },
+        },
+    },
+}
+
+local ORDER = { "nm", "loop", "prod", "mila", "metro", "mama", "kgb", "changelog" }
+
+local function get_node(id)
+    local ok, n = pcall(gui.get_node, id)
+    if ok then return n end
+    return nil
+end
+
+local function set_node_enabled(id, enabled)
+    local n = get_node(id)
+    if n then gui.set_enabled(n, enabled) end
+end
+
+local function set_nodes_enabled(ids, enabled)
+    for _, id in ipairs(ids) do set_node_enabled(id, enabled) end
+end
+
+local function set_text(id, value)
+    local n = get_node(id)
+    if n then gui.set_text(n, value or "") end
+end
+
+local function set_color(id, color, alpha)
+    local n = get_node(id)
+    if n then
+        local c = vmath.vector4(color.x, color.y, color.z, alpha or color.w or 1)
+        gui.set_color(n, c)
+    end
+end
+
+local function set_alpha(id, alpha)
+    local n = get_node(id)
+    if n then gui.set_alpha(n, alpha) end
+end
+
+local function set_size_x(id, width)
+    local n = get_node(id)
+    if n then
+        local s = gui.get_size(n)
+        gui.set_size(n, vmath.vector3(width, s.y, s.z))
+    end
+end
+
+local function get_pos(id)
+    local n = get_node(id)
+    if n then return gui.get_position(n) end
+    return vmath.vector3(0, 0, 0)
+end
+
+local function set_pos_y(id, y)
+    local n = get_node(id)
+    if n then
+        local p = gui.get_position(n)
+        gui.set_position(n, vmath.vector3(p.x, y, p.z))
+    end
+end
+
+local function set_pos_x(id, x)
+    local n = get_node(id)
+    if n then
+        local p = gui.get_position(n)
+        gui.set_position(n, vmath.vector3(x, p.y, p.z))
+    end
+end
+
+local function clamp_text(s, limit)
+    s = tostring(s or ""):gsub("\n", " ")
+    limit = limit or 80
+    if utf8 and utf8.len and utf8.len(s) and utf8.len(s) > limit then
+        local out = ""
+        local count = 0
+        for _, cp in utf8.codes(s) do
+            count = count + 1
+            if count > limit - 3 then break end
+            out = out .. utf8.char(cp)
+        end
+        return out .. "..."
+    end
+    if #s > limit then return s:sub(1, limit - 3) .. "..." end
+    return s
+end
+
+local function tone_color(tone)
+    if tone == "hot" then return COLORS.hot end
+    if tone == "amber" then return COLORS.amber end
+    if tone == "violet" then return COLORS.violet end
+    if tone == "green" then return COLORS.green end
+    return COLORS.accent
+end
+
+-- Возвращает кол-во unread в чате: для чатов с runtime-сообщениями берём
+-- из gs.get_msg_unread, для legacy-чатов (без runtime сообщений) — из CHATS.unread.
+local function chat_unread(id)
+    local runtime_unread = gs.get_msg_unread and gs.get_msg_unread(id) or 0
+    if runtime_unread > 0 then return runtime_unread end
+    local has_runtime = false
+    if gs.get_msg then
+        local msgs = gs.get_msg(id)
+        has_runtime = msgs and #msgs > 0
+    end
+    if has_runtime then return 0 end
+    -- Чат без runtime-сообщений → fallback на mock-данные из CHATS.
+    local c = CHATS[id]
+    return (c and tonumber(c.unread)) or 0
+end
+
+local function build_chat_list(self)
+    -- Список чатов = все из ORDER (mock-каталог) + любые runtime чаты,
+    -- которые не лежат в каталоге (например, новый персонаж пришёл из ink).
+    local out = {}
+    local seen = {}
+    for _, id in ipairs(ORDER) do
+        if not self.filter or self.filter ~= "unread" or chat_unread(id) > 0 then
+            table.insert(out, id)
+            seen[id] = true
+        end
+    end
+    if gs.get_msg_chats then
+        for _, id in ipairs(gs.get_msg_chats()) do
+            if not seen[id] and (self.filter ~= "unread" or chat_unread(id) > 0) then
+                table.insert(out, id)
+                seen[id] = true
+            end
+        end
+    end
+    return out
+end
+
+local function unread_total()
+    -- Сумма runtime-непрочитанных + mock-непрочитанных для чатов без runtime.
+    local n = 0
+    if gs.get_msg_unread_total then
+        n = n + (gs.get_msg_unread_total() or 0)
+    end
+    for _, id in ipairs(ORDER) do
+        local has_runtime = gs.get_msg and #gs.get_msg(id) > 0
+        if not has_runtime then
+            n = n + (tonumber(CHATS[id] and CHATS[id].unread) or 0)
+        end
+    end
+    return n
+end
+
+local function set_border(prefix, color, alpha)
+    for _, suffix in ipairs({ "_bt", "_bb", "_bl", "_br" }) do
+        set_color(prefix .. suffix, color, alpha)
+    end
+end
+
+local function set_row_enabled(i, enabled)
+    local p = "chat" .. i
+    for _, suffix in ipairs({ "_bg", "_bt", "_bb", "_bl", "_br", "_av_bg", "_av", "_name", "_icons", "_preview", "_time", "_badge_bg", "_badge" }) do
+        set_node_enabled(p .. suffix, enabled)
+    end
+end
+
+local function hide_rows()
+    for i = 1, MAX_LIST_ROWS do set_row_enabled(i, false) end
+end
+
+local function render_tab(self)
+    local all_count = #ORDER
+    local unread = unread_total()
+    set_text("tab_all_count", tostring(all_count))
+    set_text("tab_unread_count", tostring(unread))
+    local all_active = self.filter ~= "unread"
+    set_color("tab_all_bg", all_active and COLORS.accent or COLORS.card, all_active and 0.15 or 0.60)
+    set_color("tab_unread_bg", (not all_active) and COLORS.accent or COLORS.card, (not all_active) and 0.15 or 0.60)
+    set_border("tab_all", all_active and COLORS.accent or COLORS.accent, all_active and 0.55 or 0.25)
+    set_border("tab_unread", (not all_active) and COLORS.accent or COLORS.accent, (not all_active) and 0.55 or 0.25)
+end
+
+local function update_list_scrollbar(self, total)
+    local track_h = 450
+    local visible = MAX_LIST_ROWS
+    if total <= visible then
+        set_alpha("list_scrollbar_thumb", 0.18)
+        set_size_x("list_scrollbar_thumb", 4)
+        set_pos_y("list_scrollbar_thumb", 442)
+        return
+    end
+    local ratio = visible / total
+    local h = math.max(80, track_h * ratio)
+    local max_off = math.max(1, total - visible)
+    local travel = track_h - h
+    local top_y = 92 + track_h - h
+    local y = top_y - travel * ((self.list_offset or 0) / max_off)
+    local n = get_node("list_scrollbar_thumb")
+    if n then
+        local s = gui.get_size(n)
+        gui.set_size(n, vmath.vector3(s.x, h, s.z))
+        local p = gui.get_position(n)
+        gui.set_position(n, vmath.vector3(p.x, y, p.z))
+        gui.set_alpha(n, 0.70)
+    end
+end
+
+local function render_list(self)
+    local ids = build_chat_list(self)
+    self.visible_chat_ids = ids
+    local total = #ids
+    local max_offset = math.max(0, total - MAX_LIST_ROWS)
+    self.list_offset = math.max(0, math.min(self.list_offset or 0, max_offset))
+    hide_rows()
+    render_tab(self)
+
+    for slot = 1, MAX_LIST_ROWS do
+        local id = ids[(self.list_offset or 0) + slot]
+        local c = id and CHATS[id]
+        if c then
+            local p = "chat" .. slot
+            local tone = tone_color(c.tone)
+            local unread = (tonumber(c.unread) or 0) > 0
+            set_row_enabled(slot, true)
+            set_color(p .. "_bg", unread and COLORS.accent or COLORS.card, unread and 0.06 or 0.55)
+            set_border(p, unread and COLORS.accent or COLORS.paper, unread and 0.30 or 0.10)
+            set_color(p .. "_av_bg", tone, (c.tone == "dim") and 0.10 or 0.20)
+            set_color(p .. "_av", tone, 1)
+            set_color(p .. "_name", unread and COLORS.accent or COLORS.paper, 1)
+            set_text(p .. "_av", clamp_text(c.av or "?", 2))
+            set_text(p .. "_name", clamp_text(c.name or id, 26))
+            local icons = ""
+            if c.bot then icons = icons .. " BOT" end
+            if c.group then icons = icons .. " GRP" end
+            if c.channel then icons = icons .. " CH" end
+            if c.muted then icons = icons .. " MUTE" end
+            set_text(p .. "_icons", icons)
+            set_text(p .. "_preview", clamp_text(c.preview or "", 66))
+            set_text(p .. "_time", c.time or "")
+            if (tonumber(c.unread) or 0) > 0 then
+                set_node_enabled(p .. "_badge_bg", true)
+                set_node_enabled(p .. "_badge", true)
+                set_color(p .. "_badge_bg", c.tone == "hot" and COLORS.hot or COLORS.accent, 1)
+                set_text(p .. "_badge", tostring(c.unread))
+            else
+                set_node_enabled(p .. "_badge_bg", false)
+                set_node_enabled(p .. "_badge", false)
+            end
+        end
+    end
+    set_text("list_footer_left", "онлайн: 4 · e2e ok")
+    if total == 0 then
+        set_text("list_footer_right", "нет чатов")
+    else
+        local first = math.min(total, (self.list_offset or 0) + 1)
+        local last = math.min(total, (self.list_offset or 0) + MAX_LIST_ROWS)
+        set_text("list_footer_right", "показаны: " .. tostring(first) .. "-" .. tostring(last) .. " / " .. tostring(total))
+    end
+    update_list_scrollbar(self, total)
+end
+
+local function set_bubble_enabled(i, enabled)
+    local p = "bub" .. i
+    for _, suffix in ipairs({ "_bg", "_bt", "_bb", "_bl", "_br", "_text", "_stamp" }) do
+        set_node_enabled(p .. suffix, enabled)
+    end
+end
+
+local function hide_bubbles()
+    for i = 1, MAX_BUBBLES do set_bubble_enabled(i, false) end
+end
+
+-- Конвертирует runtime-сообщения из game_state в формат, который ожидает
+-- bubble-renderer этого скрипта.
+local function runtime_msgs_to_ui(chat_id, raw)
+    local out = {}
+    local tone = CHATS[chat_id] and CHATS[chat_id].tone or "default"
+    for _, m in ipairs(raw or {}) do
+        table.insert(out, {
+            dir  = m.direction or "in",
+            text = m.text or "",
+            time = m.time or "",
+            tone = tone,
+        })
+    end
+    return out
+end
+
+local function get_messages(chat_id)
+    if not chat_id then return {} end
+    -- 1) Runtime-сообщения из game_state (наполняются ink-тегами # msg:add: / # msg:reply:)
+    if gs.get_msg then
+        local raw = gs.get_msg(chat_id)
+        if raw and #raw > 0 then
+            return runtime_msgs_to_ui(chat_id, raw)
+        end
+    end
+    -- 2) Fallback на mock-данные из каталога CHATS (для чатов без runtime).
+    local c = CHATS[chat_id]
+    return c and c.msgs or {}
+end
+
+local function update_chat_scrollbar(self, total)
+    local track_h = 430
+    local visible = MAX_BUBBLES
+    if total <= visible then
+        set_alpha("chat_scrollbar_thumb", 0.18)
+        return
+    end
+    local ratio = visible / total
+    local h = math.max(80, track_h * ratio)
+    local max_off = math.max(1, total - visible)
+    local travel = track_h - h
+    local top_y = 148 + track_h - h
+    local y = top_y - travel * ((self.chat_offset or 0) / max_off)
+    local n = get_node("chat_scrollbar_thumb")
+    if n then
+        local s = gui.get_size(n)
+        gui.set_size(n, vmath.vector3(s.x, h, s.z))
+        local p = gui.get_position(n)
+        gui.set_position(n, vmath.vector3(p.x, y, p.z))
+        gui.set_alpha(n, 0.70)
+    end
+end
+
+local function render_chat(self)
+    local id = self.active_chat_id or ORDER[1]
+    local c = CHATS[id]
+    if not c then return end
+    set_text("head_av", clamp_text(c.av or "?", 2))
+    set_text("head_name", clamp_text(c.name or id, 28))
+    set_text("head_status", c.status or "в сети")
+    local tone = tone_color(c.tone)
+    set_color("head_av_bg", tone, 0.20)
+    set_color("head_av", tone, 1)
+    local msgs = get_messages(id)
+    local total = #msgs
+    local max_offset = math.max(0, total - MAX_BUBBLES)
+    self.chat_offset = math.max(0, math.min(self.chat_offset or max_offset, max_offset))
+    hide_bubbles()
+
+    for slot = 1, MAX_BUBBLES do
+        local m = msgs[(self.chat_offset or 0) + slot]
+        if m then
+            local p = "bub" .. slot
+            set_bubble_enabled(slot, true)
+            local is_out = m.dir == "out"
+            local is_sep = m.type == "daysep" or m.type == "sys"
+            local color = is_out and COLORS.accent or tone_color(m.tone or c.tone)
+            if is_sep then
+                set_color(p .. "_bg", COLORS.paper, m.type == "daysep" and 0.08 or 0.0)
+                set_border(p, COLORS.paper, 0.0)
+                set_color(p .. "_text", COLORS.dim, 0.78)
+                set_text(p .. "_text", clamp_text((m.text or ""):upper(), 68))
+                set_text(p .. "_stamp", "")
+                set_pos_x(p .. "_bg", 610)
+                set_pos_x(p .. "_text", 624)
+                set_pos_x(p .. "_stamp", 1010)
+                set_size_x(p .. "_bg", 380)
+                set_size_x(p .. "_text", 340)
+            else
+                local x = is_out and 686 or 540
+                local w = is_out and 500 or 560
+                set_pos_x(p .. "_bg", x)
+                set_pos_x(p .. "_text", x + 14)
+                set_pos_x(p .. "_stamp", x + w - 12)
+                set_size_x(p .. "_bg", w)
+                set_size_x(p .. "_text", w - 28)
+                set_color(p .. "_bg", is_out and COLORS.accent or COLORS.card, is_out and 0.12 or 0.70)
+                set_border(p, color, is_out and 0.45 or 0.28)
+                set_color(p .. "_text", COLORS.paper, 1)
+                set_text(p .. "_text", clamp_text(m.text or "", is_out and 72 or 80))
+                local stamp = tostring(m.time or "")
+                if is_out and m.status then stamp = stamp .. " · " .. tostring(m.status):upper() end
+                set_text(p .. "_stamp", stamp)
+                set_color(p .. "_stamp", is_out and COLORS.accent or COLORS.dim, 0.80)
+            end
+        end
+    end
+    update_chat_scrollbar(self, total)
+end
+
+local function set_view(self, view)
+    self.view = view or "list"
+    local show_list = self.view == "list"
+    set_node_enabled("list_root", show_list)
+    set_node_enabled("chat_root", not show_list)
+    set_node_enabled("messenger_runtime_root", true)
+    set_node_enabled("messenger_app_bg", true)
+    if show_list then render_list(self) else render_chat(self) end
+end
+
+local function open_list(self)
+    self.active_chat_id = nil
+    set_view(self, "list")
+end
+
+local function open_chat(self, chat_id)
+    self.active_chat_id = chat_id
+    self.chat_offset = nil
+    local c = CHATS[chat_id]
+    if c then c.unread = 0 end
+    -- runtime: помечаем чат прочитанным (auto-flag msg_<chat>_read)
+    if gs.mark_msg_read then gs.mark_msg_read(chat_id) end
+    -- Если у автора есть ink-knot msg_thread_<chat> и игрок ещё не отвечал
+    -- (msg_<chat>_replied != true), ui_manager_v2 закроет телефон и
+    -- прыгнет в knot для интерактивного ответа. Если knot'а нет или уже
+    -- ответили — ui_manager игнорирует, inline-вид остаётся открытым.
+    msg.post(UI_MGR, "messenger_open_chat", { chat_id = chat_id })
+    set_view(self, "chat")
+end
+
+local function is_inside_rect(id, x, y)
+    local n = get_node(id)
+    if not n or not gui.is_enabled(n) then return false end
+    return gui.pick_node(n, x, y)
+end
+
+local function handle_send_stub(self)
+    if not self.active_chat_id then return end
+    print("[phone_messenger] TODO send_message runtime hook for", self.active_chat_id)
+    -- TODO runtime: replace with real messenger send flow.
+    -- Visual placeholder keeps the screen testable.
+    local c = CHATS[self.active_chat_id]
+    if c then
+        table.insert(c.msgs, { dir = "out", text = "ок", time = "07:21", status = "sent" })
+        c.preview = "Я: ок"
+        c.time = "07:21"
+        self.chat_offset = math.max(0, #c.msgs - MAX_BUBBLES)
+        render_chat(self)
+    end
+end
+
+local function handle_scroll(self, action)
+    local dy = tonumber(action.dy or action.value or 0) or 0
+    if dy == 0 then return false end
+    if self.view == "list" then
+        local ids = build_chat_list(self)
+        local max_offset = math.max(0, #ids - MAX_LIST_ROWS)
+        self.list_offset = math.max(0, math.min((self.list_offset or 0) + (dy < 0 and LIST_SCROLL_STEP or -LIST_SCROLL_STEP), max_offset))
+        render_list(self)
+        return true
+    elseif self.view == "chat" then
+        local total = #get_messages(self.active_chat_id)
+        local max_offset = math.max(0, total - MAX_BUBBLES)
+        self.chat_offset = math.max(0, math.min((self.chat_offset or max_offset) + (dy < 0 and CHAT_SCROLL_STEP or -CHAT_SCROLL_STEP), max_offset))
+        render_chat(self)
+        return true
+    end
+    return false
+end
+
+local function handle_phone_input(self, action_id, action)
+    if not self.visible then return false end
+    action = action or {}
+    if action_id == hash("wheel_up") then
+        action.dy = 1
+        return handle_scroll(self, action)
+    elseif action_id == hash("wheel_down") then
+        action.dy = -1
+        return handle_scroll(self, action)
+    elseif (tonumber(action.dy or 0) ~= 0) then
+        return handle_scroll(self, action)
+    end
+    if not action.released and not action.pressed then return false end
+    local x, y = action.x or 0, action.y or 0
+
+    if self.view == "list" then
+        if is_inside_rect("tab_all_bg", x, y) then
+            self.filter = "all"
+            self.list_offset = 0
+            render_list(self)
+            return true
+        elseif is_inside_rect("tab_unread_bg", x, y) then
+            self.filter = "unread"
+            self.list_offset = 0
+            render_list(self)
+            return true
+        end
+        for i = 1, MAX_LIST_ROWS do
+            if is_inside_rect("chat" .. i .. "_bg", x, y) then
+                local id = self.visible_chat_ids and self.visible_chat_ids[(self.list_offset or 0) + i]
+                if id then open_chat(self, id) end
+                return true
+            end
+        end
+    else
+        if is_inside_rect("back_bg", x, y) then
+            open_list(self)
+            return true
+        elseif is_inside_rect("send_bg", x, y) or is_inside_rect("input_bg", x, y) then
+            handle_send_stub(self)
+            return true
+        elseif is_inside_rect("attach_bg", x, y) then
+            print("[phone_messenger] TODO attach runtime hook")
+            return true
+        end
+    end
+    return false
+end
+
+local function set_all_enabled(enabled)
+    set_nodes_enabled(NODE_IDS, enabled)
+end
+
+function init(self)
+    self.visible = false
+    self.view = "list"
+    self.filter = "all"
+    self.list_offset = 0
+    self.chat_offset = 0
+    set_all_enabled(false)
+end
+
+function final(self)
+    set_all_enabled(false)
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash("open_app") then
+        self.visible = true
+        self.filter = self.filter or "all"
+        self.list_offset = self.list_offset or 0
+        set_all_enabled(true)
+        -- Открытие приложения помечает все runtime-чаты прочитанными
+        -- (auto-flag msg_<chat>_read для каждого). Аналогично phone_sms_viewed.
+        if gs.mark_all_msg_read then gs.mark_all_msg_read() end
+        open_list(self)
+    elseif message_id == hash("close_app") then
+        self.visible = false
+        self.view = "list"
+        self.active_chat_id = nil
+        set_all_enabled(false)
+    elseif message_id == hash("refresh_app") then
+        if self.visible then set_view(self, self.view or "list") end
+    elseif message_id == hash("phone_input") then
+        -- Defold: on_message не должна возвращать значения. handle_phone_input
+        -- возвращает bool (consumed-флаг для on_input), но здесь на ветке
+        -- сообщения он нам не нужен — просто игнорируем результат.
+        if self.visible then
+            handle_phone_input(self, message and message.action_id or hash("touch"), {
+                x = message and message.x or 0,
+                y = message and message.y or 0,
+                dx = message and message.dx or 0,
+                dy = message and message.dy or 0,
+                value = message and message.value or 0,
+                pressed = message and message.pressed or false,
+                released = message and message.released or false,
+            })
+        end
+    end
+end
+
+function on_input(self, action_id, action)
+    return handle_phone_input(self, action_id, action or {})
+end

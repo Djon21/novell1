@@ -33,14 +33,24 @@ local _call_log    = {}
 local _call_missed = 0
 local _clues       = {}
 
+-- Messenger (отдельный от SMS канал):
+--   _msg[chat_id]       = { {text, unread, direction="in"/"out", time, seq}, ... }
+--   _msg_unread[chat_id] = N непрочитанных
+-- Управляется ink-тегами # msg:add:, # msg:reply:, # msg:read:
+-- Авто-флаги: msg_<chat>_read, msg_<chat>_replied
+local _msg         = {}
+local _msg_unread  = {}
+
 -- Map POI lock (для phone_map):
 --   _map_allowed_pois = { [poi_id] = true } — set разрешённых POI
---   Если пуст → все POI разрешены (default behaviour).
+--   Если пуст → все POI разрешены (default behaviour), кроме режима lock_all.
 --   Управляется ink-тегами:
 --     # map:allow:poi_cafe       — добавить POI в allowed
 --     # map:allow:reset          — очистить (вернуть «все разрешены»)
 --     # map:lock_to:poi_cafe     — clear + добавить (только этот разрешён)
+--     # map:lock_all             — заблокировать все POI
 local _map_allowed_pois = {}
+local _map_all_pois_locked = false
 
 -- Camera feed (вьюха «камера» в телефоне). Один активный канал.
 --   _camera = { status = "offline"|"online"|"error", message, meta }
@@ -78,12 +88,14 @@ local NOTE_TIME_BASE_MINUTES = 7 * 60 + 20
 local MAIL_TIME_BASE_MINUTES = 7 * 60 + 30
 local CALL_TIME_BASE_MINUTES = 7 * 60 + 40
 local CLUE_TIME_BASE_MINUTES = 7 * 60 + 50
+local MSG_TIME_BASE_MINUTES  = 7 * 60 + 5
 
 local _sms_seq  = 0
 local _note_seq = 0
 local _mail_seq = 0
 local _call_seq = 0
 local _clue_seq = 0
+local _msg_seq  = 0
 
 local function clone_value(value)
     if type(value) ~= "table" then
@@ -129,6 +141,20 @@ end
 local function sms_read_flag(contact_id)
     if not contact_id or contact_id == "" then return nil end
     return "sms_" .. tostring(contact_id) .. "_read"
+end
+
+local function msg_read_flag(chat_id)
+    if not chat_id or chat_id == "" then return nil end
+    return "msg_" .. tostring(chat_id) .. "_read"
+end
+
+local function next_msg_seq()
+    _msg_seq = _msg_seq + 1
+    return _msg_seq
+end
+
+local function default_msg_time(seq)
+    return format_clock(MSG_TIME_BASE_MINUTES + math.max(0, (tonumber(seq) or 1) - 1))
 end
 
 local function format_clock(total_minutes)
@@ -441,6 +467,9 @@ function M.reset()
     _quests = {}
     _sms = {}
     _sms_unread = {}
+    _msg = {}
+    _msg_unread = {}
+    _msg_seq = 0
     _notes = {}
     _mails = {}
     _mails_unread = 0
@@ -448,6 +477,7 @@ function M.reset()
     _call_missed = 0
     _clues = {}
     _map_allowed_pois = {}
+    _map_all_pois_locked = false
     _camera = {
         status  = DEFAULT_CAMERA.status,
         message = DEFAULT_CAMERA.message,
@@ -650,6 +680,119 @@ function M.get_sms_unread_total()
 end
 
 function M.get_sms_unread(contact_id) return _sms_unread[contact_id] or 0 end
+
+-- Messenger -------------------------------------------------------------
+-- Параллельный SMS канал. ink-теги:
+--   # msg:add:<chat_id>:<text>     — входящее сообщение
+--   # msg:reply:<chat_id>:<text>   — исходящее ГГ (auto-flag msg_<chat>_replied)
+--   # msg:read:<chat_id>           — пометить чат прочитанным вручную
+-- Авто-флаг msg_<chat>_read ставится при mark_msg_read (открытие приложения
+-- мессенджер или явный тег).
+
+function M.add_msg(chat_id, text)
+    if not chat_id or chat_id == "" then return false end
+    local seq = next_msg_seq()
+    _msg[chat_id] = _msg[chat_id] or {}
+    table.insert(_msg[chat_id], {
+        text      = tostring(text or ""),
+        unread    = true,
+        direction = "in",
+        time      = default_msg_time(seq),
+        seq       = seq,
+    })
+    _msg_unread[chat_id] = (_msg_unread[chat_id] or 0) + 1
+    M._notify()
+    return true
+end
+
+function M.reply_msg(chat_id, text)
+    if not chat_id or chat_id == "" then return false end
+    local seq = next_msg_seq()
+    _msg[chat_id] = _msg[chat_id] or {}
+    table.insert(_msg[chat_id], {
+        text      = tostring(text or ""),
+        unread    = false,
+        direction = "out",
+        time      = default_msg_time(seq),
+        seq       = seq,
+    })
+    local replied_flag = "msg_" .. tostring(chat_id) .. "_replied"
+    if _flags[replied_flag] ~= true then
+        _flags[replied_flag] = true
+    end
+    M._notify()
+    return true
+end
+
+function M.mark_msg_read(chat_id)
+    local chat = _msg[chat_id]
+    if not chat then return end
+    local changed = false
+    for _, msg in ipairs(chat) do
+        if msg.unread then
+            msg.unread = false
+            changed = true
+        end
+    end
+    if (_msg_unread[chat_id] or 0) > 0 then
+        changed = true
+    end
+    _msg_unread[chat_id] = 0
+    local read_flag = msg_read_flag(chat_id)
+    if read_flag and _flags[read_flag] ~= true then
+        _flags[read_flag] = true
+        changed = true
+    end
+    if changed then M._notify() end
+end
+
+function M.mark_all_msg_read()
+    local changed = false
+    for chat_id, chat in pairs(_msg) do
+        for _, msg in ipairs(chat) do
+            if msg.unread then
+                msg.unread = false
+                changed = true
+            end
+        end
+        if (_msg_unread[chat_id] or 0) > 0 then changed = true end
+        _msg_unread[chat_id] = 0
+        local read_flag = msg_read_flag(chat_id)
+        if read_flag and _flags[read_flag] ~= true then
+            _flags[read_flag] = true
+            changed = true
+        end
+    end
+    if changed then M._notify() end
+end
+
+function M.get_msg(chat_id)
+    return clone_value(_msg[chat_id] or {})
+end
+
+function M.get_msg_chats()
+    local ids = {}
+    for id, chat in pairs(_msg) do
+        if type(chat) == "table" and #chat > 0 then
+            table.insert(ids, id)
+        end
+    end
+    table.sort(ids, function(a, b)
+        local last_a = _msg[a] and _msg[a][#_msg[a]] and tonumber(_msg[a][#_msg[a]].seq) or 0
+        local last_b = _msg[b] and _msg[b][#_msg[b]] and tonumber(_msg[b][#_msg[b]].seq) or 0
+        if last_a ~= last_b then return last_a > last_b end
+        return tostring(a) < tostring(b)
+    end)
+    return ids
+end
+
+function M.get_msg_unread_total()
+    local total = 0
+    for _, n in pairs(_msg_unread) do total = total + n end
+    return total
+end
+
+function M.get_msg_unread(chat_id) return _msg_unread[chat_id] or 0 end
 
 -- Notes (заметки) --------------------------------------------------------
 function M.add_note(title, body)
@@ -904,25 +1047,35 @@ end
 
 function M.map_allow(poi_id)
     if not poi_id or poi_id == "" then return end
+    _map_all_pois_locked = false
     _map_allowed_pois[poi_id] = true
     M._notify()
 end
 
 function M.map_allow_reset()
-    if not next(_map_allowed_pois) then return end
+    if not next(_map_allowed_pois) and not _map_all_pois_locked then return end
     _map_allowed_pois = {}
+    _map_all_pois_locked = false
     M._notify()
 end
 
 function M.map_lock_to(poi_id)
     _map_allowed_pois = {}
+    _map_all_pois_locked = false
     if poi_id and poi_id ~= "" then
         _map_allowed_pois[poi_id] = true
     end
     M._notify()
 end
 
+function M.map_lock_all()
+    _map_allowed_pois = {}
+    _map_all_pois_locked = true
+    M._notify()
+end
+
 function M.map_is_poi_allowed(poi_id)
+    if _map_all_pois_locked then return false end
     -- Empty allow-set → все POI разрешены (default behaviour).
     if not next(_map_allowed_pois) then return true end
     return _map_allowed_pois[poi_id] == true
@@ -930,6 +1083,10 @@ end
 
 function M.get_map_allowed_pois()
     return clone_value(_map_allowed_pois)
+end
+
+function M.is_map_all_pois_locked()
+    return _map_all_pois_locked == true
 end
 
 -- Возвращает до TERMINAL_MAX_LINES записей в хронологическом порядке
@@ -1017,6 +1174,8 @@ function M.serialize()
         quests         = _quests,
         sms            = clone_value(_sms),
         sms_unread     = clone_value(_sms_unread),
+        msg            = clone_value(_msg),
+        msg_unread     = clone_value(_msg_unread),
         notes          = clone_value(_notes),
         mails          = clone_value(_mails),
         call_log       = clone_value(_call_log),
@@ -1024,6 +1183,7 @@ function M.serialize()
         camera         = clone_value(_camera),
         terminal_lines = clone_value(_terminal_lines),
         map_allowed_pois = clone_value(_map_allowed_pois),
+        map_all_pois_locked = _map_all_pois_locked == true,
         current_scene  = _current_scene,
     }
 end
@@ -1038,6 +1198,8 @@ function M.deserialize(data)
     _quests         = data.quests     or {}
     _sms            = data.sms        or {}
     _sms_unread     = data.sms_unread or {}
+    _msg            = data.msg        or {}
+    _msg_unread     = data.msg_unread or {}
     _notes          = data.notes      or {}
     _mails          = data.mails      or {}
     _mails_unread   = 0
@@ -1047,8 +1209,27 @@ function M.deserialize(data)
     _camera         = data.camera     or nil
     _terminal_lines = data.terminal_lines or nil
     _map_allowed_pois = data.map_allowed_pois or {}
+    _map_all_pois_locked = data.map_all_pois_locked == true
     _current_scene  = data.current_scene
     normalize_sms_state()
+    -- Восстанавливаем _msg_seq и _msg_unread по содержимому _msg.
+    do
+        local max_seq = 0
+        local rebuilt_unread = {}
+        for chat_id, chat in pairs(_msg) do
+            if type(chat) == "table" then
+                local unread = 0
+                for _, m in ipairs(chat) do
+                    local s = tonumber(m and m.seq) or 0
+                    if s > max_seq then max_seq = s end
+                    if m and m.unread then unread = unread + 1 end
+                end
+                rebuilt_unread[chat_id] = unread
+            end
+        end
+        _msg_seq = max_seq
+        _msg_unread = rebuilt_unread
+    end
     normalize_notes_state()
     normalize_mails_state()
     normalize_call_log_state()
