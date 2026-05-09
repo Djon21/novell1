@@ -148,15 +148,6 @@ local function msg_read_flag(chat_id)
     return "msg_" .. tostring(chat_id) .. "_read"
 end
 
-local function next_msg_seq()
-    _msg_seq = _msg_seq + 1
-    return _msg_seq
-end
-
-local function default_msg_time(seq)
-    return format_clock(MSG_TIME_BASE_MINUTES + math.max(0, (tonumber(seq) or 1) - 1))
-end
-
 local function format_clock(total_minutes)
     total_minutes = math.max(0, math.floor(tonumber(total_minutes) or 0))
     local hours = math.floor(total_minutes / 60) % 24
@@ -207,6 +198,15 @@ end
 local function next_clue_seq()
     _clue_seq = _clue_seq + 1
     return _clue_seq
+end
+
+local function next_msg_seq()
+    _msg_seq = _msg_seq + 1
+    return _msg_seq
+end
+
+local function default_msg_time(seq)
+    return format_clock(MSG_TIME_BASE_MINUTES + math.max(0, (tonumber(seq) or 1) - 1))
 end
 
 local function get_contact_last_seq(contact_id)
@@ -1146,6 +1146,9 @@ end
 -- Суммарный счётчик непрочитанных для бейджа телефона.
 function M.get_phone_unread_total()
     local total = M.get_sms_unread_total()
+    if M.get_msg_unread_total then
+        total = total + (M.get_msg_unread_total() or 0)
+    end
     for _, m in ipairs(M.get_mails()) do
         if m.unread then total = total + 1 end
     end
