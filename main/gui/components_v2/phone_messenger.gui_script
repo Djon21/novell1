@@ -607,9 +607,10 @@ local function handle_phone_input(self, action_id, action)
     elseif action_id == hash("wheel_down") then
         action.dy = -1
         return handle_scroll(self, action)
-    elseif (tonumber(action.dy or 0) ~= 0) then
-        return handle_scroll(self, action)
     end
+    -- Дальше обрабатываем только клики (pressed/released). Просто
+    -- движение мыши без клика игнорируем — иначе любой mouse_move
+    -- с ненулевым dy вызывал бы прокрутку.
     if not action.released and not action.pressed then return false end
     local x, y = action.x or 0, action.y or 0
 
