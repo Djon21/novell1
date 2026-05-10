@@ -478,6 +478,12 @@ function on_message(self, message_id, message, sender)
             end
         end
 
+        -- Input gate: после быстрого прокликивания диалога игрок не успевает
+        -- остановиться, и mouse-down в момент показа choice'ов попадает в
+        -- опцию. Глотаем все клики первые 300мс. socket.gettime() — стандарт
+        -- Defold (lua-socket).
+        self.input_unlock_at = (socket and socket.gettime and socket.gettime() or 0) + 0.30
+
     elseif message_id == hash("set_location") then
         remember_location(message or {})
         if self.visible then
@@ -496,6 +502,14 @@ end
 function on_input(self, action_id, action)
     if not self.visible then return false end
     if action_id ~= hash("touch") or not action.pressed then return true end
+
+    -- Защита от случайного клика на opt'е сразу после появления choice'ов
+    -- (когда игрок мэшил-кликал диалог). Первые 300мс после show_choice
+    -- глотаем все клики не передавая в опции.
+    if self.input_unlock_at and socket and socket.gettime
+       and socket.gettime() < self.input_unlock_at then
+        return true
+    end
 
     for i = 1, #self.opt_nodes do
         local o = self.opt_nodes[i]
