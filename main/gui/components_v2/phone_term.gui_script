@@ -5,6 +5,7 @@
 
 local gs = require "main.scripts.game_state"
 local drag_scroll = require "main.gui.modules.drag_scroll"
+local U = require "main.gui.modules.gui_utils"
 
 local MAX_TERM_SLOTS = 18
 local SCROLL_STEP_ROWS = 3
@@ -73,33 +74,13 @@ local FALLBACK_LINES = {
     { level = "info", text = "HINT recovery: locate anchor & meet subj NM with clear memory" },
 }
 
-local function get_node(id)
-    local ok, n = pcall(gui.get_node, id)
-    if ok then return n end
-    return nil
-end
-
-local function set_node_enabled(id, enabled)
-    local n = get_node(id)
-    if n then gui.set_enabled(n, enabled) end
-end
+local get_node             = U.get_node
+local set_node_enabled     = U.set_node_enabled
+local set_text             = U.set_text
+local set_color_keep_alpha = U.set_color_keep_alpha
 
 local function set_nodes_enabled(enabled)
-    for _, id in ipairs(NODE_IDS) do
-        set_node_enabled(id, enabled)
-    end
-end
-
-local function set_text(id, value)
-    local n = get_node(id)
-    if n then gui.set_text(n, value or "") end
-end
-
-local function set_color_keep_alpha(id, c)
-    local n = get_node(id)
-    if not n then return end
-    local cur = gui.get_color(n)
-    gui.set_color(n, vmath.vector4(c.x, c.y, c.z, cur.w))
+    U.set_nodes_enabled(NODE_IDS, enabled)
 end
 
 local function slot_count()

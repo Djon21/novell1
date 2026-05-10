@@ -13,6 +13,7 @@
 --   "phone_app_clicked" {id}— нажат тайл приложения
 
 local gs      = require "main.scripts.game_state"
+local U       = require "main.gui.modules.gui_utils"
 local UI_MGR  = "#ui_manager_v2"
 
 local DEBUG_LOG = false
@@ -90,27 +91,10 @@ local APPS = {
     { key = "app8", id = "term"   },
 }
 
-local function get_node(id)
-    local ok, n = pcall(gui.get_node, id)
-    if ok then return n end
-    return nil
-end
-
-local function set_node_enabled(id, enabled)
-    local n = get_node(id)
-    if n then gui.set_enabled(n, enabled) end
-end
-
-local function set_nodes_enabled(ids, enabled)
-    for _, id in ipairs(ids) do
-        set_node_enabled(id, enabled)
-    end
-end
-
-local function set_text(id, text)
-    local n = get_node(id)
-    if n then gui.set_text(n, text or "") end
-end
+local get_node          = U.get_node
+local set_node_enabled  = U.set_node_enabled
+local set_nodes_enabled = U.set_nodes_enabled
+local set_text          = U.set_text
 
 local function update_app_title(id)
     set_text("title_main", APP_TITLES[id or "sms"] or "ДОМАШНИЙ ЭКРАН")
@@ -143,13 +127,7 @@ local function set_badge(self_or_prefix, prefix_or_value, maybe_value)
     set_node_enabled(prefix .. "_badge_text", show)
 end
 
-local function flash_node(node)
-    local c  = gui.get_color(node)
-    local c0 = vmath.vector4(c.x, c.y, c.z, c.w)
-    gui.animate(node, "color.w", math.max(0.25, c0.w * 0.3), gui.EASING_OUTQUAD, 0.08, 0, function()
-        gui.animate(node, "color.w", c0.w, gui.EASING_OUTQUAD, 0.18)
-    end)
-end
+local flash_node = U.flash_node
 
 local function update_notif(self)
     -- Общий счётчик (sms + msg) — для статус-бара «сообщений: N».

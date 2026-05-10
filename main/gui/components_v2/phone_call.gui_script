@@ -8,6 +8,7 @@
 
 local gs = require "main.scripts.game_state"
 local drag_scroll = require "main.gui.modules.drag_scroll"
+local U = require "main.gui.modules.gui_utils"
 
 local MAX_CALL_SLOTS = 8
 local SCROLL_STEP_ROWS = 3
@@ -60,63 +61,18 @@ local FALLBACK_CALLS = {
     { who = "Сервис",      number = "+7 (800) 000-03-17", kind = "missed", time = "пн", count = 1, group = "hot" },
 }
 
-local function get_node(id)
-    local ok, n = pcall(gui.get_node, id)
-    if ok then return n end
-    return nil
-end
-
-local function set_node_enabled(id, enabled)
-    local n = get_node(id)
-    if n then gui.set_enabled(n, enabled) end
-end
+-- Локальные алиасы хелперов из gui_utils — короткие имена, чтобы не править
+-- все вызовы в файле. Реализация общая.
+local get_node             = U.get_node
+local set_node_enabled     = U.set_node_enabled
+local set_text             = U.set_text
+local set_color            = U.set_color
+local set_color_keep_alpha = U.set_color_keep_alpha
+local set_alpha            = U.set_alpha
+local clamp_text           = U.clamp_text
 
 local function set_nodes_enabled(enabled)
-    for _, id in ipairs(NODE_IDS) do set_node_enabled(id, enabled) end
-end
-
-local function set_text(id, value)
-    local n = get_node(id)
-    if n then gui.set_text(n, value or "") end
-end
-
-local function set_color(id, color, alpha)
-    local n = get_node(id)
-    if n then gui.set_color(n, vmath.vector4(color.x, color.y, color.z, alpha or color.w or 1)) end
-end
-
-local function set_color_keep_alpha(id, color)
-    local n = get_node(id)
-    if not n then return end
-    local cur = gui.get_color(n)
-    gui.set_color(n, vmath.vector4(color.x, color.y, color.z, cur.w))
-end
-
-local function set_alpha(id, alpha)
-    local n = get_node(id)
-    if not n then return end
-    local c = gui.get_color(n)
-    gui.set_color(n, vmath.vector4(c.x, c.y, c.z, alpha))
-end
-
-local function clamp_text(s, max_len)
-    s = tostring(s or "")
-    max_len = tonumber(max_len) or 32
-    if utf8 and utf8.len then
-        local len = utf8.len(s)
-        if len and len > max_len then
-            local out, count = {}, 0
-            for _, code in utf8.codes(s) do
-                count = count + 1
-                if count > max_len - 1 then break end
-                out[#out + 1] = utf8.char(code)
-            end
-            return table.concat(out) .. "…"
-        end
-        return s
-    end
-    if #s > max_len then return s:sub(1, math.max(1, max_len - 2)) .. "..." end
-    return s
+    U.set_nodes_enabled(NODE_IDS, enabled)
 end
 
 local function truthy(v)

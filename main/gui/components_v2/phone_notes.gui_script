@@ -3,6 +3,7 @@
 -- Принимает: open_app, close_app, refresh_app
 
 local gs = require "main.scripts.game_state"
+local U  = require "main.gui.modules.gui_utils"
 
 local COLOR_CYAN      = vmath.vector4(0.47, 0.94, 1.00, 1.0)
 local COLOR_PAPER_DIM = vmath.vector4(0.80, 0.80, 0.78, 0.7)
@@ -17,31 +18,13 @@ local NODE_IDS = {
 
 local CLUE_SLOTS = 2
 
-local function get_node(id)
-    local ok, n = pcall(gui.get_node, id)
-    if ok then return n end
-    return nil
-end
-
-local function set_node_enabled(id, enabled)
-    local n = get_node(id)
-    if n then gui.set_enabled(n, enabled) end
-end
+local get_node         = U.get_node
+local set_node_enabled = U.set_node_enabled
+local set_text         = U.set_text
+local set_node_color   = U.set_color  -- vector4 с .w → используется как есть
 
 local function set_nodes_enabled(enabled)
-    for _, id in ipairs(NODE_IDS) do
-        set_node_enabled(id, enabled)
-    end
-end
-
-local function set_text(id, s)
-    local n = get_node(id)
-    if n then gui.set_text(n, s or "") end
-end
-
-local function set_node_color(id, c)
-    local n = get_node(id)
-    if n then gui.set_color(n, c) end
+    U.set_nodes_enabled(NODE_IDS, enabled)
 end
 
 local function refresh(self)
