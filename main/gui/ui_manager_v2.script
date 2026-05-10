@@ -48,6 +48,7 @@ local effects_flow = require "main.gui.modules.ui_manager_v2.effects_flow"
 local scene_flow = require "main.gui.modules.ui_manager_v2.scene_flow"
 local overlay_flow = require "main.gui.modules.ui_manager_v2.overlay_flow"
 local message_flow = require "main.gui.modules.ui_manager_v2.message_flow"
+local lifecycle = require "main.gui.modules.ui_manager_v2.lifecycle"
 
 local ok_scenes, scenes = pcall(require, "main.scripts.scenes")
 if not ok_scenes then scenes = nil end
@@ -363,76 +364,31 @@ local function reset_runtime_state()
     run_state.reset_runtime(set_run_save_suppressed)
 end
 
+-- Lifecycle context: пробрасывает все колбэки и M-таблицу в lifecycle.lua.
+-- Создаём builder, чтобы каждый вызов получал свежие связки замыканий.
+local function lifecycle_ctx(self)
+    return {
+        M = M,
+        sync_modal_state          = function() sync_modal_state() end,
+        clear_armed_state         = function() clear_armed_state(self) end,
+        reset_dialogue_backlog    = function() reset_dialogue_backlog(self) end,
+        reset_runtime_state       = function() reset_runtime_state() end,
+        handle_dialogue_update    = function() handle_dialogue_update(self) end,
+        sync_ui_state             = function() sync_ui_state(self) end,
+        persist_run_state         = function() persist_run_state() end,
+    }
+end
+
 local function start_new_run(self, reset_iteration_progress)
-    local bytes = load_main_story_bytes()
-    if not bytes then
-        return false
-    end
-
-    -- Сбросить armed-state на случай если игрок начал новую игру/итерацию
-    -- из меню в момент когда был активен use-on-target.
-    clear_armed_state(self)
-
-    sm.load()
-    meta.init()
-
-    if reset_iteration_progress then
-        meta.reset_all()
-    end
-
-    M.at_end = false
-    M.base_mode = "dialogue"
-    M.overlays.choice = false
-    M.overlays.inventory = false
-    M.overlays.phone = false
-    M.overlays.map = false
-    M.overlays.backlog = false
-    sync_modal_state()
-
-    reset_dialogue_backlog(self)
-    msg.post(M.components.choice, "hide_choice")
-    msg.post(M.components.inventory, "hide_inventory")
-    msg.post(M.components.phone, "close_phone")
-    msg.post(M.components.map, "close_map")
-    msg.post(M.components.hotspots, "hide_all")
-
-    sm.new_game()
-    -- Восстанавливаем выбор персонажа из meta_state (сохраняется между итерациями).
-    -- meta.reset_all() ("СБРОСИТЬ ИТЕРАЦИЮ") вернёт nil → choose_character покажется снова.
-    local saved_gender = meta.get("mc_gender")
-    if saved_gender then
-        sm.set_gender(saved_gender)
-    end
-    reset_runtime_state()
-
-    dm.init(bytes)
-    handle_dialogue_update(self)
-    sync_ui_state(self)
-    persist_run_state()
-    return true
+    return lifecycle.start_new_run(lifecycle_ctx(self), reset_iteration_progress)
 end
 
 local function reset_iteration_and_restart(self)
-    meta.init()
-    meta.reset_all()
-
-    -- Даём UI закончить обработку клика по меню и только потом стартуем новый run.
-    timer.delay(0, false, function()
-        start_new_run(self, false)
-    end)
+    lifecycle.reset_iteration_and_restart(lifecycle_ctx(self))
 end
 
 local function refresh_menu_state(self)
-    sm.load()
-    meta.init()
-
-    msg.post(M.components.main_menu, "set_loop_state", {
-        iteration = meta.get("iteration_number", 1),
-        iteration_label = meta.get_iteration_label(),
-        awareness = meta.get("loop_awareness", 0),
-        completed = meta.get("completed_iterations", 0),
-        can_continue = sm.has_save(),
-    })
+    lifecycle.refresh_menu_state(lifecycle_ctx(self))
 end
 
 local function overlay_ctx(self)
