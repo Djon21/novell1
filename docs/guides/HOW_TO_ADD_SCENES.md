@@ -168,14 +168,35 @@ my_scene = {
 | `go.property` | `"bg_my_scene_atlas"` |
 | `DEDICATED_BG_ATLAS_PROPS` | `bg_my_scene = "bg_my_scene_atlas"` |
 | Ink-тег | `# bg:bg_my_scene` |
-| `scenes.lua` | `bg = "bg_my_scene"` |
+| `main/data/scenes/<location>.lua` | `bg = "bg_my_scene"` |
 
 ---
 
 ## 3. Добавить point-and-click сцену
 
-Сцены описываются в `main/scripts/scenes.lua`, исполняются `scene_controller.lua`,
-рендерятся через `scene_flow.lua` + `hotspots_v2.gui_script`.
+Сцены описываются в `main/data/scenes/<location>.lua` (apartment / office / locations / ...),
+агрегируются через тонкий фасад `main/scripts/scenes.lua`, исполняются
+`scene_controller.lua`, рендерятся через `scene_flow.lua` + `hotspots_v2.gui_script`.
+
+**Куда класть новую сцену:**
+
+| Локация | Файл |
+|---------|------|
+| Квартира ГГ (общий hub) | `main/data/scenes/apartment.lua` |
+| Понедельничный morning-flow в квартире | `main/data/scenes/apartment_monday.lua` |
+| Вторничный consequences-flow в квартире | `main/data/scenes/apartment_tuesday.lua` |
+| Офис (work_hub, workspace, meeting_room) | `main/data/scenes/office.lua` |
+| Кафе/парк/магазин/бар/обзорка/архив | `main/data/scenes/locations.lua` |
+| Совершенно новая локация | новый файл `main/data/scenes/<name>.lua` + `merge(...)` в `scenes.lua` |
+
+`STYLE_*`, `apartment_bg`, `office_bg`, `is_apartment_night` живут в
+`main/data/scenes/_shared.lua` и подтягиваются в каждый location-файл через:
+
+```lua
+local s = require "main.data.scenes._shared"
+local STYLE_NAV = s.STYLE_NAV
+-- ... etc
+```
 
 ### Лимиты текущего runtime
 
