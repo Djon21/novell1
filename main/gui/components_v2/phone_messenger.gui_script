@@ -714,6 +714,20 @@ local function handle_phone_input(self, action_id, action)
     local pressed = action.pressed and true or false
     local released = action.released and true or false
 
+    -- Arm reply-tap ДО drag_scroll: drag_scroll.handle глотает press
+    -- (return "swallow"), и обычный arm-on-press внутри tap-секции ниже
+    -- никогда не сработает. Арм здесь, fire — на released из tap-секции
+    -- (если drag не съехал → "tap" вернёт fall-through). Если игрок поехал
+    -- свайпом — drag.moved разарм'ит ниже.
+    if pressed and self.view == "chat" then
+        local x_pre = action.x or 0
+        local y_pre = action.y or 0
+        if is_inside_rect("send_bg", x_pre, y_pre)
+           or is_inside_rect("input_bg", x_pre, y_pre) then
+            self.reply_tap_armed = true
+        end
+    end
+
     -- Drag-scroll через общий модуль drag_scroll. handle() возвращает:
     --   "swallow" — press внутри / drag / drag-end, мы поглощаем event
     --   "tap"     — released без движения, нужно отдать tap-handler'ам ниже
