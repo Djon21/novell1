@@ -49,6 +49,7 @@ local scene_flow = require "main.gui.modules.ui_manager_v2.scene_flow"
 local overlay_flow = require "main.gui.modules.ui_manager_v2.overlay_flow"
 local message_flow = require "main.gui.modules.ui_manager_v2.message_flow"
 local lifecycle = require "main.gui.modules.ui_manager_v2.lifecycle"
+local dialogue_orchestrator = require "main.gui.modules.ui_manager_v2.dialogue_orchestrator"
 
 local ok_scenes, scenes = pcall(require, "main.scripts.scenes")
 if not ok_scenes then scenes = nil end
@@ -561,132 +562,31 @@ local function apply_dm_commands(self)
     })
 end
 
+-- Контракт для dialogue_orchestrator. См. main/gui/modules/ui_manager_v2/
+-- dialogue_orchestrator.lua — там вся логика "что показывать игроку после
+-- изменения ink-state". Здесь только сборка зависимостей.
+local function dialogue_update_ctx()
+    return {
+        M                       = M,
+        dbg                     = dbg,
+        cancel_autoplay         = cancel_dialogue_autoplay,
+        reset_autoplay_state    = reset_dialogue_autoplay_state,
+        apply_dm_commands       = apply_dm_commands,
+        consume_dm_effects      = consume_dm_effects,
+        hide_choice             = hide_choice,
+        show_dialogue           = show_dialogue,
+        show_exploration        = show_exploration,
+        show_choice             = show_choice,
+        post_dialogue_bg        = post_dialogue_background,
+        post_location_to_ui     = post_location_to_ui,
+        resolve_location_label  = resolve_current_location_label,
+        append_dialogue_backlog = append_dialogue_backlog,
+        nudge_dialogue_skip     = nudge_dialogue_skip,
+    }
+end
+
 handle_dialogue_update = function(self)
-    cancel_dialogue_autoplay(self)
-
-    -- 1) Применить команды из ink-тегов (могут поменять сцену)
-    if apply_dm_commands(self) then
-        return
-    end
-
-    -- 1a) Если apply_dm_commands открыл map hub, не рендерим диалог поверх:
-    -- иначе на `-> DONE` сразу после `# map:hub:KNOT` dialogue уходит в
-    -- end-state, клик мимо пина ловится btn_next → advance → chapter_finished.
-    if M.overlays.map then
-        M.at_end = false
-        msg.post(M.components.dialogue, "hide_dialogue")
-        hide_choice(self)
-        return
-    end
-    if M.overlays.phone then
-        M.at_end = false
-        msg.post(M.components.dialogue, "hide_dialogue")
-        hide_choice(self)
-        return
-    end
-
-    -- 2) Проверить режим ПЕРЕД обновлением фона
-    local in_exploration = scene_controller.is_active and scene_controller.is_active()
-    
-    -- 3) Обновить фон только если НЕ в exploration (в exploration фон идёт из scene_controller)
-    if not in_exploration then
-        local bg = dm.get_background_image and dm.get_background_image()
-        dbg("[ui_manager_v2] dm bg=", bg)
-        if bg then
-            post_dialogue_background(self, bg)
-            -- HUD scene_name обновляется только из set_background callback
-            -- scene_controller'а — в диалоге (без exploration) надо
-            -- продублировать вручную, иначе там висит "—" до конца диалога.
-            post_location_to_ui(resolve_current_location_label(bg))
-        end
-    else
-        dbg("[ui_manager_v2] in exploration mode, bg from scene_controller")
-    end
-
-    -- 4) Выбрать режим по scene_controller + отрендерить ноду
-    consume_dm_effects()
-
-    local node = dm.get_current_node and dm.get_current_node()
-    dbg("[ui_manager_v2] dm node=", node and node.type, "char=", node and node.character, "text=", node and node.text and node.text:sub(1,40))
-
-    if in_exploration then
-        M.at_end = false
-        show_exploration(self)
-        hide_choice(self)
-        return
-    end
-
-    if not node then
-        M.at_end = false
-        reset_dialogue_autoplay_state(self)
-        show_dialogue(self)
-        return
-    end
-
-    if node.type == "dialogue" then
-        M.at_end = false
-        self.dialogue_node_type = "dialogue"
-        self.dialogue_waiting_for_typewriter = true
-        self.dialogue_current_text = node.text or ""
-        self.current_choice_question = nil
-        self.current_choice_options = nil
-        append_dialogue_backlog(self, {
-            kind = "dialogue",
-            speaker = node.character,
-            fallback_speaker = "НАРРАТОР",
-            text = node.text or "",
-        })
-        show_dialogue(self)
-        hide_choice(self)
-        msg.post(M.components.dialogue, "render_dialogue", {
-            speaker = node.character,
-            name    = node.character and tostring(node.character):upper() or "—",
-            text    = node.text or "",
-            loop    = meta.get("iteration_number", 1),
-            loop_label = meta.get_iteration_label(),
-        })
-        nudge_dialogue_skip(self)
-
-    elseif node.type == "choice" then
-        -- Автовыбор персонажа: если пол уже сохранён (итерация 2+),
-        -- пропускаем choose_character без показа игроку.
-        -- Определяем по наличию вариантов "Артём" и "Мила" (ровно 2 варианта).
-        local saved_gender = sm.get_gender()
-        local should_skip_character_choice = saved_gender and (meta.get("iteration_number", 1) or 1) > 1
-        if should_skip_character_choice then
-            local opts = node.options or {}
-            if #opts == 2 then
-                local has_artem = (opts[1].text == "Артём" or opts[2].text == "Артём")
-                local has_mila  = (opts[1].text == "Мила"  or opts[2].text == "Мила")
-                if has_artem and has_mila then
-                    for i, opt in ipairs(opts) do
-                        local is_female_opt = (opt.text == "Мила")
-                        if (saved_gender == "female") == is_female_opt then
-                            dm.choose(i)
-                            handle_dialogue_update(self)
-                            return
-                        end
-                    end
-                end
-            end
-        end
-        M.at_end = false
-        self.dialogue_node_type = "choice"
-        self.dialogue_waiting_for_typewriter = false
-        self.dialogue_current_text = ""
-        self.current_choice_question = node.question or "КАК ПОСТУПИТЬ?"
-        self.current_choice_options = node.options or {}
-        show_dialogue(self)
-        show_choice(self, node.options or {}, 18, node.question or "КАК ПОСТУПИТЬ?")
-
-    elseif node.type == "end" then
-        M.at_end = false
-        reset_dialogue_autoplay_state(self)
-        if not (dm.is_story_end and dm.is_story_end()) then
-            msg.post("#ui_manager_v2", "chapter_finished")
-        end
-        return
-    end
+    dialogue_orchestrator.update(self, dialogue_update_ctx())
 end
 
 -- -------------------------------------------------------
