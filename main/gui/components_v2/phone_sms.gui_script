@@ -10,6 +10,8 @@
 --   - list rows support drag/wheel scrolling when more than 7 threads exist.
 --   - input/SEND in thread calls the old sms_open_contact flow through ui_manager.
 
+local drag_scroll = require "main.gui.modules.drag_scroll"
+
 local UI_MGR = "#ui_manager_v2"
 local PHONE_ROOT = "#phone_v2"
 
@@ -887,62 +889,28 @@ end
 local function handle_list_touch(self, action_id, action)
     local x = action and action.x or 0
     local y = action and action.y or 0
-    local pressed = action and action.pressed or false
-    local released = action and action.released or false
 
     local wheel_rows = wheel_rows_from_action(action_id, action)
     if wheel_rows ~= 0 then return scroll_list(self, wheel_rows) end
     if action_id ~= hash("touch") then return false end
 
-    if pressed then
-        self.list_dragging = is_inside_list(x, y)
-        self.list_drag_start_y = y or 0
-        self.list_drag_last_y = y or 0
-        self.list_drag_accum = 0
-        self.list_drag_moved = false
-        return self.list_dragging
-    end
-
-    if self.list_dragging and not released then
-        local current_y = y or self.list_drag_last_y
-        local dy = current_y - self.list_drag_last_y
-        self.list_drag_last_y = current_y
-        self.list_drag_accum = self.list_drag_accum + dy
-
-        if math.abs(current_y - self.list_drag_start_y) >= LIST_DRAG_THRESHOLD_PX then
-            self.list_drag_moved = true
-        end
-        while self.list_drag_accum >= LIST_SCROLL_STEP_PX do
-            scroll_list(self, 1)
-            self.list_drag_accum = self.list_drag_accum - LIST_SCROLL_STEP_PX
-        end
-        while self.list_drag_accum <= -LIST_SCROLL_STEP_PX do
-            scroll_list(self, -1)
-            self.list_drag_accum = self.list_drag_accum + LIST_SCROLL_STEP_PX
-        end
+    -- Drag-scroll через общий модуль drag_scroll (см. main/gui/modules).
+    local result = drag_scroll.handle(self.list_drag, action)
+    if result == "swallow" then
         return true
     end
-
-    if released then
-        local was_dragging = self.list_dragging
-        local moved = self.list_drag_moved
-        self.list_dragging = false
-        self.list_drag_accum = 0
-        self.list_drag_moved = false
-
-        if was_dragging and not moved then
-            local contact_id, id = pick_row(self, x, y)
-            if contact_id then
-                flash_node(id)
-                dbg("[phone_sms] open in-phone thread", contact_id)
-                open_thread(self, contact_id)
-                return true
-            end
+    if result == "tap" then
+        -- Released без движения внутри list area → открываем тред строки.
+        local contact_id, id = pick_row(self, x, y)
+        if contact_id then
+            flash_node(id)
+            dbg("[phone_sms] open in-phone thread", contact_id)
+            open_thread(self, contact_id)
+            return true
         end
-        return was_dragging
+        return true  -- tap внутри списка, но не на строке (gap) — поглощаем
     end
-
-    return false
+    return false  -- "ignore" — press вне list area, пусть прокинется дальше
 end
 
 local function handle_phone_input(self, action_id, action)
@@ -962,12 +930,14 @@ function init(self)
     self.view = "list"
     self.rows = {}
     self.list_offset = 0
-    self.list_dragging = false
-    self.list_drag_start_y = 0
-    self.list_drag_last_y = 0
-    self.list_drag_accum = 0
-    self.list_drag_moved = false
     self.active_contact_id = nil
+    self.list_drag = drag_scroll.new({
+        step_px      = LIST_SCROLL_STEP_PX,
+        threshold_px = LIST_DRAG_THRESHOLD_PX,
+        owner        = self,
+        is_inside    = is_inside_list,
+        on_step      = function(owner, delta) scroll_list(owner, delta) end,
+    })
     apply_static_layout()
     set_all_enabled(false)
 end
