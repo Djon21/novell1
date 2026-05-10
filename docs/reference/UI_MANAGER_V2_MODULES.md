@@ -4,6 +4,10 @@
 
 `main/gui/ui_manager_v2.script` больше не хранит всю UI-логику в одном файле. Сейчас это центральный Defold-адаптер: он объявляет `go.property(...)`, хранит ссылки на GUI-компоненты, принимает `on_message`/`on_input` и передаёт работу в модули из `main/gui/modules/ui_manager_v2/`.
 
+> Для архитектурного обзора (потоки, ctx-контракт, чеклисты добавления
+> сообщений/тегов) см. `UI_MANAGER_V2_ARCHITECTURE.md`. Этот файл — справочник
+> по модулям и точечным изменениям.
+
 ## Главная Идея
 
 `ui_manager_v2.script` отвечает за:
@@ -23,9 +27,11 @@
 |---|---|
 | `background_flow.lua` | Dedicated atlas фонов, безопасный `go.set` из `.script`, подпись текущей локации в HUD/choice. |
 | `dialogue_flow.lua` | `AUTO`, `SKIP`, таймер автопрокрутки, read-only backlog/log диалогов. |
+| `dialogue_orchestrator.lua` | `handle_dialogue_update`: применение dm-команд → разрулёвка overlays → выбор фона → рендер ноды (dialogue/choice/end) + авто-выбор персонажа в iter 2+. |
 | `dm_commands.lua` | Выполнение команд из Ink-тегов: сцены, телефон, карта, реклама, flags/items/quests/SMS/mail/calls/clues/camera/terminal. |
 | `effects_flow.lua` | One-shot эффекты Ink: `sfx`, `shake`, `pulse`. |
 | `inventory_flow.lua` | Verbs инвентаря, armed-state для `use`, поиск inventory Ink-knot. |
+| `lifecycle.lua` | Старт нового run'а, сброс итерации, refresh состояния меню (`set_loop_state`). |
 | `map_flow.lua` | Логика `map_v2`: выбранный pin, тексты dossier/log, route/save/share, hub-mode helpers. |
 | `message_flow.lua` | Маршрутизация `on_message` по группам: меню, концовки, диалог, choice, inventory, phone, map. |
 | `overlay_flow.lua` | Режимы и модалки: menu, exploration, dialogue, inventory, map, choice, `ui_state.modal_open`. |
