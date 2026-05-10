@@ -27,6 +27,14 @@ fonts {
   name: "icons"
   font: "/main/fonts/icons.font"
 }
+fonts {
+  name: "manrope_20"
+  font: "/main/fonts/manrope_20.font"
+}
+fonts {
+  name: "manrope_medium_24"
+  font: "/main/fonts/manrope_medium_24.font"
+}
 textures {
   name: "v2"
   texture: "/main/images/v2.atlas"
@@ -223,71 +231,6 @@ nodes {
 }
 nodes {
   position {
-    x: 56.0
-    y: 56.0
-    z: 0.05
-  }
-  size {
-    x: 118.0
-    y: 20.0
-  }
-  color {
-    x: 0.031
-    y: 0.024
-    z: 0.094
-  }
-  type: TYPE_BOX
-  id: "portrait_chip_stamp_bg"
-  pivot: PIVOT_SW
-  parent: "dlg_root"
-  alpha: 0.92
-}
-nodes {
-  position {
-    x: 56.0
-    y: 56.0
-    z: 0.06
-  }
-  size {
-    x: 118.0
-    y: 1.0
-  }
-  color {
-    x: 0.784
-    y: 0.078
-    z: 0.165
-  }
-  type: TYPE_BOX
-  id: "portrait_chip_stamp_line"
-  pivot: PIVOT_SW
-  parent: "dlg_root"
-}
-nodes {
-  position {
-    x: 64.0
-    y: 70.0
-    z: 0.07
-  }
-  size {
-    x: 110.0
-    y: 10.0
-  }
-  color {
-    x: 0.784
-    y: 0.078
-    z: 0.165
-  }
-  type: TYPE_TEXT
-  text: "\320\223\320\225\320\240\320\236\320\230\320\235\320\257 \302\267 01"
-  font: "jb_mono_10"
-  id: "portrait_chip_stamp_text"
-  pivot: PIVOT_W
-  parent: "dlg_root"
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
     x: 296.0
     y: 48.0
     z: 0.01
@@ -405,6 +348,30 @@ nodes {
 }
 nodes {
   position {
+    x: 6.0
+    y: 3.0
+    z: 0.06
+  }
+  size {
+    x: 248.0
+    y: 26.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "\342\200\224"
+  font: "unbounded_bold_20"
+  id: "nameplate_name"
+  pivot: PIVOT_SW
+  parent: "nameplate_bg"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
     x: 316.0
     y: 264.0
     z: 0.05
@@ -478,79 +445,6 @@ nodes {
   id: "nameplate_border_b"
   pivot: PIVOT_SW
   parent: "dlg_root"
-}
-nodes {
-  position {
-    x: 332.0
-    y: 282.0
-    z: 0.06
-  }
-  size {
-    x: 130.0
-    y: 18.0
-  }
-  color {
-    x: 0.952
-    y: 0.925
-    z: 0.85
-  }
-  type: TYPE_TEXT
-  text: "\342\200\224"
-  font: "unbounded_bold_20"
-  id: "nameplate_name"
-  pivot: PIVOT_W
-  parent: "dlg_root"
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 472.0
-    y: 280.0
-    z: 0.06
-  }
-  size {
-    x: 90.0
-    y: 12.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  text: "\342\200\224"
-  font: "jb_mono_10"
-  id: "nameplate_tag"
-  pivot: PIVOT_W
-  parent: "dlg_root"
-  alpha: 0.85
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 472.0
-    y: 270.0
-    z: 0.06
-  }
-  size {
-    x: 120.0
-    y: 12.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "nameplate_mood"
-  pivot: PIVOT_W
-  parent: "dlg_root"
-  alpha: 0.65
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
 }
 nodes {
   position {
@@ -689,7 +583,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\320\277\320\265\321\202\320\273\321\217 #017"
-  font: "jb_mono_10"
+  font: "jb_mono_bold_14"
   id: "loop_counter"
   pivot: PIVOT_E
   parent: "dlg_root"
@@ -712,7 +606,7 @@ nodes {
     z: 0.85
   }
   type: TYPE_TEXT
-  font: "manrope_16"
+  font: "manrope_medium_24"
   id: "dlg_text"
   pivot: PIVOT_NW
   line_break: true
@@ -723,30 +617,6 @@ nodes {
 nodes {
   position {
     x: 324.0
-    y: 72.0
-    z: 0.06
-  }
-  size {
-    x: 190.0
-    y: 12.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  text: "\321\200\320\265\320\277\320\273\320\270\320\272\320\260 03 / 14"
-  font: "jb_mono_10"
-  id: "dialog_pager"
-  pivot: PIVOT_W
-  parent: "dlg_root"
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 520.0
     y: 60.0
     z: 0.05
   }
@@ -767,8 +637,8 @@ nodes {
 }
 nodes {
   position {
-    x: 555.0
-    y: 74.0
+    x: 359.0
+    y: 72.0
     z: 0.06
   }
   size {
@@ -791,7 +661,7 @@ nodes {
 }
 nodes {
   position {
-    x: 598.0
+    x: 415.0
     y: 60.0
     z: 0.05
   }
@@ -812,8 +682,8 @@ nodes {
 }
 nodes {
   position {
-    x: 633.0
-    y: 74.0
+    x: 450.0
+    y: 72.0
     z: 0.06
   }
   size {
@@ -836,7 +706,7 @@ nodes {
 }
 nodes {
   position {
-    x: 1110.0
+    x: 1104.0
     y: 58.0
     z: 0.05
   }
@@ -857,8 +727,8 @@ nodes {
 }
 nodes {
   position {
-    x: 1160.0
-    y: 73.0
+    x: 1154.0
+    y: 72.0
     z: 0.06
   }
   size {
@@ -874,6 +744,51 @@ nodes {
   font: "jb_mono_bold_14"
   id: "btn_next_label"
   parent: "dlg_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 506.0
+    y: 60.0
+    z: 0.06
+  }
+  size {
+    x: 70.0
+    y: 24.0
+  }
+  color {
+    x: 0.067
+    y: 0.055
+    z: 0.173
+  }
+  type: TYPE_BOX
+  id: "btn_log"
+  pivot: PIVOT_SW
+  parent: "dlg_root"
+  alpha: 0.85
+}
+nodes {
+  position {
+    x: 541.0
+    y: 72.0
+    z: 0.07
+  }
+  size {
+    x: 70.0
+    y: 14.0
+  }
+  color {
+    x: 0.7882353
+    y: 0.7529412
+    z: 0.65882355
+  }
+  type: TYPE_TEXT
+  text: "LOG"
+  font: "jb_mono_bold_14"
+  id: "btn_log_label"
+  parent: "dlg_root"
+  alpha: 0.8
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }

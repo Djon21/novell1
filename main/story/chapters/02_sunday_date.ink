@@ -70,7 +70,21 @@
 # speaker:npc
 Ну что, кофе сначала или сразу разговоры?
 
-* [Спросить, как NPC хотелось провести день]
+{sunday_shop_bought_drink_for_npc:
+# speaker:mc
+Я по дороге взял{mc_gender == "female":а|} тебе напиток. Не знал{mc_gender == "female":а|}, что захочется, но вдруг.
+
+# speaker:npc
+Ты правда зашёл{mc_gender == "female":ла|} в магазин до встречи, чтобы взять это мне?
+
+# speaker:none
+Жест маленький, почти неловкий. Но именно поэтому он работает.
+~ TRUST = TRUST + 1
+# set_flag:date_small_kindness=true
+~ date_small_kindness = true
+}
+
+* [Спросить, как {npc_name} хотелось провести день]
     # speaker:mc
     А тебе как хотелось провести сегодня? Не в смысле “куда правильно”, а как правда хочется.
 
@@ -207,6 +221,20 @@
 
 # speaker:none
 Вы идёте рядом. Первые несколько шагов не требуют слов — только подобрать общий темп.
+
+{sunday_shop_bought_drink_for_npc:
+# speaker:mc
+Я, кстати, взял{mc_gender == "female":а|} тебе кое-что по дороге. В магазине у дома.
+
+# speaker:npc
+Вот это подготовка. Неожиданная, но приятная.
+
+# speaker:none
+Ты протягиваешь напиток не как подарок, а как простую заботу. В парке это выглядит особенно уместно.
+~ TRUST = TRUST + 1
+# set_flag:date_small_kindness=true
+~ date_small_kindness = true
+}
 
 * [Подстроиться под общий темп]
     # speaker:mc
@@ -398,10 +426,32 @@
 
 
 === sunday_shop_arrival ===
+{not met_npc_sunday:
+    -> sunday_shop_arrival_pre_date
+- else:
+    -> sunday_shop_arrival_with_npc
+}
+
+=== sunday_shop_arrival_pre_date ===
+# bg:bg_shop_day # speaker:none
+Магазин у дома оказывается почти пустым: белый свет, ровные полки, холодильники с напитками у дальней стены.
+
+До встречи ещё есть время. Можно взять что-то по дороге — или просто выйти и не превращать утро в список покупок.
+
+# set_flag:sunday_shop_pre_date_visited=true
+~ sunday_shop_pre_date_visited = true
+# return_to_scene
+-> DONE
+
+
+=== sunday_shop_arrival_with_npc ===
 # bg:bg_shop_day # speaker:none
 Магазин 24/7 выглядит слишком ярким для воскресенья: белый свет, ровные полки, холодильники у дальней стены.
 
 После первой встречи он кажется почти смешным выбором, но именно поэтому здесь легко быть обычными.
+
+# set_flag:sunday_shop_with_npc_seen=true
+~ sunday_shop_with_npc_seen = true
 
 # speaker:npc
 Знаешь, иногда такие места честнее красивых. Тут хотя бы понятно, зачем ты пришёл.
@@ -436,7 +486,7 @@
     ~ TRUST = TRUST + 1
     -> sunday_shop_settle
 
-* [Спросить, что NPC обычно берёт]
+* [Спросить, что обычно берёт {npc_name}]
     # speaker:mc
     А ты что обычно берёшь в таких местах?
 
@@ -469,8 +519,20 @@
 
 === leave_shop ===
 # bg:bg_shop_day # speaker:none
+{not met_npc_sunday:
+Автоматические двери выпускают тебя обратно в город. До встречи ещё можно выбрать маршрут.
+# map:allow:reset
+# map:allow:poi_shop
+{date_place_cafe:
+    # map:allow:poi_cafe
+- else:
+    # map:allow:poi_park
+}
+# phone:map
+- else:
 Автоматические двери выпускают вас обратно в город. Телефон уже в руке — пора решить, куда завершать день.
 # phone:map
+}
 -> DONE
 
 
@@ -570,6 +632,68 @@
 ~ sunday_evening_started = true
 # goto_scene:apartment_bedroom
 -> DONE
+
+
+=== shop_drinks_interact ===
+# bg:bg_shop_day # speaker:none
+Холодильники гудят ровно и уверенно. Вода, сок, холодный чай — маленькие решения, которые не требуют объяснений.
+
+* [Взять воду себе]
+    # speaker:mc
+    Вода — самый честный план на утро.
+    # set_flag:sunday_shop_bought_water=true
+    # set_flag:sunday_shop_done=true
+    ~ sunday_shop_bought_water = true
+    ~ sunday_shop_done = true
+    # return_to_scene
+    -> DONE
+
+* [Взять напиток для {npc_name}]
+    # speaker:mc
+    Возьму ещё один. Не подарок. Просто вдруг пригодится.
+    # set_flag:sunday_shop_bought_drink_for_npc=true
+    # set_flag:sunday_shop_done=true
+    ~ sunday_shop_bought_drink_for_npc = true
+    ~ sunday_shop_done = true
+    # return_to_scene
+    -> DONE
+
+* [Ничего не брать]
+    # speaker:mc
+    Нет. Я просто посмотрел{mc_gender == "female":а|}. Так тоже бывает.
+    # return_to_scene
+    -> DONE
+
+
+=== shop_snacks_interact ===
+# bg:bg_shop_day # speaker:none
+Центральный стеллаж предлагает всё, что человек обычно покупает не потому, что нужно, а потому что день длиннее, чем казался утром.
+
+* [Взять батончик]
+    # speaker:mc
+    Не завтрак, но хотя бы признание проблемы.
+    # set_flag:sunday_shop_bought_snack=true
+    # set_flag:sunday_shop_done=true
+    ~ sunday_shop_bought_snack = true
+    ~ sunday_shop_done = true
+    # return_to_scene
+    -> DONE
+
+* [Взять жвачку]
+    # speaker:mc
+    Жвачка — странный способ сказать себе, что ты подготовился.
+    # set_flag:sunday_shop_bought_snack=true
+    # set_flag:sunday_shop_done=true
+    ~ sunday_shop_bought_snack = true
+    ~ sunday_shop_done = true
+    # return_to_scene
+    -> DONE
+
+* [Оставить как есть]
+    # speaker:mc
+    Снеки переживут моё отсутствие.
+    # return_to_scene
+    -> DONE
 
 
 === shop_counter_interact ===

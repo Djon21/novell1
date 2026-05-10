@@ -3,11 +3,11 @@
 -- dbox с угловыми brackets и текстом. Кнопки SKIP / AUTO / NEXT.
 --
 -- Совместимость с существующим `dialogue_manager_ink`:
---   он шлёт "render_dialogue" {name, text, tag?, speaker?} — тот же формат, что у старого
+--   он шлёт "render_dialogue" {name, text, speaker?} — тот же формат, что у старого
 --   `dialogue_system`. Используем его. Если полей нет — fallback на дефолты.
 --
 -- Сообщения:
---   "render_dialogue" {speaker, name, text, tag, mood, portrait}
+--   "render_dialogue" {speaker, name, text, portrait}
 --        speaker — ключ в CHARS (mila/artem/narrator/…) — определяет цвет акцента.
 --        portrait — опционально id спрайта из v2.atlas (пока не подключаем, используем icon).
 --   "show_dialogue" / "hide_dialogue"
@@ -19,8 +19,6 @@
 --   "dialogue_next"  — клик NEXT или по dbox
 --   "dialogue_skip"  — клик SKIP
 --   "dialogue_auto"  — клик AUTO (переключатель)
-
-local backlog = require "main.scripts.dialogue_backlog"
 
 local UI_MGR = "#ui_manager_v2"
 
@@ -118,14 +116,14 @@ end
 
 -- Словарь персонажей: цвет акцента для nameplate + иконка-заглушка.
 local CHARS = {
-    mila     = { color = vmath.vector4(1.0, 0.239, 0.498, 1.0), icon = string.char(0xEE, 0x9F, 0xBB), tag = "подруга", portrait = "mila" }, -- face
-    artem    = { color = vmath.vector4(0.49, 0.976, 1.0, 1.0),  icon = string.char(0xEE, 0x9F, 0xBB), tag = "МЦ", portrait = "artem" },
-    narrator = { color = vmath.vector4(0.353, 1.0, 0.478, 1.0), icon = string.char(0xEE, 0xA4, 0xB1), tag = "нарратор", portrait = "narrator" }, -- terminal-ish
+    mila     = { color = vmath.vector4(1.0, 0.239, 0.498, 1.0), icon = string.char(0xEE, 0x9F, 0xBB), portrait = "mila" }, -- face
+    artem    = { color = vmath.vector4(0.49, 0.976, 1.0, 1.0),  icon = string.char(0xEE, 0x9F, 0xBB), portrait = "artem" },
+    narrator = { color = vmath.vector4(0.353, 1.0, 0.478, 1.0), icon = string.char(0xEE, 0xA4, 0xB1), portrait = "narrator" }, -- terminal-ish
     -- Кириллические алиасы для имён из Ink
-    ["мила"]  = { color = vmath.vector4(1.0, 0.239, 0.498, 1.0), icon = string.char(0xEE, 0x9F, 0xBB), tag = "подруга", portrait = "mila" },
-    ["артём"] = { color = vmath.vector4(0.49, 0.976, 1.0, 1.0),  icon = string.char(0xEE, 0x9F, 0xBB), tag = "МЦ", portrait = "artem" },
+    ["мила"]  = { color = vmath.vector4(1.0, 0.239, 0.498, 1.0), icon = string.char(0xEE, 0x9F, 0xBB), portrait = "mila" },
+    ["артём"] = { color = vmath.vector4(0.49, 0.976, 1.0, 1.0),  icon = string.char(0xEE, 0x9F, 0xBB), portrait = "artem" },
     -- fallback:
-    _default = { color = vmath.vector4(0.952, 0.925, 0.85, 1.0), icon = string.char(0xEE, 0x9F, 0xBB), tag = "—" },
+    _default = { color = vmath.vector4(0.952, 0.925, 0.85, 1.0), icon = string.char(0xEE, 0x9F, 0xBB) },
 }
 
 local COLOR_BTN_BG      = vmath.vector4(0.067, 0.055, 0.173, 0.85)
@@ -181,34 +179,11 @@ end
 
 local function ensure_backlog_nodes(self)
     if self.backlog_nodes then return end
-    local n = {}
-
-    -- Backlog nodes are intentionally not parented to dlg_root: exploration mode
-    -- hides dlg_root, but the journal must still be openable from HUD.
-    n.btn_log = make_box(nil, 676, 60, 0.55, 70, 24, COLOR_BTN_BG)
-    n.btn_log_label = make_text(nil, 711, 74, 0.56, 70, 14, "LOG", "jb_mono_bold_14", COLOR_LABEL_OFF, gui.PIVOT_CENTER)
-
-    n.shade = make_box(nil, 0, 0, 0.76, BASE_W, BASE_H, COLOR_BACKLOG_DIM)
-    n.panel = make_box(nil, 190, 112, 0.77, 900, 500, COLOR_BACKLOG_BOX)
-    n.line_top = make_box(nil, 190, 611, 0.78, 900, 1, COLOR_BACKLOG_LINE)
-    n.line_bottom = make_box(nil, 190, 112, 0.78, 900, 1, COLOR_BACKLOG_LINE)
-    n.line_left = make_box(nil, 190, 112, 0.78, 1, 500, COLOR_BACKLOG_LINE)
-    n.line_right = make_box(nil, 1089, 112, 0.78, 1, 500, COLOR_BACKLOG_LINE)
-    n.title = make_text(nil, 230, 572, 0.79, 500, 24, "ЖУРНАЛ ДИАЛОГА", "unbounded_bold_20", COLOR_PAPER, gui.PIVOT_W)
-    n.counter = make_text(nil, 1048, 576, 0.79, 160, 14, "0 / 0", "jb_mono_10", COLOR_LABEL_OFF, gui.PIVOT_E)
-    n.speaker = make_text(nil, 230, 520, 0.79, 820, 18, "", "jb_mono_bold_14", COLOR_BACKLOG_LINE, gui.PIVOT_W)
-    n.text = make_text(nil, 230, 488, 0.79, 820, 250, "", "manrope_16", COLOR_PAPER, gui.PIVOT_NW)
-    n.hint = make_text(nil, 230, 155, 0.79, 820, 30, "Это только история прочитанного текста. Выборы здесь нельзя переиграть.", "jb_mono_10", COLOR_LABEL_OFF, gui.PIVOT_W)
-
-    n.btn_prev = make_box(nil, 230, 132, 0.79, 120, 30, COLOR_BTN_BG)
-    n.btn_prev_label = make_text(nil, 290, 149, 0.80, 120, 14, "< НАЗАД", "jb_mono_bold_14", COLOR_LABEL_OFF, gui.PIVOT_CENTER)
-    n.btn_next = make_box(nil, 378, 132, 0.79, 120, 30, COLOR_BTN_BG)
-    n.btn_next_label = make_text(nil, 438, 149, 0.80, 120, 14, "ВПЕРЕД >", "jb_mono_bold_14", COLOR_LABEL_OFF, gui.PIVOT_CENTER)
-    n.btn_close = make_box(nil, 930, 132, 0.79, 120, 30, COLOR_BTN_BG)
-    n.btn_close_label = make_text(nil, 990, 149, 0.80, 120, 14, "ЗАКРЫТЬ", "jb_mono_bold_14", COLOR_LABEL_OFF, gui.PIVOT_CENTER)
-
+    local n = {
+        btn_log = gui.get_node("btn_log"),
+        btn_log_label = gui.get_node("btn_log_label"),
+    }
     self.backlog_nodes = n
-    set_nodes_enabled(n, false)
     gui.set_enabled(n.btn_log, true)
     gui.set_enabled(n.btn_log_label, true)
 end
@@ -220,39 +195,13 @@ local function set_dialogue_log_button_visible(self, visible)
 end
 
 local function refresh_backlog_view(self)
-    ensure_backlog_nodes(self)
-    local entries = backlog.get_all()
-    local total = #entries
-    if total == 0 then
-        self.backlog_index = 0
-        gui.set_text(self.backlog_nodes.counter, "0 / 0")
-        gui.set_text(self.backlog_nodes.speaker, "ЖУРНАЛ ПУСТ")
-        gui.set_text(self.backlog_nodes.text, "Здесь появятся уже прочитанные реплики.")
-        return
-    end
-
-    if not self.backlog_index or self.backlog_index < 1 then self.backlog_index = total end
-    if self.backlog_index > total then self.backlog_index = total end
-
-    local entry = entries[self.backlog_index] or {}
-    gui.set_text(self.backlog_nodes.counter, tostring(self.backlog_index) .. " / " .. tostring(total))
-    gui.set_text(self.backlog_nodes.speaker, tostring(entry.speaker or "НАРРАТОР"))
-    gui.set_text(self.backlog_nodes.text, tostring(entry.text or ""))
+    -- Backlog modal lives in hud_v2.gui_script.
 end
 
 local function set_backlog_open(self, open)
     ensure_backlog_nodes(self)
     self.backlog_open = open and true or false
-    for id, node in pairs(self.backlog_nodes) do
-        if id ~= "btn_log" and id ~= "btn_log_label" then
-            gui.set_enabled(node, self.backlog_open)
-        end
-    end
     set_dialogue_log_button_visible(self, self.visible and not self.backlog_open)
-    if self.backlog_open then
-        self.backlog_index = backlog.size()
-        refresh_backlog_view(self)
-    end
 end
 
 -- Функция для приведения кириллицы к нижнему регистру
@@ -335,26 +284,20 @@ local function render(self, msg)
     
     dbg("[dialogue_v2] speaker_key:", speaker_key, "resolved portrait:", c.portrait)
 
-    local name = msg.name or (speaker_key ~= "_default" and speaker_key:upper()) or "—"
+    local name = msg.name
+if not name or name == "" then
+    if speaker_key == "narrator" then
+        name = "НАРРАТОР"
+    else
+        name = (speaker_key ~= "_default" and speaker_key:upper()) or "—"
+    end
+end
     set_text("nameplate_name", name:upper())
     set_color("nameplate_name", COLOR_PAPER)
-    local tag = msg.tag or c.tag or ""
-    if (speaker_key == "mila" or speaker_key == "РјРёР»Р°") and (not msg.tag or msg.tag == "") then
-        tag = "РїРѕРґСЂСѓРіР° В· #" .. loop_label
-    end
-    set_text("nameplate_tag", tag)
-    set_color("nameplate_tag", c.color)
+
     -- Loop counter (петля #XXX)
     local loop_num = tonumber(loop_label) or tonumber(msg.loop) or 1
     set_text("loop_counter", string.format("петля #%03d", loop_num))
-
-    -- Mood indicator (настроение персонажа)
-    if msg.mood and msg.mood ~= "" then
-        set_text("nameplate_mood", "mood · " .. msg.mood)
-        gui.set_enabled(gui.get_node("nameplate_mood"), true)
-    else
-        gui.set_enabled(gui.get_node("nameplate_mood"), false)
-    end
 
     -- Портрет: если передан portrait в msg или есть в CHARS, используем спрайт из v2.atlas, иначе icon-заглушку
     local portrait_bg = gui.get_node("portrait_bg")
@@ -532,19 +475,25 @@ function on_message(self, message_id, message, sender)
         end
 
     elseif message_id == hash("clear_backlog") then
-        -- Бэклог теперь живёт в shared-модуле dialogue_backlog. Сообщение
-        -- оставлено для обратной совместимости — переадресуем на модуль.
-        backlog.clear()
         self.backlog_index = 0
-        if self.backlog_open then
-            refresh_backlog_view(self)
-        end
 
     elseif message_id == hash("open_backlog") then
         set_backlog_open(self, true)
 
     elseif message_id == hash("close_backlog") then
         set_backlog_open(self, false)
+
+    elseif message_id == hash("set_overlay_state") then
+        -- ui_manager сообщает, открыт ли поверх телефон/карта/инвентарь.
+        -- Пока какая-либо модалка открыта, dialogue не должен реагировать на
+        -- клики (иначе тапы по UI телефона проваливаются в btn_next/dbox и
+        -- листают реплику).
+        local target = message and message.target
+        local open = message and message.open and true or false
+        if target then
+            self.overlay_blockers = self.overlay_blockers or {}
+            self.overlay_blockers[target] = open or nil
+        end
 
     elseif message_id == hash("layout_changed") or message_id == hash("resize_dialogue") then
         self._adaptive_w = nil
@@ -556,6 +505,14 @@ end
 function on_input(self, action_id, action)
     if not self.visible and not self.backlog_open then return false end
     if action_id ~= hash("touch") or not action.pressed then return false end
+
+    -- Пока поверх диалога открыта модалка (телефон/карта/инвентарь/чойсы),
+    -- бэклог-режим из этого правила исключён — там свои стрелки.
+    if not self.backlog_open and self.overlay_blockers then
+        if next(self.overlay_blockers) ~= nil then
+            return false
+        end
+    end
     ensure_backlog_nodes(self)
 
     -- Любой клик во время SKIP отключает SKIP. Иначе игроку приходится
@@ -572,28 +529,6 @@ function on_input(self, action_id, action)
     end
 
     if self.backlog_open then
-        local n = self.backlog_nodes
-        if gui.pick_node(n.btn_close, action.x, action.y) then
-            click_flash(n.btn_close)
-            msg.post(UI_MGR, "close_backlog")
-            return true
-        end
-        if gui.pick_node(n.btn_prev, action.x, action.y) then
-            click_flash(n.btn_prev)
-            if backlog.size() > 0 and self.backlog_index > 1 then
-                self.backlog_index = self.backlog_index - 1
-                refresh_backlog_view(self)
-            end
-            return true
-        end
-        if gui.pick_node(n.btn_next, action.x, action.y) then
-            click_flash(n.btn_next)
-            if self.backlog_index < backlog.size() then
-                self.backlog_index = self.backlog_index + 1
-                refresh_backlog_view(self)
-            end
-            return true
-        end
         return true
     end
 

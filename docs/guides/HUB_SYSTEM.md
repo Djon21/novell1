@@ -200,10 +200,12 @@ apartment_hub = {
 ```ink
 # map:lock_to:poi_cafe   // разрешён только cafe
 # map:allow:poi_park     // добавить park в allow-set
+# map:lock_all           // заблокировать все POI
+# map:lock:all           // то же самое, альтернативная запись
 # map:allow:reset        // очистить allow-set: снова доступны все POI
 ```
 
-Важно: если allow-set пустой, runtime считает, что доступны все POI. Future-хабы (`bar_hub`, `archive_hub` и т.п.) нельзя открывать игроку, пока у их hotspot'ов нет рабочих Ink-knot'ов. Для линейного маршрута лучше использовать `map:lock_to` или scripted commute без карты.
+Важно: если allow-set пустой, runtime считает, что доступны все POI, кроме отдельного режима `map:lock_all`. После `map:lock_all` можно открыть одну точку через `map:allow:POI_ID` или снять все ограничения через `map:allow:reset`. Future-хабы (`bar_hub`, `archive_hub` и т.п.) нельзя открывать игроку, пока у их hotspot'ов нет рабочих Ink-knot'ов. Для линейного маршрута лучше использовать `map:lock_to` или scripted commute без карты.
 
 ---
 

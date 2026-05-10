@@ -21,8 +21,7 @@ local current_location_time = nil
 local current_location_loop = nil
 
 local STATIC_NODES = {
-    "backdrop", "modal",
-    "modal_border_top", "modal_border_bottom", "modal_border_left", "modal_border_right",
+    "backdrop", "modal", "box",
     "corner_tl_v", "corner_tl_h", "corner_tr_v", "corner_tr_h",
     "corner_bl_v", "corner_bl_h", "corner_br_v", "corner_br_h",
     "who_tag_bg", "who_tag", "who_name",
@@ -54,6 +53,28 @@ end
 local function set_text(id, s)
     local n = get_node(id)
     if n then gui.set_text(n, s or "") end
+end
+
+
+local function set_pos(id, x, y, z)
+    local n = get_node(id)
+    if n then gui.set_position(n, vmath.vector3(x, y, z or gui.get_position(n).z)) end
+end
+
+local function set_size(id, w, h)
+    local n = get_node(id)
+    if n then gui.set_size(n, vmath.vector3(w, h, 0)) end
+end
+
+local function set_pos_size(id, x, y, z, w, h)
+    set_pos(id, x, y, z)
+    set_size(id, w, h)
+end
+
+local function clamp(v, lo, hi)
+    if v < lo then return lo end
+    if v > hi then return hi end
+    return v
 end
 
 local function coalesce(...)
@@ -131,11 +152,16 @@ local function add_line_nodes(list, prefix, x, y, z, w, h, color)
     list[#list + 1] = new_box(x + w - 1, y, z, 1, h, color)
 end
 
-local OPT_X = 310
-local OPT_TOP = 444
-local OPT_W = 660
-local OPT_H = 54
-local OPT_GAP = 10
+local DEFAULT_LAYOUT = {
+    modal_x = 120,
+    modal_y = 46,
+    modal_w = 1040,
+    modal_h = 628,
+    pad_x = 34,
+    opt_gap = 12,
+    opt_min_h = 70,
+    opt_max_h = 124,
+}
 
 local function clear_opts(self)
     for _, opt_group in ipairs(self.opt_nodes or {}) do
@@ -148,36 +174,158 @@ local function clear_opts(self)
 end
 
 local function make_opt(self, idx, opt)
-    local y = OPT_TOP - idx * OPT_H - (idx - 1) * OPT_GAP
+    local layout = self.choice_layout or {}
+    local opt_x = layout.opt_x or 310
+    local opt_w = layout.opt_w or 660
+    local opt_h = layout.opt_h or 62
+    local opt_gap = layout.opt_gap or 10
+    local opt_top = layout.opt_top or 444
+    local y = opt_top - idx * opt_h - (idx - 1) * opt_gap
     local accent, border = color_for_class(opt.cls)
     local nodes = {}
 
-    local bg = new_box(OPT_X, y, 0.70, OPT_W, OPT_H, COLORS.opt_bg)
+    local bg = new_box(opt_x, y, 0.70, opt_w, opt_h, COLORS.opt_bg)
     nodes[#nodes + 1] = bg
-    add_line_nodes(nodes, "opt", OPT_X, y, 0.71, OPT_W, OPT_H, border)
+    add_line_nodes(nodes, "opt", opt_x, y, 0.71, opt_w, opt_h, border)
 
     -- номер слева, как .opt .num в HTML
-    local num_x = OPT_X + 12
-    local num_y = y + 14
-    nodes[#nodes + 1] = new_box(num_x, num_y, 0.72, 30, 26, COLORS.num_bg)
-    add_line_nodes(nodes, "num", num_x, num_y, 0.73, 30, 26, accent)
-    nodes[#nodes + 1] = new_text(num_x + 15, num_y + 13, 0.74, 28, 10, string.format("%02d", idx), "jb_mono_10", accent, gui.PIVOT_CENTER)
+    local num_size = clamp(math.floor(opt_h * 0.42), 30, 38)
+    local num_x = opt_x + 14
+    local num_y = y + math.floor((opt_h - num_size) * 0.5)
+    nodes[#nodes + 1] = new_box(num_x, num_y, 0.72, num_size, num_size, COLORS.num_bg)
+    add_line_nodes(nodes, "num", num_x, num_y, 0.73, num_size, num_size, accent)
+    nodes[#nodes + 1] = new_text(num_x + num_size * 0.5, num_y + num_size * 0.5, 0.74, num_size - 4, 12, string.format("%02d", idx), "jb_mono_10", accent, gui.PIVOT_CENTER)
 
     local hint = opt.hint or opt.hint_text or ""
     local hint_w = 0
     if hint ~= "" then
-        hint_w = math.max(56, math.min(168, 26 + utf8_len(hint) * 8))
+        hint_w = math.max(70, math.min(190, 34 + utf8_len(hint) * 8))
         local hc, hb = hint_color(opt.hintCls or opt.hint_cls)
-        local hx = OPT_X + OPT_W - 12 - hint_w
-        local hy = y + 16
-        add_line_nodes(nodes, "hint", hx, hy, 0.73, hint_w, 22, hb)
-        nodes[#nodes + 1] = new_text(hx + hint_w * 0.5, hy + 11, 0.74, hint_w - 8, 10, tostring(hint):upper(), "jb_mono_10", hc, gui.PIVOT_CENTER)
+        local hx = opt_x + opt_w - 14 - hint_w
+        local hy = y + math.floor((opt_h - 26) * 0.5)
+        add_line_nodes(nodes, "hint", hx, hy, 0.73, hint_w, 26, hb)
+        nodes[#nodes + 1] = new_text(hx + hint_w * 0.5, hy + 13, 0.74, hint_w - 10, 12, tostring(hint):upper(), "jb_mono_10", hc, gui.PIVOT_CENTER)
     end
 
-    local text_w = OPT_W - 74 - (hint_w > 0 and (hint_w + 26) or 20)
-    nodes[#nodes + 1] = new_text(OPT_X + 56, y + 29, 0.74, text_w, 28, opt.text or "—", "manrope_16", COLORS.paper, gui.PIVOT_W)
+    local text_x = opt_x + num_size + 34
+    local text_w = opt_w - (text_x - opt_x) - (hint_w > 0 and (hint_w + 30) or 24)
+    local text_h = opt_h - 16
+    nodes[#nodes + 1] = new_text(text_x, y + opt_h * 0.5, 0.74, text_w, text_h, opt.text or "—", "manrope_medium_24", COLORS.paper, gui.PIVOT_W)
 
     return { bg = bg, nodes = nodes, cls = opt.cls }
+end
+
+local function estimate_text_height(text, width, min_h, max_h, line_h)
+    text = tostring(text or "")
+    if text == "" then
+        return 0
+    end
+    -- Грубая оценка для Manrope 24: средний кириллический символ занимает 12-14 px.
+    local chars_per_line = math.max(18, math.floor((width or 660) / 13))
+    local lines = math.max(1, math.ceil(utf8_len(text) / chars_per_line))
+    return clamp(lines * (line_h or 32), min_h or 34, max_h or 96)
+end
+
+local function layout_choice(self, message, opt_count)
+    message = message or {}
+    local L = DEFAULT_LAYOUT
+    local mx, my, mw, mh = L.modal_x, L.modal_y, L.modal_w, L.modal_h
+    local left = mx + L.pad_x
+    local right = mx + mw - L.pad_x
+    local content_w = right - left
+    local top = my + mh
+
+    -- Растягиваем саму модалку: на мобильном landscape это заметно лучше,
+    -- а на desktop не ломает композицию.
+    set_pos_size("modal", mx, my, 0.60, mw, mh)
+    -- box заменяет старые modal_border_top/bottom/left/right.
+    -- В .gui у box должен быть pivot=PIVOT_SW и slice9, тогда размер
+    -- из адаптивного layout-а будет корректно растягивать рамку.
+    set_pos_size("box", mx, my, 0.61, mw, mh)
+
+    -- Угловые акценты тоже привязаны к новым углам.
+    local c = 22
+    set_pos_size("corner_tl_v", mx, top - c, 0.62, 2, c)
+    set_pos_size("corner_tl_h", mx, top - 2, 0.62, c, 2)
+    set_pos_size("corner_tr_v", mx + mw - 2, top - c, 0.62, 2, c)
+    set_pos_size("corner_tr_h", mx + mw - c, top - 2, 0.62, c, 2)
+    set_pos_size("corner_bl_v", mx, my, 0.62, 2, c)
+    set_pos_size("corner_bl_h", mx, my, 0.62, c, 2)
+    set_pos_size("corner_br_v", mx + mw - 2, my, 0.62, 2, c)
+    set_pos_size("corner_br_h", mx + mw - c, my, 0.62, c, 2)
+
+    local header_y = top - 44
+    set_pos_size("who_tag_bg", left, header_y - 12, 0.62, 78, 22)
+    set_pos("who_tag", left + 39, header_y - 1, 0.63)
+    set_size("who_tag", 70, 12)
+    set_pos("who_name", left + 92, header_y - 1, 0.63)
+    set_size("who_name", 430, 24)
+
+    local meta_w = 180
+    local meta_x = right - meta_w
+    set_pos_size("meta_loop_bg", meta_x, header_y - 14, 0.62, meta_w, 24)
+    set_pos_size("meta_loop_border_top", meta_x, header_y + 9, 0.63, meta_w, 1)
+    set_pos_size("meta_loop_border_bottom", meta_x, header_y - 14, 0.63, meta_w, 1)
+    set_pos_size("meta_loop_border_left", meta_x, header_y - 14, 0.63, 1, 24)
+    set_pos_size("meta_loop_border_right", meta_x + meta_w - 1, header_y - 14, 0.63, 1, 24)
+    set_pos("meta_loop", meta_x + meta_w * 0.5, header_y - 2, 0.64)
+    set_size("meta_loop", meta_w - 12, 12)
+    set_pos("meta_tm", right, header_y - 33, 0.63)
+    set_size("meta_tm", 360, 12)
+
+    local head_div_y = top - 76
+    set_pos_size("head_divider", left, head_div_y, 0.62, content_w, 1)
+
+    local prompt = coalesce(message.prompt, message.title, "Выбери вариант.") or ""
+    local caveat = coalesce(message.caveat, message.subtitle, message.note, "") or ""
+    local prompt_h = estimate_text_height(prompt, content_w, 38, 118, 34)
+    local caveat_h = caveat ~= "" and estimate_text_height(caveat, content_w, 32, 86, 30) or 0
+
+    local prompt_top = head_div_y - 24
+    set_pos("prompt", left, prompt_top, 0.63)
+    set_size("prompt", content_w, prompt_h)
+
+    local next_y = prompt_top - prompt_h - 12
+    if caveat_h > 0 then
+        set_pos("caveat", left, next_y, 0.63)
+        set_size("caveat", content_w, caveat_h)
+        next_y = next_y - caveat_h - 18
+    else
+        set_pos("caveat", left, next_y, 0.63)
+        set_size("caveat", content_w, 0)
+        next_y = next_y - 8
+    end
+
+    local foot_y = my + 72
+    set_pos_size("foot_divider", left, foot_y, 0.62, content_w, 1)
+    set_pos("foot_label", left, my + 38, 0.63)
+    set_size("foot_label", 360, 20)
+
+    local opts_top = next_y
+    local opts_bottom = foot_y + 22
+    local available = math.max(180, opts_top - opts_bottom)
+    local count = math.max(1, math.min(4, tonumber(opt_count) or 1))
+    local opt_gap = L.opt_gap
+    local opt_h = math.floor((available - opt_gap * (count - 1)) / count)
+    opt_h = clamp(opt_h, L.opt_min_h, L.opt_max_h)
+
+    -- Если текст вопроса длинный, не даём вариантам залезть под footer:
+    -- лучше слегка сжать карточку, чем получить наложение.
+    local total_opts_h = count * opt_h + (count - 1) * opt_gap
+    if opts_top - total_opts_h < opts_bottom then
+        opt_h = math.max(62, math.floor((opts_top - opts_bottom - opt_gap * (count - 1)) / count))
+        total_opts_h = count * opt_h + (count - 1) * opt_gap
+    end
+
+    set_pos_size("opts_panel", left, opts_top - total_opts_h, 0.62, content_w, total_opts_h)
+
+    self.choice_layout = {
+        opt_x = left,
+        opt_w = content_w,
+        opt_top = opts_top,
+        opt_h = opt_h,
+        opt_gap = opt_gap,
+    }
 end
 
 local function normalize_loop_label(v)
@@ -303,9 +451,11 @@ function on_message(self, message_id, message, sender)
         self.visible = true
         set_all_enabled(true)
         clear_opts(self)
-        apply_copy(message or {})
 
         local opts = message.opts or {}
+        layout_choice(self, message or {}, #opts)
+        apply_copy(message or {})
+
         self.opts = opts
         for i, opt in ipairs(opts) do
             if i <= 4 then

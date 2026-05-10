@@ -149,20 +149,58 @@ local function set_pos_x(id, x)
     end
 end
 
-local function clamp_text(s, limit)
-    s = tostring(s or ""):gsub("\n", " ")
-    limit = limit or 80
-    if utf8 and utf8.len and utf8.len(s) and utf8.len(s) > limit then
-        local out = ""
-        local count = 0
-        for _, cp in utf8.codes(s) do
-            count = count + 1
-            if count > limit - 3 then break end
-            out = out .. utf8.char(cp)
+local function utf8_char_width(byte)
+    byte = tonumber(byte) or 0
+    if byte < 0x80 then return 1 end
+    if byte >= 0xC2 and byte < 0xE0 then return 2 end
+    if byte >= 0xE0 and byte < 0xF0 then return 3 end
+    if byte >= 0xF0 and byte < 0xF5 then return 4 end
+    return 1
+end
+
+local function utf8_prefix(s, max_chars)
+    s = tostring(s or "")
+    max_chars = math.max(0, tonumber(max_chars) or 0)
+    if max_chars <= 0 or s == "" then return "", 0, 0 end
+
+    local i = 1
+    local chars = 0
+    local cut = 0
+    local bytes = #s
+    while i <= bytes do
+        local w = utf8_char_width(s:byte(i))
+        if i + w - 1 > bytes then
+            w = 1
         end
-        return out .. "..."
+        chars = chars + 1
+        if chars <= max_chars then
+            cut = i + w - 1
+        end
+        i = i + w
     end
-    if #s > limit then return s:sub(1, limit - 3) .. "..." end
+
+    if chars <= max_chars then
+        return s, chars, chars
+    end
+    return s:sub(1, cut), max_chars, chars
+end
+
+local function utf8_first_char(s)
+    local prefix = utf8_prefix(s, 1)
+    return prefix ~= "" and prefix or nil
+end
+
+local function clamp_text(s, limit)
+    s = tostring(s or ""):gsub("\r", " "):gsub("\n", " ")
+    limit = tonumber(limit) or 80
+    if limit <= 0 then return "" end
+
+    local ellipsis = "..."
+    local keep = math.max(1, limit - #ellipsis)
+    local prefix, _, total = utf8_prefix(s, keep)
+    if total > keep then
+        return prefix .. ellipsis
+    end
     return s
 end
 
@@ -185,14 +223,16 @@ end
 
 local function make_avatar(name_or_id)
     local s = tostring(name_or_id or "?")
-    local first = s:match("%S") or "?"
+    local first = utf8_first_char(s:match("%S+") or "?") or "?"
     local second = nil
     local words = {}
     for w in s:gmatch("%S+") do table.insert(words, w) end
     if #words >= 2 then
-        second = words[2]:match("%S")
+        second = utf8_first_char(words[2])
     else
-        second = s:match("^%S+%s*(%S)")
+        local compact = s:gsub("%s+", "")
+        local one = utf8_prefix(compact, 1)
+        second = utf8_first_char(compact:sub(#one + 1))
     end
     local av = first .. (second or "")
     return clamp_text(av:upper(), 2)
@@ -614,15 +654,24 @@ local function handle_phone_input(self, action_id, action)
     action = action or {}
     if action_id == hash("wheel_up") then
         action.dy = 1
-        return handle_scroll(self, action)
+        handle_scroll(self, action)
+        return true
     elseif action_id == hash("wheel_down") then
         action.dy = -1
-        return handle_scroll(self, action)
+        handle_scroll(self, action)
+        return true
     end
-    -- Дальше обрабатываем только клики (pressed/released). Просто
-    -- движение мыши без клика игнорируем — иначе любой mouse_move
-    -- с ненулевым dy вызывал бы прокрутку.
-    if not action.released and not action.pressed then return false end
+
+    -- Важно: когда Messenger видим, он обязан поглощать input так же,
+    -- как SMS. Иначе при открытом dialogue layer неиспользованный тап
+    -- по bubble/пустому месту возвращает false и уходит дальше по input
+    -- stack, где dialogue_next листает реплику.
+    if action_id ~= hash("touch") then
+        return true
+    end
+    if not action.released and not action.pressed then
+        return true
+    end
     local x, y = action.x or 0, action.y or 0
 
     if self.view == "list" then
@@ -646,17 +695,36 @@ local function handle_phone_input(self, action_id, action)
         end
     else
         if is_inside_rect("back_bg", x, y) then
+            self.reply_tap_armed = false
             open_list(self)
             return true
         elseif is_inside_rect("send_bg", x, y) or is_inside_rect("input_bg", x, y) then
-            handle_reply_tap(self)
+            -- В отличие от обычных hitbox'ов, input/send может закрыть телефон
+            -- и открыть side-dialogue через messenger_open_chat. Если сделать это
+            -- на pressed, последующий released уже придёт при закрытом телефоне
+            -- и может пролистнуть dialogue_v2. Поэтому arm на pressed, execute
+            -- на released: текущий release возвращает true и не уходит дальше.
+            if action.pressed then
+                self.reply_tap_armed = true
+                return true
+            end
+            if action.released then
+                if self.reply_tap_armed then
+                    self.reply_tap_armed = false
+                    handle_reply_tap(self)
+                end
+                return true
+            end
             return true
         elseif is_inside_rect("attach_bg", x, y) then
             print("[phone_messenger] TODO attach runtime hook")
             return true
         end
     end
-    return false
+    -- Любой тап внутри открытого Messenger считается обработанным.
+    -- Конкретные hit-actions выше могут что-то сделать, но отсутствие hit
+    -- не должно прокидывать input в dialogue_v2.
+    return true
 end
 
 local function set_all_enabled(enabled)
@@ -669,6 +737,7 @@ function init(self)
     self.filter = "all"
     self.list_offset = 0
     self.chat_offset = 0
+    self.reply_tap_armed = false
     set_all_enabled(false)
 end
 
@@ -687,6 +756,7 @@ function on_message(self, message_id, message, sender)
         self.visible = false
         self.view = "list"
         self.active_chat_id = nil
+        self.reply_tap_armed = false
         stop_send_pulse()  -- не крутим анимации в скрытом app
         set_all_enabled(false)
     elseif message_id == hash("refresh_app") then

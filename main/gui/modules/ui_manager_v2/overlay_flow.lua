@@ -26,6 +26,23 @@ function M.show_menu(ctx)
     ctx.dbg("[ui_manager_v2] mode: menu")
 end
 
+function M.prepare_run_restore(ctx)
+    ctx.overlays.inventory = false
+    ctx.overlays.phone = false
+    ctx.overlays.map = false
+    ctx.overlays.backlog = false
+    ctx.overlays.choice = false
+    M.sync_modal_state(ctx.overlays)
+
+    msg.post(ctx.components.main_menu, "hide_menu")
+    msg.post(ctx.components.dialogue,  "hide_dialogue")
+    msg.post(ctx.components.choice,    "hide_choice")
+    msg.post(ctx.components.inventory, "hide_inventory")
+    msg.post(ctx.components.phone,     "close_phone")
+    msg.post(ctx.components.map,       "close_map")
+    msg.post(ctx.components.hotspots,  "hide_all")
+end
+
 function M.show_exploration(ctx)
     ctx.set_base_mode("exploration")
     ctx.reset_dialogue_autoplay_state()

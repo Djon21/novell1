@@ -50,7 +50,7 @@
 - `phone_v2.gui` + `phone_v2.gui_script` — старый монолит, остался на диске для справки,
   в коллекцию не подключён. Можно удалить после стабилизации сплита.
 - `phone_cam.gui` + `phone_cam.gui_script` — приложение «камера», заменено на
-  `phone_messenger`. Файлы могут оставаться на диске как legacy/reference, но в коллекцию больше не включаются.
+  `phone_messenger`. Файлы остались на диске, в коллекцию больше не включены.
 - `phone_map_beautiful.gui` — заготовка нового дизайна карты, пока не используется.
 
 ---
@@ -119,10 +119,10 @@ phone_sms.gui_script.on_message("open_app")
 | Что показывает | Источник |
 |---|---|
 | `stats_msg` («сообщений: N» в статус-баре) | `gs.get_phone_unread_total()` — sum sms+msg |
-| `app1_badge` (иконка SMS) | `gs.get_sms_unread_total()` — **только SMS** |
-| `app7_badge` (иконка Messenger) | `gs.get_msg_unread_total()` — TODO: добавить ноды `app7_badge_*` в `.gui` файл |
+| `app1_badge` (иконка SMS) | `gs.get_sms_unread_total()` — только SMS |
+| `app7_badge` (иконка Messenger) | `gs.get_msg_unread_total()` — только Messenger |
 
-Раньше бейдж на SMS-иконке показывал общий total — это считало messenger-непрочитанные как SMS. Сейчас разделено.
+Раньше бейдж на SMS-иконке мог показывать общий total. Сейчас SMS и Messenger разделены.
 
 ---
 
@@ -217,18 +217,6 @@ message_flow.lua handles "sms_open_contact"
 > 2. Написать knot `sms_thread_<contact>` в нужном `.ink`-файле
 > 3. Готово — ui_manager найдёт knot по имени автоматически
 
-**SMS thread имеет тот же pulse-паттерн что Messenger:** при открытии переписки
-поле ввода (`th_input_text`) и кнопка SEND (`th_send_label`, `th_send_bg`)
-пульсируют, если выполнены все условия:
-1. Есть ink-knot `sms_thread_<contact>` (или явный `contact.ink_thread`)
-2. Игрок ещё не отвечал (`sms_<contact>_replied != true`)
-3. Контакт не `readonly`
-
-Тап на input/send пробрасывает в `sms_open_contact` — оттуда message_flow
-открывает knot. Если `can_reply` = false (нет knot, уже ответил, readonly),
-тап игнорируется и пульса нет.
-
-
 ### Messenger — параллельный канал
 
 Messenger-приложение (`phone_messenger`) работает зеркально к SMS, но через
@@ -263,13 +251,14 @@ message_flow.handle_messenger_open_chat
   └─ иначе игнорируется (тап не делает ничего)
 ```
 
-**`can_reply(chat_id)` возвращает true** только если выполнены **все** условия:
-1. Есть ink-knot `msg_thread_<chat>` (`dm.has_knot` — phone_messenger напрямую `require`-ит `dialogue_manager_ink`)
-2. Игрок ещё не отвечал в этом чате (`msg_<chat>_replied != true`)
+`can_reply(chat_id)` возвращает true только если выполнены все условия:
 
-Для чатов **без интерактивного ответа** (meme-чаты, боты-нотификации, каналы) пульса не будет — input/send выглядят статичными. Тап тоже игнорируется.
+1. Есть ink-knot `msg_thread_<chat>`.
+2. Игрок ещё не отвечал в этом чате (`msg_<chat>_replied != true`).
 
-`open_app` Messenger **не** вызывает автоматически `gs.mark_all_msg_read()`.
+Для чатов без интерактивного ответа (meme-чаты, боты-нотификации, каналы) пульса не будет — input/send выглядят статичными. Тап тоже игнорируется.
+
+`open_app` Messenger не вызывает автоматически `gs.mark_all_msg_read()`.
 Непрочитанные сбрасываются точечно при открытии конкретного чата через
 `gs.mark_msg_read(chat_id)`. Так игрок может открыть приложение и всё ещё видеть,
 какие диалоги остались непрочитанными.
@@ -283,7 +272,7 @@ chat_id, которого нет в `CHAT_META`, чат всё равно дол
 > **Как добавить Messenger-переписку с новым chat_id:**
 > 1. `# msg:add:<chat_id>:<текст>` — прислать входящее сообщение.
 > 2. При необходимости написать knot `msg_thread_<chat_id>` в `.ink`-файле.
-> 3. Если knot есть — тап по чату может открыть side-dialogue выбора ответа.
+> 3. Если knot есть — тап по input/SEND в открытом чате может открыть side-dialogue выбора ответа.
 > 4. Если knot нет — чат остаётся обычным inline bubble-view внутри телефона.
 
 ---
@@ -594,6 +583,4 @@ Defold автоматически распространяет `enabled = false`
 | При закрытии телефона меню не работает | `release_input_focus` вызывается в `close_phone` | Убрать `release_input_focus` |
 | Данные в вкладке не обновляются | Нет вызова `refresh(self)` в `open_app` | Добавить `refresh(self)` в хэндлер `open_app` |
 | `refresh_phone` не обновляет данные | Активная вкладка не совпадает с той что на экране | `refresh_phone` обновляет только `active_app` — открой нужную вкладку |
-| Messenger показывает старые demo-чаты | В `phone_messenger.gui_script` осталась runtime-таблица `CHATS` / `ORDER` | Использовать только `gs.get_msg_chats()` / `gs.get_msg(chat_id)`, оставить только presentation `CHAT_META` |
-| Messenger unread сбрасывается сразу при входе в приложение | В `open_app` вызван `gs.mark_all_msg_read()` | Сбрасывать unread точечно через `gs.mark_msg_read(chat_id)` при открытии конкретного чата |
 | `gui.get_node` крашится | Нода с таким id нет в этом GUI-файле | Используй `pcall(gui.get_node, id)` — обёртка `get_node()` уже есть в каждом скрипте |

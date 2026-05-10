@@ -2,10 +2,6 @@ local l10n = require "main.scripts.l10n"
 
 local UI_MGR = "#ui_manager_v2"
 
-local COLOR_HOVER  = vmath.vector4(0.49, 0.976, 1.0, 1.0)
-local COLOR_NORMAL = vmath.vector4(0.952, 0.925, 0.85, 0.78)
-local COLOR_ACTIVE = vmath.vector4(0.952, 0.925, 0.85, 1.0)
-
 -- Лейблы пунктов меню теперь идут через l10n. mi_new имеет format-плейсхолдер
 -- (номер итерации) и формируется динамически в apply_loop_state.
 local MENU_ITEMS = {
@@ -29,9 +25,8 @@ local LOGO_BASE = {
     cyan = 62,
 }
 
--- Runtime-модалка подтверждения для «Сбросить итерацию». Лежит в скрипте
--- (а не в .gui), потому что используется один раз и зависит от l10n —
--- проще создать ноды программно, чем править .gui-файл.
+-- Confirm-модалка подтверждения для «Сбросить итерацию» теперь лежит
+-- в main_menu_v2.gui. Скрипт только проставляет l10n-текст и включает/выключает ноды.
 local CONFIRM_BG_COLOR     = vmath.vector4(0.0, 0.0, 0.0, 0.85)
 local CONFIRM_BOX_COLOR    = vmath.vector4(0.06, 0.06, 0.10, 1.0)
 local CONFIRM_BORDER_COLOR = vmath.vector4(0.49, 0.976, 1.0, 1.0)
@@ -97,68 +92,32 @@ local function apply_loop_state(self, message)
 end
 
 local function click_flash(node)
-    gui.animate(node, "scale", vmath.vector4(1.06, 1.06, 1, 1), gui.EASING_OUTQUAD, 0.1, 0, function()
-        gui.animate(node, "scale", vmath.vector4(1, 1, 1, 1), gui.EASING_OUTQUAD, 0.15)
+    gui.cancel_animation(node, "scale")
+    gui.animate(node, "scale", vmath.vector3(1.06, 1.06, 1), gui.EASING_OUTQUAD, 0.1, 0, function()
+        gui.animate(node, "scale", vmath.vector3(1, 1, 1), gui.EASING_OUTQUAD, 0.15)
     end)
 end
 
 -- ─── Confirm-модалка для reset_iteration ────────────────────────────────
 
--- Все ноды модалки создаются на root-уровне без gui.set_parent — в Defold
--- set_parent с дефолтом превращает позиции в локальные относительно родителя
--- и ноды улетают за экран. На рут-уровне коорды трактуются как world (1280×720),
--- (640, 360) — центр экрана.
---
--- Для кнопок отдельно создаются box-hitbox'ы: gui.pick_node для text-ноды
--- считает hit-area по фактической ширине текста (~30px для «ДА»), легко
--- промахнуться. Hitbox побольше — комфортный клик.
+-- Ноды модалки находятся в main_menu_v2.gui:
+-- confirm_bg, confirm_box, confirm_text, confirm_yes_hit, confirm_yes,
+-- confirm_no_hit, confirm_no.
+-- Hitbox-ноды нужны, потому что gui.pick_node по text-ноды слишком узкий
+-- для коротких подписей «ДА» / «НЕТ».
 local CONFIRM_NODE_KEYS = { "bg", "box", "text", "yes", "yes_hit", "no", "no_hit" }
-local BUTTON_HIT_W = 160
-local BUTTON_HIT_H = 60
 
 local function ensure_confirm_nodes(self)
     if self.confirm_nodes then return end
-    local nodes = {}
-    local font = gui.get_font(gui.get_node("mi_new"))
-
-    -- Подложка на весь экран.
-    nodes.bg = gui.new_box_node(vmath.vector3(640, 360, 0), vmath.vector3(1280, 720, 0))
-    gui.set_color(nodes.bg, CONFIRM_BG_COLOR)
-
-    -- Бокс-окно по центру.
-    nodes.box = gui.new_box_node(vmath.vector3(640, 360, 0.05), vmath.vector3(640, 240, 0))
-    gui.set_color(nodes.box, CONFIRM_BOX_COLOR)
-
-    -- Текст-вопрос (выше центра).
-    nodes.text = gui.new_text_node(vmath.vector3(640, 410, 0.1), "")
-    gui.set_font(nodes.text, font)
-    gui.set_color(nodes.text, CONFIRM_TEXT_COLOR)
-    gui.set_line_break(nodes.text, true)
-    pcall(gui.set_size, nodes.text, vmath.vector3(560, 120, 0))
-
-    -- ДА: hitbox + текст поверх.
-    nodes.yes_hit = gui.new_box_node(vmath.vector3(540, 300, 0.08),
-                                     vmath.vector3(BUTTON_HIT_W, BUTTON_HIT_H, 0))
-    gui.set_color(nodes.yes_hit, vmath.vector4(0, 0, 0, 0))   -- невидимый, для pick_node
-
-    nodes.yes = gui.new_text_node(vmath.vector3(540, 300, 0.1), "")
-    gui.set_font(nodes.yes, font)
-    gui.set_color(nodes.yes, CONFIRM_YES_COLOR)
-
-    -- НЕТ: hitbox + текст поверх.
-    nodes.no_hit = gui.new_box_node(vmath.vector3(740, 300, 0.08),
-                                    vmath.vector3(BUTTON_HIT_W, BUTTON_HIT_H, 0))
-    gui.set_color(nodes.no_hit, vmath.vector4(0, 0, 0, 0))
-
-    nodes.no = gui.new_text_node(vmath.vector3(740, 300, 0.1), "")
-    gui.set_font(nodes.no, font)
-    gui.set_color(nodes.no, CONFIRM_NO_COLOR)
-
-    self.confirm_nodes = nodes
-    -- Сразу прячем — модалка создаётся при первом открытии и переиспользуется.
-    for _, key in ipairs(CONFIRM_NODE_KEYS) do
-        gui.set_enabled(nodes[key], false)
-    end
+    self.confirm_nodes = {
+        bg      = gui.get_node("confirm_bg"),
+        box     = gui.get_node("confirm_box"),
+        text    = gui.get_node("confirm_text"),
+        yes     = gui.get_node("confirm_yes"),
+        yes_hit = gui.get_node("confirm_yes_hit"),
+        no      = gui.get_node("confirm_no"),
+        no_hit  = gui.get_node("confirm_no_hit"),
+    }
 end
 
 local function set_confirm_enabled(self, enabled)
@@ -515,45 +474,18 @@ local function start_glitch_loop(self)
     schedule_next_glitch(self)
 end
 
-local function make_skyline_layer(parent_pos, y, h, color, sway, period)
-    local abs_x = parent_pos.x + 0
-    local abs_y = parent_pos.y + y
-    local abs_z = parent_pos.z - 0.08
-
-    local n = gui.new_box_node(vmath.vector3(abs_x, abs_y, abs_z), vmath.vector3(1280, h, 0))
-    gui.set_pivot(n, gui.PIVOT_SW)
-    gui.set_color(n, color)
-    gui.set_inherit_alpha(n, false)
-    gui.animate(n, "position.x", abs_x + sway, gui.EASING_INOUTSINE, period, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
-    return n
-end
-
-local function setup_skyline(self)
-    local root = gui.get_node("menu_root")
-    local root_pos = gui.get_position(root)
-
-    self.sky_far  = make_skyline_layer(root_pos, 70, 36,
-        vmath.vector4(0.067, 0.055, 0.173, 0.55), 4, 12.0)
-    self.sky_mid  = make_skyline_layer(root_pos, 90, 24,
-        vmath.vector4(0.047, 0.039, 0.141, 0.75), 8, 8.0)
-    self.sky_near = make_skyline_layer(root_pos, 110, 14,
-        vmath.vector4(0.027, 0.023, 0.094, 0.90), 12, 5.5)
-end
-
 function init(self)
     msg.post(".", "acquire_input_focus")
     self.visible = true
-    self.hovered = nil
     self.glitch_timer = nil
     self.can_continue = false
     self.reset_confirm_visible = false
-    self.confirm_nodes = nil   -- ленивая инициализация в ensure_confirm_nodes
-
-    math.randomseed(os.time())
+    self.confirm_nodes = nil
+    ensure_confirm_nodes(self)
+    set_confirm_enabled(self, false)
 
     cache_logo_base_from_scene()
     start_glitch_loop(self)
-    setup_skyline(self)
     apply_static_labels()
     apply_menu_visibility()
     apply_loop_state(self, { iteration = 1, iteration_label = "001", awareness = 0, completed = 0, can_continue = false })
@@ -631,7 +563,6 @@ function on_input(self, action_id, action)
                     return true
                 end
                 click_flash(n)
-                gui.set_color(n, COLOR_ACTIVE)
                 -- Reset-итерации требует подтверждения — не шлём msg сразу.
                 if item.msg == "reset_iteration" then
                     show_reset_confirm(self)

@@ -62,11 +62,11 @@
 - mail
 - call log
 - clues
-- camera
+- messenger
 - terminal
 - map entry
 
-Ink добавляет данные через теги `sms`, `quest`, `note`, `mail`, `call`, `clue`, `camera`, `term`.
+Ink добавляет данные через теги `sms`, `msg`, `quest`, `note`, `mail`, `call`, `clue`, `camera`, `term`. Messenger использует `msg:*`; camera-feed остаётся в game_state как legacy/data-channel, но не является активным phone app.
 
 ### Инвентарь
 
@@ -97,7 +97,8 @@ Run-state текущего прохождения:
 - current_scene
 - SMS / notes
 - mail / call log / clues
-- camera feed
+- messenger messages
+- camera feed (legacy/data-channel)
 - terminal lines
 
 Важно:

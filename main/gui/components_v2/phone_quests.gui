@@ -33,34 +33,213 @@ fonts {
 }
 nodes {
   position {
-    x: 524.0
-    y: 116.0
+    z: 0.5
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  type: TYPE_BOX
+  id: "quests_runtime_root"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 500.0
+    y: 40.0
     z: 0.521
   }
   size {
-    x: 680.0
-    y: 410.0
+    x: 728.0
+    y: 640.0
   }
   color {
-    x: 0.018
-    y: 0.017
-    z: 0.045
+    x: 0.031
+    y: 0.024
+    z: 0.094
   }
   type: TYPE_BOX
-  id: "quests_screen_bg"
+  id: "quests_app_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.62
-  enabled: false
+  alpha: 0.84
 }
 nodes {
   position {
     x: 524.0
-    y: 542.0
-    z: 0.545
+    y: 651.0
+    z: 0.556
   }
   size {
+    x: 390.0
+    y: 34.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\232\320\222\320\225\320\241\320\242\320\253"
+  font: "unbounded_bold_32"
+  id: "quests_title"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 524.0
+    y: 594.0
+    z: 0.542
+  }
+  size {
+    x: 154.0
+    y: 30.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "qtab_active_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.6
+}
+nodes {
+  position {
+    x: 690.0
+    y: 594.0
+    z: 0.542
+  }
+  size {
+    x: 164.0
+    y: 30.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "qtab_done_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.6
+}
+nodes {
+  position {
+    x: 538.0
+    y: 610.0
+    z: 0.556
+  }
+  size {
+    x: 100.0
+    y: 12.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\320\220\320\232\320\242\320\230\320\222\320\235\320\253\320\225"
+  font: "jb_mono_12"
+  id: "qtab_active_label"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.75
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
     x: 656.0
+    y: 610.0
+    z: 0.556
+  }
+  size {
+    x: 32.0
+    y: 12.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "0"
+  font: "jb_mono_bold_14"
+  id: "qtab_active_count"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.85
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 704.0
+    y: 610.0
+    z: 0.556
+  }
+  size {
+    x: 110.0
+    y: 12.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\320\227\320\220\320\222\320\225\320\240\320\250\320\225\320\235\320\236"
+  font: "jb_mono_12"
+  id: "qtab_done_label"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.75
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 832.0
+    y: 610.0
+    z: 0.556
+  }
+  size {
+    x: 32.0
+    y: 12.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "0"
+  font: "jb_mono_bold_14"
+  id: "qtab_done_count"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.85
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 524.0
+    y: 574.0
+    z: 0.544
+  }
+  size {
+    x: 660.0
     y: 1.0
   }
   color {
@@ -69,198 +248,2456 @@ nodes {
     z: 0.851
   }
   type: TYPE_BOX
-  id: "quests_header_line"
+  id: "quests_divider"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.15
+}
+nodes {
+  position {
+    x: 1192.0
+    y: 104.0
+    z: 0.542
+  }
+  size {
+    x: 5.0
+    y: 454.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "quests_scrollbar_track"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   alpha: 0.08
-  enabled: false
+}
+nodes {
+  position {
+    x: 1192.0
+    y: 331.0
+    z: 0.545
+  }
+  size {
+    x: 5.0
+    y: 227.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "quests_scrollbar_thumb"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.7
 }
 nodes {
   position {
     x: 524.0
-    y: 590.0
-    z: 0.555
+    y: 348.0
+    z: 0.532
   }
   size {
-    x: 520.0
+    x: 646.0
+    y: 210.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "quest1_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.55
+}
+nodes {
+  position {
+    x: 524.0
+    y: 557.0
+    z: 0.545
+  }
+  size {
+    x: 646.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "quest1_top"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 524.0
+    y: 348.0
+    z: 0.545
+  }
+  size {
+    x: 646.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "quest1_bottom"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 524.0
+    y: 348.0
+    z: 0.545
+  }
+  size {
+    x: 1.0
+    y: 210.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "quest1_left"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1169.0
+    y: 348.0
+    z: 0.545
+  }
+  size {
+    x: 1.0
+    y: 210.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "quest1_right"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 538.0
+    y: 497.0
+    z: 0.546
+  }
+  size {
+    x: 52.0
+    y: 52.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "quest1_glyph_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.15
+}
+nodes {
+  position {
+    x: 26.0
+    y: 27.0
+    z: 0.058
+  }
+  size {
+    x: 44.0
+    y: 28.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "!"
+  font: "unbounded_bold_20"
+  id: "quest1_glyph"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "quest1_glyph_bg"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 604.0
+    y: 530.0
+    z: 0.558
+  }
+  size {
+    x: 350.0
+    y: 22.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\342\200\224"
+  font: "unbounded_bold_20"
+  id: "quest1_name"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 962.0
+    y: 516.0
+    z: 0.546
+  }
+  size {
+    x: 100.0
+    y: 22.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "quest1_tag_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.1
+}
+nodes {
+  position {
+    x: 1012.0
+    y: 528.0
+    z: 0.558
+  }
+  size {
+    x: 92.0
+    y: 11.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "\320\220\320\232\320\242\320\230\320\222\320\235\320\220\320\257"
+  font: "jb_mono_10"
+  id: "quest1_tag"
+  adjust_mode: ADJUST_MODE_STRETCH
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 604.0
+    y: 480.0
+    z: 0.558
+  }
+  size {
+    x: 395.0
+    y: 48.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  font: "manrope_14"
+  id: "quest1_desc"
+  pivot: PIVOT_NW
+  adjust_mode: ADJUST_MODE_STRETCH
+  line_break: true
+  alpha: 0.76
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 606.0
+    y: 426.0
+    z: 0.546
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "quest1_step1_box"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 606.0
+    y: 439.0
+    z: 0.547
+  }
+  size {
+    x: 14.0
+    y: 1.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest1_step1_top"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 606.0
+    y: 426.0
+    z: 0.547
+  }
+  size {
+    x: 14.0
+    y: 1.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest1_step1_bottom"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 606.0
+    y: 426.0
+    z: 0.547
+  }
+  size {
+    x: 1.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest1_step1_left"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 619.0
+    y: 426.0
+    z: 0.547
+  }
+  size {
+    x: 1.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest1_step1_right"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 613.0
+    y: 433.0
+    z: 0.558
+  }
+  size {
+    x: 12.0
+    y: 10.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_10"
+  id: "quest1_step1_mark"
+  adjust_mode: ADJUST_MODE_STRETCH
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 628.0
+    y: 434.0
+    z: 0.558
+  }
+  size {
+    x: 355.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_12"
+  id: "quest1_step1_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.86
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 606.0
+    y: 402.0
+    z: 0.546
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "quest1_step2_box"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 606.0
+    y: 415.0
+    z: 0.547
+  }
+  size {
+    x: 14.0
+    y: 1.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest1_step2_top"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 606.0
+    y: 402.0
+    z: 0.547
+  }
+  size {
+    x: 14.0
+    y: 1.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest1_step2_bottom"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 606.0
+    y: 402.0
+    z: 0.547
+  }
+  size {
+    x: 1.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest1_step2_left"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 619.0
+    y: 402.0
+    z: 0.547
+  }
+  size {
+    x: 1.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest1_step2_right"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 613.0
+    y: 409.0
+    z: 0.558
+  }
+  size {
+    x: 12.0
+    y: 10.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_10"
+  id: "quest1_step2_mark"
+  adjust_mode: ADJUST_MODE_STRETCH
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 628.0
+    y: 410.0
+    z: 0.558
+  }
+  size {
+    x: 355.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_12"
+  id: "quest1_step2_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.86
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 606.0
+    y: 378.0
+    z: 0.546
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "quest1_step3_box"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 606.0
+    y: 391.0
+    z: 0.547
+  }
+  size {
+    x: 14.0
+    y: 1.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest1_step3_top"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 606.0
+    y: 378.0
+    z: 0.547
+  }
+  size {
+    x: 14.0
+    y: 1.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest1_step3_bottom"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 606.0
+    y: 378.0
+    z: 0.547
+  }
+  size {
+    x: 1.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest1_step3_left"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 619.0
+    y: 378.0
+    z: 0.547
+  }
+  size {
+    x: 1.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest1_step3_right"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 613.0
+    y: 385.0
+    z: 0.558
+  }
+  size {
+    x: 12.0
+    y: 10.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_10"
+  id: "quest1_step3_mark"
+  adjust_mode: ADJUST_MODE_STRETCH
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 628.0
+    y: 386.0
+    z: 0.558
+  }
+  size {
+    x: 355.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_12"
+  id: "quest1_step3_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.86
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1156.0
+    y: 524.0
+    z: 0.558
+  }
+  size {
+    x: 110.0
+    y: 28.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\320\250\320\220\320\223\320\230 0/0"
+  font: "jb_mono_12"
+  id: "quest1_due"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  line_break: true
+  alpha: 0.8
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1020.0
+    y: 436.0
+    z: 0.546
+  }
+  size {
+    x: 136.0
+    y: 7.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "quest1_pbar_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.12
+}
+nodes {
+  position {
+    x: 1020.0
+    y: 436.0
+    z: 0.548
+  }
+  size {
+    x: 68.0
+    y: 7.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "quest1_pbar_fill"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+}
+nodes {
+  position {
+    x: 1156.0
+    y: 414.0
+    z: 0.558
+  }
+  size {
+    x: 90.0
+    y: 11.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "0%"
+  font: "jb_mono_bold_14"
+  id: "quest1_pct"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.92
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 524.0
+    y: 120.0
+    z: 0.532
+  }
+  size {
+    x: 646.0
+    y: 210.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "quest2_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.55
+}
+nodes {
+  position {
+    x: 524.0
+    y: 329.0
+    z: 0.545
+  }
+  size {
+    x: 646.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "quest2_top"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 524.0
+    y: 120.0
+    z: 0.545
+  }
+  size {
+    x: 646.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "quest2_bottom"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 524.0
+    y: 120.0
+    z: 0.545
+  }
+  size {
+    x: 1.0
+    y: 210.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "quest2_left"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1169.0
+    y: 120.0
+    z: 0.545
+  }
+  size {
+    x: 1.0
+    y: 210.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "quest2_right"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 538.0
+    y: 254.0
+    z: 0.546
+  }
+  size {
+    x: 52.0
+    y: 52.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "quest2_glyph_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.15
+}
+nodes {
+  position {
+    x: 564.0
+    y: 281.0
+    z: 0.558
+  }
+  size {
+    x: 44.0
+    y: 28.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "!"
+  font: "unbounded_bold_20"
+  id: "quest2_glyph"
+  adjust_mode: ADJUST_MODE_STRETCH
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 604.0
+    y: 302.0
+    z: 0.558
+  }
+  size {
+    x: 350.0
+    y: 22.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\342\200\224"
+  font: "unbounded_bold_20"
+  id: "quest2_name"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 962.0
+    y: 288.0
+    z: 0.546
+  }
+  size {
+    x: 100.0
+    y: 22.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "quest2_tag_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.1
+}
+nodes {
+  position {
+    x: 1012.0
+    y: 300.0
+    z: 0.558
+  }
+  size {
+    x: 92.0
+    y: 11.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "\320\220\320\232\320\242\320\230\320\222\320\235\320\220\320\257"
+  font: "jb_mono_10"
+  id: "quest2_tag"
+  adjust_mode: ADJUST_MODE_STRETCH
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 604.0
+    y: 252.0
+    z: 0.558
+  }
+  size {
+    x: 395.0
+    y: 48.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  font: "manrope_14"
+  id: "quest2_desc"
+  pivot: PIVOT_NW
+  adjust_mode: ADJUST_MODE_STRETCH
+  line_break: true
+  alpha: 0.76
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 606.0
+    y: 198.0
+    z: 0.546
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "quest2_step1_box"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 606.0
+    y: 211.0
+    z: 0.547
+  }
+  size {
+    x: 14.0
+    y: 1.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest2_step1_top"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 606.0
+    y: 198.0
+    z: 0.547
+  }
+  size {
+    x: 14.0
+    y: 1.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest2_step1_bottom"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 606.0
+    y: 198.0
+    z: 0.547
+  }
+  size {
+    x: 1.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest2_step1_left"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 619.0
+    y: 198.0
+    z: 0.547
+  }
+  size {
+    x: 1.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest2_step1_right"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 613.0
+    y: 205.0
+    z: 0.558
+  }
+  size {
+    x: 12.0
+    y: 10.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_10"
+  id: "quest2_step1_mark"
+  adjust_mode: ADJUST_MODE_STRETCH
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 628.0
+    y: 206.0
+    z: 0.558
+  }
+  size {
+    x: 355.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_12"
+  id: "quest2_step1_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.86
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 606.0
+    y: 174.0
+    z: 0.546
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "quest2_step2_box"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 606.0
+    y: 187.0
+    z: 0.547
+  }
+  size {
+    x: 14.0
+    y: 1.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest2_step2_top"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 606.0
+    y: 174.0
+    z: 0.547
+  }
+  size {
+    x: 14.0
+    y: 1.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest2_step2_bottom"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 606.0
+    y: 174.0
+    z: 0.547
+  }
+  size {
+    x: 1.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest2_step2_left"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 619.0
+    y: 174.0
+    z: 0.547
+  }
+  size {
+    x: 1.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest2_step2_right"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 613.0
+    y: 181.0
+    z: 0.558
+  }
+  size {
+    x: 12.0
+    y: 10.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_10"
+  id: "quest2_step2_mark"
+  adjust_mode: ADJUST_MODE_STRETCH
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 628.0
+    y: 182.0
+    z: 0.558
+  }
+  size {
+    x: 355.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_12"
+  id: "quest2_step2_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.86
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 606.0
+    y: 150.0
+    z: 0.546
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "quest2_step3_box"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 606.0
+    y: 163.0
+    z: 0.547
+  }
+  size {
+    x: 14.0
+    y: 1.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest2_step3_top"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 606.0
+    y: 150.0
+    z: 0.547
+  }
+  size {
+    x: 14.0
+    y: 1.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest2_step3_bottom"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 606.0
+    y: 150.0
+    z: 0.547
+  }
+  size {
+    x: 1.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest2_step3_left"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 619.0
+    y: 150.0
+    z: 0.547
+  }
+  size {
+    x: 1.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest2_step3_right"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 613.0
+    y: 157.0
+    z: 0.558
+  }
+  size {
+    x: 12.0
+    y: 10.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_10"
+  id: "quest2_step3_mark"
+  adjust_mode: ADJUST_MODE_STRETCH
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 628.0
+    y: 158.0
+    z: 0.558
+  }
+  size {
+    x: 355.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_12"
+  id: "quest2_step3_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.86
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1156.0
+    y: 296.0
+    z: 0.558
+  }
+  size {
+    x: 110.0
+    y: 28.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\320\250\320\220\320\223\320\230 0/0"
+  font: "jb_mono_12"
+  id: "quest2_due"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  line_break: true
+  alpha: 0.8
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1020.0
+    y: 208.0
+    z: 0.546
+  }
+  size {
+    x: 136.0
+    y: 7.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "quest2_pbar_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.12
+}
+nodes {
+  position {
+    x: 1020.0
+    y: 208.0
+    z: 0.548
+  }
+  size {
+    x: 68.0
+    y: 7.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "quest2_pbar_fill"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+}
+nodes {
+  position {
+    x: 1156.0
+    y: 186.0
+    z: 0.558
+  }
+  size {
+    x: 90.0
+    y: 11.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "0%"
+  font: "jb_mono_bold_14"
+  id: "quest2_pct"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.92
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 524.0
+    y: -260.0
+    z: 0.532
+  }
+  size {
+    x: 646.0
+    y: 210.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "quest3_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.55
+}
+nodes {
+  position {
+    x: 524.0
+    y: -51.0
+    z: 0.545
+  }
+  size {
+    x: 646.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "quest3_top"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 524.0
+    y: -260.0
+    z: 0.545
+  }
+  size {
+    x: 646.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "quest3_bottom"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 524.0
+    y: -260.0
+    z: 0.545
+  }
+  size {
+    x: 1.0
+    y: 210.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "quest3_left"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1169.0
+    y: -260.0
+    z: 0.545
+  }
+  size {
+    x: 1.0
+    y: 210.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "quest3_right"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 538.0
+    y: -126.0
+    z: 0.546
+  }
+  size {
+    x: 52.0
+    y: 52.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "quest3_glyph_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.15
+}
+nodes {
+  position {
+    x: 564.0
+    y: -99.0
+    z: 0.558
+  }
+  size {
+    x: 44.0
+    y: 28.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "!"
+  font: "unbounded_bold_20"
+  id: "quest3_glyph"
+  adjust_mode: ADJUST_MODE_STRETCH
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 604.0
+    y: -78.0
+    z: 0.558
+  }
+  size {
+    x: 350.0
+    y: 22.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\342\200\224"
+  font: "unbounded_bold_20"
+  id: "quest3_name"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 962.0
+    y: -92.0
+    z: 0.546
+  }
+  size {
+    x: 100.0
+    y: 22.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "quest3_tag_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.1
+}
+nodes {
+  position {
+    x: 1012.0
+    y: -80.0
+    z: 0.558
+  }
+  size {
+    x: 92.0
+    y: 11.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "\320\220\320\232\320\242\320\230\320\222\320\235\320\220\320\257"
+  font: "jb_mono_10"
+  id: "quest3_tag"
+  adjust_mode: ADJUST_MODE_STRETCH
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 604.0
+    y: -128.0
+    z: 0.558
+  }
+  size {
+    x: 395.0
+    y: 48.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  font: "manrope_14"
+  id: "quest3_desc"
+  pivot: PIVOT_NW
+  adjust_mode: ADJUST_MODE_STRETCH
+  line_break: true
+  alpha: 0.76
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 606.0
+    y: -182.0
+    z: 0.546
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "quest3_step1_box"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 606.0
+    y: -169.0
+    z: 0.547
+  }
+  size {
+    x: 14.0
+    y: 1.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest3_step1_top"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 606.0
+    y: -182.0
+    z: 0.547
+  }
+  size {
+    x: 14.0
+    y: 1.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest3_step1_bottom"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 606.0
+    y: -182.0
+    z: 0.547
+  }
+  size {
+    x: 1.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest3_step1_left"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 619.0
+    y: -182.0
+    z: 0.547
+  }
+  size {
+    x: 1.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest3_step1_right"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 613.0
+    y: -175.0
+    z: 0.558
+  }
+  size {
+    x: 12.0
+    y: 10.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_10"
+  id: "quest3_step1_mark"
+  adjust_mode: ADJUST_MODE_STRETCH
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 628.0
+    y: -174.0
+    z: 0.558
+  }
+  size {
+    x: 355.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_12"
+  id: "quest3_step1_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.86
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 606.0
+    y: -206.0
+    z: 0.546
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "quest3_step2_box"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 606.0
+    y: -193.0
+    z: 0.547
+  }
+  size {
+    x: 14.0
+    y: 1.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest3_step2_top"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 606.0
+    y: -206.0
+    z: 0.547
+  }
+  size {
+    x: 14.0
+    y: 1.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest3_step2_bottom"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 606.0
+    y: -206.0
+    z: 0.547
+  }
+  size {
+    x: 1.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest3_step2_left"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 619.0
+    y: -206.0
+    z: 0.547
+  }
+  size {
+    x: 1.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest3_step2_right"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 613.0
+    y: -199.0
+    z: 0.558
+  }
+  size {
+    x: 12.0
+    y: 10.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_10"
+  id: "quest3_step2_mark"
+  adjust_mode: ADJUST_MODE_STRETCH
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 628.0
+    y: -198.0
+    z: 0.558
+  }
+  size {
+    x: 355.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_12"
+  id: "quest3_step2_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.86
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 606.0
+    y: -230.0
+    z: 0.546
+  }
+  size {
+    x: 14.0
+    y: 14.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "quest3_step3_box"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 606.0
+    y: -217.0
+    z: 0.547
+  }
+  size {
+    x: 14.0
+    y: 1.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest3_step3_top"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 606.0
+    y: -230.0
+    z: 0.547
+  }
+  size {
+    x: 14.0
+    y: 1.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest3_step3_bottom"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 606.0
+    y: -230.0
+    z: 0.547
+  }
+  size {
+    x: 1.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest3_step3_left"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 619.0
+    y: -230.0
+    z: 0.547
+  }
+  size {
+    x: 1.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_BOX
+  id: "quest3_step3_right"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 613.0
+    y: -223.0
+    z: 0.558
+  }
+  size {
+    x: 12.0
+    y: 10.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_10"
+  id: "quest3_step3_mark"
+  adjust_mode: ADJUST_MODE_STRETCH
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 628.0
+    y: -222.0
+    z: 0.558
+  }
+  size {
+    x: 355.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_12"
+  id: "quest3_step3_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.86
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1156.0
+    y: -84.0
+    z: 0.558
+  }
+  size {
+    x: 110.0
+    y: 28.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\320\250\320\220\320\223\320\230 0/0"
+  font: "jb_mono_12"
+  id: "quest3_due"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  line_break: true
+  alpha: 0.8
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1020.0
+    y: -172.0
+    z: 0.546
+  }
+  size {
+    x: 136.0
+    y: 7.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "quest3_pbar_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.12
+}
+nodes {
+  position {
+    x: 1020.0
+    y: -172.0
+    z: 0.548
+  }
+  size {
+    x: 68.0
+    y: 7.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "quest3_pbar_fill"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+}
+nodes {
+  position {
+    x: 1156.0
+    y: -194.0
+    z: 0.558
+  }
+  size {
+    x: 90.0
+    y: 11.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "0%"
+  font: "jb_mono_bold_14"
+  id: "quest3_pct"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.92
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 524.0
+    y: 80.0
+    z: 0.544
+  }
+  size {
+    x: 660.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "quests_footer_line"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.12
+}
+nodes {
+  position {
+    x: 524.0
+    y: 60.0
+    z: 0.556
+  }
+  size {
+    x: 360.0
     y: 12.0
   }
   color {
-    y: 0.239
-    z: 0.498
+    x: 0.788
+    y: 0.753
+    z: 0.659
   }
   type: TYPE_TEXT
-  text: "\320\272\320\262\320\265\321\201\321\202\321\213 \302\267 \320\260\320\272\321\202\320\270\320\262\320\275\321\213\321\205 2"
-  font: "jb_mono_10"
-  id: "v_quests_eyebrow"
+  font: "jb_mono_12"
+  id: "quests_footer_left"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.82
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 524.0
-    y: 562.0
-    z: 0.555
+    x: 1184.0
+    y: 60.0
+    z: 0.556
   }
   size {
-    x: 520.0
-    y: 24.0
+    x: 260.0
+    y: 12.0
   }
   color {
-    x: 0.952
-    y: 0.925
-    z: 0.85
+    x: 0.788
+    y: 0.753
+    z: 0.659
   }
   type: TYPE_TEXT
-  text: "\320\232\320\262\320\265\321\201\321\202\321\213"
-  font: "unbounded_bold_20"
-  id: "v_quests_title"
-  pivot: PIVOT_W
+  font: "jb_mono_12"
+  id: "quests_footer_right"
+  pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 548.0
-    y: 386.0
-    z: 0.532
-  }
-  size {
-    x: 632.0
-    y: 114.0
-  }
-  color {
-    x: 0.075
-    y: 0.06
-    z: 0.15
-  }
-  type: TYPE_BOX
-  id: "v_quests_q1_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.085
-}
-nodes {
-  position {
-    x: 572.0
-    y: 468.0
-    z: 0.555
-  }
-  size {
-    x: 560.0
-    y: 16.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\235\320\260\320\271\321\202\320\270 \320\277\321\200\320\270\321\207\320\270\320\275\321\203 \320\277\320\265\321\202\320\273\320\270"
-  font: "jb_mono_bold_14"
-  id: "v_quests_q1_name"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 572.0
-    y: 442.0
-    z: 0.555
-  }
-  size {
-    x: 580.0
-    y: 54.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\321\201\320\276\320\261\321\200\320\260\321\202\321\214 \321\203\320\273\320\270\320\272\320\270 \320\276 \320\277\320\276\320\275\320\265\320\264\320\265\320\273\321\214\320\275\320\270\320\272\320\265 \302\267 1/3"
-  font: "manrope_14"
-  id: "v_quests_q1_desc"
-  pivot: PIVOT_NW
-  adjust_mode: ADJUST_MODE_STRETCH
-  line_break: true
-  alpha: 0.66
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 548.0
-    y: 244.0
-    z: 0.532
-  }
-  size {
-    x: 632.0
-    y: 114.0
-  }
-  color {
-    x: 0.075
-    y: 0.06
-    z: 0.15
-  }
-  type: TYPE_BOX
-  id: "v_quests_q2_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.085
-}
-nodes {
-  position {
-    x: 572.0
-    y: 326.0
-    z: 0.555
-  }
-  size {
-    x: 560.0
-    y: 16.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\235\320\265 \320\276\320\277\320\276\320\267\320\264\320\260\321\202\321\214 \320\275\320\260 \321\200\320\260\320\261\320\276\321\202\321\203"
-  font: "jb_mono_bold_14"
-  id: "v_quests_q2_name"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 572.0
-    y: 300.0
-    z: 0.555
-  }
-  size {
-    x: 580.0
-    y: 54.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\321\203\321\201\320\277\320\265\321\202\321\214 \320\272 09:00 \302\267 0/1"
-  font: "manrope_14"
-  id: "v_quests_q2_desc"
-  pivot: PIVOT_NW
-  adjust_mode: ADJUST_MODE_STRETCH
-  line_break: true
-  alpha: 0.66
+  alpha: 0.82
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }

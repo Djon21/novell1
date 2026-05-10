@@ -511,28 +511,34 @@ sync_modal_state = function()
     overlay_flow.sync_modal_state(M.overlays)
 end
 
+local function notify_overlay_state(target, open)
+    -- HUD pulse-hint и dialogue input gating: dialogue игнорит клики, пока
+    -- любой оверлей открыт — иначе тапы по UI телефона/карты/инвентаря
+    -- проваливаются в btn_next/dbox и листают реплику.
+    if M.components.hud then
+        msg.post(M.components.hud, "set_overlay_state", { target = target, open = open })
+    end
+    if M.components.dialogue then
+        msg.post(M.components.dialogue, "set_overlay_state", { target = target, open = open })
+    end
+end
+
 local function open_inventory(self)
     -- BAG открыт → визуально приостановить pulse-hint, флаг сохраняется.
-    if M.components.hud then
-        msg.post(M.components.hud, "set_overlay_state", { target = "bag", open = true })
-    end
+    notify_overlay_state("bag", true)
     overlay_flow.open_inventory(overlay_ctx(self))
 end
 
 close_inventory = function(self)
     overlay_flow.close_inventory(overlay_ctx(self))
-    if M.components.hud then
-        msg.post(M.components.hud, "set_overlay_state", { target = "bag", open = false })
-    end
+    notify_overlay_state("bag", false)
 end
 
 open_phone = function(self)
     -- Сообщаем HUD что телефон открыт — pulse-hint визуально приостановится
     -- (флаг hint_phone не сбрасывается, при close_phone pulse возобновится
     -- если игрок не выполнил то что от него ожидалось).
-    if M.components.hud then
-        msg.post(M.components.hud, "set_overlay_state", { target = "phone", open = true })
-    end
+    notify_overlay_state("phone", true)
     phone_flow.open(phone_ctx())
 end
 
@@ -542,9 +548,7 @@ end
 
 close_phone = function(self)
     phone_flow.close(phone_ctx())
-    if M.components.hud then
-        msg.post(M.components.hud, "set_overlay_state", { target = "phone", open = false })
-    end
+    notify_overlay_state("phone", false)
 end
 
 local function open_phone_map_app(self)
@@ -552,15 +556,18 @@ local function open_phone_map_app(self)
 end
 
 local function open_map(self)
+    notify_overlay_state("map", true)
     overlay_flow.open_map(overlay_ctx(self))
 end
 
 local function open_map_hub(self, primary_knot)
+    notify_overlay_state("map", true)
     overlay_flow.open_map_hub(overlay_ctx(self), primary_knot)
 end
 
 close_map = function(self)
     overlay_flow.close_map(overlay_ctx(self))
+    notify_overlay_state("map", false)
 end
 
 local function show_choice(self, opts, timer_sec, title)

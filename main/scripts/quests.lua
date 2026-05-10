@@ -65,12 +65,11 @@ M.quests = {
 
     make_coffee = {
         name = "Собраться перед встречей",
-        description = "Перед выходом нужно прийти в себя: умыться, дойти до кухни, найти кружку и сделать кофе.",
+        description = "Перед выходом нужно прийти в себя: умыться, взять ключи, надеть куртку и обувь. Кофе, завтрак и магазин — по желанию.",
         steps = {
-            { text = "Умыться",         done_when = "washed_up" },
-            { text = "Дойти до кухни",  done_when = "kitchen_morning_seen" },
-            { text = "Найти кружку",    done_when = "mug_taken" },
-            { text = "Сделать кофе",    done_when = "coffee_drunk" },
+            { text = "Умыться",              done_when = "washed_up" },
+            { text = "Взять ключи",          done_when = "sunday_keys_taken" },
+            { text = "Надеть куртку и обувь", done_when = "sunday_dressed" },
         },
     },
 
@@ -83,7 +82,7 @@ M.quests = {
                 text = "Выбрать место",
                 done_when_any = { "date_place_cafe", "date_place_park" },
             },
-            { text = "Собраться",             done_when = "coffee_drunk" },
+            { text = "Собраться",             done_when = "sunday_ready_to_leave" },
             { text = "Выйти из квартиры",     done_when = "left_apartment" },
             { text = "Открыть карту",         done_when = "map_opened_after_apartment" },
             { text = "Прийти на встречу",     done_when = "met_npc_sunday" },

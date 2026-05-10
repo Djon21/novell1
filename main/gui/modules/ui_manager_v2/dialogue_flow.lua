@@ -26,13 +26,17 @@ function M.open_backlog(ctx)
     ctx.sync_modal_state()
     msg.post(ctx.components.hotspots, "hide_all")
     msg.post(ctx.components.dialogue, "open_backlog")
+    msg.post(ctx.components.hud, "open_backlog")
 end
 
 function M.close_backlog(ctx)
     ctx.overlays.backlog = false
     ctx.sync_modal_state()
+    msg.post(ctx.components.hud, "close_backlog")
     msg.post(ctx.components.dialogue, "close_backlog")
-    ctx.render_current_scene()
+    if ctx.base_mode and ctx.base_mode() ~= "dialogue" then
+        ctx.render_current_scene()
+    end
 end
 
 function M.append_backlog(entry)

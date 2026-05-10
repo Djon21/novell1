@@ -42,6 +42,87 @@ nodes {
   layer: "ui"
 }
 nodes {
+  position {
+    x: 505.0
+    y: 664.0
+    z: 0.7
+  }
+  size {
+    x: 220.0
+    y: 36.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\232\320\220\320\240\320\242\320\220"
+  font: "unbounded_bold_20"
+  id: "map_head_title"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "grp_panel"
+  layer: "text"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1188.0
+    y: 670.0
+    z: 0.7
+  }
+  size {
+    x: 150.0
+    y: 16.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "55.76 N"
+  font: "jb_mono_10"
+  id: "map_head_coord_n"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "grp_panel"
+  layer: "text"
+  inherit_alpha: true
+  alpha: 0.85
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1188.0
+    y: 652.0
+    z: 0.7
+  }
+  size {
+    x: 150.0
+    y: 16.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "37.58 E"
+  font: "jb_mono_10"
+  id: "map_head_coord_e"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "grp_panel"
+  layer: "text"
+  inherit_alpha: true
+  alpha: 0.85
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
   type: TYPE_BOX
   id: "grp_map_layers"
   adjust_mode: ADJUST_MODE_STRETCH
@@ -56,11 +137,11 @@ nodes {
     z: 0.32
   }
   size {
-    x: 728.0
-    y: 575.0
+    x: 727.0
+    y: 604.0
   }
   type: TYPE_BOX
-  texture: "map2/map_bg_base"
+  texture: "map2/mapa"
   id: "map_texture_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
@@ -1221,6 +1302,10 @@ nodes {
   inherit_alpha: true
 }
 nodes {
+  position {
+    x: 32.0
+    z: 0.1
+  }
   type: TYPE_BOX
   id: "grp_confirm"
   adjust_mode: ADJUST_MODE_STRETCH
@@ -1247,7 +1332,7 @@ nodes {
   id: "confirm_backdrop"
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "grp_confirm"
-  layer: "ui"
+  layer: "grp_confirm"
   inherit_alpha: true
   alpha: 0.85
 }
@@ -1270,7 +1355,7 @@ nodes {
   id: "confirm_panel"
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "grp_confirm"
-  layer: "ui"
+  layer: "grp_confirm"
   inherit_alpha: true
   alpha: 0.97
 }
@@ -1294,7 +1379,7 @@ nodes {
   id: "confirm_title"
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "grp_confirm"
-  layer: "text"
+  layer: "grp_confirm"
   inherit_alpha: true
   outline_alpha: 0.0
   shadow_alpha: 0.0
@@ -1320,7 +1405,7 @@ nodes {
   id: "confirm_location_name"
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "grp_confirm"
-  layer: "text"
+  layer: "grp_confirm"
   inherit_alpha: true
   alpha: 0.9
   outline_alpha: 0.0
@@ -1345,7 +1430,7 @@ nodes {
   id: "confirm_yes_btn"
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "grp_confirm"
-  layer: "ui"
+  layer: "grp_confirm"
   inherit_alpha: true
   alpha: 0.9
 }
@@ -1370,7 +1455,7 @@ nodes {
   id: "confirm_yes_label"
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "grp_confirm"
-  layer: "text"
+  layer: "grp_confirm"
   inherit_alpha: true
   outline_alpha: 0.0
   shadow_alpha: 0.0
@@ -1394,7 +1479,7 @@ nodes {
   id: "confirm_no_btn"
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "grp_confirm"
-  layer: "ui"
+  layer: "grp_confirm"
   inherit_alpha: true
   alpha: 0.9
 }
@@ -1419,7 +1504,7 @@ nodes {
   id: "confirm_no_label"
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "grp_confirm"
-  layer: "text"
+  layer: "grp_confirm"
   inherit_alpha: true
   alpha: 0.9
   outline_alpha: 0.0
@@ -1439,5 +1524,8 @@ layers {
 }
 layers {
   name: "text"
+}
+layers {
+  name: "grp_confirm"
 }
 material: "/builtins/materials/gui.material"

@@ -16,3 +16,5 @@ INCLUDE chapters/32_tuesday_rooftop.ink
 
 INCLUDE chapters/91_inventory_actions.ink
 INCLUDE chapters/92_phone_sms.ink
+INCLUDE chapters/93_phone_messenger.ink
+INCLUDE chapters/94_phone_mail.ink

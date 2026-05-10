@@ -60,6 +60,7 @@ local CHROME_NODES = {
     "close_btn", "close_x",
     "close_btn_border_t", "close_btn_border_b", "close_btn_border_l", "close_btn_border_r",
     "app1_badge_bg", "app1_badge_text",
+    "app7_badge_bg", "app7_badge_text",
     "app_slot_vline_1", "app_slot_vline_2", "app_slot_vline_3", "app_slot_vline_4",
     "app_slot_vline_5", "app_slot_vline_6", "app_slot_vline_7", "app_slot_vline_8",
     "app_slot_vline_9", "app_slot_vline_10", "app_slot_vline_11", "app_slot_vline_12",
@@ -155,13 +156,12 @@ local function update_notif(self)
     local total = gs.get_phone_unread_total and gs.get_phone_unread_total() or 0
     set_text("stats_msg", "сообщений: " .. tostring(total))
 
-    -- На иконке SMS (app1) показываем ТОЛЬКО непрочитанные SMS — раньше
-    -- был get_phone_unread_total, который суммирует и messenger, и баг
-    -- засчитывал msg-сообщения в SMS-бейдж.
-    -- TODO: добавить app7_badge_bg/_text в phone_v2_root.gui и показывать
-    -- здесь msg-непрочитанные на иконке мессенджера.
+    -- Бейджи приложений разделены по каналам.
+    -- app1 показывает только SMS, app7 — только Messenger.
     local sms_unread = gs.get_sms_unread_total and gs.get_sms_unread_total() or 0
+    local msg_unread = gs.get_msg_unread_total and gs.get_msg_unread_total() or 0
     set_badge(self, "app1", sms_unread)
+    set_badge(self, "app7", msg_unread)
 end
 
 -- Закрыть текущее активное приложение (если есть)

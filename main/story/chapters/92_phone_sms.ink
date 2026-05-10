@@ -311,7 +311,7 @@
 # quest:done:reply_npc
 # quest:start:make_coffee
 # quest:start:meet_npc
-# map:lock_to:poi_home
+# map:lock_all
 # hud:hint:phone:off
 # return_to_scene
 -> DONE

@@ -391,6 +391,7 @@
 
 # speaker:none
 Можно использовать папку по кейсу на рабочем столе. Или отдать её коллеге через инвентарь.
+# hud:hint:bag
 # return_to_scene
 -> DONE
 
@@ -413,6 +414,7 @@
 
 # add_item:folder
 # set_flag:monday_folder_taken=true
+# hud:hint:bag
 # return_to_scene
 -> DONE
 

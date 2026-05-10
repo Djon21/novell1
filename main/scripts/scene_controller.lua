@@ -112,7 +112,8 @@ local function render()
     end
 end
 
-function M.enter(scene_id)
+function M.enter(scene_id, opts)
+    opts = opts or {}
     local data = scenes.get(scene_id)
     if not data then
         print("[scene_controller] не известна сцена: " .. tostring(scene_id))
@@ -128,7 +129,7 @@ function M.enter(scene_id)
     -- Если on_enter сразу уводит в Ink, не надо сначала рисовать сцену-роутер:
     -- для apartment_hub после воскресной встречи это давало дневной кадр
     -- перед ночным вечерним блоком.
-    if data.on_enter then
+    if data.on_enter and not opts.skip_on_enter then
         local oe = data.on_enter
         local ok = true
         if oe.condition then ok = oe.condition(gs) end

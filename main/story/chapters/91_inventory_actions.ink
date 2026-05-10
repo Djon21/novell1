@@ -28,6 +28,7 @@
 ~ coffee_drunk = true
 # set_flag:coffee_drunk=true
 # quest:done:make_coffee
+# hud:hint:bag:off
 # return_to_scene
 -> DONE
 
@@ -43,6 +44,7 @@
 ~ coffee_drunk = true
 # set_flag:coffee_drunk=true
 # quest:done:make_coffee
+# hud:hint:bag:off
 # return_to_scene
 -> DONE
 
@@ -120,6 +122,7 @@
 # remove_item:report_page
 # add_item:case_file
 # set_flag:monday_case_file_assembled=true
+# hud:hint:bag
 # return_to_scene
 -> DONE
 
@@ -148,6 +151,7 @@
 
 # remove_item:case_file
 # set_flag:monday_case_file_submitted=true
+# hud:hint:bag:off
 -> mon_office_npc_greeting
 
 === inv_office_workspace_give_case_file_on_npc ===
@@ -159,6 +163,7 @@
 
 # remove_item:case_file
 # set_flag:monday_case_file_submitted=true
+# hud:hint:bag:off
 -> mon_office_npc_greeting
 
 === inv_use_fallback ===

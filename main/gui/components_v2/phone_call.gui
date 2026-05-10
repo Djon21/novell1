@@ -32,124 +32,96 @@ fonts {
   font: "/main/fonts/manrope_16.font"
 }
 nodes {
-  position {
-    x: 500.0
-    y: 132.0
-    z: 0.521
-  }
-  size {
-    x: 720.0
-    y: 452.0
-  }
   color {
-    x: 0.018
-    y: 0.017
-    z: 0.045
+    x: 1.000
+    y: 1.000
+    z: 1.000
   }
   type: TYPE_BOX
-  id: "calls_screen_bg"
+  id: "call_runtime_root"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.7
-  enabled: false
+  alpha: 0.000
 }
 nodes {
   position {
-    x: 524.0
-    y: 544.0
-    z: 0.545
+    x: 500.000
+    y: 40.000
+    z: 0.522
   }
   size {
-    x: 656.0
-    y: 1.0
+    x: 728.000
+    y: 640.000
   }
   color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
+    x: 0.031
+    y: 0.024
+    z: 0.094
   }
   type: TYPE_BOX
-  id: "calls_header_line"
+  id: "v_call_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.09
-  enabled: false
+  parent: "call_runtime_root"
+  alpha: 0.860
 }
 nodes {
   position {
-    x: 524.0
-    y: 244.0
-    z: 0.545
+    x: 500.000
+    y: 610.000
+    z: 0.523
   }
   size {
-    x: 656.0
-    y: 1.0
+    x: 728.000
+    y: 70.000
   }
   color {
-    x: 0.282
-    y: 0.961
+    x: 0.047
+    y: 0.041
+    z: 0.120
   }
   type: TYPE_BOX
-  id: "calls_footer_line"
+  id: "v_call_head_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.1
-  enabled: false
+  parent: "call_runtime_root"
+  alpha: 0.700
 }
 nodes {
   position {
-    x: 1048.0
-    y: 586.0
-    z: 0.546
+    x: 524.000
+    y: 650.000
+    z: 0.560
   }
   size {
-    x: 132.0
-    y: 22.0
+    x: 520.000
+    y: 12.000
   }
   color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_BOX
-  id: "calls_status_chip"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.08
-  enabled: false
-}
-nodes {
-  position {
-    x: 524.0
-    y: 590.0
-    z: 0.555
-  }
-  size {
-    x: 520.0
-    y: 12.0
-  }
-  color {
-    x: 0.282
-    y: 0.961
+    x: 0.490
+    y: 0.976
+    z: 1.000
   }
   type: TYPE_TEXT
-  text: "\320\266\321\203\321\200\320\275\320\260\320\273 \320\262\321\213\320\267\320\276\320\262\320\276\320\262 \302\267 4 \320\267\320\260\320\277\320\270\321\201\320\270"
+  text: ""
   font: "jb_mono_10"
-  id: "v_calls_eyebrow"
+  id: "v_call_eyebrow"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.92
+  parent: "call_runtime_root"
+  alpha: 0.950
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 524.0
-    y: 562.0
-    z: 0.555
+    x: 524.000
+    y: 625.000
+    z: 0.561
   }
   size {
-    x: 520.0
-    y: 22.0
+    x: 260.000
+    y: 24.000
   }
   color {
     x: 0.953
@@ -157,182 +129,1069 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: "\320\227\320\262\320\276\320\275\320\272\320\270"
+  text: ""
   font: "unbounded_bold_20"
-  id: "v_calls_title"
+  id: "v_call_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.97
+  parent: "call_runtime_root"
+  alpha: 0.980
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 548.0
-    y: 420.0
-    z: 0.548
+    x: 524.000
+    y: 586.000
+    z: 0.538
   }
   size {
-    x: 3.0
-    y: 72.0
+    x: 88.000
+    y: 24.000
   }
   color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "v_call_tab_all_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.660
+}
+nodes {
+  position {
+    x: 534.000
+    y: 598.000
+    z: 0.562
+  }
+  size {
+    x: 72.000
+    y: 12.000
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_10"
+  id: "v_call_tab_all_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.960
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 620.000
+    y: 586.000
+    z: 0.538
+  }
+  size {
+    x: 150.000
+    y: 24.000
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "v_call_tab_missed_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.660
+}
+nodes {
+  position {
+    x: 630.000
+    y: 598.000
+    z: 0.562
+  }
+  size {
+    x: 134.000
+    y: 12.000
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_10"
+  id: "v_call_tab_missed_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.960
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 778.000
+    y: 586.000
+    z: 0.538
+  }
+  size {
+    x: 118.000
+    y: 24.000
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "v_call_tab_contacts_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.660
+}
+nodes {
+  position {
+    x: 788.000
+    y: 598.000
+    z: 0.562
+  }
+  size {
+    x: 102.000
+    y: 12.000
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_10"
+  id: "v_call_tab_contacts_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.960
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 520.000
+    y: 572.000
+    z: 0.539
+  }
+  size {
+    x: 690.000
+    y: 1.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "v_call_divider"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.150
+}
+nodes {
+  position {
+    x: 520.000
+    y: 104.000
+    z: 0.524
+  }
+  size {
+    x: 676.000
+    y: 456.000
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "v_call_list_clip"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.000
+}
+nodes {
+  position {
+    x: 1205.000
+    y: 104.000
+    z: 0.540
+  }
+  size {
+    x: 4.000
+    y: 456.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "v_call_scroll_track"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.080
+}
+nodes {
+  position {
+    x: 1205.000
+    y: 382.000
+    z: 0.565
+  }
+  size {
+    x: 4.000
+    y: 170.000
+  }
+  color {
+    x: 0.490
+    y: 0.976
+    z: 1.000
+  }
+  type: TYPE_BOX
+  id: "v_call_scroll_thumb"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.720
+}
+nodes {
+  position {
+    x: 524.000
+    y: 508.000
+    z: 0.530
+  }
+  size {
+    x: 662.000
+    y: 50.000
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "v_call_c1_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.580
+}
+nodes {
+  position {
+    x: 524.000
+    y: 508.000
+    z: 0.552
+  }
+  size {
+    x: 3.000
+    y: 50.000
+  }
+  color {
+    x: 0.490
+    y: 0.976
+    z: 1.000
+  }
+  type: TYPE_BOX
+  id: "v_call_c1_accent"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.000
+}
+nodes {
+  position {
+    x: 538.000
+    y: 514.000
+    z: 0.545
+  }
+  size {
+    x: 38.000
+    y: 38.000
+  }
+  color {
+    x: 0.100
+    y: 0.150
+    z: 0.250
+  }
+  type: TYPE_BOX
+  id: "v_call_c1_av_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.840
+}
+nodes {
+  position {
+    x: 557.000
+    y: 533.000
+    z: 0.566
+  }
+  size {
+    x: 36.000
+    y: 16.000
+  }
+  color {
+    x: 0.490
+    y: 0.976
+    z: 1.000
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_bold_14"
+  id: "v_call_c1_av_text"
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 588.000
+    y: 540.000
+    z: 0.566
+  }
+  size {
+    x: 360.000
+    y: 16.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_bold_14"
+  id: "v_call_c1_name"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 590.000
+    y: 520.000
+    z: 0.556
+  }
+  size {
+    x: 8.000
+    y: 8.000
+  }
+  color {
+    x: 0.290
+    y: 0.870
+    z: 0.500
+  }
+  type: TYPE_BOX
+  id: "v_call_c1_dir_box"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.850
+}
+nodes {
+  position {
+    x: 606.000
+    y: 524.000
+    z: 0.566
+  }
+  size {
+    x: 360.000
+    y: 14.000
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_10"
+  id: "v_call_c1_meta"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.950
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1124.000
+    y: 540.000
+    z: 0.566
+  }
+  size {
+    x: 52.000
+    y: 14.000
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_10"
+  id: "v_call_c1_time"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.950
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1150.000
+    y: 518.000
+    z: 0.556
+  }
+  size {
+    x: 26.000
+    y: 16.000
+  }
+  color {
+    x: 1.000
     y: 0.239
     z: 0.498
   }
   type: TYPE_BOX
-  id: "calls_row1_accent"
+  id: "v_call_c1_badge_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.58
-  enabled: false
+  parent: "call_runtime_root"
+  alpha: 0.000
 }
 nodes {
   position {
-    x: 548.0
-    y: 420.0
-    z: 0.532
+    x: 1163.000
+    y: 526.000
+    z: 0.568
   }
   size {
-    x: 632.0
-    y: 72.0
+    x: 24.000
+    y: 10.000
   }
   color {
+    x: 0.100
+    y: 0.020
+    z: 0.060
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_10"
+  id: "v_call_c1_badge_text"
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.000
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 524.000
+    y: 452.000
+    z: 0.530
+  }
+  size {
+    x: 662.000
+    y: 50.000
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "v_call_c2_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.580
+}
+nodes {
+  position {
+    x: 524.000
+    y: 452.000
+    z: 0.552
+  }
+  size {
+    x: 3.000
+    y: 50.000
+  }
+  color {
+    x: 0.490
+    y: 0.976
+    z: 1.000
+  }
+  type: TYPE_BOX
+  id: "v_call_c2_accent"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.000
+}
+nodes {
+  position {
+    x: 538.000
+    y: 458.000
+    z: 0.545
+  }
+  size {
+    x: 38.000
+    y: 38.000
+  }
+  color {
+    x: 0.100
+    y: 0.150
+    z: 0.250
+  }
+  type: TYPE_BOX
+  id: "v_call_c2_av_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.840
+}
+nodes {
+  position {
+    x: 557.000
+    y: 477.000
+    z: 0.566
+  }
+  size {
+    x: 36.000
+    y: 16.000
+  }
+  color {
+    x: 0.490
+    y: 0.976
+    z: 1.000
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_bold_14"
+  id: "v_call_c2_av_text"
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 588.000
+    y: 484.000
+    z: 0.566
+  }
+  size {
+    x: 360.000
+    y: 16.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_bold_14"
+  id: "v_call_c2_name"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 590.000
+    y: 464.000
+    z: 0.556
+  }
+  size {
+    x: 8.000
+    y: 8.000
+  }
+  color {
+    x: 0.290
+    y: 0.870
+    z: 0.500
+  }
+  type: TYPE_BOX
+  id: "v_call_c2_dir_box"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.850
+}
+nodes {
+  position {
+    x: 606.000
+    y: 468.000
+    z: 0.566
+  }
+  size {
+    x: 360.000
+    y: 14.000
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_10"
+  id: "v_call_c2_meta"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.950
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1124.000
+    y: 484.000
+    z: 0.566
+  }
+  size {
+    x: 52.000
+    y: 14.000
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_10"
+  id: "v_call_c2_time"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.950
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1150.000
+    y: 462.000
+    z: 0.556
+  }
+  size {
+    x: 26.000
+    y: 16.000
+  }
+  color {
+    x: 1.000
     y: 0.239
     z: 0.498
   }
   type: TYPE_BOX
-  id: "v_calls_row1_bg"
+  id: "v_call_c2_badge_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.105
+  parent: "call_runtime_root"
+  alpha: 0.000
 }
 nodes {
   position {
-    x: 572.0
-    y: 470.0
-    z: 0.555
+    x: 1163.000
+    y: 470.000
+    z: 0.568
   }
   size {
-    x: 420.0
-    y: 16.0
+    x: 24.000
+    y: 10.000
   }
   color {
+    x: 0.100
+    y: 0.020
+    z: 0.060
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_10"
+  id: "v_call_c2_badge_text"
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.000
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 524.000
+    y: 396.000
+    z: 0.530
+  }
+  size {
+    x: 662.000
+    y: 50.000
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "v_call_c3_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.580
+}
+nodes {
+  position {
+    x: 524.000
+    y: 396.000
+    z: 0.552
+  }
+  size {
+    x: 3.000
+    y: 50.000
+  }
+  color {
+    x: 0.490
+    y: 0.976
+    z: 1.000
+  }
+  type: TYPE_BOX
+  id: "v_call_c3_accent"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.000
+}
+nodes {
+  position {
+    x: 538.000
+    y: 402.000
+    z: 0.545
+  }
+  size {
+    x: 38.000
+    y: 38.000
+  }
+  color {
+    x: 0.100
+    y: 0.150
+    z: 0.250
+  }
+  type: TYPE_BOX
+  id: "v_call_c3_av_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.840
+}
+nodes {
+  position {
+    x: 557.000
+    y: 421.000
+    z: 0.566
+  }
+  size {
+    x: 36.000
+    y: 16.000
+  }
+  color {
+    x: 0.490
+    y: 0.976
+    z: 1.000
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_bold_14"
+  id: "v_call_c3_av_text"
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 588.000
+    y: 428.000
+    z: 0.566
+  }
+  size {
+    x: 360.000
+    y: 16.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_bold_14"
+  id: "v_call_c3_name"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 590.000
+    y: 408.000
+    z: 0.556
+  }
+  size {
+    x: 8.000
+    y: 8.000
+  }
+  color {
+    x: 0.290
+    y: 0.870
+    z: 0.500
+  }
+  type: TYPE_BOX
+  id: "v_call_c3_dir_box"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.850
+}
+nodes {
+  position {
+    x: 606.000
+    y: 412.000
+    z: 0.566
+  }
+  size {
+    x: 360.000
+    y: 14.000
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_10"
+  id: "v_call_c3_meta"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.950
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1124.000
+    y: 428.000
+    z: 0.566
+  }
+  size {
+    x: 52.000
+    y: 14.000
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_10"
+  id: "v_call_c3_time"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.950
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1150.000
+    y: 406.000
+    z: 0.556
+  }
+  size {
+    x: 26.000
+    y: 16.000
+  }
+  color {
+    x: 1.000
     y: 0.239
     z: 0.498
   }
-  type: TYPE_TEXT
-  text: "\320\235. \320\234."
-  font: "jb_mono_bold_14"
-  id: "v_calls_row1_name"
-  pivot: PIVOT_W
+  type: TYPE_BOX
+  id: "v_call_c3_badge_bg"
+  pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.96
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
+  parent: "call_runtime_root"
+  alpha: 0.000
 }
 nodes {
   position {
-    x: 572.0
-    y: 446.0
-    z: 0.555
+    x: 1163.000
+    y: 414.000
+    z: 0.568
   }
   size {
-    x: 560.0
-    y: 13.0
+    x: 24.000
+    y: 10.000
   }
   color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
+    x: 0.100
+    y: 0.020
+    z: 0.060
   }
   type: TYPE_TEXT
-  text: "\320\277\321\200\320\276\320\277\321\203\321\211\320\265\320\275\320\275\321\213\320\271 \302\267 06:42"
+  text: ""
   font: "jb_mono_10"
-  id: "v_calls_row1_meta"
-  pivot: PIVOT_W
+  id: "v_call_c3_badge_text"
+  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.5
+  parent: "call_runtime_root"
+  alpha: 0.000
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 548.0
-    y: 326.0
-    z: 0.548
+    x: 524.000
+    y: 340.000
+    z: 0.530
   }
   size {
-    x: 3.0
-    y: 72.0
+    x: 662.000
+    y: 50.000
   }
   color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
+    x: 0.078
+    y: 0.071
+    z: 0.204
   }
   type: TYPE_BOX
-  id: "calls_row2_accent"
+  id: "v_call_c4_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.58
-  enabled: false
+  parent: "call_runtime_root"
+  alpha: 0.580
 }
 nodes {
   position {
-    x: 548.0
-    y: 326.0
-    z: 0.532
+    x: 524.000
+    y: 340.000
+    z: 0.552
   }
   size {
-    x: 632.0
-    y: 72.0
+    x: 3.000
+    y: 50.000
   }
   color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
+    x: 0.490
+    y: 0.976
+    z: 1.000
   }
   type: TYPE_BOX
-  id: "v_calls_row2_bg"
+  id: "v_call_c4_accent"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.08
+  parent: "call_runtime_root"
+  alpha: 0.000
 }
 nodes {
   position {
-    x: 572.0
-    y: 376.0
-    z: 0.555
+    x: 538.000
+    y: 346.000
+    z: 0.545
   }
   size {
-    x: 420.0
-    y: 16.0
+    x: 38.000
+    y: 38.000
   }
   color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
+    x: 0.100
+    y: 0.150
+    z: 0.250
+  }
+  type: TYPE_BOX
+  id: "v_call_c4_av_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.840
+}
+nodes {
+  position {
+    x: 557.000
+    y: 365.000
+    z: 0.566
+  }
+  size {
+    x: 36.000
+    y: 16.000
+  }
+  color {
+    x: 0.490
+    y: 0.976
+    z: 1.000
   }
   type: TYPE_TEXT
-  text: "\320\234\320\260\320\274\320\260"
+  text: ""
   font: "jb_mono_bold_14"
-  id: "v_calls_row2_name"
-  pivot: PIVOT_W
+  id: "v_call_c4_av_text"
+  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.96
+  parent: "call_runtime_root"
+  alpha: 0.980
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 572.0
-    y: 352.0
-    z: 0.555
+    x: 588.000
+    y: 372.000
+    z: 0.566
   }
   size {
-    x: 560.0
-    y: 13.0
+    x: 360.000
+    y: 16.000
   }
   color {
     x: 0.953
@@ -340,90 +1199,239 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: "\320\270\321\201\321\205\320\276\320\264\321\217\321\211\320\270\320\271 \302\267 \320\262\321\207\320\265\321\200\320\260 21:05"
-  font: "jb_mono_10"
-  id: "v_calls_row2_meta"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.5
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 548.0
-    y: 232.0
-    z: 0.548
-  }
-  size {
-    x: 3.0
-    y: 72.0
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_BOX
-  id: "calls_row3_accent"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.58
-  enabled: false
-}
-nodes {
-  position {
-    x: 548.0
-    y: 232.0
-    z: 0.532
-  }
-  size {
-    x: 632.0
-    y: 72.0
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_BOX
-  id: "v_calls_row3_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.075
-}
-nodes {
-  position {
-    x: 572.0
-    y: 282.0
-    z: 0.555
-  }
-  size {
-    x: 420.0
-    y: 16.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "+7 (???) ???-??-??"
+  text: ""
   font: "jb_mono_bold_14"
-  id: "v_calls_row3_name"
+  id: "v_call_c4_name"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.96
+  parent: "call_runtime_root"
+  alpha: 0.980
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 572.0
-    y: 258.0
-    z: 0.555
+    x: 590.000
+    y: 352.000
+    z: 0.556
   }
   size {
-    x: 560.0
-    y: 13.0
+    x: 8.000
+    y: 8.000
+  }
+  color {
+    x: 0.290
+    y: 0.870
+    z: 0.500
+  }
+  type: TYPE_BOX
+  id: "v_call_c4_dir_box"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.850
+}
+nodes {
+  position {
+    x: 606.000
+    y: 356.000
+    z: 0.566
+  }
+  size {
+    x: 360.000
+    y: 14.000
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_10"
+  id: "v_call_c4_meta"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.950
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1124.000
+    y: 372.000
+    z: 0.566
+  }
+  size {
+    x: 52.000
+    y: 14.000
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_10"
+  id: "v_call_c4_time"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.950
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1150.000
+    y: 350.000
+    z: 0.556
+  }
+  size {
+    x: 26.000
+    y: 16.000
+  }
+  color {
+    x: 1.000
+    y: 0.239
+    z: 0.498
+  }
+  type: TYPE_BOX
+  id: "v_call_c4_badge_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.000
+}
+nodes {
+  position {
+    x: 1163.000
+    y: 358.000
+    z: 0.568
+  }
+  size {
+    x: 24.000
+    y: 10.000
+  }
+  color {
+    x: 0.100
+    y: 0.020
+    z: 0.060
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_10"
+  id: "v_call_c4_badge_text"
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.000
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 524.000
+    y: 284.000
+    z: 0.530
+  }
+  size {
+    x: 662.000
+    y: 50.000
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "v_call_c5_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.580
+}
+nodes {
+  position {
+    x: 524.000
+    y: 284.000
+    z: 0.552
+  }
+  size {
+    x: 3.000
+    y: 50.000
+  }
+  color {
+    x: 0.490
+    y: 0.976
+    z: 1.000
+  }
+  type: TYPE_BOX
+  id: "v_call_c5_accent"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.000
+}
+nodes {
+  position {
+    x: 538.000
+    y: 290.000
+    z: 0.545
+  }
+  size {
+    x: 38.000
+    y: 38.000
+  }
+  color {
+    x: 0.100
+    y: 0.150
+    z: 0.250
+  }
+  type: TYPE_BOX
+  id: "v_call_c5_av_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.840
+}
+nodes {
+  position {
+    x: 557.000
+    y: 309.000
+    z: 0.566
+  }
+  size {
+    x: 36.000
+    y: 16.000
+  }
+  color {
+    x: 0.490
+    y: 0.976
+    z: 1.000
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_bold_14"
+  id: "v_call_c5_av_text"
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 588.000
+    y: 316.000
+    z: 0.566
+  }
+  size {
+    x: 360.000
+    y: 16.000
   }
   color {
     x: 0.953
@@ -431,13 +1439,951 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: "\320\262\321\205\320\276\320\264\321\217\321\211\320\270\320\271 \302\267 03:14"
-  font: "jb_mono_10"
-  id: "v_calls_row3_meta"
+  text: ""
+  font: "jb_mono_bold_14"
+  id: "v_call_c5_name"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.5
+  parent: "call_runtime_root"
+  alpha: 0.980
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
-material: "/builtins/materials/gui.material"
+nodes {
+  position {
+    x: 590.000
+    y: 296.000
+    z: 0.556
+  }
+  size {
+    x: 8.000
+    y: 8.000
+  }
+  color {
+    x: 0.290
+    y: 0.870
+    z: 0.500
+  }
+  type: TYPE_BOX
+  id: "v_call_c5_dir_box"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.850
+}
+nodes {
+  position {
+    x: 606.000
+    y: 300.000
+    z: 0.566
+  }
+  size {
+    x: 360.000
+    y: 14.000
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_10"
+  id: "v_call_c5_meta"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.950
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1124.000
+    y: 316.000
+    z: 0.566
+  }
+  size {
+    x: 52.000
+    y: 14.000
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_10"
+  id: "v_call_c5_time"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.950
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1150.000
+    y: 294.000
+    z: 0.556
+  }
+  size {
+    x: 26.000
+    y: 16.000
+  }
+  color {
+    x: 1.000
+    y: 0.239
+    z: 0.498
+  }
+  type: TYPE_BOX
+  id: "v_call_c5_badge_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.000
+}
+nodes {
+  position {
+    x: 1163.000
+    y: 302.000
+    z: 0.568
+  }
+  size {
+    x: 24.000
+    y: 10.000
+  }
+  color {
+    x: 0.100
+    y: 0.020
+    z: 0.060
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_10"
+  id: "v_call_c5_badge_text"
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.000
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 524.000
+    y: 228.000
+    z: 0.530
+  }
+  size {
+    x: 662.000
+    y: 50.000
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "v_call_c6_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.580
+}
+nodes {
+  position {
+    x: 524.000
+    y: 228.000
+    z: 0.552
+  }
+  size {
+    x: 3.000
+    y: 50.000
+  }
+  color {
+    x: 0.490
+    y: 0.976
+    z: 1.000
+  }
+  type: TYPE_BOX
+  id: "v_call_c6_accent"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.000
+}
+nodes {
+  position {
+    x: 538.000
+    y: 234.000
+    z: 0.545
+  }
+  size {
+    x: 38.000
+    y: 38.000
+  }
+  color {
+    x: 0.100
+    y: 0.150
+    z: 0.250
+  }
+  type: TYPE_BOX
+  id: "v_call_c6_av_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.840
+}
+nodes {
+  position {
+    x: 557.000
+    y: 253.000
+    z: 0.566
+  }
+  size {
+    x: 36.000
+    y: 16.000
+  }
+  color {
+    x: 0.490
+    y: 0.976
+    z: 1.000
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_bold_14"
+  id: "v_call_c6_av_text"
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 588.000
+    y: 260.000
+    z: 0.566
+  }
+  size {
+    x: 360.000
+    y: 16.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_bold_14"
+  id: "v_call_c6_name"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 590.000
+    y: 240.000
+    z: 0.556
+  }
+  size {
+    x: 8.000
+    y: 8.000
+  }
+  color {
+    x: 0.290
+    y: 0.870
+    z: 0.500
+  }
+  type: TYPE_BOX
+  id: "v_call_c6_dir_box"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.850
+}
+nodes {
+  position {
+    x: 606.000
+    y: 244.000
+    z: 0.566
+  }
+  size {
+    x: 360.000
+    y: 14.000
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_10"
+  id: "v_call_c6_meta"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.950
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1124.000
+    y: 260.000
+    z: 0.566
+  }
+  size {
+    x: 52.000
+    y: 14.000
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_10"
+  id: "v_call_c6_time"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.950
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1150.000
+    y: 238.000
+    z: 0.556
+  }
+  size {
+    x: 26.000
+    y: 16.000
+  }
+  color {
+    x: 1.000
+    y: 0.239
+    z: 0.498
+  }
+  type: TYPE_BOX
+  id: "v_call_c6_badge_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.000
+}
+nodes {
+  position {
+    x: 1163.000
+    y: 246.000
+    z: 0.568
+  }
+  size {
+    x: 24.000
+    y: 10.000
+  }
+  color {
+    x: 0.100
+    y: 0.020
+    z: 0.060
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_10"
+  id: "v_call_c6_badge_text"
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.000
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 524.000
+    y: 172.000
+    z: 0.530
+  }
+  size {
+    x: 662.000
+    y: 50.000
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "v_call_c7_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.580
+}
+nodes {
+  position {
+    x: 524.000
+    y: 172.000
+    z: 0.552
+  }
+  size {
+    x: 3.000
+    y: 50.000
+  }
+  color {
+    x: 0.490
+    y: 0.976
+    z: 1.000
+  }
+  type: TYPE_BOX
+  id: "v_call_c7_accent"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.000
+}
+nodes {
+  position {
+    x: 538.000
+    y: 178.000
+    z: 0.545
+  }
+  size {
+    x: 38.000
+    y: 38.000
+  }
+  color {
+    x: 0.100
+    y: 0.150
+    z: 0.250
+  }
+  type: TYPE_BOX
+  id: "v_call_c7_av_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.840
+}
+nodes {
+  position {
+    x: 557.000
+    y: 197.000
+    z: 0.566
+  }
+  size {
+    x: 36.000
+    y: 16.000
+  }
+  color {
+    x: 0.490
+    y: 0.976
+    z: 1.000
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_bold_14"
+  id: "v_call_c7_av_text"
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 588.000
+    y: 204.000
+    z: 0.566
+  }
+  size {
+    x: 360.000
+    y: 16.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_bold_14"
+  id: "v_call_c7_name"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 590.000
+    y: 184.000
+    z: 0.556
+  }
+  size {
+    x: 8.000
+    y: 8.000
+  }
+  color {
+    x: 0.290
+    y: 0.870
+    z: 0.500
+  }
+  type: TYPE_BOX
+  id: "v_call_c7_dir_box"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.850
+}
+nodes {
+  position {
+    x: 606.000
+    y: 188.000
+    z: 0.566
+  }
+  size {
+    x: 360.000
+    y: 14.000
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_10"
+  id: "v_call_c7_meta"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.950
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1124.000
+    y: 204.000
+    z: 0.566
+  }
+  size {
+    x: 52.000
+    y: 14.000
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_10"
+  id: "v_call_c7_time"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.950
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1150.000
+    y: 182.000
+    z: 0.556
+  }
+  size {
+    x: 26.000
+    y: 16.000
+  }
+  color {
+    x: 1.000
+    y: 0.239
+    z: 0.498
+  }
+  type: TYPE_BOX
+  id: "v_call_c7_badge_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.000
+}
+nodes {
+  position {
+    x: 1163.000
+    y: 190.000
+    z: 0.568
+  }
+  size {
+    x: 24.000
+    y: 10.000
+  }
+  color {
+    x: 0.100
+    y: 0.020
+    z: 0.060
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_10"
+  id: "v_call_c7_badge_text"
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.000
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 524.000
+    y: 116.000
+    z: 0.530
+  }
+  size {
+    x: 662.000
+    y: 50.000
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "v_call_c8_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.580
+}
+nodes {
+  position {
+    x: 524.000
+    y: 116.000
+    z: 0.552
+  }
+  size {
+    x: 3.000
+    y: 50.000
+  }
+  color {
+    x: 0.490
+    y: 0.976
+    z: 1.000
+  }
+  type: TYPE_BOX
+  id: "v_call_c8_accent"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.000
+}
+nodes {
+  position {
+    x: 538.000
+    y: 122.000
+    z: 0.545
+  }
+  size {
+    x: 38.000
+    y: 38.000
+  }
+  color {
+    x: 0.100
+    y: 0.150
+    z: 0.250
+  }
+  type: TYPE_BOX
+  id: "v_call_c8_av_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.840
+}
+nodes {
+  position {
+    x: 557.000
+    y: 141.000
+    z: 0.566
+  }
+  size {
+    x: 36.000
+    y: 16.000
+  }
+  color {
+    x: 0.490
+    y: 0.976
+    z: 1.000
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_bold_14"
+  id: "v_call_c8_av_text"
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 588.000
+    y: 148.000
+    z: 0.566
+  }
+  size {
+    x: 360.000
+    y: 16.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_bold_14"
+  id: "v_call_c8_name"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 590.000
+    y: 128.000
+    z: 0.556
+  }
+  size {
+    x: 8.000
+    y: 8.000
+  }
+  color {
+    x: 0.290
+    y: 0.870
+    z: 0.500
+  }
+  type: TYPE_BOX
+  id: "v_call_c8_dir_box"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.850
+}
+nodes {
+  position {
+    x: 606.000
+    y: 132.000
+    z: 0.566
+  }
+  size {
+    x: 360.000
+    y: 14.000
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_10"
+  id: "v_call_c8_meta"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.950
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1124.000
+    y: 148.000
+    z: 0.566
+  }
+  size {
+    x: 52.000
+    y: 14.000
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_10"
+  id: "v_call_c8_time"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.950
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1150.000
+    y: 126.000
+    z: 0.556
+  }
+  size {
+    x: 26.000
+    y: 16.000
+  }
+  color {
+    x: 1.000
+    y: 0.239
+    z: 0.498
+  }
+  type: TYPE_BOX
+  id: "v_call_c8_badge_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.000
+}
+nodes {
+  position {
+    x: 1163.000
+    y: 134.000
+    z: 0.568
+  }
+  size {
+    x: 24.000
+    y: 10.000
+  }
+  color {
+    x: 0.100
+    y: 0.020
+    z: 0.060
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_10"
+  id: "v_call_c8_badge_text"
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.000
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 520.000
+    y: 84.000
+    z: 0.540
+  }
+  size {
+    x: 690.000
+    y: 1.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "v_call_foot_line"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.120
+}
+nodes {
+  position {
+    x: 524.000
+    y: 62.000
+    z: 0.562
+  }
+  size {
+    x: 420.000
+    y: 14.000
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_10"
+  id: "v_call_footer_left"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.950
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1080.000
+    y: 50.000
+    z: 0.545
+  }
+  size {
+    x: 126.000
+    y: 26.000
+  }
+  color {
+    x: 0.290
+    y: 0.870
+    z: 0.500
+  }
+  type: TYPE_BOX
+  id: "v_call_dial_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.150
+}
+nodes {
+  position {
+    x: 1143.000
+    y: 63.000
+    z: 0.566
+  }
+  size {
+    x: 118.000
+    y: 12.000
+  }
+  color {
+    x: 0.290
+    y: 0.870
+    z: 0.500
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_10"
+  id: "v_call_dial_text"
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}

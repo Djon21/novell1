@@ -32,6 +32,6 @@ images {
   image: "/main/images/phone/map2/poi_stem.png"
 }
 images {
-  image: "/main/images/phone/map2/map_bg_base.png"
+  image: "/main/images/phone/map2/mapa.png"
 }
 extrude_borders: 2

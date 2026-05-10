@@ -686,8 +686,8 @@ function M.get_sms_unread(contact_id) return _sms_unread[contact_id] or 0 end
 --   # msg:add:<chat_id>:<text>     — входящее сообщение
 --   # msg:reply:<chat_id>:<text>   — исходящее ГГ (auto-flag msg_<chat>_replied)
 --   # msg:read:<chat_id>           — пометить чат прочитанным вручную
--- Авто-флаг msg_<chat>_read ставится при mark_msg_read (открытие приложения
--- мессенджер или явный тег).
+-- Авто-флаг msg_<chat>_read ставится при mark_msg_read
+-- (открытие конкретного чата или явный тег # msg:read:<chat_id>).
 
 function M.add_msg(chat_id, text)
     if not chat_id or chat_id == "" then return false end
