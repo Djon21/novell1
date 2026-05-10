@@ -14,6 +14,8 @@ local apartment_bg      = s.apartment_bg
 local office_bg         = s.office_bg
 local is_apartment_night = s.is_apartment_night
 local is_office_night   = s.is_office_night
+local is_sunday_apartment_night = s.is_sunday_apartment_night
+local is_monday_apartment_night = s.is_monday_apartment_night
 
 return {
 
