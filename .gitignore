@@ -27,3 +27,49 @@ tools/ink_compiler.dll
 *.bak_menu
 # Локальные копии из Claude Design (handoff bundle)
 .design_*.html
+
+# Подписные ключи и пароли — НИКОГДА в git
+*.keystore
+*.jks
+*.p12
+*.pfx
+*.pem
+*.key
+*.pass.txt
+*password*
+
+# Переменные окружения / секреты
+.env
+.env.*
+!.env.example
+secrets.json
+credentials.json
+
+# Worktrees / служебные папки Claude
+.claude/worktrees/
+
+# IDE / OS
+.idea/
+.vscode/
+*.iml
+*.swp
+*.swo
+*~
+desktop.ini
+
+# Временные / бэкапные файлы
+*.bak
+*.tmp
+*.orig
+*.rej
+*.log
+
+# Python (на случай скриптов в tools/)
+__pycache__/
+*.pyo
+.venv/
+venv/
+
+# Node (если появится package.json для тулинга)
+node_modules/
+npm-debug.log*
