@@ -4,17 +4,18 @@ local sm = require "main.scripts.save_manager"
 local meta = require "main.scripts.meta_state"
 local scene_controller = require "main.scripts.scene_controller"
 local contacts = require "main.scripts.phone_contacts"
+local MSG = require "main.gui.modules.messages"
 
 local M = {}
 
 local function handle_menu(ctx, message_id, message, sender)
-    if message_id == hash("show_menu") then
+    if message_id == MSG.show_menu then
         ctx.show_menu()
         return true
-    elseif message_id == hash("start_game") then
+    elseif message_id == MSG.start_game then
         ctx.start_new_run(false)
         return true
-    elseif message_id == hash("continue_game") then
+    elseif message_id == MSG.continue_game then
         sm.load()
         meta.init()
         if not sm.has_save() then
@@ -38,10 +39,10 @@ local function handle_menu(ctx, message_id, message, sender)
         ctx.handle_dialogue_update()
         ctx.sync_ui_state()
         return true
-    elseif message_id == hash("reset_iteration") or message_id == hash("open_gallery") then
+    elseif message_id == MSG.reset_iteration or message_id == MSG.open_gallery then
         ctx.reset_iteration_and_restart()
         return true
-    elseif message_id == hash("open_achievements") then
+    elseif message_id == MSG.open_achievements then
         ctx.dbg("[ui_manager_v2] open_achievements (TODO)")
         return true
     end
@@ -65,10 +66,10 @@ local function reset_run_and_return_to_menu(ctx)
 end
 
 local function handle_ending(ctx, message_id, message, sender)
-    if message_id == hash("chapter_finished") then
+    if message_id == MSG.chapter_finished then
         finish_chapter_and_return_to_menu(ctx, "[ui_manager_v2] chapter_finished -> iteration")
         return true
-    elseif message_id == hash("false_ending") then
+    elseif message_id == MSG.false_ending then
         local iter = meta.get("iteration_number", 1) or 1
         if iter < 2 then
             print("[ui_manager_v2] iter 001: ignoring false_ending -> chapter_finished")
@@ -84,7 +85,7 @@ local function handle_ending(ctx, message_id, message, sender)
 
         reset_run_and_return_to_menu(ctx)
         return true
-    elseif message_id == hash("true_ending") then
+    elseif message_id == MSG.true_ending then
         local iter = meta.get("iteration_number", 1) or 1
         if iter < 2 then
             print("[ui_manager_v2] iter 001: ignoring true_ending -> chapter_finished")
@@ -106,7 +107,7 @@ local function handle_ending(ctx, message_id, message, sender)
 end
 
 local function handle_system(ctx, message_id, message, sender)
-    if message_id == hash("apply_dialogue_bg") then
+    if message_id == MSG.apply_dialogue_bg then
         ctx.apply_dialogue_bg(message and message.name)
         return true
     end
@@ -114,32 +115,32 @@ local function handle_system(ctx, message_id, message, sender)
 end
 
 local function handle_dialogue(ctx, message_id, message, sender)
-    if message_id == hash("dialogue_updated") then
+    if message_id == MSG.dialogue_updated then
         ctx.handle_dialogue_update()
         return true
-    elseif message_id == hash("dialogue_next") then
+    elseif message_id == MSG.dialogue_next then
         ctx.cancel_dialogue_autoplay()
         if dm.advance then dm.advance() end
         ctx.handle_dialogue_update()
         return true
-    elseif message_id == hash("typewriter_done") then
+    elseif message_id == MSG.typewriter_done then
         ctx.self.dialogue_waiting_for_typewriter = false
         if ctx.self.dialogue_skip or ctx.self.dialogue_auto then
             ctx.schedule_dialogue_autoadvance()
         end
         return true
-    elseif message_id == hash("dialogue_skip") then
+    elseif message_id == MSG.dialogue_skip then
         ctx.dbg("[ui_manager_v2] dialogue_skip", message.on)
         ctx.set_dialogue_play_mode("skip", message and message.on)
         return true
-    elseif message_id == hash("dialogue_auto") then
+    elseif message_id == MSG.dialogue_auto then
         ctx.dbg("[ui_manager_v2] dialogue_auto", message.on)
         ctx.set_dialogue_play_mode("auto", message and message.on)
         return true
-    elseif message_id == hash("open_backlog") then
+    elseif message_id == MSG.open_backlog then
         ctx.open_dialogue_backlog()
         return true
-    elseif message_id == hash("close_backlog") then
+    elseif message_id == MSG.close_backlog then
         ctx.close_dialogue_backlog()
         return true
     end
@@ -165,20 +166,20 @@ local function append_choice_to_backlog(ctx, index, speaker)
 end
 
 local function handle_choice(ctx, message_id, message, sender)
-    if message_id == hash("choice_picked") then
+    if message_id == MSG.choice_picked then
         local idx = message and message.index
         append_choice_to_backlog(ctx, idx, "ВЫБОР")
         ctx.hide_choice()
         if dm.choose then dm.choose(message.index) end
         ctx.handle_dialogue_update()
         return true
-    elseif message_id == hash("choice_timeout") then
+    elseif message_id == MSG.choice_timeout then
         append_choice_to_backlog(ctx, 1, "АВТО-ВЫБОР")
         ctx.hide_choice()
         if dm.choose then dm.choose(1) end
         ctx.handle_dialogue_update()
         return true
-    elseif message_id == hash("choice_cancelled") then
+    elseif message_id == MSG.choice_cancelled then
         ctx.hide_choice()
         return true
     end
@@ -186,22 +187,22 @@ local function handle_choice(ctx, message_id, message, sender)
 end
 
 local function handle_inventory(ctx, message_id, message, sender)
-    if message_id == hash("open_inventory") then
+    if message_id == MSG.open_inventory then
         ctx.dbg("[ui_manager_v2] open_inventory from", sender)
         ctx.open_inventory()
         return true
-    elseif message_id == hash("close_inventory") then
+    elseif message_id == MSG.close_inventory then
         ctx.dbg("[ui_manager_v2] close_inventory")
         ctx.close_inventory()
         return true
-    elseif message_id == hash("inventory_verb") then
+    elseif message_id == MSG.inventory_verb then
         ctx.dbg("[ui_manager_v2] inventory_verb", message.item_id, message.verb,
             message.target_item_id or "")
         ctx.handle_inventory_verb(message.item_id, message.verb, {
             target_item_id = message.target_item_id,
         })
         return true
-    elseif message_id == hash("cancel_armed_inventory") then
+    elseif message_id == MSG.cancel_armed_inventory then
         ctx.clear_armed_state()
         return true
     end
@@ -255,28 +256,28 @@ local function handle_messenger_open_chat(ctx, chat_id)
 end
 
 local function handle_phone(ctx, message_id, message, sender)
-    if message_id == hash("open_phone") then
+    if message_id == MSG.open_phone then
         ctx.dbg("[ui_manager_v2] open_phone from", sender)
         ctx.open_phone()
         return true
-    elseif message_id == hash("close_phone") then
+    elseif message_id == MSG.close_phone then
         ctx.close_phone()
         return true
-    elseif message_id == hash("phone_sms_viewed") then
+    elseif message_id == MSG.phone_sms_viewed then
         if gs.mark_all_sms_read then
             gs.mark_all_sms_read()
         end
         return true
-    elseif message_id == hash("sms_open_contact") then
+    elseif message_id == MSG.sms_open_contact then
         handle_sms_open_contact(ctx, message and message.contact_id)
         return true
-    elseif message_id == hash("messenger_open_chat") then
+    elseif message_id == MSG.messenger_open_chat then
         handle_messenger_open_chat(ctx, message and message.chat_id)
         return true
-    elseif message_id == hash("phone_app_clicked") then
+    elseif message_id == MSG.phone_app_clicked then
         ctx.dbg("[ui_manager_v2] phone_app_clicked", message.id)
         return true
-    elseif message_id == hash("map_travel") then
+    elseif message_id == MSG.map_travel then
         local scene_id = message and message.scene
         ctx.dbg("[ui_manager_v2] map_travel ->", scene_id)
         if scene_id then
@@ -289,17 +290,17 @@ local function handle_phone(ctx, message_id, message, sender)
 end
 
 local function handle_map(ctx, message_id, message, sender)
-    if message_id == hash("open_map") then
+    if message_id == MSG.open_map then
         ctx.open_map()
         return true
-    elseif message_id == hash("close_map") then
+    elseif message_id == MSG.close_map then
         ctx.close_map()
         return true
-    elseif message_id == hash("map_verb") then
+    elseif message_id == MSG.map_verb then
         ctx.dbg("[ui_manager_v2] map_verb", message.pin_id, message.verb)
         ctx.handle_map_verb(message.pin_id, message.verb)
         return true
-    elseif message_id == hash("map_hub_route") then
+    elseif message_id == MSG.map_hub_route then
         ctx.dbg("[ui_manager_v2] map_hub_route", message and message.knot)
         local knot = message and message.knot
         ctx.close_map()
