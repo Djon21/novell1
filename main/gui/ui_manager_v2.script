@@ -638,6 +638,10 @@ handle_dialogue_update = function(self)
         dbg("[ui_manager_v2] dm bg=", bg)
         if bg then
             post_dialogue_background(self, bg)
+            -- HUD scene_name обновляется только из set_background callback
+            -- scene_controller'а — в диалоге (без exploration) надо
+            -- продублировать вручную, иначе там висит "—" до конца диалога.
+            post_location_to_ui(resolve_current_location_label(bg))
         end
     else
         dbg("[ui_manager_v2] in exploration mode, bg from scene_controller")

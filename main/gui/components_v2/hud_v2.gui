@@ -1,27 +1,19 @@
 script: "/main/gui/components_v2/hud_v2.gui_script"
 fonts {
-  name: "jb_mono_10"
-  font: "/main/fonts/jb_mono_10.font"
-}
-fonts {
-  name: "jb_mono_12"
-  font: "/main/fonts/jb_mono_12.font"
-}
-fonts {
-  name: "jb_mono_bold_14"
-  font: "/main/fonts/jb_mono_bold_14.font"
-}
-fonts {
-  name: "unbounded_bold_20"
-  font: "/main/fonts/unbounded_bold_20.font"
-}
-fonts {
   name: "unbounded_bold_32"
   font: "/main/fonts/unbounded_bold_32.font"
 }
 fonts {
   name: "icons"
   font: "/main/fonts/icons.font"
+}
+fonts {
+  name: "jb_mono_16"
+  font: "/main/fonts/jb_mono_16.font"
+}
+textures {
+  name: "ui_common"
+  texture: "/main/images/ui_common.atlas"
 }
 nodes {
   color {
@@ -37,33 +29,32 @@ nodes {
 }
 nodes {
   position {
-    x: 24.0
-    y: 660.0
-    z: 0.1
+    x: 50.0
+    y: 650.0
   }
   size {
     x: 400.0
-    y: 14.0
+    y: 60.0
   }
   color {
-    x: 0.49
-    y: 0.976
+    x: 0.0
+    y: 0.0
+    z: 0.0
   }
-  type: TYPE_TEXT
-  text: "locale \302\267 04 / 11"
-  font: "jb_mono_10"
-  id: "scene_eyebrow"
+  type: TYPE_BOX
+  id: "box"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
   parent: "hud_root"
   inherit_alpha: true
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
+  alpha: 0.5
+  size_mode: SIZE_MODE_AUTO
 }
 nodes {
   position {
-    x: 24.0
-    y: 634.0
+    x: 7.0
+    y: 9.0
     z: 0.1
   }
   size {
@@ -79,17 +70,17 @@ nodes {
   text: "\320\237\320\240\320\230\320\245\320\236\320\226\320\220\320\257"
   font: "unbounded_bold_32"
   id: "scene_name"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "hud_root"
-  inherit_alpha: true
+  parent: "box"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 24.0
-    y: 610.0
+    x: 7.0
+    y: -17.0
     z: 0.1
   }
   size {
@@ -103,25 +94,25 @@ nodes {
   }
   type: TYPE_TEXT
   text: "07:12 \302\267 \320\277\320\265\321\202\320\273\321\217 #017 \302\267 \321\201\320\276\321\201\321\202. \321\201\321\202\320\260\320\261\320\270\320\273\321\214\320\275\320\260"
-  font: "jb_mono_10"
+  font: "jb_mono_16"
   id: "scene_meta"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "hud_root"
-  inherit_alpha: true
+  parent: "box"
   alpha: 0.5
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1164.0
-    y: 649.0
+    x: 1195.0
+    y: 645.0
     z: 0.1
   }
   size {
-    x: 64.0
-    y: 64.0
+    x: 70.0
+    y: 70.0
   }
   color {
     x: 0.031
@@ -130,6 +121,8 @@ nodes {
   }
   type: TYPE_BOX
   id: "bag_ring"
+  xanchor: XANCHOR_RIGHT
+  yanchor: YANCHOR_TOP
   parent: "hud_root"
   inherit_alpha: true
   alpha: 0.85
@@ -180,18 +173,17 @@ nodes {
 }
 nodes {
   position {
-    x: 25.0
-    y: 25.0
+    x: 30.0
+    y: 30.0
     z: 0.13
   }
   size {
-    x: 18.0
-    y: 18.0
+    x: 20.0
+    y: 20.0
   }
   color {
-    x: 0.784
-    y: 0.078
-    z: 0.165
+    y: 0.23921569
+    z: 0.49803922
   }
   type: TYPE_BOX
   id: "bag_badge"
@@ -209,7 +201,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "7"
-  font: "jb_mono_bold_14"
+  font: "jb_mono_16"
   id: "bag_badge_text"
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "bag_badge"
@@ -219,13 +211,13 @@ nodes {
 }
 nodes {
   position {
-    x: 1084.0
-    y: 649.0
+    x: 1115.0
+    y: 645.0
     z: 0.1
   }
   size {
-    x: 64.0
-    y: 64.0
+    x: 70.0
+    y: 70.0
   }
   color {
     x: 0.031
@@ -234,6 +226,8 @@ nodes {
   }
   type: TYPE_BOX
   id: "phn_ring"
+  xanchor: XANCHOR_RIGHT
+  yanchor: YANCHOR_TOP
   parent: "hud_root"
   inherit_alpha: true
   alpha: 0.85
@@ -263,13 +257,13 @@ nodes {
 }
 nodes {
   position {
-    x: 25.0
-    y: 25.0
+    x: 30.0
+    y: 30.0
     z: 0.13
   }
   size {
-    x: 18.0
-    y: 18.0
+    x: 20.0
+    y: 20.0
   }
   color {
     y: 0.239
@@ -291,7 +285,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "3"
-  font: "jb_mono_bold_14"
+  font: "jb_mono_16"
   id: "phn_badge_text"
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "phn_badge"
@@ -301,13 +295,13 @@ nodes {
 }
 nodes {
   position {
-    x: 1003.0
-    y: 649.0
+    x: 1035.0
+    y: 645.0
     z: 0.1
   }
   size {
-    x: 64.0
-    y: 64.0
+    x: 70.0
+    y: 70.0
   }
   color {
     x: 0.031
@@ -316,6 +310,8 @@ nodes {
   }
   type: TYPE_BOX
   id: "log_ring"
+  xanchor: XANCHOR_RIGHT
+  yanchor: YANCHOR_TOP
   parent: "hud_root"
   inherit_alpha: true
   alpha: 0.85
@@ -325,9 +321,13 @@ nodes {
     y: 1.0
     z: 0.12
   }
+  scale {
+    x: 0.7
+    y: 0.7
+  }
   size {
-    x: 60.0
-    y: 16.0
+    x: 85.0
+    y: 40.0
   }
   color {
     x: 0.952
@@ -336,12 +336,135 @@ nodes {
   }
   type: TYPE_TEXT
   text: "LOG"
-  font: "jb_mono_bold_14"
+  font: "unbounded_bold_32"
   id: "log_label"
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "log_ring"
-  inherit_alpha: true
   alpha: 0.9
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 340.0
+    y: 617.0
+    z: 0.2
+  }
+  size {
+    x: 600.0
+    y: 56.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "armed_banner_root"
+  pivot: PIVOT_SW
+  parent: "hud_root"
+  inherit_alpha: true
+  alpha: 0.0
+}
+nodes {
+  position {
+    z: 0.2
+  }
+  size {
+    x: 600.0
+    y: 56.0
+  }
+  color {
+    x: 0.031
+    y: 0.023
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "armed_banner_bg"
+  pivot: PIVOT_SW
+  parent: "armed_banner_root"
+  alpha: 0.92
+}
+nodes {
+  position {
+    y: 54.0
+    z: 0.21
+  }
+  size {
+    x: 600.0
+    y: 2.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "armed_banner_border"
+  pivot: PIVOT_SW
+  parent: "armed_banner_root"
+}
+nodes {
+  position {
+    x: 16.0
+    y: 29.0
+    z: 0.22
+  }
+  size {
+    x: 512.0
+    y: 24.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_16"
+  id: "armed_banner_text"
+  pivot: PIVOT_W
+  parent: "armed_banner_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 534.0
+    y: 8.0
+    z: 0.22
+  }
+  size {
+    x: 60.0
+    y: 40.0
+  }
+  color {
+    x: 0.06
+    y: 0.06
+    z: 0.1
+  }
+  type: TYPE_BOX
+  id: "armed_banner_cancel_bg"
+  pivot: PIVOT_SW
+  parent: "armed_banner_root"
+}
+nodes {
+  position {
+    x: 564.0
+    y: 28.0
+    z: 0.23
+  }
+  size {
+    x: 60.0
+    y: 40.0
+  }
+  color {
+    y: 0.23921569
+    z: 0.49803922
+  }
+  type: TYPE_TEXT
+  text: "\320\236\320\242\320\234\320\225\320\235\320\220"
+  font: "jb_mono_16"
+  id: "armed_banner_cancel_label"
+  parent: "armed_banner_root"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
@@ -349,7 +472,7 @@ nodes {
   position {
     x: 640.0
     y: 360.0
-    z: 0.76
+    z: 0.06
   }
   size {
     x: 1280.0
@@ -369,8 +492,6 @@ nodes {
 }
 nodes {
   position {
-    x: 190.0
-    y: 112.0
     z: 0.77
   }
   size {
@@ -384,99 +505,14 @@ nodes {
   }
   type: TYPE_BOX
   id: "backlog_panel"
-  pivot: PIVOT_SW
-  parent: "hud_root"
+  parent: "backlog_shade"
   inherit_alpha: true
   alpha: 0.96
 }
 nodes {
   position {
-    x: 190.0
-    y: 611.0
-    z: 0.78
-  }
-  size {
-    x: 900.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "backlog_line_top"
-  pivot: PIVOT_SW
-  parent: "hud_root"
-  inherit_alpha: true
-  alpha: 0.55
-}
-nodes {
-  position {
-    x: 190.0
-    y: 112.0
-    z: 0.78
-  }
-  size {
-    x: 900.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "backlog_line_bottom"
-  pivot: PIVOT_SW
-  parent: "hud_root"
-  inherit_alpha: true
-  alpha: 0.55
-}
-nodes {
-  position {
-    x: 190.0
-    y: 112.0
-    z: 0.78
-  }
-  size {
-    x: 1.0
-    y: 500.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "backlog_line_left"
-  pivot: PIVOT_SW
-  parent: "hud_root"
-  inherit_alpha: true
-  alpha: 0.55
-}
-nodes {
-  position {
-    x: 1089.0
-    y: 112.0
-    z: 0.78
-  }
-  size {
-    x: 1.0
-    y: 500.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "backlog_line_right"
-  pivot: PIVOT_SW
-  parent: "hud_root"
-  inherit_alpha: true
-  alpha: 0.55
-}
-nodes {
-  position {
-    x: 230.0
-    y: 572.0
+    x: -410.0
+    y: 206.0
     z: 0.79
   }
   size {
@@ -490,44 +526,18 @@ nodes {
   }
   type: TYPE_TEXT
   text: "DIALOG LOG"
-  font: "unbounded_bold_20"
+  font: "unbounded_bold_32"
   id: "backlog_title"
   pivot: PIVOT_W
-  parent: "hud_root"
+  parent: "backlog_shade"
   inherit_alpha: true
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1048.0
-    y: 576.0
-    z: 0.79
-  }
-  size {
-    x: 160.0
-    y: 14.0
-  }
-  color {
-    x: 0.952
-    y: 0.925
-    z: 0.85
-  }
-  type: TYPE_TEXT
-  text: "0 / 0"
-  font: "jb_mono_10"
-  id: "backlog_counter"
-  pivot: PIVOT_E
-  parent: "hud_root"
-  inherit_alpha: true
-  alpha: 0.8
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 230.0
-    y: 520.0
+    x: -408.0
+    y: 162.0
     z: 0.79
   }
   size {
@@ -539,10 +549,10 @@ nodes {
     y: 0.976
   }
   type: TYPE_TEXT
-  font: "jb_mono_bold_14"
+  font: "jb_mono_16"
   id: "backlog_speaker"
   pivot: PIVOT_W
-  parent: "hud_root"
+  parent: "backlog_shade"
   inherit_alpha: true
   alpha: 0.55
   outline_alpha: 0.0
@@ -550,8 +560,8 @@ nodes {
 }
 nodes {
   position {
-    x: 230.0
-    y: 488.0
+    x: -407.0
+    y: 132.0
     z: 0.79
   }
   size {
@@ -564,19 +574,19 @@ nodes {
     z: 0.85
   }
   type: TYPE_TEXT
-  font: "jb_mono_12"
+  font: "jb_mono_16"
   id: "backlog_text"
   pivot: PIVOT_NW
   line_break: true
-  parent: "hud_root"
+  parent: "backlog_shade"
   inherit_alpha: true
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 230.0
-    y: 155.0
+    x: -408.0
+    y: -210.0
     z: 0.79
   }
   size {
@@ -590,10 +600,10 @@ nodes {
   }
   type: TYPE_TEXT
   text: "LOG IS READ-ONLY: CHOICES CANNOT BE REPLAYED."
-  font: "jb_mono_10"
+  font: "jb_mono_16"
   id: "backlog_hint"
   pivot: PIVOT_W
-  parent: "hud_root"
+  parent: "backlog_shade"
   inherit_alpha: true
   alpha: 0.8
   outline_alpha: 0.0
@@ -601,9 +611,35 @@ nodes {
 }
 nodes {
   position {
-    x: 230.0
-    y: 189.0
+    x: 410.0
+    y: 207.0
     z: 0.79
+  }
+  size {
+    x: 160.0
+    y: 14.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "0 / 0"
+  font: "jb_mono_16"
+  id: "backlog_counter"
+  pivot: PIVOT_E
+  parent: "backlog_shade"
+  inherit_alpha: true
+  alpha: 0.8
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -403.0
+    y: -171.0
+    z: 0.09
   }
   size {
     x: 120.0
@@ -617,14 +653,14 @@ nodes {
   type: TYPE_BOX
   id: "backlog_btn_prev"
   pivot: PIVOT_SW
-  parent: "hud_root"
+  parent: "backlog_shade"
   inherit_alpha: true
   alpha: 0.85
 }
 nodes {
   position {
-    x: 290.0
-    y: 206.0
+    x: 59.0
+    y: 15.0
     z: 0.8
   }
   size {
@@ -638,9 +674,9 @@ nodes {
   }
   type: TYPE_TEXT
   text: "< BACK"
-  font: "jb_mono_bold_14"
+  font: "jb_mono_16"
   id: "backlog_btn_prev_label"
-  parent: "hud_root"
+  parent: "backlog_btn_prev"
   inherit_alpha: true
   alpha: 0.8
   outline_alpha: 0.0
@@ -648,9 +684,9 @@ nodes {
 }
 nodes {
   position {
-    x: 378.0
-    y: 189.0
-    z: 0.79
+    x: -262.0
+    y: -171.0
+    z: 0.09
   }
   size {
     x: 120.0
@@ -664,14 +700,14 @@ nodes {
   type: TYPE_BOX
   id: "backlog_btn_next"
   pivot: PIVOT_SW
-  parent: "hud_root"
+  parent: "backlog_shade"
   inherit_alpha: true
   alpha: 0.85
 }
 nodes {
   position {
-    x: 438.0
-    y: 206.0
+    x: 60.0
+    y: 15.0
     z: 0.8
   }
   size {
@@ -685,9 +721,9 @@ nodes {
   }
   type: TYPE_TEXT
   text: "NEXT >"
-  font: "jb_mono_bold_14"
+  font: "jb_mono_16"
   id: "backlog_btn_next_label"
-  parent: "hud_root"
+  parent: "backlog_btn_next"
   inherit_alpha: true
   alpha: 0.8
   outline_alpha: 0.0
@@ -695,9 +731,9 @@ nodes {
 }
 nodes {
   position {
-    x: 930.0
-    y: 189.0
-    z: 0.79
+    x: 285.0
+    y: -171.0
+    z: 0.09
   }
   size {
     x: 120.0
@@ -711,14 +747,14 @@ nodes {
   type: TYPE_BOX
   id: "backlog_btn_close"
   pivot: PIVOT_SW
-  parent: "hud_root"
+  parent: "backlog_shade"
   inherit_alpha: true
   alpha: 0.85
 }
 nodes {
   position {
-    x: 990.0
-    y: 206.0
+    x: 59.0
+    y: 16.0
     z: 0.8
   }
   size {
@@ -732,13 +768,30 @@ nodes {
   }
   type: TYPE_TEXT
   text: "CLOSE"
-  font: "jb_mono_bold_14"
+  font: "jb_mono_16"
   id: "backlog_btn_close_label"
-  parent: "hud_root"
+  parent: "backlog_btn_close"
   inherit_alpha: true
   alpha: 0.8
   outline_alpha: 0.0
   shadow_alpha: 0.0
+}
+nodes {
+  size {
+    x: 900.0
+    y: 500.0
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "backlog_border"
+  parent: "backlog_shade"
+  inherit_alpha: true
+  slice9 {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+    w: 2.0
+  }
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT

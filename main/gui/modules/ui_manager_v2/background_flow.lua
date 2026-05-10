@@ -1,6 +1,7 @@
 local meta = require "main.scripts.meta_state"
 local scene_controller = require "main.scripts.scene_controller"
 local ui_state = require "main.scripts.ui_state"
+local gs = require "main.scripts.game_state"
 
 local M = {}
 
@@ -52,6 +53,33 @@ function M.post_dialogue_bg(self, bg_name)
     msg.post(target, "apply_dialogue_bg", { name = bg_name })
 end
 
+-- Обратный поиск: по имени bg-атласа найти scene_data из таблицы scenes,
+-- у которой bg резолвится в это же имя. Нужен для диалогового режима, когда
+-- scene_controller ещё не активен (или экспозиция/cut-scene без exploration),
+-- но HUD уже должен показывать «человеческое» название локации.
+local function find_scene_data_by_bg(bg_name, scenes)
+    if not bg_name or bg_name == "" or not scenes then return nil end
+    local table_ref = scenes.scenes or scenes
+    if type(table_ref) ~= "table" then return nil end
+    for _, data in pairs(table_ref) do
+        if type(data) == "table" then
+            local bg = data.bg
+            if type(bg) == "function" then
+                -- bg-функция в scenes.lua принимает game_state и возвращает
+                -- нужное имя атласа в зависимости от времени суток / дня.
+                -- Без gs она вернёт fallback-морнинг и мы не найдём ночную
+                -- сцену → label не зарезолвится.
+                local ok, resolved = pcall(bg, gs)
+                bg = ok and resolved or nil
+            end
+            if bg == bg_name then
+                return data
+            end
+        end
+    end
+    return nil
+end
+
 function M.resolve_location_label(bg_name, scenes)
     local scene_id = scene_controller.get_current_scene_id and scene_controller.get_current_scene_id() or nil
     local scene_data = nil
@@ -65,6 +93,11 @@ function M.resolve_location_label(bg_name, scenes)
         elseif scenes.scenes then
             scene_data = scenes.scenes[scene_id]
         end
+    end
+    -- Fallback: scene_controller неактивен (диалоговый режим). Ищем сцену
+    -- по совпадающему bg_name, чтобы взять её label.
+    if not scene_data then
+        scene_data = find_scene_data_by_bg(bg_name, scenes)
     end
 
     local label = scene_data and scene_data.label or nil

@@ -14,6 +14,13 @@ local MAX_BUBBLES = 8
 local LIST_SCROLL_STEP = 1
 local CHAT_SCROLL_STEP = 1
 
+-- Drag-scroll параметры (как в phone_sms): pixel-сдвиг при котором делаем
+-- ровно 1 step (одна строка чата / один bubble), и порог в пикселях, после
+-- которого тап превращается в drag и не считается кликом по строке.
+local LIST_DRAG_STEP_PX = 64   -- ROW height в списке мессенджера
+local CHAT_DRAG_STEP_PX = 48   -- средняя высота bubble
+local DRAG_THRESHOLD_PX = 8
+
 local COLORS = {
     paper = vmath.vector4(0.953, 0.925, 0.851, 1),
     dim = vmath.vector4(0.788, 0.753, 0.659, 1),
@@ -630,6 +637,42 @@ local function handle_reply_tap(self)
     msg.post(UI_MGR, "messenger_open_chat", { chat_id = self.active_chat_id })
 end
 
+-- Bounds для drag-распознавания. Считаем что любой pick_node по любой из
+-- видимых строк/баблов = клик внутри scrollable area.
+local function is_inside_list_area(self, x, y)
+    for i = 1, MAX_LIST_ROWS do
+        local n = get_node("chat" .. i .. "_bg")
+        if n and gui.is_enabled(n) and gui.pick_node(n, x, y) then
+            return true
+        end
+    end
+    return false
+end
+
+local function is_inside_chat_area(self, x, y)
+    for i = 1, MAX_BUBBLES do
+        local n = get_node("bub" .. i .. "_bg")
+        if n and gui.is_enabled(n) and gui.pick_node(n, x, y) then
+            return true
+        end
+    end
+    return false
+end
+
+local function step_list(self, delta)
+    local ids = build_chat_list(self)
+    local max_offset = math.max(0, #ids - MAX_LIST_ROWS)
+    self.list_offset = math.max(0, math.min((self.list_offset or 0) + delta, max_offset))
+    render_list(self)
+end
+
+local function step_chat(self, delta)
+    local total = #get_messages(self.active_chat_id)
+    local max_offset = math.max(0, total - MAX_BUBBLES)
+    self.chat_offset = math.max(0, math.min((self.chat_offset or max_offset) + delta, max_offset))
+    render_chat(self)
+end
+
 local function handle_scroll(self, action)
     local dy = tonumber(action.dy or action.value or 0) or 0
     if dy == 0 then return false end
@@ -669,12 +712,111 @@ local function handle_phone_input(self, action_id, action)
     if action_id ~= hash("touch") then
         return true
     end
-    if not action.released and not action.pressed then
+    local x, y = action.x or 0, action.y or 0
+    local pressed = action.pressed and true or false
+    local released = action.released and true or false
+
+    -- Drag-scroll (модель из phone_sms): pressed запоминает старт, движение
+    -- между pressed/released аккумулирует dy и пошагово листает list/chat,
+    -- released завершает drag. Если за время удержания палец сдвинулся
+    -- меньше DRAG_THRESHOLD — это считается tap, обработка идёт ниже.
+    if self.view == "list" then
+        if pressed then
+            -- Любой press в списке считаем потенциальным drag. Tab'ы и
+            -- кнопки header'а — мелкие, drag-порог 8px их не задевает; tap
+            -- по ним отработает на released через fall-through ниже.
+            self.list_dragging = true
+            self.list_drag_start_y = y
+            self.list_drag_last_y = y
+            self.list_drag_accum = 0
+            self.list_drag_moved = false
+            -- НЕ возвращаем true тут: на released без движения нужно дать
+            -- tap-обработке (tab/chat row) сработать через fall-through.
+        elseif self.list_dragging and not released then
+            local dy = y - (self.list_drag_last_y or y)
+            self.list_drag_last_y = y
+            self.list_drag_accum = (self.list_drag_accum or 0) + dy
+            if math.abs(y - (self.list_drag_start_y or y)) >= DRAG_THRESHOLD_PX then
+                self.list_drag_moved = true
+            end
+            while self.list_drag_accum >= LIST_DRAG_STEP_PX do
+                step_list(self, 1)
+                self.list_drag_accum = self.list_drag_accum - LIST_DRAG_STEP_PX
+            end
+            while self.list_drag_accum <= -LIST_DRAG_STEP_PX do
+                step_list(self, -1)
+                self.list_drag_accum = self.list_drag_accum + LIST_DRAG_STEP_PX
+            end
+            return true
+        elseif released then
+            local was_dragging = self.list_dragging
+            local moved = self.list_drag_moved
+            self.list_dragging = false
+            self.list_drag_accum = 0
+            self.list_drag_moved = false
+            -- При drag (палец двигался) tap по строке игнорим — иначе
+            -- свайп открывал бы случайный чат.
+            if was_dragging and moved then
+                return true
+            end
+        end
+    elseif self.view == "chat" then
+        if pressed then
+            -- В chat view drag-eligible везде: tap по back/input/send отработает
+            -- на released (для send/input — отдельная arm-on-press логика ниже,
+            -- она тоже сработает потому что мы НЕ возвращаем true тут).
+            self.chat_dragging = true
+            self.chat_drag_start_y = y
+            self.chat_drag_last_y = y
+            self.chat_drag_accum = 0
+            self.chat_drag_moved = false
+        elseif self.chat_dragging and not released then
+            local dy = y - (self.chat_drag_last_y or y)
+            self.chat_drag_last_y = y
+            self.chat_drag_accum = (self.chat_drag_accum or 0) + dy
+            if math.abs(y - (self.chat_drag_start_y or y)) >= DRAG_THRESHOLD_PX then
+                self.chat_drag_moved = true
+                -- Если игрок начал press на send/input и поехал — отменяем arm,
+                -- чтобы release где попало не открыл reply-knot.
+                self.reply_tap_armed = false
+            end
+            -- Drag вверх (dy<0) → видим более новые сообщения (offset++).
+            -- Drag вниз (dy>0) → к старым (offset--). Совпадает с естественным
+            -- инерционным свайпом «контент следует за пальцем».
+            while self.chat_drag_accum >= CHAT_DRAG_STEP_PX do
+                step_chat(self, -1)
+                self.chat_drag_accum = self.chat_drag_accum - CHAT_DRAG_STEP_PX
+            end
+            while self.chat_drag_accum <= -CHAT_DRAG_STEP_PX do
+                step_chat(self, 1)
+                self.chat_drag_accum = self.chat_drag_accum + CHAT_DRAG_STEP_PX
+            end
+            return true
+        elseif released then
+            local was_dragging = self.chat_dragging
+            local moved = self.chat_drag_moved
+            self.chat_dragging = false
+            self.chat_drag_accum = 0
+            self.chat_drag_moved = false
+            if was_dragging and moved then
+                return true
+            end
+        end
+    end
+
+    -- Tap-обработка работает только на pressed/released. Движение пальца
+    -- без свайпа просто проглатывается выше.
+    if not pressed and not released then
         return true
     end
-    local x, y = action.x or 0, action.y or 0
 
     if self.view == "list" then
+        -- Tap-обработка списка: фильтры и открытие чата срабатывают только
+        -- на released. На pressed мы сидим в drag-init и не открываем ничего,
+        -- иначе тап-вниз сразу бы открыл чат и drag не мог бы случиться.
+        if not released then
+            return true
+        end
         if is_inside_rect("tab_all_bg", x, y) then
             self.filter = "all"
             self.list_offset = 0
@@ -694,7 +836,11 @@ local function handle_phone_input(self, action_id, action)
             end
         end
     else
+        -- back/attach срабатывают только на released, чтобы drag-вверх по
+        -- баблам у границы шапки случайно не закрыл чат. send/input ниже —
+        -- arm-on-press, остаётся как было.
         if is_inside_rect("back_bg", x, y) then
+            if not released then return true end
             self.reply_tap_armed = false
             open_list(self)
             return true

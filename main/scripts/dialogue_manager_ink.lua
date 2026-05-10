@@ -666,6 +666,11 @@ local function save_ink_state()
     sm.set_ink_state({
         ink   = story.get_state(),
         index = current_index,
+        -- bg_image хранится в локальном состоянии wrapper'а и не входит
+        -- в ink.get_state(). Если игрок сохранился через несколько пачек
+        -- после `# bg:`-тега, replay при load_saved не восстановит фон
+        -- (re-apply идёт только для текущей пачки). Сохраняем явно.
+        bg_image = bg_image,
     })
 end
 
@@ -857,15 +862,17 @@ function M.load_saved(json_bytes)
     end
 
     -- Поддерживаем два формата сохранения:
-    --   новый: { ink = <state>, index = <n> }
+    --   новый: { ink = <state>, index = <n>, bg_image = <name> }
     --   старый (до фикса позиции): сам <state>
-    local ink_history, saved_index
+    local ink_history, saved_index, saved_bg_image
     if saved.ink then
         ink_history = saved.ink
         saved_index = saved.index or 1
+        saved_bg_image = saved.bg_image
     else
         ink_history = saved
         saved_index = 1
+        saved_bg_image = nil
     end
     local saved_index_raw = saved_index
 
@@ -920,6 +927,13 @@ function M.load_saved(json_bytes)
     suppress_effects = false
     restore_scene_transitions = false
     pending_effects  = {}  -- на всякий случай
+
+    -- Если replay тегов текущей пачки не выставил bg_image (тег `# bg:` был
+    -- в предыдущей пачке до сейв-точки) — берём сохранённое значение явно.
+    -- Иначе диалог после загрузки идёт без фона до следующего `# bg:`.
+    if (not bg_image or bg_image == "") and saved_bg_image and saved_bg_image ~= "" then
+        bg_image = saved_bg_image
+    end
 
     if saved_index_raw > #paragraph_queue then
         for _, cmd in ipairs(deferred_commands) do

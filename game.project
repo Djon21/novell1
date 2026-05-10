@@ -4,6 +4,9 @@ main_collection = /main/main_v2.collectionc
 [script]
 shared_state = 1
 
+[graphics]
+texture_profiles = /main/textures.texture_profiles
+
 [display]
 high_dpi = 1
 width = 1280

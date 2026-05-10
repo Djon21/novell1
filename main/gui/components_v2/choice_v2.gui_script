@@ -21,16 +21,12 @@ local current_location_time = nil
 local current_location_loop = nil
 
 local STATIC_NODES = {
-    "backdrop", "modal", "box",
-    "corner_tl_v", "corner_tl_h", "corner_tr_v", "corner_tr_h",
-    "corner_bl_v", "corner_bl_h", "corner_br_v", "corner_br_h",
-    "who_tag_bg", "who_tag", "who_name",
-    "meta_loop_bg", "meta_loop_border_top", "meta_loop_border_bottom", "meta_loop_border_left", "meta_loop_border_right",
-    "meta_loop", "meta_tm", "head_divider",
+    "backdrop", "modal", "modal_border",
+    "meta_loop_bg", "meta_loop_border_top", "meta_loop_border_bottom",
+    "meta_loop_border_left", "meta_loop_border_right", "meta_loop",
+    "head_divider",
     "prompt", "caveat", "opts_panel",
     "foot_divider", "foot_label",
-    -- старые id оставлены пустыми, чтобы внешние/старые вызовы не падали
-    "title_eyebrow", "title_main",
 }
 
 local function get_node(id)
@@ -88,8 +84,6 @@ end
 local COLORS = {
     paper      = vmath.vector4(0.953, 0.925, 0.851, 1.0),
     paper_dim  = vmath.vector4(0.788, 0.753, 0.659, 1.0),
-    ink0       = vmath.vector4(0.020, 0.012, 0.102, 1.0),
-    panel      = vmath.vector4(0.031, 0.024, 0.094, 0.92),
     opt_bg     = vmath.vector4(0.047, 0.039, 0.141, 0.72),
     num_bg     = vmath.vector4(0.020, 0.012, 0.102, 1.0),
     accent     = vmath.vector4(0.490, 0.976, 1.000, 1.0),
@@ -100,9 +94,6 @@ local COLORS = {
     amber_dim  = vmath.vector4(1.000, 0.702, 0.278, 0.55),
     violet     = vmath.vector4(0.478, 0.361, 1.000, 1.0),
     violet_dim = vmath.vector4(0.478, 0.361, 1.000, 0.55),
-    stamp      = vmath.vector4(0.784, 0.078, 0.165, 1.0),
-    stamp_dim  = vmath.vector4(0.784, 0.078, 0.165, 0.25),
-    transparent = vmath.vector4(0, 0, 0, 0),
 }
 
 local function color_for_class(cls)
@@ -126,30 +117,26 @@ local function utf8_len(s)
     return count
 end
 
-local function new_box(x, y, z, w, h, color)
-    local n = gui.new_box_node(vmath.vector3(x, y, z), vmath.vector3(w, h, 0))
-    gui.set_pivot(n, gui.PIVOT_SW)
-    gui.set_color(n, color)
-    gui.set_adjust_mode(n, gui.ADJUST_FIT)
-    return n
-end
 
-local function new_text(x, y, z, w, h, text, font, color, pivot)
-    local n = gui.new_text_node(vmath.vector3(x, y, z), text or "")
-    gui.set_pivot(n, pivot or gui.PIVOT_W)
-    gui.set_size(n, vmath.vector3(w, h, 0))
-    gui.set_font(n, font)
-    gui.set_color(n, color)
-    gui.set_adjust_mode(n, gui.ADJUST_FIT)
-    pcall(gui.set_line_break, n, true)
-    return n
-end
-
-local function add_line_nodes(list, prefix, x, y, z, w, h, color)
-    list[#list + 1] = new_box(x, y + h - 1, z, w, 1, color)
-    list[#list + 1] = new_box(x, y, z, w, 1, color)
-    list[#list + 1] = new_box(x, y, z, 1, h, color)
-    list[#list + 1] = new_box(x + w - 1, y, z, 1, h, color)
+local function cache_opt_slots(self)
+    if self.opt_slots then return end
+    self.opt_slots = {}
+    for i = 1, 4 do
+        local prefix = "opt" .. i
+        local slot = {
+            root = gui.get_node(prefix .. "_root"),
+            bg = gui.get_node(prefix .. "_bg"),
+            border = gui.get_node(prefix .. "_border"),
+            num_bg = gui.get_node(prefix .. "_num_bg"),
+            num_border = gui.get_node(prefix .. "_num_border"),
+            num_text = gui.get_node(prefix .. "_num_text"),
+            hint_border = gui.get_node(prefix .. "_hint_border"),
+            hint_text = gui.get_node(prefix .. "_hint_text"),
+            text = gui.get_node(prefix .. "_text"),
+        }
+        pcall(gui.set_line_break, slot.text, true)
+        self.opt_slots[i] = slot
+    end
 end
 
 local DEFAULT_LAYOUT = {
@@ -163,17 +150,27 @@ local DEFAULT_LAYOUT = {
     opt_max_h = 124,
 }
 
+local function set_slot_enabled(slot, enabled)
+    if not slot then return end
+    gui.set_enabled(slot.root, enabled)
+    -- Hint nodes are controlled separately when the slot is visible.
+    if not enabled then
+        gui.set_enabled(slot.hint_border, false)
+        gui.set_enabled(slot.hint_text, false)
+    end
+end
+
 local function clear_opts(self)
-    for _, opt_group in ipairs(self.opt_nodes or {}) do
-        for _, n in ipairs(opt_group.nodes or {}) do
-            if n then pcall(gui.delete_node, n) end
-        end
+    cache_opt_slots(self)
+    for i = 1, 4 do
+        set_slot_enabled(self.opt_slots[i], false)
     end
     self.opt_nodes = {}
     self.opts = {}
 end
 
-local function make_opt(self, idx, opt)
+local function fill_opt_slot(self, idx, opt)
+    cache_opt_slots(self)
     local layout = self.choice_layout or {}
     local opt_x = layout.opt_x or 310
     local opt_w = layout.opt_w or 660
@@ -182,37 +179,66 @@ local function make_opt(self, idx, opt)
     local opt_top = layout.opt_top or 444
     local y = opt_top - idx * opt_h - (idx - 1) * opt_gap
     local accent, border = color_for_class(opt.cls)
-    local nodes = {}
+    local slot = self.opt_slots[idx]
+    if not slot then return nil end
 
-    local bg = new_box(opt_x, y, 0.70, opt_w, opt_h, COLORS.opt_bg)
-    nodes[#nodes + 1] = bg
-    add_line_nodes(nodes, "opt", opt_x, y, 0.71, opt_w, opt_h, border)
+    set_slot_enabled(slot, true)
+    gui.set_position(slot.root, vmath.vector3(opt_x, y, 0))
+    gui.set_size(slot.root, vmath.vector3(opt_w, opt_h, 0))
 
-    -- номер слева, как .opt .num в HTML
+    gui.set_position(slot.bg, vmath.vector3(0, 0, 0.70))
+    gui.set_size(slot.bg, vmath.vector3(opt_w, opt_h, 0))
+    gui.set_color(slot.bg, COLORS.opt_bg)
+
+    gui.set_position(slot.border, vmath.vector3(0, 0, 0.71))
+    gui.set_size(slot.border, vmath.vector3(opt_w, opt_h, 0))
+    gui.set_color(slot.border, border)
+
+    -- Номер слева, как .opt .num в HTML.
     local num_size = clamp(math.floor(opt_h * 0.42), 30, 38)
-    local num_x = opt_x + 14
-    local num_y = y + math.floor((opt_h - num_size) * 0.5)
-    nodes[#nodes + 1] = new_box(num_x, num_y, 0.72, num_size, num_size, COLORS.num_bg)
-    add_line_nodes(nodes, "num", num_x, num_y, 0.73, num_size, num_size, accent)
-    nodes[#nodes + 1] = new_text(num_x + num_size * 0.5, num_y + num_size * 0.5, 0.74, num_size - 4, 12, string.format("%02d", idx), "jb_mono_10", accent, gui.PIVOT_CENTER)
+    local num_x = 14
+    local num_y = math.floor((opt_h - num_size) * 0.5)
+    gui.set_position(slot.num_bg, vmath.vector3(num_x, num_y, 0.72))
+    gui.set_size(slot.num_bg, vmath.vector3(num_size, num_size, 0))
+    gui.set_color(slot.num_bg, COLORS.num_bg)
+
+    gui.set_position(slot.num_border, vmath.vector3(num_x, num_y, 0.73))
+    gui.set_size(slot.num_border, vmath.vector3(num_size, num_size, 0))
+    gui.set_color(slot.num_border, accent)
+
+    gui.set_position(slot.num_text, vmath.vector3(num_x + num_size * 0.5, num_y + num_size * 0.5, 0.74))
+    gui.set_size(slot.num_text, vmath.vector3(num_size - 4, 12, 0))
+    gui.set_text(slot.num_text, string.format("%02d", idx))
+    gui.set_color(slot.num_text, accent)
 
     local hint = opt.hint or opt.hint_text or ""
     local hint_w = 0
-    if hint ~= "" then
+    local has_hint = hint ~= ""
+    gui.set_enabled(slot.hint_border, has_hint)
+    gui.set_enabled(slot.hint_text, has_hint)
+    if has_hint then
         hint_w = math.max(70, math.min(190, 34 + utf8_len(hint) * 8))
         local hc, hb = hint_color(opt.hintCls or opt.hint_cls)
-        local hx = opt_x + opt_w - 14 - hint_w
-        local hy = y + math.floor((opt_h - 26) * 0.5)
-        add_line_nodes(nodes, "hint", hx, hy, 0.73, hint_w, 26, hb)
-        nodes[#nodes + 1] = new_text(hx + hint_w * 0.5, hy + 13, 0.74, hint_w - 10, 12, tostring(hint):upper(), "jb_mono_10", hc, gui.PIVOT_CENTER)
+        local hx = opt_w - 14 - hint_w
+        local hy = math.floor((opt_h - 26) * 0.5)
+        gui.set_position(slot.hint_border, vmath.vector3(hx, hy, 0.73))
+        gui.set_size(slot.hint_border, vmath.vector3(hint_w, 26, 0))
+        gui.set_color(slot.hint_border, hb)
+        gui.set_position(slot.hint_text, vmath.vector3(hx + hint_w * 0.5, hy + 13, 0.74))
+        gui.set_size(slot.hint_text, vmath.vector3(hint_w - 10, 12, 0))
+        gui.set_text(slot.hint_text, tostring(hint):upper())
+        gui.set_color(slot.hint_text, hc)
     end
 
-    local text_x = opt_x + num_size + 34
-    local text_w = opt_w - (text_x - opt_x) - (hint_w > 0 and (hint_w + 30) or 24)
+    local text_x = num_size + 34
+    local text_w = opt_w - text_x - (hint_w > 0 and (hint_w + 30) or 24)
     local text_h = opt_h - 16
-    nodes[#nodes + 1] = new_text(text_x, y + opt_h * 0.5, 0.74, text_w, text_h, opt.text or "—", "manrope_medium_24", COLORS.paper, gui.PIVOT_W)
+    gui.set_position(slot.text, vmath.vector3(text_x, opt_h * 0.5, 0.74))
+    gui.set_size(slot.text, vmath.vector3(text_w, text_h, 0))
+    gui.set_text(slot.text, opt.text or "—")
+    gui.set_color(slot.text, COLORS.paper)
 
-    return { bg = bg, nodes = nodes, cls = opt.cls }
+    return { bg = slot.bg, nodes = slot, cls = opt.cls }
 end
 
 local function estimate_text_height(text, width, min_h, max_h, line_h)
@@ -238,28 +264,9 @@ local function layout_choice(self, message, opt_count)
     -- Растягиваем саму модалку: на мобильном landscape это заметно лучше,
     -- а на desktop не ломает композицию.
     set_pos_size("modal", mx, my, 0.60, mw, mh)
-    -- box заменяет старые modal_border_top/bottom/left/right.
-    -- В .gui у box должен быть pivot=PIVOT_SW и slice9, тогда размер
-    -- из адаптивного layout-а будет корректно растягивать рамку.
-    set_pos_size("box", mx, my, 0.61, mw, mh)
-
-    -- Угловые акценты тоже привязаны к новым углам.
-    local c = 22
-    set_pos_size("corner_tl_v", mx, top - c, 0.62, 2, c)
-    set_pos_size("corner_tl_h", mx, top - 2, 0.62, c, 2)
-    set_pos_size("corner_tr_v", mx + mw - 2, top - c, 0.62, 2, c)
-    set_pos_size("corner_tr_h", mx + mw - c, top - 2, 0.62, c, 2)
-    set_pos_size("corner_bl_v", mx, my, 0.62, 2, c)
-    set_pos_size("corner_bl_h", mx, my, 0.62, c, 2)
-    set_pos_size("corner_br_v", mx + mw - 2, my, 0.62, 2, c)
-    set_pos_size("corner_br_h", mx + mw - c, my, 0.62, c, 2)
+    set_pos_size("modal_border", mx, my, 0.61, mw, mh)
 
     local header_y = top - 44
-    set_pos_size("who_tag_bg", left, header_y - 12, 0.62, 78, 22)
-    set_pos("who_tag", left + 39, header_y - 1, 0.63)
-    set_size("who_tag", 70, 12)
-    set_pos("who_name", left + 92, header_y - 1, 0.63)
-    set_size("who_name", 430, 24)
 
     local meta_w = 180
     local meta_x = right - meta_w
@@ -270,8 +277,11 @@ local function layout_choice(self, message, opt_count)
     set_pos_size("meta_loop_border_right", meta_x + meta_w - 1, header_y - 14, 0.63, 1, 24)
     set_pos("meta_loop", meta_x + meta_w * 0.5, header_y - 2, 0.64)
     set_size("meta_loop", meta_w - 12, 12)
-    set_pos("meta_tm", right, header_y - 33, 0.63)
-    set_size("meta_tm", 360, 12)
+
+    -- foot_label («ВЫБЕРИ ВАРИАНТ») сидит на той же горизонтали что и
+    -- бейдж meta_loop справа, но выровнен по левому краю контента (PIVOT_W).
+    set_pos("foot_label", left, header_y - 2, 0.63)
+    set_size("foot_label", content_w - meta_w - 24, 30)
 
     local head_div_y = top - 76
     set_pos_size("head_divider", left, head_div_y, 0.62, content_w, 1)
@@ -298,8 +308,6 @@ local function layout_choice(self, message, opt_count)
 
     local foot_y = my + 72
     set_pos_size("foot_divider", left, foot_y, 0.62, content_w, 1)
-    set_pos("foot_label", left, my + 38, 0.63)
-    set_size("foot_label", 360, 20)
 
     local opts_top = next_y
     local opts_bottom = foot_y + 22
@@ -394,11 +402,23 @@ end
 
 local function remember_location(message)
     message = message or {}
-    if coalesce(message.name) then
-        current_location_name = tostring(message.name)
+
+    -- Do not use message.name here: in show_choice it is speaker/who_name,
+    -- not a location label. Location must arrive through explicit location fields.
+    local loc = coalesce(
+        message.location_label,
+        message.current_location_label,
+        message.location_name,
+        message.scene_label,
+        message.location,
+        message.current_location
+    )
+    if loc then
+        current_location_name = tostring(loc)
         ui_state.current_location_name = current_location_name
         ui_state.location_name = current_location_name
     end
+
     if message.time ~= nil then
         current_location_time = message.time
         ui_state.current_location_time = message.time
@@ -412,9 +432,6 @@ local function remember_location(message)
 end
 
 local function apply_copy(message)
-    -- Совместимость: старый ui_manager мог присылать только title.
-    local tag = coalesce(message.tag, message.who_tag, "МЫСЛЬ")
-    local name = coalesce(message.name, message.who, message.speaker, "К. АВОСЬЕВ")
     local prompt = coalesce(message.prompt, message.title, "Выбери вариант.")
     local caveat = coalesce(message.caveat, message.subtitle, message.note, "")
     local loop = normalize_loop_label(coalesce(
@@ -424,14 +441,10 @@ local function apply_copy(message)
         message.iteration_number,
         current_location_loop
     ))
-    local meta = format_location_text(message)
 
-    set_text("who_tag", tostring(tag):upper())
-    set_text("who_name", tostring(name):upper())
     set_text("prompt", tostring(prompt))
     set_text("caveat", tostring(caveat))
     set_text("meta_loop", loop)
-    set_text("meta_tm", meta)
 
     local has_caveat = caveat ~= nil and tostring(caveat) ~= ""
     set_node_enabled("caveat", has_caveat)
@@ -442,7 +455,9 @@ function init(self)
     self.visible = false
     self.opts = {}
     self.opt_nodes = {}
+    cache_opt_slots(self)
     set_all_enabled(false)
+    clear_opts(self)
 end
 
 function on_message(self, message_id, message, sender)
@@ -459,14 +474,13 @@ function on_message(self, message_id, message, sender)
         self.opts = opts
         for i, opt in ipairs(opts) do
             if i <= 4 then
-                self.opt_nodes[i] = make_opt(self, i, opt)
+                self.opt_nodes[i] = fill_opt_slot(self, i, opt)
             end
         end
 
     elseif message_id == hash("set_location") then
         remember_location(message or {})
         if self.visible then
-            set_text("meta_tm", format_location_text({}))
             if current_location_loop ~= nil then
                 set_text("meta_loop", normalize_loop_label(current_location_loop))
             end

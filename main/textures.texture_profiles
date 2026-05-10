@@ -1,0 +1,57 @@
+path_settings {
+  path: "/main/images/backgrounds/**"
+  profile: "Backgrounds"
+}
+path_settings {
+  path: "/main/images/phone/**"
+  profile: "UI"
+}
+path_settings {
+  path: "/main/images/menu/**"
+  profile: "UI"
+}
+path_settings {
+  path: "/main/images/v2/**"
+  profile: "UI"
+}
+path_settings {
+  path: "**"
+  profile: "Default"
+}
+profiles {
+  name: "Backgrounds"
+  platforms {
+    os: OS_ID_GENERIC
+    formats {
+      format: TEXTURE_FORMAT_RGB
+      compressor: "Uncompressed"
+      compressor_preset: "UNCOMPRESSED"
+    }
+    mipmaps: false
+    max_texture_size: 1920
+  }
+}
+profiles {
+  name: "UI"
+  platforms {
+    os: OS_ID_GENERIC
+    formats {
+      format: TEXTURE_FORMAT_RGBA
+      compressor: "Uncompressed"
+      compressor_preset: "UNCOMPRESSED"
+    }
+    mipmaps: false
+  }
+}
+profiles {
+  name: "Default"
+  platforms {
+    os: OS_ID_GENERIC
+    formats {
+      format: TEXTURE_FORMAT_RGBA
+      compressor: "Uncompressed"
+      compressor_preset: "UNCOMPRESSED"
+    }
+    mipmaps: false
+  }
+}
