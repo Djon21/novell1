@@ -1,0 +1,2491 @@
+fonts {
+  name: "jb_mono_10"
+  font: "/main/fonts/jb_mono_10.font"
+}
+fonts {
+  name: "jb_mono_12"
+  font: "/main/fonts/jb_mono_12.font"
+}
+fonts {
+  name: "jb_mono_bold_14"
+  font: "/main/fonts/jb_mono_bold_14.font"
+}
+fonts {
+  name: "unbounded_bold_20"
+  font: "/main/fonts/unbounded_bold_20.font"
+}
+fonts {
+  name: "unbounded_bold_32"
+  font: "/main/fonts/unbounded_bold_32.font"
+}
+fonts {
+  name: "icons"
+  font: "/main/fonts/icons.font"
+}
+fonts {
+  name: "manrope_14"
+  font: "/main/fonts/manrope_14.font"
+}
+fonts {
+  name: "manrope_16"
+  font: "/main/fonts/manrope_16.font"
+}
+textures {
+  name: "icon_phone"
+  texture: "/main/images/phone/icon_phone.atlas"
+}
+
+nodes {
+  position {
+    z: 0.053
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "chat_root"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 528.0
+    y: 608.0
+    z: 0.55
+  }
+  size {
+    x: 118.0
+    y: 40.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "back_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.6
+}
+nodes {
+  position {
+    x: 528.0
+    y: 608.0
+    z: 0.552
+  }
+  size {
+    x: 118.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "back_bt"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.35
+}
+nodes {
+  position {
+    x: 528.0
+    y: 647.0
+    z: 0.552
+  }
+  size {
+    x: 118.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "back_bb"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.35
+}
+nodes {
+  position {
+    x: 528.0
+    y: 608.0
+    z: 0.552
+  }
+  size {
+    x: 1.0
+    y: 40.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "back_bl"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.35
+}
+nodes {
+  position {
+    x: 645.0
+    y: 608.0
+    z: 0.552
+  }
+  size {
+    x: 1.0
+    y: 40.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "back_br"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.35
+}
+nodes {
+  position {
+    x: 546.0
+    y: 628.0
+    z: 0.56
+  }
+  size {
+    x: 98.0
+    y: 12.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "\342\200\271 \320\235\320\220\320\227\320\220\320\224"
+  font: "jb_mono_bold_14"
+  id: "back_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 660.0
+    y: 606.0
+    z: 0.553
+  }
+  size {
+    x: 44.0
+    y: 44.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "head_av_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.2
+}
+nodes {
+  position {
+    x: 682.0
+    y: 628.0
+    z: 0.56
+  }
+  size {
+    x: 42.0
+    y: 16.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "\320\235\320\234"
+  font: "jb_mono_bold_14"
+  id: "head_av"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 718.0
+    y: 634.0
+    z: 0.56
+  }
+  size {
+    x: 310.0
+    y: 18.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\235. \320\234."
+  font: "unbounded_bold_20"
+  id: "head_name"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 718.0
+    y: 612.0
+    z: 0.56
+  }
+  size {
+    x: 360.0
+    y: 12.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\320\261\321\213\320\273(\320\260) \320\262 \321\201\320\265\321\202\320\270 5 \320\274\320\270\320\275 \320\275\320\260\320\267\320\260\320\264"
+  font: "jb_mono_12"
+  id: "head_status"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.82
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1074.0
+    y: 610.0
+    z: 0.55
+  }
+  size {
+    x: 38.0
+    y: 38.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "head_call_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.6
+}
+nodes {
+  position {
+    x: 1074.0
+    y: 610.0
+    z: 0.552
+  }
+  size {
+    x: 38.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "head_call_bt"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1074.0
+    y: 647.0
+    z: 0.552
+  }
+  size {
+    x: 38.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "head_call_bb"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1074.0
+    y: 610.0
+    z: 0.552
+  }
+  size {
+    x: 1.0
+    y: 38.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "head_call_bl"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1111.0
+    y: 610.0
+    z: 0.552
+  }
+  size {
+    x: 1.0
+    y: 38.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "head_call_br"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1093.0
+    y: 629.0
+    z: 0.56
+  }
+  size {
+    x: 34.0
+    y: 16.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\342\230\217"
+  font: "jb_mono_bold_14"
+  id: "head_call_text"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1118.0
+    y: 610.0
+    z: 0.55
+  }
+  size {
+    x: 38.0
+    y: 38.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "head_find_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.6
+}
+nodes {
+  position {
+    x: 1118.0
+    y: 610.0
+    z: 0.552
+  }
+  size {
+    x: 38.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "head_find_bt"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1118.0
+    y: 647.0
+    z: 0.552
+  }
+  size {
+    x: 38.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "head_find_bb"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1118.0
+    y: 610.0
+    z: 0.552
+  }
+  size {
+    x: 1.0
+    y: 38.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "head_find_bl"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1155.0
+    y: 610.0
+    z: 0.552
+  }
+  size {
+    x: 1.0
+    y: 38.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "head_find_br"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1137.0
+    y: 629.0
+    z: 0.56
+  }
+  size {
+    x: 34.0
+    y: 16.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\342\214\225"
+  font: "jb_mono_bold_14"
+  id: "head_find_text"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1162.0
+    y: 610.0
+    z: 0.55
+  }
+  size {
+    x: 38.0
+    y: 38.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "head_menu_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.6
+}
+nodes {
+  position {
+    x: 1162.0
+    y: 610.0
+    z: 0.552
+  }
+  size {
+    x: 38.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "head_menu_bt"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1162.0
+    y: 647.0
+    z: 0.552
+  }
+  size {
+    x: 38.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "head_menu_bb"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1162.0
+    y: 610.0
+    z: 0.552
+  }
+  size {
+    x: 1.0
+    y: 38.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "head_menu_bl"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1199.0
+    y: 610.0
+    z: 0.552
+  }
+  size {
+    x: 1.0
+    y: 38.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "head_menu_br"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1181.0
+    y: 629.0
+    z: 0.56
+  }
+  size {
+    x: 34.0
+    y: 16.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\342\213\256"
+  font: "jb_mono_bold_14"
+  id: "head_menu_text"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 528.0
+    y: 592.0
+    z: 0.55
+  }
+  size {
+    x: 668.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "chat_header_line"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.15
+}
+nodes {
+  position {
+    x: 540.0
+    y: 528.0
+    z: 0.55
+  }
+  size {
+    x: 500.0
+    y: 46.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "bub1_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 540.0
+    y: 528.0
+    z: 0.552
+  }
+  size {
+    x: 500.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub1_bt"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 540.0
+    y: 573.0
+    z: 0.552
+  }
+  size {
+    x: 500.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub1_bb"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 540.0
+    y: 528.0
+    z: 0.552
+  }
+  size {
+    x: 1.0
+    y: 46.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub1_bl"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 1039.0
+    y: 528.0
+    z: 0.552
+  }
+  size {
+    x: 1.0
+    y: 46.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub1_br"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 554.0
+    y: 557.0
+    z: 0.56
+  }
+  size {
+    x: 470.0
+    y: 14.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\321\201\320\276\320\276\320\261\321\211\320\265\320\275\320\270\320\265"
+  font: "jb_mono_12"
+  id: "bub1_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1028.0
+    y: 538.0
+    z: 0.56
+  }
+  size {
+    x: 120.0
+    y: 10.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "07:10"
+  font: "jb_mono_10"
+  id: "bub1_stamp"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.8
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 540.0
+    y: 470.0
+    z: 0.55
+  }
+  size {
+    x: 500.0
+    y: 46.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "bub2_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 540.0
+    y: 470.0
+    z: 0.552
+  }
+  size {
+    x: 500.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub2_bt"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 540.0
+    y: 515.0
+    z: 0.552
+  }
+  size {
+    x: 500.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub2_bb"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 540.0
+    y: 470.0
+    z: 0.552
+  }
+  size {
+    x: 1.0
+    y: 46.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub2_bl"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 1039.0
+    y: 470.0
+    z: 0.552
+  }
+  size {
+    x: 1.0
+    y: 46.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub2_br"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 554.0
+    y: 499.0
+    z: 0.56
+  }
+  size {
+    x: 470.0
+    y: 14.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\321\201\320\276\320\276\320\261\321\211\320\265\320\275\320\270\320\265"
+  font: "jb_mono_12"
+  id: "bub2_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1028.0
+    y: 480.0
+    z: 0.56
+  }
+  size {
+    x: 120.0
+    y: 10.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "07:10"
+  font: "jb_mono_10"
+  id: "bub2_stamp"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.8
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 540.0
+    y: 412.0
+    z: 0.55
+  }
+  size {
+    x: 500.0
+    y: 46.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "bub3_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 540.0
+    y: 412.0
+    z: 0.552
+  }
+  size {
+    x: 500.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub3_bt"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 540.0
+    y: 457.0
+    z: 0.552
+  }
+  size {
+    x: 500.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub3_bb"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 540.0
+    y: 412.0
+    z: 0.552
+  }
+  size {
+    x: 1.0
+    y: 46.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub3_bl"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 1039.0
+    y: 412.0
+    z: 0.552
+  }
+  size {
+    x: 1.0
+    y: 46.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub3_br"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 554.0
+    y: 441.0
+    z: 0.56
+  }
+  size {
+    x: 470.0
+    y: 14.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\321\201\320\276\320\276\320\261\321\211\320\265\320\275\320\270\320\265"
+  font: "jb_mono_12"
+  id: "bub3_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1028.0
+    y: 422.0
+    z: 0.56
+  }
+  size {
+    x: 120.0
+    y: 10.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "07:10"
+  font: "jb_mono_10"
+  id: "bub3_stamp"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.8
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 540.0
+    y: 354.0
+    z: 0.55
+  }
+  size {
+    x: 500.0
+    y: 46.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "bub4_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 540.0
+    y: 354.0
+    z: 0.552
+  }
+  size {
+    x: 500.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub4_bt"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 540.0
+    y: 399.0
+    z: 0.552
+  }
+  size {
+    x: 500.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub4_bb"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 540.0
+    y: 354.0
+    z: 0.552
+  }
+  size {
+    x: 1.0
+    y: 46.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub4_bl"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 1039.0
+    y: 354.0
+    z: 0.552
+  }
+  size {
+    x: 1.0
+    y: 46.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub4_br"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 554.0
+    y: 383.0
+    z: 0.56
+  }
+  size {
+    x: 470.0
+    y: 14.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\321\201\320\276\320\276\320\261\321\211\320\265\320\275\320\270\320\265"
+  font: "jb_mono_12"
+  id: "bub4_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1028.0
+    y: 364.0
+    z: 0.56
+  }
+  size {
+    x: 120.0
+    y: 10.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "07:10"
+  font: "jb_mono_10"
+  id: "bub4_stamp"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.8
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 540.0
+    y: 296.0
+    z: 0.55
+  }
+  size {
+    x: 500.0
+    y: 46.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "bub5_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 540.0
+    y: 296.0
+    z: 0.552
+  }
+  size {
+    x: 500.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub5_bt"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 540.0
+    y: 341.0
+    z: 0.552
+  }
+  size {
+    x: 500.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub5_bb"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 540.0
+    y: 296.0
+    z: 0.552
+  }
+  size {
+    x: 1.0
+    y: 46.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub5_bl"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 1039.0
+    y: 296.0
+    z: 0.552
+  }
+  size {
+    x: 1.0
+    y: 46.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub5_br"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 554.0
+    y: 325.0
+    z: 0.56
+  }
+  size {
+    x: 470.0
+    y: 14.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\321\201\320\276\320\276\320\261\321\211\320\265\320\275\320\270\320\265"
+  font: "jb_mono_12"
+  id: "bub5_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1028.0
+    y: 306.0
+    z: 0.56
+  }
+  size {
+    x: 120.0
+    y: 10.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "07:10"
+  font: "jb_mono_10"
+  id: "bub5_stamp"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.8
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 540.0
+    y: 238.0
+    z: 0.55
+  }
+  size {
+    x: 500.0
+    y: 46.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "bub6_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 540.0
+    y: 238.0
+    z: 0.552
+  }
+  size {
+    x: 500.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub6_bt"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 540.0
+    y: 283.0
+    z: 0.552
+  }
+  size {
+    x: 500.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub6_bb"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 540.0
+    y: 238.0
+    z: 0.552
+  }
+  size {
+    x: 1.0
+    y: 46.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub6_bl"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 1039.0
+    y: 238.0
+    z: 0.552
+  }
+  size {
+    x: 1.0
+    y: 46.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub6_br"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 554.0
+    y: 267.0
+    z: 0.56
+  }
+  size {
+    x: 470.0
+    y: 14.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\321\201\320\276\320\276\320\261\321\211\320\265\320\275\320\270\320\265"
+  font: "jb_mono_12"
+  id: "bub6_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1028.0
+    y: 248.0
+    z: 0.56
+  }
+  size {
+    x: 120.0
+    y: 10.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "07:10"
+  font: "jb_mono_10"
+  id: "bub6_stamp"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.8
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 540.0
+    y: 180.0
+    z: 0.55
+  }
+  size {
+    x: 500.0
+    y: 46.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "bub7_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 540.0
+    y: 180.0
+    z: 0.552
+  }
+  size {
+    x: 500.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub7_bt"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 540.0
+    y: 225.0
+    z: 0.552
+  }
+  size {
+    x: 500.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub7_bb"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 540.0
+    y: 180.0
+    z: 0.552
+  }
+  size {
+    x: 1.0
+    y: 46.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub7_bl"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 1039.0
+    y: 180.0
+    z: 0.552
+  }
+  size {
+    x: 1.0
+    y: 46.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub7_br"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 554.0
+    y: 209.0
+    z: 0.56
+  }
+  size {
+    x: 470.0
+    y: 14.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\321\201\320\276\320\276\320\261\321\211\320\265\320\275\320\270\320\265"
+  font: "jb_mono_12"
+  id: "bub7_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1028.0
+    y: 190.0
+    z: 0.56
+  }
+  size {
+    x: 120.0
+    y: 10.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "07:10"
+  font: "jb_mono_10"
+  id: "bub7_stamp"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.8
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 540.0
+    y: 122.0
+    z: 0.55
+  }
+  size {
+    x: 500.0
+    y: 46.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "bub8_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 540.0
+    y: 122.0
+    z: 0.552
+  }
+  size {
+    x: 500.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub8_bt"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 540.0
+    y: 167.0
+    z: 0.552
+  }
+  size {
+    x: 500.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub8_bb"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 540.0
+    y: 122.0
+    z: 0.552
+  }
+  size {
+    x: 1.0
+    y: 46.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub8_bl"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 1039.0
+    y: 122.0
+    z: 0.552
+  }
+  size {
+    x: 1.0
+    y: 46.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bub8_br"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.25
+}
+nodes {
+  position {
+    x: 554.0
+    y: 151.0
+    z: 0.56
+  }
+  size {
+    x: 470.0
+    y: 14.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\321\201\320\276\320\276\320\261\321\211\320\265\320\275\320\270\320\265"
+  font: "jb_mono_12"
+  id: "bub8_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1028.0
+    y: 132.0
+    z: 0.56
+  }
+  size {
+    x: 120.0
+    y: 10.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "07:10"
+  font: "jb_mono_10"
+  id: "bub8_stamp"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.8
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1196.0
+    y: 148.0
+    z: 0.55
+  }
+  size {
+    x: 4.0
+    y: 430.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "chat_scrollbar_track"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.08
+}
+nodes {
+  position {
+    x: 1196.0
+    y: 472.0
+    z: 0.56
+  }
+  size {
+    x: 4.0
+    y: 104.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "chat_scrollbar_thumb"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 528.0
+    y: 136.0
+    z: 0.55
+  }
+  size {
+    x: 668.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "input_line"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.15
+}
+nodes {
+  position {
+    x: 528.0
+    y: 82.0
+    z: 0.55
+  }
+  size {
+    x: 44.0
+    y: 44.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "attach_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.6
+}
+nodes {
+  position {
+    x: 528.0
+    y: 82.0
+    z: 0.552
+  }
+  size {
+    x: 44.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "attach_bt"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.2
+}
+nodes {
+  position {
+    x: 528.0
+    y: 125.0
+    z: 0.552
+  }
+  size {
+    x: 44.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "attach_bb"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.2
+}
+nodes {
+  position {
+    x: 528.0
+    y: 82.0
+    z: 0.552
+  }
+  size {
+    x: 1.0
+    y: 44.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "attach_bl"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.2
+}
+nodes {
+  position {
+    x: 571.0
+    y: 82.0
+    z: 0.552
+  }
+  size {
+    x: 1.0
+    y: 44.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "attach_br"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.2
+}
+nodes {
+  position {
+    x: 550.0
+    y: 104.0
+    z: 0.56
+  }
+  size {
+    x: 40.0
+    y: 16.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\357\274\213"
+  font: "jb_mono_bold_14"
+  id: "attach_text"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 582.0
+    y: 82.0
+    z: 0.55
+  }
+  size {
+    x: 456.0
+    y: 44.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "input_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.6
+}
+nodes {
+  position {
+    x: 582.0
+    y: 82.0
+    z: 0.552
+  }
+  size {
+    x: 456.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "input_bt"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.3
+}
+nodes {
+  position {
+    x: 582.0
+    y: 125.0
+    z: 0.552
+  }
+  size {
+    x: 456.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "input_bb"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.3
+}
+nodes {
+  position {
+    x: 582.0
+    y: 82.0
+    z: 0.552
+  }
+  size {
+    x: 1.0
+    y: 44.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "input_bl"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.3
+}
+nodes {
+  position {
+    x: 1037.0
+    y: 82.0
+    z: 0.552
+  }
+  size {
+    x: 1.0
+    y: 44.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "input_br"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.3
+}
+nodes {
+  position {
+    x: 600.0
+    y: 104.0
+    z: 0.56
+  }
+  size {
+    x: 420.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\320\275\320\260\320\277\320\270\321\201\320\260\321\202\321\214 \321\201\320\276\320\276\320\261\321\211\320\265\320\275\320\270\320\265..."
+  font: "jb_mono_12"
+  id: "input_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.65
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1050.0
+    y: 82.0
+    z: 0.55
+  }
+  size {
+    x: 146.0
+    y: 44.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "send_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+}
+nodes {
+  position {
+    x: 1050.0
+    y: 82.0
+    z: 0.552
+  }
+  size {
+    x: 146.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "send_bt"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+}
+nodes {
+  position {
+    x: 1050.0
+    y: 125.0
+    z: 0.552
+  }
+  size {
+    x: 146.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "send_bb"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+}
+nodes {
+  position {
+    x: 1050.0
+    y: 82.0
+    z: 0.552
+  }
+  size {
+    x: 1.0
+    y: 44.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "send_bl"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+}
+nodes {
+  position {
+    x: 1195.0
+    y: 82.0
+    z: 0.552
+  }
+  size {
+    x: 1.0
+    y: 44.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "send_br"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+}
+nodes {
+  position {
+    x: 1123.0
+    y: 104.0
+    z: 0.56
+  }
+  size {
+    x: 130.0
+    y: 14.0
+  }
+  color {
+    x: 0.02
+    y: 0.012
+    z: 0.1
+  }
+  type: TYPE_TEXT
+  text: "\320\236\320\242\320\237\320\240. \342\226\266"
+  font: "jb_mono_bold_14"
+  id: "send_text"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 528.0
+    y: 66.0
+    z: 0.55
+  }
+  size {
+    x: 668.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "chat_footer_line"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.12
+}
+nodes {
+  position {
+    x: 528.0
+    y: 48.0
+    z: 0.56
+  }
+  size {
+    x: 380.0
+    y: 10.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "e2e: \320\262\320\272\320\273\321\216\321\207\320\265\320\275\320\276 \302\267 \320\272\320\260\320\275\320\260\320\273: messenger.local"
+  font: "jb_mono_10"
+  id: "chat_footer_left"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.76
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1196.0
+    y: 48.0
+    z: 0.56
+  }
+  size {
+    x: 240.0
+    y: 10.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\320\267\320\260\320\263\320\273\321\203\321\210\320\272\320\260 runtime API"
+  font: "jb_mono_10"
+  id: "chat_footer_right"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "chat_root"
+  alpha: 0.76
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+material: "/builtins/materials/gui.material"

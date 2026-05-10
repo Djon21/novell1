@@ -95,9 +95,28 @@ local CHAT_META = {
 
 local EMPTY_CHAT_ID = nil
 
-local function get_node(id)
+local function try_get_node(id)
     local ok, n = pcall(gui.get_node, id)
     if ok then return n end
+    return nil
+end
+
+-- phone_messenger.gui разбит на 2 template'а: messenger_list/* и
+-- messenger_chat/*. В gui_script продолжаем обращаться к нодам по
+-- "коротким" id ("chat1_bg", "bub1_text"), а wrapper подставляет нужный
+-- префикс. Аналог phone_sms.gui_script.
+local function get_node(id)
+    local n = try_get_node(id)
+    if n then return n end
+
+    if id:sub(1, 15) ~= "messenger_list/" then
+        n = try_get_node("messenger_list/" .. id)
+        if n then return n end
+    end
+    if id:sub(1, 15) ~= "messenger_chat/" then
+        n = try_get_node("messenger_chat/" .. id)
+        if n then return n end
+    end
     return nil
 end
 
