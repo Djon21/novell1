@@ -4,6 +4,8 @@
 --
 -- Источник правды — CSS-токены из mobile-макетов AVOS (Downloads/AVOS (14)/*_mobile.html).
 
+local log = require "main.scripts.log"
+
 local M = {}
 
 -- ============================================================
@@ -129,7 +131,7 @@ M.ROLES = {
 function M.apply(node, role_name)
     local role = M.ROLES[role_name]
     if not role then
-        print("[v2_theme] unknown role: " .. tostring(role_name))
+        log.warn("v2_theme", "unknown role: " .. tostring(role_name))
         return
     end
     gui.set_font(node, role.font)

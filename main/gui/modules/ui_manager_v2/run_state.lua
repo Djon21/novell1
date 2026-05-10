@@ -1,4 +1,5 @@
 local gs = require "main.scripts.game_state"
+local log = require "main.scripts.log"
 local sm = require "main.scripts.save_manager"
 local scene_controller = require "main.scripts.scene_controller"
 
@@ -62,7 +63,7 @@ end
 function M.load_main_story_bytes()
     local ok, bytes = pcall(sys.load_resource, "/main/story/chapter_01.json")
     if not ok or not bytes then
-        print("[ui_manager_v2] ERROR: chapter_01.json not found")
+        log.error("ui_manager", "chapter_01.json not found")
         return nil
     end
     return bytes

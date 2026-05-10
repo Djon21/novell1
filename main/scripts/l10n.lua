@@ -14,6 +14,8 @@
 --   M.f(key, ...)        — то же + string.format
 --   M.set_lang(lang)     — принудительно сменить язык (для тестов / debug)
 
+local log = require "main.scripts.log"
+
 local M = {
     lang     = "ru",
     strings  = {},
@@ -27,12 +29,12 @@ local function load_lang(lang)
     local path = "/main/data/strings/" .. lang .. ".json"
     local data = sys.load_resource(path)
     if not data then
-        print("[l10n] WARN: cannot load " .. path)
+        log.warn("l10n", "cannot load " .. path)
         return nil
     end
     local ok, parsed = pcall(json.decode, data)
     if not ok or type(parsed) ~= "table" then
-        print("[l10n] WARN: cannot parse " .. path .. ": " .. tostring(parsed))
+        log.warn("l10n", "cannot parse " .. path .. ": " .. tostring(parsed))
         return nil
     end
     return parsed
@@ -61,12 +63,12 @@ function M.init()
     M.initialized = true
     local ru_count = 0
     for _ in pairs(M.strings.ru or {}) do ru_count = ru_count + 1 end
-    print("[l10n] init lang=" .. tostring(M.lang) .. " ru_keys=" .. tostring(ru_count))
+    log.info("l10n", "init lang=" .. tostring(M.lang) .. " ru_keys=" .. tostring(ru_count))
 end
 
 function M.set_lang(lang)
     if not SUPPORTED[lang] then
-        print("[l10n] WARN: unsupported lang " .. tostring(lang))
+        log.warn("l10n", "unsupported lang " .. tostring(lang))
         return
     end
     M.lang = lang

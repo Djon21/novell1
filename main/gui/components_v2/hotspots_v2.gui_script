@@ -4,12 +4,9 @@
 local scene_controller = require "main.scripts.scene_controller"
 local hotspot_editor = require "main.scripts.hotspot_editor"
 local ui_state = require "main.scripts.ui_state"
+local log = require "main.scripts.log"
 
--- Debug-логи: переключить в true для диагностики кликов/инициализации
-local DEBUG_LOG = false
-local function dbg(...)
-    if DEBUG_LOG then print(...) end
-end
+local function dbg(...) log.debug("hotspots", ...) end
 
 -- Состояние hotspots
 local M = {}

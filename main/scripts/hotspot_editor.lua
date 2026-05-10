@@ -16,6 +16,7 @@
 -- копируй строки из консоли через P.
 
 local scene_controller = require "main.scripts.scene_controller"
+local log = require "main.scripts.log"
 
 local M = {}
 
@@ -92,7 +93,7 @@ end
 
 function M.toggle()
     if not scene_controller.is_active() then
-        print("[hotspot_editor] scene_controller не активен — нечего редактировать")
+        log.info("hotspot_editor", "scene_controller не активен — нечего редактировать")
         return
     end
     _active = not _active
@@ -106,7 +107,7 @@ function M.toggle()
             :format(tostring(scene_controller.get_current_scene_id()), describe()))
         print("  F1/Esc=выйти  Tab=след  стрелки=двигать  []=ширина  ;'=высота  P=напечатать  Shift=×4")
     else
-        print("[hotspot_editor] ВЫКЛЮЧЕН.")
+        log.info("hotspot_editor", "ВЫКЛЮЧЕН.")
     end
     scene_controller.render_now()
 end
@@ -114,7 +115,7 @@ end
 function M.exit_mode()
     if not _active then return end
     _active = false
-    print("[hotspot_editor] ВЫКЛЮЧЕН.")
+    log.info("hotspot_editor", "ВЫКЛЮЧЕН.")
     scene_controller.render_now()
 end
 

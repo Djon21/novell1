@@ -3,6 +3,8 @@
 -- Press F2 to toggle debugger overlay
 -- Shows all enabled GUI nodes with their properties
 
+local log = require "main.scripts.log"
+
 local M = {}
 
 M.enabled = false
@@ -82,11 +84,11 @@ end
 function M.toggle()
     M.enabled = not M.enabled
     if M.enabled then
-        print("[gui_debugger] ENABLED - Press F2 to disable")
+        log.info("gui_debugger", "ENABLED - Press F2 to disable")
         M.collect_all_nodes()
         M.print_nodes()
     else
-        print("[gui_debugger] DISABLED")
+        log.info("gui_debugger", "DISABLED")
     end
 end
 

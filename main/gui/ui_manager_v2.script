@@ -50,15 +50,15 @@ local overlay_flow = require "main.gui.modules.ui_manager_v2.overlay_flow"
 local message_flow = require "main.gui.modules.ui_manager_v2.message_flow"
 local lifecycle = require "main.gui.modules.ui_manager_v2.lifecycle"
 local dialogue_orchestrator = require "main.gui.modules.ui_manager_v2.dialogue_orchestrator"
+local log = require "main.scripts.log"
 
 local ok_scenes, scenes = pcall(require, "main.scripts.scenes")
 if not ok_scenes then scenes = nil end
 
--- Debug-логи: переключить в true для диагностики mode/overlay переходов
-local DEBUG_LOG = false
-local function dbg(...)
-    if DEBUG_LOG then print(...) end
-end
+-- dbg — алиас на log.debug для системы "ui_manager". Включить через
+-- log.set_level("debug") — глобально или log.set_filter({"ui_manager"})
+-- для одной этой системы.
+local function dbg(...) log.debug("ui_manager", ...) end
 
 local M = {}
 local handle_dialogue_update

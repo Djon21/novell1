@@ -14,10 +14,10 @@
 
 local gs      = require "main.scripts.game_state"
 local U       = require "main.gui.modules.gui_utils"
+local log     = require "main.scripts.log"
 local UI_MGR  = "#ui_manager_v2"
 
-local DEBUG_LOG = false
-local function dbg(...) if DEBUG_LOG then print(...) end end
+local function dbg(...) log.debug("phone_root", ...) end
 
 -- Карта app-id → component-id (все на одном game object-е → "#" prefix)
 local APP_COMPONENT = {

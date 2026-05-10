@@ -6,6 +6,8 @@
 --
 -- Сериализация — snapshot для save_manager.set_game_state(state).
 
+local log = require "main.scripts.log"
+
 local M = {}
 
 M.MAX_INVENTORY_SLOTS = 12
@@ -128,7 +130,7 @@ local function sanitize_inventory(src)
     for _, id in ipairs(src) do
         if id ~= nil and id ~= "" and not seen[id] then
             if #out >= M.MAX_INVENTORY_SLOTS then
-                print("[game_state] inventory overflow on deserialize, dropping:", tostring(id))
+                log.warn("game_state", "inventory overflow on deserialize, dropping:", tostring(id))
             else
                 table.insert(out, id)
                 seen[id] = true
@@ -518,7 +520,7 @@ function M.add_item(id)
         return false
     end
     if #_inventory >= M.MAX_INVENTORY_SLOTS then
-        print("[game_state] inventory is full, cannot add:", tostring(id))
+        log.warn("game_state", "inventory is full, cannot add:", tostring(id))
         return false
     end
     table.insert(_inventory, id)

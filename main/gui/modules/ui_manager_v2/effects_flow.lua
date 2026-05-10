@@ -1,4 +1,5 @@
 local dm = require "main.scripts.dialogue_manager_ink"
+local log = require "main.scripts.log"
 
 local M = {}
 
@@ -15,7 +16,7 @@ local function dispatch(effect, ctx)
                 gain = tonumber(effect.gain) or 0.6,
             })
         else
-            print("[ui_manager_v2] WARNING: unknown sfx effect:", tostring(effect.name))
+            log.warn("ui_manager", "unknown sfx effect:", tostring(effect.name))
         end
     elseif effect.type == "shake" then
         msg.post(ctx.components.effects, "play_shake", {

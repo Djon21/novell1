@@ -1,4 +1,5 @@
 local meta = require "main.scripts.meta_state"
+local log = require "main.scripts.log"
 local scene_controller = require "main.scripts.scene_controller"
 local ui_state = require "main.scripts.ui_state"
 local gs = require "main.scripts.game_state"
@@ -31,7 +32,7 @@ function M.apply_dialogue_bg(self, components, bg_name)
 
     local atlas, animation_id = resolve_visual(self, bg_name)
     if not atlas then
-        print("[ui_manager_v2] WARNING: no dedicated atlas for bg:", bg_name,
+        log.warn("ui_manager", "no dedicated atlas for bg:", bg_name,
               "- register it in ui_manager_v2.script + main/images/backgrounds/")
         return
     end

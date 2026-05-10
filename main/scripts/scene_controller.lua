@@ -12,6 +12,7 @@
 local scenes   = require "main.scripts.scenes"
 local gs       = require "main.scripts.game_state"
 local ui_state = require "main.scripts.ui_state"
+local log = require "main.scripts.log"
 
 local M = {}
 
@@ -81,7 +82,7 @@ local function resolve_bg(scene_data)
     if type(bg) == "function" then
         local ok, value = pcall(bg, gs)
         if not ok then
-            print("[scene_controller] bg function failed:", tostring(value))
+            log.info("scene", "bg function failed:", tostring(value))
             return nil
         end
         return value
@@ -116,10 +117,10 @@ function M.enter(scene_id, opts)
     opts = opts or {}
     local data = scenes.get(scene_id)
     if not data then
-        print("[scene_controller] не известна сцена: " .. tostring(scene_id))
+        log.info("scene", "не известна сцена: " .. tostring(scene_id))
         return
     end
-    print("[scene_controller] enter scene:", scene_id)
+    log.info("scene", "enter scene:", scene_id)
     _active     = true
     _scene_id   = scene_id
     _scene_data = data
@@ -133,9 +134,9 @@ function M.enter(scene_id, opts)
         local oe = data.on_enter
         local ok = true
         if oe.condition then ok = oe.condition(gs) end
-        print("[scene_controller] on_enter check:", oe.knot, "condition:", ok)
+        log.info("scene", "on_enter check:", oe.knot, "condition:", ok)
         if ok and oe.knot then
-            print("[scene_controller] triggering on_enter knot:", oe.knot)
+            log.info("scene", "triggering on_enter knot:", oe.knot)
             local scene_bg = resolve_bg(data)
             M.exit()
             if _ui and _ui.request_ink_knot then
@@ -146,7 +147,7 @@ function M.enter(scene_id, opts)
     end
 
     render()
-    print("[scene_controller] render() called, objects rendered")
+    log.info("scene", "render() called, objects rendered")
 end
 
 function M.exit()
@@ -255,7 +256,7 @@ function M.on_hotspot_click(index)
             _ui.request_ink_knot(action.knot, scene_bg)
         end
     else
-        print("[scene_controller] неизвестный action.type: " .. tostring(action.type))
+        log.info("scene", "неизвестный action.type: " .. tostring(action.type))
     end
     return true
 end

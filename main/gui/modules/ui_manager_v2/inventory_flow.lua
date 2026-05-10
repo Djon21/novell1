@@ -1,4 +1,5 @@
 local dm = require "main.scripts.dialogue_manager_ink"
+local log = require "main.scripts.log"
 local catalog = require "main.scripts.items_catalog"
 local ui_state = require "main.scripts.ui_state"
 
@@ -64,7 +65,7 @@ local function fire_knot(item_id, verb, scene_id, target_id, target_kind, ctx)
     local item = catalog.get_runtime and catalog.get_runtime(item_id) or catalog.get(item_id)
     local knot_name = resolve_knot(item_id, verb, scene_id, target_id)
     if not knot_name then
-        print("[inventory_flow] WARNING: no inventory knot for", item_id, verb, scene_id, target_id or "")
+        log.warn("inventory", "no inventory knot for", item_id, verb, scene_id, target_id or "")
         return false
     end
 
@@ -87,14 +88,14 @@ function M.handle_verb(item_id, verb, extra, ctx)
         return
     end
     if not ENABLED_VERBS[verb] then
-        print("[inventory_flow] inventory verb is not enabled in MVP:", tostring(verb))
+        log.info("inventory", "inventory verb is not enabled in MVP:", tostring(verb))
         return
     end
 
     local scene_id = ctx.current_scene_id()
     local scene_data = ctx.current_scene_data()
     if not scene_id or scene_id == "" then
-        print("[inventory_flow] inventory verbs are only supported from exploration in MVP")
+        log.info("inventory", "inventory verbs are only supported from exploration in MVP")
         ctx.close_inventory()
         return
     end

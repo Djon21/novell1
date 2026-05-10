@@ -18,6 +18,7 @@
 -- «КРИТИЧНО: require из зависимостей — ТОЛЬКО top-level».
 
 local ink = require "ink.story"
+local log = require "main.scripts.log"
 local sm  = require "main.scripts.save_manager"
 local meta = require "main.scripts.meta_state"
 
@@ -802,14 +803,14 @@ local function build_story_knot_index(json_bytes)
     local index = {}
     local ok, decoded = pcall(json.decode, json_bytes)
     if not ok or type(decoded) ~= "table" then
-        print("[DM-Ink] WARNING: failed to decode story JSON for knot index")
+        log.warn("dm", "failed to decode story JSON for knot index")
         return index
     end
 
     local root = decoded.root
     local knot_map = type(root) == "table" and root[3] or nil
     if type(knot_map) ~= "table" then
-        print("[DM-Ink] WARNING: story JSON has no top-level knot map")
+        log.warn("dm", "story JSON has no top-level knot map")
         return index
     end
 
@@ -901,7 +902,7 @@ function M.load_saved(json_bytes)
     if not ok then
         suppress_effects = false
         restore_scene_transitions = false
-        print("[DM-Ink] restore failed: " .. tostring(paragraphs) .. " — начинаем сначала")
+        log.info("dm", "restore failed: " .. tostring(paragraphs) .. " — начинаем сначала")
         M.init(json_bytes)
         return
     end
@@ -1068,18 +1069,18 @@ function M.advance()
 
         if et and et.type == "false" then
             side_knot_active = false
-            print("[DM-Ink] END: false ending '" .. tostring(et.id) .. "'")
+            log.info("dm", "END: false ending '" .. tostring(et.id) .. "'")
             msg.post("#ui_manager_v2", "false_ending", { id = et.id })
         elseif et and et.type == "true" then
             side_knot_active = false
-            print("[DM-Ink] END: true ending")
+            log.info("dm", "END: true ending")
             msg.post("#ui_manager_v2", "true_ending")
         elseif side_knot_active then
             side_knot_active = false
-            print("[DM-Ink] END: side knot DONE, chapter finish suppressed")
+            log.info("dm", "END: side knot DONE, chapter finish suppressed")
         else
             -- Нет тега — обычный конец (итерация 001 или неразмеченный knot)
-            print("[DM-Ink] END: chapter_finished")
+            log.info("dm", "END: chapter_finished")
             msg.post("#ui_manager_v2", "chapter_finished")
         end
     end
@@ -1093,7 +1094,7 @@ function M.choose(option_index)
     if not ans then return false end
 
     -- Лог выбранного варианта — удобно отслеживать ветвления в консоли.
-    print("[DM-Ink] выбор: [" .. option_index .. "] " .. tostring(ans.text))
+    log.info("dm", "выбор: [" .. option_index .. "] " .. tostring(ans.text))
 
     -- Единственный источник правды — тело выбора в .ink (например:
     --   * [Мила]

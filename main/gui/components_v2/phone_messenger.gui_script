@@ -5,6 +5,7 @@
 -- This GUI keeps only presentation metadata for known chat ids.
 
 local gs = require "main.scripts.game_state"
+local log = require "main.scripts.log"
 local dm = require "main.scripts.dialogue_manager_ink"
 local drag_scroll = require "main.gui.modules.drag_scroll"
 
@@ -774,7 +775,7 @@ local function handle_phone_input(self, action_id, action)
             end
             return true
         elseif is_inside_rect("attach_bg", x, y) then
-            print("[phone_messenger] TODO attach runtime hook")
+            log.debug("messenger", "TODO attach runtime hook")
             return true
         end
     end

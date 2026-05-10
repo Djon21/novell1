@@ -1,4 +1,5 @@
 local dm = require "main.scripts.dialogue_manager_ink"
+local log = require "main.scripts.log"
 local gs = require "main.scripts.game_state"
 local sm = require "main.scripts.save_manager"
 local meta = require "main.scripts.meta_state"
@@ -19,14 +20,14 @@ local function handle_menu(ctx, message_id, message, sender)
         sm.load()
         meta.init()
         if not sm.has_save() then
-            print("[ui_manager_v2] continue_game ignored: no run-state save")
+            log.info("ui_manager", "continue_game ignored: no run-state save")
             ctx.refresh_menu_state()
             return true
         end
 
         local ok, bytes = pcall(sys.load_resource, "/main/story/chapter_01.json")
         if not ok or not bytes then
-            print("[ui_manager_v2] ERROR: chapter_01.json not found")
+            log.error("ui_manager", "chapter_01.json not found")
             return true
         end
         ctx.prepare_run_restore()
@@ -72,14 +73,14 @@ local function handle_ending(ctx, message_id, message, sender)
     elseif message_id == MSG.false_ending then
         local iter = meta.get("iteration_number", 1) or 1
         if iter < 2 then
-            print("[ui_manager_v2] iter 001: ignoring false_ending -> chapter_finished")
+            log.info("ui_manager", "iter 001: ignoring false_ending -> chapter_finished")
             finish_chapter_and_return_to_menu(ctx, "[ui_manager_v2] iter 001 forced-finish -> iteration")
             return true
         end
 
         local id = message and message.id or "unknown"
         local is_new = meta.record_false_ending(id)
-        print("[ui_manager_v2] false_ending '" .. id .. "' new=" .. tostring(is_new)
+        log.info("ui_manager", "false_ending '" .. id .. "' new=" .. tostring(is_new)
               .. " awareness=" .. tostring(meta.get("loop_awareness"))
               .. " false_count=" .. tostring(meta.get_false_endings_count()))
 
@@ -88,13 +89,13 @@ local function handle_ending(ctx, message_id, message, sender)
     elseif message_id == MSG.true_ending then
         local iter = meta.get("iteration_number", 1) or 1
         if iter < 2 then
-            print("[ui_manager_v2] iter 001: ignoring true_ending -> chapter_finished")
+            log.info("ui_manager", "iter 001: ignoring true_ending -> chapter_finished")
             finish_chapter_and_return_to_menu(ctx, nil)
             return true
         end
 
         if not meta.is_true_ending_unlocked() then
-            print("[ui_manager_v2] WARNING: true_ending reached but not unlocked - treating as false_ending 'early_true'")
+            log.warn("ui_manager", "true_ending reached but not unlocked - treating as false_ending 'early_true'")
             meta.record_false_ending("early_true")
             reset_run_and_return_to_menu(ctx)
             return true

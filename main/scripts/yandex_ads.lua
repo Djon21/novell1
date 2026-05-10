@@ -1,4 +1,5 @@
 local yagames = require "yagames.yagames"
+local log = require "main.scripts.log"
 
 local M = {
     ready = false,
@@ -21,7 +22,7 @@ end
 local function set_master_gain(value)
     local ok, err = pcall(sound.set_group_gain, "master", value)
     if not ok then
-        print("[yandex_ads] sound gain failed:", err)
+        log.info("yandex_ads", "sound gain failed:", err)
     end
 end
 
@@ -68,20 +69,20 @@ function M.init(callback)
 
     timer.delay(INIT_TIMEOUT_SEC, false, function()
         if completed then return end
-        print("[yandex_ads] Yandex SDK init timeout")
+        log.info("yandex_ads", "Yandex SDK init timeout")
         complete("timeout")
     end)
 
     local ok, call_err = call_yagames("init", function(_, err)
         if err then
-            print("[yandex_ads] Yandex SDK init error:", err)
+            log.info("yandex_ads", "Yandex SDK init error:", err)
         else
-            print("[yandex_ads] Yandex SDK ready")
+            log.info("yandex_ads", "Yandex SDK ready")
         end
         complete(err)
     end)
     if not ok then
-        print("[yandex_ads] Yandex SDK init call failed:", call_err)
+        log.info("yandex_ads", "Yandex SDK init call failed:", call_err)
         complete(call_err)
     end
 end
@@ -92,7 +93,7 @@ local function wait_until_ready(on_ready, on_done)
         return
     end
 
-    print("[yandex_ads] ad delayed: Yandex SDK is not ready yet")
+    log.info("yandex_ads", "ad delayed: Yandex SDK is not ready yet")
     M.init(function(err)
         if err then
             call_later(on_done, false)
@@ -104,7 +105,7 @@ end
 
 function M.show_fullscreen(on_done)
     if M.ad_open then
-        print("[yandex_ads] fullscreen skipped: another ad is already open")
+        log.info("yandex_ads", "fullscreen skipped: another ad is already open")
         call_later(on_done, false)
         return
     end
@@ -126,7 +127,7 @@ function M.show_fullscreen(on_done)
         timer.delay(FULLSCREEN_TIMEOUT_SEC, false, function()
             if finished then return end
             if not opened then
-                print("[yandex_ads] fullscreen timeout")
+                log.info("yandex_ads", "fullscreen timeout")
                 finish(false)
             end
         end)
@@ -135,26 +136,26 @@ function M.show_fullscreen(on_done)
             open = function()
                 opened = true
                 set_master_gain(0)
-                print("[yandex_ads] fullscreen opened")
+                log.info("yandex_ads", "fullscreen opened")
             end,
 
             close = function(_, was_shown)
-                print("[yandex_ads] fullscreen closed, was_shown=", tostring(was_shown))
+                log.info("yandex_ads", "fullscreen closed, was_shown=", tostring(was_shown))
                 finish(was_shown == true)
             end,
 
             offline = function()
-                print("[yandex_ads] fullscreen offline")
+                log.info("yandex_ads", "fullscreen offline")
                 finish(false)
             end,
 
             error = function(_, err)
-                print("[yandex_ads] fullscreen error:", err)
+                log.info("yandex_ads", "fullscreen error:", err)
                 finish(false)
             end,
         })
         if not ok then
-            print("[yandex_ads] fullscreen call failed:", err)
+            log.info("yandex_ads", "fullscreen call failed:", err)
             finish(false)
         end
     end, on_done)
@@ -162,7 +163,7 @@ end
 
 function M.show_rewarded(on_reward, on_done)
     if M.ad_open then
-        print("[yandex_ads] rewarded skipped: another ad is already open")
+        log.info("yandex_ads", "rewarded skipped: another ad is already open")
         call_later(on_done, false)
         return
     end
@@ -185,7 +186,7 @@ function M.show_rewarded(on_reward, on_done)
         timer.delay(FULLSCREEN_TIMEOUT_SEC, false, function()
             if finished then return end
             if not opened then
-                print("[yandex_ads] rewarded timeout")
+                log.info("yandex_ads", "rewarded timeout")
                 finish()
             end
         end)
@@ -194,27 +195,27 @@ function M.show_rewarded(on_reward, on_done)
             open = function()
                 opened = true
                 set_master_gain(0)
-                print("[yandex_ads] rewarded opened")
+                log.info("yandex_ads", "rewarded opened")
             end,
 
             rewarded = function()
                 rewarded = true
-                print("[yandex_ads] rewarded counted")
+                log.info("yandex_ads", "rewarded counted")
                 if on_reward then on_reward() end
             end,
 
             close = function()
-                print("[yandex_ads] rewarded closed, rewarded=", tostring(rewarded))
+                log.info("yandex_ads", "rewarded closed, rewarded=", tostring(rewarded))
                 finish()
             end,
 
             error = function(_, err)
-                print("[yandex_ads] rewarded error:", err)
+                log.info("yandex_ads", "rewarded error:", err)
                 finish()
             end,
         })
         if not ok then
-            print("[yandex_ads] rewarded call failed:", err)
+            log.info("yandex_ads", "rewarded call failed:", err)
             finish()
         end
     end, on_done)

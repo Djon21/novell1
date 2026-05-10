@@ -11,6 +11,7 @@
 --   - input/SEND in thread calls the old sms_open_contact flow through ui_manager.
 
 local drag_scroll = require "main.gui.modules.drag_scroll"
+local log = require "main.scripts.log"
 
 local UI_MGR = "#ui_manager_v2"
 local PHONE_ROOT = "#phone_v2"
@@ -19,8 +20,7 @@ local MAX_ROWS = 7
 local MAX_BUBBLES = 8
 local LIST_SCROLL_STEP_PX = 64
 local LIST_DRAG_THRESHOLD_PX = 8
-local DEBUG_LOG = false
-local function dbg(...) if DEBUG_LOG then print(...) end end
+local function dbg(...) log.debug("phone_sms", ...) end
 
 -- Right-side SMS application panel. These numbers match the current phone
 -- overlay slot from phone_sms.gui and are intentionally NOT the raw HTML
