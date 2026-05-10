@@ -7,6 +7,7 @@
 --   - call rows support wheel/touch-drag scrolling when list is longer than visible slots.
 
 local gs = require "main.scripts.game_state"
+local drag_scroll = require "main.gui.modules.drag_scroll"
 
 local MAX_CALL_SLOTS = 8
 local SCROLL_STEP_ROWS = 3
@@ -413,52 +414,21 @@ local function handle_phone_input(self, action_id, action)
 
     if action_id ~= hash("touch") then return false end
 
-    local x = tonumber(action.x) or 0
-    local y = tonumber(action.y) or 0
-
-    if action.pressed then
-        self.call_dragging = inside_list(x, y)
-        self.call_drag_start_y = y
-        self.call_drag_last_y = y
-        self.call_drag_accum = 0
-        return self.call_dragging
-    end
-
-    if self.call_dragging and not action.released then
-        local dy = y - (tonumber(self.call_drag_last_y) or y)
-        self.call_drag_last_y = y
-        self.call_drag_accum = (tonumber(self.call_drag_accum) or 0) + dy
-
-        if math.abs(y - (tonumber(self.call_drag_start_y) or y)) >= DRAG_THRESHOLD_PX then
-            while self.call_drag_accum >= DRAG_STEP_PX do
-                scroll_calls(self, -1)
-                self.call_drag_accum = self.call_drag_accum - DRAG_STEP_PX
-            end
-            while self.call_drag_accum <= -DRAG_STEP_PX do
-                scroll_calls(self, 1)
-                self.call_drag_accum = self.call_drag_accum + DRAG_STEP_PX
-            end
-        end
-        return true
-    end
-
-    if action.released then
-        local was_dragging = self.call_dragging
-        self.call_dragging = false
-        self.call_drag_accum = 0
-        return was_dragging == true
-    end
-
-    return false
+    local result = drag_scroll.handle(self.call_drag, action)
+    return result == "swallow" or result == "tap"
 end
 
 function init(self)
     self.visible = false
     self.call_offset = 0
-    self.call_dragging = false
-    self.call_drag_start_y = 0
-    self.call_drag_last_y = 0
-    self.call_drag_accum = 0
+    self.call_drag = drag_scroll.new({
+        step_px      = DRAG_STEP_PX,
+        threshold_px = DRAG_THRESHOLD_PX,
+        owner        = self,
+        invert       = true,  -- drag вверх → старые звонки
+        is_inside    = inside_list,
+        on_step      = function(owner, delta) scroll_calls(owner, delta) end,
+    })
     set_nodes_enabled(false)
 end
 
@@ -470,14 +440,14 @@ function on_message(self, message_id, message, sender)
     if message_id == hash("open_app") then
         self.visible = true
         self.call_offset = 0
-        self.call_dragging = false
+        drag_scroll.reset(self.call_drag)
         set_nodes_enabled(true)
         if gs.mark_all_calls_seen then gs.mark_all_calls_seen() end
         refresh(self)
 
     elseif message_id == hash("close_app") then
         self.visible = false
-        self.call_dragging = false
+        drag_scroll.reset(self.call_drag)
         set_nodes_enabled(false)
 
     elseif message_id == hash("refresh_app") then

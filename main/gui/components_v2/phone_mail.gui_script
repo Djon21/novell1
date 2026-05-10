@@ -7,6 +7,7 @@
 --   - mail rows support wheel/touch-drag scrolling when list is longer than visible slots.
 
 local gs = require "main.scripts.game_state"
+local drag_scroll = require "main.gui.modules.drag_scroll"
 
 local MAX_MAIL_SLOTS = 7
 local SCROLL_STEP_ROWS = 3
@@ -485,53 +486,23 @@ local function handle_phone_input(self, action_id, action)
 
     if action_id ~= hash("touch") then return false end
 
-    local x = tonumber(action.x) or 0
-    local y = tonumber(action.y) or 0
-
-    if action.pressed then
-        self.mail_dragging = inside_list(x, y)
-        self.mail_drag_start_y = y
-        self.mail_drag_last_y = y
-        self.mail_drag_accum = 0
-        return self.mail_dragging
-    end
-
-    if self.mail_dragging and not action.released then
-        local dy = y - (tonumber(self.mail_drag_last_y) or y)
-        self.mail_drag_last_y = y
-        self.mail_drag_accum = (tonumber(self.mail_drag_accum) or 0) + dy
-
-        if math.abs(y - (tonumber(self.mail_drag_start_y) or y)) >= DRAG_THRESHOLD_PX then
-            -- Dragging up should move list down to older rows.
-            while self.mail_drag_accum >= DRAG_STEP_PX do
-                scroll_mail(self, -1)
-                self.mail_drag_accum = self.mail_drag_accum - DRAG_STEP_PX
-            end
-            while self.mail_drag_accum <= -DRAG_STEP_PX do
-                scroll_mail(self, 1)
-                self.mail_drag_accum = self.mail_drag_accum + DRAG_STEP_PX
-            end
-        end
-        return true
-    end
-
-    if action.released then
-        local was_dragging = self.mail_dragging
-        self.mail_dragging = false
-        self.mail_drag_accum = 0
-        return was_dragging == true
-    end
-
-    return false
+    -- Drag-scroll через общий модуль drag_scroll. Направление инвертировано:
+    -- drag вверх → старые письма снизу → scroll_mail(-1).
+    local result = drag_scroll.handle(self.mail_drag, action)
+    return result == "swallow" or result == "tap"
 end
 
 function init(self)
     self.visible = false
     self.mail_offset = 0
-    self.mail_dragging = false
-    self.mail_drag_start_y = 0
-    self.mail_drag_last_y = 0
-    self.mail_drag_accum = 0
+    self.mail_drag = drag_scroll.new({
+        step_px      = DRAG_STEP_PX,
+        threshold_px = DRAG_THRESHOLD_PX,
+        owner        = self,
+        invert       = true,  -- drag вверх → старые письма
+        is_inside    = inside_list,
+        on_step      = function(owner, delta) scroll_mail(owner, delta) end,
+    })
     set_nodes_enabled(false)
 end
 
@@ -548,7 +519,7 @@ function on_message(self, message_id, message, sender)
 
     elseif message_id == hash("close_app") then
         self.visible = false
-        self.mail_dragging = false
+        drag_scroll.reset(self.mail_drag)
         set_nodes_enabled(false)
 
     elseif message_id == hash("refresh_app") then
