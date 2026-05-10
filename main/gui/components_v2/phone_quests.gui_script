@@ -5,6 +5,7 @@
 
 local gs = require "main.scripts.game_state"
 local quests_catalog = require "main.scripts.quests"
+local drag_scroll = require "main.gui.modules.drag_scroll"
 
 local COLORS = {
     dark      = vmath.vector4(0.031, 0.024, 0.094, 1),
@@ -446,17 +447,14 @@ local function point_in_node(id, x, y)
     return point_in(x, y, rx, ry, rw, rh)
 end
 
-local function handle_press(self, x, y)
+local function handle_tab_press(self, x, y)
+    -- Тапы по табам срабатывают на pressed (мгновенный отклик). Drag-scroll
+    -- ниже их не задевает: is_inside ограничен областью списка.
     if point_in_node("qtab_active_bg", x, y) then
         set_filter(self, "active")
         return true
     elseif point_in_node("qtab_done_bg", x, y) then
         set_filter(self, "done")
-        return true
-    end
-    if point_in(x, y, CONTENT_X, LIST_BOTTOM, ROW_W, LIST_H) then
-        self.dragging = true
-        self.drag_y = y
         return true
     end
     return false
@@ -476,7 +474,15 @@ function init(self)
     self.visible = false
     self.filter = "active"
     self.offset = 0
-    self.dragging = false
+    self.list_drag = drag_scroll.new({
+        step_px      = 32,
+        threshold_px = 8,
+        owner        = self,
+        is_inside    = function(x, y)
+            return point_in(x, y, CONTENT_X, LIST_BOTTOM, ROW_W, LIST_H)
+        end,
+        on_step      = function(owner, delta) scroll_by(owner, delta) end,
+    })
     apply_static_layout()
     set_nodes_enabled(false)
 end
@@ -489,7 +495,7 @@ function on_message(self, message_id, message, sender)
         refresh(self)
     elseif message_id == hash("close_app") then
         self.visible = false
-        self.dragging = false
+        drag_scroll.reset(self.list_drag)
         set_nodes_enabled(false)
     elseif message_id == hash("refresh_app") then
         if self.visible then refresh(self) end
@@ -499,17 +505,16 @@ function on_message(self, message_id, message, sender)
         local x = message and message.x or 0
         local y = message and message.y or 0
         if aid == hash("touch") then
-            if message.pressed then
-                handle_press(self, x, y)
-            elseif message.released then
-                self.dragging = false
-            elseif self.dragging then
-                local dy = y - (self.drag_y or y)
-                if math.abs(dy) > 32 then
-                    if dy < 0 then scroll_by(self, 1) else scroll_by(self, -1) end
-                    self.drag_y = y
-                end
+            -- 1) Табы фильтра — мгновенно на pressed.
+            if message.pressed and handle_tab_press(self, x, y) then
+                return
             end
+            -- 2) Drag-scroll списка через общий модуль drag_scroll.
+            drag_scroll.handle(self.list_drag, {
+                x = x, y = y,
+                pressed = message.pressed,
+                released = message.released,
+            })
         elseif aid == hash("wheel_down") then
             scroll_by(self, 1)
         elseif aid == hash("wheel_up") then
