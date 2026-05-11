@@ -63,7 +63,11 @@
 
 ## Archive
 
-`archive/legacy-ui/` — история старого `novel_ui` и GUI-миграции.
-`archive/legacy_runtime/` — отключённый старый runtime.
+`docs/archive/` — несколько legacy-документов (`HOW_TO_WRITE_INK_old.md`,
+`HUB_SYSTEM_old.md`) сохранены как исторический snapshot. **НЕ источники правды**.
 
-**НЕ источники правды**, использовать только как историю.
+Папка `archive/legacy-ui/` была удалена в мае 2026 — миграция со старого
+`novel_ui` на `v2` давно завершена, документы потеряли актуальность. Полная
+история всё ещё в git history.
+
+`archive/legacy_runtime/` (вне docs/) — отключённый старый runtime, не fallback.

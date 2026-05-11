@@ -135,5 +135,5 @@ phone-UI идут через BASIS Universal — компрессия в дес�
 
 Не использовать как рабочие инструкции:
 
-- `docs/archive/legacy-ui/*`
+- `docs/archive/*_old.md` (старые snapshots отдельных гайдов)
 - `archive/legacy_runtime/`
