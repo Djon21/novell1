@@ -1,8 +1,9 @@
 # CODEX_CONTEXT
 
-Актуально на `2026-04-29` (обновлено), ветка `AVOS_S`.
+Актуально на `2026-05-11`, ветка `AVOS_S`.
 
-Этот файл — быстрый вход в проект для новой Codex-сессии.
+Быстрый вход в проект для новой AI-сессии. Поглотил `CONTINUE_HERE.md` и
+`DOCUMENTATION_AUDIT.md` — был дубль на дубле.
 
 ## Читать Первым
 
@@ -14,63 +15,125 @@
 
 ## Активный Runtime
 
-- `game.project -> /main/main_v2.collectionc`
-- главный UI: `main/gui/ui_manager_v2.script`
+- `game.project → /main/main_v2.collectionc`
+- главный UI: `main/gui/ui_manager_v2.script` (~730 строк, остальное в flow-модулях)
 - GUI: `main/gui/components_v2/`
 - сценарий: `main/story/chapter_01.ink` + `main/story/chapters/*.ink`
 - compiled story: `main/story/chapter_01.json`
-- старый runtime лежит в `archive/legacy_runtime/` и не участвует в игре
+- legacy runtime: `archive/legacy_runtime/` — НЕ участвует в игре
 
 ## Основные Модули
 
-- `dialogue_manager_ink.lua` — `defold-ink`, команды из тегов, one-shot эффекты, jump в knot'ы.
-- `game_state.lua` — состояние текущего прохождения: flags, inventory, quests, SMS, notes, mail, calls, clues, camera, terminal, current_scene.
-- `save_manager.lua` — run-save для `Continue`: Ink history + `game_state`.
-- `meta_state.lua` — долгий meta-state петли: iteration, awareness, false endings, выбор персонажа.
+### Scripts (`main/scripts/`)
+
+- `dialogue_manager_ink.lua` — `defold-ink` wrapper, команды из тегов, one-shot
+  эффекты, jump в knot'ы.
+- `game_state.lua` — фасад state-системы. Реальная логика в `main/scripts/state/`.
 - `scene_controller.lua` — exploration-сцены, hotspots и scene objects.
-- `ui_manager_v2.script` — центральный Defold-адаптер: компоненты, lifecycle, context wrappers, `handle_dialogue_update`.
-- `main/gui/modules/ui_manager_v2/*.lua` — flow-модули UI: messages, overlays, dialogue, inventory, phone, map, scenes, backgrounds, effects, run-state.
+- `save_manager.lua` — run-save для `Continue`: Ink history + `game_state`.
+- `meta_state.lua` — долгий meta-state петли: iteration, awareness, false endings,
+  выбор персонажа.
+- `log.lua` — единый logger с уровнями (error/warn/info/debug/trace) +
+  фильтрация по системам.
+- `items_catalog.lua`, `quests.lua`, `phone_contacts.lua` — каталоги.
+- `hotspot_editor.lua` — F1-редактор для координат hotspot'ов.
+
+### State channels (`main/scripts/state/`)
+
+Каналы phone-данных, выделенные из game_state.lua:
+
+- `sms.lua` / `messenger.lua` / `mail.lua` / `calls.lua` / `clues.lua` /
+  `notes.lua` — каждый держит свой state, normalize, serialize/deserialize.
+- `_helpers.lua` — общие clone, format_clock, make_seq, make_default_time.
+
+### Scenes (`main/data/scenes/`)
+
+`scenes.lua` стал фасадом ~60 строк. Реальные сцены:
+
+- `_shared.lua` — STYLE_* + apartment_bg/office_bg helper'ы.
+- `apartment.lua`, `apartment_monday.lua`, `apartment_tuesday.lua` — квартира.
+- `office.lua`, `locations.lua` — офис, кафе/парк/магазин/бар/обзор/архив.
+
+### UI orchestrator (`main/gui/ui_manager_v2.script` + `main/gui/modules/ui_manager_v2/`)
+
+- `message_flow.lua` — маршрутизация `on_message`
+- `overlay_flow.lua` — menu/exploration/dialogue/choice/inventory/map overlays
+- `dialogue_flow.lua` — AUTO/SKIP/backlog
+- `dialogue_orchestrator.lua` — `handle_dialogue_update` (рендер по типу ноды)
+- `dm_commands.lua` — выполнение команд из Ink-тегов
+- `lifecycle.lua` — start_new_run / reset_iteration / refresh_menu
+- `inventory_flow.lua` — verbs предметов и armed-use
+- `phone_flow.lua` — открыть/закрыть телефон и приложения
+- `map_flow.lua` — map pins, route/save/share, hub-mode
+- `scene_flow.lua` — адаптер `scene_controller -> hotspots_v2`
+- `background_flow.lua` — fullscreen backgrounds и location label
+- `effects_flow.lua` — one-shot effects
+- `run_state.lua` — persist/restore/reset run-state
+
+Подробная карта: `docs/reference/UI_MANAGER_V2_ARCHITECTURE.md` и `UI_MANAGER_V2_MODULES.md`.
+
+### Shared GUI utilities (`main/gui/modules/`)
+
+- `messages.lua` — реестр всех msg.post сообщений (MSG.dialogue_next и т.п.).
+- `drag_scroll.lua` — общий drag-to-scroll для phone-app'ов.
+- `gui_utils.lua` — общие GUI-хелперы (get_node, set_text, set_color, clamp_text,
+  flash_node).
+- `gui_animations.lua` — pulsing/bobbing/easing.
+- `v2_theme.lua` — централизованные цвета и шрифты.
 
 ## Что Важно Помнить
 
-- После правок `.ink` всегда запускать `tools\compile_ink.bat`.
-- Runtime всё ещё грузит один `/main/story/chapter_01.json`.
-- `main/story/chapters/New/` больше не рабочая ветка. Новый сюжет должен быть уже перенесён в активные `chapters/*.ink`.
-- `Continue` чувствителен к структуре compiled Ink JSON. После крупных правок сценария лучше проверять и новый старт, и загрузку.
-- Телефон data-driven: контент добавляется через Ink-теги и хранится в `game_state`.
-- Карта для нового контента вызывается из Ink через `# phone:map`: открывается телефон и приложение `phone_map.gui`, игрок выбирает POI.
-- `nav_buttons_v2` удалён из активной схемы. Навигация идёт через hotspots и карту.
-- `open_achievements` остаётся скрытым пунктом будущего этапа.
+- После правок `.ink` запускать `tools\compile_ink.bat`.
+- Runtime грузит один `/main/story/chapter_01.json`.
+- `main/story/chapters/New/` больше НЕ рабочая ветка.
+- `Continue` чувствителен к структуре compiled Ink JSON. После крупных правок
+  сценария проверять и новый старт, и загрузку.
+- Телефон data-driven: контент через Ink-теги, хранится в `game_state` / `state/*`.
+- Карта для нового контента вызывается из Ink через `# phone:map`.
+- `nav_buttons_v2` удалён — навигация через hotspots и карту.
+- `open_achievements` — скрытый пункт будущего этапа.
 - Папку `skills/` не трогаем.
-- Если нужно менять обработку `msg.post("#ui_manager_v2", "...")`, сначала смотри `main/gui/modules/ui_manager_v2/message_flow.lua`.
-- Если нужно понять, где теперь лежит логика `ui_manager_v2`, смотри `docs/reference/UI_MANAGER_V2_MODULES.md`.
+- Если нужно менять обработку `msg.post("#ui_manager_v2", "...")`, сначала
+  смотри `main/gui/modules/ui_manager_v2/message_flow.lua`.
+- Если нужно понять «где теперь лежит логика foo» — смотри
+  `docs/reference/UI_MANAGER_V2_ARCHITECTURE.md` (таблица «Хочу понять X → смотри Y»).
 
-## Недавние Закрытые Хвосты
+## Свежие Архитектурные Изменения (май 2026)
 
-- подключены one-shot эффекты `# sfx`, `# shake`, `# pulse`
-- loop labels больше не сидят на старом `#017`
-- добавлены недостающие квесты `make_coffee` и `find_phone`
-- телефон переведён на data-driven model
-- инвентарь получил Ink-действия `use/inspect/read`
-- `city_map_hub` объединён с `map_v2` через hub-режим
-- phone apps `mail/call/clues/camera/terminal` получили storage/API
-- debug-log spam сокращён через `DEBUG_LOG = false`
-- исправлен баг с повторным диалогом спальни: `# set_flag:` не парсился в `apply_tags` → флаг `bedroom_morning_seen` никогда не ставился → вечный цикл
-- исправлен `# add_item:` и `# remove_item:` — не распознавались в `apply_tags`
-- добавлена система SMS-ответов: `# sms:reply:contact:text`, авто-флаги `sms_<contact>_replied` и `sms_<contact>_read`
-- SMS-переписка стала кликабельной: тап на строку → `sms_open_contact` → Ink-knot `sms_thread_<contact>`
-- написан knot `sms_thread_mila`, квест `reply_mila` полностью закрыт через ink
-- создана `docs/guides/HOW_TO_WRITE_INK.md` — практическая инструкция по ink для проекта
-- бэклог реплик вынесен в `main/scripts/dialogue_backlog.lua` (shared-модуль): убрана пересылка таблицы через `msg.post`, упиравшаяся в `sys.max_message_data_size`
-- починена кодировка `AVOS_S_Story_Bible.md` и `AVOS_S_World_Doc_v2.md` (был UTF-8 → CP1251 → UTF-8 mojibake)
-- `ui_manager_v2.script` разрезан на flow-модули в `main/gui/modules/ui_manager_v2/`; `on_message` вынесен в `message_flow.lua`
+- **logger module** — единый `main/scripts/log.lua` заменил 78 разрозненных
+  `print("[X]")` + 5 локальных DEBUG_LOG-флагов.
+- **messages.lua** — реестр сообщений, демо-миграция в `message_flow.lua`.
+- **gui_utils.lua** — общие GUI-хелперы, мигрировано 5 phone-apps.
+- **drag_scroll.lua** — извлечён в общий модуль из 6 phone-apps (~330 строк
+  дубликата убрано).
+- **ui_manager_v2.script**: 875 → 730 строк. Lifecycle и dialogue_orchestrator
+  вынесены в flow-модули.
+- **scenes.lua**: 1263 → 60 строк (фасад), сцены разбиты по локациям в
+  `main/data/scenes/`.
+- **game_state.lua**: 1249 → 580 строк (фасад). Channel-домены (sms/messenger/
+  mail/calls/clues/notes) вынесены в `main/scripts/state/`.
+- **phone_messenger.gui**: 5259 → 1470 строк через Defold templates (по образцу
+  phone_sms).
+
+## Texture Profiles + BASIS Universal
+
+`main/textures.texture_profiles` подключён в `game.project`. Backgrounds и
+phone-UI идут через BASIS Universal — компрессия в десятки раз для HTML5 build.
 
 ## Где Лежит Контент
 
 - Ink: `main/story/chapter_01.ink`, `main/story/chapters/*.ink`
-- сцены: `main/scripts/scenes.lua`
+- сцены: `main/data/scenes/*.lua` (фасад: `main/scripts/scenes.lua`)
 - предметы: `main/scripts/items_catalog.lua`
 - квесты: `main/scripts/quests.lua`
 - фоны: `main/images/backgrounds/*.atlas`
 - телефонные GUI: `main/gui/components_v2/phone_*.gui`
 - телефонные ассеты: `main/images/phone/`
+- локализация (заготовлена): `main/data/strings/{ru,en,tr}.json`
+
+## Архив
+
+Не использовать как рабочие инструкции:
+
+- `docs/archive/legacy-ui/*`
+- `archive/legacy_runtime/`

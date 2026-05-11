@@ -1,42 +1,69 @@
 # Документация AVOS_S
 
-Документация разделена на рабочие reference-файлы, практические гайды и архив миграции.
+Документация разделена на:
+- **reference** — архитектурные документы, source-of-truth для структуры.
+- **guides** — практические how-to и описания систем.
+- **archive** — история миграции, не источник правды.
 
 ## Читать Первым
 
 1. `../README.md`
-2. `reference/CODEX_CONTEXT.md`
-3. `reference/ARCHITECTURE.md`
-4. `docs/guides/HOW_TO_WRITE_INK.md`
-5. `reference/TODO.md`
+2. `reference/CODEX_CONTEXT.md` — быстрый вход для AI/новой сессии
+3. `reference/ARCHITECTURE.md` — runtime + основные модули
+4. `guides/HOW_TO_WRITE_INK.md` — ink-теги, паттерны
+5. `reference/TODO.md` — живые хвосты
 
 ## Reference
 
-- `reference/ARCHITECTURE.md` — текущий runtime
-- `reference/UI_MANAGER_V2_MODULES.md` — как сейчас разрезан `ui_manager_v2.script`
-- `reference/CODEX_CONTEXT.md` — краткая карта проекта для новых сессий
-- `reference/CONTINUE_HERE.md` — где продолжать работу
-- `reference/LOOP_SYSTEM.md` — итерации и meta-state
-- `reference/INVENTORY_SYSTEM.md` — инвентарь и Ink-действия предметов
-- `reference/TESTING_CHECKLIST.md` — ручной QA перед релизом
-- `reference/L10N_PLAN.md` — план локализации
-- `reference/ROADMAP.md` — крупные направления
-- `reference/TODO.md` — живые хвосты
+### Точка входа / контекст
+- `CODEX_CONTEXT.md` — быстрый вход для новой сессии (поглотил CONTINUE_HERE)
+- `ARCHITECTURE.md` — runtime, модули, ink pipeline, ограничения
+- `ROADMAP.md` — крупные направления
+- `TODO.md` — живые хвосты задач
+
+### Системы
+- `LOOP_SYSTEM.md` — итерации, meta-state, false/true endings
+- `INVENTORY_SYSTEM.md` — инвентарь и ink-действия предметов
+- `GAME_STATE.md` — фасад state-системы, channel-модули в `main/scripts/state/`
+- `UI_MANAGER_V2_ARCHITECTURE.md` — архитектурный обзор + потоки + чек-листы
+- `UI_MANAGER_V2_MODULES.md` — справочник flow-модулей
+- `L10N_PLAN.md` — план локализации RU/EN/TR
+- `TESTING_CHECKLIST.md` — ручной QA перед релизом
+
+### Дизайн / нарратив
+- `AVOS_S_Story_Bible.md`
+- `AVOS_S_World_Doc_v3_color_palette.md`
 
 ## Guides
 
-- `guides/HOW_TO_ADD_SCENES.md`
-- `guides/HOW_TO_ADD_PORTRAITS.md`
-- `guides/HOW_TO_ADD_SOUNDS.md`
-- `guides/GRAPHICS_GUIDE.md`
-- `guides/DESIGN_PORT_RULES.md`
-- `guides/F1_HOTSPOT_EDITOR.md`
-- `guides/PHONE_SYSTEM.md`
-- `guides/HUB_SYSTEM.md`
-- `guides/YANDEX_SDK_AND_ADS.md`
+### Работа с контентом
+- `HOW_TO_WRITE_INK.md` — все ink-теги и паттерны
+- `HOW_TO_ADD_SCENES.md` — фоны, сцены, hotspot'ы
+- `HOW_TO_ADD_PORTRAITS.md` — портреты персонажей
+- `HOW_TO_ADD_SOUNDS.md` — sfx + музыка
+
+### Подсистемы UI
+- `PHONE_SYSTEM.md` — phone overlay, apps, ink-теги телефона
+- `HUB_SYSTEM.md` — хабы и переходы
+- `HOTSPOT_VISUALS.md` — стили hotspot'ов
+- `F1_HOTSPOT_EDITOR.md` — dev-редактор координат
+- `DIALOGUE_BACKLOG.md` — backlog реплик и выборов
+- `UI_COLOR_SYSTEM_RECOMMENDATIONS.md`
+
+### Дизайн / графика
+- `GRAPHICS_GUIDE.md`
+- `DESIGN_PORT_RULES.md`
+
+### Технические модули
+- `LOGGING.md` — единый logger (log.lua)
+- `MESSAGES.md` — реестр msg-сообщений (messages.lua)
+- `GUI_UTILS.md` — общие GUI-хелперы
+- `DRAG_SCROLL.md` — drag-to-scroll для phone-app'ов
+- `YANDEX_SDK_AND_ADS.md` — Yandex Games SDK и реклама
 
 ## Archive
 
-`archive/legacy-ui/` хранит историю старого `novel_ui` и GUI-миграции. Эти файлы не являются source of truth для текущего `v2` runtime.
+`archive/legacy-ui/` — история старого `novel_ui` и GUI-миграции.
+`archive/legacy_runtime/` — отключённый старый runtime.
 
-`archive/legacy_runtime/` содержит отключённый старый runtime. Его не используем как fallback.
+**НЕ источники правды**, использовать только как историю.

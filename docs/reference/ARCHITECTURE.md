@@ -1,6 +1,6 @@
 # Архитектура AVOS_S
 
-Актуально на `2026-05-07`.
+Актуально на `2026-05-11`.
 
 ## Entry Point
 
@@ -167,14 +167,16 @@ Git Bash / Linux:
 
 ## UI Manager V2 Modules
 
-`main/gui/ui_manager_v2.script` сейчас работает как центральный Defold-адаптер, а не как монолит всей логики.
+`main/gui/ui_manager_v2.script` (~730 строк) сейчас работает как центральный Defold-адаптер, а не как монолит всей логики.
 
 Основная логика вынесена в `main/gui/modules/ui_manager_v2/`:
 
 - `message_flow.lua` — маршрутизация `on_message`
 - `overlay_flow.lua` — menu/exploration/dialogue/choice/inventory/map overlays
 - `dialogue_flow.lua` — `AUTO`, `SKIP`, backlog
+- `dialogue_orchestrator.lua` — `handle_dialogue_update` (рендер ноды по типу)
 - `dm_commands.lua` — выполнение команд из Ink-тегов
+- `lifecycle.lua` — start_new_run / reset_iteration / refresh_menu
 - `inventory_flow.lua` — verbs предметов и armed-use
 - `phone_flow.lua` — открыть/закрыть телефон и приложения
 - `map_flow.lua` — map pins, route/save/share, hub-mode
@@ -183,7 +185,41 @@ Git Bash / Linux:
 - `effects_flow.lua` — one-shot effects
 - `run_state.lua` — persist/restore/reset run-state
 
-Подробная карта: `docs/reference/UI_MANAGER_V2_MODULES.md`.
+Подробная карта: `docs/reference/UI_MANAGER_V2_ARCHITECTURE.md` (обзор + потоки)
+и `UI_MANAGER_V2_MODULES.md` (справочник модулей).
+
+## Shared Utilities
+
+В `main/gui/modules/`:
+
+- `messages.lua` — реестр всех `hash("...")` сообщений (`MSG.dialogue_next` и т.п.).
+- `gui_utils.lua` — общие GUI-хелперы (get_node, set_text, set_color, clamp_text, flash_node).
+- `drag_scroll.lua` — drag-to-scroll state-машина для phone-app'ов.
+- `gui_animations.lua` — pulsing/bobbing/easing анимации.
+- `v2_theme.lua` — централизованные цвета и шрифты.
+
+В `main/scripts/`:
+
+- `log.lua` — единый logger (error/warn/info/debug/trace) с фильтрами по системам.
+
+## State Channels
+
+`game_state.lua` — фасад. Каналы телефона выделены в `main/scripts/state/`:
+
+- `sms.lua` / `messenger.lua` / `mail.lua` / `calls.lua` / `clues.lua` / `notes.lua`
+- `_helpers.lua` — общие clone, format_clock, make_seq.
+
+См. `docs/reference/GAME_STATE.md` для полного API.
+
+## Scenes
+
+`main/scripts/scenes.lua` — фасад (~60 строк). Сцены в `main/data/scenes/`:
+
+- `_shared.lua` — STYLE_* + apartment_bg/office_bg
+- `apartment.lua`, `apartment_monday.lua`, `apartment_tuesday.lua`
+- `office.lua`, `locations.lua`
+
+См. `docs/guides/HOW_TO_ADD_SCENES.md`.
 
 ## Ограничения
 
