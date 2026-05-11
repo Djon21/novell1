@@ -37,13 +37,13 @@
 
 ## Типичный workflow
 
-1. Добавьте сцену или hotspot в `main/scripts/scenes.lua`
+1. Добавьте сцену или hotspot в `main/data/scenes/<location>.lua` (apartment / office / locations и т.п.)
 2. Запустите игру
 3. Войдите в нужную exploration-сцену
 4. Нажмите `F1`
 5. Подгоните положение / размер
 6. Нажмите `P`
-7. Скопируйте строки из консоли обратно в `scenes.lua`
+7. Скопируйте строки из консоли обратно в соответствующий location-файл
 
 ## Важно
 

@@ -14,7 +14,7 @@
 
 | Что меняем | Файл |
 |---|---|
-| Список хотспотов, координаты, подписи, иконки, стили | `main/scripts/scenes.lua` |
+| Список хотспотов, координаты, подписи, иконки, стили | `main/data/scenes/<location>.lua` (фасад: `main/scripts/scenes.lua`) |
 | Передача хотспотов из сцены в UI-адаптер | `main/scripts/scene_controller.lua` |
 | Whitelist полей хотспота для отправки в GUI component | `main/gui/modules/ui_manager_v2/scene_flow.lua` |
 | Логика отрисовки хотспотов | `main/gui/components_v2/hotspots_v2.gui_script` |
@@ -442,7 +442,7 @@ end
 
 ## 10. Как добавить новый хотспот
 
-1. Найди нужную сцену в `main/scripts/scenes.lua`.
+1. Найди нужную сцену в `main/data/scenes/<location>.lua` (apartment / office / locations и т.п.).
 2. Внутри `hotspots = { ... }` добавь объект:
 
 ```lua
@@ -551,7 +551,7 @@ max_hotspots = function() return 7 end
 
 ### Что можно менять в GUI руками
 
-Обычно руками в `hotspots_v2.gui` трогать почти ничего не надо. Большинство настроек лучше задавать в `main/scripts/scenes.lua` прямо в хотспоте:
+Обычно руками в `hotspots_v2.gui` трогать почти ничего не надо. Большинство настроек лучше задавать в `main/data/scenes/<location>.lua` прямо в хотспоте:
 
 ```lua
 icon = "phone"

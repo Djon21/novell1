@@ -36,7 +36,7 @@
 | `main/gui/components_v2/phone_v2_root.gui_script` | заголовки приложений в лаунчере |
 | `main/gui/components_v2/phone_sms.gui_script` | «Сообщения», «Сообщение отправлено» (если есть) |
 | `main/gui/components_v2/phone_quests.gui_script` | «ЗАДАЧИ» |
-| `main/gui/components_v2/phone_notes.gui_script`, `phone_mail`, `phone_call`, `phone_cam`, `phone_term` | заголовки и пустые состояния |
+| `main/gui/components_v2/phone_notes.gui_script`, `phone_mail`, `phone_call`, `phone_messenger`, `phone_term` | заголовки и пустые состояния |
 | `main/gui/components_v2/inventory_v2.gui_script` | подписи verbs (use/inspect/read) |
 | `main/gui/modules/ui_manager_v2/map_flow.lua` + `main/scripts/l10n.lua` | ключи подписей пинов карты (`map_home`, `map_work`, …) |
 | `main/scripts/scenes.lua` | поле `label` у каждого hotspot'а |

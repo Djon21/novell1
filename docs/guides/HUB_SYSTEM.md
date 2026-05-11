@@ -1,6 +1,8 @@
 # Система хабов и POI-карты
 
-Хаб — это point-and-click сцена из `main/scripts/scenes.lua`, в которую игрок попадает через карту телефона. Карта сама не содержит сценарий: она только выбирает `scene_id`, закрывает телефон и передаёт управление `scene_controller`.
+Хаб — это point-and-click сцена, в которую игрок попадает через карту телефона. Карта сама не содержит сценарий: она только выбирает `scene_id`, закрывает телефон и передаёт управление `scene_controller`.
+
+Сцены живут в `main/data/scenes/<location>.lua` (apartment, office, locations и т.п.); `main/scripts/scenes.lua` — тонкий фасад который агрегирует location-файлы. См. `HOW_TO_ADD_SCENES.md` для деталей.
 
 ---
 
@@ -20,7 +22,7 @@ Source of truth:
 | Что | Где |
 |---|---|
 | POI на карте и связанный `scene_id` | `phone_map.gui_script`, таблица `POI_SCENES` |
-| Сцена, фон, hotspot'ы, `on_enter`, `npc` | `main/scripts/scenes.lua` |
+| Сцена, фон, hotspot'ы, `on_enter`, `npc` | `main/data/scenes/<location>.lua` (через фасад `main/scripts/scenes.lua`) |
 | Ink-реакции hotspot'ов | `main/story/chapters/*.ink` |
 | Правила добавления фонов | `HOW_TO_ADD_SCENES.md` |
 | Внешний вид hotspot'ов | `HOTSPOT_VISUALS.md` |
