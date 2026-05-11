@@ -61,13 +61,11 @@
 - `DRAG_SCROLL.md` — drag-to-scroll для phone-app'ов
 - `YANDEX_SDK_AND_ADS.md` — Yandex Games SDK и реклама
 
-## Archive
+## Legacy
 
-`docs/archive/` — несколько legacy-документов (`HOW_TO_WRITE_INK_old.md`,
-`HUB_SYSTEM_old.md`) сохранены как исторический snapshot. **НЕ источники правды**.
+Папка `docs/archive/` удалена в мае 2026 — legacy-snapshot'ы (`legacy-ui/*`,
+`HOW_TO_WRITE_INK_old.md`, `HUB_SYSTEM_old.md`) больше не актуальны. Полная
+история всё ещё доступна через `git log` / `git show`.
 
-Папка `archive/legacy-ui/` была удалена в мае 2026 — миграция со старого
-`novel_ui` на `v2` давно завершена, документы потеряли актуальность. Полная
-история всё ещё в git history.
-
-`archive/legacy_runtime/` (вне docs/) — отключённый старый runtime, не fallback.
+`archive/legacy_runtime/` (в корне проекта, не в docs/) — отключённый старый
+runtime, **не fallback**.

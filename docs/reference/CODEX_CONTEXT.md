@@ -133,7 +133,9 @@ phone-UI идут через BASIS Universal — компрессия в дес�
 
 ## Архив
 
+`docs/archive/` удалена в мае 2026 — миграционные доки больше не нужны,
+история в git.
+
 Не использовать как рабочие инструкции:
 
-- `docs/archive/*_old.md` (старые snapshots отдельных гайдов)
-- `archive/legacy_runtime/`
+- `archive/legacy_runtime/` (корень проекта)
