@@ -23,30 +23,17 @@
 Щелчок кнопки. Вода начинает шуметь — сначала тихо, потом всё увереннее.
 Пока чайник греется, я нахожу кофе и насыпаю его в кружку.
 
-Обычный утренний порядок. Почти убедительный.
+Первый глоток получается слишком горячим, второй — уже человеческим.
+Утренний порядок. Почти убедительный.
 
 ~ coffee_drunk = true
 # set_flag:coffee_drunk=true
 # quest:done:make_coffee
 # hud:hint:bag:off
-# return_to_scene
--> DONE
+-> sunday_send_messenger_invite
 
 === inv_apartment_kitchen_morning_use_mug_on_coffee_setup ===
-# speaker:mc
-Ставлю кружку на столешницу рядом с чайником.
-
-Щелчок кнопки. Вода начинает шуметь — сначала тихо, потом всё увереннее.
-Пока чайник греется, я нахожу кофе и насыпаю его в кружку.
-
-Обычный утренний порядок. Почти убедительный.
-
-~ coffee_drunk = true
-# set_flag:coffee_drunk=true
-# quest:done:make_coffee
-# hud:hint:bag:off
-# return_to_scene
--> DONE
+-> inv_apartment_kitchen_use_mug_on_coffee_setup
 
 === inv_read_note ===
 # speaker:none
@@ -166,6 +153,62 @@
 # hud:hint:bag:off
 -> mon_office_npc_greeting
 
+
+// ----------------------------------------------------------------
+// ВОСКРЕСЕНЬЕ / ВАННАЯ — первый combine onboarding
+// ----------------------------------------------------------------
+
+=== inv_inspect_toothbrush ===
+# speaker:mc
+Обычная зубная щётка. Никакой тайны. Просто вещь, без которой утро становится социально рискованным.
+# return_to_scene
+-> DONE
+
+=== inv_inspect_toothpaste ===
+# speaker:mc
+Мятная паста. Тюбик смят посередине — классика людей, которые не хотят признавать, что пора купить новый.
+# return_to_scene
+-> DONE
+
+=== inv_inspect_toothbrush_pasted ===
+# speaker:mc
+Щётка с пастой. Очень узкоспециализированный инструмент против воскресного состояния.
+# return_to_scene
+-> DONE
+
+=== inv_combine_toothbrush_with_toothpaste ===
+# speaker:mc
+Выдавливаю пасту на щётку. Самое сложное решение утра пока принято.
+Теперь надо использовать её на раковине.
+
+# remove_item:toothbrush
+# remove_item:toothpaste
+# add_item:toothbrush_pasted
+# set_flag:toothbrush_pasted_ready=true
+~ toothbrush_pasted_ready = true
+# hud:hint:bag
+# return_to_scene
+-> DONE
+
+=== inv_apartment_bathroom_use_toothbrush_pasted_on_bathroom_sink ===
+# speaker:none
+Холодная вода. Мята. Несколько секунд перед зеркалом, в которых день наконец становится похож на день.
+
+# speaker:mc
+Так. Уже лучше.
+
+# set_flag:teeth_brushed=true
+# set_flag:washed_up=true
+# set_flag:toothbrush_pasted_ready=false
+~ teeth_brushed = true
+~ washed_up = true
+~ toothbrush_pasted_ready = false
+# remove_item:toothbrush_pasted
+# hud:hint:bag:off
+# hud:hint:reset
+# return_to_scene
+-> DONE
+
 === inv_use_fallback ===
 # speaker:mc
 {inventory_item_name != "":
@@ -275,5 +318,41 @@
 - else:
     Никого рядом нет — некому передавать.
 }
+# return_to_scene
+-> DONE
+
+
+// ================================================================
+// Воскресенье / парк — предметные действия
+// ================================================================
+
+=== inv_inspect_park_trash_cup ===
+# speaker:mc
+Чужой пустой стаканчик. Не самая великая проблема дня, но начать разговор рядом с ним почему-то не хочется.
+# return_to_scene
+-> DONE
+
+=== inv_park_hub_use_park_trash_cup_on_park_bin ===
+# speaker:none
+Стаканчик падает в урну с тихим пластиковым шорохом. Ничего героического — просто место у лавочки стало чуть больше похоже на место для вас.
+
+# remove_item:park_trash_cup
+# set_flag:park_bench_cleared=true
+~ park_bench_cleared = true
+# hud:hint:bag:off
+# hud:hint:reset
+# return_to_scene
+-> DONE
+
+=== inv_use_park_trash_cup_on_fallback ===
+# speaker:mc
+Стаканчик надо выкинуть в урну. Носить его по парку как аргумент — странная стратегия.
+# hud:hint:bag
+# return_to_scene
+-> DONE
+
+=== inv_inspect_water_bottle ===
+# speaker:mc
+Бутылка воды из магазина. После второго кофе это почти романтическая предусмотрительность, если не произносить это вслух.
 # return_to_scene
 -> DONE

@@ -7,7 +7,9 @@
 local gs = require "main.scripts.game_state"
 local log = require "main.scripts.log"
 local dm = require "main.scripts.dialogue_manager_ink"
+local contacts = require "main.scripts.phone_contacts"
 local drag_scroll = require "main.gui.modules.drag_scroll"
+local MSG = require "main.gui.modules.messages"
 
 local UI_MGR = "#ui_manager_v2"
 
@@ -15,6 +17,15 @@ local MAX_LIST_ROWS = 7
 local MAX_BUBBLES = 8
 local LIST_SCROLL_STEP = 1
 local CHAT_SCROLL_STEP = 1
+local BUBBLE_SLOT_GAP_Y = 58
+local BUBBLE_MIN_H = 46
+local BUBBLE_LINE_H = 18
+local BUBBLE_PAD_X = 14
+local BUBBLE_PAD_TOP = 12
+local BUBBLE_STAMP_AREA_H = 22
+local CHAT_AREA_TOP = 578
+local CHAT_AREA_BOTTOM = 148
+local LIST_ROW_SLOT_GAP_Y = 64
 
 -- Drag-scroll параметры (как в phone_sms): pixel-сдвиг при котором делаем
 -- ровно 1 step (одна строка чата / один bubble), и порог в пикселях, после
@@ -36,10 +47,10 @@ local COLORS = {
 }
 
 local NODE_IDS = {
-    "messenger_runtime_root", "messenger_app_bg",
-    "list_root", "msgr_title", "search_bg", "search_bt", "search_bb", "search_bl", "search_br", "search_icon", "search_text",
+    "messenger_runtime_root",
+    "list_root", "msgr_title", "search_bg", "border_search", "search_icon", "search_text",
     "tab_all_bg", "tab_all_bt", "tab_all_bb", "tab_all_bl", "tab_all_br", "tab_all_text", "tab_all_count",
-    "tab_unread_bg", "tab_unread_bt", "tab_unread_bb", "tab_unread_bl", "tab_unread_br", "tab_unread_text", "tab_unread_count",
+    "tab_unread_bg", "border_unread", "tab_unread_text", "tab_unread_count",
     "list_divider", "list_scrollbar_track", "list_scrollbar_thumb", "list_footer_line", "list_footer_left", "list_footer_right",
     "chat_root", "back_bg", "back_bt", "back_bb", "back_bl", "back_br", "back_text",
     "head_av_bg", "head_av", "head_name", "head_status",
@@ -47,19 +58,16 @@ local NODE_IDS = {
     "head_find_bg", "head_find_bt", "head_find_bb", "head_find_bl", "head_find_br", "head_find_text",
     "head_menu_bg", "head_menu_bt", "head_menu_bb", "head_menu_bl", "head_menu_br", "head_menu_text",
     "chat_header_line", "chat_scrollbar_track", "chat_scrollbar_thumb",
-    "input_line", "attach_bg", "attach_bt", "attach_bb", "attach_bl", "attach_br", "attach_text",
-    "input_bg", "input_bt", "input_bb", "input_bl", "input_br", "input_text",
-    "send_bg", "send_bt", "send_bb", "send_bl", "send_br", "send_text",
+    "input_line", "attach_bg", "border_attach", "attach_text",
+    "input_bg", "border_input", "input_text",
+    "send_bg", "border_send", "send_text",
     "chat_footer_line", "chat_footer_left", "chat_footer_right",
 }
 
 for i = 1, MAX_LIST_ROWS do
     local p = "chat" .. i
     table.insert(NODE_IDS, p .. "_bg")
-    table.insert(NODE_IDS, p .. "_bt")
-    table.insert(NODE_IDS, p .. "_bb")
-    table.insert(NODE_IDS, p .. "_bl")
-    table.insert(NODE_IDS, p .. "_br")
+    table.insert(NODE_IDS, p .. "_border")
     table.insert(NODE_IDS, p .. "_av_bg")
     table.insert(NODE_IDS, p .. "_av")
     table.insert(NODE_IDS, p .. "_name")
@@ -73,14 +81,12 @@ end
 for i = 1, MAX_BUBBLES do
     local p = "bub" .. i
     table.insert(NODE_IDS, p .. "_bg")
-    table.insert(NODE_IDS, p .. "_bt")
-    table.insert(NODE_IDS, p .. "_bb")
-    table.insert(NODE_IDS, p .. "_bl")
-    table.insert(NODE_IDS, p .. "_br")
+    table.insert(NODE_IDS, p .. "_border")
     table.insert(NODE_IDS, p .. "_text")
     table.insert(NODE_IDS, p .. "_stamp")
 end
 
+-- Legacy fallback; canonical presentation metadata lives in main/scripts/phone_contacts.lua.
 local CHAT_META = {
     nm        = { name = "Н. М.", av = "НМ", tone = "hot",    status = "был(а) в сети 5 мин назад" },
     loop      = { name = "loop_bot", av = "L", tone = "violet", status = "бот · работает в фоне", bot = true },
@@ -95,18 +101,101 @@ local CHAT_META = {
 
 local EMPTY_CHAT_ID = nil
 
+-- Runtime list-row clones. В .gui держим chat1_* как prototype, а слоты
+-- chat2..chat7 создаём через gui.clone_tree(chat1_bg). Ключи clone_tree
+-- остаются id оригинального дерева: "messenger_list/chat1_name" / "chat1_name".
+local _row_clones = nil
+
+-- Runtime bubble clones. В .gui держим bub1_* как prototype, а слоты
+-- bub2..bub8 создаём через gui.clone_tree(bub1_bg). Ключи clone_tree
+-- остаются id оригинального дерева: "messenger_chat/bub1_text" / "bub1_text".
+local _bubble_clones = nil
+
 local function try_get_node(id)
     local ok, n = pcall(gui.get_node, id)
     if ok then return n end
     return nil
 end
 
+local function resolve_row_clone(id)
+    if not _row_clones then return nil end
+
+    local raw = tostring(id or "")
+    raw = raw:gsub("^messenger_list/", "")
+    local slot, suffix = raw:match("^chat(%d+)(_.+)$")
+    slot = tonumber(slot)
+    if not slot or slot <= 1 then return nil end
+
+    local clone = _row_clones[slot]
+    if not clone then return nil end
+
+    -- Defold template instance may expose clone keys either with full template
+    -- prefix or as local ids, depending on where clone_tree was called from.
+    if suffix == "_border" then
+        return clone["messenger_list/border_chat"]
+            or clone["border_chat"]
+    end
+
+    return clone["messenger_list/chat1" .. suffix]
+        or clone["chat1" .. suffix]
+end
+
+local function resolve_bubble_clone(id)
+    if not _bubble_clones then return nil end
+
+    local raw = tostring(id or "")
+    raw = raw:gsub("^messenger_chat/", "")
+    local slot, suffix = raw:match("^bub(%d+)(_.+)$")
+    slot = tonumber(slot)
+    if not slot or slot <= 1 then return nil end
+
+    local clone = _bubble_clones[slot]
+    if not clone then return nil end
+
+    -- Defold template instance may expose clone keys either with full template
+    -- prefix or as local ids, depending on where clone_tree was called from.
+    if suffix == "_border" then
+        return clone["messenger_chat/border_bub"]
+            or clone["border_bub"]
+    end
+
+    return clone["messenger_chat/bub1" .. suffix]
+        or clone["bub1" .. suffix]
+end
+
+local function resolve_template_alias(id)
+    local raw = tostring(id or "")
+    raw = raw:gsub("^messenger_list/", ""):gsub("^messenger_chat/", "")
+
+    local row_slot = raw:match("^chat(%d+)_border$")
+    if row_slot == "1" then
+        return try_get_node("messenger_list/border_chat") or try_get_node("border_chat")
+    end
+
+    local bub_slot = raw:match("^bub(%d+)_border$")
+    if bub_slot == "1" then
+        return try_get_node("messenger_chat/border_bub") or try_get_node("border_bub")
+    end
+
+    return nil
+end
+
 -- phone_messenger.gui разбит на 2 template'а: messenger_list/* и
 -- messenger_chat/*. В gui_script продолжаем обращаться к нодам по
 -- "коротким" id ("chat1_bg", "bub1_text"), а wrapper подставляет нужный
--- префикс. Аналог phone_sms.gui_script.
+-- префикс. Для chat2..chat7 и bub2..bub8 wrapper сначала смотрит
+-- runtime-клоны chat1/bub1, а не статические дубляжи из .gui.
 local function get_node(id)
-    local n = try_get_node(id)
+    local n = resolve_row_clone(id)
+    if n then return n end
+
+    n = resolve_bubble_clone(id)
+    if n then return n end
+
+    n = resolve_template_alias(id)
+    if n then return n end
+
+    n = try_get_node(id)
     if n then return n end
 
     if id:sub(1, 15) ~= "messenger_list/" then
@@ -155,6 +244,14 @@ local function set_size_x(id, width)
     end
 end
 
+local function set_size_y(id, height)
+    local n = get_node(id)
+    if n then
+        local s = gui.get_size(n)
+        gui.set_size(n, vmath.vector3(s.x, height, s.z))
+    end
+end
+
 local function get_pos(id)
     local n = get_node(id)
     if n then return gui.get_position(n) end
@@ -172,8 +269,25 @@ end
 local function set_pos_x(id, x)
     local n = get_node(id)
     if n then
+        local target_x = x
+
+        -- bub*_text / bub*_stamp live under bub*_bg in the runtime-cloned
+        -- bubble tree, so their X must stay local to the bubble root.
+        -- The renderer still passes absolute screen X values because the old
+        -- static slots were authored as chat_root children. Convert only child
+        -- bubble nodes to local coordinates; bub*_bg itself remains absolute.
+        local raw = tostring(id or ''):gsub('^messenger_chat/', '')
+        local slot, suffix = raw:match('^bub(%d+)(_.+)$')
+        if slot and suffix and suffix ~= '_bg' then
+            local root = get_node('bub' .. tostring(slot) .. '_bg')
+            if root then
+                local rp = gui.get_position(root)
+                target_x = x - rp.x
+            end
+        end
+
         local p = gui.get_position(n)
-        gui.set_position(n, vmath.vector3(x, p.y, p.z))
+        gui.set_position(n, vmath.vector3(target_x, p.y, p.z))
     end
 end
 
@@ -232,6 +346,66 @@ local function clamp_text(s, limit)
     return s
 end
 
+local function utf8_len_safe(s)
+    s = tostring(s or "")
+    if utf8 and utf8.len then
+        local ok, n = pcall(utf8.len, s)
+        if ok and n then return n end
+    end
+    local _, chars = utf8_prefix(s, 1000000)
+    return chars or #s
+end
+
+local function utf8_take(s, max_chars)
+    s = tostring(s or "")
+    max_chars = math.max(0, tonumber(max_chars) or 0)
+    if max_chars <= 0 then return "", s end
+    local prefix, _, total = utf8_prefix(s, max_chars)
+    if total <= max_chars then return s, "" end
+    return prefix, s:sub(#prefix + 1)
+end
+
+local function wrap_text_to_width(text, max_cols)
+    text = tostring(text or ""):gsub("\r\n", "\n"):gsub("\r", "\n"):gsub("\t", " ")
+    max_cols = math.max(8, tonumber(max_cols) or 32)
+    local lines = {}
+    local function push(line) lines[#lines + 1] = line or "" end
+
+    for paragraph in (text .. "\n"):gmatch("(.-)\n") do
+        paragraph = paragraph:gsub("%s+", " "):gsub("^%s+", ""):gsub("%s+$", "")
+        if paragraph == "" then
+            if #lines == 0 then push("") end
+        else
+            local current = ""
+            for word in paragraph:gmatch("%S+") do
+                while utf8_len_safe(word) > max_cols do
+                    if current ~= "" then push(current); current = "" end
+                    local part, rest = utf8_take(word, max_cols)
+                    push(part)
+                    word = rest
+                end
+                if word ~= "" then
+                    if current == "" then
+                        current = word
+                    elseif utf8_len_safe(current) + 1 + utf8_len_safe(word) <= max_cols then
+                        current = current .. " " .. word
+                    else
+                        push(current)
+                        current = word
+                    end
+                end
+            end
+            if current ~= "" then push(current) end
+        end
+    end
+    if #lines == 0 then lines[1] = "" end
+    return table.concat(lines, "\n"), #lines
+end
+
+local function text_cols_for_width(width)
+    return math.max(12, math.floor((tonumber(width) or 320) / 8.6))
+end
+
 local function tone_color(tone)
     if tone == "hot" then return COLORS.hot end
     if tone == "amber" then return COLORS.amber end
@@ -249,6 +423,14 @@ local function title_from_id(chat_id)
     end))
 end
 
+local function avatar_text(value)
+    local s = tostring(value or "?"):gsub("\r", " "):gsub("\n", " ")
+    s = s:gsub("%s+", "")
+    if s == "" then return "?" end
+    local prefix = utf8_prefix(s:upper(), 2)
+    return prefix ~= "" and prefix or "?"
+end
+
 local function make_avatar(name_or_id)
     local s = tostring(name_or_id or "?")
     local first = utf8_first_char(s:match("%S+") or "?") or "?"
@@ -263,12 +445,12 @@ local function make_avatar(name_or_id)
         second = utf8_first_char(compact:sub(#one + 1))
     end
     local av = first .. (second or "")
-    return clamp_text(av:upper(), 2)
+    return avatar_text(av)
 end
 
 local function get_meta(chat_id)
     local id = tostring(chat_id or "")
-    local base = CHAT_META[id] or {}
+    local base = (contacts and contacts.get_msg and contacts.get_msg(id)) or CHAT_META[id] or {}
     local out = {}
     for k, v in pairs(base) do out[k] = v end
     out.id = id
@@ -320,7 +502,33 @@ local function preview_from_message(m)
     return text
 end
 
+local BORDER_NODE_BY_PREFIX = {
+    search = "border_search",
+    tab_unread = "border_unread",
+    attach = "border_attach",
+    input = "border_input",
+    send = "border_send",
+}
+
+local function border_node_id(prefix)
+    local slot = tostring(prefix or ""):match("^chat(%d+)$")
+    if slot then return "chat" .. slot .. "_border" end
+
+    slot = tostring(prefix or ""):match("^bub(%d+)$")
+    if slot then return "bub" .. slot .. "_border" end
+
+    return BORDER_NODE_BY_PREFIX[prefix]
+end
+
 local function set_border(prefix, color, alpha)
+    local id = border_node_id(prefix)
+    if id and get_node(id) then
+        set_color(id, color, alpha)
+        return
+    end
+
+    -- Legacy fallback for controls that still use four border segments
+    -- in the current templates: tab_all, back, head_call/find/menu.
     for _, suffix in ipairs({ "_bt", "_bb", "_bl", "_br" }) do
         set_color(prefix .. suffix, color, alpha)
     end
@@ -328,7 +536,7 @@ end
 
 local function set_row_enabled(i, enabled)
     local p = "chat" .. i
-    for _, suffix in ipairs({ "_bg", "_bt", "_bb", "_bl", "_br", "_av_bg", "_av", "_name", "_icons", "_preview", "_time", "_badge_bg", "_badge" }) do
+    for _, suffix in ipairs({ "_bg", "_border", "_av_bg", "_av", "_name", "_icons", "_preview", "_time", "_badge_bg", "_badge" }) do
         set_node_enabled(p .. suffix, enabled)
     end
 end
@@ -398,7 +606,7 @@ local function render_list(self)
             set_color(p .. "_av_bg", tone, (meta.tone == "dim") and 0.10 or 0.20)
             set_color(p .. "_av", tone, 1)
             set_color(p .. "_name", unread and COLORS.accent or COLORS.paper, 1)
-            set_text(p .. "_av", clamp_text(meta.av or "?", 2))
+            set_text(p .. "_av", avatar_text(meta.av or "?"))
             set_text(p .. "_name", clamp_text(meta.name or id, 26))
             local icons = ""
             if meta.bot then icons = icons .. " BOT" end
@@ -436,7 +644,7 @@ end
 
 local function set_bubble_enabled(i, enabled)
     local p = "bub" .. i
-    for _, suffix in ipairs({ "_bg", "_bt", "_bb", "_bl", "_br", "_text", "_stamp" }) do
+    for _, suffix in ipairs({ "_bg", "_border", "_text", "_stamp" }) do
         set_node_enabled(p .. suffix, enabled)
     end
 end
@@ -479,6 +687,37 @@ local function get_messages(chat_id)
     return runtime_msgs_to_ui(chat_id, gs.get_msg(chat_id) or {})
 end
 
+local function bubble_layout(m, meta)
+    local is_out = m.dir == "out"
+    local is_sep = m.type == "daysep" or m.type == "sys"
+    if is_sep then
+        local text, lines = wrap_text_to_width((m.text or ""):upper(), 54)
+        return {
+            x = 610,
+            w = 380,
+            h = math.max(24, 10 + lines * 14),
+            text_w = 340,
+            text = text,
+            lines = lines,
+            is_sep = true,
+        }
+    end
+
+    local x = is_out and 686 or 540
+    local w = is_out and 500 or 560
+    local text, lines = wrap_text_to_width(m.text or "", text_cols_for_width(w - BUBBLE_PAD_X * 2))
+    local h = math.max(BUBBLE_MIN_H, BUBBLE_PAD_TOP + lines * BUBBLE_LINE_H + BUBBLE_STAMP_AREA_H)
+    return {
+        x = x,
+        w = w,
+        h = h,
+        text_w = w - BUBBLE_PAD_X * 2,
+        text = text,
+        lines = lines,
+        is_out = is_out,
+    }
+end
+
 local function update_chat_scrollbar(self, total)
     local track_h = 430
     local visible = MAX_BUBBLES
@@ -506,7 +745,7 @@ local function render_chat(self)
     local id = self.active_chat_id
     if not id then return end
     local meta = get_meta(id)
-    set_text("head_av", clamp_text(meta.av or "?", 2))
+    set_text("head_av", avatar_text(meta.av or "?"))
     set_text("head_name", clamp_text(meta.name or id, 28))
     set_text("head_status", meta.status or "в сети")
     local tone = tone_color(meta.tone)
@@ -518,43 +757,74 @@ local function render_chat(self)
     self.chat_offset = math.max(0, math.min(self.chat_offset or max_offset, max_offset))
     hide_bubbles()
 
-    for slot = 1, MAX_BUBBLES do
-        local m = msgs[(self.chat_offset or 0) + slot]
-        if m then
-            local p = "bub" .. slot
-            set_bubble_enabled(slot, true)
-            local is_out = m.dir == "out"
-            local is_sep = m.type == "daysep" or m.type == "sys"
-            local color = is_out and COLORS.accent or tone_color(m.tone or meta.tone)
-            if is_sep then
-                set_color(p .. "_bg", COLORS.paper, m.type == "daysep" and 0.08 or 0.0)
-                set_border(p, COLORS.paper, 0.0)
-                set_color(p .. "_text", COLORS.dim, 0.78)
-                set_text(p .. "_text", clamp_text((m.text or ""):upper(), 68))
-                set_text(p .. "_stamp", "")
-                set_pos_x(p .. "_bg", 610)
-                set_pos_x(p .. "_text", 624)
-                set_pos_x(p .. "_stamp", 1010)
-                set_size_x(p .. "_bg", 380)
-                set_size_x(p .. "_text", 340)
-            else
-                local x = is_out and 686 or 540
-                local w = is_out and 500 or 560
-                set_pos_x(p .. "_bg", x)
-                set_pos_x(p .. "_text", x + 14)
-                set_pos_x(p .. "_stamp", x + w - 12)
-                set_size_x(p .. "_bg", w)
-                set_size_x(p .. "_text", w - 28)
-                set_color(p .. "_bg", is_out and COLORS.accent or COLORS.card, is_out and 0.12 or 0.70)
-                set_border(p, color, is_out and 0.45 or 0.28)
-                set_color(p .. "_text", COLORS.paper, 1)
-                set_text(p .. "_text", clamp_text(m.text or "", is_out and 72 or 80))
-                local stamp = tostring(m.time or "")
-                if is_out and m.status then stamp = stamp .. " · " .. tostring(m.status):upper() end
-                set_text(p .. "_stamp", stamp)
-                set_color(p .. "_stamp", is_out and COLORS.accent or COLORS.dim, 0.80)
+    local idx = math.min(total, (self.chat_offset or 0) + MAX_BUBBLES)
+    local slot = MAX_BUBBLES
+    local y = CHAT_AREA_BOTTOM
+
+    -- Render from bottom to top. A wrapped older bubble can no longer push the
+    -- latest message below the input bar; fewer bubbles are shown when they are
+    -- taller, but every visible bubble contains its full text.
+    while idx >= 1 and slot >= 1 do
+        local m = msgs[idx]
+        local layout = bubble_layout(m, meta)
+        if y + layout.h > CHAT_AREA_TOP then break end
+
+        local p = "bub" .. slot
+        set_bubble_enabled(slot, true)
+        local is_out = m.dir == "out"
+        local is_sep = layout.is_sep
+        local color = is_out and COLORS.accent or tone_color(m.tone or meta.tone)
+        set_pos_y(p .. "_bg", y)
+        set_size_y(p .. "_bg", layout.h)
+        set_size_y(p .. "_border", layout.h)
+
+        if is_sep then
+            set_color(p .. "_bg", COLORS.paper, m.type == "daysep" and 0.08 or 0.0)
+            set_border(p, COLORS.paper, 0.0)
+            set_color(p .. "_text", COLORS.dim, 0.78)
+            set_text(p .. "_text", layout.text)
+            set_text(p .. "_stamp", "")
+            set_pos_x(p .. "_bg", layout.x)
+            set_pos_x(p .. "_text", layout.x + 14)
+            set_pos_x(p .. "_stamp", layout.x + layout.w - 12)
+            set_size_x(p .. "_bg", layout.w)
+            set_size_x(p .. "_border", layout.w)
+            set_size_x(p .. "_text", layout.text_w)
+            set_size_y(p .. "_text", math.max(14, layout.h - 8))
+            set_pos_y(p .. "_text", layout.h / 2)
+            local tnode = get_node(p .. "_text")
+            if tnode then
+                gui.set_pivot(tnode, gui.PIVOT_CENTER)
+                if gui.set_line_break then gui.set_line_break(tnode, true) end
             end
+        else
+            set_pos_x(p .. "_bg", layout.x)
+            set_pos_x(p .. "_text", layout.x + BUBBLE_PAD_X)
+            set_pos_x(p .. "_stamp", layout.x + layout.w - 12)
+            set_size_x(p .. "_bg", layout.w)
+            set_size_x(p .. "_border", layout.w)
+            set_size_x(p .. "_text", layout.text_w)
+            set_size_y(p .. "_text", math.max(BUBBLE_LINE_H, layout.lines * BUBBLE_LINE_H))
+            set_color(p .. "_bg", is_out and COLORS.accent or COLORS.card, is_out and 0.12 or 0.70)
+            set_border(p, color, is_out and 0.45 or 0.28)
+            set_color(p .. "_text", COLORS.paper, 1)
+            set_text(p .. "_text", layout.text)
+            set_pos_y(p .. "_text", layout.h - BUBBLE_PAD_TOP)
+            local tnode = get_node(p .. "_text")
+            if tnode then
+                gui.set_pivot(tnode, gui.PIVOT_NW)
+                if gui.set_line_break then gui.set_line_break(tnode, true) end
+            end
+            local stamp = tostring(m.time or "")
+            if is_out and m.status then stamp = stamp .. " · " .. tostring(m.status):upper() end
+            set_text(p .. "_stamp", stamp)
+            set_pos_y(p .. "_stamp", 10)
+            set_color(p .. "_stamp", is_out and COLORS.accent or COLORS.dim, 0.80)
         end
+
+        y = y + layout.h + 12
+        idx = idx - 1
+        slot = slot - 1
     end
     update_chat_scrollbar(self, total)
 end
@@ -570,7 +840,6 @@ local function set_view(self, view)
     set_node_enabled("list_root", show_list)
     set_node_enabled("chat_root", not show_list)
     set_node_enabled("messenger_runtime_root", true)
-    set_node_enabled("messenger_app_bg", true)
     if show_list then render_list(self) else render_chat(self) end
     if refresh_send_pulse then refresh_send_pulse(self) end
 end
@@ -599,15 +868,24 @@ local function is_inside_rect(id, x, y)
     return gui.pick_node(n, x, y)
 end
 
+local function resolve_reply_knot(chat_id)
+    if not chat_id or chat_id == "" then return nil end
+    local knot_name = nil
+    if contacts and contacts.get_ink_thread then
+        knot_name = contacts.get_ink_thread("msg", chat_id)
+    end
+    return knot_name or ("msg_thread_" .. tostring(chat_id))
+end
+
 -- Можно ли отвечать в этом чате. Должны быть выполнены оба условия:
---   1) Автор написал ink-knot msg_thread_<chat> (если нет — отвечать нечем,
---      пульс не нужен; например meme-чаты без интерактивного ответа).
+--   1) Автор написал msg-thread knot (по умолчанию msg_thread_<chat>,
+--      но можно переопределить через phone_contacts.lua).
 --   2) Игрок ещё не отвечал (флаг msg_<chat>_replied != true; авто-флаг
 --      ставится при # msg:reply:).
 local function can_reply(chat_id)
     if not chat_id or chat_id == "" then return false end
-    local knot_name = "msg_thread_" .. tostring(chat_id)
-    if not (dm.has_knot and dm.has_knot(knot_name)) then return false end
+    local knot_name = resolve_reply_knot(chat_id)
+    if not (knot_name and dm.has_knot and dm.has_knot(knot_name)) then return false end
     local replied_flag = "msg_" .. tostring(chat_id) .. "_replied"
     if gs.get_flag and gs.get_flag(replied_flag) then return false end
     return true
@@ -655,7 +933,11 @@ end
 local function handle_reply_tap(self)
     if not self.active_chat_id then return end
     if not can_reply(self.active_chat_id) then return end
-    msg.post(UI_MGR, "messenger_open_chat", { chat_id = self.active_chat_id })
+    msg.post(UI_MGR, MSG.messenger_open_chat, { chat_id = self.active_chat_id })
+end
+
+local function disarm_all_taps(self)
+    self.reply_tap_armed = false
 end
 
 local function step_list(self, delta)
@@ -694,11 +976,11 @@ end
 local function handle_phone_input(self, action_id, action)
     if not self.visible then return false end
     action = action or {}
-    if action_id == hash("wheel_up") then
+    if action_id == MSG.wheel_up then
         action.dy = 1
         handle_scroll(self, action)
         return true
-    elseif action_id == hash("wheel_down") then
+    elseif action_id == MSG.wheel_down then
         action.dy = -1
         handle_scroll(self, action)
         return true
@@ -708,7 +990,7 @@ local function handle_phone_input(self, action_id, action)
     -- как SMS. Иначе при открытом dialogue layer неиспользованный тап
     -- по bubble/пустому месту возвращает false и уходит дальше по input
     -- stack, где dialogue_next листает реплику.
-    if action_id ~= hash("touch") then
+    if action_id ~= MSG.touch then
         return true
     end
     local pressed = action.pressed and true or false
@@ -741,7 +1023,7 @@ local function handle_phone_input(self, action_id, action)
             -- Если игрок начал press на send/input и поехал — отменяем arm,
             -- чтобы release где попало не открыл reply-knot.
             if self.view == "chat" and drag_state.moved then
-                self.reply_tap_armed = false
+                disarm_all_taps(self)
             end
             return true
         end
@@ -786,7 +1068,7 @@ local function handle_phone_input(self, action_id, action)
         -- arm-on-press, остаётся как было.
         if is_inside_rect("back_bg", x, y) then
             if not released then return true end
-            self.reply_tap_armed = false
+            disarm_all_taps(self)
             open_list(self)
             return true
         elseif is_inside_rect("send_bg", x, y) or is_inside_rect("input_bg", x, y) then
@@ -801,7 +1083,7 @@ local function handle_phone_input(self, action_id, action)
             end
             if action.released then
                 if self.reply_tap_armed then
-                    self.reply_tap_armed = false
+                    disarm_all_taps(self)
                     handle_reply_tap(self)
                 end
                 return true
@@ -820,6 +1102,80 @@ end
 
 local function set_all_enabled(enabled)
     set_nodes_enabled(NODE_IDS, enabled)
+end
+
+local function clone_rows()
+    _row_clones = {}
+
+    local proto = try_get_node("messenger_list/chat1_bg") or try_get_node("chat1_bg")
+    if not proto then
+        log.warn("messenger", "chat1_bg prototype not found; row clones disabled")
+        return
+    end
+
+    local proto_pos = gui.get_position(proto)
+    for slot = 2, MAX_LIST_ROWS do
+        local clone = gui.clone_tree(proto)
+        _row_clones[slot] = clone
+
+        local root = clone["messenger_list/chat1_bg"] or clone["chat1_bg"]
+        if root then
+            gui.set_position(root, vmath.vector3(
+                proto_pos.x,
+                proto_pos.y - (slot - 1) * LIST_ROW_SLOT_GAP_Y,
+                proto_pos.z
+            ))
+        end
+    end
+end
+
+local function delete_row_clones()
+    if not _row_clones then return end
+    for slot = 2, MAX_LIST_ROWS do
+        local clone = _row_clones[slot]
+        if clone then
+            local root = clone["messenger_list/chat1_bg"] or clone["chat1_bg"]
+            if root then pcall(gui.delete_node, root) end
+        end
+    end
+    _row_clones = nil
+end
+
+local function clone_bubbles()
+    _bubble_clones = {}
+
+    local proto = try_get_node("messenger_chat/bub1_bg") or try_get_node("bub1_bg")
+    if not proto then
+        log.warn("messenger", "bub1_bg prototype not found; bubble clones disabled")
+        return
+    end
+
+    local proto_pos = gui.get_position(proto)
+    for slot = 2, MAX_BUBBLES do
+        local clone = gui.clone_tree(proto)
+        _bubble_clones[slot] = clone
+
+        local root = clone["messenger_chat/bub1_bg"] or clone["bub1_bg"]
+        if root then
+            gui.set_position(root, vmath.vector3(
+                proto_pos.x,
+                proto_pos.y - (slot - 1) * BUBBLE_SLOT_GAP_Y,
+                proto_pos.z
+            ))
+        end
+    end
+end
+
+local function delete_bubble_clones()
+    if not _bubble_clones then return end
+    for slot = 2, MAX_BUBBLES do
+        local clone = _bubble_clones[slot]
+        if clone then
+            local root = clone["messenger_chat/bub1_bg"] or clone["bub1_bg"]
+            if root then pcall(gui.delete_node, root) end
+        end
+    end
+    _bubble_clones = nil
 end
 
 function init(self)
@@ -844,35 +1200,43 @@ function init(self)
         invert       = true,
         on_step      = function(owner, delta) step_chat(owner, delta) end,
     })
+
+    -- В .gui используются chat1_* и bub1_* как prototypes. Runtime-клоны
+    -- должны быть созданы до первого set_all_enabled(false), иначе
+    -- chat2..chat7 / bub2..bub8 не будут найдены wrapper'ом get_node().
+    clone_rows()
+    clone_bubbles()
     set_all_enabled(false)
 end
 
 function final(self)
     set_all_enabled(false)
+    delete_bubble_clones()
+    delete_row_clones()
 end
 
 function on_message(self, message_id, message, sender)
-    if message_id == hash("open_app") then
+    if message_id == MSG.open_app then
         self.visible = true
         self.filter = self.filter or "all"
         self.list_offset = self.list_offset or 0
         set_all_enabled(true)
         open_list(self)
-    elseif message_id == hash("close_app") then
+    elseif message_id == MSG.close_app then
         self.visible = false
         self.view = "list"
         self.active_chat_id = nil
-        self.reply_tap_armed = false
+        disarm_all_taps(self)
         stop_send_pulse()  -- не крутим анимации в скрытом app
         set_all_enabled(false)
-    elseif message_id == hash("refresh_app") then
+    elseif message_id == MSG.refresh_app then
         if self.visible then set_view(self, self.view or "list") end
-    elseif message_id == hash("phone_input") then
+    elseif message_id == MSG.phone_input then
         -- Defold: on_message не должна возвращать значения. handle_phone_input
         -- возвращает bool (consumed-флаг для on_input), но здесь на ветке
         -- сообщения он нам не нужен — просто игнорируем результат.
         if self.visible then
-            handle_phone_input(self, message and message.action_id or hash("touch"), {
+            handle_phone_input(self, message and message.action_id or MSG.touch, {
                 x = message and message.x or 0,
                 y = message and message.y or 0,
                 dx = message and message.dx or 0,

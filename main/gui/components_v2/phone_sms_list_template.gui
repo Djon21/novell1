@@ -30,6 +30,10 @@ fonts {
   name: "manrope_16"
   font: "/main/fonts/manrope_16.font"
 }
+fonts {
+  name: "Manrope-Medium_16"
+  font: "/main/fonts/Manrope-Medium_16.font"
+}
 textures {
   name: "icon_phone"
   texture: "/main/images/phone/icon_phone.atlas"
@@ -38,7 +42,23 @@ textures {
   name: "map2"
   texture: "/main/images/phone/map2.atlas"
 }
+textures {
+  name: "ui_common"
+  texture: "/main/images/ui_common.atlas"
+}
 nodes {
+  position {
+    z: 0.03
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
   type: TYPE_BOX
   id: "list_root"
   pivot: PIVOT_SW
@@ -47,13 +67,13 @@ nodes {
 }
 nodes {
   position {
-    x: 524.0
-    y: 608.0
+    x: 528.0
+    y: 662.0
     z: 0.556
   }
   size {
-    x: 520.0
-    y: 24.0
+    x: 366.0
+    y: 34.0
   }
   color {
     x: 0.953
@@ -62,7 +82,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\320\241\320\236\320\236\320\221\320\251\320\225\320\235\320\230\320\257"
-  font: "unbounded_bold_20"
+  font: "unbounded_bold_32"
   id: "side_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
@@ -97,7 +117,7 @@ nodes {
   position {
     x: 1188.0
     y: 112.0
-    z: 0.540
+    z: 0.54
   }
   size {
     x: 4.0
@@ -126,26 +146,25 @@ nodes {
     y: 142.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_BOX
   id: "sms_scrollbar_thumb"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "list_root"
-  alpha: 0.70
+  alpha: 0.7
 }
 nodes {
   position {
     x: 524.0
     y: 518.0
-    z: 0.532
+    z: 0.032
   }
   size {
     x: 660.0
-    y: 52.0
+    y: 56.0
   }
   color {
     x: 0.078
@@ -157,127 +176,36 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "list_root"
-  alpha: 0.60
+  alpha: 0.6
 }
 nodes {
   position {
-    x: 524.0
-    y: 569.0
-    z: 0.545
-  }
-  size {
-    x: 660.0
-    y: 1.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "msg1_border_t"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 524.0
-    y: 518.0
-    z: 0.545
-  }
-  size {
-    x: 660.0
-    y: 1.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "msg1_border_b"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 524.0
-    y: 518.0
-    z: 0.545
-  }
-  size {
-    x: 1.0
-    y: 52.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "msg1_border_l"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 1183.0
-    y: 518.0
-    z: 0.545
-  }
-  size {
-    x: 1.0
-    y: 52.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "msg1_border_r"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 521.0
-    y: 546.0
-    z: 0.550
+    x: -3.0
+    y: 30.0
+    z: 0.055
   }
   size {
     x: 6.0
     y: 18.0
   }
   color {
-    x: 1.000
     y: 0.239
     z: 0.498
   }
   type: TYPE_BOX
   id: "msg1_dot"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 1.00
+  parent: "msg1_bg"
 }
 nodes {
   position {
-    x: 540.0
-    y: 555.0
-    z: 0.560
+    x: 16.0
+    y: 41.0
+    z: 0.056
   }
   size {
     x: 360.0
-    y: 14.0
+    y: 18.0
   }
   color {
     x: 0.953
@@ -286,20 +214,19 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\342\200\224"
-  font: "jb_mono_12"
+  font: "unbounded_bold_20"
   id: "msg1_name"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
+  parent: "msg1_bg"
   alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1172.0
-    y: 555.0
-    z: 0.560
+    x: 648.0
+    y: 37.0
+    z: 0.056
   }
   size {
     x: 92.0
@@ -315,17 +242,16 @@ nodes {
   font: "jb_mono_10"
   id: "msg1_time"
   pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
+  parent: "msg1_bg"
   alpha: 0.72
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 540.0
-    y: 536.0
-    z: 0.560
+    x: 16.0
+    y: 18.0
+    z: 0.056
   }
   size {
     x: 500.0
@@ -337,42 +263,39 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  font: "manrope_14"
+  font: "Manrope-Medium_16"
   id: "msg1_body"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
+  parent: "msg1_bg"
   alpha: 0.86
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1088.0
-    y: 526.0
-    z: 0.552
+    x: 564.0
+    y: 7.0
+    z: 0.052
   }
   size {
     x: 86.0
     y: 16.0
   }
   color {
-    x: 1.000
     y: 0.702
     z: 0.278
   }
   type: TYPE_BOX
   id: "msg1_pin_bg"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
+  parent: "msg1_bg"
   alpha: 0.15
 }
 nodes {
   position {
-    x: 1086.0
-    y: 538.0
-    z: 0.555
+    x: 4.0
+    y: 13.0
+    z: 0.055
   }
   size {
     x: 70.0
@@ -385,15 +308,14 @@ nodes {
   type: TYPE_BOX
   id: "msg1_pin_border_t"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
+  parent: "msg1_pin_bg"
   alpha: 0.5
 }
 nodes {
   position {
-    x: 1086.0
-    y: 526.0
-    z: 0.555
+    x: 4.0
+    y: 1.0
+    z: 0.055
   }
   size {
     x: 70.0
@@ -406,15 +328,14 @@ nodes {
   type: TYPE_BOX
   id: "msg1_pin_border_b"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
+  parent: "msg1_pin_bg"
   alpha: 0.5
 }
 nodes {
   position {
-    x: 1086.0
-    y: 526.0
-    z: 0.555
+    x: 4.0
+    y: 1.0
+    z: 0.055
   }
   size {
     x: 1.0
@@ -427,15 +348,14 @@ nodes {
   type: TYPE_BOX
   id: "msg1_pin_border_l"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
+  parent: "msg1_pin_bg"
   alpha: 0.5
 }
 nodes {
   position {
-    x: 1156.0
-    y: 526.0
-    z: 0.555
+    x: 73.0
+    y: 1.0
+    z: 0.055
   }
   size {
     x: 1.0
@@ -448,2067 +368,48 @@ nodes {
   type: TYPE_BOX
   id: "msg1_pin_border_r"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
+  parent: "msg1_pin_bg"
   alpha: 0.5
 }
 nodes {
   position {
-    x: 1131.0
-    y: 534.0
-    z: 0.562
+    x: 43.0
+    y: 8.0
+    z: 0.062
   }
   size {
     x: 76.0
     y: 10.0
   }
   color {
-    x: 1.000
     y: 0.702
     z: 0.278
   }
   type: TYPE_TEXT
   font: "jb_mono_10"
   id: "msg1_pin"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
+  parent: "msg1_pin_bg"
   alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position {
-    x: 524.0
-    y: 456.0
-    z: 0.532
-  }
   size {
     x: 660.0
-    y: 52.0
+    y: 56.0
   }
-  color {
-    x: 0.078
-    y: 0.071
-    z: 0.204
-  }
-  type: TYPE_BOX
-  id: "msg2_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.60
-}
-nodes {
-  position {
-    x: 524.0
-    y: 507.0
-    z: 0.545
-  }
-  size {
-    x: 660.0
-    y: 1.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "msg2_border_t"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 524.0
-    y: 456.0
-    z: 0.545
-  }
-  size {
-    x: 660.0
-    y: 1.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "msg2_border_b"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 524.0
-    y: 456.0
-    z: 0.545
-  }
-  size {
-    x: 1.0
-    y: 52.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "msg2_border_l"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 1183.0
-    y: 456.0
-    z: 0.545
-  }
-  size {
-    x: 1.0
-    y: 52.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "msg2_border_r"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 521.0
-    y: 484.0
-    z: 0.550
-  }
-  size {
-    x: 6.0
-    y: 18.0
-  }
-  color {
-    x: 1.000
-    y: 0.239
-    z: 0.498
-  }
-  type: TYPE_BOX
-  id: "msg2_dot"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 1.00
-}
-nodes {
-  position {
-    x: 540.0
-    y: 493.0
-    z: 0.560
-  }
-  size {
-    x: 360.0
-    y: 14.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\342\200\224"
-  font: "jb_mono_12"
-  id: "msg2_name"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.95
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 1172.0
-    y: 493.0
-    z: 0.560
-  }
-  size {
-    x: 92.0
-    y: 10.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  text: "\342\200\224"
-  font: "jb_mono_10"
-  id: "msg2_time"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.72
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 540.0
-    y: 474.0
-    z: 0.560
-  }
-  size {
-    x: 500.0
-    y: 14.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  font: "manrope_14"
-  id: "msg2_body"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.86
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 1088.0
-    y: 464.0
-    z: 0.552
-  }
-  size {
-    x: 86.0
-    y: 16.0
-  }
-  color {
-    x: 1.000
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "msg2_pin_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.15
-}
-nodes {
-  position {
-    x: 1086.0
-    y: 476.0
-    z: 0.555
-  }
-  size {
-    x: 70.0
-    y: 1.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "msg2_pin_border_t"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.5
-}
-nodes {
-  position {
-    x: 1086.0
-    y: 464.0
-    z: 0.555
-  }
-  size {
-    x: 70.0
-    y: 1.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "msg2_pin_border_b"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.5
-}
-nodes {
-  position {
-    x: 1086.0
-    y: 464.0
-    z: 0.555
-  }
-  size {
-    x: 1.0
-    y: 13.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "msg2_pin_border_l"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.5
-}
-nodes {
-  position {
-    x: 1156.0
-    y: 464.0
-    z: 0.555
-  }
-  size {
-    x: 1.0
-    y: 13.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "msg2_pin_border_r"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.5
-}
-nodes {
-  position {
-    x: 1131.0
-    y: 472.0
-    z: 0.562
-  }
-  size {
-    x: 76.0
-    y: 10.0
-  }
-  color {
-    x: 1.000
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "msg2_pin"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.95
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 524.0
-    y: 394.0
-    z: 0.532
-  }
-  size {
-    x: 660.0
-    y: 52.0
-  }
-  color {
-    x: 0.078
-    y: 0.071
-    z: 0.204
-  }
-  type: TYPE_BOX
-  id: "msg3_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.60
-}
-nodes {
-  position {
-    x: 524.0
-    y: 445.0
-    z: 0.545
-  }
-  size {
-    x: 660.0
-    y: 1.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "msg3_border_t"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 524.0
-    y: 394.0
-    z: 0.545
-  }
-  size {
-    x: 660.0
-    y: 1.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "msg3_border_b"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 524.0
-    y: 394.0
-    z: 0.545
-  }
-  size {
-    x: 1.0
-    y: 52.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "msg3_border_l"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 1183.0
-    y: 394.0
-    z: 0.545
-  }
-  size {
-    x: 1.0
-    y: 52.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "msg3_border_r"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 521.0
-    y: 422.0
-    z: 0.550
-  }
-  size {
-    x: 6.0
-    y: 18.0
-  }
-  color {
-    x: 1.000
-    y: 0.239
-    z: 0.498
-  }
-  type: TYPE_BOX
-  id: "msg3_dot"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 1.00
-}
-nodes {
-  position {
-    x: 540.0
-    y: 431.0
-    z: 0.560
-  }
-  size {
-    x: 360.0
-    y: 14.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\342\200\224"
-  font: "jb_mono_12"
-  id: "msg3_name"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.95
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 1172.0
-    y: 431.0
-    z: 0.560
-  }
-  size {
-    x: 92.0
-    y: 10.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  text: "\342\200\224"
-  font: "jb_mono_10"
-  id: "msg3_time"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.72
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 540.0
-    y: 412.0
-    z: 0.560
-  }
-  size {
-    x: 500.0
-    y: 14.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  font: "manrope_14"
-  id: "msg3_body"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.86
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 1088.0
-    y: 402.0
-    z: 0.552
-  }
-  size {
-    x: 86.0
-    y: 16.0
-  }
-  color {
-    x: 1.000
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "msg3_pin_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.15
-}
-nodes {
-  position {
-    x: 1086.0
-    y: 414.0
-    z: 0.555
-  }
-  size {
-    x: 70.0
-    y: 1.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "msg3_pin_border_t"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.5
-}
-nodes {
-  position {
-    x: 1086.0
-    y: 402.0
-    z: 0.555
-  }
-  size {
-    x: 70.0
-    y: 1.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "msg3_pin_border_b"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.5
-}
-nodes {
-  position {
-    x: 1086.0
-    y: 402.0
-    z: 0.555
-  }
-  size {
-    x: 1.0
-    y: 13.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "msg3_pin_border_l"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.5
-}
-nodes {
-  position {
-    x: 1156.0
-    y: 402.0
-    z: 0.555
-  }
-  size {
-    x: 1.0
-    y: 13.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "msg3_pin_border_r"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.5
-}
-nodes {
-  position {
-    x: 1131.0
-    y: 410.0
-    z: 0.562
-  }
-  size {
-    x: 76.0
-    y: 10.0
-  }
-  color {
-    x: 1.000
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "msg3_pin"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.95
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 524.0
-    y: 332.0
-    z: 0.532
-  }
-  size {
-    x: 660.0
-    y: 52.0
-  }
-  color {
-    x: 0.078
-    y: 0.071
-    z: 0.204
-  }
-  type: TYPE_BOX
-  id: "msg4_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.60
-}
-nodes {
-  position {
-    x: 524.0
-    y: 383.0
-    z: 0.545
-  }
-  size {
-    x: 660.0
-    y: 1.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "msg4_border_t"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 524.0
-    y: 332.0
-    z: 0.545
-  }
-  size {
-    x: 660.0
-    y: 1.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "msg4_border_b"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 524.0
-    y: 332.0
-    z: 0.545
-  }
-  size {
-    x: 1.0
-    y: 52.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "msg4_border_l"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 1183.0
-    y: 332.0
-    z: 0.545
-  }
-  size {
-    x: 1.0
-    y: 52.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "msg4_border_r"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 521.0
-    y: 360.0
-    z: 0.550
-  }
-  size {
-    x: 6.0
-    y: 18.0
-  }
-  color {
-    x: 1.000
-    y: 0.239
-    z: 0.498
-  }
-  type: TYPE_BOX
-  id: "msg4_dot"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 1.00
-}
-nodes {
-  position {
-    x: 540.0
-    y: 369.0
-    z: 0.560
-  }
-  size {
-    x: 360.0
-    y: 14.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\342\200\224"
-  font: "jb_mono_12"
-  id: "msg4_name"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.95
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 1172.0
-    y: 369.0
-    z: 0.560
-  }
-  size {
-    x: 92.0
-    y: 10.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  text: "\342\200\224"
-  font: "jb_mono_10"
-  id: "msg4_time"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.72
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 540.0
-    y: 350.0
-    z: 0.560
-  }
-  size {
-    x: 500.0
-    y: 14.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  font: "manrope_14"
-  id: "msg4_body"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.86
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 1088.0
-    y: 340.0
-    z: 0.552
-  }
-  size {
-    x: 86.0
-    y: 16.0
-  }
-  color {
-    x: 1.000
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "msg4_pin_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.15
-}
-nodes {
-  position {
-    x: 1086.0
-    y: 352.0
-    z: 0.555
-  }
-  size {
-    x: 70.0
-    y: 1.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "msg4_pin_border_t"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.5
-}
-nodes {
-  position {
-    x: 1086.0
-    y: 340.0
-    z: 0.555
-  }
-  size {
-    x: 70.0
-    y: 1.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "msg4_pin_border_b"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.5
-}
-nodes {
-  position {
-    x: 1086.0
-    y: 340.0
-    z: 0.555
-  }
-  size {
-    x: 1.0
-    y: 13.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "msg4_pin_border_l"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.5
-}
-nodes {
-  position {
-    x: 1156.0
-    y: 340.0
-    z: 0.555
-  }
-  size {
-    x: 1.0
-    y: 13.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "msg4_pin_border_r"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.5
-}
-nodes {
-  position {
-    x: 1131.0
-    y: 348.0
-    z: 0.562
-  }
-  size {
-    x: 76.0
-    y: 10.0
-  }
-  color {
-    x: 1.000
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "msg4_pin"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.95
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 524.0
-    y: 270.0
-    z: 0.532
-  }
-  size {
-    x: 660.0
-    y: 52.0
-  }
-  color {
-    x: 0.078
-    y: 0.071
-    z: 0.204
-  }
-  type: TYPE_BOX
-  id: "msg5_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.60
-}
-nodes {
-  position {
-    x: 524.0
-    y: 321.0
-    z: 0.545
-  }
-  size {
-    x: 660.0
-    y: 1.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "msg5_border_t"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 524.0
-    y: 270.0
-    z: 0.545
-  }
-  size {
-    x: 660.0
-    y: 1.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "msg5_border_b"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 524.0
-    y: 270.0
-    z: 0.545
-  }
-  size {
-    x: 1.0
-    y: 52.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "msg5_border_l"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 1183.0
-    y: 270.0
-    z: 0.545
-  }
-  size {
-    x: 1.0
-    y: 52.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "msg5_border_r"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 521.0
-    y: 298.0
-    z: 0.550
-  }
-  size {
-    x: 6.0
-    y: 18.0
-  }
-  color {
-    x: 1.000
-    y: 0.239
-    z: 0.498
-  }
-  type: TYPE_BOX
-  id: "msg5_dot"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 1.00
-}
-nodes {
-  position {
-    x: 540.0
-    y: 307.0
-    z: 0.560
-  }
-  size {
-    x: 360.0
-    y: 14.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\342\200\224"
-  font: "jb_mono_12"
-  id: "msg5_name"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.95
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 1172.0
-    y: 307.0
-    z: 0.560
-  }
-  size {
-    x: 92.0
-    y: 10.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  text: "\342\200\224"
-  font: "jb_mono_10"
-  id: "msg5_time"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.72
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 540.0
-    y: 288.0
-    z: 0.560
-  }
-  size {
-    x: 500.0
-    y: 14.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  font: "manrope_14"
-  id: "msg5_body"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.86
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 1088.0
-    y: 278.0
-    z: 0.552
-  }
-  size {
-    x: 86.0
-    y: 16.0
-  }
-  color {
-    x: 1.000
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "msg5_pin_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.15
-}
-nodes {
-  position {
-    x: 1086.0
-    y: 290.0
-    z: 0.555
-  }
-  size {
-    x: 70.0
-    y: 1.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "msg5_pin_border_t"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.5
-}
-nodes {
-  position {
-    x: 1086.0
-    y: 278.0
-    z: 0.555
-  }
-  size {
-    x: 70.0
-    y: 1.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "msg5_pin_border_b"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.5
-}
-nodes {
-  position {
-    x: 1086.0
-    y: 278.0
-    z: 0.555
-  }
-  size {
-    x: 1.0
-    y: 13.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "msg5_pin_border_l"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.5
-}
-nodes {
-  position {
-    x: 1156.0
-    y: 278.0
-    z: 0.555
-  }
-  size {
-    x: 1.0
-    y: 13.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "msg5_pin_border_r"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.5
-}
-nodes {
-  position {
-    x: 1131.0
-    y: 286.0
-    z: 0.562
-  }
-  size {
-    x: 76.0
-    y: 10.0
-  }
-  color {
-    x: 1.000
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "msg5_pin"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.95
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 524.0
-    y: 208.0
-    z: 0.532
-  }
-  size {
-    x: 660.0
-    y: 52.0
-  }
-  color {
-    x: 0.078
-    y: 0.071
-    z: 0.204
-  }
-  type: TYPE_BOX
-  id: "msg6_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.60
-}
-nodes {
-  position {
-    x: 524.0
-    y: 259.0
-    z: 0.545
-  }
-  size {
-    x: 660.0
-    y: 1.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "msg6_border_t"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 524.0
-    y: 208.0
-    z: 0.545
-  }
-  size {
-    x: 660.0
-    y: 1.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "msg6_border_b"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 524.0
-    y: 208.0
-    z: 0.545
-  }
-  size {
-    x: 1.0
-    y: 52.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "msg6_border_l"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 1183.0
-    y: 208.0
-    z: 0.545
-  }
-  size {
-    x: 1.0
-    y: 52.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "msg6_border_r"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 521.0
-    y: 236.0
-    z: 0.550
-  }
-  size {
-    x: 6.0
-    y: 18.0
-  }
-  color {
-    x: 1.000
-    y: 0.239
-    z: 0.498
-  }
-  type: TYPE_BOX
-  id: "msg6_dot"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 1.00
-}
-nodes {
-  position {
-    x: 540.0
-    y: 245.0
-    z: 0.560
-  }
-  size {
-    x: 360.0
-    y: 14.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\342\200\224"
-  font: "jb_mono_12"
-  id: "msg6_name"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.95
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 1172.0
-    y: 245.0
-    z: 0.560
-  }
-  size {
-    x: 92.0
-    y: 10.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  text: "\342\200\224"
-  font: "jb_mono_10"
-  id: "msg6_time"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.72
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 540.0
-    y: 226.0
-    z: 0.560
-  }
-  size {
-    x: 500.0
-    y: 14.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  font: "manrope_14"
-  id: "msg6_body"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.86
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 1088.0
-    y: 216.0
-    z: 0.552
-  }
-  size {
-    x: 86.0
-    y: 16.0
-  }
-  color {
-    x: 1.000
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "msg6_pin_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.15
-}
-nodes {
-  position {
-    x: 1086.0
-    y: 228.0
-    z: 0.555
-  }
-  size {
-    x: 70.0
-    y: 1.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "msg6_pin_border_t"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.5
-}
-nodes {
-  position {
-    x: 1086.0
-    y: 216.0
-    z: 0.555
-  }
-  size {
-    x: 70.0
-    y: 1.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "msg6_pin_border_b"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.5
-}
-nodes {
-  position {
-    x: 1086.0
-    y: 216.0
-    z: 0.555
-  }
-  size {
-    x: 1.0
-    y: 13.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "msg6_pin_border_l"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.5
-}
-nodes {
-  position {
-    x: 1156.0
-    y: 216.0
-    z: 0.555
-  }
-  size {
-    x: 1.0
-    y: 13.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "msg6_pin_border_r"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.5
-}
-nodes {
-  position {
-    x: 1131.0
-    y: 224.0
-    z: 0.562
-  }
-  size {
-    x: 76.0
-    y: 10.0
-  }
-  color {
-    x: 1.000
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "msg6_pin"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.95
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 524.0
-    y: 146.0
-    z: 0.532
-  }
-  size {
-    x: 660.0
-    y: 52.0
-  }
-  color {
-    x: 0.078
-    y: 0.071
-    z: 0.204
-  }
-  type: TYPE_BOX
-  id: "msg7_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.60
-}
-nodes {
-  position {
-    x: 524.0
-    y: 197.0
-    z: 0.545
-  }
-  size {
-    x: 660.0
-    y: 1.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "msg7_border_t"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 524.0
-    y: 146.0
-    z: 0.545
-  }
-  size {
-    x: 660.0
-    y: 1.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "msg7_border_b"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 524.0
-    y: 146.0
-    z: 0.545
-  }
-  size {
-    x: 1.0
-    y: 52.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "msg7_border_l"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 1183.0
-    y: 146.0
-    z: 0.545
-  }
-  size {
-    x: 1.0
-    y: 52.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "msg7_border_r"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 521.0
-    y: 174.0
-    z: 0.550
-  }
-  size {
-    x: 6.0
-    y: 18.0
-  }
-  color {
-    x: 1.000
-    y: 0.239
-    z: 0.498
-  }
-  type: TYPE_BOX
-  id: "msg7_dot"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 1.00
-}
-nodes {
-  position {
-    x: 540.0
-    y: 183.0
-    z: 0.560
-  }
-  size {
-    x: 360.0
-    y: 14.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\342\200\224"
-  font: "jb_mono_12"
-  id: "msg7_name"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.95
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 1172.0
-    y: 183.0
-    z: 0.560
-  }
-  size {
-    x: 92.0
-    y: 10.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  text: "\342\200\224"
-  font: "jb_mono_10"
-  id: "msg7_time"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.72
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 540.0
-    y: 164.0
-    z: 0.560
-  }
-  size {
-    x: 500.0
-    y: 14.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  font: "manrope_14"
-  id: "msg7_body"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.86
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 1088.0
-    y: 154.0
-    z: 0.552
-  }
-  size {
-    x: 86.0
-    y: 16.0
-  }
-  color {
-    x: 1.000
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "msg7_pin_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.15
-}
-nodes {
-  position {
-    x: 1086.0
-    y: 166.0
-    z: 0.555
-  }
-  size {
-    x: 70.0
-    y: 1.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "msg7_pin_border_t"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.5
-}
-nodes {
-  position {
-    x: 1086.0
-    y: 154.0
-    z: 0.555
-  }
-  size {
-    x: 70.0
-    y: 1.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "msg7_pin_border_b"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.5
-}
-nodes {
-  position {
-    x: 1086.0
-    y: 154.0
-    z: 0.555
-  }
-  size {
-    x: 1.0
-    y: 13.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  id: "msg7_pin_border_l"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.5
-}
-nodes {
-  position {
-    x: 1156.0
-    y: 154.0
-    z: 0.555
-  }
-  size {
-    x: 1.0
-    y: 13.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
   type: TYPE_BOX
-  id: "msg7_pin_border_r"
+  texture: "ui_common/border"
+  id: "border_msg1"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.5
-}
-nodes {
-  position {
-    x: 1131.0
-    y: 162.0
-    z: 0.562
-  }
-  size {
-    x: 76.0
-    y: 10.0
+  parent: "msg1_bg"
+  slice9 {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+    w: 2.0
   }
-  color {
-    x: 1.000
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "msg7_pin"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.95
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT

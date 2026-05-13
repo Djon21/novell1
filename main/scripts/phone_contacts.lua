@@ -1,18 +1,25 @@
 -- phone_contacts.lua
--- Display metadata for SMS contacts.
+-- Presentation metadata registry for phone channels.
 --
 -- Contract with Ink/game_state:
---   - contact_id is the same id used in Ink tags:
+--   SMS uses contact_id from tags:
 --       # sms:add:<contact_id>:text
 --       # sms:reply:<contact_id>:text
---   - By default, the related Ink thread knot is "sms_thread_<contact_id>".
---   - Override `ink_thread` per contact when a thread uses a custom knot name.
+--     Default Ink thread: sms_thread_<contact_id>.
 --
--- phone_sms.gui_script uses this module only for presentation metadata.
--- It does not mutate game_state and does not start Ink by itself.
+--   Messenger uses chat_id from tags:
+--       # msg:add:<chat_id>:text
+--       # msg:reply:<chat_id>:text
+--     Default Ink thread: msg_thread_<chat_id>.
+--
+-- This module is presentation metadata only. It does not mutate game_state
+-- and does not start Ink by itself.
 
 local M = {}
 
+-- ---------------------------------------------------------------------------
+-- SMS contacts
+-- ---------------------------------------------------------------------------
 M.contacts = {
     nm = {
         name       = "Н. М.",
@@ -108,8 +115,23 @@ M.contacts = {
     },
 }
 
-local function title_from_id(contact_id)
-    local s = tostring(contact_id or "")
+-- ---------------------------------------------------------------------------
+-- Messenger chats
+-- ---------------------------------------------------------------------------
+M.msg_chats = {
+    nm        = { name = "Н. М.", av = "НМ", tone = "hot",    status = "был(а) в сети 5 мин назад", ink_thread = "msg_thread_nm" },
+    loop      = { name = "loop_bot", av = "LO", tone = "violet", status = "бот · работает в фоне", bot = true, ink_thread = "msg_thread_loop" },
+    prod      = { name = "Отдел · Прод", av = "ПР", tone = "amber", status = "группа · 12 участников", group = true, ink_thread = "msg_thread_prod" },
+    mila      = { name = "Мила", av = "МИ", tone = "green",  status = "в сети", ink_thread = "msg_thread_mila" },
+    artem     = { name = "Артём", av = "АР", tone = "green",  status = "в сети", ink_thread = "msg_thread_artem" },
+    metro     = { name = "Москва · Транспорт", av = "МТ", tone = "default", status = "канал", muted = true, channel = true, ink_thread = "msg_thread_metro" },
+    mama      = { name = "Мама", av = "МА", tone = "violet", status = "была в сети недавно", ink_thread = "msg_thread_mama" },
+    kgb       = { name = "КГБ-чат · соседи", av = "КН", tone = "dim", status = "группа", group = true, ink_thread = "msg_thread_kgb" },
+    changelog = { name = "avos · changelog", av = "АВ", tone = "amber", status = "канал", channel = true, ink_thread = "msg_thread_changelog" },
+}
+
+local function title_from_id(id)
+    local s = tostring(id or "")
     if s == "" then return "—" end
     s = s:gsub("_", " "):gsub("%-", " ")
     return (s:gsub("(%S+)", function(word)
@@ -117,11 +139,16 @@ local function title_from_id(contact_id)
     end))
 end
 
-local function clone_contact(src, contact_id)
+local function clone_table(src)
     local out = {}
     if type(src) == "table" then
         for k, v in pairs(src) do out[k] = v end
     end
+    return out
+end
+
+local function clone_contact(src, contact_id)
+    local out = clone_table(src)
     out.id = contact_id
     out.name = out.name or title_from_id(contact_id)
     out.number = out.number or tostring(contact_id or "—")
@@ -131,6 +158,21 @@ local function clone_contact(src, contact_id)
     return out
 end
 
+local function clone_msg_chat(src, chat_id)
+    local out = clone_table(src)
+    out.id = chat_id
+    out.name = out.name or title_from_id(chat_id)
+    out.tone = out.tone or "default"
+    out.status = out.status or "в сети"
+    if out.ink_thread == nil and chat_id and chat_id ~= "" then
+        out.ink_thread = "msg_thread_" .. tostring(chat_id)
+    end
+    return out
+end
+
+-- ---------------------------------------------------------------------------
+-- SMS API (existing call sites)
+-- ---------------------------------------------------------------------------
 function M.get(contact_id)
     if not contact_id or contact_id == "" then
         return clone_contact(nil, "")
@@ -151,7 +193,7 @@ function M.get_tag(contact_id)
     return c.tone, c.tag
 end
 
-function M.get_ink_thread(contact_id)
+function M.get_sms_ink_thread(contact_id)
     return M.get(contact_id).ink_thread
 end
 
@@ -165,6 +207,53 @@ function M.register(contact_id, data)
     end
     M.contacts[tostring(contact_id)] = data
     return true
+end
+
+-- ---------------------------------------------------------------------------
+-- Messenger API
+-- ---------------------------------------------------------------------------
+function M.get_msg(chat_id)
+    if not chat_id or chat_id == "" then
+        return clone_msg_chat(nil, "")
+    end
+    return clone_msg_chat(M.msg_chats[tostring(chat_id)], tostring(chat_id))
+end
+
+function M.get_msg_name(chat_id)
+    return M.get_msg(chat_id).name
+end
+
+function M.get_msg_ink_thread(chat_id)
+    return M.get_msg(chat_id).ink_thread
+end
+
+function M.is_msg_readonly(chat_id)
+    local c = M.get_msg(chat_id)
+    return c.readonly == true or c.channel == true or c.bot == true
+end
+
+function M.register_msg(chat_id, data)
+    if not chat_id or chat_id == "" or type(data) ~= "table" then
+        return false
+    end
+    M.msg_chats[tostring(chat_id)] = data
+    return true
+end
+
+-- Backward-compatible one-arg form:
+--   get_ink_thread(contact_id)       -> sms_thread_<contact_id>
+-- New explicit form:
+--   get_ink_thread("sms", id)
+--   get_ink_thread("msg", chat_id)
+function M.get_ink_thread(kind_or_id, maybe_id)
+    if maybe_id ~= nil then
+        local kind = tostring(kind_or_id or "sms")
+        if kind == "msg" or kind == "messenger" then
+            return M.get_msg_ink_thread(maybe_id)
+        end
+        return M.get_sms_ink_thread(maybe_id)
+    end
+    return M.get_sms_ink_thread(kind_or_id)
 end
 
 return M

@@ -9,13 +9,7 @@ local STYLE_PICKUP      = s.STYLE_PICKUP
 local STYLE_USE         = s.STYLE_USE
 local STYLE_ITEM_TARGET = s.STYLE_ITEM_TARGET
 local STYLE_STORY       = s.STYLE_STORY
-local STYLE_NEUTRAL     = s.STYLE_NEUTRAL
-local apartment_bg      = s.apartment_bg
-local office_bg         = s.office_bg
-local is_apartment_night = s.is_apartment_night
-local is_office_night   = s.is_office_night
-local is_sunday_apartment_night = s.is_sunday_apartment_night
-local is_monday_apartment_night = s.is_monday_apartment_night
+
 
 return {
 
@@ -61,44 +55,331 @@ return {
         },
     },
 
-    park_hub = {
-        bg = "bg_park_by_the_river_morning",
-        label = "Парк у реки",
-        npc = "npc",       -- для inventory verb=give: inv_give_<item>_on_npc
+    -- =====================================================================
+    -- ПАРК У РЕКИ — воскресная встреча, мини-хаб из 3 фонов
+    -- =====================================================================
+    -- park_hub остаётся entrypoint с карты.
+    -- Внутри парка:
+    --   park_hub                 — вход / первая точка, Messenger “Ты где?”
+    --   park_riverside_bench     — скамейка у воды
+    --   park_riverside_path      — прогулочная аллея
 
+    park_hub = {
+        bg = "bg_park_riverside_entrance_morning",
+        label = "Парк у реки",
         on_enter = {
             knot = "sunday_date_park_arrival",
             condition = function(gs)
-                return gs.get_flag("date_place_park") and not gs.get_flag("met_npc_sunday")
+                return gs.get_flag("date_place_park") and not gs.get_flag("park_arrived")
             end,
         },
+
         hotspots = {
             {
-                id = "park_bench",
-                rect = { x = 730, y = 120, w = 135, h = 135 },
-                label = "Скамейка",
+                id = "park_entrance_view",
+                rect = { x = 465, y = 245, w = 230, h = 180 },
+                label = "Осмотреться",
                 icon = "left_click",
                 hotspot_style = STYLE_INSPECT,
-                action = { type = "ink_knot", knot = "park_bench_interact" },
+                icon_offset_x = -4,
+                icon_offset_y = 0,
+                action = { type = "ink_knot", knot = "park_entrance_view" },
+                visible_when = function(gs)
+                    return not gs.get_flag("park_place_chosen")
+                       and not gs.get_flag("met_npc_sunday")
+                end,
             },
             {
-                id = "park_river_view",
-                rect = { x = 990, y = 155, w = 135, h = 135 },
-                label = "Река",
-                icon = "left_click",
-                hotspot_style = STYLE_INSPECT,
-                action = { type = "ink_knot", knot = "park_river_view" },
+                id = "park_bin",
+                rect = { x = 1080, y = 110, w = 130, h = 160 },
+                label = "Урна",
+                icon = "delete",
+                hotspot_style = STYLE_ITEM_TARGET,
+                icon_offset_x = -4,
+                icon_offset_y = 0,
+                action = { type = "ink_knot", knot = "park_bin_prompt" },
                 visible_when = function(gs)
-                    return gs.get_flag("met_npc_sunday")
+                    return gs.has_item("park_trash_cup")
+                       and not gs.get_flag("park_bench_cleared")
+                end,
+            },
+            {
+                id = "park_message_where",
+                rect = { x = 345, y = 120, w = 170, h = 150 },
+                label = "Написать",
+                icon = "phone",
+                hotspot_style = STYLE_STORY,
+                icon_offset_x = -4,
+                icon_offset_y = 0,
+                action = { type = "ink_knot", knot = "park_message_where_are_you" },
+                visible_when = function(gs)
+                    return not gs.get_flag("park_where_message_sent")
+                       and not gs.get_flag("park_npc_greeted")
+                       and not gs.get_flag("met_npc_sunday")
+                end,
+            },
+            {
+                id = "park_npc_greeting",
+                rect = { x = 650, y = 205, w = 230, h = 210 },
+                label = "Поздороваться",
+                icon = "left_click",
+                hotspot_style = STYLE_STORY,
+                icon_offset_x = -4,
+                icon_offset_y = 0,
+                action = { type = "ink_knot", knot = "park_npc_arrives" },
+                visible_when = function(gs)
+                    return gs.get_flag("park_where_message_sent")
+                       and not gs.get_flag("park_npc_greeted")
+                       and not gs.get_flag("met_npc_sunday")
+                end,
+            },
+            {
+                id = "park_offer_place",
+                rect = { x = 650, y = 205, w = 230, h = 210 },
+                label = "Предложить",
+                icon = "left_click",
+                hotspot_style = STYLE_STORY,
+                icon_offset_x = -4,
+                icon_offset_y = 0,
+                action = { type = "ink_knot", knot = "park_offer_place" },
+                visible_when = function(gs)
+                    return gs.get_flag("park_npc_greeted")
+                       and gs.get_flag("park_bench_cleared")
+                       and gs.get_flag("park_path_seen")
+                       and not gs.get_flag("park_place_chosen")
+                       and not gs.get_flag("met_npc_sunday")
+                end,
+            },
+            {
+                id = "park_to_bench",
+                rect = { x = 830, y = 165, w = 245, h = 300 },
+                label = "К скамейке",
+                icon = "arrow_forward",
+                hotspot_style = STYLE_NAV,
+                icon_offset_x = -4,
+                icon_offset_y = 0,
+                action = { type = "goto_scene", scene = "park_riverside_bench" },
+                visible_when = function(gs)
+                    return gs.get_flag("park_npc_greeted")
+                       and not gs.get_flag("park_place_chosen")
+                       and not gs.get_flag("met_npc_sunday")
+                end,
+            },
+            {
+                id = "park_to_path",
+                rect = { x = 520, y = 345, w = 235, h = 210 },
+                label = "По аллее",
+                icon = "arrow_up",
+                hotspot_style = STYLE_NAV,
+                icon_offset_x = -4,
+                icon_offset_y = 0,
+                action = { type = "goto_scene", scene = "park_riverside_path" },
+                visible_when = function(gs)
+                    return gs.get_flag("park_npc_greeted")
+                       and not gs.get_flag("park_place_chosen")
+                       and not gs.get_flag("met_npc_sunday")
                 end,
             },
             {
                 id = "leave_park",
-                rect = { x = 60, y = 60, w = 170, h = 220 },
+                rect = { x = 0, y = 0, w = 170, h = 220 },
                 label = "Уйти",
                 icon = "arrow_back",
                 hotspot_style = STYLE_NAV,
+                icon_offset_x = -4,
+                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "leave_park" },
+                visible_when = function(gs)
+                    return not (gs.get_flag("park_place_chosen") and not gs.get_flag("met_npc_sunday"))
+                end,
+            },
+        },
+    },
+
+    park_riverside_bench = {
+        bg = "bg_park_riverside_bench_morning",
+        label = "Парк у реки — скамейка",
+        hotspots = {
+            {
+                id = "park_bench",
+                rect = { x = 645, y = 150, w = 230, h = 165 },
+                label = "Скамейка",
+                icon = "left_click",
+                hotspot_style = STYLE_INSPECT,
+                icon_offset_x = -4,
+                icon_offset_y = 0,
+                action = { type = "ink_knot", knot = "park_bench_interact" },
+            },
+            {
+                id = "park_trash_cup",
+                rect = { x = 735, y = 215, w = 95, h = 90 },
+                label = "Стаканчик",
+                icon = "left_click",
+                hotspot_style = STYLE_PICKUP,
+                icon_offset_x = -4,
+                icon_offset_y = 0,
+                action = { type = "ink_knot", knot = "take_park_trash_cup" },
+                visible_when = function(gs)
+                    return gs.get_flag("park_npc_greeted")
+                       and gs.get_flag("park_bench_trash_seen")
+                       and not gs.has_item("park_trash_cup")
+                       and not gs.get_flag("park_bench_cleared")
+                end,
+            },
+            {
+                id = "park_river_view",
+                rect = { x = 875, y = 260, w = 310, h = 230 },
+                label = "Река",
+                icon = "left_click",
+                hotspot_style = STYLE_INSPECT,
+                icon_offset_x = -4,
+                icon_offset_y = 0,
+                action = { type = "ink_knot", knot = "park_river_view" },
+            },
+            {
+                id = "park_offer_place_bench",
+                rect = { x = 520, y = 250, w = 220, h = 190 },
+                label = "Предложить",
+                icon = "left_click",
+                hotspot_style = STYLE_STORY,
+                icon_offset_x = -4,
+                icon_offset_y = 0,
+                action = { type = "ink_knot", knot = "park_offer_place" },
+                visible_when = function(gs)
+                    return gs.get_flag("park_npc_greeted")
+                       and gs.get_flag("park_bench_cleared")
+                       and gs.get_flag("park_path_seen")
+                       and not gs.get_flag("park_place_chosen")
+                       and not gs.get_flag("met_npc_sunday")
+                end,
+            },
+            {
+                id = "bench_to_path",
+                rect = { x = 300, y = 310, w = 300, h = 235 },
+                label = "Пройтись",
+                icon = "arrow_up",
+                hotspot_style = STYLE_NAV,
+                icon_offset_x = -4,
+                icon_offset_y = 0,
+                action = { type = "goto_scene", scene = "park_riverside_path" },
+                visible_when = function(gs)
+                    return not (gs.get_flag("park_place_chosen") and not gs.get_flag("met_npc_sunday"))
+                end,
+            },
+            {
+                id = "bench_to_entrance",
+                rect = { x = 0, y = 0, w = 170, h = 220 },
+                label = "К входу",
+                icon = "arrow_back",
+                hotspot_style = STYLE_NAV,
+                icon_offset_x = -4,
+                icon_offset_y = 0,
+                action = { type = "goto_scene", scene = "park_hub" },
+                visible_when = function(gs)
+                    return not (gs.get_flag("park_place_chosen") and not gs.get_flag("met_npc_sunday"))
+                end,
+            },
+            {
+                id = "leave_park_from_bench",
+                rect = { x = 1110, y = 0, w = 170, h = 220 },
+                label = "Уйти",
+                icon = "arrow_forward",
+                hotspot_style = STYLE_NAV,
+                icon_offset_x = -4,
+                icon_offset_y = 0,
+                action = { type = "ink_knot", knot = "leave_park" },
+                visible_when = function(gs)
+                    return not (gs.get_flag("park_place_chosen") and not gs.get_flag("met_npc_sunday"))
+                end,
+            },
+        },
+    },
+
+    park_riverside_path = {
+        bg = "bg_park_riverside_path_morning",
+        label = "Парк у реки — аллея",
+        hotspots = {
+            {
+                id = "park_path_walk",
+                rect = { x = 520, y = 165, w = 300, h = 330 },
+                label = "Пройтись",
+                icon = "left_click",
+                hotspot_style = STYLE_USE,
+                icon_offset_x = -4,
+                icon_offset_y = 0,
+                action = { type = "ink_knot", knot = "park_path_walk" },
+                visible_when = function(gs)
+                    return gs.get_flag("park_talk_place_path") or gs.get_flag("met_npc_sunday")
+                end,
+            },
+            {
+                id = "park_path_trees",
+                rect = { x = 125, y = 210, w = 250, h = 310 },
+                label = "Тень деревьев",
+                icon = "left_click",
+                hotspot_style = STYLE_INSPECT,
+                icon_offset_x = -4,
+                icon_offset_y = 0,
+                action = { type = "ink_knot", knot = "park_path_trees" },
+                visible_when = function(gs)
+                    return not (gs.get_flag("park_place_chosen") and not gs.get_flag("met_npc_sunday"))
+                end,
+            },
+            {
+                id = "park_offer_place_path",
+                rect = { x = 520, y = 250, w = 220, h = 190 },
+                label = "Предложить",
+                icon = "left_click",
+                hotspot_style = STYLE_STORY,
+                icon_offset_x = -4,
+                icon_offset_y = 0,
+                action = { type = "ink_knot", knot = "park_offer_place" },
+                visible_when = function(gs)
+                    return gs.get_flag("park_npc_greeted")
+                       and gs.get_flag("park_bench_cleared")
+                       and gs.get_flag("park_path_seen")
+                       and not gs.get_flag("park_place_chosen")
+                       and not gs.get_flag("met_npc_sunday")
+                end,
+            },
+            {
+                id = "path_to_bench",
+                rect = { x = 870, y = 155, w = 250, h = 300 },
+                label = "К скамейке",
+                icon = "arrow_forward",
+                hotspot_style = STYLE_NAV,
+                icon_offset_x = -4,
+                icon_offset_y = 0,
+                action = { type = "goto_scene", scene = "park_riverside_bench" },
+                visible_when = function(gs)
+                    return not (gs.get_flag("park_place_chosen") and not gs.get_flag("met_npc_sunday"))
+                end,
+            },
+            {
+                id = "path_to_entrance",
+                rect = { x = 0, y = 0, w = 170, h = 220 },
+                label = "К входу",
+                icon = "arrow_back",
+                hotspot_style = STYLE_NAV,
+                icon_offset_x = -4,
+                icon_offset_y = 0,
+                action = { type = "goto_scene", scene = "park_hub" },
+                visible_when = function(gs)
+                    return not (gs.get_flag("park_place_chosen") and not gs.get_flag("met_npc_sunday"))
+                end,
+            },
+            {
+                id = "leave_park_from_path",
+                rect = { x = 1110, y = 0, w = 170, h = 220 },
+                label = "Уйти",
+                icon = "arrow_forward",
+                hotspot_style = STYLE_NAV,
+                icon_offset_x = -4,
+                icon_offset_y = 0,
+                action = { type = "ink_knot", knot = "leave_park" },
+                visible_when = function(gs)
+                    return not (gs.get_flag("park_place_chosen") and not gs.get_flag("met_npc_sunday"))
+                end,
             },
         },
     },

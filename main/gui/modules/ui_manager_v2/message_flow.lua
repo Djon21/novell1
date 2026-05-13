@@ -245,7 +245,13 @@ local function handle_messenger_open_chat(ctx, chat_id)
     if not chat_id then return end
     local replied_flag = "msg_" .. tostring(chat_id) .. "_replied"
     if gs.get_flag and gs.get_flag(replied_flag) then return end
-    local knot_name = "msg_thread_" .. tostring(chat_id)
+
+    local knot_name = nil
+    if contacts and contacts.get_ink_thread then
+        knot_name = contacts.get_ink_thread("msg", chat_id)
+    end
+    knot_name = knot_name or ("msg_thread_" .. tostring(chat_id))
+
     if not (dm.has_knot and dm.has_knot(knot_name)) then return end
     ctx.close_phone()
     local keep_bg = nil

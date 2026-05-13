@@ -63,12 +63,9 @@ return {
                 hotspot_style = STYLE_NAV,
                 icon_offset_x = -4,
                 icon_offset_y = 0,
-                action = { type = "ink_knot", knot = "leave_apartment" },
+                action = { type = "ink_knot", knot = "leave_apartment_prompt" },
                 visible_when = function(gs)
                     return not is_apartment_night(gs)
-                end,
-                condition = function(gs)
-                    return gs.has_item("phone") and gs.has_item("key") and gs.get_flag("date_agreed") and gs.get_flag("washed_up") and gs.get_flag("sunday_dressed")
                 end,
             },
             {
@@ -82,20 +79,6 @@ return {
                 action = { type = "ink_knot", knot = "look_hall_mirror" },
             },
             {
-                id = "hall_console_keys",
-                rect = { x = 385, y = 165, w = 135, h = 135 },
-                label = "Ключи",
-                icon = "note",
-                hotspot_style = STYLE_PICKUP,
-                icon_offset_x = -4,
-                icon_offset_y = 0,
-                action = { type = "ink_knot", knot = "take_sunday_keys" },
-                visible_when = function(gs)
-                    return not is_apartment_night(gs)
-                       and not gs.has_item("key")
-                end,
-            },
-            {
                 id = "hall_jacket_shoes",
                 rect = { x = 805, y = 135, w = 135, h = 305 },
                 label = "Куртка и обувь",
@@ -106,6 +89,7 @@ return {
                 action = { type = "ink_knot", knot = "sunday_get_dressed" },
                 visible_when = function(gs)
                     return not is_apartment_night(gs)
+                       and gs.get_flag("date_agreed")
                        and not gs.get_flag("sunday_dressed")
                 end,
             },
@@ -164,15 +148,15 @@ return {
             {
                 id = "bedroom_bed",
                 rect = { x = 425, y = 150, w = 135, h = 135 },
-                label = "Кровать",
-                icon = "left_click",
-                hotspot_style = STYLE_INSPECT,
+                label = "Встать",
+                icon = "arrow_up",
+                hotspot_style = STYLE_STORY,
                 icon_offset_x = -4,
                 icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "look_bed_morning" },
                 visible_when = function(gs)
                     return not is_apartment_night(gs)
-                       and gs.get_flag("date_agreed")
+                       and gs.has_item("phone")
                        and not gs.get_flag("got_out_of_bed")
                 end,
             },
@@ -190,18 +174,16 @@ return {
                 end,
             },
             {
-                id = "bathroom_door_locked",
+                id = "to_bathroom_from_bedroom",
                 rect = { x = 920, y = 145, w = 125, h = 480 },
-                label = "Умыться",
-                icon = "left_click",
-                hotspot_style = STYLE_USE,
+                label = "В ванную",
+                icon = "arrow_forward",
+                hotspot_style = STYLE_NAV,
                 icon_offset_x = -4,
                 icon_offset_y = 0,
-                action = { type = "ink_knot", knot = "wash_up_morning" },
+                action = { type = "goto_scene", scene = "apartment_bathroom" },
                 visible_when = function(gs)
-                    return not is_apartment_night(gs)
-                       and gs.get_flag("got_out_of_bed")
-                       and not gs.get_flag("washed_up")
+                    return is_apartment_night(gs) or gs.get_flag("got_out_of_bed")
                 end,
             },
             {
@@ -230,6 +212,102 @@ return {
                 action = { type = "goto_scene", scene = "apartment_hub" },
                 visible_when = function(gs)
                     return is_apartment_night(gs) or gs.get_flag("washed_up")
+                end,
+            },
+        },
+    },
+
+
+    apartment_bathroom = {
+        bg = apartment_bg("bathroom"),
+        label = "Ванная",
+        on_enter = {
+            knot = "enter_bathroom_morning_first",
+            condition = function(gs)
+                return not is_apartment_night(gs)
+                   and not gs.get_flag("bathroom_morning_seen")
+            end,
+        },
+        hotspots = {
+            {
+                id = "bathroom_mirror",
+                rect = { x = 500, y = 300, w = 280, h = 240 },
+                label = "Зеркало",
+                icon = "left_click",
+                hotspot_style = STYLE_INSPECT,
+                icon_offset_x = -4,
+                icon_offset_y = 0,
+                action = { type = "ink_knot", knot = "look_bathroom_mirror" },
+            },
+            {
+                id = "bathroom_toothbrush",
+                rect = { x = 570, y = 210, w = 105, h = 105 },
+                label = "Щётка",
+                icon = "left_click",
+                hotspot_style = STYLE_PICKUP,
+                icon_offset_x = -4,
+                icon_offset_y = 0,
+                action = { type = "ink_knot", knot = "take_toothbrush" },
+                visible_when = function(gs)
+                    return not gs.get_flag("teeth_brushed")
+                       and not gs.has_item("toothbrush")
+                       and not gs.has_item("toothbrush_pasted")
+                end,
+            },
+            {
+                id = "bathroom_toothpaste",
+                rect = { x = 690, y = 210, w = 105, h = 105 },
+                label = "Паста",
+                icon = "left_click",
+                hotspot_style = STYLE_PICKUP,
+                icon_offset_x = -4,
+                icon_offset_y = 0,
+                action = { type = "ink_knot", knot = "take_toothpaste" },
+                visible_when = function(gs)
+                    return not gs.get_flag("teeth_brushed")
+                       and not gs.has_item("toothpaste")
+                       and not gs.has_item("toothbrush_pasted")
+                end,
+            },
+            {
+                id = "bathroom_sink",
+                rect = { x = 500, y = 115, w = 350, h = 190 },
+                label = "Раковина",
+                icon = "left_click",
+                hotspot_style = STYLE_ITEM_TARGET,
+                icon_offset_x = -4,
+                icon_offset_y = 0,
+                action = { type = "ink_knot", knot = "bathroom_sink_prompt" },
+                visible_when = function(gs)
+                    return not gs.get_flag("washed_up")
+                end,
+            },
+            {
+                id = "bathroom_exit_locked",
+                rect = { x = 25, y = 70, w = 180, h = 560 },
+                label = "В спальню",
+                icon = "arrow_back",
+                hotspot_style = STYLE_STORY,
+                icon_offset_x = -4,
+                icon_offset_y = 0,
+                action = { type = "ink_knot", knot = "bathroom_exit_locked" },
+                visible_when = function(gs)
+                    return not is_apartment_night(gs)
+                       and not gs.get_flag("washed_up")
+                end,
+            },
+            {
+                id = "back_to_bedroom_from_bathroom",
+                rect = { x = 25, y = 70, w = 180, h = 560 },
+                label = "В спальню",
+                icon = "arrow_back",
+                hotspot_style = STYLE_NAV,
+                icon_offset_x = -4,
+                icon_offset_y = 0,
+                action = { type = "goto_scene", scene = "apartment_bedroom" },
+                visible_when = function(gs)
+                    return is_apartment_night(gs)
+                        or gs.get_flag("washed_up")
                 end,
             },
         },

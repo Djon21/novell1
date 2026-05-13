@@ -30,6 +30,10 @@ fonts {
   name: "manrope_16"
   font: "/main/fonts/manrope_16.font"
 }
+fonts {
+  name: "Manrope-Medium_16"
+  font: "/main/fonts/Manrope-Medium_16.font"
+}
 textures {
   name: "icon_phone"
   texture: "/main/images/phone/icon_phone.atlas"
@@ -38,7 +42,23 @@ textures {
   name: "map2"
   texture: "/main/images/phone/map2.atlas"
 }
+textures {
+  name: "ui_common"
+  texture: "/main/images/ui_common.atlas"
+}
 nodes {
+  position {
+    z: 0.053
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
   type: TYPE_BOX
   id: "thread_root"
   pivot: PIVOT_SW
@@ -48,8 +68,8 @@ nodes {
 nodes {
   position {
     x: 524.0
-    y: 606.0
-    z: 0.552
+    y: 604.0
+    z: 0.052
   }
   size {
     x: 118.0
@@ -62,121 +82,50 @@ nodes {
   }
   type: TYPE_BOX
   id: "th_back_bg"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
   parent: "thread_root"
-  alpha: 0.60
+  alpha: 0.6
 }
 nodes {
-  position {
-    x: 524.0
-    y: 641.0
-    z: 0.557
-  }
   size {
     x: 118.0
-    y: 1.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "th_back_border_t"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.35
-}
-nodes {
-  position {
-    x: 524.0
-    y: 606.0
-    z: 0.557
-  }
-  size {
-    x: 118.0
-    y: 1.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "th_back_border_b"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.35
-}
-nodes {
-  position {
-    x: 524.0
-    y: 606.0
-    z: 0.557
-  }
-  size {
-    x: 1.0
     y: 36.0
   }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
   type: TYPE_BOX
-  id: "th_back_border_l"
+  texture: "ui_common/border"
+  id: "border_back"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.35
+  parent: "th_back_bg"
+  slice9 {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+    w: 2.0
+  }
 }
 nodes {
   position {
-    x: 641.0
-    y: 606.0
-    z: 0.557
-  }
-  size {
-    x: 1.0
-    y: 36.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "th_back_border_r"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.35
-}
-nodes {
-  position {
-    x: 536.0
-    y: 624.0
-    z: 0.559
+    x: 26.0
+    y: 19.0
+    z: 0.059
   }
   size {
     x: 96.0
     y: 12.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_TEXT
   text: "\342\200\271 \320\222\320\245\320\236\320\224\320\257\320\251\320\230\320\225"
   font: "jb_mono_10"
   id: "th_back_label"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
+  parent: "th_back_bg"
   alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
@@ -184,12 +133,12 @@ nodes {
 nodes {
   position {
     x: 660.0
-    y: 630.0
+    y: 604.0
     z: 0.559
   }
   size {
     x: 340.0
-    y: 18.0
+    y: 36.0
   }
   color {
     x: 0.953
@@ -198,10 +147,11 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\342\200\224"
-  font: "jb_mono_bold_14"
+  font: "unbounded_bold_20"
   id: "th_name"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
+  pivot: PIVOT_SW
   parent: "thread_root"
   alpha: 0.95
   outline_alpha: 0.0
@@ -209,13 +159,13 @@ nodes {
 }
 nodes {
   position {
-    x: 660.0
-    y: 610.0
+    x: 1064.0
+    y: 604.0
     z: 0.559
   }
   size {
     x: 370.0
-    y: 12.0
+    y: 36.0
   }
   color {
     x: 0.788
@@ -224,9 +174,11 @@ nodes {
   }
   type: TYPE_TEXT
   text: "SIM 1 \302\267 \342\200\224"
-  font: "jb_mono_10"
+  font: "Manrope-Medium_16"
   id: "th_num"
-  pivot: PIVOT_W
+  xanchor: XANCHOR_RIGHT
+  yanchor: YANCHOR_TOP
+  pivot: PIVOT_SE
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "thread_root"
   alpha: 0.78
@@ -236,7 +188,7 @@ nodes {
 nodes {
   position {
     x: 1074.0
-    y: 612.0
+    y: 604.0
     z: 0.552
   }
   size {
@@ -250,103 +202,34 @@ nodes {
   }
   type: TYPE_BOX
   id: "th_call_bg"
+  xanchor: XANCHOR_RIGHT
+  yanchor: YANCHOR_TOP
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
   parent: "thread_root"
-  alpha: 0.60
+  alpha: 0.6
 }
 nodes {
-  position {
-    x: 1074.0
-    y: 643.0
-    z: 0.557
-  }
   size {
     x: 32.0
-    y: 1.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_BOX
-  id: "th_call_border_t"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 1074.0
-    y: 612.0
-    z: 0.557
-  }
-  size {
-    x: 32.0
-    y: 1.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_BOX
-  id: "th_call_border_b"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 1074.0
-    y: 612.0
-    z: 0.557
-  }
-  size {
-    x: 1.0
     y: 32.0
   }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
   type: TYPE_BOX
-  id: "th_call_border_l"
+  texture: "ui_common/border"
+  id: "border_call"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.18
+  parent: "th_call_bg"
+  slice9 {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+    w: 2.0
+  }
 }
 nodes {
   position {
-    x: 1105.0
-    y: 612.0
-    z: 0.557
-  }
-  size {
-    x: 1.0
-    y: 32.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_BOX
-  id: "th_call_border_r"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 1090.0
-    y: 628.0
+    x: 16.0
+    y: 16.0
     z: 0.559
   }
   size {
@@ -362,8 +245,7 @@ nodes {
   text: "\342\230\217"
   font: "jb_mono_bold_14"
   id: "th_call_label"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
+  parent: "th_call_bg"
   alpha: 0.78
   outline_alpha: 0.0
   shadow_alpha: 0.0
@@ -371,8 +253,8 @@ nodes {
 nodes {
   position {
     x: 1112.0
-    y: 612.0
-    z: 0.552
+    y: 604.0
+    z: 0.052
   }
   size {
     x: 32.0
@@ -385,104 +267,35 @@ nodes {
   }
   type: TYPE_BOX
   id: "th_info_bg"
+  xanchor: XANCHOR_RIGHT
+  yanchor: YANCHOR_TOP
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
   parent: "thread_root"
-  alpha: 0.60
+  alpha: 0.6
 }
 nodes {
-  position {
-    x: 1112.0
-    y: 643.0
-    z: 0.557
-  }
   size {
     x: 32.0
-    y: 1.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_BOX
-  id: "th_info_border_t"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 1112.0
-    y: 612.0
-    z: 0.557
-  }
-  size {
-    x: 32.0
-    y: 1.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_BOX
-  id: "th_info_border_b"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 1112.0
-    y: 612.0
-    z: 0.557
-  }
-  size {
-    x: 1.0
     y: 32.0
   }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
   type: TYPE_BOX
-  id: "th_info_border_l"
+  texture: "ui_common/border"
+  id: "border_info"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.18
+  parent: "th_info_bg"
+  slice9 {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+    w: 2.0
+  }
 }
 nodes {
   position {
-    x: 1143.0
-    y: 612.0
-    z: 0.557
-  }
-  size {
-    x: 1.0
-    y: 32.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_BOX
-  id: "th_info_border_r"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 1128.0
-    y: 628.0
-    z: 0.559
+    x: 16.0
+    y: 16.0
+    z: 0.059
   }
   size {
     x: 20.0
@@ -497,8 +310,7 @@ nodes {
   text: "i"
   font: "jb_mono_bold_14"
   id: "th_info_label"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
+  parent: "th_info_bg"
   alpha: 0.78
   outline_alpha: 0.0
   shadow_alpha: 0.0
@@ -506,8 +318,8 @@ nodes {
 nodes {
   position {
     x: 1150.0
-    y: 612.0
-    z: 0.552
+    y: 604.0
+    z: 0.052
   }
   size {
     x: 32.0
@@ -520,103 +332,34 @@ nodes {
   }
   type: TYPE_BOX
   id: "th_menu_bg"
+  xanchor: XANCHOR_RIGHT
+  yanchor: YANCHOR_TOP
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
   parent: "thread_root"
-  alpha: 0.60
+  alpha: 0.6
 }
 nodes {
-  position {
-    x: 1150.0
-    y: 643.0
-    z: 0.557
-  }
   size {
     x: 32.0
-    y: 1.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_BOX
-  id: "th_menu_border_t"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 1150.0
-    y: 612.0
-    z: 0.557
-  }
-  size {
-    x: 32.0
-    y: 1.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_BOX
-  id: "th_menu_border_b"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 1150.0
-    y: 612.0
-    z: 0.557
-  }
-  size {
-    x: 1.0
     y: 32.0
   }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
   type: TYPE_BOX
-  id: "th_menu_border_l"
+  texture: "ui_common/border"
+  id: "border_menu"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.18
+  parent: "th_menu_bg"
+  slice9 {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+    w: 2.0
+  }
 }
 nodes {
   position {
-    x: 1181.0
-    y: 612.0
-    z: 0.557
-  }
-  size {
-    x: 1.0
-    y: 32.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_BOX
-  id: "th_menu_border_r"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 1166.0
-    y: 628.0
+    x: 16.0
+    y: 16.0
     z: 0.559
   }
   size {
@@ -632,8 +375,7 @@ nodes {
   text: "\342\213\256"
   font: "jb_mono_bold_14"
   id: "th_menu_label"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
+  parent: "th_menu_bg"
   alpha: 0.78
   outline_alpha: 0.0
   shadow_alpha: 0.0
@@ -689,7 +431,7 @@ nodes {
   position {
     x: 540.0
     y: 520.0
-    z: 0.548
+    z: 0.048
   }
   size {
     x: 420.0
@@ -709,93 +451,9 @@ nodes {
 }
 nodes {
   position {
-    x: 540.0
-    y: 559.0
-    z: 0.556
-  }
-  size {
-    x: 420.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub1_border_t"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 540.0
-    y: 520.0
-    z: 0.556
-  }
-  size {
-    x: 420.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub1_border_b"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 540.0
-    y: 520.0
-    z: 0.556
-  }
-  size {
-    x: 1.0
-    y: 40.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub1_border_l"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 959.0
-    y: 520.0
-    z: 0.556
-  }
-  size {
-    x: 1.0
-    y: 40.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub1_border_r"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 552.0
-    y: 546.0
-    z: 0.559
+    x: 12.0
+    y: 28.0
+    z: 0.059
   }
   size {
     x: 396.0
@@ -807,24 +465,41 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  font: "manrope_14"
+  font: "Manrope-Medium_16"
   id: "bub1_text"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
   line_break: true
-  parent: "thread_root"
+  parent: "bub1_bg"
   alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
+  size {
+    x: 420.0
+    y: 40.0
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "border_bub1"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "bub1_bg"
+  slice9 {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+    w: 2.0
+  }
+}
+nodes {
   position {
-    x: 948.0
-    y: 528.0
-    z: 0.559
+    x: 408.0
+    y: 8.0
+    z: 0.059
   }
   size {
-    x: 396.0
+    x: 50.0
     y: 10.0
   }
   color {
@@ -836,1107 +511,7 @@ nodes {
   font: "jb_mono_10"
   id: "bub1_stamp"
   pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.74
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 540.0
-    y: 476.0
-    z: 0.548
-  }
-  size {
-    x: 420.0
-    y: 40.0
-  }
-  color {
-    x: 0.078
-    y: 0.071
-    z: 0.204
-  }
-  type: TYPE_BOX
-  id: "bub2_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.7
-}
-nodes {
-  position {
-    x: 540.0
-    y: 515.0
-    z: 0.556
-  }
-  size {
-    x: 420.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub2_border_t"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 540.0
-    y: 476.0
-    z: 0.556
-  }
-  size {
-    x: 420.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub2_border_b"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 540.0
-    y: 476.0
-    z: 0.556
-  }
-  size {
-    x: 1.0
-    y: 40.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub2_border_l"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 959.0
-    y: 476.0
-    z: 0.556
-  }
-  size {
-    x: 1.0
-    y: 40.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub2_border_r"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 552.0
-    y: 502.0
-    z: 0.559
-  }
-  size {
-    x: 396.0
-    y: 28.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  font: "manrope_14"
-  id: "bub2_text"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  line_break: true
-  parent: "thread_root"
-  alpha: 0.95
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 948.0
-    y: 484.0
-    z: 0.559
-  }
-  size {
-    x: 396.0
-    y: 10.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "bub2_stamp"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.74
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 540.0
-    y: 432.0
-    z: 0.548
-  }
-  size {
-    x: 420.0
-    y: 40.0
-  }
-  color {
-    x: 0.078
-    y: 0.071
-    z: 0.204
-  }
-  type: TYPE_BOX
-  id: "bub3_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.7
-}
-nodes {
-  position {
-    x: 540.0
-    y: 471.0
-    z: 0.556
-  }
-  size {
-    x: 420.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub3_border_t"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 540.0
-    y: 432.0
-    z: 0.556
-  }
-  size {
-    x: 420.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub3_border_b"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 540.0
-    y: 432.0
-    z: 0.556
-  }
-  size {
-    x: 1.0
-    y: 40.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub3_border_l"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 959.0
-    y: 432.0
-    z: 0.556
-  }
-  size {
-    x: 1.0
-    y: 40.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub3_border_r"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 552.0
-    y: 458.0
-    z: 0.559
-  }
-  size {
-    x: 396.0
-    y: 28.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  font: "manrope_14"
-  id: "bub3_text"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  line_break: true
-  parent: "thread_root"
-  alpha: 0.95
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 948.0
-    y: 440.0
-    z: 0.559
-  }
-  size {
-    x: 396.0
-    y: 10.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "bub3_stamp"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.74
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 540.0
-    y: 388.0
-    z: 0.548
-  }
-  size {
-    x: 420.0
-    y: 40.0
-  }
-  color {
-    x: 0.078
-    y: 0.071
-    z: 0.204
-  }
-  type: TYPE_BOX
-  id: "bub4_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.7
-}
-nodes {
-  position {
-    x: 540.0
-    y: 427.0
-    z: 0.556
-  }
-  size {
-    x: 420.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub4_border_t"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 540.0
-    y: 388.0
-    z: 0.556
-  }
-  size {
-    x: 420.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub4_border_b"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 540.0
-    y: 388.0
-    z: 0.556
-  }
-  size {
-    x: 1.0
-    y: 40.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub4_border_l"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 959.0
-    y: 388.0
-    z: 0.556
-  }
-  size {
-    x: 1.0
-    y: 40.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub4_border_r"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 552.0
-    y: 414.0
-    z: 0.559
-  }
-  size {
-    x: 396.0
-    y: 28.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  font: "manrope_14"
-  id: "bub4_text"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  line_break: true
-  parent: "thread_root"
-  alpha: 0.95
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 948.0
-    y: 396.0
-    z: 0.559
-  }
-  size {
-    x: 396.0
-    y: 10.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "bub4_stamp"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.74
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 540.0
-    y: 344.0
-    z: 0.548
-  }
-  size {
-    x: 420.0
-    y: 40.0
-  }
-  color {
-    x: 0.078
-    y: 0.071
-    z: 0.204
-  }
-  type: TYPE_BOX
-  id: "bub5_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.7
-}
-nodes {
-  position {
-    x: 540.0
-    y: 383.0
-    z: 0.556
-  }
-  size {
-    x: 420.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub5_border_t"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 540.0
-    y: 344.0
-    z: 0.556
-  }
-  size {
-    x: 420.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub5_border_b"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 540.0
-    y: 344.0
-    z: 0.556
-  }
-  size {
-    x: 1.0
-    y: 40.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub5_border_l"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 959.0
-    y: 344.0
-    z: 0.556
-  }
-  size {
-    x: 1.0
-    y: 40.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub5_border_r"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 552.0
-    y: 370.0
-    z: 0.559
-  }
-  size {
-    x: 396.0
-    y: 28.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  font: "manrope_14"
-  id: "bub5_text"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  line_break: true
-  parent: "thread_root"
-  alpha: 0.95
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 948.0
-    y: 352.0
-    z: 0.559
-  }
-  size {
-    x: 396.0
-    y: 10.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "bub5_stamp"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.74
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 540.0
-    y: 300.0
-    z: 0.548
-  }
-  size {
-    x: 420.0
-    y: 40.0
-  }
-  color {
-    x: 0.078
-    y: 0.071
-    z: 0.204
-  }
-  type: TYPE_BOX
-  id: "bub6_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.7
-}
-nodes {
-  position {
-    x: 540.0
-    y: 339.0
-    z: 0.556
-  }
-  size {
-    x: 420.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub6_border_t"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 540.0
-    y: 300.0
-    z: 0.556
-  }
-  size {
-    x: 420.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub6_border_b"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 540.0
-    y: 300.0
-    z: 0.556
-  }
-  size {
-    x: 1.0
-    y: 40.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub6_border_l"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 959.0
-    y: 300.0
-    z: 0.556
-  }
-  size {
-    x: 1.0
-    y: 40.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub6_border_r"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 552.0
-    y: 326.0
-    z: 0.559
-  }
-  size {
-    x: 396.0
-    y: 28.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  font: "manrope_14"
-  id: "bub6_text"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  line_break: true
-  parent: "thread_root"
-  alpha: 0.95
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 948.0
-    y: 308.0
-    z: 0.559
-  }
-  size {
-    x: 396.0
-    y: 10.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "bub6_stamp"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.74
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 540.0
-    y: 256.0
-    z: 0.548
-  }
-  size {
-    x: 420.0
-    y: 40.0
-  }
-  color {
-    x: 0.078
-    y: 0.071
-    z: 0.204
-  }
-  type: TYPE_BOX
-  id: "bub7_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.7
-}
-nodes {
-  position {
-    x: 540.0
-    y: 295.0
-    z: 0.556
-  }
-  size {
-    x: 420.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub7_border_t"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 540.0
-    y: 256.0
-    z: 0.556
-  }
-  size {
-    x: 420.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub7_border_b"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 540.0
-    y: 256.0
-    z: 0.556
-  }
-  size {
-    x: 1.0
-    y: 40.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub7_border_l"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 959.0
-    y: 256.0
-    z: 0.556
-  }
-  size {
-    x: 1.0
-    y: 40.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub7_border_r"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 552.0
-    y: 282.0
-    z: 0.559
-  }
-  size {
-    x: 396.0
-    y: 28.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  font: "manrope_14"
-  id: "bub7_text"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  line_break: true
-  parent: "thread_root"
-  alpha: 0.95
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 948.0
-    y: 264.0
-    z: 0.559
-  }
-  size {
-    x: 396.0
-    y: 10.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "bub7_stamp"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.74
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 540.0
-    y: 212.0
-    z: 0.548
-  }
-  size {
-    x: 420.0
-    y: 40.0
-  }
-  color {
-    x: 0.078
-    y: 0.071
-    z: 0.204
-  }
-  type: TYPE_BOX
-  id: "bub8_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.7
-}
-nodes {
-  position {
-    x: 540.0
-    y: 251.0
-    z: 0.556
-  }
-  size {
-    x: 420.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub8_border_t"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 540.0
-    y: 212.0
-    z: 0.556
-  }
-  size {
-    x: 420.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub8_border_b"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 540.0
-    y: 212.0
-    z: 0.556
-  }
-  size {
-    x: 1.0
-    y: 40.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub8_border_l"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 959.0
-    y: 212.0
-    z: 0.556
-  }
-  size {
-    x: 1.0
-    y: 40.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub8_border_r"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 552.0
-    y: 238.0
-    z: 0.559
-  }
-  size {
-    x: 396.0
-    y: 28.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  font: "manrope_14"
-  id: "bub8_text"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  line_break: true
-  parent: "thread_root"
-  alpha: 0.95
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 948.0
-    y: 220.0
-    z: 0.559
-  }
-  size {
-    x: 396.0
-    y: 10.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "bub8_stamp"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
+  parent: "bub1_bg"
   alpha: 0.74
   outline_alpha: 0.0
   shadow_alpha: 0.0
@@ -1967,7 +542,7 @@ nodes {
   position {
     x: 524.0
     y: 92.0
-    z: 0.552
+    z: 0.052
   }
   size {
     x: 540.0
@@ -1983,101 +558,31 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "thread_root"
-  alpha: 0.60
+  alpha: 0.6
 }
 nodes {
-  position {
-    x: 524.0
-    y: 129.0
-    z: 0.557
-  }
   size {
     x: 540.0
-    y: 1.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "th_input_border_t"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.30
-}
-nodes {
-  position {
-    x: 524.0
-    y: 92.0
-    z: 0.557
-  }
-  size {
-    x: 540.0
-    y: 1.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "th_input_border_b"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.30
-}
-nodes {
-  position {
-    x: 524.0
-    y: 92.0
-    z: 0.557
-  }
-  size {
-    x: 1.0
     y: 38.0
   }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
   type: TYPE_BOX
-  id: "th_input_border_l"
+  texture: "ui_common/border"
+  id: "border_input"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.30
+  parent: "th_input_bg"
+  slice9 {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+    w: 2.0
+  }
 }
 nodes {
   position {
-    x: 1063.0
-    y: 92.0
-    z: 0.557
-  }
-  size {
-    x: 1.0
-    y: 38.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "th_input_border_r"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.30
-}
-nodes {
-  position {
-    x: 538.0
-    y: 112.0
-    z: 0.559
+    x: 11.0
+    y: 21.0
+    z: 0.059
   }
   size {
     x: 510.0
@@ -2093,8 +598,7 @@ nodes {
   font: "jb_mono_12"
   id: "th_input_text"
   pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
+  parent: "th_input_bg"
   alpha: 0.55
   outline_alpha: 0.0
   shadow_alpha: 0.0
@@ -2103,117 +607,45 @@ nodes {
   position {
     x: 1072.0
     y: 92.0
-    z: 0.552
+    z: 0.052
   }
   size {
     x: 112.0
     y: 38.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_BOX
   id: "th_send_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "thread_root"
-  alpha: 1.00
 }
 nodes {
-  position {
-    x: 1072.0
-    y: 129.0
-    z: 0.557
-  }
   size {
     x: 112.0
-    y: 1.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "th_send_border_t"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 1.00
-}
-nodes {
-  position {
-    x: 1072.0
-    y: 92.0
-    z: 0.557
-  }
-  size {
-    x: 112.0
-    y: 1.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "th_send_border_b"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 1.00
-}
-nodes {
-  position {
-    x: 1072.0
-    y: 92.0
-    z: 0.557
-  }
-  size {
-    x: 1.0
     y: 38.0
   }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
   type: TYPE_BOX
-  id: "th_send_border_l"
+  texture: "ui_common/border"
+  id: "border_send"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 1.00
+  parent: "th_send_bg"
+  slice9 {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+    w: 2.0
+  }
 }
 nodes {
   position {
-    x: 1183.0
-    y: 92.0
-    z: 0.557
-  }
-  size {
-    x: 1.0
-    y: 38.0
-  }
-  color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_BOX
-  id: "th_send_border_r"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 1.00
-}
-nodes {
-  position {
-    x: 1128.0
-    y: 112.0
-    z: 0.559
+    x: 58.0
+    y: 19.0
+    z: 0.059
   }
   size {
     x: 92.0
@@ -2228,8 +660,7 @@ nodes {
   text: "SEND \342\226\266"
   font: "jb_mono_10"
   id: "th_send_label"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
+  parent: "th_send_bg"
   alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0

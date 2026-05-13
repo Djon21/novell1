@@ -13,12 +13,16 @@
 go.property("bg_rooftop_atlas", resource.atlas("/main/images/backgrounds/bg_rooftop.atlas"))
 go.property("bg_apartment_hall_morning_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_hall_morning.atlas"))
 go.property("bg_apartment_hall_night_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_hall_night.atlas"))
+go.property("bg_apartment_bathroom_morning_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_bathroom_morning.atlas"))
+go.property("bg_apartment_bathroom_night_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_bathroom_night.atlas"))
 go.property("bg_apartment_bedroom_morning_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_bedroom_morning.atlas"))
 go.property("bg_apartment_bedroom_night_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_bedroom_night.atlas"))
 go.property("bg_apartment_kitchen_morning_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_kitchen_morning.atlas"))
 go.property("bg_apartment_kitchen_night_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_kitchen_night.atlas"))
 go.property("bg_cafe_morning_atlas", resource.atlas("/main/images/backgrounds/bg_cafe_morning.atlas"))
-go.property("bg_park_by_the_river_morning_atlas", resource.atlas("/main/images/backgrounds/bg_park_by_the_river_morning.atlas"))
+go.property("bg_park_riverside_entrance_morning_atlas", resource.atlas("/main/images/backgrounds/bg_park_riverside_entrance_morning.atlas"))
+go.property("bg_park_riverside_bench_morning_atlas", resource.atlas("/main/images/backgrounds/bg_park_riverside_bench_morning.atlas"))
+go.property("bg_park_riverside_path_morning_atlas", resource.atlas("/main/images/backgrounds/bg_park_riverside_path_morning.atlas"))
 go.property("bg_shop_day_atlas", resource.atlas("/main/images/backgrounds/bg_shop_day.atlas"))
 go.property("bg_observation_day_atlas", resource.atlas("/main/images/backgrounds/bg_observation_day.atlas"))
 go.property("bg_office_lobby_day_atlas", resource.atlas("/main/images/backgrounds/bg_office_lobby_day.atlas"))
@@ -48,6 +52,7 @@ local effects_flow = require "main.gui.modules.ui_manager_v2.effects_flow"
 local scene_flow = require "main.gui.modules.ui_manager_v2.scene_flow"
 local overlay_flow = require "main.gui.modules.ui_manager_v2.overlay_flow"
 local message_flow = require "main.gui.modules.ui_manager_v2.message_flow"
+local MSG = require "main.gui.modules.messages"
 local lifecycle = require "main.gui.modules.ui_manager_v2.lifecycle"
 local dialogue_orchestrator = require "main.gui.modules.ui_manager_v2.dialogue_orchestrator"
 local log = require "main.scripts.log"
@@ -77,12 +82,16 @@ local DEDICATED_BG_ATLAS_PROPS = {
     bg_rooftop        = "bg_rooftop_atlas",
     bg_apartment_hall_morning = "bg_apartment_hall_morning_atlas",
 	bg_apartment_hall_night = "bg_apartment_hall_night_atlas",
+	bg_apartment_bathroom_morning = "bg_apartment_bathroom_morning_atlas",
+	bg_apartment_bathroom_night = "bg_apartment_bathroom_night_atlas",
     bg_apartment_bedroom_morning = "bg_apartment_bedroom_morning_atlas",
     bg_apartment_bedroom_night = "bg_apartment_bedroom_night_atlas",
     bg_apartment_kitchen_morning = "bg_apartment_kitchen_morning_atlas",
 	bg_apartment_kitchen_night = "bg_apartment_kitchen_night_atlas",
     bg_cafe_morning = "bg_cafe_morning_atlas",
-    bg_park_by_the_river_morning = "bg_park_by_the_river_morning_atlas",
+    bg_park_riverside_entrance_morning = "bg_park_riverside_entrance_morning_atlas",
+	bg_park_riverside_bench_morning = "bg_park_riverside_bench_morning_atlas",
+	bg_park_riverside_path_morning = "bg_park_riverside_path_morning_atlas",
     bg_shop_day = "bg_shop_day_atlas",
     bg_observation_day = "bg_observation_day_atlas",
 	bg_office_lobby_day = "bg_office_lobby_day_atlas",
@@ -336,13 +345,13 @@ local function sync_ui_state(self)
     local unread = gs.get_phone_unread_total and gs.get_phone_unread_total() or 0
     local has_phone = has_phone_access()
 
-    msg.post(M.components.hud, "set_inventory_count", { n = #inv })
-    msg.post(M.components.hud, "set_phone_enabled", { enabled = has_phone })
-    msg.post(M.components.hud, "set_phone_notif", { n = unread })
-    msg.post(M.components.inventory, "refresh_inventory")
-    msg.post(M.components.phone, "set_phone_notif", { n = unread })
+    msg.post(M.components.hud, MSG.set_inventory_count, { n = #inv })
+    msg.post(M.components.hud, MSG.set_phone_enabled, { enabled = has_phone })
+    msg.post(M.components.hud, MSG.set_phone_notif, { n = unread })
+    msg.post(M.components.inventory, MSG.refresh_inventory)
+    msg.post(M.components.phone, MSG.set_phone_notif, { n = unread })
     -- step23: phone подтягивает SMS/quests/mail/calls/clues из game_state.
-    msg.post(M.components.phone, "refresh_phone")
+    msg.post(M.components.phone, MSG.refresh_phone)
 end
 
 local function set_run_save_suppressed(on)
@@ -706,18 +715,18 @@ end
 
 function on_input(self, action_id, action)
     -- Музыка при первом касании
-    if not M.music_started and action_id == hash("touch") and action.pressed then
+    if not M.music_started and action_id == MSG.touch and action.pressed then
         M.music_started = true
         msg.post(M.MUSIC_URL, "play_sound", { delay = 0, gain = 0.5 })
     end
 
-    if action_id == hash("key_esc") and action.pressed then
+    if action_id == MSG.key_esc and action.pressed then
         -- Esc закрывает первую открытую модалку
         if M.overlays.backlog then
             close_dialogue_backlog(self); return true
         elseif M.overlays.choice then
             hide_choice(self)
-            msg.post(".", "choice_cancelled")
+            msg.post(".", MSG.choice_cancelled)
             return true
         elseif M.overlays.map then
             close_map(self); return true

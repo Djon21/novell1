@@ -30,11 +30,18 @@ fonts {
   name: "manrope_16"
   font: "/main/fonts/manrope_16.font"
 }
+fonts {
+  name: "Manrope-Medium_16"
+  font: "/main/fonts/Manrope-Medium_16.font"
+}
 textures {
   name: "icon_phone"
   texture: "/main/images/phone/icon_phone.atlas"
 }
-
+textures {
+  name: "ui_common"
+  texture: "/main/images/ui_common.atlas"
+}
 nodes {
   position {
     z: 0.053
@@ -727,92 +734,8 @@ nodes {
 }
 nodes {
   position {
-    x: 540.0
-    y: 528.0
-    z: 0.552
-  }
-  size {
-    x: 500.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub1_bt"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 540.0
-    y: 573.0
-    z: 0.552
-  }
-  size {
-    x: 500.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub1_bb"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 540.0
-    y: 528.0
-    z: 0.552
-  }
-  size {
-    x: 1.0
-    y: 46.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub1_bl"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 1039.0
-    y: 528.0
-    z: 0.552
-  }
-  size {
-    x: 1.0
-    y: 46.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub1_br"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 554.0
-    y: 557.0
+    x: 13.0
+    y: 32.0
     z: 0.56
   }
   size {
@@ -826,18 +749,18 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\321\201\320\276\320\276\320\261\321\211\320\265\320\275\320\270\320\265"
-  font: "jb_mono_12"
+  font: "Manrope-Medium_16"
   id: "bub1_text"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
+  parent: "bub1_bg"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1028.0
-    y: 538.0
+    x: 489.0
+    y: 13.0
     z: 0.56
   }
   size {
@@ -855,1109 +778,27 @@ nodes {
   id: "bub1_stamp"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
+  parent: "bub1_bg"
   alpha: 0.8
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
-  position {
-    x: 540.0
-    y: 470.0
-    z: 0.55
-  }
   size {
     x: 500.0
     y: 46.0
   }
-  color {
-    x: 0.078
-    y: 0.071
-    z: 0.204
-  }
   type: TYPE_BOX
-  id: "bub2_bg"
+  texture: "ui_common/border"
+  id: "border_bub"
   pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.7
-}
-nodes {
-  position {
-    x: 540.0
-    y: 470.0
-    z: 0.552
+  parent: "bub1_bg"
+  slice9 {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+    w: 2.0
   }
-  size {
-    x: 500.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub2_bt"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 540.0
-    y: 515.0
-    z: 0.552
-  }
-  size {
-    x: 500.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub2_bb"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 540.0
-    y: 470.0
-    z: 0.552
-  }
-  size {
-    x: 1.0
-    y: 46.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub2_bl"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 1039.0
-    y: 470.0
-    z: 0.552
-  }
-  size {
-    x: 1.0
-    y: 46.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub2_br"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 554.0
-    y: 499.0
-    z: 0.56
-  }
-  size {
-    x: 470.0
-    y: 14.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\321\201\320\276\320\276\320\261\321\211\320\265\320\275\320\270\320\265"
-  font: "jb_mono_12"
-  id: "bub2_text"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 1028.0
-    y: 480.0
-    z: 0.56
-  }
-  size {
-    x: 120.0
-    y: 10.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  text: "07:10"
-  font: "jb_mono_10"
-  id: "bub2_stamp"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.8
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 540.0
-    y: 412.0
-    z: 0.55
-  }
-  size {
-    x: 500.0
-    y: 46.0
-  }
-  color {
-    x: 0.078
-    y: 0.071
-    z: 0.204
-  }
-  type: TYPE_BOX
-  id: "bub3_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.7
-}
-nodes {
-  position {
-    x: 540.0
-    y: 412.0
-    z: 0.552
-  }
-  size {
-    x: 500.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub3_bt"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 540.0
-    y: 457.0
-    z: 0.552
-  }
-  size {
-    x: 500.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub3_bb"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 540.0
-    y: 412.0
-    z: 0.552
-  }
-  size {
-    x: 1.0
-    y: 46.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub3_bl"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 1039.0
-    y: 412.0
-    z: 0.552
-  }
-  size {
-    x: 1.0
-    y: 46.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub3_br"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 554.0
-    y: 441.0
-    z: 0.56
-  }
-  size {
-    x: 470.0
-    y: 14.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\321\201\320\276\320\276\320\261\321\211\320\265\320\275\320\270\320\265"
-  font: "jb_mono_12"
-  id: "bub3_text"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 1028.0
-    y: 422.0
-    z: 0.56
-  }
-  size {
-    x: 120.0
-    y: 10.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  text: "07:10"
-  font: "jb_mono_10"
-  id: "bub3_stamp"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.8
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 540.0
-    y: 354.0
-    z: 0.55
-  }
-  size {
-    x: 500.0
-    y: 46.0
-  }
-  color {
-    x: 0.078
-    y: 0.071
-    z: 0.204
-  }
-  type: TYPE_BOX
-  id: "bub4_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.7
-}
-nodes {
-  position {
-    x: 540.0
-    y: 354.0
-    z: 0.552
-  }
-  size {
-    x: 500.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub4_bt"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 540.0
-    y: 399.0
-    z: 0.552
-  }
-  size {
-    x: 500.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub4_bb"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 540.0
-    y: 354.0
-    z: 0.552
-  }
-  size {
-    x: 1.0
-    y: 46.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub4_bl"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 1039.0
-    y: 354.0
-    z: 0.552
-  }
-  size {
-    x: 1.0
-    y: 46.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub4_br"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 554.0
-    y: 383.0
-    z: 0.56
-  }
-  size {
-    x: 470.0
-    y: 14.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\321\201\320\276\320\276\320\261\321\211\320\265\320\275\320\270\320\265"
-  font: "jb_mono_12"
-  id: "bub4_text"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 1028.0
-    y: 364.0
-    z: 0.56
-  }
-  size {
-    x: 120.0
-    y: 10.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  text: "07:10"
-  font: "jb_mono_10"
-  id: "bub4_stamp"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.8
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 540.0
-    y: 296.0
-    z: 0.55
-  }
-  size {
-    x: 500.0
-    y: 46.0
-  }
-  color {
-    x: 0.078
-    y: 0.071
-    z: 0.204
-  }
-  type: TYPE_BOX
-  id: "bub5_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.7
-}
-nodes {
-  position {
-    x: 540.0
-    y: 296.0
-    z: 0.552
-  }
-  size {
-    x: 500.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub5_bt"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 540.0
-    y: 341.0
-    z: 0.552
-  }
-  size {
-    x: 500.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub5_bb"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 540.0
-    y: 296.0
-    z: 0.552
-  }
-  size {
-    x: 1.0
-    y: 46.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub5_bl"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 1039.0
-    y: 296.0
-    z: 0.552
-  }
-  size {
-    x: 1.0
-    y: 46.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub5_br"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 554.0
-    y: 325.0
-    z: 0.56
-  }
-  size {
-    x: 470.0
-    y: 14.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\321\201\320\276\320\276\320\261\321\211\320\265\320\275\320\270\320\265"
-  font: "jb_mono_12"
-  id: "bub5_text"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 1028.0
-    y: 306.0
-    z: 0.56
-  }
-  size {
-    x: 120.0
-    y: 10.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  text: "07:10"
-  font: "jb_mono_10"
-  id: "bub5_stamp"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.8
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 540.0
-    y: 238.0
-    z: 0.55
-  }
-  size {
-    x: 500.0
-    y: 46.0
-  }
-  color {
-    x: 0.078
-    y: 0.071
-    z: 0.204
-  }
-  type: TYPE_BOX
-  id: "bub6_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.7
-}
-nodes {
-  position {
-    x: 540.0
-    y: 238.0
-    z: 0.552
-  }
-  size {
-    x: 500.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub6_bt"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 540.0
-    y: 283.0
-    z: 0.552
-  }
-  size {
-    x: 500.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub6_bb"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 540.0
-    y: 238.0
-    z: 0.552
-  }
-  size {
-    x: 1.0
-    y: 46.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub6_bl"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 1039.0
-    y: 238.0
-    z: 0.552
-  }
-  size {
-    x: 1.0
-    y: 46.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub6_br"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 554.0
-    y: 267.0
-    z: 0.56
-  }
-  size {
-    x: 470.0
-    y: 14.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\321\201\320\276\320\276\320\261\321\211\320\265\320\275\320\270\320\265"
-  font: "jb_mono_12"
-  id: "bub6_text"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 1028.0
-    y: 248.0
-    z: 0.56
-  }
-  size {
-    x: 120.0
-    y: 10.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  text: "07:10"
-  font: "jb_mono_10"
-  id: "bub6_stamp"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.8
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 540.0
-    y: 180.0
-    z: 0.55
-  }
-  size {
-    x: 500.0
-    y: 46.0
-  }
-  color {
-    x: 0.078
-    y: 0.071
-    z: 0.204
-  }
-  type: TYPE_BOX
-  id: "bub7_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.7
-}
-nodes {
-  position {
-    x: 540.0
-    y: 180.0
-    z: 0.552
-  }
-  size {
-    x: 500.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub7_bt"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 540.0
-    y: 225.0
-    z: 0.552
-  }
-  size {
-    x: 500.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub7_bb"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 540.0
-    y: 180.0
-    z: 0.552
-  }
-  size {
-    x: 1.0
-    y: 46.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub7_bl"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 1039.0
-    y: 180.0
-    z: 0.552
-  }
-  size {
-    x: 1.0
-    y: 46.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub7_br"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 554.0
-    y: 209.0
-    z: 0.56
-  }
-  size {
-    x: 470.0
-    y: 14.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\321\201\320\276\320\276\320\261\321\211\320\265\320\275\320\270\320\265"
-  font: "jb_mono_12"
-  id: "bub7_text"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 1028.0
-    y: 190.0
-    z: 0.56
-  }
-  size {
-    x: 120.0
-    y: 10.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  text: "07:10"
-  font: "jb_mono_10"
-  id: "bub7_stamp"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.8
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 540.0
-    y: 122.0
-    z: 0.55
-  }
-  size {
-    x: 500.0
-    y: 46.0
-  }
-  color {
-    x: 0.078
-    y: 0.071
-    z: 0.204
-  }
-  type: TYPE_BOX
-  id: "bub8_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.7
-}
-nodes {
-  position {
-    x: 540.0
-    y: 122.0
-    z: 0.552
-  }
-  size {
-    x: 500.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub8_bt"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 540.0
-    y: 167.0
-    z: 0.552
-  }
-  size {
-    x: 500.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub8_bb"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 540.0
-    y: 122.0
-    z: 0.552
-  }
-  size {
-    x: 1.0
-    y: 46.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub8_bl"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 1039.0
-    y: 122.0
-    z: 0.552
-  }
-  size {
-    x: 1.0
-    y: 46.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "bub8_br"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 554.0
-    y: 151.0
-    z: 0.56
-  }
-  size {
-    x: 470.0
-    y: 14.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\321\201\320\276\320\276\320\261\321\211\320\265\320\275\320\270\320\265"
-  font: "jb_mono_12"
-  id: "bub8_text"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 1028.0
-    y: 132.0
-    z: 0.56
-  }
-  size {
-    x: 120.0
-    y: 10.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  text: "07:10"
-  font: "jb_mono_10"
-  id: "bub8_stamp"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.8
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
 }
 nodes {
   position {
@@ -2028,7 +869,7 @@ nodes {
   position {
     x: 528.0
     y: 82.0
-    z: 0.55
+    z: 0.055
   }
   size {
     x: 44.0
@@ -2048,97 +889,9 @@ nodes {
 }
 nodes {
   position {
-    x: 528.0
-    y: 82.0
-    z: 0.552
-  }
-  size {
-    x: 44.0
-    y: 1.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_BOX
-  id: "attach_bt"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.2
-}
-nodes {
-  position {
-    x: 528.0
-    y: 125.0
-    z: 0.552
-  }
-  size {
-    x: 44.0
-    y: 1.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_BOX
-  id: "attach_bb"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.2
-}
-nodes {
-  position {
-    x: 528.0
-    y: 82.0
-    z: 0.552
-  }
-  size {
-    x: 1.0
-    y: 44.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_BOX
-  id: "attach_bl"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.2
-}
-nodes {
-  position {
-    x: 571.0
-    y: 82.0
-    z: 0.552
-  }
-  size {
-    x: 1.0
-    y: 44.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_BOX
-  id: "attach_br"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.2
-}
-nodes {
-  position {
-    x: 550.0
-    y: 104.0
-    z: 0.56
+    x: 22.0
+    y: 22.0
+    z: 0.056
   }
   size {
     x: 40.0
@@ -2154,15 +907,32 @@ nodes {
   font: "jb_mono_bold_14"
   id: "attach_text"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
+  parent: "attach_bg"
   outline_alpha: 0.0
   shadow_alpha: 0.0
+}
+nodes {
+  size {
+    x: 44.0
+    y: 44.0
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "border_attach"
+  pivot: PIVOT_SW
+  parent: "attach_bg"
+  slice9 {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+    w: 2.0
+  }
 }
 nodes {
   position {
     x: 582.0
     y: 82.0
-    z: 0.55
+    z: 0.055
   }
   size {
     x: 456.0
@@ -2182,93 +952,9 @@ nodes {
 }
 nodes {
   position {
-    x: 582.0
-    y: 82.0
-    z: 0.552
-  }
-  size {
-    x: 456.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "input_bt"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.3
-}
-nodes {
-  position {
-    x: 582.0
-    y: 125.0
-    z: 0.552
-  }
-  size {
-    x: 456.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "input_bb"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.3
-}
-nodes {
-  position {
-    x: 582.0
-    y: 82.0
-    z: 0.552
-  }
-  size {
-    x: 1.0
-    y: 44.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "input_bl"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.3
-}
-nodes {
-  position {
-    x: 1037.0
-    y: 82.0
-    z: 0.552
-  }
-  size {
-    x: 1.0
-    y: 44.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "input_br"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-  alpha: 0.3
-}
-nodes {
-  position {
-    x: 600.0
-    y: 104.0
-    z: 0.56
+    x: 17.0
+    y: 23.0
+    z: 0.056
   }
   size {
     x: 420.0
@@ -2285,10 +971,27 @@ nodes {
   id: "input_text"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
+  parent: "input_bg"
   alpha: 0.65
   outline_alpha: 0.0
   shadow_alpha: 0.0
+}
+nodes {
+  size {
+    x: 456.0
+    y: 44.0
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "border_input"
+  pivot: PIVOT_SW
+  parent: "input_bg"
+  slice9 {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+    w: 2.0
+  }
 }
 nodes {
   position {
@@ -2312,89 +1015,9 @@ nodes {
 }
 nodes {
   position {
-    x: 1050.0
-    y: 82.0
-    z: 0.552
-  }
-  size {
-    x: 146.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "send_bt"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-}
-nodes {
-  position {
-    x: 1050.0
-    y: 125.0
-    z: 0.552
-  }
-  size {
-    x: 146.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "send_bb"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-}
-nodes {
-  position {
-    x: 1050.0
-    y: 82.0
-    z: 0.552
-  }
-  size {
-    x: 1.0
-    y: 44.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "send_bl"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-}
-nodes {
-  position {
-    x: 1195.0
-    y: 82.0
-    z: 0.552
-  }
-  size {
-    x: 1.0
-    y: 44.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "send_br"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
-}
-nodes {
-  position {
-    x: 1123.0
-    y: 104.0
-    z: 0.56
+    x: 79.0
+    y: 20.0
+    z: 0.056
   }
   size {
     x: 130.0
@@ -2410,9 +1033,26 @@ nodes {
   font: "jb_mono_bold_14"
   id: "send_text"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "chat_root"
+  parent: "send_bg"
   outline_alpha: 0.0
   shadow_alpha: 0.0
+}
+nodes {
+  size {
+    x: 146.0
+    y: 44.0
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "border_send"
+  pivot: PIVOT_SW
+  parent: "send_bg"
+  slice9 {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+    w: 2.0
+  }
 }
 nodes {
   position {

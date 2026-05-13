@@ -14,7 +14,7 @@
 === sms_thread_mama ===
 # speaker:none
 МАМА:
-«Не забудь позавтракать. И ключи проверь, пожалуйста.»
+«Не забудь позавтракать. И не сиди весь день дома.»
 
 Ты машинально улыбаешься. Сообщение из тех, на которые отвечаешь мысленно: да-да, конечно.
 
@@ -151,167 +151,11 @@
 // -----------------------------------------------------------------------------
 
 === sms_service_done ===
-{date_agreed:
-    -> sms_service_return_scene
-- else:
-    -> sms_service_return_phone
-}
-
-=== sms_service_return_phone ===
-# speaker:mc
-Ладно. Но сначала надо ответить {npc_name}.
-
-# phone:app:sms
--> DONE
-
-=== sms_service_return_scene ===
 # return_to_scene
 -> DONE
 
 // -----------------------------------------------------------------------------
-// NPC THREADS
-// Технические контакты:
-// - mila  — когда ГГ Артём, NPC Мила.
-// - artem — когда ГГ Мила, NPC Артём.
-// Квест reply_npc засчитывает оба набора флагов через quests.lua.
+// NPC SMS THREADS REMOVED
+// Воскресное приглашение и личные ответы NPC больше живут только в Messenger.
+// Сервисные SMS выше остаются как инфо-шум телефона.
 // -----------------------------------------------------------------------------
-
-=== sms_thread_mila ===
-# speaker:none
-Открываешь переписку.
-
-Мила написала утром:
-
-«Ты сегодня вообще проснулся? Я уже второй кофе пью.»
-
-# speaker:mc
-Воскресенье. Значит, не офис. Нормальный день. Нормальная встреча.
-
-* [«А тебе куда хочется?»]
-    # speaker:none
-    Ты почти пишешь первое, что приходит в голову: кафе. Тёплое, понятное, безопасное.
-    Палец останавливается.
-
-    # speaker:mc
-    А тебе куда хочется?
-
-    # sms:reply:mila:А тебе куда хочется?
-    # sms:add:mila:Если честно — в парк у реки. Хочется воздуха.
-    # sms:read:mila
-
-    # speaker:npc
-    Если честно — в парк у реки. Хочется воздуха.
-
-    # speaker:mc
-    Тогда в парк. Хорошо.
-
-    # sms:reply:mila:Тогда в парк. Хорошо.
-    # set_flag:date_agreed=true
-    # set_flag:date_place_park=true
-    ~ date_agreed = true
-    ~ date_place_park = true
-    ~ TRUST = TRUST + 1
-    ~ INSIGHT = INSIGHT + 1
-    -> sms_npc_place_sent
-
-* [«Давай в кафе. Спокойно посидим.»]
-    # speaker:none
-    Ты выбираешь самый безопасный вариант: тепло, столик, кофе и разговор без лишней суеты.
-
-    # sms:reply:mila:Давай в кафе. Спокойно посидим.
-    # set_flag:date_agreed=true
-    # set_flag:date_place_cafe=true
-    ~ date_agreed = true
-    ~ date_place_cafe = true
-    ~ TRUST = TRUST + 1
-    -> sms_npc_place_sent
-
-* [«Давай в парк у реки. Хочется пройтись.»]
-    # speaker:none
-    В этом ответе больше воздуха, чем уверенности. Но, может, сейчас именно это и нужно.
-
-    # sms:reply:mila:Давай в парк у реки. Хочется пройтись.
-    # set_flag:date_agreed=true
-    # set_flag:date_place_park=true
-    ~ date_agreed = true
-    ~ date_place_park = true
-    ~ SYNC = SYNC + 1
-    -> sms_npc_place_sent
-
-
-=== sms_thread_artem ===
-# speaker:none
-Открываешь переписку.
-
-Артём написал утром:
-
-«Ты сегодня вообще проснулась? Я уже второй кофе пью.»
-
-# speaker:mc
-Воскресенье. Значит, не офис. Нормальный день. Нормальная встреча.
-
-* [«А тебе куда хочется?»]
-    # speaker:none
-    Ты почти пишешь первое, что приходит в голову: кафе. Тёплое, понятное, безопасное.
-    Палец останавливается.
-
-    # speaker:mc
-    А тебе куда хочется?
-
-    # sms:reply:artem:А тебе куда хочется?
-    # sms:add:artem:Если честно — в парк у реки. Хочется воздуха.
-    # sms:read:artem
-
-    # speaker:npc
-    Если честно — в парк у реки. Хочется воздуха.
-
-    # speaker:mc
-    Тогда в парк. Хорошо.
-
-    # sms:reply:artem:Тогда в парк. Хорошо.
-    # set_flag:date_agreed=true
-    # set_flag:date_place_park=true
-    ~ date_agreed = true
-    ~ date_place_park = true
-    ~ TRUST = TRUST + 1
-    ~ INSIGHT = INSIGHT + 1
-    -> sms_npc_place_sent
-
-* [«Давай в кафе. Спокойно посидим.»]
-    # speaker:none
-    Ты выбираешь самый безопасный вариант: тепло, столик, кофе и разговор без лишней суеты.
-
-    # sms:reply:artem:Давай в кафе. Спокойно посидим.
-    # set_flag:date_agreed=true
-    # set_flag:date_place_cafe=true
-    ~ date_agreed = true
-    ~ date_place_cafe = true
-    ~ TRUST = TRUST + 1
-    -> sms_npc_place_sent
-
-* [«Давай в парк у реки. Хочется пройтись.»]
-    # speaker:none
-    В этом ответе больше воздуха, чем уверенности. Но, может, сейчас именно это и нужно.
-
-    # sms:reply:artem:Давай в парк у реки. Хочется пройтись.
-    # set_flag:date_agreed=true
-    # set_flag:date_place_park=true
-    ~ date_agreed = true
-    ~ date_place_park = true
-    ~ SYNC = SYNC + 1
-    -> sms_npc_place_sent
-
-
-=== sms_npc_place_sent ===
-# speaker:none
-Сообщение отправлено.
-
-Теперь можно наконец встать: умыться, собраться, если хочется — зайти на кухню, а потом выйти.
-
-# quest:done:reply_npc
-# quest:start:make_coffee
-# quest:start:meet_npc
-# map:lock_all
-# hud:hint:phone:off
-# return_to_scene
--> DONE

@@ -15,6 +15,7 @@
 local gs      = require "main.scripts.game_state"
 local U       = require "main.gui.modules.gui_utils"
 local log     = require "main.scripts.log"
+local MSG     = require "main.gui.modules.messages"
 local UI_MGR  = "#ui_manager_v2"
 
 local function dbg(...) log.debug("phone_root", ...) end
@@ -147,7 +148,7 @@ local function close_active_app(self)
     if self.active_app then
         local comp = APP_COMPONENT[self.active_app]
         if comp then
-            msg.post(comp, "close_app")
+            msg.post(comp, MSG.close_app)
         end
         dbg("[phone_v2_root] closed app:", self.active_app)
         self.active_app = nil
@@ -160,7 +161,7 @@ local function switch_app(self, id)
         -- тап на активное → вернуться в SMS
         close_active_app(self)
         local comp = APP_COMPONENT["sms"]
-        if comp then msg.post(comp, "open_app") end
+        if comp then msg.post(comp, MSG.open_app) end
         self.active_app = "sms"
         update_app_title("sms")
         dbg("[phone_v2_root] toggled back to sms")
@@ -169,7 +170,7 @@ local function switch_app(self, id)
     close_active_app(self)
     local comp = APP_COMPONENT[id]
     if comp then
-        msg.post(comp, "open_app")
+        msg.post(comp, MSG.open_app)
         self.active_app = id
         update_app_title(id)
         dbg("[phone_v2_root] switched to app:", id)
@@ -181,7 +182,7 @@ local function forward_active_app_input(self, action_id, action)
     if not self.active_app then return end
     local comp = APP_COMPONENT[self.active_app]
     if not comp then return end
-    msg.post(comp, "phone_input", {
+    msg.post(comp, MSG.phone_input, {
         action_id = action_id,
         x = action and action.x or 0,
         y = action and action.y or 0,
@@ -208,18 +209,18 @@ function init(self)
 end
 
 function on_message(self, message_id, message, sender)
-    if message_id == hash("open_phone") then
+    if message_id == MSG.open_phone then
         self.visible = true
         set_nodes_enabled(CHROME_NODES, true)
         update_notif(self)
         -- Открыть SMS по умолчанию
         local comp = APP_COMPONENT["sms"]
-        if comp then msg.post(comp, "open_app") end
+        if comp then msg.post(comp, MSG.open_app) end
         self.active_app = "sms"
         update_app_title("sms")
         dbg("[phone_v2_root] open_phone → sms")
 
-    elseif message_id == hash("close_phone") then
+    elseif message_id == MSG.close_phone then
         -- Просто скрыть — НЕ постить обратно в UI_MGR (иначе loop),
         -- НЕ release_input_focus (держим фокус постоянно как phone_v2.gui_script)
         close_active_app(self)
@@ -227,14 +228,14 @@ function on_message(self, message_id, message, sender)
         self.visible = false
         dbg("[phone_v2_root] close_phone")
 
-    elseif message_id == hash("refresh_phone") then
+    elseif message_id == MSG.refresh_phone then
         update_notif(self)
         if self.active_app then
             local comp = APP_COMPONENT[self.active_app]
-            if comp then msg.post(comp, "refresh_app") end
+            if comp then msg.post(comp, MSG.refresh_app) end
         end
 
-    elseif message_id == hash("open_app") then
+    elseif message_id == MSG.open_app then
         if self.visible then
             local id = message and message.id or "sms"
             if self.active_app ~= id then
@@ -242,12 +243,18 @@ function on_message(self, message_id, message, sender)
             end
         end
 
-    elseif message_id == hash("set_phone_notif") then
+    elseif message_id == MSG.set_phone_notif then
+        -- Keep status total and per-app badges semantically split.
+        -- message.n is the aggregate phone unread total; app badges must still
+        -- come from their own channels (SMS vs Messenger).
         local n = tonumber(message and message.n) or 0
         set_text("stats_msg", "сообщений: " .. tostring(n))
-        set_badge(self, "app1", n)
+        local sms_unread = gs.get_sms_unread_total and gs.get_sms_unread_total() or 0
+        local msg_unread = gs.get_msg_unread_total and gs.get_msg_unread_total() or 0
+        set_badge(self, "app1", sms_unread)
+        set_badge(self, "app7", msg_unread)
 
-    elseif message_id == hash("set_phone_time") then
+    elseif message_id == MSG.set_phone_time then
         local t = (message and message.time) or "07:12"
         set_text("status_time", t)
         set_text("wall_time", t)
@@ -259,7 +266,7 @@ function on_input(self, action_id, action)
 
     -- Non-touch inputs, such as mouse wheel if bound by the project, belong to
     -- the active app while the phone is open.
-    if action_id ~= hash("touch") then
+    if action_id ~= MSG.touch then
         forward_active_app_input(self, action_id, action or {})
         return true
     end
@@ -289,7 +296,7 @@ function on_input(self, action_id, action)
             if n and gui.is_enabled(n) and gui.pick_node(n, action.x, action.y) then
                 dbg("[phone_v2_root] tile clicked:", app.id)
                 flash_node(n)
-                msg.post(UI_MGR, "phone_app_clicked", { id = app.id })
+                msg.post(UI_MGR, MSG.phone_app_clicked, { id = app.id })
                 if not EXTERNAL_APPS[app.id] then
                     switch_app(self, app.id)
                 end

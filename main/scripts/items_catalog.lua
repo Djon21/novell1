@@ -33,6 +33,13 @@ local ICON_CIG     = string.char(0xEE, 0x9F, 0xB5)
 local ICON_CASH    = string.char(0xEE, 0xBD, 0xA3)
 -- папка (folder) U+E2C7 -> EE 8B 87
 local ICON_FOLDER  = string.char(0xEE, 0x8B, 0x87)
+-- щётка / паста: используем близкие Material Icons из приватного диапазона;
+-- если в шрифте не окажется глифа, UI всё равно покажет fallback-символ.
+local ICON_BRUSH   = string.char(0xEE, 0xA3, 0x8B)
+local ICON_PASTE   = string.char(0xEE, 0x90, 0xA9)
+-- вода / мусор: близкие Material Icons, fallback допустим
+local ICON_WATER   = string.char(0xEE, 0x95, 0x84)
+local ICON_TRASH   = string.char(0xEE, 0xA1, 0xB2)
 
 M.items = {
     mug = {
@@ -167,6 +174,72 @@ M.items = {
         description = "Пустая папка для сборки рабочего кейса.",
         verbs  = { "inspect", "combine" },
         icon   = ICON_FOLDER,
+        qty    = 1,
+    },
+
+
+    toothbrush = {
+        name   = "Зубная щётка",
+        type   = "расход.",
+        source = "ванная",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Обычная щётка. Самое честное устройство утренней перезагрузки.",
+        description = "Зубная щётка из стакана у раковины.",
+        verbs  = { "inspect", "combine" },
+        icon   = ICON_BRUSH,
+        qty    = 1,
+    },
+
+    toothpaste = {
+        name   = "Зубная паста",
+        type   = "расход.",
+        source = "ванная",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Мятная. Тюбик смят так, будто утро уже пытались начать без тебя.",
+        description = "Зубная паста. Почти закончилась, но ещё держится.",
+        verbs  = { "inspect", "combine" },
+        icon   = ICON_PASTE,
+        qty    = 1,
+    },
+
+    toothbrush_pasted = {
+        name   = "Щётка с пастой",
+        type   = "расход.",
+        source = "ванная",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Готова к самому героическому действию утра.",
+        description = "Зубная щётка с пастой.",
+        verbs  = { "inspect", "use" },
+        icon   = ICON_BRUSH,
+        qty    = 1,
+    },
+
+    park_trash_cup = {
+        name   = "Пустой стаканчик",
+        type   = "мусор",
+        source = "лавочка у реки",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Чужой бумажный стаканчик. Не улика, просто повод не сидеть рядом с мусором.",
+        description = "Пустой бумажный стаканчик с лавочки.",
+        verbs  = { "use", "inspect" },
+        icon   = ICON_TRASH,
+        qty    = 1,
+    },
+
+    water_bottle = {
+        name   = "Бутылка воды",
+        type   = "расход.",
+        source = "магазин",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Холодная вода из магазина. Маленькая забота, если вовремя вспомнить.",
+        description = "Бутылка воды.",
+        verbs  = { "inspect" },
+        icon   = ICON_WATER,
         qty    = 1,
     },
 

@@ -55,28 +55,6 @@ nodes {
   alpha: 0.0
 }
 nodes {
-  position {
-    x: 500.0
-    y: 40.0
-    z: 0.022
-  }
-  size {
-    x: 728.0
-    y: 640.0
-  }
-  color {
-    x: 0.031
-    y: 0.024
-    z: 0.094
-  }
-  type: TYPE_BOX
-  id: "messenger_app_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "messenger_runtime_root"
-  alpha: 0.85
-}
-nodes {
   type: TYPE_TEMPLATE
   id: "messenger_list"
   parent: "messenger_runtime_root"
@@ -102,38 +80,20 @@ nodes {
 }
 nodes {
   type: TYPE_BOX
-  id: "messenger_list/search_bt"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/search_bb"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/search_bl"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/search_br"
-  parent: "messenger_list/list_root"
+  id: "messenger_list/border_search"
+  parent: "messenger_list/search_bg"
   template_node_child: true
 }
 nodes {
   type: TYPE_TEXT
   id: "messenger_list/search_icon"
-  parent: "messenger_list/list_root"
+  parent: "messenger_list/search_bg"
   template_node_child: true
 }
 nodes {
   type: TYPE_TEXT
   id: "messenger_list/search_text"
-  parent: "messenger_list/list_root"
+  parent: "messenger_list/search_bg"
   template_node_child: true
 }
 nodes {
@@ -185,39 +145,21 @@ nodes {
   template_node_child: true
 }
 nodes {
-  type: TYPE_BOX
-  id: "messenger_list/tab_unread_bt"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/tab_unread_bb"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/tab_unread_bl"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/tab_unread_br"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
   type: TYPE_TEXT
   id: "messenger_list/tab_unread_text"
-  parent: "messenger_list/list_root"
+  parent: "messenger_list/tab_unread_bg"
   template_node_child: true
 }
 nodes {
   type: TYPE_TEXT
   id: "messenger_list/tab_unread_count"
-  parent: "messenger_list/list_root"
+  parent: "messenger_list/tab_unread_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_list/border_unread"
+  parent: "messenger_list/tab_unread_bg"
   template_node_child: true
 }
 nodes {
@@ -234,542 +176,56 @@ nodes {
 }
 nodes {
   type: TYPE_BOX
-  id: "messenger_list/chat1_bt"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat1_bb"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat1_bl"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat1_br"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
   id: "messenger_list/chat1_av_bg"
-  parent: "messenger_list/list_root"
+  parent: "messenger_list/chat1_bg"
   template_node_child: true
 }
 nodes {
   type: TYPE_TEXT
   id: "messenger_list/chat1_av"
-  parent: "messenger_list/list_root"
+  parent: "messenger_list/chat1_av_bg"
   template_node_child: true
 }
 nodes {
   type: TYPE_TEXT
   id: "messenger_list/chat1_name"
-  parent: "messenger_list/list_root"
+  parent: "messenger_list/chat1_bg"
   template_node_child: true
 }
 nodes {
   type: TYPE_TEXT
   id: "messenger_list/chat1_icons"
-  parent: "messenger_list/list_root"
+  parent: "messenger_list/chat1_bg"
   template_node_child: true
 }
 nodes {
   type: TYPE_TEXT
   id: "messenger_list/chat1_preview"
-  parent: "messenger_list/list_root"
+  parent: "messenger_list/chat1_bg"
   template_node_child: true
 }
 nodes {
   type: TYPE_TEXT
   id: "messenger_list/chat1_time"
-  parent: "messenger_list/list_root"
+  parent: "messenger_list/chat1_bg"
   template_node_child: true
 }
 nodes {
   type: TYPE_BOX
   id: "messenger_list/chat1_badge_bg"
-  parent: "messenger_list/list_root"
+  parent: "messenger_list/chat1_bg"
   template_node_child: true
 }
 nodes {
   type: TYPE_TEXT
   id: "messenger_list/chat1_badge"
-  parent: "messenger_list/list_root"
+  parent: "messenger_list/chat1_badge_bg"
   template_node_child: true
 }
 nodes {
   type: TYPE_BOX
-  id: "messenger_list/chat2_bg"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat2_bt"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat2_bb"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat2_bl"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat2_br"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat2_av_bg"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat2_av"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat2_name"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat2_icons"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat2_preview"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat2_time"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat2_badge_bg"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat2_badge"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat3_bg"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat3_bt"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat3_bb"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat3_bl"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat3_br"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat3_av_bg"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat3_av"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat3_name"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat3_icons"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat3_preview"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat3_time"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat3_badge_bg"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat3_badge"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat4_bg"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat4_bt"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat4_bb"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat4_bl"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat4_br"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat4_av_bg"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat4_av"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat4_name"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat4_icons"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat4_preview"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat4_time"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat4_badge_bg"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat4_badge"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat5_bg"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat5_bt"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat5_bb"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat5_bl"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat5_br"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat5_av_bg"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat5_av"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat5_name"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat5_icons"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat5_preview"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat5_time"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat5_badge_bg"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat5_badge"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat6_bg"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat6_bt"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat6_bb"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat6_bl"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat6_br"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat6_av_bg"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat6_av"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat6_name"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat6_icons"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat6_preview"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat6_time"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat6_badge_bg"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat6_badge"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat7_bg"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat7_bt"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat7_bb"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat7_bl"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat7_br"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat7_av_bg"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat7_av"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat7_name"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat7_icons"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat7_preview"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat7_time"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/chat7_badge_bg"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/chat7_badge"
-  parent: "messenger_list/list_root"
+  id: "messenger_list/border_chat"
+  parent: "messenger_list/chat1_bg"
   template_node_child: true
 }
 nodes {
@@ -989,339 +445,45 @@ nodes {
   template_node_child: true
 }
 nodes {
+  position {
+    x: 540.0
+    y: 528.0
+    z: 0.05
+  }
   type: TYPE_BOX
   id: "messenger_chat/bub1_bg"
   parent: "messenger_chat/chat_root"
+  overridden_fields: 1
   template_node_child: true
 }
 nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub1_bt"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub1_bb"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub1_bl"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub1_br"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
+  position {
+    x: 6.0
+    y: 33.0
+    z: 0.056
+  }
   type: TYPE_TEXT
   id: "messenger_chat/bub1_text"
-  parent: "messenger_chat/chat_root"
+  parent: "messenger_chat/bub1_bg"
+  overridden_fields: 1
   template_node_child: true
 }
 nodes {
+  position {
+    x: 490.0
+    y: 12.0
+    z: 0.056
+  }
   type: TYPE_TEXT
   id: "messenger_chat/bub1_stamp"
-  parent: "messenger_chat/chat_root"
+  parent: "messenger_chat/bub1_bg"
+  overridden_fields: 1
   template_node_child: true
 }
 nodes {
   type: TYPE_BOX
-  id: "messenger_chat/bub2_bg"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub2_bt"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub2_bb"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub2_bl"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub2_br"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_chat/bub2_text"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_chat/bub2_stamp"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub3_bg"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub3_bt"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub3_bb"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub3_bl"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub3_br"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_chat/bub3_text"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_chat/bub3_stamp"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub4_bg"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub4_bt"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub4_bb"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub4_bl"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub4_br"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_chat/bub4_text"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_chat/bub4_stamp"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub5_bg"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub5_bt"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub5_bb"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub5_bl"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub5_br"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_chat/bub5_text"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_chat/bub5_stamp"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub6_bg"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub6_bt"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub6_bb"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub6_bl"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub6_br"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_chat/bub6_text"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_chat/bub6_stamp"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub7_bg"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub7_bt"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub7_bb"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub7_bl"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub7_br"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_chat/bub7_text"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_chat/bub7_stamp"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub8_bg"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub8_bt"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub8_bb"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub8_bl"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/bub8_br"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_chat/bub8_text"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_chat/bub8_stamp"
-  parent: "messenger_chat/chat_root"
+  id: "messenger_chat/border_bub"
+  parent: "messenger_chat/bub1_bg"
   template_node_child: true
 }
 nodes {
@@ -1349,33 +511,15 @@ nodes {
   template_node_child: true
 }
 nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/attach_bt"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/attach_bb"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/attach_bl"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/attach_br"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
   type: TYPE_TEXT
   id: "messenger_chat/attach_text"
-  parent: "messenger_chat/chat_root"
+  parent: "messenger_chat/attach_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/border_attach"
+  parent: "messenger_chat/attach_bg"
   template_node_child: true
 }
 nodes {
@@ -1385,33 +529,15 @@ nodes {
   template_node_child: true
 }
 nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/input_bt"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/input_bb"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/input_bl"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/input_br"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
   type: TYPE_TEXT
   id: "messenger_chat/input_text"
-  parent: "messenger_chat/chat_root"
+  parent: "messenger_chat/input_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/border_input"
+  parent: "messenger_chat/input_bg"
   template_node_child: true
 }
 nodes {
@@ -1421,33 +547,15 @@ nodes {
   template_node_child: true
 }
 nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/send_bt"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/send_bb"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/send_bl"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/send_br"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
   type: TYPE_TEXT
   id: "messenger_chat/send_text"
-  parent: "messenger_chat/chat_root"
+  parent: "messenger_chat/send_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/border_send"
+  parent: "messenger_chat/send_bg"
   template_node_child: true
 }
 nodes {
@@ -1468,3 +576,4 @@ nodes {
   parent: "messenger_chat/chat_root"
   template_node_child: true
 }
+material: "/builtins/materials/gui.material"

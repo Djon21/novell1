@@ -1022,7 +1022,6 @@ nodes {
   color {
     x: 0.282
     y: 0.961
-    z: 1.0
   }
   type: TYPE_BOX
   texture: "icon_phone/ico_fon"
@@ -1078,7 +1077,7 @@ nodes {
   id: "side_panel"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.85
+  alpha: 0.95
 }
 nodes {
   position {

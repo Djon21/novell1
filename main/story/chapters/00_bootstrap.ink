@@ -32,11 +32,19 @@ VAR sunday_went_to_shop = false
 VAR sunday_went_to_viewpoint = false
 VAR sunday_evening_started = false
 VAR sunday_finished = false
-VAR sunday_keys_taken = false
 VAR sunday_dressed = false
 VAR sunday_ready_to_leave = false
+VAR got_out_of_bed = false
+VAR washed_up = false
+VAR bathroom_morning_seen = false
+VAR teeth_brushed = false
+VAR toothbrush_taken = false
+VAR toothpaste_taken = false
+VAR toothbrush_pasted_ready = false
+VAR sunday_morning_routine_seen = false
+VAR sunday_messenger_invite_sent = false
 VAR sunday_bedroom_window_seen = false
-VAR sunday_work_hint_seen = false
+VAR sunday_kitchen_window_seen = false
 VAR breakfast_done = false
 VAR fridge_checked = false
 VAR water_drunk = false
@@ -47,26 +55,29 @@ VAR sunday_shop_bought_drink_for_npc = false
 VAR sunday_shop_done = false
 VAR sunday_shop_with_npc_seen = false
 VAR date_small_kindness = false
+VAR park_arrived = false
+VAR park_where_message_sent = false
+VAR park_entrance_seen = false
+VAR park_path_seen = false
+VAR park_npc_greeted = false
+VAR park_place_chosen = false
+VAR park_talk_place_bench = false
+VAR park_talk_place_path = false
+VAR park_bench_trash_seen = false
+VAR park_trash_cup_taken = false
+VAR park_bench_cleared = false
+VAR park_water_given = false
 VAR monday_started = false
 VAR monday_morning_started = false
 
-VAR morning_choice = ""
 VAR day_strategy = ""
 VAR office_strategy = ""
 VAR current_iteration_end = ""
 
-VAR newspaper_taken = false
-VAR newspaper_kept = false
-VAR early_terminal_glitch = false
-
 VAR anomaly_noticed = false
 VAR anomaly_interpreted = false
-VAR repeated_phrase_noticed = false
-VAR future_hint_seen = false
 
 VAR kitchen_intro_seen = false
-VAR need_mug_for_coffee = false
-VAR need_phone = false
 VAR mug_taken = false
 VAR phone_taken = false
 VAR first_anomaly_seen = false
@@ -78,10 +89,6 @@ VAR understood_uncertainty = false
 
 VAR npc_opened_up = false
 VAR player_was_honest = false
-VAR confession_unlocked = false
-
-VAR log_message = ""
-VAR log_marker = ""
 
 VAR inventory_item_id = ""
 VAR inventory_item_name = ""

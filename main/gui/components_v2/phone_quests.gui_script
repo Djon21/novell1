@@ -28,9 +28,11 @@ local LIST_TOP = 558
 local LIST_BOTTOM = 104
 local LIST_H = LIST_TOP - LIST_BOTTOM
 local CARD_W, CARD_H, CARD_GAP = 646, 210, 18
--- Physical GUI contains 3 card node sets for safe hiding/editor compatibility.
--- Runtime renders only 2 cards, using the extra vertical room for readable text.
-local CARD_NODE_SLOTS = 3
+-- В phone_quests.gui лежит только ОДНА quest-карточка (quest1_bg + дети).
+-- Остальные слоты создаются в init() через gui.clone_tree(quest1_bg).
+-- CARD_NODE_SLOTS = сколько cards живёт в gui-памяти; QUEST_SLOTS — сколько
+-- из них рендерится одновременно (всегда == CARD_NODE_SLOTS теперь).
+local CARD_NODE_SLOTS = 2
 local QUEST_SLOTS = 2
 local VISIBLE_STEPS = 3
 local SCROLL_STEP = 1
@@ -72,10 +74,32 @@ for i = 1, CARD_NODE_SLOTS do
     table.insert(NODE_IDS, p .. "_pct")
 end
 
-local function get_node(id)
+-- Хранит клоны quest-карточек: _card_clones[slot] = { [orig_id] = node, ... }
+-- slot 1 = оригинал из .gui (не клон).
+-- slot 2..N = клоны из gui.clone_tree(quest1_bg) созданные в init().
+local _card_clones = nil
+
+local function try_get_node(id)
     local ok, n = pcall(gui.get_node, id)
     if ok then return n end
     return nil
+end
+
+-- Резолвит "questN_<suffix>" через clone-таблицу для N > 1. Все остальные id
+-- идут напрямую через gui.get_node. После init() _card_clones содержит slot 2+.
+local function get_node(id)
+    local n = try_get_node(id)
+    if n then return n end
+
+    if not _card_clones then return nil end
+    local N, suffix = id:match("^quest(%d+)(_.+)$")
+    if not N then return nil end
+    N = tonumber(N)
+    if N == 1 then return nil end  -- оригинал — уже пробовали через try_get_node
+    local clone = _card_clones[N]
+    if not clone then return nil end
+    -- Ключи в clone-таблице — оригинальные id ("quest1_top" и т.п.)
+    return clone["quest1" .. suffix]
 end
 
 local function set_node_enabled(id, enabled)
@@ -474,6 +498,25 @@ function init(self)
     self.visible = false
     self.filter = "active"
     self.offset = 0
+
+    -- В .gui лежит ОДНА quest-карточка (quest1_bg + дети). Клонируем её для
+    -- слотов 2..CARD_NODE_SLOTS через gui.clone_tree. Клоны позиционируются
+    -- ниже оригинала с шагом CARD_H + CARD_GAP. Должно выполняться ДО первого
+    -- set_nodes_enabled, иначе wrapper get_node не сможет найти quest2_*.
+    _card_clones = {}
+    local proto = gui.get_node("quest1_bg")
+    if proto then
+        local proto_pos = gui.get_position(proto)
+        for slot = 2, CARD_NODE_SLOTS do
+            local clone = gui.clone_tree(proto)
+            _card_clones[slot] = clone
+            local clone_root = clone["quest1_bg"]
+            local y_offset = -(slot - 1) * (CARD_H + CARD_GAP)
+            gui.set_position(clone_root, vmath.vector3(
+                proto_pos.x, proto_pos.y + y_offset, proto_pos.z))
+        end
+    end
+
     self.list_drag = drag_scroll.new({
         step_px      = 32,
         threshold_px = 8,

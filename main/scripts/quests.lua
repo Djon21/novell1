@@ -11,7 +11,9 @@
 -- должны жить в meta_state или отдельном persistent journal module.
 --
 -- Воскресный flow:
---   find_phone -> reply_npc -> make_coffee -> meet_npc -> spend_sunday
+--   find_phone -> make_coffee -> reply_npc -> meet_npc -> spend_sunday
+--
+-- Приглашение на встречу приходит в Messenger после бытового утреннего блока.
 --
 -- go_to_office остаётся в каталоге, но НЕ стартует в воскресенье.
 -- Его запускает monday_morning_start; воскресенье его не стартует.
@@ -20,8 +22,8 @@ local M = {}
 
 M.phone_order = {
     "find_phone",
-    "reply_npc",
     "make_coffee",
+    "reply_npc",
     "meet_npc",
     "spend_sunday",
     "go_to_office",
@@ -37,7 +39,7 @@ end
 M.quests = {
     find_phone = {
         name = "Найти телефон",
-        description = "Телефон вибрирует рядом с кроватью. Нужно взять его и проверить сообщение.",
+        description = "Телефон вибрирует рядом с кроватью. Нужно взять его и включить экран: там обычный утренний шум, без срочного ответа.",
         steps = {
             { text = "Подобрать телефон", done_when = "phone_taken" },
             { text = "Включить экран",    done_when = "phone_active" },
@@ -45,12 +47,12 @@ M.quests = {
     },
 
     reply_npc = {
-        name = "Ответить коллеге",
-        description = "Утром пришло личное сообщение. Нужно открыть переписку и выбрать место встречи.",
+        name = "Ответить в Messenger",
+        description = "После утренних дел пришло личное сообщение. Нужно открыть Messenger и выбрать место встречи.",
         steps = {
             {
                 text = "Прочитать сообщение",
-                done_when_any = { "sms_mila_read", "sms_artem_read" },
+                done_when_any = { "msg_mila_read", "msg_artem_read" },
             },
             {
                 text = "Выбрать место встречи",
@@ -58,23 +60,23 @@ M.quests = {
             },
             {
                 text = "Ответить",
-                done_when_any = { "sms_mila_replied", "sms_artem_replied" },
+                done_when_any = { "msg_mila_replied", "msg_artem_replied" },
             },
         },
     },
 
     make_coffee = {
-        name = "Собраться перед встречей",
-        description = "Перед выходом нужно прийти в себя: умыться, взять ключи, надеть куртку и обувь. Кофе, завтрак и магазин — по желанию.",
+        name = "Проснуться нормально",
+        description = "Сначала нужно вернуться в день: встать, умыться и сделать кофе. После этого уже можно разбираться, зовёт ли воскресенье наружу.",
         steps = {
-            { text = "Умыться",              done_when = "washed_up" },
-            { text = "Взять ключи",          done_when = "sunday_keys_taken" },
-            { text = "Надеть куртку и обувь", done_when = "sunday_dressed" },
+            { text = "Встать",       done_when = "got_out_of_bed" },
+            { text = "Умыться",      done_when = "washed_up" },
+            { text = "Сделать кофе", done_when = "coffee_drunk" },
         },
     },
 
     meet_npc = {
-        name = "Встретиться с коллегой",
+        name = "Встретиться",
         description = "Вы договорились увидеться сегодня. Осталось собраться, выйти из квартиры и добраться до выбранного места.",
         steps = {
             { text = "Договориться о встрече", done_when = "date_agreed" },
@@ -93,7 +95,7 @@ M.quests = {
         name = "Продолжить воскресенье",
         description = "После первой встречи день ещё не закончился. Можно провести немного времени вместе, вернуться домой и лечь спать.",
         steps = {
-            { text = "Встретиться с коллегой", done_when = "met_npc_sunday" },
+            { text = "Встретиться", done_when = "met_npc_sunday" },
             { text = "Решить, куда пойти дальше", done_when = "sunday_after_date_active" },
             { text = "Провести ещё немного времени", done_when = "sunday_second_stop_done" },
             { text = "Вернуться домой", done_when = "sunday_evening_started" },

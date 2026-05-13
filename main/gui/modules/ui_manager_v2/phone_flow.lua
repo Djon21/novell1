@@ -1,4 +1,5 @@
 local gs = require "main.scripts.game_state"
+local MSG = require "main.gui.modules.messages"
 
 local M = {}
 
@@ -15,14 +16,14 @@ function M.open(ctx)
 
     ctx.overlays.phone = true
     ctx.sync_modal_state()
-    msg.post(ctx.components.phone, "open_phone")
+    msg.post(ctx.components.phone, MSG.open_phone)
     return true
 end
 
 function M.open_app(ctx, app_id)
     M.open(ctx)
     if ctx.overlays.phone then
-        msg.post(ctx.components.phone, "open_app", { id = app_id or "sms" })
+        msg.post(ctx.components.phone, MSG.open_app, { id = app_id or "sms" })
         return true
     end
     return false
@@ -32,14 +33,14 @@ function M.close(ctx)
     ctx.dbg("[ui_manager_v2] close_phone()")
     ctx.overlays.phone = false
     ctx.sync_modal_state()
-    msg.post(ctx.components.phone, "close_phone")
+    msg.post(ctx.components.phone, MSG.close_phone)
 end
 
 function M.open_map_app(ctx)
     if not ctx.overlays.phone then
         return false
     end
-    msg.post(ctx.components.phone, "open_app", { id = "map" })
+    msg.post(ctx.components.phone, MSG.open_app, { id = "map" })
     return true
 end
 

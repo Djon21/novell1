@@ -1,0 +1,5 @@
+images {
+  image: "/main/images/bg_image/bg_park_riverside_entrance_morning.jpg"
+}
+extrude_borders: 2
+rename_patterns: "bg_park_riverside_entrance_morning=scene_bg"
