@@ -373,8 +373,21 @@ local function refresh(self)
     if self.selected then
         -- re-paint selected slot with selection colors
         paint_slot_filled(self.selected, catalog.get_runtime(self.inv_ids[self.selected]), true)
-        show_item_details(self, self.inv_ids[self.selected])
+        -- Если активен combine-pending — сохраняем "ОТМЕНА"-лейбл и
+        -- pending-инструкцию. Иначе обычные item details.
+        -- (refresh() может быть вызван фоновым notify из game_state когда
+        -- combine ждёт второй клик. Без этой проверки лейбл "ОТМЕНА"
+        -- сбросится в "СОЕДИНИТЬ", и игрок жмёт «отмена» → попадает в
+        -- ту же ветку pending повторно.)
+        if self.combine_first then
+            show_combine_pending_details(self, self.combine_first)
+        else
+            show_item_details(self, self.inv_ids[self.selected])
+        end
     else
+        -- Selected дропнут — значит item удалили из инвентаря.
+        -- Если combine был на этом предмете — отменяем pending.
+        self.combine_first = nil
         clear_details(self)
     end
 end
