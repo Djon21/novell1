@@ -5,11 +5,28 @@ local l10n = require "main.scripts.l10n"
 
 local M = {}
 
+-- Все scene_id квартиры (sunday hub + monday/tuesday flow). Используется
+-- для подсветки пина "home" на карте: игрок дома → home selected.
+-- Aliases вроде apartment_hall_morning через scenes.lua резолвятся в
+-- apartment_hub, но scene_controller возвращает alias-имя, так что
+-- перечисляем явно.
 local HOME_SCENES = {
-    apartment_hub = true,
-    kitchen = true,
-    bathroom = true,
-    bedroom_day = true,
+    -- Sunday hub
+    apartment_hub                    = true,
+    apartment_bedroom                = true,
+    apartment_kitchen                = true,
+    apartment_hall_morning           = true,  -- alias
+    apartment_bedroom_morning        = true,  -- alias
+    apartment_kitchen_morning        = true,  -- alias
+    sunday_apartment_bedroom_night   = true,  -- alias
+    -- Monday morning-flow
+    monday_apartment_hall_morning    = true,
+    monday_apartment_bedroom_morning = true,
+    monday_apartment_kitchen_morning = true,
+    -- Tuesday consequences-flow
+    tuesday_apartment_hall_morning   = true,
+    tuesday_apartment_bedroom_morning = true,
+    tuesday_apartment_kitchen_morning = true,
 }
 
 local PIN_LABEL_KEYS = {
