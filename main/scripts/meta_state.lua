@@ -2,28 +2,26 @@ local M = {}
 
 local SAVE_PATH = sys.get_save_file("novell1", "meta_state.dat")
 
-local DEFAULT = {
-    iteration_number     = 1,
-    completed_iterations = 0,
-    loop_awareness       = 0,
-    -- Ложные концовки, найденные в текущей итерации (сбрасываются при переходе
-    -- на следующую). Ключ = id концовки, значение = true.
-    false_endings_seen   = {},
-    false_endings_count  = 0,
-    -- Выбор персонажа сохраняется между итерациями.
-    -- Сбрасывается только при reset_all() (кнопка "СБРОСИТЬ ИТЕРАЦИЮ").
-    mc_gender            = nil,
-}
+-- Дефолты в виде функции: каждый вызов отдаёт свежие table-значения. Иначе
+-- shallow-copy через `for k,v in pairs` отдала бы РАЗДЕЛЯЕМУЮ ссылку на
+-- false_endings_seen, и mutate в state мутировал бы и DEFAULT. После
+-- reset_all() reset был бы фиктивным.
+local function clone_defaults()
+    return {
+        iteration_number     = 1,
+        completed_iterations = 0,
+        loop_awareness       = 0,
+        -- Ложные концовки текущей итерации. Ключ = id, значение = true.
+        -- Сбрасываются при переходе на следующую итерацию.
+        false_endings_seen   = {},
+        false_endings_count  = 0,
+        -- Выбор персонажа сохраняется между итерациями. Сбрасывается только
+        -- при reset_all() (кнопка "СБРОСИТЬ ИТЕРАЦИЮ").
+        mc_gender            = nil,
+    }
+end
 
 local state = nil
-
-local function clone_defaults()
-    local copy = {}
-    for k, v in pairs(DEFAULT) do
-        copy[k] = v
-    end
-    return copy
-end
 
 local function ensure_loaded()
     if not state then
