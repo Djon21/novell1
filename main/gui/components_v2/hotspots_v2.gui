@@ -7,6 +7,10 @@ fonts {
   name: "main"
   font: "/main/fonts/main.font"
 }
+fonts {
+  name: "Manrope-Medium_16"
+  font: "/main/fonts/Manrope-Medium_16.font"
+}
 textures {
   name: "hotspots"
   texture: "/main/images/hotspots.atlas"
@@ -47,7 +51,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "label"
-  font: "main"
+  font: "Manrope-Medium_16"
   id: "hotspot_label_1"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_1"
@@ -143,7 +147,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "label"
-  font: "main"
+  font: "Manrope-Medium_16"
   id: "hotspot_label_2"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_2"
@@ -239,7 +243,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "label"
-  font: "main"
+  font: "Manrope-Medium_16"
   id: "hotspot_label_3"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_3"
@@ -335,7 +339,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "label"
-  font: "main"
+  font: "Manrope-Medium_16"
   id: "hotspot_label_4"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_4"
@@ -431,7 +435,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "label"
-  font: "main"
+  font: "Manrope-Medium_16"
   id: "hotspot_label_5"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_5"
@@ -527,7 +531,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "label"
-  font: "main"
+  font: "Manrope-Medium_16"
   id: "hotspot_label_6"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_6"

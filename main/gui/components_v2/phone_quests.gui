@@ -47,27 +47,6 @@ nodes {
 }
 nodes {
   position {
-    x: 500.0
-    y: 40.0
-    z: 0.521
-  }
-  size {
-    x: 728.0
-    y: 640.0
-  }
-  color {
-    x: 0.031
-    y: 0.024
-    z: 0.094
-  }
-  type: TYPE_BOX
-  id: "quests_app_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.84
-}
-nodes {
-  position {
     x: 524.0
     y: 651.0
     z: 0.556

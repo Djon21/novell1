@@ -19,23 +19,17 @@ local COLORS = {
     green     = vmath.vector4(0.290, 0.870, 0.500, 1),
 }
 
-local PANEL_X, PANEL_Y = 500, 40
-local PANEL_W, PANEL_H = 728, 640
 local CONTENT_X = 524
 local ROW_W = 660
 local SCROLL_X = 1192
 local LIST_TOP = 558
 local LIST_BOTTOM = 104
 local LIST_H = LIST_TOP - LIST_BOTTOM
-local CARD_W, CARD_H, CARD_GAP = 646, 210, 18
+local CARD_H, CARD_GAP = 210, 18
 -- В phone_quests.gui лежит только ОДНА quest-карточка (quest1_bg + дети).
 -- Остальные слоты создаются в init() через gui.clone_tree(quest1_bg).
--- CARD_NODE_SLOTS = сколько cards живёт в gui-памяти; QUEST_SLOTS — сколько
--- из них рендерится одновременно (всегда == CARD_NODE_SLOTS теперь).
-local CARD_NODE_SLOTS = 2
 local QUEST_SLOTS = 2
 local VISIBLE_STEPS = 3
-local SCROLL_STEP = 1
 
 local NODE_IDS = {
     "quests_runtime_root", "quests_app_bg",
@@ -46,7 +40,7 @@ local NODE_IDS = {
     "quests_footer_line", "quests_footer_left", "quests_footer_right",
 }
 
-for i = 1, CARD_NODE_SLOTS do
+for i = 1, QUEST_SLOTS do
     local p = "quest" .. i
     table.insert(NODE_IDS, p .. "_bg")
     table.insert(NODE_IDS, p .. "_top")
@@ -154,10 +148,6 @@ local function set_border_color(prefix, color, alpha)
     set_color(prefix .. "_bottom", color, alpha)
     set_color(prefix .. "_left", color, alpha)
     set_color(prefix .. "_right", color, alpha)
-end
-
-local function set_step_border_color(prefix, color, alpha)
-    set_border_color(prefix, color, alpha)
 end
 
 local function utf8_len_and_cut(s, max_chars)
@@ -307,12 +297,6 @@ local function show_card(i)
     end
 end
 
-local function apply_static_layout()
-    -- Layout is intentionally owned by phone_quests.gui so positions can be edited
-    -- in Defold Editor and survive runtime. Keep this function as a no-op for
-    -- backwards compatibility; script code below only changes dynamic state.
-end
-
 local function update_scrollbar(self, total)
     local max_offset = math.max(0, total - QUEST_SLOTS)
     if max_offset <= 0 then
@@ -410,7 +394,7 @@ local function render_card(i, q)
             set_color(box, checked and accent or COLORS.dark, checked and 1.0 or 0.0)
             set_color(mark, checked and COLORS.dark or accent, checked and 0.95 or 0.0)
             set_color(txt, checked and COLORS.paper or COLORS.paper_dim, kind == "done" and 0.45 or 0.86)
-            set_step_border_color(p .. "_step" .. j, checked and accent or COLORS.paper_dim, checked and 1.0 or 0.40)
+            set_border_color(p .. "_step" .. j, checked and accent or COLORS.paper_dim, checked and 1.0 or 0.40)
         end
     end
 end
@@ -425,9 +409,6 @@ local function refresh(self)
 
     for i = 1, QUEST_SLOTS do
         render_card(i, list[self.offset + i])
-    end
-    for i = QUEST_SLOTS + 1, CARD_NODE_SLOTS do
-        hide_card(i)
     end
 
     if total == 0 then
@@ -500,14 +481,14 @@ function init(self)
     self.offset = 0
 
     -- В .gui лежит ОДНА quest-карточка (quest1_bg + дети). Клонируем её для
-    -- слотов 2..CARD_NODE_SLOTS через gui.clone_tree. Клоны позиционируются
-    -- ниже оригинала с шагом CARD_H + CARD_GAP. Должно выполняться ДО первого
+    -- слотов 2..QUEST_SLOTS через gui.clone_tree. Клоны позиционируются ниже
+    -- оригинала с шагом CARD_H + CARD_GAP. Должно выполняться ДО первого
     -- set_nodes_enabled, иначе wrapper get_node не сможет найти quest2_*.
     _card_clones = {}
     local proto = gui.get_node("quest1_bg")
     if proto then
         local proto_pos = gui.get_position(proto)
-        for slot = 2, CARD_NODE_SLOTS do
+        for slot = 2, QUEST_SLOTS do
             local clone = gui.clone_tree(proto)
             _card_clones[slot] = clone
             local clone_root = clone["quest1_bg"]
@@ -526,7 +507,6 @@ function init(self)
         end,
         on_step      = function(owner, delta) scroll_by(owner, delta) end,
     })
-    apply_static_layout()
     set_nodes_enabled(false)
 end
 
@@ -534,7 +514,6 @@ function on_message(self, message_id, message, sender)
     if message_id == hash("open_app") then
         self.visible = true
         set_nodes_enabled(true)
-        apply_static_layout()
         refresh(self)
     elseif message_id == hash("close_app") then
         self.visible = false

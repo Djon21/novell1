@@ -39,83 +39,37 @@ nodes {
 }
 nodes {
   position {
-    x: 500.000
-    y: 40.000
-    z: 0.522
+    x: 524.0
+    y: 650.0
+    z: 0.56
   }
   size {
-    x: 728.000
-    y: 640.000
+    x: 440.0
+    y: 12.0
   }
   color {
-    x: 0.031
-    y: 0.024
-    z: 0.094
-  }
-  type: TYPE_BOX
-  id: "v_mail_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mail_runtime_root"
-  alpha: 0.860
-}
-nodes {
-  position {
-    x: 500.000
-    y: 610.000
-    z: 0.523
-  }
-  size {
-    x: 728.000
-    y: 70.000
-  }
-  color {
-    x: 0.047
-    y: 0.041
-    z: 0.120
-  }
-  type: TYPE_BOX
-  id: "v_mail_head_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mail_runtime_root"
-  alpha: 0.700
-}
-nodes {
-  position {
-    x: 524.000
-    y: 650.000
-    z: 0.560
-  }
-  size {
-    x: 440.000
-    y: 12.000
-  }
-  color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_eyebrow"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 524.000
-    y: 625.000
+    x: 524.0
+    y: 625.0
     z: 0.561
   }
   size {
-    x: 240.000
-    y: 24.000
+    x: 240.0
+    y: 24.0
   }
   color {
     x: 0.953
@@ -123,76 +77,72 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: ""
   font: "unbounded_bold_20"
   id: "v_mail_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1086.000
-    y: 626.000
-    z: 0.540
+    x: 1086.0
+    y: 591.0
+    z: 0.54
   }
   size {
-    x: 118.000
-    y: 30.000
+    x: 118.0
+    y: 25.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_BOX
   id: "v_mail_compose_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
 }
 nodes {
   position {
-    x: 1100.000
-    y: 641.000
-    z: 0.562
+    x: 8.0
+    y: 13.0
+    z: 0.062
   }
   size {
-    x: 96.000
-    y: 14.000
+    x: 96.0
+    y: 12.0
   }
   color {
-    x: 0.020
+    x: 0.02
     y: 0.012
-    z: 0.100
+    z: 0.1
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_mail_compose_text"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mail_runtime_root"
-  alpha: 1.000
+  parent: "v_mail_compose_bg"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 524.000
-    y: 590.000
+    x: 524.0
+    y: 590.0
     z: 0.535
   }
   size {
-    x: 112.000
-    y: 25.000
+    x: 112.0
+    y: 25.0
   }
   color {
-    x: 0.060
+    x: 0.06
     y: 0.125
     z: 0.185
   }
@@ -201,43 +151,41 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.750
+  alpha: 0.75
 }
 nodes {
   position {
-    x: 532.000
-    y: 603.000
+    x: 532.0
+    y: 603.0
     z: 0.562
   }
   size {
-    x: 96.000
-    y: 12.000
+    x: 96.0
+    y: 12.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_tab_inbox_text"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 642.000
-    y: 590.000
+    x: 642.0
+    y: 590.0
     z: 0.535
   }
   size {
-    x: 106.000
-    y: 25.000
+    x: 106.0
+    y: 25.0
   }
   color {
     x: 0.078
@@ -249,17 +197,17 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.750
+  alpha: 0.75
 }
 nodes {
   position {
-    x: 650.000
-    y: 603.000
+    x: 650.0
+    y: 603.0
     z: 0.562
   }
   size {
-    x: 90.000
-    y: 12.000
+    x: 90.0
+    y: 12.0
   }
   color {
     x: 0.788
@@ -267,25 +215,24 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_tab_important_text"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 754.000
-    y: 590.000
+    x: 754.0
+    y: 590.0
     z: 0.535
   }
   size {
-    x: 94.000
-    y: 25.000
+    x: 94.0
+    y: 25.0
   }
   color {
     x: 0.078
@@ -297,17 +244,17 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.750
+  alpha: 0.75
 }
 nodes {
   position {
-    x: 762.000
-    y: 603.000
+    x: 762.0
+    y: 603.0
     z: 0.562
   }
   size {
-    x: 78.000
-    y: 12.000
+    x: 78.0
+    y: 12.0
   }
   color {
     x: 0.788
@@ -315,25 +262,24 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_tab_promo_text"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 854.000
-    y: 590.000
+    x: 854.0
+    y: 590.0
     z: 0.535
   }
   size {
-    x: 86.000
-    y: 25.000
+    x: 86.0
+    y: 25.0
   }
   color {
     x: 0.078
@@ -345,17 +291,17 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.750
+  alpha: 0.75
 }
 nodes {
   position {
-    x: 862.000
-    y: 603.000
+    x: 862.0
+    y: 603.0
     z: 0.562
   }
   size {
-    x: 70.000
-    y: 12.000
+    x: 70.0
+    y: 12.0
   }
   color {
     x: 0.788
@@ -363,25 +309,24 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_tab_spam_text"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 946.000
-    y: 590.000
+    x: 946.0
+    y: 590.0
     z: 0.535
   }
   size {
-    x: 98.000
-    y: 25.000
+    x: 98.0
+    y: 25.0
   }
   color {
     x: 0.078
@@ -393,17 +338,17 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.750
+  alpha: 0.75
 }
 nodes {
   position {
-    x: 954.000
-    y: 603.000
+    x: 954.0
+    y: 603.0
     z: 0.562
   }
   size {
-    x: 82.000
-    y: 12.000
+    x: 82.0
+    y: 12.0
   }
   color {
     x: 0.788
@@ -411,25 +356,24 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_tab_sent_text"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 524.000
-    y: 568.000
+    x: 524.0
+    y: 568.0
     z: 0.538
   }
   size {
-    x: 680.000
-    y: 1.000
+    x: 680.0
+    y: 1.0
   }
   color {
     x: 0.953
@@ -441,22 +385,22 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.160
+  alpha: 0.16
 }
 nodes {
   position {
-    x: 524.000
-    y: 116.000
+    x: 524.0
+    y: 116.0
     z: 0.526
   }
   size {
-    x: 664.000
-    y: 444.000
+    x: 664.0
+    y: 444.0
   }
   color {
-    x: 0.000
-    y: 0.000
-    z: 0.000
+    x: 0.0
+    y: 0.0
+    z: 0.0
   }
   type: TYPE_BOX
   id: "v_mail_list_clip"
@@ -467,13 +411,13 @@ nodes {
 }
 nodes {
   position {
-    x: 1194.000
-    y: 116.000
-    z: 0.540
+    x: 1194.0
+    y: 116.0
+    z: 0.54
   }
   size {
-    x: 4.000
-    y: 444.000
+    x: 4.0
+    y: 444.0
   }
   color {
     x: 0.953
@@ -485,39 +429,38 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.080
+  alpha: 0.08
 }
 nodes {
   position {
-    x: 1194.000
-    y: 446.000
+    x: 1194.0
+    y: 446.0
     z: 0.565
   }
   size {
-    x: 4.000
-    y: 110.000
+    x: 4.0
+    y: 110.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_BOX
   id: "v_mail_scroll_thumb"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.700
+  alpha: 0.7
 }
 nodes {
   position {
-    x: 524.000
-    y: 496.000
+    x: 524.0
+    y: 496.0
     z: 0.532
   }
   size {
-    x: 664.000
-    y: 56.000
+    x: 664.0
+    y: 56.0
   }
   color {
     x: 0.078
@@ -529,65 +472,62 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.720
+  alpha: 0.72
 }
 nodes {
   position {
-    x: 524.000
-    y: 496.000
+    x: 524.0
+    y: 496.0
     z: 0.564
   }
   size {
-    x: 3.000
-    y: 56.000
+    x: 3.0
+    y: 56.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_BOX
   id: "v_mail_m1_accent"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.000
+  alpha: 0.0
 }
 nodes {
   position {
-    x: 536.000
-    y: 533.000
+    x: 536.0
+    y: 533.0
     z: 0.565
   }
   size {
-    x: 18.000
-    y: 14.000
+    x: 18.0
+    y: 14.0
   }
   color {
-    x: 1.000
     y: 0.702
     z: 0.278
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_mail_m1_star"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 562.000
-    y: 536.000
+    x: 562.0
+    y: 536.0
     z: 0.565
   }
   size {
-    x: 148.000
-    y: 12.000
+    x: 148.0
+    y: 12.0
   }
   color {
     x: 0.953
@@ -595,25 +535,24 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_mail_m1_from"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 562.000
-    y: 520.000
+    x: 562.0
+    y: 520.0
     z: 0.565
   }
   size {
-    x: 148.000
-    y: 10.000
+    x: 148.0
+    y: 10.0
   }
   color {
     x: 0.788
@@ -621,25 +560,24 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_m1_addr"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.850
+  alpha: 0.85
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 720.000
-    y: 535.000
+    x: 720.0
+    y: 535.0
     z: 0.565
   }
   size {
-    x: 360.000
-    y: 13.000
+    x: 360.0
+    y: 13.0
   }
   color {
     x: 0.953
@@ -647,25 +585,24 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_mail_m1_subj"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 720.000
-    y: 516.000
+    x: 720.0
+    y: 516.0
     z: 0.565
   }
   size {
-    x: 400.000
-    y: 12.000
+    x: 400.0
+    y: 12.0
   }
   color {
     x: 0.788
@@ -673,76 +610,71 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_12"
   id: "v_mail_m1_body"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.920
+  alpha: 0.92
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1072.000
-    y: 530.000
-    z: 0.540
+    x: 1072.0
+    y: 530.0
+    z: 0.54
   }
   size {
-    x: 54.000
-    y: 18.000
+    x: 54.0
+    y: 18.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_BOX
   id: "v_mail_m1_tag1_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.140
+  alpha: 0.14
 }
 nodes {
   position {
-    x: 1078.000
-    y: 539.000
+    x: 1078.0
+    y: 539.0
     z: 0.566
   }
   size {
-    x: 42.000
-    y: 9.000
+    x: 42.0
+    y: 9.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_m1_tag1_text"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1130.000
-    y: 530.000
-    z: 0.540
+    x: 1130.0
+    y: 530.0
+    z: 0.54
   }
   size {
-    x: 46.000
-    y: 18.000
+    x: 46.0
+    y: 18.0
   }
   color {
-    x: 1.000
     y: 0.239
     z: 0.498
   }
@@ -751,43 +683,41 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.140
+  alpha: 0.14
 }
 nodes {
   position {
-    x: 1136.000
-    y: 539.000
+    x: 1136.0
+    y: 539.0
     z: 0.566
   }
   size {
-    x: 34.000
-    y: 9.000
+    x: 34.0
+    y: 9.0
   }
   color {
-    x: 1.000
     y: 0.239
     z: 0.498
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_m1_tag2_text"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1132.000
-    y: 511.000
+    x: 1132.0
+    y: 511.0
     z: 0.565
   }
   size {
-    x: 50.000
-    y: 11.000
+    x: 50.0
+    y: 11.0
   }
   color {
     x: 0.788
@@ -795,25 +725,24 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_m1_time"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 524.000
-    y: 433.000
+    x: 524.0
+    y: 433.0
     z: 0.532
   }
   size {
-    x: 664.000
-    y: 56.000
+    x: 664.0
+    y: 56.0
   }
   color {
     x: 0.078
@@ -825,65 +754,62 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.720
+  alpha: 0.72
 }
 nodes {
   position {
-    x: 524.000
-    y: 433.000
+    x: 524.0
+    y: 433.0
     z: 0.564
   }
   size {
-    x: 3.000
-    y: 56.000
+    x: 3.0
+    y: 56.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_BOX
   id: "v_mail_m2_accent"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.000
+  alpha: 0.0
 }
 nodes {
   position {
-    x: 536.000
-    y: 470.000
+    x: 536.0
+    y: 470.0
     z: 0.565
   }
   size {
-    x: 18.000
-    y: 14.000
+    x: 18.0
+    y: 14.0
   }
   color {
-    x: 1.000
     y: 0.702
     z: 0.278
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_mail_m2_star"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 562.000
-    y: 473.000
+    x: 562.0
+    y: 473.0
     z: 0.565
   }
   size {
-    x: 148.000
-    y: 12.000
+    x: 148.0
+    y: 12.0
   }
   color {
     x: 0.953
@@ -891,25 +817,24 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_mail_m2_from"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 562.000
-    y: 457.000
+    x: 562.0
+    y: 457.0
     z: 0.565
   }
   size {
-    x: 148.000
-    y: 10.000
+    x: 148.0
+    y: 10.0
   }
   color {
     x: 0.788
@@ -917,25 +842,24 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_m2_addr"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.850
+  alpha: 0.85
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 720.000
-    y: 472.000
+    x: 720.0
+    y: 472.0
     z: 0.565
   }
   size {
-    x: 360.000
-    y: 13.000
+    x: 360.0
+    y: 13.0
   }
   color {
     x: 0.953
@@ -943,25 +867,24 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_mail_m2_subj"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 720.000
-    y: 453.000
+    x: 720.0
+    y: 453.0
     z: 0.565
   }
   size {
-    x: 400.000
-    y: 12.000
+    x: 400.0
+    y: 12.0
   }
   color {
     x: 0.788
@@ -969,76 +892,71 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_12"
   id: "v_mail_m2_body"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.920
+  alpha: 0.92
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1072.000
-    y: 467.000
-    z: 0.540
+    x: 1072.0
+    y: 467.0
+    z: 0.54
   }
   size {
-    x: 54.000
-    y: 18.000
+    x: 54.0
+    y: 18.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_BOX
   id: "v_mail_m2_tag1_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.140
+  alpha: 0.14
 }
 nodes {
   position {
-    x: 1078.000
-    y: 476.000
+    x: 1078.0
+    y: 476.0
     z: 0.566
   }
   size {
-    x: 42.000
-    y: 9.000
+    x: 42.0
+    y: 9.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_m2_tag1_text"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1130.000
-    y: 467.000
-    z: 0.540
+    x: 1130.0
+    y: 467.0
+    z: 0.54
   }
   size {
-    x: 46.000
-    y: 18.000
+    x: 46.0
+    y: 18.0
   }
   color {
-    x: 1.000
     y: 0.239
     z: 0.498
   }
@@ -1047,43 +965,41 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.140
+  alpha: 0.14
 }
 nodes {
   position {
-    x: 1136.000
-    y: 476.000
+    x: 1136.0
+    y: 476.0
     z: 0.566
   }
   size {
-    x: 34.000
-    y: 9.000
+    x: 34.0
+    y: 9.0
   }
   color {
-    x: 1.000
     y: 0.239
     z: 0.498
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_m2_tag2_text"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1132.000
-    y: 448.000
+    x: 1132.0
+    y: 448.0
     z: 0.565
   }
   size {
-    x: 50.000
-    y: 11.000
+    x: 50.0
+    y: 11.0
   }
   color {
     x: 0.788
@@ -1091,25 +1007,24 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_m2_time"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 524.000
-    y: 370.000
+    x: 524.0
+    y: 370.0
     z: 0.532
   }
   size {
-    x: 664.000
-    y: 56.000
+    x: 664.0
+    y: 56.0
   }
   color {
     x: 0.078
@@ -1121,65 +1036,62 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.720
+  alpha: 0.72
 }
 nodes {
   position {
-    x: 524.000
-    y: 370.000
+    x: 524.0
+    y: 370.0
     z: 0.564
   }
   size {
-    x: 3.000
-    y: 56.000
+    x: 3.0
+    y: 56.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_BOX
   id: "v_mail_m3_accent"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.000
+  alpha: 0.0
 }
 nodes {
   position {
-    x: 536.000
-    y: 407.000
+    x: 536.0
+    y: 407.0
     z: 0.565
   }
   size {
-    x: 18.000
-    y: 14.000
+    x: 18.0
+    y: 14.0
   }
   color {
-    x: 1.000
     y: 0.702
     z: 0.278
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_mail_m3_star"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 562.000
-    y: 410.000
+    x: 562.0
+    y: 410.0
     z: 0.565
   }
   size {
-    x: 148.000
-    y: 12.000
+    x: 148.0
+    y: 12.0
   }
   color {
     x: 0.953
@@ -1187,25 +1099,24 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_mail_m3_from"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 562.000
-    y: 394.000
+    x: 562.0
+    y: 394.0
     z: 0.565
   }
   size {
-    x: 148.000
-    y: 10.000
+    x: 148.0
+    y: 10.0
   }
   color {
     x: 0.788
@@ -1213,25 +1124,24 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_m3_addr"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.850
+  alpha: 0.85
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 720.000
-    y: 409.000
+    x: 720.0
+    y: 409.0
     z: 0.565
   }
   size {
-    x: 360.000
-    y: 13.000
+    x: 360.0
+    y: 13.0
   }
   color {
     x: 0.953
@@ -1239,25 +1149,24 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_mail_m3_subj"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 720.000
-    y: 390.000
+    x: 720.0
+    y: 390.0
     z: 0.565
   }
   size {
-    x: 400.000
-    y: 12.000
+    x: 400.0
+    y: 12.0
   }
   color {
     x: 0.788
@@ -1265,76 +1174,71 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_12"
   id: "v_mail_m3_body"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.920
+  alpha: 0.92
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1072.000
-    y: 404.000
-    z: 0.540
+    x: 1072.0
+    y: 404.0
+    z: 0.54
   }
   size {
-    x: 54.000
-    y: 18.000
+    x: 54.0
+    y: 18.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_BOX
   id: "v_mail_m3_tag1_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.140
+  alpha: 0.14
 }
 nodes {
   position {
-    x: 1078.000
-    y: 413.000
+    x: 1078.0
+    y: 413.0
     z: 0.566
   }
   size {
-    x: 42.000
-    y: 9.000
+    x: 42.0
+    y: 9.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_m3_tag1_text"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1130.000
-    y: 404.000
-    z: 0.540
+    x: 1130.0
+    y: 404.0
+    z: 0.54
   }
   size {
-    x: 46.000
-    y: 18.000
+    x: 46.0
+    y: 18.0
   }
   color {
-    x: 1.000
     y: 0.239
     z: 0.498
   }
@@ -1343,43 +1247,41 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.140
+  alpha: 0.14
 }
 nodes {
   position {
-    x: 1136.000
-    y: 413.000
+    x: 1136.0
+    y: 413.0
     z: 0.566
   }
   size {
-    x: 34.000
-    y: 9.000
+    x: 34.0
+    y: 9.0
   }
   color {
-    x: 1.000
     y: 0.239
     z: 0.498
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_m3_tag2_text"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1132.000
-    y: 385.000
+    x: 1132.0
+    y: 385.0
     z: 0.565
   }
   size {
-    x: 50.000
-    y: 11.000
+    x: 50.0
+    y: 11.0
   }
   color {
     x: 0.788
@@ -1387,25 +1289,24 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_m3_time"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 524.000
-    y: 307.000
+    x: 524.0
+    y: 307.0
     z: 0.532
   }
   size {
-    x: 664.000
-    y: 56.000
+    x: 664.0
+    y: 56.0
   }
   color {
     x: 0.078
@@ -1417,65 +1318,62 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.720
+  alpha: 0.72
 }
 nodes {
   position {
-    x: 524.000
-    y: 307.000
+    x: 524.0
+    y: 307.0
     z: 0.564
   }
   size {
-    x: 3.000
-    y: 56.000
+    x: 3.0
+    y: 56.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_BOX
   id: "v_mail_m4_accent"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.000
+  alpha: 0.0
 }
 nodes {
   position {
-    x: 536.000
-    y: 344.000
+    x: 536.0
+    y: 344.0
     z: 0.565
   }
   size {
-    x: 18.000
-    y: 14.000
+    x: 18.0
+    y: 14.0
   }
   color {
-    x: 1.000
     y: 0.702
     z: 0.278
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_mail_m4_star"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 562.000
-    y: 347.000
+    x: 562.0
+    y: 347.0
     z: 0.565
   }
   size {
-    x: 148.000
-    y: 12.000
+    x: 148.0
+    y: 12.0
   }
   color {
     x: 0.953
@@ -1483,25 +1381,24 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_mail_m4_from"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 562.000
-    y: 331.000
+    x: 562.0
+    y: 331.0
     z: 0.565
   }
   size {
-    x: 148.000
-    y: 10.000
+    x: 148.0
+    y: 10.0
   }
   color {
     x: 0.788
@@ -1509,25 +1406,24 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_m4_addr"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.850
+  alpha: 0.85
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 720.000
-    y: 346.000
+    x: 720.0
+    y: 346.0
     z: 0.565
   }
   size {
-    x: 360.000
-    y: 13.000
+    x: 360.0
+    y: 13.0
   }
   color {
     x: 0.953
@@ -1535,25 +1431,24 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_mail_m4_subj"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 720.000
-    y: 327.000
+    x: 720.0
+    y: 327.0
     z: 0.565
   }
   size {
-    x: 400.000
-    y: 12.000
+    x: 400.0
+    y: 12.0
   }
   color {
     x: 0.788
@@ -1561,76 +1456,71 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_12"
   id: "v_mail_m4_body"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.920
+  alpha: 0.92
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1072.000
-    y: 341.000
-    z: 0.540
+    x: 1072.0
+    y: 341.0
+    z: 0.54
   }
   size {
-    x: 54.000
-    y: 18.000
+    x: 54.0
+    y: 18.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_BOX
   id: "v_mail_m4_tag1_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.140
+  alpha: 0.14
 }
 nodes {
   position {
-    x: 1078.000
-    y: 350.000
+    x: 1078.0
+    y: 350.0
     z: 0.566
   }
   size {
-    x: 42.000
-    y: 9.000
+    x: 42.0
+    y: 9.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_m4_tag1_text"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1130.000
-    y: 341.000
-    z: 0.540
+    x: 1130.0
+    y: 341.0
+    z: 0.54
   }
   size {
-    x: 46.000
-    y: 18.000
+    x: 46.0
+    y: 18.0
   }
   color {
-    x: 1.000
     y: 0.239
     z: 0.498
   }
@@ -1639,43 +1529,41 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.140
+  alpha: 0.14
 }
 nodes {
   position {
-    x: 1136.000
-    y: 350.000
+    x: 1136.0
+    y: 350.0
     z: 0.566
   }
   size {
-    x: 34.000
-    y: 9.000
+    x: 34.0
+    y: 9.0
   }
   color {
-    x: 1.000
     y: 0.239
     z: 0.498
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_m4_tag2_text"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1132.000
-    y: 322.000
+    x: 1132.0
+    y: 322.0
     z: 0.565
   }
   size {
-    x: 50.000
-    y: 11.000
+    x: 50.0
+    y: 11.0
   }
   color {
     x: 0.788
@@ -1683,25 +1571,24 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_m4_time"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 524.000
-    y: 244.000
+    x: 524.0
+    y: 244.0
     z: 0.532
   }
   size {
-    x: 664.000
-    y: 56.000
+    x: 664.0
+    y: 56.0
   }
   color {
     x: 0.078
@@ -1713,65 +1600,62 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.720
+  alpha: 0.72
 }
 nodes {
   position {
-    x: 524.000
-    y: 244.000
+    x: 524.0
+    y: 244.0
     z: 0.564
   }
   size {
-    x: 3.000
-    y: 56.000
+    x: 3.0
+    y: 56.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_BOX
   id: "v_mail_m5_accent"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.000
+  alpha: 0.0
 }
 nodes {
   position {
-    x: 536.000
-    y: 281.000
+    x: 536.0
+    y: 281.0
     z: 0.565
   }
   size {
-    x: 18.000
-    y: 14.000
+    x: 18.0
+    y: 14.0
   }
   color {
-    x: 1.000
     y: 0.702
     z: 0.278
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_mail_m5_star"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 562.000
-    y: 284.000
+    x: 562.0
+    y: 284.0
     z: 0.565
   }
   size {
-    x: 148.000
-    y: 12.000
+    x: 148.0
+    y: 12.0
   }
   color {
     x: 0.953
@@ -1779,25 +1663,24 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_mail_m5_from"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 562.000
-    y: 268.000
+    x: 562.0
+    y: 268.0
     z: 0.565
   }
   size {
-    x: 148.000
-    y: 10.000
+    x: 148.0
+    y: 10.0
   }
   color {
     x: 0.788
@@ -1805,25 +1688,24 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_m5_addr"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.850
+  alpha: 0.85
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 720.000
-    y: 283.000
+    x: 720.0
+    y: 283.0
     z: 0.565
   }
   size {
-    x: 360.000
-    y: 13.000
+    x: 360.0
+    y: 13.0
   }
   color {
     x: 0.953
@@ -1831,25 +1713,24 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_mail_m5_subj"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 720.000
-    y: 264.000
+    x: 720.0
+    y: 264.0
     z: 0.565
   }
   size {
-    x: 400.000
-    y: 12.000
+    x: 400.0
+    y: 12.0
   }
   color {
     x: 0.788
@@ -1857,76 +1738,71 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_12"
   id: "v_mail_m5_body"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.920
+  alpha: 0.92
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1072.000
-    y: 278.000
-    z: 0.540
+    x: 1072.0
+    y: 278.0
+    z: 0.54
   }
   size {
-    x: 54.000
-    y: 18.000
+    x: 54.0
+    y: 18.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_BOX
   id: "v_mail_m5_tag1_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.140
+  alpha: 0.14
 }
 nodes {
   position {
-    x: 1078.000
-    y: 287.000
+    x: 1078.0
+    y: 287.0
     z: 0.566
   }
   size {
-    x: 42.000
-    y: 9.000
+    x: 42.0
+    y: 9.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_m5_tag1_text"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1130.000
-    y: 278.000
-    z: 0.540
+    x: 1130.0
+    y: 278.0
+    z: 0.54
   }
   size {
-    x: 46.000
-    y: 18.000
+    x: 46.0
+    y: 18.0
   }
   color {
-    x: 1.000
     y: 0.239
     z: 0.498
   }
@@ -1935,43 +1811,41 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.140
+  alpha: 0.14
 }
 nodes {
   position {
-    x: 1136.000
-    y: 287.000
+    x: 1136.0
+    y: 287.0
     z: 0.566
   }
   size {
-    x: 34.000
-    y: 9.000
+    x: 34.0
+    y: 9.0
   }
   color {
-    x: 1.000
     y: 0.239
     z: 0.498
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_m5_tag2_text"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1132.000
-    y: 259.000
+    x: 1132.0
+    y: 259.0
     z: 0.565
   }
   size {
-    x: 50.000
-    y: 11.000
+    x: 50.0
+    y: 11.0
   }
   color {
     x: 0.788
@@ -1979,25 +1853,24 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_m5_time"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 524.000
-    y: 181.000
+    x: 524.0
+    y: 181.0
     z: 0.532
   }
   size {
-    x: 664.000
-    y: 56.000
+    x: 664.0
+    y: 56.0
   }
   color {
     x: 0.078
@@ -2009,65 +1882,62 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.720
+  alpha: 0.72
 }
 nodes {
   position {
-    x: 524.000
-    y: 181.000
+    x: 524.0
+    y: 181.0
     z: 0.564
   }
   size {
-    x: 3.000
-    y: 56.000
+    x: 3.0
+    y: 56.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_BOX
   id: "v_mail_m6_accent"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.000
+  alpha: 0.0
 }
 nodes {
   position {
-    x: 536.000
-    y: 218.000
+    x: 536.0
+    y: 218.0
     z: 0.565
   }
   size {
-    x: 18.000
-    y: 14.000
+    x: 18.0
+    y: 14.0
   }
   color {
-    x: 1.000
     y: 0.702
     z: 0.278
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_mail_m6_star"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 562.000
-    y: 221.000
+    x: 562.0
+    y: 221.0
     z: 0.565
   }
   size {
-    x: 148.000
-    y: 12.000
+    x: 148.0
+    y: 12.0
   }
   color {
     x: 0.953
@@ -2075,25 +1945,24 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_mail_m6_from"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 562.000
-    y: 205.000
+    x: 562.0
+    y: 205.0
     z: 0.565
   }
   size {
-    x: 148.000
-    y: 10.000
+    x: 148.0
+    y: 10.0
   }
   color {
     x: 0.788
@@ -2101,25 +1970,24 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_m6_addr"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.850
+  alpha: 0.85
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 720.000
-    y: 220.000
+    x: 720.0
+    y: 220.0
     z: 0.565
   }
   size {
-    x: 360.000
-    y: 13.000
+    x: 360.0
+    y: 13.0
   }
   color {
     x: 0.953
@@ -2127,25 +1995,24 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_mail_m6_subj"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 720.000
-    y: 201.000
+    x: 720.0
+    y: 201.0
     z: 0.565
   }
   size {
-    x: 400.000
-    y: 12.000
+    x: 400.0
+    y: 12.0
   }
   color {
     x: 0.788
@@ -2153,76 +2020,71 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_12"
   id: "v_mail_m6_body"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.920
+  alpha: 0.92
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1072.000
-    y: 215.000
-    z: 0.540
+    x: 1072.0
+    y: 215.0
+    z: 0.54
   }
   size {
-    x: 54.000
-    y: 18.000
+    x: 54.0
+    y: 18.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_BOX
   id: "v_mail_m6_tag1_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.140
+  alpha: 0.14
 }
 nodes {
   position {
-    x: 1078.000
-    y: 224.000
+    x: 1078.0
+    y: 224.0
     z: 0.566
   }
   size {
-    x: 42.000
-    y: 9.000
+    x: 42.0
+    y: 9.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_m6_tag1_text"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1130.000
-    y: 215.000
-    z: 0.540
+    x: 1130.0
+    y: 215.0
+    z: 0.54
   }
   size {
-    x: 46.000
-    y: 18.000
+    x: 46.0
+    y: 18.0
   }
   color {
-    x: 1.000
     y: 0.239
     z: 0.498
   }
@@ -2231,43 +2093,41 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.140
+  alpha: 0.14
 }
 nodes {
   position {
-    x: 1136.000
-    y: 224.000
+    x: 1136.0
+    y: 224.0
     z: 0.566
   }
   size {
-    x: 34.000
-    y: 9.000
+    x: 34.0
+    y: 9.0
   }
   color {
-    x: 1.000
     y: 0.239
     z: 0.498
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_m6_tag2_text"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1132.000
-    y: 196.000
+    x: 1132.0
+    y: 196.0
     z: 0.565
   }
   size {
-    x: 50.000
-    y: 11.000
+    x: 50.0
+    y: 11.0
   }
   color {
     x: 0.788
@@ -2275,25 +2135,24 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_m6_time"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 524.000
-    y: 118.000
+    x: 524.0
+    y: 118.0
     z: 0.532
   }
   size {
-    x: 664.000
-    y: 56.000
+    x: 664.0
+    y: 56.0
   }
   color {
     x: 0.078
@@ -2305,65 +2164,62 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.720
+  alpha: 0.72
 }
 nodes {
   position {
-    x: 524.000
-    y: 118.000
+    x: 524.0
+    y: 118.0
     z: 0.564
   }
   size {
-    x: 3.000
-    y: 56.000
+    x: 3.0
+    y: 56.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_BOX
   id: "v_mail_m7_accent"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.000
+  alpha: 0.0
 }
 nodes {
   position {
-    x: 536.000
-    y: 155.000
+    x: 536.0
+    y: 155.0
     z: 0.565
   }
   size {
-    x: 18.000
-    y: 14.000
+    x: 18.0
+    y: 14.0
   }
   color {
-    x: 1.000
     y: 0.702
     z: 0.278
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_mail_m7_star"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 562.000
-    y: 158.000
+    x: 562.0
+    y: 158.0
     z: 0.565
   }
   size {
-    x: 148.000
-    y: 12.000
+    x: 148.0
+    y: 12.0
   }
   color {
     x: 0.953
@@ -2371,25 +2227,24 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_mail_m7_from"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 562.000
-    y: 142.000
+    x: 562.0
+    y: 142.0
     z: 0.565
   }
   size {
-    x: 148.000
-    y: 10.000
+    x: 148.0
+    y: 10.0
   }
   color {
     x: 0.788
@@ -2397,25 +2252,24 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_m7_addr"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.850
+  alpha: 0.85
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 720.000
-    y: 157.000
+    x: 720.0
+    y: 157.0
     z: 0.565
   }
   size {
-    x: 360.000
-    y: 13.000
+    x: 360.0
+    y: 13.0
   }
   color {
     x: 0.953
@@ -2423,25 +2277,24 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_mail_m7_subj"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 720.000
-    y: 138.000
+    x: 720.0
+    y: 138.0
     z: 0.565
   }
   size {
-    x: 400.000
-    y: 12.000
+    x: 400.0
+    y: 12.0
   }
   color {
     x: 0.788
@@ -2449,76 +2302,71 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_12"
   id: "v_mail_m7_body"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.920
+  alpha: 0.92
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1072.000
-    y: 152.000
-    z: 0.540
+    x: 1072.0
+    y: 152.0
+    z: 0.54
   }
   size {
-    x: 54.000
-    y: 18.000
+    x: 54.0
+    y: 18.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_BOX
   id: "v_mail_m7_tag1_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.140
+  alpha: 0.14
 }
 nodes {
   position {
-    x: 1078.000
-    y: 161.000
+    x: 1078.0
+    y: 161.0
     z: 0.566
   }
   size {
-    x: 42.000
-    y: 9.000
+    x: 42.0
+    y: 9.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_m7_tag1_text"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1130.000
-    y: 152.000
-    z: 0.540
+    x: 1130.0
+    y: 152.0
+    z: 0.54
   }
   size {
-    x: 46.000
-    y: 18.000
+    x: 46.0
+    y: 18.0
   }
   color {
-    x: 1.000
     y: 0.239
     z: 0.498
   }
@@ -2527,43 +2375,41 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.140
+  alpha: 0.14
 }
 nodes {
   position {
-    x: 1136.000
-    y: 161.000
+    x: 1136.0
+    y: 161.0
     z: 0.566
   }
   size {
-    x: 34.000
-    y: 9.000
+    x: 34.0
+    y: 9.0
   }
   color {
-    x: 1.000
     y: 0.239
     z: 0.498
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_m7_tag2_text"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1132.000
-    y: 133.000
+    x: 1132.0
+    y: 133.0
     z: 0.565
   }
   size {
-    x: 50.000
-    y: 11.000
+    x: 50.0
+    y: 11.0
   }
   color {
     x: 0.788
@@ -2571,25 +2417,24 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_m7_time"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 524.000
-    y: 96.000
+    x: 524.0
+    y: 96.0
     z: 0.538
   }
   size {
-    x: 680.000
-    y: 1.000
+    x: 680.0
+    y: 1.0
   }
   color {
     x: 0.953
@@ -2601,17 +2446,17 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.120
+  alpha: 0.12
 }
 nodes {
   position {
-    x: 524.000
-    y: 76.000
-    z: 0.560
+    x: 524.0
+    y: 76.0
+    z: 0.56
   }
   size {
-    x: 330.000
-    y: 12.000
+    x: 330.0
+    y: 12.0
   }
   color {
     x: 0.788
@@ -2619,25 +2464,24 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_footer_left"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.900
+  alpha: 0.9
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 980.000
-    y: 76.000
-    z: 0.560
+    x: 980.0
+    y: 76.0
+    z: 0.56
   }
   size {
-    x: 224.000
-    y: 12.000
+    x: 224.0
+    y: 12.0
   }
   color {
     x: 0.788
@@ -2645,13 +2489,12 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_mail_footer_right"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.900
+  alpha: 0.9
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }

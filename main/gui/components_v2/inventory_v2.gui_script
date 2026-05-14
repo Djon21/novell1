@@ -24,6 +24,7 @@
 local catalog = require "main.scripts.items_catalog"
 local gs      = require "main.scripts.game_state"
 local meta    = require "main.scripts.meta_state"
+local MSG     = require "main.gui.modules.messages"
 
 local UI_MGR = "#ui_manager_v2"
 
@@ -41,13 +42,15 @@ local ACTIVE_VERBS = {
 -- modal opens/closes. Slot & verb nodes are handled separately (see below).
 local CHROME_NODES = {
     "backdrop", "modal",
+    "decor_group", "header_group",
+    "slots_group", "details_group", "verbs_group", "footer_group",
     "modal_border_top", "modal_border_bot",
     "modal_border_left", "modal_border_right",
     "corner_tl_v", "corner_tl_h",
     "corner_tr_v", "corner_tr_h",
     "corner_bl_v", "corner_bl_h",
     "corner_br_v", "corner_br_h",
-    "title_eyebrow", "title_main",
+    "title_main",
     "stats_slots", "stats_weight", "stats_loop",
     "close_btn_bg", "close_btn",
     "head_divider", "foot_divider",
@@ -123,14 +126,27 @@ local function color_for_type(t, is_clue)
     return COLOR_PAPER
 end
 
-local function n(id)           return gui.get_node(id) end
-local function set_text(id, s) gui.set_text(n(id), s or "") end
-local function set_color(id, c) gui.set_color(n(id), c) end
-local function set_enabled(id, b) gui.set_enabled(n(id), b) end
+local function n(id)
+    local ok, node = pcall(gui.get_node, id)
+    if ok then return node end
+    return nil
+end
+local function set_text(id, s)
+    local node = n(id)
+    if node then gui.set_text(node, s or "") end
+end
+local function set_color(id, c)
+    local node = n(id)
+    if node and c then gui.set_color(node, c) end
+end
+local function set_enabled(id, b)
+    local node = n(id)
+    if node then gui.set_enabled(node, b and true or false) end
+end
 
 local function set_group_enabled(ids, enabled)
     for _, id in ipairs(ids) do
-        gui.set_enabled(n(id), enabled)
+        set_enabled(id, enabled)
     end
 end
 
@@ -390,24 +406,19 @@ function init(self)
     self.combine_first   = nil   -- item_id первого предмета в режиме COMBINE
                                   -- (двухшаговый verb: 1) клик COMBINE, 2) клик второго слота)
     set_modal_enabled(self, false)
-    -- Legacy selection-ring static nodes from earlier layout: unused by the
-    -- current implementation (selection is shown via border color). Keep them
-    -- permanently disabled so they never flash onto slot1.
-    gui.set_enabled(n("sel_ring_b"), false)
-    gui.set_enabled(n("sel_ring_t"), false)
 end
 
 function on_message(self, message_id, message, sender)
-    if message_id == hash("show_inventory") then
+    if message_id == MSG.show_inventory then
         self.visible = true
         self.combine_first = nil   -- свежее открытие — без зависшего combine
         set_modal_enabled(self, true)
         refresh(self)
-    elseif message_id == hash("hide_inventory") then
+    elseif message_id == MSG.hide_inventory then
         self.visible = false
         self.combine_first = nil
         set_modal_enabled(self, false)
-    elseif message_id == hash("refresh_inventory") then
+    elseif message_id == MSG.refresh_inventory then
         if self.visible then refresh(self) end
     end
 end
@@ -424,24 +435,26 @@ end
 
 function on_input(self, action_id, action)
     if not self.visible then return false end
-    if action_id ~= hash("touch") or not action.pressed then return false end
+    if action_id ~= MSG.touch or not action.pressed then return false end
 
     -- close button — закрытие сбрасывает combine_pending
-    if gui.is_enabled(n("close_btn_bg")) and gui.pick_node(n("close_btn_bg"), action.x, action.y) then
+    local close_bg = n("close_btn_bg")
+    if close_bg and gui.is_enabled(close_bg) and gui.pick_node(close_bg, action.x, action.y) then
         cancel_combine_pending(self)
-        msg.post(UI_MGR, "close_inventory")
+        msg.post(UI_MGR, MSG.close_inventory)
         return true
     end
-    if gui.is_enabled(n("close_btn")) and gui.pick_node(n("close_btn"), action.x, action.y) then
+    local close_btn = n("close_btn")
+    if close_btn and gui.is_enabled(close_btn) and gui.pick_node(close_btn, action.x, action.y) then
         cancel_combine_pending(self)
-        msg.post(UI_MGR, "close_inventory")
+        msg.post(UI_MGR, MSG.close_inventory)
         return true
     end
 
     -- slot click
     for i = 1, SLOT_COUNT do
         local bg = n("slot" .. i .. "_bg")
-        if self.inv_ids[i] and gui.is_enabled(bg) and gui.pick_node(bg, action.x, action.y) then
+        if bg and self.inv_ids[i] and gui.is_enabled(bg) and gui.pick_node(bg, action.x, action.y) then
             -- Combine-pending: первый item уже выбран, кликаем второй.
             if self.combine_first then
                 local first = self.combine_first
@@ -454,7 +467,7 @@ function on_input(self, action_id, action)
                 -- Разные предметы → отправляем combine + закрываем инвентарь
                 -- (сам close прилетит из ui_manager).
                 self.combine_first = nil
-                msg.post(UI_MGR, "inventory_verb", {
+                msg.post(UI_MGR, MSG.inventory_verb, {
                     item_id        = first,
                     verb           = "combine",
                     target_item_id = second,
@@ -479,7 +492,7 @@ function on_input(self, action_id, action)
         for i = 1, VERB_NODE_COUNT do
             local bg = n("verb" .. i .. "_bg")
             local vname = VERB_SLOT_TO_NAME[i]
-            if vname and self.available_verbs[vname]
+            if bg and vname and self.available_verbs[vname]
                and gui.is_enabled(bg) and gui.pick_node(bg, action.x, action.y) then
                 -- COMBINE: двухшаговый. Первый клик → enter combine_pending.
                 -- Второй клик на ту же кнопку (теперь "ОТМЕНА") → выход.
@@ -493,7 +506,7 @@ function on_input(self, action_id, action)
                     return true
                 end
                 -- Остальные verbs работают как раньше.
-                msg.post(UI_MGR, "inventory_verb", {
+                msg.post(UI_MGR, MSG.inventory_verb, {
                     item_id = self.inv_ids[self.selected],
                     verb    = vname,
                 })
@@ -504,13 +517,15 @@ function on_input(self, action_id, action)
 
     -- click inside modal chrome: consume so it doesn't fall through to
     -- hotspots/nav underneath
-    if gui.is_enabled(n("modal")) and gui.pick_node(n("modal"), action.x, action.y) then
+    local modal = n("modal")
+    if modal and gui.is_enabled(modal) and gui.pick_node(modal, action.x, action.y) then
         return true
     end
-    if gui.is_enabled(n("backdrop")) and gui.pick_node(n("backdrop"), action.x, action.y) then
+    local backdrop = n("backdrop")
+    if backdrop and gui.is_enabled(backdrop) and gui.pick_node(backdrop, action.x, action.y) then
         -- click on dim backdrop closes (matches phone_v2 convention).
         cancel_combine_pending(self)
-        msg.post(UI_MGR, "close_inventory")
+        msg.post(UI_MGR, MSG.close_inventory)
         return true
     end
     return false

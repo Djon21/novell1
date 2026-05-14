@@ -1,17 +1,5 @@
 script: "/main/gui/components_v2/inventory_v2.gui_script"
 fonts {
-  name: "jb_mono_10"
-  font: "/main/fonts/jb_mono_10.font"
-}
-fonts {
-  name: "jb_mono_12"
-  font: "/main/fonts/jb_mono_12.font"
-}
-fonts {
-  name: "jb_mono_bold_14"
-  font: "/main/fonts/jb_mono_bold_14.font"
-}
-fonts {
   name: "unbounded_bold_20"
   font: "/main/fonts/unbounded_bold_20.font"
 }
@@ -20,16 +8,28 @@ fonts {
   font: "/main/fonts/icons.font"
 }
 fonts {
-  name: "manrope_14"
-  font: "/main/fonts/manrope_14.font"
-}
-fonts {
   name: "manrope_16"
   font: "/main/fonts/manrope_16.font"
 }
 fonts {
   name: "unbounded_bold_32"
   font: "/main/fonts/unbounded_bold_32.font"
+}
+fonts {
+  name: "Manrope-Medium_16"
+  font: "/main/fonts/Manrope-Medium_16.font"
+}
+fonts {
+  name: "jb_mono_bold_16"
+  font: "/main/fonts/jb_mono_bold_16.font"
+}
+fonts {
+  name: "unbounded_bold_64"
+  font: "/main/fonts/unbounded_bold_64.font"
+}
+textures {
+  name: "ui_common"
+  texture: "/main/images/ui_common.atlas"
 }
 nodes {
   position {
@@ -52,13 +52,13 @@ nodes {
 }
 nodes {
   position {
-    x: 150.0
-    y: 80.0
+    x: 20.0
+    y: 20.0
     z: 0.5
   }
   size {
-    x: 980.0
-    y: 560.0
+    x: 1240.0
+    y: 680.0
   }
   color {
     x: 0.031
@@ -72,255 +72,58 @@ nodes {
 }
 nodes {
   position {
-    x: 150.0
-    y: 639.0
-    z: 0.51
-  }
-  size {
-    x: 980.0
-    y: 1.0
+    z: 0.001
   }
   color {
-    x: 0.49
-    y: 0.976
+    x: 0.0
+    y: 0.0
+    z: 0.0
   }
   type: TYPE_BOX
-  id: "modal_border_top"
+  id: "decor_group"
   pivot: PIVOT_SW
-  alpha: 0.4
+  parent: "modal"
 }
 nodes {
-  position {
-    x: 150.0
-    y: 80.0
-    z: 0.51
-  }
   size {
-    x: 980.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
+    x: 1240.0
+    y: 680.0
   }
   type: TYPE_BOX
-  id: "modal_border_bot"
+  texture: "ui_common/border"
+  id: "border_modal"
   pivot: PIVOT_SW
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 150.0
-    y: 80.0
-    z: 0.51
-  }
-  size {
-    x: 1.0
-    y: 560.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "modal_border_left"
-  pivot: PIVOT_SW
-  alpha: 0.35
-}
-nodes {
-  position {
-    x: 1129.0
-    y: 80.0
-    z: 0.51
-  }
-  size {
-    x: 1.0
-    y: 560.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "modal_border_right"
-  pivot: PIVOT_SW
-  alpha: 0.35
-}
-nodes {
-  position {
-    x: 150.0
-    y: 622.0
-    z: 0.52
-  }
-  size {
+  parent: "decor_group"
+  inherit_alpha: true
+  slice9 {
     x: 2.0
-    y: 18.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "corner_tl_v"
-  pivot: PIVOT_SW
-}
-nodes {
-  position {
-    x: 150.0
-    y: 638.0
-    z: 0.52
-  }
-  size {
-    x: 18.0
     y: 2.0
+    z: 2.0
+    w: 2.0
+  }
+}
+nodes {
+  position {
+    z: 0.003
   }
   color {
-    x: 0.49
-    y: 0.976
+    x: 0.0
+    y: 0.0
+    z: 0.0
   }
   type: TYPE_BOX
-  id: "corner_tl_h"
+  id: "header_group"
   pivot: PIVOT_SW
+  parent: "modal"
 }
 nodes {
   position {
-    x: 1128.0
-    y: 622.0
-    z: 0.52
+    x: 38.0
+    y: 628.0
   }
   size {
-    x: 2.0
-    y: 18.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "corner_tr_v"
-  pivot: PIVOT_SW
-}
-nodes {
-  position {
-    x: 1112.0
-    y: 638.0
-    z: 0.52
-  }
-  size {
-    x: 18.0
-    y: 2.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "corner_tr_h"
-  pivot: PIVOT_SW
-}
-nodes {
-  position {
-    x: 150.0
-    y: 80.0
-    z: 0.52
-  }
-  size {
-    x: 2.0
-    y: 18.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "corner_bl_v"
-  pivot: PIVOT_SW
-}
-nodes {
-  position {
-    x: 150.0
-    y: 80.0
-    z: 0.52
-  }
-  size {
-    x: 18.0
-    y: 2.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "corner_bl_h"
-  pivot: PIVOT_SW
-}
-nodes {
-  position {
-    x: 1128.0
-    y: 80.0
-    z: 0.52
-  }
-  size {
-    x: 2.0
-    y: 18.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "corner_br_v"
-  pivot: PIVOT_SW
-}
-nodes {
-  position {
-    x: 1112.0
-    y: 80.0
-    z: 0.52
-  }
-  size {
-    x: 18.0
-    y: 2.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "corner_br_h"
-  pivot: PIVOT_SW
-}
-nodes {
-  position {
-    x: 174.0
-    y: 622.0
-    z: 0.53
-  }
-  size {
-    x: 420.0
-    y: 12.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_TEXT
-  text: "inventory \302\267 \321\200\321\216\320\272\320\267\320\260\320\272 \302\267 \342\204\2267"
-  font: "jb_mono_10"
-  id: "title_eyebrow"
-  pivot: PIVOT_W
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 174.0
-    y: 596.0
-    z: 0.53
-  }
-  size {
-    x: 420.0
-    y: 24.0
+    x: 520.0
+    y: 38.0
   }
   color {
     x: 0.953
@@ -332,18 +135,18 @@ nodes {
   font: "unbounded_bold_32"
   id: "title_main"
   pivot: PIVOT_W
+  parent: "header_group"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 746.0
-    y: 626.0
-    z: 0.53
+    x: 780.0
+    y: 650.0
   }
   size {
-    x: 130.0
-    y: 12.0
+    x: 140.0
+    y: 14.0
   }
   color {
     x: 0.788
@@ -352,21 +155,21 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\321\201\320\273\320\276\321\202\320\276\320\262: 0/12"
-  font: "jb_mono_10"
+  font: "jb_mono_bold_16"
   id: "stats_slots"
   pivot: PIVOT_W
+  parent: "header_group"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 872.0
-    y: 626.0
-    z: 0.53
+    x: 930.0
+    y: 650.0
   }
   size {
-    x: 100.0
-    y: 12.0
+    x: 110.0
+    y: 14.0
   }
   color {
     x: 0.788
@@ -375,21 +178,21 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\320\262\320\265\321\201: \342\200\224"
-  font: "jb_mono_10"
+  font: "jb_mono_bold_16"
   id: "stats_weight"
   pivot: PIVOT_W
+  parent: "header_group"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 970.0
-    y: 626.0
-    z: 0.53
+    x: 1045.0
+    y: 650.0
   }
   size {
-    x: 130.0
-    y: 12.0
+    x: 120.0
+    y: 14.0
   }
   color {
     y: 0.239
@@ -397,21 +200,21 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\320\277\320\265\321\202\320\273\321\217: #001"
-  font: "jb_mono_10"
+  font: "jb_mono_bold_16"
   id: "stats_loop"
   pivot: PIVOT_W
+  parent: "header_group"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1098.0
-    y: 608.0
-    z: 0.53
+    x: 1176.0
+    y: 620.0
   }
   size {
-    x: 32.0
-    y: 32.0
+    x: 48.0
+    y: 48.0
   }
   color {
     x: 0.0
@@ -421,38 +224,38 @@ nodes {
   type: TYPE_BOX
   id: "close_btn_bg"
   pivot: PIVOT_SW
+  parent: "header_group"
   alpha: 0.0
 }
 nodes {
   position {
-    x: 1114.0
-    y: 624.0
-    z: 0.55
+    x: 1200.0
+    y: 644.0
+    z: 0.1
   }
   size {
-    x: 32.0
-    y: 32.0
+    x: 28.0
+    y: 28.0
   }
   color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
+    y: 0.0
+    z: 0.0
   }
   type: TYPE_TEXT
   text: "\303\227"
-  font: "jb_mono_12"
+  font: "unbounded_bold_64"
   id: "close_btn"
+  parent: "header_group"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 174.0
-    y: 580.0
-    z: 0.53
+    x: 38.0
+    y: 598.0
   }
   size {
-    x: 932.0
+    x: 1164.0
     y: 1.0
   }
   color {
@@ -463,17 +266,12 @@ nodes {
   type: TYPE_BOX
   id: "head_divider"
   pivot: PIVOT_SW
+  parent: "header_group"
   alpha: 0.15
 }
 nodes {
   position {
-    x: 174.0
-    y: 103.0
-    z: 0.53
-  }
-  size {
-    x: 932.0
-    y: 1.0
+    z: 0.004
   }
   color {
     x: 0.0
@@ -481,959 +279,17 @@ nodes {
     z: 0.0
   }
   type: TYPE_BOX
-  id: "foot_divider"
+  id: "slots_group"
   pivot: PIVOT_SW
-  alpha: 0.0
+  parent: "header_group"
 }
 nodes {
   position {
-    x: 174.0
-    y: 96.0
-    z: 0.53
-  }
-  size {
-    x: 600.0
-    y: 12.0
-  }
-  color {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "foot_left"
-  pivot: PIVOT_W
-  alpha: 0.0
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 1106.0
-    y: 96.0
-    z: 0.53
-  }
-  size {
-    x: 260.0
-    y: 12.0
-  }
-  color {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "foot_right"
-  pivot: PIVOT_E
-  alpha: 0.0
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 682.0
-    y: 561.0
-    z: 0.52
-  }
-  size {
-    x: 424.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "details_border_top"
-  pivot: PIVOT_SW
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 682.0
-    y: 122.0
-    z: 0.52
-  }
-  size {
-    x: 424.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "details_border_bot"
-  pivot: PIVOT_SW
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 682.0
-    y: 122.0
-    z: 0.52
-  }
-  size {
-    x: 1.0
-    y: 440.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "details_border_left"
-  pivot: PIVOT_SW
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 1105.0
-    y: 122.0
-    z: 0.52
-  }
-  size {
-    x: 1.0
-    y: 440.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "details_border_right"
-  pivot: PIVOT_SW
-  alpha: 0.25
-}
-nodes {
-  position {
-    x: 683.0
-    y: 123.0
-    z: 0.53
-  }
-  size {
-    x: 422.0
+    x: 38.0
     y: 438.0
   }
-  color {
-    x: 0.047
-    y: 0.039
-    z: 0.141
-  }
-  type: TYPE_BOX
-  id: "details_bg"
-  pivot: PIVOT_SW
-  alpha: 0.55
-}
-nodes {
-  position {
-    x: 696.0
-    y: 545.0
-    z: 0.54
-  }
   size {
-    x: 396.0
-    y: 12.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_TEXT
-  text: "details \302\267 \320\277\321\200\320\265\320\264\320\274\320\265\321\202"
-  font: "jb_mono_10"
-  id: "details_cap"
-  pivot: PIVOT_W
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 696.0
-    y: 520.0
-    z: 0.54
-  }
-  size {
-    x: 396.0
-    y: 24.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\222\321\213\320\261\320\265\321\200\320\270\321\202\320\265 \320\277\321\200\320\265\320\264\320\274\320\265\321\202"
-  font: "unbounded_bold_20"
-  id: "details_name"
-  pivot: PIVOT_W
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 696.0
-    y: 498.0
-    z: 0.54
-  }
-  size {
-    x: 250.0
-    y: 12.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "details_iter"
-  pivot: PIVOT_W
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 1092.0
-    y: 498.0
-    z: 0.54
-  }
-  size {
-    x: 120.0
-    y: 12.0
-  }
-  color {
-    y: 0.239
-    z: 0.498
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "details_clue"
-  pivot: PIVOT_E
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 696.0
-    y: 398.0
-    z: 0.54
-  }
-  size {
-    x: 396.0
-    y: 84.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "details_preview_bg"
-  pivot: PIVOT_SW
-  alpha: 0.05
-}
-nodes {
-  position {
-    x: 696.0
-    y: 481.0
-    z: 0.55
-  }
-  size {
-    x: 396.0
-    y: 1.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_BOX
-  id: "details_preview_top"
-  pivot: PIVOT_SW
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 696.0
-    y: 398.0
-    z: 0.55
-  }
-  size {
-    x: 396.0
-    y: 1.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_BOX
-  id: "details_preview_bot"
-  pivot: PIVOT_SW
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 696.0
-    y: 398.0
-    z: 0.55
-  }
-  size {
-    x: 1.0
-    y: 84.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_BOX
-  id: "details_preview_left"
-  pivot: PIVOT_SW
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 1091.0
-    y: 398.0
-    z: 0.55
-  }
-  size {
-    x: 1.0
-    y: 84.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_BOX
-  id: "details_preview_right"
-  pivot: PIVOT_SW
-  alpha: 0.18
-}
-nodes {
-  position {
-    x: 894.0
-    y: 440.0
-    z: 0.56
-  }
-  size {
-    x: 80.0
-    y: 80.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_TEXT
-  font: "icons"
-  id: "details_icon"
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 988.0
-    y: 454.0
-    z: 0.56
-  }
-  size {
-    x: 92.0
-    y: 18.0
-  }
-  color {
-    x: 0.031
-    y: 0.024
-    z: 0.094
-  }
-  type: TYPE_BOX
-  id: "preview_stamp_bg"
-  pivot: PIVOT_SW
-  alpha: 0.94
-}
-nodes {
-  position {
-    x: 1034.0
-    y: 463.0
-    z: 0.57
-  }
-  size {
-    x: 88.0
-    y: 14.0
-  }
-  color {
-    x: 0.784
-    y: 0.078
-    z: 0.165
-  }
-  type: TYPE_TEXT
-  text: "\320\237\320\243\320\241\320\242\320\236"
-  font: "jb_mono_10"
-  id: "preview_stamp_label"
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 696.0
-    y: 382.0
-    z: 0.54
-  }
-  size {
-    x: 396.0
-    y: 90.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  text: "\320\222\321\213\320\261\320\265\321\200\320\270 \320\277\321\200\320\265\320\264\320\274\320\265\321\202 \320\262 \321\201\320\265\321\202\320\272\320\265 \321\201\320\273\320\265\320\262\320\260."
-  font: "manrope_14"
-  id: "details_desc"
-  pivot: PIVOT_NW
-  line_break: true
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 696.0
-    y: 278.0
-    z: 0.54
-  }
-  size {
-    x: 396.0
-    y: 1.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_BOX
-  id: "details_stats_divider"
-  pivot: PIVOT_SW
-  alpha: 0.15
-}
-nodes {
-  position {
-    x: 696.0
-    y: 262.0
-    z: 0.54
-  }
-  size {
-    x: 180.0
-    y: 10.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  text: "\320\270\321\201\321\202\320\276\321\207\320\275\320\270\320\272"
-  font: "jb_mono_10"
-  id: "stat_src_k"
-  pivot: PIVOT_W
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 696.0
-    y: 246.0
-    z: 0.54
-  }
-  size {
-    x: 180.0
-    y: 10.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\342\200\224"
-  font: "jb_mono_10"
-  id: "stat_src_v"
-  pivot: PIVOT_W
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 896.0
-    y: 262.0
-    z: 0.54
-  }
-  size {
-    x: 180.0
-    y: 10.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  text: "\320\270\321\202\320\265\321\200\320\260\321\206\320\270\321\217"
-  font: "jb_mono_10"
-  id: "stat_iter_k"
-  pivot: PIVOT_W
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 896.0
-    y: 246.0
-    z: 0.54
-  }
-  size {
-    x: 180.0
-    y: 10.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_TEXT
-  text: "\342\200\224"
-  font: "jb_mono_10"
-  id: "stat_iter_v"
-  pivot: PIVOT_W
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 696.0
-    y: 222.0
-    z: 0.54
-  }
-  size {
-    x: 180.0
-    y: 10.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  text: "\321\202\320\270\320\277"
-  font: "jb_mono_10"
-  id: "stat_type_k"
-  pivot: PIVOT_W
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 696.0
-    y: 206.0
-    z: 0.54
-  }
-  size {
-    x: 180.0
-    y: 10.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\342\200\224"
-  font: "jb_mono_10"
-  id: "stat_type_v"
-  pivot: PIVOT_W
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 896.0
-    y: 222.0
-    z: 0.54
-  }
-  size {
-    x: 180.0
-    y: 10.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  text: "\321\203\320\273\320\270\320\272\320\260"
-  font: "jb_mono_10"
-  id: "stat_clue_k"
-  pivot: PIVOT_W
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 896.0
-    y: 206.0
-    z: 0.54
-  }
-  size {
-    x: 180.0
-    y: 10.0
-  }
-  color {
-    y: 0.239
-    z: 0.498
-  }
-  type: TYPE_TEXT
-  text: "\342\200\224"
-  font: "jb_mono_10"
-  id: "stat_clue_v"
-  pivot: PIVOT_W
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 696.0
-    y: 186.0
-    z: 0.54
-  }
-  size {
-    x: 396.0
-    y: 1.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_BOX
-  id: "details_verbs_divider"
-  pivot: PIVOT_SW
-  alpha: 0.15
-}
-nodes {
-  position {
-    x: 695.0
-    y: 137.0
-    z: 0.54
-  }
-  size {
-    x: 76.4
-    y: 36.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "verb1_border"
-  pivot: PIVOT_SW
-  alpha: 0.4
-}
-nodes {
-  position {
-    x: 696.0
-    y: 138.0
-    z: 0.55
-  }
-  size {
-    x: 74.4
-    y: 34.0
-  }
-  color {
-    x: 0.047
-    y: 0.039
-    z: 0.141
-  }
-  type: TYPE_BOX
-  id: "verb1_bg"
-  pivot: PIVOT_SW
-  alpha: 0.7
-}
-nodes {
-  position {
-    x: 733.2
-    y: 155.0
-    z: 0.56
-  }
-  size {
-    x: 74.4
-    y: 16.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\230\320\241\320\237\320\236\320\233\320\254\320\227\320\236\320\222\320\220\320\242\320\254"
-  font: "jb_mono_10"
-  id: "verb1_label"
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 775.4
-    y: 137.0
-    z: 0.54
-  }
-  size {
-    x: 76.4
-    y: 36.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "verb2_border"
-  pivot: PIVOT_SW
-  alpha: 0.4
-}
-nodes {
-  position {
-    x: 776.4
-    y: 138.0
-    z: 0.55
-  }
-  size {
-    x: 74.4
-    y: 34.0
-  }
-  color {
-    x: 0.047
-    y: 0.039
-    z: 0.141
-  }
-  type: TYPE_BOX
-  id: "verb2_bg"
-  pivot: PIVOT_SW
-  alpha: 0.7
-}
-nodes {
-  position {
-    x: 813.6
-    y: 155.0
-    z: 0.56
-  }
-  size {
-    x: 74.4
-    y: 16.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\236\320\241\320\234\320\236\320\242\320\240\320\225\320\242\320\254"
-  font: "jb_mono_10"
-  id: "verb2_label"
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 855.8
-    y: 137.0
-    z: 0.54
-  }
-  size {
-    x: 76.4
-    y: 36.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "verb3_border"
-  pivot: PIVOT_SW
-  alpha: 0.4
-}
-nodes {
-  position {
-    x: 856.8
-    y: 138.0
-    z: 0.55
-  }
-  size {
-    x: 74.4
-    y: 34.0
-  }
-  color {
-    x: 0.047
-    y: 0.039
-    z: 0.141
-  }
-  type: TYPE_BOX
-  id: "verb3_bg"
-  pivot: PIVOT_SW
-  alpha: 0.7
-}
-nodes {
-  position {
-    x: 894.0
-    y: 155.0
-    z: 0.56
-  }
-  size {
-    x: 74.4
-    y: 16.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\241\320\236\320\225\320\224\320\230\320\235\320\230\320\242\320\254"
-  font: "jb_mono_10"
-  id: "verb3_label"
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 936.2
-    y: 137.0
-    z: 0.54
-  }
-  size {
-    x: 76.4
-    y: 36.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "verb4_border"
-  pivot: PIVOT_SW
-  alpha: 0.4
-}
-nodes {
-  position {
-    x: 937.2
-    y: 138.0
-    z: 0.55
-  }
-  size {
-    x: 74.4
-    y: 34.0
-  }
-  color {
-    x: 0.047
-    y: 0.039
-    z: 0.141
-  }
-  type: TYPE_BOX
-  id: "verb4_bg"
-  pivot: PIVOT_SW
-  alpha: 0.7
-}
-nodes {
-  position {
-    x: 974.4
-    y: 155.0
-    z: 0.56
-  }
-  size {
-    x: 74.4
-    y: 16.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\237\320\240\320\236\320\247\320\230\320\242\320\220\320\242\320\254"
-  font: "jb_mono_10"
-  id: "verb4_label"
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 1016.6
-    y: 137.0
-    z: 0.54
-  }
-  size {
-    x: 76.4
-    y: 36.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "verb5_border"
-  pivot: PIVOT_SW
-  alpha: 0.4
-}
-nodes {
-  position {
-    x: 1017.6
-    y: 138.0
-    z: 0.55
-  }
-  size {
-    x: 74.4
-    y: 34.0
-  }
-  color {
-    x: 0.047
-    y: 0.039
-    z: 0.141
-  }
-  type: TYPE_BOX
-  id: "verb5_bg"
-  pivot: PIVOT_SW
-  alpha: 0.7
-}
-nodes {
-  position {
-    x: 1054.8
-    y: 155.0
-    z: 0.56
-  }
-  size {
-    x: 74.4
-    y: 16.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\236\320\242\320\224\320\220\320\242\320\254"
-  font: "jb_mono_10"
-  id: "verb5_label"
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 173.0
-    y: 421.0
-    z: 0.052
-  }
-  size {
-    x: 117.0
+    x: 178.0
     y: 142.0
   }
   color {
@@ -1444,16 +300,17 @@ nodes {
   type: TYPE_BOX
   id: "slot1_border"
   pivot: PIVOT_SW
+  parent: "slots_group"
   alpha: 0.18
 }
 nodes {
   position {
     x: 1.0
     y: 1.0
-    z: 0.053
+    z: 0.01
   }
   size {
-    x: 115.0
+    x: 176.0
     y: 140.0
   }
   color {
@@ -1469,13 +326,13 @@ nodes {
 }
 nodes {
   position {
-    x: 7.0
+    x: 12.0
     y: 131.0
-    z: 0.054
+    z: 0.01
   }
   size {
-    x: 40.0
-    y: 8.0
+    x: 64.0
+    y: 14.0
   }
   color {
     x: 0.953
@@ -1484,7 +341,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "A1"
-  font: "jb_mono_10"
+  font: "jb_mono_bold_16"
   id: "slot1_coord"
   pivot: PIVOT_W
   parent: "slot1_border"
@@ -1494,13 +351,13 @@ nodes {
 }
 nodes {
   position {
-    x: 60.0
-    y: 81.0
-    z: 0.054
+    x: 89.0
+    y: 82.0
+    z: 0.01
   }
   size {
-    x: 50.0
-    y: 42.0
+    x: 68.0
+    y: 60.0
   }
   color {
     x: 0.49
@@ -1515,13 +372,13 @@ nodes {
 }
 nodes {
   position {
-    x: 59.0
-    y: 29.0
-    z: 0.054
+    x: 89.0
+    y: 31.0
+    z: 0.01
   }
   size {
-    x: 105.0
-    y: 22.0
+    x: 156.0
+    y: 28.0
   }
   color {
     x: 0.953
@@ -1530,7 +387,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\342\200\224"
-  font: "jb_mono_10"
+  font: "jb_mono_bold_16"
   id: "slot1_name"
   line_break: true
   parent: "slot1_border"
@@ -1539,20 +396,20 @@ nodes {
 }
 nodes {
   position {
-    x: 110.0
-    y: 10.0
-    z: 0.054
+    x: 166.0
+    y: 13.0
+    z: 0.01
   }
   size {
-    x: 36.0
-    y: 10.0
+    x: 56.0
+    y: 14.0
   }
   color {
     y: 0.702
     z: 0.278
   }
   type: TYPE_TEXT
-  font: "jb_mono_10"
+  font: "jb_mono_bold_16"
   id: "slot1_qty"
   pivot: PIVOT_E
   parent: "slot1_border"
@@ -1561,12 +418,11 @@ nodes {
 }
 nodes {
   position {
-    x: 298.0
-    y: 421.0
-    z: 0.52
+    x: 236.0
+    y: 438.0
   }
   size {
-    x: 117.0
+    x: 178.0
     y: 142.0
   }
   color {
@@ -1577,16 +433,17 @@ nodes {
   type: TYPE_BOX
   id: "slot2_border"
   pivot: PIVOT_SW
+  parent: "slots_group"
   alpha: 0.18
 }
 nodes {
   position {
-    x: 299.0
-    y: 422.0
-    z: 0.53
+    x: 1.0
+    y: 1.0
+    z: 0.01
   }
   size {
-    x: 115.0
+    x: 176.0
     y: 140.0
   }
   color {
@@ -1597,17 +454,18 @@ nodes {
   type: TYPE_BOX
   id: "slot2_bg"
   pivot: PIVOT_SW
+  parent: "slot2_border"
   alpha: 0.7
 }
 nodes {
   position {
-    x: 305.0
-    y: 552.0
-    z: 0.54
+    x: 12.0
+    y: 131.0
+    z: 0.02
   }
   size {
-    x: 40.0
-    y: 8.0
+    x: 64.0
+    y: 14.0
   }
   color {
     x: 0.953
@@ -1616,22 +474,23 @@ nodes {
   }
   type: TYPE_TEXT
   text: "A2"
-  font: "jb_mono_10"
+  font: "jb_mono_bold_16"
   id: "slot2_coord"
   pivot: PIVOT_W
+  parent: "slot2_border"
   alpha: 0.45
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 356.5
-    y: 502.0
-    z: 0.54
+    x: 89.0
+    y: 82.0
+    z: 0.02
   }
   size {
-    x: 50.0
-    y: 42.0
+    x: 68.0
+    y: 60.0
   }
   color {
     x: 0.49
@@ -1640,18 +499,19 @@ nodes {
   type: TYPE_TEXT
   font: "icons"
   id: "slot2_icon"
+  parent: "slot2_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 356.5
-    y: 450.0
-    z: 0.54
+    x: 89.0
+    y: 31.0
+    z: 0.02
   }
   size {
-    x: 105.0
-    y: 22.0
+    x: 156.0
+    y: 28.0
   }
   color {
     x: 0.953
@@ -1660,41 +520,42 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\342\200\224"
-  font: "jb_mono_10"
+  font: "jb_mono_bold_16"
   id: "slot2_name"
   line_break: true
+  parent: "slot2_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 408.0
-    y: 431.0
-    z: 0.54
+    x: 166.0
+    y: 13.0
+    z: 0.02
   }
   size {
-    x: 36.0
-    y: 10.0
+    x: 56.0
+    y: 14.0
   }
   color {
     y: 0.702
     z: 0.278
   }
   type: TYPE_TEXT
-  font: "jb_mono_10"
+  font: "jb_mono_bold_16"
   id: "slot2_qty"
   pivot: PIVOT_E
+  parent: "slot2_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 423.0
-    y: 421.0
-    z: 0.52
+    x: 434.0
+    y: 438.0
   }
   size {
-    x: 117.0
+    x: 178.0
     y: 142.0
   }
   color {
@@ -1705,16 +566,17 @@ nodes {
   type: TYPE_BOX
   id: "slot3_border"
   pivot: PIVOT_SW
+  parent: "slots_group"
   alpha: 0.18
 }
 nodes {
   position {
-    x: 424.0
-    y: 422.0
-    z: 0.53
+    x: 1.0
+    y: 1.0
+    z: 0.01
   }
   size {
-    x: 115.0
+    x: 176.0
     y: 140.0
   }
   color {
@@ -1725,17 +587,18 @@ nodes {
   type: TYPE_BOX
   id: "slot3_bg"
   pivot: PIVOT_SW
+  parent: "slot3_border"
   alpha: 0.7
 }
 nodes {
   position {
-    x: 430.0
-    y: 552.0
-    z: 0.54
+    x: 12.0
+    y: 131.0
+    z: 0.02
   }
   size {
-    x: 40.0
-    y: 8.0
+    x: 64.0
+    y: 14.0
   }
   color {
     x: 0.953
@@ -1744,22 +607,23 @@ nodes {
   }
   type: TYPE_TEXT
   text: "A3"
-  font: "jb_mono_10"
+  font: "jb_mono_bold_16"
   id: "slot3_coord"
   pivot: PIVOT_W
+  parent: "slot3_border"
   alpha: 0.45
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 481.5
-    y: 502.0
-    z: 0.54
+    x: 89.0
+    y: 82.0
+    z: 0.02
   }
   size {
-    x: 50.0
-    y: 42.0
+    x: 68.0
+    y: 60.0
   }
   color {
     x: 0.49
@@ -1768,18 +632,19 @@ nodes {
   type: TYPE_TEXT
   font: "icons"
   id: "slot3_icon"
+  parent: "slot3_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 481.5
-    y: 450.0
-    z: 0.54
+    x: 89.0
+    y: 31.0
+    z: 0.02
   }
   size {
-    x: 105.0
-    y: 22.0
+    x: 156.0
+    y: 28.0
   }
   color {
     x: 0.953
@@ -1788,41 +653,42 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\342\200\224"
-  font: "jb_mono_10"
+  font: "jb_mono_bold_16"
   id: "slot3_name"
   line_break: true
+  parent: "slot3_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 533.0
-    y: 431.0
-    z: 0.54
+    x: 166.0
+    y: 13.0
+    z: 0.02
   }
   size {
-    x: 36.0
-    y: 10.0
+    x: 56.0
+    y: 14.0
   }
   color {
     y: 0.702
     z: 0.278
   }
   type: TYPE_TEXT
-  font: "jb_mono_10"
+  font: "jb_mono_bold_16"
   id: "slot3_qty"
   pivot: PIVOT_E
+  parent: "slot3_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 548.0
-    y: 421.0
-    z: 0.52
+    x: 632.0
+    y: 438.0
   }
   size {
-    x: 117.0
+    x: 178.0
     y: 142.0
   }
   color {
@@ -1833,16 +699,17 @@ nodes {
   type: TYPE_BOX
   id: "slot4_border"
   pivot: PIVOT_SW
+  parent: "slots_group"
   alpha: 0.18
 }
 nodes {
   position {
-    x: 549.0
-    y: 422.0
-    z: 0.53
+    x: 1.0
+    y: 1.0
+    z: 0.01
   }
   size {
-    x: 115.0
+    x: 176.0
     y: 140.0
   }
   color {
@@ -1853,17 +720,18 @@ nodes {
   type: TYPE_BOX
   id: "slot4_bg"
   pivot: PIVOT_SW
+  parent: "slot4_border"
   alpha: 0.7
 }
 nodes {
   position {
-    x: 555.0
-    y: 552.0
-    z: 0.54
+    x: 12.0
+    y: 131.0
+    z: 0.02
   }
   size {
-    x: 40.0
-    y: 8.0
+    x: 64.0
+    y: 14.0
   }
   color {
     x: 0.953
@@ -1872,22 +740,23 @@ nodes {
   }
   type: TYPE_TEXT
   text: "A4"
-  font: "jb_mono_10"
+  font: "jb_mono_bold_16"
   id: "slot4_coord"
   pivot: PIVOT_W
+  parent: "slot4_border"
   alpha: 0.45
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 606.5
-    y: 502.0
-    z: 0.54
+    x: 89.0
+    y: 82.0
+    z: 0.02
   }
   size {
-    x: 50.0
-    y: 42.0
+    x: 68.0
+    y: 60.0
   }
   color {
     x: 0.49
@@ -1896,18 +765,19 @@ nodes {
   type: TYPE_TEXT
   font: "icons"
   id: "slot4_icon"
+  parent: "slot4_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 606.5
-    y: 450.0
-    z: 0.54
+    x: 89.0
+    y: 31.0
+    z: 0.02
   }
   size {
-    x: 105.0
-    y: 22.0
+    x: 156.0
+    y: 28.0
   }
   color {
     x: 0.953
@@ -1916,41 +786,42 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\342\200\224"
-  font: "jb_mono_10"
+  font: "jb_mono_bold_16"
   id: "slot4_name"
   line_break: true
+  parent: "slot4_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 658.0
-    y: 431.0
-    z: 0.54
+    x: 166.0
+    y: 13.0
+    z: 0.02
   }
   size {
-    x: 36.0
-    y: 10.0
+    x: 56.0
+    y: 14.0
   }
   color {
     y: 0.702
     z: 0.278
   }
   type: TYPE_TEXT
-  font: "jb_mono_10"
+  font: "jb_mono_bold_16"
   id: "slot4_qty"
   pivot: PIVOT_E
+  parent: "slot4_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 173.0
-    y: 271.0
-    z: 0.52
+    x: 830.0
+    y: 438.0
   }
   size {
-    x: 117.0
+    x: 178.0
     y: 142.0
   }
   color {
@@ -1961,16 +832,17 @@ nodes {
   type: TYPE_BOX
   id: "slot5_border"
   pivot: PIVOT_SW
+  parent: "slots_group"
   alpha: 0.18
 }
 nodes {
   position {
-    x: 174.0
-    y: 272.0
-    z: 0.53
+    x: 1.0
+    y: 1.0
+    z: 0.01
   }
   size {
-    x: 115.0
+    x: 176.0
     y: 140.0
   }
   color {
@@ -1981,17 +853,18 @@ nodes {
   type: TYPE_BOX
   id: "slot5_bg"
   pivot: PIVOT_SW
+  parent: "slot5_border"
   alpha: 0.7
 }
 nodes {
   position {
-    x: 180.0
-    y: 402.0
-    z: 0.54
+    x: 12.0
+    y: 131.0
+    z: 0.02
   }
   size {
-    x: 40.0
-    y: 8.0
+    x: 64.0
+    y: 14.0
   }
   color {
     x: 0.953
@@ -1999,23 +872,24 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: "B1"
-  font: "jb_mono_10"
+  text: "A5"
+  font: "jb_mono_bold_16"
   id: "slot5_coord"
   pivot: PIVOT_W
+  parent: "slot5_border"
   alpha: 0.45
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 231.5
-    y: 352.0
-    z: 0.54
+    x: 89.0
+    y: 82.0
+    z: 0.02
   }
   size {
-    x: 50.0
-    y: 42.0
+    x: 68.0
+    y: 60.0
   }
   color {
     x: 0.49
@@ -2024,18 +898,19 @@ nodes {
   type: TYPE_TEXT
   font: "icons"
   id: "slot5_icon"
+  parent: "slot5_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 231.5
-    y: 300.0
-    z: 0.54
+    x: 89.0
+    y: 31.0
+    z: 0.02
   }
   size {
-    x: 105.0
-    y: 22.0
+    x: 156.0
+    y: 28.0
   }
   color {
     x: 0.953
@@ -2044,41 +919,42 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\342\200\224"
-  font: "jb_mono_10"
+  font: "jb_mono_bold_16"
   id: "slot5_name"
   line_break: true
+  parent: "slot5_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 283.0
-    y: 281.0
-    z: 0.54
+    x: 166.0
+    y: 13.0
+    z: 0.02
   }
   size {
-    x: 36.0
-    y: 10.0
+    x: 56.0
+    y: 14.0
   }
   color {
     y: 0.702
     z: 0.278
   }
   type: TYPE_TEXT
-  font: "jb_mono_10"
+  font: "jb_mono_bold_16"
   id: "slot5_qty"
   pivot: PIVOT_E
+  parent: "slot5_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 298.0
-    y: 271.0
-    z: 0.52
+    x: 1028.0
+    y: 438.0
   }
   size {
-    x: 117.0
+    x: 178.0
     y: 142.0
   }
   color {
@@ -2089,16 +965,17 @@ nodes {
   type: TYPE_BOX
   id: "slot6_border"
   pivot: PIVOT_SW
+  parent: "slots_group"
   alpha: 0.18
 }
 nodes {
   position {
-    x: 299.0
-    y: 272.0
-    z: 0.53
+    x: 1.0
+    y: 1.0
+    z: 0.01
   }
   size {
-    x: 115.0
+    x: 176.0
     y: 140.0
   }
   color {
@@ -2109,17 +986,18 @@ nodes {
   type: TYPE_BOX
   id: "slot6_bg"
   pivot: PIVOT_SW
+  parent: "slot6_border"
   alpha: 0.7
 }
 nodes {
   position {
-    x: 305.0
-    y: 402.0
-    z: 0.54
+    x: 12.0
+    y: 131.0
+    z: 0.02
   }
   size {
-    x: 40.0
-    y: 8.0
+    x: 64.0
+    y: 14.0
   }
   color {
     x: 0.953
@@ -2127,23 +1005,24 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: "B2"
-  font: "jb_mono_10"
+  text: "A6"
+  font: "jb_mono_bold_16"
   id: "slot6_coord"
   pivot: PIVOT_W
+  parent: "slot6_border"
   alpha: 0.45
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 356.5
-    y: 352.0
-    z: 0.54
+    x: 89.0
+    y: 82.0
+    z: 0.02
   }
   size {
-    x: 50.0
-    y: 42.0
+    x: 68.0
+    y: 60.0
   }
   color {
     x: 0.49
@@ -2152,18 +1031,19 @@ nodes {
   type: TYPE_TEXT
   font: "icons"
   id: "slot6_icon"
+  parent: "slot6_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 356.5
-    y: 300.0
-    z: 0.54
+    x: 89.0
+    y: 31.0
+    z: 0.02
   }
   size {
-    x: 105.0
-    y: 22.0
+    x: 156.0
+    y: 28.0
   }
   color {
     x: 0.953
@@ -2172,41 +1052,42 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\342\200\224"
-  font: "jb_mono_10"
+  font: "jb_mono_bold_16"
   id: "slot6_name"
   line_break: true
+  parent: "slot6_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 408.0
-    y: 281.0
-    z: 0.54
+    x: 166.0
+    y: 13.0
+    z: 0.02
   }
   size {
-    x: 36.0
-    y: 10.0
+    x: 56.0
+    y: 14.0
   }
   color {
     y: 0.702
     z: 0.278
   }
   type: TYPE_TEXT
-  font: "jb_mono_10"
+  font: "jb_mono_bold_16"
   id: "slot6_qty"
   pivot: PIVOT_E
+  parent: "slot6_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 423.0
-    y: 271.0
-    z: 0.52
+    x: 38.0
+    y: 278.0
   }
   size {
-    x: 117.0
+    x: 178.0
     y: 142.0
   }
   color {
@@ -2217,16 +1098,17 @@ nodes {
   type: TYPE_BOX
   id: "slot7_border"
   pivot: PIVOT_SW
+  parent: "slots_group"
   alpha: 0.18
 }
 nodes {
   position {
-    x: 424.0
-    y: 272.0
-    z: 0.53
+    x: 1.0
+    y: 1.0
+    z: 0.01
   }
   size {
-    x: 115.0
+    x: 176.0
     y: 140.0
   }
   color {
@@ -2237,17 +1119,18 @@ nodes {
   type: TYPE_BOX
   id: "slot7_bg"
   pivot: PIVOT_SW
+  parent: "slot7_border"
   alpha: 0.7
 }
 nodes {
   position {
-    x: 430.0
-    y: 402.0
-    z: 0.54
+    x: 12.0
+    y: 131.0
+    z: 0.02
   }
   size {
-    x: 40.0
-    y: 8.0
+    x: 64.0
+    y: 14.0
   }
   color {
     x: 0.953
@@ -2255,23 +1138,24 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: "B3"
-  font: "jb_mono_10"
+  text: "B1"
+  font: "jb_mono_bold_16"
   id: "slot7_coord"
   pivot: PIVOT_W
+  parent: "slot7_border"
   alpha: 0.45
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 481.5
-    y: 352.0
-    z: 0.54
+    x: 89.0
+    y: 82.0
+    z: 0.02
   }
   size {
-    x: 50.0
-    y: 42.0
+    x: 68.0
+    y: 60.0
   }
   color {
     x: 0.49
@@ -2280,18 +1164,19 @@ nodes {
   type: TYPE_TEXT
   font: "icons"
   id: "slot7_icon"
+  parent: "slot7_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 481.5
-    y: 300.0
-    z: 0.54
+    x: 89.0
+    y: 31.0
+    z: 0.02
   }
   size {
-    x: 105.0
-    y: 22.0
+    x: 156.0
+    y: 28.0
   }
   color {
     x: 0.953
@@ -2300,41 +1185,42 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\342\200\224"
-  font: "jb_mono_10"
+  font: "jb_mono_bold_16"
   id: "slot7_name"
   line_break: true
+  parent: "slot7_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 533.0
-    y: 281.0
-    z: 0.54
+    x: 166.0
+    y: 13.0
+    z: 0.02
   }
   size {
-    x: 36.0
-    y: 10.0
+    x: 56.0
+    y: 14.0
   }
   color {
     y: 0.702
     z: 0.278
   }
   type: TYPE_TEXT
-  font: "jb_mono_10"
+  font: "jb_mono_bold_16"
   id: "slot7_qty"
   pivot: PIVOT_E
+  parent: "slot7_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 548.0
-    y: 271.0
-    z: 0.52
+    x: 236.0
+    y: 278.0
   }
   size {
-    x: 117.0
+    x: 178.0
     y: 142.0
   }
   color {
@@ -2345,16 +1231,17 @@ nodes {
   type: TYPE_BOX
   id: "slot8_border"
   pivot: PIVOT_SW
+  parent: "slots_group"
   alpha: 0.18
 }
 nodes {
   position {
-    x: 549.0
-    y: 272.0
-    z: 0.53
+    x: 1.0
+    y: 1.0
+    z: 0.01
   }
   size {
-    x: 115.0
+    x: 176.0
     y: 140.0
   }
   color {
@@ -2365,17 +1252,18 @@ nodes {
   type: TYPE_BOX
   id: "slot8_bg"
   pivot: PIVOT_SW
+  parent: "slot8_border"
   alpha: 0.7
 }
 nodes {
   position {
-    x: 555.0
-    y: 402.0
-    z: 0.54
+    x: 12.0
+    y: 131.0
+    z: 0.02
   }
   size {
-    x: 40.0
-    y: 8.0
+    x: 64.0
+    y: 14.0
   }
   color {
     x: 0.953
@@ -2383,23 +1271,24 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: "B4"
-  font: "jb_mono_10"
+  text: "B2"
+  font: "jb_mono_bold_16"
   id: "slot8_coord"
   pivot: PIVOT_W
+  parent: "slot8_border"
   alpha: 0.45
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 606.5
-    y: 352.0
-    z: 0.54
+    x: 89.0
+    y: 82.0
+    z: 0.02
   }
   size {
-    x: 50.0
-    y: 42.0
+    x: 68.0
+    y: 60.0
   }
   color {
     x: 0.49
@@ -2408,18 +1297,19 @@ nodes {
   type: TYPE_TEXT
   font: "icons"
   id: "slot8_icon"
+  parent: "slot8_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 606.5
-    y: 300.0
-    z: 0.54
+    x: 89.0
+    y: 31.0
+    z: 0.02
   }
   size {
-    x: 105.0
-    y: 22.0
+    x: 156.0
+    y: 28.0
   }
   color {
     x: 0.953
@@ -2428,41 +1318,42 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\342\200\224"
-  font: "jb_mono_10"
+  font: "jb_mono_bold_16"
   id: "slot8_name"
   line_break: true
+  parent: "slot8_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 658.0
-    y: 281.0
-    z: 0.54
+    x: 166.0
+    y: 13.0
+    z: 0.02
   }
   size {
-    x: 36.0
-    y: 10.0
+    x: 56.0
+    y: 14.0
   }
   color {
     y: 0.702
     z: 0.278
   }
   type: TYPE_TEXT
-  font: "jb_mono_10"
+  font: "jb_mono_bold_16"
   id: "slot8_qty"
   pivot: PIVOT_E
+  parent: "slot8_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 173.0
-    y: 121.0
-    z: 0.52
+    x: 434.0
+    y: 278.0
   }
   size {
-    x: 117.0
+    x: 178.0
     y: 142.0
   }
   color {
@@ -2473,16 +1364,17 @@ nodes {
   type: TYPE_BOX
   id: "slot9_border"
   pivot: PIVOT_SW
+  parent: "slots_group"
   alpha: 0.18
 }
 nodes {
   position {
-    x: 174.0
-    y: 122.0
-    z: 0.53
+    x: 1.0
+    y: 1.0
+    z: 0.01
   }
   size {
-    x: 115.0
+    x: 176.0
     y: 140.0
   }
   color {
@@ -2493,17 +1385,18 @@ nodes {
   type: TYPE_BOX
   id: "slot9_bg"
   pivot: PIVOT_SW
+  parent: "slot9_border"
   alpha: 0.7
 }
 nodes {
   position {
-    x: 180.0
-    y: 252.0
-    z: 0.54
+    x: 12.0
+    y: 131.0
+    z: 0.02
   }
   size {
-    x: 40.0
-    y: 8.0
+    x: 64.0
+    y: 14.0
   }
   color {
     x: 0.953
@@ -2511,23 +1404,24 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: "C1"
-  font: "jb_mono_10"
+  text: "B3"
+  font: "jb_mono_bold_16"
   id: "slot9_coord"
   pivot: PIVOT_W
+  parent: "slot9_border"
   alpha: 0.45
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 231.5
-    y: 202.0
-    z: 0.54
+    x: 89.0
+    y: 82.0
+    z: 0.02
   }
   size {
-    x: 50.0
-    y: 42.0
+    x: 68.0
+    y: 60.0
   }
   color {
     x: 0.49
@@ -2536,18 +1430,19 @@ nodes {
   type: TYPE_TEXT
   font: "icons"
   id: "slot9_icon"
+  parent: "slot9_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 231.5
-    y: 150.0
-    z: 0.54
+    x: 89.0
+    y: 31.0
+    z: 0.02
   }
   size {
-    x: 105.0
-    y: 22.0
+    x: 156.0
+    y: 28.0
   }
   color {
     x: 0.953
@@ -2556,41 +1451,42 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\342\200\224"
-  font: "jb_mono_10"
+  font: "jb_mono_bold_16"
   id: "slot9_name"
   line_break: true
+  parent: "slot9_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 283.0
-    y: 131.0
-    z: 0.54
+    x: 166.0
+    y: 13.0
+    z: 0.02
   }
   size {
-    x: 36.0
-    y: 10.0
+    x: 56.0
+    y: 14.0
   }
   color {
     y: 0.702
     z: 0.278
   }
   type: TYPE_TEXT
-  font: "jb_mono_10"
+  font: "jb_mono_bold_16"
   id: "slot9_qty"
   pivot: PIVOT_E
+  parent: "slot9_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 298.0
-    y: 121.0
-    z: 0.52
+    x: 632.0
+    y: 278.0
   }
   size {
-    x: 117.0
+    x: 178.0
     y: 142.0
   }
   color {
@@ -2601,16 +1497,17 @@ nodes {
   type: TYPE_BOX
   id: "slot10_border"
   pivot: PIVOT_SW
+  parent: "slots_group"
   alpha: 0.18
 }
 nodes {
   position {
-    x: 299.0
-    y: 122.0
-    z: 0.53
+    x: 1.0
+    y: 1.0
+    z: 0.01
   }
   size {
-    x: 115.0
+    x: 176.0
     y: 140.0
   }
   color {
@@ -2621,17 +1518,18 @@ nodes {
   type: TYPE_BOX
   id: "slot10_bg"
   pivot: PIVOT_SW
+  parent: "slot10_border"
   alpha: 0.7
 }
 nodes {
   position {
-    x: 305.0
-    y: 252.0
-    z: 0.54
+    x: 12.0
+    y: 131.0
+    z: 0.02
   }
   size {
-    x: 40.0
-    y: 8.0
+    x: 64.0
+    y: 14.0
   }
   color {
     x: 0.953
@@ -2639,23 +1537,24 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: "C2"
-  font: "jb_mono_10"
+  text: "B4"
+  font: "jb_mono_bold_16"
   id: "slot10_coord"
   pivot: PIVOT_W
+  parent: "slot10_border"
   alpha: 0.45
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 356.5
-    y: 202.0
-    z: 0.54
+    x: 89.0
+    y: 82.0
+    z: 0.02
   }
   size {
-    x: 50.0
-    y: 42.0
+    x: 68.0
+    y: 60.0
   }
   color {
     x: 0.49
@@ -2664,18 +1563,19 @@ nodes {
   type: TYPE_TEXT
   font: "icons"
   id: "slot10_icon"
+  parent: "slot10_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 356.5
-    y: 150.0
-    z: 0.54
+    x: 89.0
+    y: 31.0
+    z: 0.02
   }
   size {
-    x: 105.0
-    y: 22.0
+    x: 156.0
+    y: 28.0
   }
   color {
     x: 0.953
@@ -2684,41 +1584,42 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\342\200\224"
-  font: "jb_mono_10"
+  font: "jb_mono_bold_16"
   id: "slot10_name"
   line_break: true
+  parent: "slot10_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 408.0
-    y: 131.0
-    z: 0.54
+    x: 166.0
+    y: 13.0
+    z: 0.02
   }
   size {
-    x: 36.0
-    y: 10.0
+    x: 56.0
+    y: 14.0
   }
   color {
     y: 0.702
     z: 0.278
   }
   type: TYPE_TEXT
-  font: "jb_mono_10"
+  font: "jb_mono_bold_16"
   id: "slot10_qty"
   pivot: PIVOT_E
+  parent: "slot10_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 423.0
-    y: 121.0
-    z: 0.52
+    x: 830.0
+    y: 278.0
   }
   size {
-    x: 117.0
+    x: 178.0
     y: 142.0
   }
   color {
@@ -2729,16 +1630,17 @@ nodes {
   type: TYPE_BOX
   id: "slot11_border"
   pivot: PIVOT_SW
+  parent: "slots_group"
   alpha: 0.18
 }
 nodes {
   position {
-    x: 424.0
-    y: 122.0
-    z: 0.53
+    x: 1.0
+    y: 1.0
+    z: 0.01
   }
   size {
-    x: 115.0
+    x: 176.0
     y: 140.0
   }
   color {
@@ -2749,17 +1651,18 @@ nodes {
   type: TYPE_BOX
   id: "slot11_bg"
   pivot: PIVOT_SW
+  parent: "slot11_border"
   alpha: 0.7
 }
 nodes {
   position {
-    x: 430.0
-    y: 252.0
-    z: 0.54
+    x: 12.0
+    y: 131.0
+    z: 0.02
   }
   size {
-    x: 40.0
-    y: 8.0
+    x: 64.0
+    y: 14.0
   }
   color {
     x: 0.953
@@ -2767,23 +1670,24 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: "C3"
-  font: "jb_mono_10"
+  text: "B5"
+  font: "jb_mono_bold_16"
   id: "slot11_coord"
   pivot: PIVOT_W
+  parent: "slot11_border"
   alpha: 0.45
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 481.5
-    y: 202.0
-    z: 0.54
+    x: 89.0
+    y: 82.0
+    z: 0.02
   }
   size {
-    x: 50.0
-    y: 42.0
+    x: 68.0
+    y: 60.0
   }
   color {
     x: 0.49
@@ -2792,18 +1696,19 @@ nodes {
   type: TYPE_TEXT
   font: "icons"
   id: "slot11_icon"
+  parent: "slot11_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 481.5
-    y: 150.0
-    z: 0.54
+    x: 89.0
+    y: 31.0
+    z: 0.02
   }
   size {
-    x: 105.0
-    y: 22.0
+    x: 156.0
+    y: 28.0
   }
   color {
     x: 0.953
@@ -2812,41 +1717,42 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\342\200\224"
-  font: "jb_mono_10"
+  font: "jb_mono_bold_16"
   id: "slot11_name"
   line_break: true
+  parent: "slot11_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 533.0
-    y: 131.0
-    z: 0.54
+    x: 166.0
+    y: 13.0
+    z: 0.02
   }
   size {
-    x: 36.0
-    y: 10.0
+    x: 56.0
+    y: 14.0
   }
   color {
     y: 0.702
     z: 0.278
   }
   type: TYPE_TEXT
-  font: "jb_mono_10"
+  font: "jb_mono_bold_16"
   id: "slot11_qty"
   pivot: PIVOT_E
+  parent: "slot11_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 548.0
-    y: 121.0
-    z: 0.52
+    x: 1028.0
+    y: 278.0
   }
   size {
-    x: 117.0
+    x: 178.0
     y: 142.0
   }
   color {
@@ -2857,16 +1763,17 @@ nodes {
   type: TYPE_BOX
   id: "slot12_border"
   pivot: PIVOT_SW
+  parent: "slots_group"
   alpha: 0.18
 }
 nodes {
   position {
-    x: 549.0
-    y: 122.0
-    z: 0.53
+    x: 1.0
+    y: 1.0
+    z: 0.01
   }
   size {
-    x: 115.0
+    x: 176.0
     y: 140.0
   }
   color {
@@ -2877,17 +1784,18 @@ nodes {
   type: TYPE_BOX
   id: "slot12_bg"
   pivot: PIVOT_SW
+  parent: "slot12_border"
   alpha: 0.7
 }
 nodes {
   position {
-    x: 555.0
-    y: 252.0
-    z: 0.54
+    x: 12.0
+    y: 131.0
+    z: 0.02
   }
   size {
-    x: 40.0
-    y: 8.0
+    x: 64.0
+    y: 14.0
   }
   color {
     x: 0.953
@@ -2895,23 +1803,24 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: "C4"
-  font: "jb_mono_10"
+  text: "B6"
+  font: "jb_mono_bold_16"
   id: "slot12_coord"
   pivot: PIVOT_W
+  parent: "slot12_border"
   alpha: 0.45
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 606.5
-    y: 202.0
-    z: 0.54
+    x: 89.0
+    y: 82.0
+    z: 0.02
   }
   size {
-    x: 50.0
-    y: 42.0
+    x: 68.0
+    y: 60.0
   }
   color {
     x: 0.49
@@ -2920,18 +1829,19 @@ nodes {
   type: TYPE_TEXT
   font: "icons"
   id: "slot12_icon"
+  parent: "slot12_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 606.5
-    y: 150.0
-    z: 0.54
+    x: 89.0
+    y: 31.0
+    z: 0.02
   }
   size {
-    x: 105.0
-    y: 22.0
+    x: 156.0
+    y: 28.0
   }
   color {
     x: 0.953
@@ -2940,42 +1850,38 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\342\200\224"
-  font: "jb_mono_10"
+  font: "jb_mono_bold_16"
   id: "slot12_name"
   line_break: true
+  parent: "slot12_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 658.0
-    y: 131.0
-    z: 0.54
+    x: 166.0
+    y: 13.0
+    z: 0.02
   }
   size {
-    x: 36.0
-    y: 10.0
+    x: 56.0
+    y: 14.0
   }
   color {
     y: 0.702
     z: 0.278
   }
   type: TYPE_TEXT
-  font: "jb_mono_10"
+  font: "jb_mono_bold_16"
   id: "slot12_qty"
   pivot: PIVOT_E
+  parent: "slot12_border"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 174.0
-    y: 122.0
-    z: 0.58
-  }
-  size {
-    x: 115.0
-    y: 140.0
+    z: 0.005
   }
   color {
     x: 0.0
@@ -2983,19 +1889,278 @@ nodes {
     z: 0.0
   }
   type: TYPE_BOX
-  id: "sel_ring_b"
+  id: "details_group"
   pivot: PIVOT_SW
+  parent: "modal"
+}
+nodes {
+  position {
+    x: 38.0
+    y: 146.0
+  }
+  size {
+    x: 1168.0
+    y: 108.0
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "border_details"
+  pivot: PIVOT_SW
+  parent: "details_group"
+  inherit_alpha: true
+  slice9 {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+    w: 2.0
+  }
+}
+nodes {
+  position {
+    x: 40.0
+    y: 148.0
+  }
+  size {
+    x: 1164.0
+    y: 104.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
+  type: TYPE_BOX
+  id: "details_bg"
+  pivot: PIVOT_SW
+  parent: "details_group"
+  alpha: 0.55
+}
+nodes {
+  position {
+    x: 160.0
+    y: 232.0
+  }
+  size {
+    x: 320.0
+    y: 14.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "details \302\267 \320\277\321\200\320\265\320\264\320\274\320\265\321\202"
+  font: "jb_mono_bold_16"
+  id: "details_cap"
+  pivot: PIVOT_W
+  parent: "details_group"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 160.0
+    y: 207.0
+  }
+  size {
+    x: 600.0
+    y: 26.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\222\321\213\320\261\320\265\321\200\320\270\321\202\320\265 \320\277\321\200\320\265\320\264\320\274\320\265\321\202"
+  font: "unbounded_bold_20"
+  id: "details_name"
+  pivot: PIVOT_W
+  parent: "details_group"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 160.0
+    y: 181.0
+  }
+  size {
+    x: 200.0
+    y: 14.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_bold_16"
+  id: "details_iter"
+  pivot: PIVOT_W
+  parent: "details_group"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 370.0
+    y: 181.0
+  }
+  size {
+    x: 90.0
+    y: 14.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_bold_16"
+  id: "details_clue"
+  pivot: PIVOT_E
+  parent: "details_group"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 58.0
+    y: 166.0
+  }
+  size {
+    x: 84.0
+    y: 70.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "details_preview_bg"
+  pivot: PIVOT_SW
+  parent: "details_group"
+  alpha: 0.06
+}
+nodes {
+  position {
+    x: 58.0
+    y: 166.0
+  }
+  size {
+    x: 84.0
+    y: 70.0
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "border_preview"
+  pivot: PIVOT_SW
+  parent: "details_group"
+  inherit_alpha: true
+  slice9 {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+    w: 2.0
+  }
+}
+nodes {
+  position {
+    x: 100.0
+    y: 201.0
+    z: 0.1
+  }
+  size {
+    x: 76.0
+    y: 76.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  font: "icons"
+  id: "details_icon"
+  parent: "details_group"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -2000.0
+    y: -2000.0
+    z: 0.1
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "preview_stamp_bg"
+  pivot: PIVOT_SW
+  parent: "details_group"
   alpha: 0.0
 }
 nodes {
   position {
-    x: 174.0
-    y: 260.0
-    z: 0.59
+    x: -2000.0
+    y: -2000.0
+    z: 0.1
   }
   size {
-    x: 115.0
-    y: 2.0
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    x: 0.784
+    y: 0.078
+    z: 0.165
+  }
+  type: TYPE_TEXT
+  text: "\320\237\320\243\320\241\320\242\320\236"
+  font: "jb_mono_bold_16"
+  id: "preview_stamp_label"
+  parent: "details_group"
+  alpha: 0.0
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 500.0
+    y: 230.0
+  }
+  size {
+    x: 670.0
+    y: 74.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\320\222\321\213\320\261\320\265\321\200\320\270 \320\277\321\200\320\265\320\264\320\274\320\265\321\202 \320\262 \321\201\320\265\321\202\320\272\320\265 \321\201\320\273\320\265\320\262\320\260."
+  font: "Manrope-Medium_16"
+  id: "details_desc"
+  pivot: PIVOT_NW
+  line_break: true
+  parent: "details_group"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -2000.0
+    y: -2000.0
+  }
+  size {
+    x: 1.0
+    y: 1.0
   }
   color {
     x: 0.953
@@ -3003,8 +2168,629 @@ nodes {
     z: 0.851
   }
   type: TYPE_BOX
-  id: "sel_ring_t"
+  id: "details_stats_divider"
   pivot: PIVOT_SW
+  parent: "details_group"
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: -2000.0
+    y: -2000.0
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\320\270\321\201\321\202\320\276\321\207\320\275\320\270\320\272"
+  font: "jb_mono_bold_16"
+  id: "stat_src_k"
+  pivot: PIVOT_W
+  parent: "details_group"
+  alpha: 0.0
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -2000.0
+    y: -2000.0
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\342\200\224"
+  font: "jb_mono_bold_16"
+  id: "stat_src_v"
+  pivot: PIVOT_W
+  parent: "details_group"
+  alpha: 0.0
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -2000.0
+    y: -2000.0
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\320\270\321\202\320\265\321\200\320\260\321\206\320\270\321\217"
+  font: "jb_mono_bold_16"
+  id: "stat_iter_k"
+  pivot: PIVOT_W
+  parent: "details_group"
+  alpha: 0.0
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -2000.0
+    y: -2000.0
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "\342\200\224"
+  font: "jb_mono_bold_16"
+  id: "stat_iter_v"
+  pivot: PIVOT_W
+  parent: "details_group"
+  alpha: 0.0
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -2000.0
+    y: -2000.0
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\321\202\320\270\320\277"
+  font: "jb_mono_bold_16"
+  id: "stat_type_k"
+  pivot: PIVOT_W
+  parent: "details_group"
+  alpha: 0.0
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -2000.0
+    y: -2000.0
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\342\200\224"
+  font: "jb_mono_bold_16"
+  id: "stat_type_v"
+  pivot: PIVOT_W
+  parent: "details_group"
+  alpha: 0.0
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -2000.0
+    y: -2000.0
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\321\203\320\273\320\270\320\272\320\260"
+  font: "jb_mono_bold_16"
+  id: "stat_clue_k"
+  pivot: PIVOT_W
+  parent: "details_group"
+  alpha: 0.0
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -2000.0
+    y: -2000.0
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
+  type: TYPE_TEXT
+  text: "\342\200\224"
+  font: "jb_mono_bold_16"
+  id: "stat_clue_v"
+  pivot: PIVOT_W
+  parent: "details_group"
+  alpha: 0.0
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    z: 0.006
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "verbs_group"
+  pivot: PIVOT_SW
+  parent: "modal"
+}
+nodes {
+  position {
+    x: 38.0
+    y: 136.0
+  }
+  size {
+    x: 1168.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "details_verbs_divider"
+  pivot: PIVOT_SW
+  parent: "verbs_group"
+  alpha: 0.15
+}
+nodes {
+  position {
+    x: 212.0
+    y: 82.0
+  }
+  size {
+    x: 260.0
+    y: 46.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "verb1_border"
+  pivot: PIVOT_SW
+  parent: "verbs_group"
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 213.0
+    y: 83.0
+    z: 0.1
+  }
+  size {
+    x: 258.0
+    y: 44.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
+  type: TYPE_BOX
+  id: "verb1_bg"
+  pivot: PIVOT_SW
+  parent: "verbs_group"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 342.0
+    y: 105.0
+    z: 0.1
+  }
+  size {
+    x: 246.0
+    y: 18.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\230\320\241\320\237\320\236\320\233\320\254\320\227\320\236\320\222\320\220\320\242\320\254"
+  font: "unbounded_bold_20"
+  id: "verb1_label"
+  parent: "verbs_group"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 492.0
+    y: 82.0
+  }
+  size {
+    x: 260.0
+    y: 46.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "verb2_border"
+  pivot: PIVOT_SW
+  parent: "verbs_group"
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 493.0
+    y: 83.0
+    z: 0.1
+  }
+  size {
+    x: 258.0
+    y: 44.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
+  type: TYPE_BOX
+  id: "verb2_bg"
+  pivot: PIVOT_SW
+  parent: "verbs_group"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 622.0
+    y: 105.0
+    z: 0.1
+  }
+  size {
+    x: 246.0
+    y: 18.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\236\320\241\320\234\320\236\320\242\320\240\320\225\320\242\320\254"
+  font: "unbounded_bold_20"
+  id: "verb2_label"
+  parent: "verbs_group"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 352.0
+    y: 30.0
+  }
+  size {
+    x: 260.0
+    y: 46.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "verb3_border"
+  pivot: PIVOT_SW
+  parent: "verbs_group"
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 353.0
+    y: 31.0
+    z: 0.1
+  }
+  size {
+    x: 258.0
+    y: 44.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
+  type: TYPE_BOX
+  id: "verb3_bg"
+  pivot: PIVOT_SW
+  parent: "verbs_group"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 482.0
+    y: 53.0
+    z: 0.1
+  }
+  size {
+    x: 246.0
+    y: 18.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\241\320\236\320\225\320\224\320\230\320\235\320\230\320\242\320\254"
+  font: "unbounded_bold_20"
+  id: "verb3_label"
+  parent: "verbs_group"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 772.0
+    y: 82.0
+  }
+  size {
+    x: 260.0
+    y: 46.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "verb4_border"
+  pivot: PIVOT_SW
+  parent: "verbs_group"
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 773.0
+    y: 83.0
+    z: 0.1
+  }
+  size {
+    x: 258.0
+    y: 44.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
+  type: TYPE_BOX
+  id: "verb4_bg"
+  pivot: PIVOT_SW
+  parent: "verbs_group"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 902.0
+    y: 105.0
+    z: 0.1
+  }
+  size {
+    x: 246.0
+    y: 18.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\237\320\240\320\236\320\247\320\230\320\242\320\220\320\242\320\254"
+  font: "unbounded_bold_20"
+  id: "verb4_label"
+  parent: "verbs_group"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 632.0
+    y: 30.0
+  }
+  size {
+    x: 260.0
+    y: 46.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "verb5_border"
+  pivot: PIVOT_SW
+  parent: "verbs_group"
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 633.0
+    y: 31.0
+    z: 0.1
+  }
+  size {
+    x: 258.0
+    y: 44.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
+  type: TYPE_BOX
+  id: "verb5_bg"
+  pivot: PIVOT_SW
+  parent: "verbs_group"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 762.0
+    y: 53.0
+    z: 0.1
+  }
+  size {
+    x: 246.0
+    y: 18.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\236\320\242\320\224\320\220\320\242\320\254"
+  font: "unbounded_bold_20"
+  id: "verb5_label"
+  parent: "verbs_group"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    z: 0.007
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "footer_group"
+  pivot: PIVOT_SW
+  parent: "modal"
+}
+nodes {
+  position {
+    x: 38.0
+    y: 20.0
+  }
+  size {
+    x: 1164.0
+    y: 1.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "foot_divider"
+  pivot: PIVOT_SW
+  parent: "footer_group"
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 38.0
+    y: 10.0
+  }
+  size {
+    x: 620.0
+    y: 12.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_bold_16"
+  id: "foot_left"
+  pivot: PIVOT_W
+  parent: "footer_group"
+  alpha: 0.0
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1168.0
+    y: 10.0
+  }
+  size {
+    x: 80.0
+    y: 12.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_bold_16"
+  id: "foot_right"
+  pivot: PIVOT_E
+  parent: "footer_group"
+  alpha: 0.0
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT

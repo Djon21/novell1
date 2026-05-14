@@ -104,6 +104,9 @@ M.set_progress         = hash("set_progress")
 M.set_points           = hash("set_points")
 M.set_loop_state       = hash("set_loop_state")
 M.set_location         = hash("set_location")
+M.toggle_mute          = hash("toggle_mute")
+M.set_mute_state       = hash("set_mute_state")
+M.return_to_menu       = hash("return_to_menu")
 
 -- ---------------------------------------------------------------------------
 -- Menu
@@ -167,6 +170,12 @@ M.edit_w_minus         = hash("edit_w_minus")
 M.edit_h_plus          = hash("edit_h_plus")
 M.edit_h_minus         = hash("edit_h_minus")
 M.edit_print           = hash("edit_print")
+
+-- ---------------------------------------------------------------------------
+-- Dev checkpoints (debug build only)
+-- ---------------------------------------------------------------------------
+M.dev_jump_next        = hash("dev_jump_next")
+M.dev_jump_apply       = hash("dev_jump_apply")
 
 -- ---------------------------------------------------------------------------
 -- Input action_id'ы (стандартные Defold-инпуты, пригодятся для сравнений)

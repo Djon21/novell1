@@ -15,6 +15,14 @@ key_trigger {
   action: "edit_toggle"
 }
 key_trigger {
+  input: KEY_F3
+  action: "dev_jump_next"
+}
+key_trigger {
+  input: KEY_F4
+  action: "dev_jump_apply"
+}
+key_trigger {
   input: KEY_ESC
   action: "edit_exit"
 }

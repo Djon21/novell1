@@ -32,96 +32,45 @@ fonts {
   font: "/main/fonts/manrope_16.font"
 }
 nodes {
-  color {
-    x: 1.000
-    y: 1.000
-    z: 1.000
-  }
   type: TYPE_BOX
   id: "call_runtime_root"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.000
+  alpha: 0.0
 }
 nodes {
   position {
-    x: 500.000
-    y: 40.000
-    z: 0.522
+    x: 524.0
+    y: 650.0
+    z: 0.56
   }
   size {
-    x: 728.000
-    y: 640.000
+    x: 520.0
+    y: 12.0
   }
   color {
-    x: 0.031
-    y: 0.024
-    z: 0.094
-  }
-  type: TYPE_BOX
-  id: "v_call_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "call_runtime_root"
-  alpha: 0.860
-}
-nodes {
-  position {
-    x: 500.000
-    y: 610.000
-    z: 0.523
-  }
-  size {
-    x: 728.000
-    y: 70.000
-  }
-  color {
-    x: 0.047
-    y: 0.041
-    z: 0.120
-  }
-  type: TYPE_BOX
-  id: "v_call_head_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "call_runtime_root"
-  alpha: 0.700
-}
-nodes {
-  position {
-    x: 524.000
-    y: 650.000
-    z: 0.560
-  }
-  size {
-    x: 520.000
-    y: 12.000
-  }
-  color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_call_eyebrow"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 524.000
-    y: 625.000
+    x: 524.0
+    y: 625.0
     z: 0.561
   }
   size {
-    x: 260.000
-    y: 24.000
+    x: 260.0
+    y: 24.0
   }
   color {
     x: 0.953
@@ -129,25 +78,24 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: ""
   font: "unbounded_bold_20"
   id: "v_call_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 524.000
-    y: 586.000
+    x: 524.0
+    y: 586.0
     z: 0.538
   }
   size {
-    x: 88.000
-    y: 24.000
+    x: 88.0
+    y: 24.0
   }
   color {
     x: 0.078
@@ -159,17 +107,17 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.660
+  alpha: 0.66
 }
 nodes {
   position {
-    x: 534.000
-    y: 598.000
+    x: 534.0
+    y: 598.0
     z: 0.562
   }
   size {
-    x: 72.000
-    y: 12.000
+    x: 72.0
+    y: 12.0
   }
   color {
     x: 0.788
@@ -177,25 +125,24 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_call_tab_all_text"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.960
+  alpha: 0.96
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 620.000
-    y: 586.000
+    x: 620.0
+    y: 586.0
     z: 0.538
   }
   size {
-    x: 150.000
-    y: 24.000
+    x: 150.0
+    y: 24.0
   }
   color {
     x: 0.078
@@ -207,17 +154,17 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.660
+  alpha: 0.66
 }
 nodes {
   position {
-    x: 630.000
-    y: 598.000
+    x: 630.0
+    y: 598.0
     z: 0.562
   }
   size {
-    x: 134.000
-    y: 12.000
+    x: 134.0
+    y: 12.0
   }
   color {
     x: 0.788
@@ -225,25 +172,24 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_call_tab_missed_text"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.960
+  alpha: 0.96
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 778.000
-    y: 586.000
+    x: 778.0
+    y: 586.0
     z: 0.538
   }
   size {
-    x: 118.000
-    y: 24.000
+    x: 118.0
+    y: 24.0
   }
   color {
     x: 0.078
@@ -255,17 +201,17 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.660
+  alpha: 0.66
 }
 nodes {
   position {
-    x: 788.000
-    y: 598.000
+    x: 788.0
+    y: 598.0
     z: 0.562
   }
   size {
-    x: 102.000
-    y: 12.000
+    x: 102.0
+    y: 12.0
   }
   color {
     x: 0.788
@@ -273,25 +219,24 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_call_tab_contacts_text"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.960
+  alpha: 0.96
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 520.000
-    y: 572.000
+    x: 520.0
+    y: 572.0
     z: 0.539
   }
   size {
-    x: 690.000
-    y: 1.000
+    x: 690.0
+    y: 1.0
   }
   color {
     x: 0.953
@@ -303,17 +248,17 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.150
+  alpha: 0.15
 }
 nodes {
   position {
-    x: 520.000
-    y: 104.000
+    x: 520.0
+    y: 104.0
     z: 0.524
   }
   size {
-    x: 676.000
-    y: 456.000
+    x: 676.0
+    y: 456.0
   }
   color {
     x: 0.031
@@ -325,17 +270,17 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.000
+  alpha: 0.0
 }
 nodes {
   position {
-    x: 1205.000
-    y: 104.000
-    z: 0.540
+    x: 1205.0
+    y: 104.0
+    z: 0.54
   }
   size {
-    x: 4.000
-    y: 456.000
+    x: 4.0
+    y: 456.0
   }
   color {
     x: 0.953
@@ -347,39 +292,38 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.080
+  alpha: 0.08
 }
 nodes {
   position {
-    x: 1205.000
-    y: 382.000
+    x: 1205.0
+    y: 382.0
     z: 0.565
   }
   size {
-    x: 4.000
-    y: 170.000
+    x: 4.0
+    y: 170.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_BOX
   id: "v_call_scroll_thumb"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.720
+  alpha: 0.72
 }
 nodes {
   position {
-    x: 524.000
-    y: 508.000
-    z: 0.530
+    x: 524.0
+    y: 508.0
+    z: 0.53
   }
   size {
-    x: 662.000
-    y: 50.000
+    x: 662.0
+    y: 50.0
   }
   color {
     x: 0.078
@@ -391,87 +335,83 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.580
+  alpha: 0.58
 }
 nodes {
   position {
-    x: 524.000
-    y: 508.000
+    x: 524.0
+    y: 508.0
     z: 0.552
   }
   size {
-    x: 3.000
-    y: 50.000
+    x: 3.0
+    y: 50.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_BOX
   id: "v_call_c1_accent"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.000
+  alpha: 0.0
 }
 nodes {
   position {
-    x: 538.000
-    y: 514.000
+    x: 538.0
+    y: 514.0
     z: 0.545
   }
   size {
-    x: 38.000
-    y: 38.000
+    x: 38.0
+    y: 38.0
   }
   color {
-    x: 0.100
-    y: 0.150
-    z: 0.250
+    x: 0.1
+    y: 0.15
+    z: 0.25
   }
   type: TYPE_BOX
   id: "v_call_c1_av_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.840
+  alpha: 0.84
 }
 nodes {
   position {
-    x: 557.000
-    y: 533.000
+    x: 557.0
+    y: 533.0
     z: 0.566
   }
   size {
-    x: 36.000
-    y: 16.000
+    x: 36.0
+    y: 16.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_call_c1_av_text"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 588.000
-    y: 540.000
+    x: 588.0
+    y: 540.0
     z: 0.566
   }
   size {
-    x: 360.000
-    y: 16.000
+    x: 360.0
+    y: 16.0
   }
   color {
     x: 0.953
@@ -479,47 +419,46 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_call_c1_name"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 590.000
-    y: 520.000
+    x: 590.0
+    y: 520.0
     z: 0.556
   }
   size {
-    x: 8.000
-    y: 8.000
+    x: 8.0
+    y: 8.0
   }
   color {
-    x: 0.290
-    y: 0.870
-    z: 0.500
+    x: 0.29
+    y: 0.87
+    z: 0.5
   }
   type: TYPE_BOX
   id: "v_call_c1_dir_box"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.850
+  alpha: 0.85
 }
 nodes {
   position {
-    x: 606.000
-    y: 524.000
+    x: 606.0
+    y: 524.0
     z: 0.566
   }
   size {
-    x: 360.000
-    y: 14.000
+    x: 360.0
+    y: 14.0
   }
   color {
     x: 0.788
@@ -527,25 +466,24 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_call_c1_meta"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1124.000
-    y: 540.000
+    x: 1124.0
+    y: 540.0
     z: 0.566
   }
   size {
-    x: 52.000
-    y: 14.000
+    x: 52.0
+    y: 14.0
   }
   color {
     x: 0.788
@@ -553,28 +491,26 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_call_c1_time"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1150.000
-    y: 518.000
+    x: 1150.0
+    y: 518.0
     z: 0.556
   }
   size {
-    x: 26.000
-    y: 16.000
+    x: 26.0
+    y: 16.0
   }
   color {
-    x: 1.000
     y: 0.239
     z: 0.498
   }
@@ -583,43 +519,41 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.000
+  alpha: 0.0
 }
 nodes {
   position {
-    x: 1163.000
-    y: 526.000
+    x: 1163.0
+    y: 526.0
     z: 0.568
   }
   size {
-    x: 24.000
-    y: 10.000
+    x: 24.0
+    y: 10.0
   }
   color {
-    x: 0.100
-    y: 0.020
-    z: 0.060
+    x: 0.1
+    y: 0.02
+    z: 0.06
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_call_c1_badge_text"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.000
+  alpha: 0.0
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 524.000
-    y: 452.000
-    z: 0.530
+    x: 524.0
+    y: 452.0
+    z: 0.53
   }
   size {
-    x: 662.000
-    y: 50.000
+    x: 662.0
+    y: 50.0
   }
   color {
     x: 0.078
@@ -631,87 +565,83 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.580
+  alpha: 0.58
 }
 nodes {
   position {
-    x: 524.000
-    y: 452.000
+    x: 524.0
+    y: 452.0
     z: 0.552
   }
   size {
-    x: 3.000
-    y: 50.000
+    x: 3.0
+    y: 50.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_BOX
   id: "v_call_c2_accent"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.000
+  alpha: 0.0
 }
 nodes {
   position {
-    x: 538.000
-    y: 458.000
+    x: 538.0
+    y: 458.0
     z: 0.545
   }
   size {
-    x: 38.000
-    y: 38.000
+    x: 38.0
+    y: 38.0
   }
   color {
-    x: 0.100
-    y: 0.150
-    z: 0.250
+    x: 0.1
+    y: 0.15
+    z: 0.25
   }
   type: TYPE_BOX
   id: "v_call_c2_av_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.840
+  alpha: 0.84
 }
 nodes {
   position {
-    x: 557.000
-    y: 477.000
+    x: 557.0
+    y: 477.0
     z: 0.566
   }
   size {
-    x: 36.000
-    y: 16.000
+    x: 36.0
+    y: 16.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_call_c2_av_text"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 588.000
-    y: 484.000
+    x: 588.0
+    y: 484.0
     z: 0.566
   }
   size {
-    x: 360.000
-    y: 16.000
+    x: 360.0
+    y: 16.0
   }
   color {
     x: 0.953
@@ -719,47 +649,46 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_call_c2_name"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 590.000
-    y: 464.000
+    x: 590.0
+    y: 464.0
     z: 0.556
   }
   size {
-    x: 8.000
-    y: 8.000
+    x: 8.0
+    y: 8.0
   }
   color {
-    x: 0.290
-    y: 0.870
-    z: 0.500
+    x: 0.29
+    y: 0.87
+    z: 0.5
   }
   type: TYPE_BOX
   id: "v_call_c2_dir_box"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.850
+  alpha: 0.85
 }
 nodes {
   position {
-    x: 606.000
-    y: 468.000
+    x: 606.0
+    y: 468.0
     z: 0.566
   }
   size {
-    x: 360.000
-    y: 14.000
+    x: 360.0
+    y: 14.0
   }
   color {
     x: 0.788
@@ -767,25 +696,24 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_call_c2_meta"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1124.000
-    y: 484.000
+    x: 1124.0
+    y: 484.0
     z: 0.566
   }
   size {
-    x: 52.000
-    y: 14.000
+    x: 52.0
+    y: 14.0
   }
   color {
     x: 0.788
@@ -793,28 +721,26 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_call_c2_time"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1150.000
-    y: 462.000
+    x: 1150.0
+    y: 462.0
     z: 0.556
   }
   size {
-    x: 26.000
-    y: 16.000
+    x: 26.0
+    y: 16.0
   }
   color {
-    x: 1.000
     y: 0.239
     z: 0.498
   }
@@ -823,43 +749,41 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.000
+  alpha: 0.0
 }
 nodes {
   position {
-    x: 1163.000
-    y: 470.000
+    x: 1163.0
+    y: 470.0
     z: 0.568
   }
   size {
-    x: 24.000
-    y: 10.000
+    x: 24.0
+    y: 10.0
   }
   color {
-    x: 0.100
-    y: 0.020
-    z: 0.060
+    x: 0.1
+    y: 0.02
+    z: 0.06
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_call_c2_badge_text"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.000
+  alpha: 0.0
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 524.000
-    y: 396.000
-    z: 0.530
+    x: 524.0
+    y: 396.0
+    z: 0.53
   }
   size {
-    x: 662.000
-    y: 50.000
+    x: 662.0
+    y: 50.0
   }
   color {
     x: 0.078
@@ -871,87 +795,83 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.580
+  alpha: 0.58
 }
 nodes {
   position {
-    x: 524.000
-    y: 396.000
+    x: 524.0
+    y: 396.0
     z: 0.552
   }
   size {
-    x: 3.000
-    y: 50.000
+    x: 3.0
+    y: 50.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_BOX
   id: "v_call_c3_accent"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.000
+  alpha: 0.0
 }
 nodes {
   position {
-    x: 538.000
-    y: 402.000
+    x: 538.0
+    y: 402.0
     z: 0.545
   }
   size {
-    x: 38.000
-    y: 38.000
+    x: 38.0
+    y: 38.0
   }
   color {
-    x: 0.100
-    y: 0.150
-    z: 0.250
+    x: 0.1
+    y: 0.15
+    z: 0.25
   }
   type: TYPE_BOX
   id: "v_call_c3_av_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.840
+  alpha: 0.84
 }
 nodes {
   position {
-    x: 557.000
-    y: 421.000
+    x: 557.0
+    y: 421.0
     z: 0.566
   }
   size {
-    x: 36.000
-    y: 16.000
+    x: 36.0
+    y: 16.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_call_c3_av_text"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 588.000
-    y: 428.000
+    x: 588.0
+    y: 428.0
     z: 0.566
   }
   size {
-    x: 360.000
-    y: 16.000
+    x: 360.0
+    y: 16.0
   }
   color {
     x: 0.953
@@ -959,47 +879,46 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_call_c3_name"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 590.000
-    y: 408.000
+    x: 590.0
+    y: 408.0
     z: 0.556
   }
   size {
-    x: 8.000
-    y: 8.000
+    x: 8.0
+    y: 8.0
   }
   color {
-    x: 0.290
-    y: 0.870
-    z: 0.500
+    x: 0.29
+    y: 0.87
+    z: 0.5
   }
   type: TYPE_BOX
   id: "v_call_c3_dir_box"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.850
+  alpha: 0.85
 }
 nodes {
   position {
-    x: 606.000
-    y: 412.000
+    x: 606.0
+    y: 412.0
     z: 0.566
   }
   size {
-    x: 360.000
-    y: 14.000
+    x: 360.0
+    y: 14.0
   }
   color {
     x: 0.788
@@ -1007,25 +926,24 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_call_c3_meta"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1124.000
-    y: 428.000
+    x: 1124.0
+    y: 428.0
     z: 0.566
   }
   size {
-    x: 52.000
-    y: 14.000
+    x: 52.0
+    y: 14.0
   }
   color {
     x: 0.788
@@ -1033,28 +951,26 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_call_c3_time"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1150.000
-    y: 406.000
+    x: 1150.0
+    y: 406.0
     z: 0.556
   }
   size {
-    x: 26.000
-    y: 16.000
+    x: 26.0
+    y: 16.0
   }
   color {
-    x: 1.000
     y: 0.239
     z: 0.498
   }
@@ -1063,43 +979,41 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.000
+  alpha: 0.0
 }
 nodes {
   position {
-    x: 1163.000
-    y: 414.000
+    x: 1163.0
+    y: 414.0
     z: 0.568
   }
   size {
-    x: 24.000
-    y: 10.000
+    x: 24.0
+    y: 10.0
   }
   color {
-    x: 0.100
-    y: 0.020
-    z: 0.060
+    x: 0.1
+    y: 0.02
+    z: 0.06
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_call_c3_badge_text"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.000
+  alpha: 0.0
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 524.000
-    y: 340.000
-    z: 0.530
+    x: 524.0
+    y: 340.0
+    z: 0.53
   }
   size {
-    x: 662.000
-    y: 50.000
+    x: 662.0
+    y: 50.0
   }
   color {
     x: 0.078
@@ -1111,87 +1025,83 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.580
+  alpha: 0.58
 }
 nodes {
   position {
-    x: 524.000
-    y: 340.000
+    x: 524.0
+    y: 340.0
     z: 0.552
   }
   size {
-    x: 3.000
-    y: 50.000
+    x: 3.0
+    y: 50.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_BOX
   id: "v_call_c4_accent"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.000
+  alpha: 0.0
 }
 nodes {
   position {
-    x: 538.000
-    y: 346.000
+    x: 538.0
+    y: 346.0
     z: 0.545
   }
   size {
-    x: 38.000
-    y: 38.000
+    x: 38.0
+    y: 38.0
   }
   color {
-    x: 0.100
-    y: 0.150
-    z: 0.250
+    x: 0.1
+    y: 0.15
+    z: 0.25
   }
   type: TYPE_BOX
   id: "v_call_c4_av_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.840
+  alpha: 0.84
 }
 nodes {
   position {
-    x: 557.000
-    y: 365.000
+    x: 557.0
+    y: 365.0
     z: 0.566
   }
   size {
-    x: 36.000
-    y: 16.000
+    x: 36.0
+    y: 16.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_call_c4_av_text"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 588.000
-    y: 372.000
+    x: 588.0
+    y: 372.0
     z: 0.566
   }
   size {
-    x: 360.000
-    y: 16.000
+    x: 360.0
+    y: 16.0
   }
   color {
     x: 0.953
@@ -1199,47 +1109,46 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_call_c4_name"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 590.000
-    y: 352.000
+    x: 590.0
+    y: 352.0
     z: 0.556
   }
   size {
-    x: 8.000
-    y: 8.000
+    x: 8.0
+    y: 8.0
   }
   color {
-    x: 0.290
-    y: 0.870
-    z: 0.500
+    x: 0.29
+    y: 0.87
+    z: 0.5
   }
   type: TYPE_BOX
   id: "v_call_c4_dir_box"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.850
+  alpha: 0.85
 }
 nodes {
   position {
-    x: 606.000
-    y: 356.000
+    x: 606.0
+    y: 356.0
     z: 0.566
   }
   size {
-    x: 360.000
-    y: 14.000
+    x: 360.0
+    y: 14.0
   }
   color {
     x: 0.788
@@ -1247,25 +1156,24 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_call_c4_meta"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1124.000
-    y: 372.000
+    x: 1124.0
+    y: 372.0
     z: 0.566
   }
   size {
-    x: 52.000
-    y: 14.000
+    x: 52.0
+    y: 14.0
   }
   color {
     x: 0.788
@@ -1273,28 +1181,26 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_call_c4_time"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1150.000
-    y: 350.000
+    x: 1150.0
+    y: 350.0
     z: 0.556
   }
   size {
-    x: 26.000
-    y: 16.000
+    x: 26.0
+    y: 16.0
   }
   color {
-    x: 1.000
     y: 0.239
     z: 0.498
   }
@@ -1303,43 +1209,41 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.000
+  alpha: 0.0
 }
 nodes {
   position {
-    x: 1163.000
-    y: 358.000
+    x: 1163.0
+    y: 358.0
     z: 0.568
   }
   size {
-    x: 24.000
-    y: 10.000
+    x: 24.0
+    y: 10.0
   }
   color {
-    x: 0.100
-    y: 0.020
-    z: 0.060
+    x: 0.1
+    y: 0.02
+    z: 0.06
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_call_c4_badge_text"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.000
+  alpha: 0.0
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 524.000
-    y: 284.000
-    z: 0.530
+    x: 524.0
+    y: 284.0
+    z: 0.53
   }
   size {
-    x: 662.000
-    y: 50.000
+    x: 662.0
+    y: 50.0
   }
   color {
     x: 0.078
@@ -1351,87 +1255,83 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.580
+  alpha: 0.58
 }
 nodes {
   position {
-    x: 524.000
-    y: 284.000
+    x: 524.0
+    y: 284.0
     z: 0.552
   }
   size {
-    x: 3.000
-    y: 50.000
+    x: 3.0
+    y: 50.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_BOX
   id: "v_call_c5_accent"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.000
+  alpha: 0.0
 }
 nodes {
   position {
-    x: 538.000
-    y: 290.000
+    x: 538.0
+    y: 290.0
     z: 0.545
   }
   size {
-    x: 38.000
-    y: 38.000
+    x: 38.0
+    y: 38.0
   }
   color {
-    x: 0.100
-    y: 0.150
-    z: 0.250
+    x: 0.1
+    y: 0.15
+    z: 0.25
   }
   type: TYPE_BOX
   id: "v_call_c5_av_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.840
+  alpha: 0.84
 }
 nodes {
   position {
-    x: 557.000
-    y: 309.000
+    x: 557.0
+    y: 309.0
     z: 0.566
   }
   size {
-    x: 36.000
-    y: 16.000
+    x: 36.0
+    y: 16.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_call_c5_av_text"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 588.000
-    y: 316.000
+    x: 588.0
+    y: 316.0
     z: 0.566
   }
   size {
-    x: 360.000
-    y: 16.000
+    x: 360.0
+    y: 16.0
   }
   color {
     x: 0.953
@@ -1439,47 +1339,46 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_call_c5_name"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 590.000
-    y: 296.000
+    x: 590.0
+    y: 296.0
     z: 0.556
   }
   size {
-    x: 8.000
-    y: 8.000
+    x: 8.0
+    y: 8.0
   }
   color {
-    x: 0.290
-    y: 0.870
-    z: 0.500
+    x: 0.29
+    y: 0.87
+    z: 0.5
   }
   type: TYPE_BOX
   id: "v_call_c5_dir_box"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.850
+  alpha: 0.85
 }
 nodes {
   position {
-    x: 606.000
-    y: 300.000
+    x: 606.0
+    y: 300.0
     z: 0.566
   }
   size {
-    x: 360.000
-    y: 14.000
+    x: 360.0
+    y: 14.0
   }
   color {
     x: 0.788
@@ -1487,25 +1386,24 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_call_c5_meta"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1124.000
-    y: 316.000
+    x: 1124.0
+    y: 316.0
     z: 0.566
   }
   size {
-    x: 52.000
-    y: 14.000
+    x: 52.0
+    y: 14.0
   }
   color {
     x: 0.788
@@ -1513,28 +1411,26 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_call_c5_time"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1150.000
-    y: 294.000
+    x: 1150.0
+    y: 294.0
     z: 0.556
   }
   size {
-    x: 26.000
-    y: 16.000
+    x: 26.0
+    y: 16.0
   }
   color {
-    x: 1.000
     y: 0.239
     z: 0.498
   }
@@ -1543,43 +1439,41 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.000
+  alpha: 0.0
 }
 nodes {
   position {
-    x: 1163.000
-    y: 302.000
+    x: 1163.0
+    y: 302.0
     z: 0.568
   }
   size {
-    x: 24.000
-    y: 10.000
+    x: 24.0
+    y: 10.0
   }
   color {
-    x: 0.100
-    y: 0.020
-    z: 0.060
+    x: 0.1
+    y: 0.02
+    z: 0.06
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_call_c5_badge_text"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.000
+  alpha: 0.0
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 524.000
-    y: 228.000
-    z: 0.530
+    x: 524.0
+    y: 228.0
+    z: 0.53
   }
   size {
-    x: 662.000
-    y: 50.000
+    x: 662.0
+    y: 50.0
   }
   color {
     x: 0.078
@@ -1591,87 +1485,83 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.580
+  alpha: 0.58
 }
 nodes {
   position {
-    x: 524.000
-    y: 228.000
+    x: 524.0
+    y: 228.0
     z: 0.552
   }
   size {
-    x: 3.000
-    y: 50.000
+    x: 3.0
+    y: 50.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_BOX
   id: "v_call_c6_accent"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.000
+  alpha: 0.0
 }
 nodes {
   position {
-    x: 538.000
-    y: 234.000
+    x: 538.0
+    y: 234.0
     z: 0.545
   }
   size {
-    x: 38.000
-    y: 38.000
+    x: 38.0
+    y: 38.0
   }
   color {
-    x: 0.100
-    y: 0.150
-    z: 0.250
+    x: 0.1
+    y: 0.15
+    z: 0.25
   }
   type: TYPE_BOX
   id: "v_call_c6_av_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.840
+  alpha: 0.84
 }
 nodes {
   position {
-    x: 557.000
-    y: 253.000
+    x: 557.0
+    y: 253.0
     z: 0.566
   }
   size {
-    x: 36.000
-    y: 16.000
+    x: 36.0
+    y: 16.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_call_c6_av_text"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 588.000
-    y: 260.000
+    x: 588.0
+    y: 260.0
     z: 0.566
   }
   size {
-    x: 360.000
-    y: 16.000
+    x: 360.0
+    y: 16.0
   }
   color {
     x: 0.953
@@ -1679,47 +1569,46 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_call_c6_name"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 590.000
-    y: 240.000
+    x: 590.0
+    y: 240.0
     z: 0.556
   }
   size {
-    x: 8.000
-    y: 8.000
+    x: 8.0
+    y: 8.0
   }
   color {
-    x: 0.290
-    y: 0.870
-    z: 0.500
+    x: 0.29
+    y: 0.87
+    z: 0.5
   }
   type: TYPE_BOX
   id: "v_call_c6_dir_box"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.850
+  alpha: 0.85
 }
 nodes {
   position {
-    x: 606.000
-    y: 244.000
+    x: 606.0
+    y: 244.0
     z: 0.566
   }
   size {
-    x: 360.000
-    y: 14.000
+    x: 360.0
+    y: 14.0
   }
   color {
     x: 0.788
@@ -1727,25 +1616,24 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_call_c6_meta"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1124.000
-    y: 260.000
+    x: 1124.0
+    y: 260.0
     z: 0.566
   }
   size {
-    x: 52.000
-    y: 14.000
+    x: 52.0
+    y: 14.0
   }
   color {
     x: 0.788
@@ -1753,28 +1641,26 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_call_c6_time"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1150.000
-    y: 238.000
+    x: 1150.0
+    y: 238.0
     z: 0.556
   }
   size {
-    x: 26.000
-    y: 16.000
+    x: 26.0
+    y: 16.0
   }
   color {
-    x: 1.000
     y: 0.239
     z: 0.498
   }
@@ -1783,43 +1669,41 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.000
+  alpha: 0.0
 }
 nodes {
   position {
-    x: 1163.000
-    y: 246.000
+    x: 1163.0
+    y: 246.0
     z: 0.568
   }
   size {
-    x: 24.000
-    y: 10.000
+    x: 24.0
+    y: 10.0
   }
   color {
-    x: 0.100
-    y: 0.020
-    z: 0.060
+    x: 0.1
+    y: 0.02
+    z: 0.06
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_call_c6_badge_text"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.000
+  alpha: 0.0
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 524.000
-    y: 172.000
-    z: 0.530
+    x: 524.0
+    y: 172.0
+    z: 0.53
   }
   size {
-    x: 662.000
-    y: 50.000
+    x: 662.0
+    y: 50.0
   }
   color {
     x: 0.078
@@ -1831,87 +1715,83 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.580
+  alpha: 0.58
 }
 nodes {
   position {
-    x: 524.000
-    y: 172.000
+    x: 524.0
+    y: 172.0
     z: 0.552
   }
   size {
-    x: 3.000
-    y: 50.000
+    x: 3.0
+    y: 50.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_BOX
   id: "v_call_c7_accent"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.000
+  alpha: 0.0
 }
 nodes {
   position {
-    x: 538.000
-    y: 178.000
+    x: 538.0
+    y: 178.0
     z: 0.545
   }
   size {
-    x: 38.000
-    y: 38.000
+    x: 38.0
+    y: 38.0
   }
   color {
-    x: 0.100
-    y: 0.150
-    z: 0.250
+    x: 0.1
+    y: 0.15
+    z: 0.25
   }
   type: TYPE_BOX
   id: "v_call_c7_av_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.840
+  alpha: 0.84
 }
 nodes {
   position {
-    x: 557.000
-    y: 197.000
+    x: 557.0
+    y: 197.0
     z: 0.566
   }
   size {
-    x: 36.000
-    y: 16.000
+    x: 36.0
+    y: 16.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_call_c7_av_text"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 588.000
-    y: 204.000
+    x: 588.0
+    y: 204.0
     z: 0.566
   }
   size {
-    x: 360.000
-    y: 16.000
+    x: 360.0
+    y: 16.0
   }
   color {
     x: 0.953
@@ -1919,47 +1799,46 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_call_c7_name"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 590.000
-    y: 184.000
+    x: 590.0
+    y: 184.0
     z: 0.556
   }
   size {
-    x: 8.000
-    y: 8.000
+    x: 8.0
+    y: 8.0
   }
   color {
-    x: 0.290
-    y: 0.870
-    z: 0.500
+    x: 0.29
+    y: 0.87
+    z: 0.5
   }
   type: TYPE_BOX
   id: "v_call_c7_dir_box"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.850
+  alpha: 0.85
 }
 nodes {
   position {
-    x: 606.000
-    y: 188.000
+    x: 606.0
+    y: 188.0
     z: 0.566
   }
   size {
-    x: 360.000
-    y: 14.000
+    x: 360.0
+    y: 14.0
   }
   color {
     x: 0.788
@@ -1967,25 +1846,24 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_call_c7_meta"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1124.000
-    y: 204.000
+    x: 1124.0
+    y: 204.0
     z: 0.566
   }
   size {
-    x: 52.000
-    y: 14.000
+    x: 52.0
+    y: 14.0
   }
   color {
     x: 0.788
@@ -1993,28 +1871,26 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_call_c7_time"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1150.000
-    y: 182.000
+    x: 1150.0
+    y: 182.0
     z: 0.556
   }
   size {
-    x: 26.000
-    y: 16.000
+    x: 26.0
+    y: 16.0
   }
   color {
-    x: 1.000
     y: 0.239
     z: 0.498
   }
@@ -2023,43 +1899,41 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.000
+  alpha: 0.0
 }
 nodes {
   position {
-    x: 1163.000
-    y: 190.000
+    x: 1163.0
+    y: 190.0
     z: 0.568
   }
   size {
-    x: 24.000
-    y: 10.000
+    x: 24.0
+    y: 10.0
   }
   color {
-    x: 0.100
-    y: 0.020
-    z: 0.060
+    x: 0.1
+    y: 0.02
+    z: 0.06
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_call_c7_badge_text"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.000
+  alpha: 0.0
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 524.000
-    y: 116.000
-    z: 0.530
+    x: 524.0
+    y: 116.0
+    z: 0.53
   }
   size {
-    x: 662.000
-    y: 50.000
+    x: 662.0
+    y: 50.0
   }
   color {
     x: 0.078
@@ -2071,87 +1945,83 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.580
+  alpha: 0.58
 }
 nodes {
   position {
-    x: 524.000
-    y: 116.000
+    x: 524.0
+    y: 116.0
     z: 0.552
   }
   size {
-    x: 3.000
-    y: 50.000
+    x: 3.0
+    y: 50.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_BOX
   id: "v_call_c8_accent"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.000
+  alpha: 0.0
 }
 nodes {
   position {
-    x: 538.000
-    y: 122.000
+    x: 538.0
+    y: 122.0
     z: 0.545
   }
   size {
-    x: 38.000
-    y: 38.000
+    x: 38.0
+    y: 38.0
   }
   color {
-    x: 0.100
-    y: 0.150
-    z: 0.250
+    x: 0.1
+    y: 0.15
+    z: 0.25
   }
   type: TYPE_BOX
   id: "v_call_c8_av_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.840
+  alpha: 0.84
 }
 nodes {
   position {
-    x: 557.000
-    y: 141.000
+    x: 557.0
+    y: 141.0
     z: 0.566
   }
   size {
-    x: 36.000
-    y: 16.000
+    x: 36.0
+    y: 16.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_call_c8_av_text"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 588.000
-    y: 148.000
+    x: 588.0
+    y: 148.0
     z: 0.566
   }
   size {
-    x: 360.000
-    y: 16.000
+    x: 360.0
+    y: 16.0
   }
   color {
     x: 0.953
@@ -2159,47 +2029,46 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_bold_14"
   id: "v_call_c8_name"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 590.000
-    y: 128.000
+    x: 590.0
+    y: 128.0
     z: 0.556
   }
   size {
-    x: 8.000
-    y: 8.000
+    x: 8.0
+    y: 8.0
   }
   color {
-    x: 0.290
-    y: 0.870
-    z: 0.500
+    x: 0.29
+    y: 0.87
+    z: 0.5
   }
   type: TYPE_BOX
   id: "v_call_c8_dir_box"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.850
+  alpha: 0.85
 }
 nodes {
   position {
-    x: 606.000
-    y: 132.000
+    x: 606.0
+    y: 132.0
     z: 0.566
   }
   size {
-    x: 360.000
-    y: 14.000
+    x: 360.0
+    y: 14.0
   }
   color {
     x: 0.788
@@ -2207,25 +2076,24 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_call_c8_meta"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1124.000
-    y: 148.000
+    x: 1124.0
+    y: 148.0
     z: 0.566
   }
   size {
-    x: 52.000
-    y: 14.000
+    x: 52.0
+    y: 14.0
   }
   color {
     x: 0.788
@@ -2233,28 +2101,26 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_call_c8_time"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1150.000
-    y: 126.000
+    x: 1150.0
+    y: 126.0
     z: 0.556
   }
   size {
-    x: 26.000
-    y: 16.000
+    x: 26.0
+    y: 16.0
   }
   color {
-    x: 1.000
     y: 0.239
     z: 0.498
   }
@@ -2263,43 +2129,41 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.000
+  alpha: 0.0
 }
 nodes {
   position {
-    x: 1163.000
-    y: 134.000
+    x: 1163.0
+    y: 134.0
     z: 0.568
   }
   size {
-    x: 24.000
-    y: 10.000
+    x: 24.0
+    y: 10.0
   }
   color {
-    x: 0.100
-    y: 0.020
-    z: 0.060
+    x: 0.1
+    y: 0.02
+    z: 0.06
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_call_c8_badge_text"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.000
+  alpha: 0.0
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 520.000
-    y: 84.000
-    z: 0.540
+    x: 520.0
+    y: 84.0
+    z: 0.54
   }
   size {
-    x: 690.000
-    y: 1.000
+    x: 690.0
+    y: 1.0
   }
   color {
     x: 0.953
@@ -2311,17 +2175,17 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.120
+  alpha: 0.12
 }
 nodes {
   position {
-    x: 524.000
-    y: 62.000
+    x: 524.0
+    y: 62.0
     z: 0.562
   }
   size {
-    x: 420.000
-    y: 14.000
+    x: 420.0
+    y: 14.0
   }
   color {
     x: 0.788
@@ -2329,61 +2193,59 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_call_footer_left"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1080.000
-    y: 50.000
+    x: 1080.0
+    y: 50.0
     z: 0.545
   }
   size {
-    x: 126.000
-    y: 26.000
+    x: 126.0
+    y: 26.0
   }
   color {
-    x: 0.290
-    y: 0.870
-    z: 0.500
+    x: 0.29
+    y: 0.87
+    z: 0.5
   }
   type: TYPE_BOX
   id: "v_call_dial_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.150
+  alpha: 0.15
 }
 nodes {
   position {
-    x: 1143.000
-    y: 63.000
+    x: 1143.0
+    y: 63.0
     z: 0.566
   }
   size {
-    x: 118.000
-    y: 12.000
+    x: 118.0
+    y: 12.0
   }
   color {
-    x: 0.290
-    y: 0.870
-    z: 0.500
+    x: 0.29
+    y: 0.87
+    z: 0.5
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_10"
   id: "v_call_dial_text"
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
+material: "/builtins/materials/gui.material"

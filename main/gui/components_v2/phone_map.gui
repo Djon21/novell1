@@ -31,6 +31,10 @@ fonts {
   name: "manrope_16"
   font: "/main/fonts/manrope_16.font"
 }
+fonts {
+  name: "jb_mono_bold_16"
+  font: "/main/fonts/jb_mono_bold_16.font"
+}
 textures {
   name: "map2"
   texture: "/main/images/phone/map2.atlas"
@@ -158,8 +162,8 @@ nodes {
 }
 nodes {
   position {
-    x: 577.6
-    y: 493.7
+    x: 624.6
+    y: 459.7
     z: 0.68
   }
   size {
@@ -172,7 +176,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\320\224\320\276\320\274"
-  font: "jb_mono_12"
+  font: "jb_mono_bold_16"
   id: "poi_home_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
@@ -183,8 +187,8 @@ nodes {
 }
 nodes {
   position {
-    x: 783.0
-    y: 230.2
+    x: 804.0
+    y: 201.2
     z: 0.68
   }
   size {
@@ -197,7 +201,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\320\240\320\260\320\261\320\276\321\202\320\260"
-  font: "jb_mono_12"
+  font: "jb_mono_bold_16"
   id: "poi_work_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
@@ -208,8 +212,8 @@ nodes {
 }
 nodes {
   position {
-    x: 1049.4
-    y: 301.6
+    x: 1053.4
+    y: 268.6
     z: 0.68
   }
   size {
@@ -222,7 +226,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\320\232\320\260\321\204\320\265"
-  font: "jb_mono_12"
+  font: "jb_mono_bold_16"
   id: "poi_cafe_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
@@ -233,8 +237,8 @@ nodes {
 }
 nodes {
   position {
-    x: 839.9
-    y: 461.7
+    x: 849.9
+    y: 425.7
     z: 0.68
   }
   size {
@@ -248,7 +252,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\320\237\320\260\321\200\320\272 \321\203 \321\200\320\265\320\272\320\270"
-  font: "jb_mono_12"
+  font: "jb_mono_bold_16"
   id: "poi_park_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
@@ -259,8 +263,8 @@ nodes {
 }
 nodes {
   position {
-    x: 799.8
-    y: 581.6
+    x: 857.8
+    y: 539.6
     z: 0.68
   }
   size {
@@ -273,7 +277,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\320\234\320\260\320\263\320\260\320\267\320\270\320\275 24/7"
-  font: "jb_mono_12"
+  font: "jb_mono_bold_16"
   id: "poi_shop_title"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
@@ -284,8 +288,8 @@ nodes {
 }
 nodes {
   position {
-    x: 666.6
-    y: 339.9
+    x: 598.6
+    y: 298.9
     z: 0.68
   }
   size {
@@ -298,7 +302,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\320\221\320\260\321\200 Maybe"
-  font: "jb_mono_12"
+  font: "jb_mono_bold_16"
   id: "poi_bar_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
@@ -309,8 +313,8 @@ nodes {
 }
 nodes {
   position {
-    x: 1029.3
-    y: 578.4
+    x: 1149.3
+    y: 608.4
     z: 0.68
   }
   size {
@@ -323,7 +327,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\320\241\320\274\320\276\321\202\321\200\320\276\320\262\320\260\321\217"
-  font: "jb_mono_12"
+  font: "jb_mono_bold_16"
   id: "poi_view_title"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
@@ -334,8 +338,8 @@ nodes {
 }
 nodes {
   position {
-    x: 1139.2
-    y: 456.3
+    x: 1096.2
+    y: 420.3
     z: 0.68
   }
   size {
@@ -348,7 +352,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\320\220\321\200\321\205\320\270\320\262"
-  font: "jb_mono_12"
+  font: "jb_mono_bold_16"
   id: "poi_archive_title"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
@@ -360,22 +364,20 @@ nodes {
 nodes {
   type: TYPE_BOX
   id: "grp_poi"
-  adjust_mode: ADJUST_MODE_STRETCH
   parent: "grp_panel"
   layer: "ui"
 }
 nodes {
   position {
-    x: 588.0
-    y: 431.0
+    x: 642.0
+    y: 412.0
   }
   size {
-    x: 0.9
-    y: 0.9
+    x: 1.0
+    y: 1.0
   }
   type: TYPE_BOX
   id: "poi_home"
-  adjust_mode: ADJUST_MODE_STRETCH
   parent: "grp_poi"
   layer: "ui"
   inherit_alpha: true
@@ -390,7 +392,6 @@ nodes {
   }
   type: TYPE_BOX
   id: "poi_home_hitbox"
-  adjust_mode: ADJUST_MODE_STRETCH
   parent: "poi_home"
   layer: "ui"
   inherit_alpha: true
@@ -402,7 +403,7 @@ nodes {
     z: 0.52
   }
   size {
-    x: 19.1
+    x: 20.0
     y: 60.3
   }
   color {
@@ -412,7 +413,6 @@ nodes {
   type: TYPE_BOX
   texture: "map2/poi_stem"
   id: "poi_home_stem"
-  adjust_mode: ADJUST_MODE_STRETCH
   parent: "poi_home"
   layer: "lines"
   inherit_alpha: true
@@ -424,8 +424,8 @@ nodes {
     z: 0.53
   }
   size {
-    x: 69.6
-    y: 68.9
+    x: 100.0
+    y: 100.0
   }
   color {
     x: 0.714
@@ -434,7 +434,6 @@ nodes {
   type: TYPE_BOX
   texture: "map2/poi_circle"
   id: "poi_home_circle"
-  adjust_mode: ADJUST_MODE_STRETCH
   parent: "poi_home"
   layer: "ui"
   inherit_alpha: true
@@ -446,8 +445,8 @@ nodes {
     z: 0.54
   }
   size {
-    x: 87.0
-    y: 86.1
+    x: 110.0
+    y: 110.0
   }
   color {
     x: 0.714
@@ -456,7 +455,6 @@ nodes {
   type: TYPE_BOX
   texture: "map2/poi_center_dark"
   id: "poi_home_center"
-  adjust_mode: ADJUST_MODE_STRETCH
   parent: "poi_home"
   layer: "ui"
   inherit_alpha: true
@@ -468,8 +466,8 @@ nodes {
     z: 0.55
   }
   size {
-    x: 38.3
-    y: 37.9
+    x: 50.0
+    y: 50.0
   }
   color {
     x: 0.714
@@ -478,15 +476,14 @@ nodes {
   type: TYPE_BOX
   texture: "map2/poi_icon_home"
   id: "poi_home_icon"
-  adjust_mode: ADJUST_MODE_STRETCH
   parent: "poi_home"
   layer: "ui"
   inherit_alpha: true
 }
 nodes {
   position {
-    x: 802.0
-    y: 160.0
+    x: 836.0
+    y: 152.0
   }
   size {
     x: 0.9
@@ -521,7 +518,7 @@ nodes {
     z: 0.52
   }
   size {
-    x: 19.1
+    x: 20.0
     y: 60.3
   }
   color {
@@ -543,8 +540,8 @@ nodes {
     z: 0.53
   }
   size {
-    x: 69.6
-    y: 68.9
+    x: 100.0
+    y: 100.0
   }
   color {
     x: 0.282
@@ -565,8 +562,8 @@ nodes {
     z: 0.54
   }
   size {
-    x: 87.0
-    y: 86.1
+    x: 110.0
+    y: 110.0
   }
   color {
     x: 0.282
@@ -587,8 +584,8 @@ nodes {
     z: 0.55
   }
   size {
-    x: 38.3
-    y: 37.9
+    x: 50.0
+    y: 50.0
   }
   color {
     x: 0.282
@@ -603,8 +600,8 @@ nodes {
 }
 nodes {
   position {
-    x: 1065.0
-    y: 240.0
+    x: 1075.0
+    y: 228.0
   }
   size {
     x: 0.9
@@ -639,7 +636,7 @@ nodes {
     z: 0.52
   }
   size {
-    x: 19.1
+    x: 20.0
     y: 60.3
   }
   color {
@@ -660,8 +657,8 @@ nodes {
     z: 0.53
   }
   size {
-    x: 69.6
-    y: 68.9
+    x: 100.0
+    y: 100.0
   }
   color {
     y: 0.71
@@ -681,8 +678,8 @@ nodes {
     z: 0.54
   }
   size {
-    x: 87.0
-    y: 86.1
+    x: 110.0
+    y: 110.0
   }
   color {
     y: 0.71
@@ -702,8 +699,8 @@ nodes {
     z: 0.55
   }
   size {
-    x: 38.3
-    y: 37.9
+    x: 50.0
+    y: 50.0
   }
   color {
     y: 0.71
@@ -719,8 +716,8 @@ nodes {
 }
 nodes {
   position {
-    x: 880.0
-    y: 401.0
+    x: 906.0
+    y: 383.0
   }
   size {
     x: 0.9
@@ -755,7 +752,7 @@ nodes {
     z: 0.52
   }
   size {
-    x: 19.1
+    x: 20.0
     y: 60.3
   }
   color {
@@ -777,8 +774,8 @@ nodes {
     z: 0.53
   }
   size {
-    x: 69.6
-    y: 68.9
+    x: 100.0
+    y: 100.0
   }
   color {
     x: 0.412
@@ -799,8 +796,8 @@ nodes {
     z: 0.54
   }
   size {
-    x: 87.0
-    y: 86.1
+    x: 110.0
+    y: 110.0
   }
   color {
     x: 0.412
@@ -821,8 +818,8 @@ nodes {
     z: 0.55
   }
   size {
-    x: 38.3
-    y: 37.9
+    x: 50.0
+    y: 50.0
   }
   color {
     x: 0.412
@@ -839,8 +836,8 @@ nodes {
 }
 nodes {
   position {
-    x: 758.0
-    y: 521.0
+    x: 797.0
+    y: 499.0
   }
   size {
     x: 0.9
@@ -875,7 +872,7 @@ nodes {
     z: 0.52
   }
   size {
-    x: 19.1
+    x: 20.0
     y: 60.3
   }
   color {
@@ -896,8 +893,8 @@ nodes {
     z: 0.53
   }
   size {
-    x: 69.6
-    y: 68.9
+    x: 100.0
+    y: 100.0
   }
   color {
     y: 0.282
@@ -917,8 +914,8 @@ nodes {
     z: 0.54
   }
   size {
-    x: 87.0
-    y: 86.1
+    x: 110.0
+    y: 110.0
   }
   color {
     y: 0.282
@@ -938,8 +935,8 @@ nodes {
     z: 0.55
   }
   size {
-    x: 38.3
-    y: 37.9
+    x: 50.0
+    y: 50.0
   }
   color {
     y: 0.282
@@ -955,8 +952,8 @@ nodes {
 }
 nodes {
   position {
-    x: 700.0
-    y: 279.0
+    x: 645.0
+    y: 259.0
   }
   size {
     x: 0.9
@@ -991,7 +988,7 @@ nodes {
     z: 0.52
   }
   size {
-    x: 19.1
+    x: 20.0
     y: 60.3
   }
   color {
@@ -1012,8 +1009,8 @@ nodes {
     z: 0.53
   }
   size {
-    x: 69.6
-    y: 68.9
+    x: 100.0
+    y: 100.0
   }
   color {
     y: 0.282
@@ -1033,8 +1030,8 @@ nodes {
     z: 0.54
   }
   size {
-    x: 87.0
-    y: 86.1
+    x: 110.0
+    y: 110.0
   }
   color {
     y: 0.282
@@ -1054,8 +1051,8 @@ nodes {
     z: 0.55
   }
   size {
-    x: 38.3
-    y: 37.9
+    x: 50.0
+    y: 50.0
   }
   color {
     y: 0.282
@@ -1071,8 +1068,8 @@ nodes {
 }
 nodes {
   position {
-    x: 1000.0
-    y: 515.0
+    x: 1105.0
+    y: 568.0
   }
   size {
     x: 0.9
@@ -1107,7 +1104,7 @@ nodes {
     z: 0.52
   }
   size {
-    x: 19.1
+    x: 20.0
     y: 60.3
   }
   color {
@@ -1128,8 +1125,8 @@ nodes {
     z: 0.53
   }
   size {
-    x: 69.6
-    y: 68.9
+    x: 100.0
+    y: 100.0
   }
   color {
     y: 0.71
@@ -1149,8 +1146,8 @@ nodes {
     z: 0.54
   }
   size {
-    x: 87.0
-    y: 86.1
+    x: 110.0
+    y: 110.0
   }
   color {
     y: 0.71
@@ -1170,8 +1167,8 @@ nodes {
     z: 0.55
   }
   size {
-    x: 38.3
-    y: 37.9
+    x: 50.0
+    y: 50.0
   }
   color {
     y: 0.71
@@ -1187,8 +1184,8 @@ nodes {
 }
 nodes {
   position {
-    x: 1121.0
-    y: 394.0
+    x: 1070.0
+    y: 379.0
   }
   size {
     x: 0.9
@@ -1223,7 +1220,7 @@ nodes {
     z: 0.52
   }
   size {
-    x: 19.1
+    x: 20.0
     y: 60.3
   }
   color {
@@ -1244,8 +1241,8 @@ nodes {
     z: 0.53
   }
   size {
-    x: 69.6
-    y: 68.9
+    x: 100.0
+    y: 100.0
   }
   color {
     x: 0.714
@@ -1265,8 +1262,8 @@ nodes {
     z: 0.54
   }
   size {
-    x: 87.0
-    y: 86.1
+    x: 110.0
+    y: 110.0
   }
   color {
     x: 0.714
@@ -1286,8 +1283,8 @@ nodes {
     z: 0.55
   }
   size {
-    x: 38.3
-    y: 37.9
+    x: 50.0
+    y: 50.0
   }
   color {
     x: 0.714
@@ -1315,13 +1312,13 @@ nodes {
 }
 nodes {
   position {
-    x: 832.0
-    y: 358.0
+    x: 467.0
+    y: 40.0
     z: 0.78
   }
   size {
-    x: 700.0
-    y: 400.0
+    x: 727.0
+    y: 604.0
   }
   color {
     x: 0.04
@@ -1330,6 +1327,7 @@ nodes {
   }
   type: TYPE_BOX
   id: "confirm_backdrop"
+  pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "grp_confirm"
   layer: "grp_confirm"
@@ -1375,7 +1373,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\320\237\320\225\320\240\320\225\320\230\320\242\320\230?"
-  font: "jb_mono_bold_14"
+  font: "jb_mono_bold_16"
   id: "confirm_title"
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "grp_confirm"
@@ -1401,7 +1399,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "..."
-  font: "jb_mono_12"
+  font: "jb_mono_bold_16"
   id: "confirm_location_name"
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "grp_confirm"
@@ -1451,7 +1449,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\320\224\320\220"
-  font: "jb_mono_bold_14"
+  font: "jb_mono_bold_16"
   id: "confirm_yes_label"
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "grp_confirm"
@@ -1500,7 +1498,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\320\235\320\225\320\242"
-  font: "jb_mono_bold_14"
+  font: "jb_mono_bold_16"
   id: "confirm_no_label"
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "grp_confirm"

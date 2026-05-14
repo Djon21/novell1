@@ -13,6 +13,12 @@ local function handle_menu(ctx, message_id, message, sender)
     if message_id == MSG.show_menu then
         ctx.show_menu()
         return true
+    elseif message_id == MSG.return_to_menu then
+        ctx.return_to_menu()
+        return true
+    elseif message_id == MSG.toggle_mute then
+        ctx.toggle_mute()
+        return true
     elseif message_id == MSG.start_game then
         ctx.start_new_run(false)
         return true

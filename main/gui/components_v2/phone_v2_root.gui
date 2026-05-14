@@ -31,9 +31,17 @@ fonts {
   name: "manrope_16"
   font: "/main/fonts/manrope_16.font"
 }
+fonts {
+  name: "unbounded_bold_64"
+  font: "/main/fonts/unbounded_bold_64.font"
+}
 textures {
   name: "icon_phone"
   texture: "/main/images/phone/icon_phone.atlas"
+}
+textures {
+  name: "ui_common"
+  texture: "/main/images/ui_common.atlas"
 }
 nodes {
   position {
@@ -57,12 +65,12 @@ nodes {
 nodes {
   position {
     x: 55.0
-    y: 64.0
+    y: 74.0
     z: 0.53
   }
   size {
     x: 380.0
-    y: 592.0
+    y: 575.0
   }
   color {
     x: 0.039
@@ -84,16 +92,16 @@ nodes {
 }
 nodes {
   position {
-    x: -4.0
+    x: 28.0
     y: 33.0
     z: 0.52
   }
   size {
-    x: 500.0
+    x: 435.0
     y: 660.0
   }
   type: TYPE_BOX
-  texture: "icon_phone/phone"
+  texture: "icon_phone/phone2"
   id: "phone_case"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
@@ -327,7 +335,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\320\241\320\234\320\241"
-  font: "jb_mono_10"
+  font: "jb_mono_bold_14"
   id: "app1_label"
   adjust_mode: ADJUST_MODE_STRETCH
   alpha: 0.82
@@ -426,7 +434,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\320\227\320\262\320\276\320\275\320\272\320\270"
-  font: "jb_mono_10"
+  font: "jb_mono_bold_14"
   id: "app2_label"
   adjust_mode: ADJUST_MODE_STRETCH
   alpha: 0.82
@@ -513,7 +521,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\320\232\320\260\321\200\321\202\320\260"
-  font: "jb_mono_10"
+  font: "jb_mono_bold_14"
   id: "app3_label"
   adjust_mode: ADJUST_MODE_STRETCH
   alpha: 0.82
@@ -602,7 +610,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\320\243\320\273\320\270\320\272\320\270"
-  font: "jb_mono_10"
+  font: "jb_mono_bold_14"
   id: "app4_label"
   adjust_mode: ADJUST_MODE_STRETCH
   alpha: 0.82
@@ -689,7 +697,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\320\232\320\262\320\265\321\201\321\202\321\213"
-  font: "jb_mono_10"
+  font: "jb_mono_bold_14"
   id: "app5_label"
   adjust_mode: ADJUST_MODE_STRETCH
   alpha: 0.82
@@ -777,7 +785,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\320\237\320\276\321\207\321\202\320\260"
-  font: "jb_mono_10"
+  font: "jb_mono_bold_14"
   id: "app6_label"
   adjust_mode: ADJUST_MODE_STRETCH
   alpha: 0.82
@@ -865,7 +873,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\320\247\320\260\321\202\321\213"
-  font: "jb_mono_10"
+  font: "jb_mono_bold_14"
   id: "app7_label"
   adjust_mode: ADJUST_MODE_STRETCH
   alpha: 0.82
@@ -953,7 +961,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\320\242\320\265\321\200\320\274\320\270\320\275\320\260\320\273"
-  font: "jb_mono_10"
+  font: "jb_mono_bold_14"
   id: "app8_label"
   adjust_mode: ADJUST_MODE_STRETCH
   alpha: 0.82
@@ -1253,13 +1261,13 @@ nodes {
 }
 nodes {
   position {
-    x: 1199.0
-    y: 651.0
+    x: 1193.0
+    y: 646.0
     z: 0.59
   }
   size {
-    x: 26.0
-    y: 26.0
+    x: 32.0
+    y: 32.0
   }
   color {
     x: 0.031
@@ -1274,97 +1282,13 @@ nodes {
 }
 nodes {
   position {
-    x: 1199.0
-    y: 676.0
-    z: 0.591
-  }
-  size {
-    x: 26.0
-    y: 1.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_BOX
-  id: "close_btn_border_t"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.3
-}
-nodes {
-  position {
-    x: 1199.0
-    y: 651.0
-    z: 0.591
-  }
-  size {
-    x: 26.0
-    y: 1.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_BOX
-  id: "close_btn_border_b"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.3
-}
-nodes {
-  position {
-    x: 1199.0
-    y: 651.0
-    z: 0.591
-  }
-  size {
-    x: 1.0
-    y: 26.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_BOX
-  id: "close_btn_border_l"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.3
-}
-nodes {
-  position {
-    x: 1224.0
-    y: 651.0
-    z: 0.591
-  }
-  size {
-    x: 1.0
-    y: 26.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_BOX
-  id: "close_btn_border_r"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.3
-}
-nodes {
-  position {
-    x: 1212.0
-    y: 664.0
-    z: 0.594
-  }
-  size {
-    x: 26.0
+    x: 15.0
     y: 18.0
+    z: 0.094
+  }
+  size {
+    x: 30.0
+    y: 30.0
   }
   color {
     y: 0.0
@@ -1372,9 +1296,10 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\303\227"
-  font: "unbounded_bold_32"
+  font: "unbounded_bold_64"
   id: "close_x"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "close_btn"
   alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0

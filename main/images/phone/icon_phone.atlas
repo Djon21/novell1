@@ -29,9 +29,9 @@ images {
   image: "/main/images/phone/phone_screen_rounded_128.png"
 }
 images {
-  image: "/main/images/phone/phone.png"
+  image: "/main/images/phone/ico_fon.png"
 }
 images {
-  image: "/main/images/phone/ico_fon.png"
+  image: "/main/images/phone/phone2.png"
 }
 extrude_borders: 2

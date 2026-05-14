@@ -11,6 +11,12 @@ function M.show_menu(ctx)
     ctx.set_base_mode("menu")
     ctx.set_at_end(false)
     ctx.reset_dialogue_play_modes()
+    ctx.overlays.choice = false
+    ctx.overlays.inventory = false
+    ctx.overlays.phone = false
+    ctx.overlays.map = false
+    ctx.overlays.backlog = false
+    M.sync_modal_state(ctx.overlays)
 
     msg.post(ctx.components.hud,       "hide_hud")
     msg.post(ctx.components.dialogue,  "hide_dialogue")

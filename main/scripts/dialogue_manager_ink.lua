@@ -956,6 +956,18 @@ function M.has_knot(knot_name)
     return story_knot_index[knot_name] == true
 end
 
+-- Dev/testing helper: принудительно выставить Ink-переменную перед прыжком
+-- в checkpoint. В обычном сценарии переменные меняет только Ink.
+function M.set_var(name, value, track_in_state)
+    if not name or name == "" then return false end
+    local ok, err = pcall(set_story_value, name, value, track_in_state == true)
+    if not ok then
+        log.warn("dm", "dev set_var failed:", tostring(name), tostring(err))
+        return false
+    end
+    return true
+end
+
 function M.set_inventory_action_context(ctx)
     set_inventory_story_context(ctx)
 end

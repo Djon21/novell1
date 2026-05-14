@@ -102,6 +102,7 @@ nodes {
   font: "jb_mono_16"
   id: "meta"
   pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
   parent: "left_menu_root"
   alpha: 0.6
   outline_alpha: 0.0
@@ -132,6 +133,7 @@ nodes {
     y: 0.101960786
     z: 0.101960786
   }
+  adjust_mode: ADJUST_MODE_STRETCH
   parent: "left_menu_root"
   shadow_alpha: 0.0
 }
@@ -155,6 +157,7 @@ nodes {
   font: "unbounded_bold_20"
   id: "mi_continue"
   pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
   parent: "left_menu_root"
   alpha: 0.78
   outline_alpha: 0.0
@@ -180,6 +183,7 @@ nodes {
   font: "unbounded_bold_20"
   id: "mi_gallery"
   pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
   parent: "left_menu_root"
   alpha: 0.78
   outline_alpha: 0.0
@@ -205,6 +209,7 @@ nodes {
   font: "unbounded_bold_20"
   id: "mi_achievements"
   pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
   parent: "left_menu_root"
   alpha: 0.78
   outline_alpha: 0.0
@@ -229,6 +234,7 @@ nodes {
   font: "jb_mono_16"
   id: "eyebrow"
   pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
   parent: "left_menu_root"
   outline_alpha: 0.0
   shadow_alpha: 0.0
@@ -246,6 +252,7 @@ nodes {
   xanchor: XANCHOR_LEFT
   yanchor: YANCHOR_TOP
   pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
   parent: "left_menu_root"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
@@ -371,8 +378,9 @@ nodes {
   type: TYPE_BOX
   id: "dossier_card"
   xanchor: XANCHOR_RIGHT
-  yanchor: YANCHOR_TOP
+  yanchor: YANCHOR_BOTTOM
   pivot: PIVOT_SE
+  adjust_mode: ADJUST_MODE_STRETCH
   parent: "menu_root"
   alpha: 0.96
 }
