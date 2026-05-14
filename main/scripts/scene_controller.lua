@@ -237,15 +237,6 @@ function M.on_hotspot_click(index)
     elseif action.type == "remove_item" then
         gs.remove_item(action.item)
         render()
-    elseif action.type == "phone_close" then
-        -- Закрыть телефон и вернуться в сцену-вызыватель.
-        local caller = gs.get_flag("_phone_return_scene")
-        if caller then
-            gs.set_flag("_phone_return_scene", nil)
-            M.enter(caller)
-        else
-            M.return_to_last_scene()
-        end
     elseif action.type == "ink_knot" then
         -- Сохраняем фон текущей сцены, чтобы короткий ink-монолог
         -- (drink_coffee/take_phone/…) играл на том же фоне, а не на
