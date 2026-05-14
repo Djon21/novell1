@@ -279,19 +279,6 @@ return {
                     return not (gs.get_flag("park_place_chosen") and not gs.get_flag("met_npc_sunday"))
                 end,
             },
-            {
-                id = "leave_park_from_bench",
-                rect = { x = 1110, y = 0, w = 170, h = 220 },
-                label = "Уйти",
-                icon = "arrow_forward",
-                hotspot_style = STYLE_NAV,
-                icon_offset_x = -4,
-                icon_offset_y = 0,
-                action = { type = "ink_knot", knot = "leave_park" },
-                visible_when = function(gs)
-                    return not (gs.get_flag("park_place_chosen") and not gs.get_flag("met_npc_sunday"))
-                end,
-            },
         },
     },
 
@@ -364,19 +351,6 @@ return {
                 icon_offset_x = -4,
                 icon_offset_y = 0,
                 action = { type = "goto_scene", scene = "park_hub" },
-                visible_when = function(gs)
-                    return not (gs.get_flag("park_place_chosen") and not gs.get_flag("met_npc_sunday"))
-                end,
-            },
-            {
-                id = "leave_park_from_path",
-                rect = { x = 1110, y = 0, w = 170, h = 220 },
-                label = "Уйти",
-                icon = "arrow_forward",
-                hotspot_style = STYLE_NAV,
-                icon_offset_x = -4,
-                icon_offset_y = 0,
-                action = { type = "ink_knot", knot = "leave_park" },
                 visible_when = function(gs)
                     return not (gs.get_flag("park_place_chosen") and not gs.get_flag("met_npc_sunday"))
                 end,

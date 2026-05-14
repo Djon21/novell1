@@ -28,12 +28,32 @@
     ~ mc_gender = "male"
     ~ mc_name = "Артём"
     ~ npc_name = "Мила"
+    ~ mc_name_gen = "Артёма"
+    ~ npc_name_gen = "Милы"
+    ~ mc_name_dat = "Артёму"
+    ~ npc_name_dat = "Миле"
+    ~ mc_name_acc = "Артёма"
+    ~ npc_name_acc = "Милу"
+    ~ mc_name_ins = "Артёмом"
+    ~ npc_name_ins = "Милой"
+    ~ mc_name_prep = "Артёме"
+    ~ npc_name_prep = "Миле"
     -> apartment_start
 
 * [Мила]
     ~ mc_gender = "female"
     ~ mc_name = "Мила"
     ~ npc_name = "Артём"
+    ~ mc_name_gen = "Милы"
+    ~ npc_name_gen = "Артёма"
+    ~ mc_name_dat = "Миле"
+    ~ npc_name_dat = "Артёму"
+    ~ mc_name_acc = "Милу"
+    ~ npc_name_acc = "Артёма"
+    ~ mc_name_ins = "Милой"
+    ~ npc_name_ins = "Артёмом"
+    ~ mc_name_prep = "Миле"
+    ~ npc_name_prep = "Артёме"
     -> apartment_start
 
 

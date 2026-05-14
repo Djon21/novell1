@@ -3,6 +3,7 @@
 Документация разделена на:
 - **reference** — архитектурные документы, source-of-truth для структуры.
 - **guides** — практические how-to и описания систем.
+- **scenario_context** — сжатый пакет документов для GPT-проекта по сценарию, хабам, локациям и хотспотам.
 - **archive** — история миграции, не источник правды.
 
 ## Читать Первым
@@ -11,7 +12,8 @@
 2. `reference/CODEX_CONTEXT.md` — быстрый вход для AI/новой сессии
 3. `reference/ARCHITECTURE.md` — runtime + основные модули
 4. `guides/HOW_TO_WRITE_INK.md` — ink-теги, паттерны
-5. `reference/TODO.md` — живые хвосты
+5. `scenario_context/README.md` — компактный контекст для GPT, который помогает со сценарием и хабами
+6. `reference/TODO.md` — живые хвосты
 
 ## Reference
 

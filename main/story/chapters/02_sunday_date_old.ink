@@ -37,7 +37,6 @@
 === sunday_date_go_park ===
 # set_flag:date_route_chosen=true
 ~ date_route_chosen = true
-# map:lock_all
 # explore:park_hub
 -> DONE
 
@@ -216,7 +215,6 @@
 
 # set_flag:park_arrived=true
 ~ park_arrived = true
-# map:lock_all
 # return_to_scene
 -> DONE
 
@@ -640,9 +638,6 @@
 # speaker:none
 {met_npc_sunday:
 Ты выходишь с набережной. Телефон уже в руке — можно выбрать, куда идти дальше.
-# map:allow:reset
-# map:allow:poi_shop
-# map:allow:poi_view
 # phone:map
 - else:
     {park_place_chosen:

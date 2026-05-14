@@ -90,26 +90,34 @@ end
 -- Перерисовать состояние всех POI-кружков. Вызывается при open_app,
 -- refresh_app и любом изменении allowed-set из ink-тегов
 -- # map:allow:poi_X / # map:lock_to:poi_X.
+--
+-- Использует self.spinning_pois для трекинга: если POI УЖЕ крутится —
+-- не перезапускаем (иначе start_poi_spin сделает cancel + set_rotation(0)
+-- → визуальный «прыжок» на 0 каждый refresh).
 local function refresh_pois(self)
+    self.spinning_pois = self.spinning_pois or {}
     for poi_id, _ in pairs(POI_SCENES) do
         local circle = get_node(poi_id .. "_circle")
         if circle then
             local allowed = (not gs.map_is_poi_allowed) or gs.map_is_poi_allowed(poi_id)
-            if allowed then
+            if allowed and not self.spinning_pois[poi_id] then
                 start_poi_spin(circle)
-            else
+                self.spinning_pois[poi_id] = true
+            elseif not allowed and self.spinning_pois[poi_id] then
                 stop_poi_spin(circle)
+                self.spinning_pois[poi_id] = nil
             end
         end
     end
 end
 
 -- Полный стоп — экономит CPU когда карта закрыта.
-local function stop_all_pois()
+local function stop_all_pois(self)
     for poi_id, _ in pairs(POI_SCENES) do
         local circle = get_node(poi_id .. "_circle")
         if circle then stop_poi_spin(circle) end
     end
+    if self then self.spinning_pois = {} end
 end
 
 -- -----------------------------------------------------------------------
@@ -136,7 +144,7 @@ function on_message(self, message_id, message, sender)
     elseif message_id == hash("close_app") then
         self.visible = false
         hide_confirm(self)
-        stop_all_pois()             -- не крутим в скрытом app — экономия CPU
+        stop_all_pois(self)         -- не крутим в скрытом app — экономия CPU
         set_root_enabled(false)
     end
 end

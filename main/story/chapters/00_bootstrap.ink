@@ -7,6 +7,20 @@ VAR mc_gender = "male"
 VAR mc_name = "Артём"
 VAR npc_name = "Мила"
 
+// Склонения текущих имён для живого русского текста.
+// По умолчанию игрок — Артём, NPC — Мила; при выборе персонажа
+// значения переопределяются в 01_apartment.ink.
+VAR mc_name_gen = "Артёма"
+VAR npc_name_gen = "Милы"
+VAR mc_name_dat = "Артёму"
+VAR npc_name_dat = "Миле"
+VAR mc_name_acc = "Артёма"
+VAR npc_name_acc = "Милу"
+VAR mc_name_ins = "Артёмом"
+VAR npc_name_ins = "Милой"
+VAR mc_name_prep = "Артёме"
+VAR npc_name_prep = "Миле"
+
 VAR iteration_number = 1
 VAR iteration_label = "001"
 VAR loop_awareness = 0

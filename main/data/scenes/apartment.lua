@@ -231,7 +231,7 @@ return {
         hotspots = {
             {
                 id = "bathroom_mirror",
-                rect = { x = 500, y = 300, w = 280, h = 240 },
+                rect = { x = 1025, y = 465, w = 180, h = 105 },
                 label = "Зеркало",
                 icon = "left_click",
                 hotspot_style = STYLE_INSPECT,
@@ -241,7 +241,7 @@ return {
             },
             {
                 id = "bathroom_toothbrush",
-                rect = { x = 570, y = 210, w = 105, h = 105 },
+                rect = { x = 870, y = 300, w = 105, h = 105 },
                 label = "Щётка",
                 icon = "left_click",
                 hotspot_style = STYLE_PICKUP,
@@ -256,7 +256,7 @@ return {
             },
             {
                 id = "bathroom_toothpaste",
-                rect = { x = 690, y = 210, w = 105, h = 105 },
+                rect = { x = 1115, y = 290, w = 105, h = 105 },
                 label = "Паста",
                 icon = "left_click",
                 hotspot_style = STYLE_PICKUP,
@@ -271,7 +271,7 @@ return {
             },
             {
                 id = "bathroom_sink",
-                rect = { x = 500, y = 115, w = 350, h = 190 },
+                rect = { x = 985, y = 175, w = 105, h = 105 },
                 label = "Раковина",
                 icon = "left_click",
                 hotspot_style = STYLE_ITEM_TARGET,
@@ -284,7 +284,7 @@ return {
             },
             {
                 id = "bathroom_exit_locked",
-                rect = { x = 25, y = 70, w = 180, h = 560 },
+                rect = { x = 85, y = 70, w = 180, h = 560 },
                 label = "В спальню",
                 icon = "arrow_back",
                 hotspot_style = STYLE_STORY,
@@ -298,7 +298,7 @@ return {
             },
             {
                 id = "back_to_bedroom_from_bathroom",
-                rect = { x = 25, y = 70, w = 180, h = 560 },
+                rect = { x = 85, y = 70, w = 180, h = 560 },
                 label = "В спальню",
                 icon = "arrow_back",
                 hotspot_style = STYLE_NAV,

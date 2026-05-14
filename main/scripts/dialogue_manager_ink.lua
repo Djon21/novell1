@@ -135,6 +135,43 @@ local function resolve_speaker(value)
     return value   -- literal name
 end
 
+local function name_case_forms_for_gender(gender)
+    if gender == "female" then
+        return {
+            mc_name_gen   = "Милы",
+            npc_name_gen  = "Артёма",
+            mc_name_dat   = "Миле",
+            npc_name_dat  = "Артёму",
+            mc_name_acc   = "Милу",
+            npc_name_acc  = "Артёма",
+            mc_name_ins   = "Милой",
+            npc_name_ins  = "Артёмом",
+            mc_name_prep  = "Миле",
+            npc_name_prep = "Артёме",
+        }
+    end
+
+    return {
+        mc_name_gen   = "Артёма",
+        npc_name_gen  = "Милы",
+        mc_name_dat   = "Артёму",
+        npc_name_dat  = "Миле",
+        mc_name_acc   = "Артёма",
+        npc_name_acc  = "Милу",
+        mc_name_ins   = "Артёмом",
+        npc_name_ins  = "Милой",
+        mc_name_prep  = "Артёме",
+        npc_name_prep = "Миле",
+    }
+end
+
+local function push_name_case_forms(gender, track_in_state)
+    if not set_story_value then return end
+    for key, value in pairs(name_case_forms_for_gender(gender)) do
+        set_story_value(key, value, track_in_state)
+    end
+end
+
 local function build_loop_intro()
     local awareness = tonumber(meta.get("loop_awareness", 0)) or 0
     if awareness <= 0 then
@@ -553,9 +590,11 @@ end
 local function push_vars_to_ink(track_in_state)
     if not story then return end
 
-    set_story_value("mc_gender", sm.get_gender() or "male", track_in_state)
+    local gender = sm.get_gender() or "male"
+    set_story_value("mc_gender", gender, track_in_state)
     set_story_value("mc_name", sm.get_mc_name(), track_in_state)
     set_story_value("npc_name", sm.get_npc_name(), track_in_state)
+    push_name_case_forms(gender, track_in_state)
     set_story_value("iteration_number",    meta.get("iteration_number", 1),    track_in_state)
     set_story_value("iteration_label",     meta.get_iteration_label(),          track_in_state)
     set_story_value("loop_awareness",      meta.get("loop_awareness", 0),       track_in_state)
@@ -596,6 +635,11 @@ local function build_restore_history(saved_state)
         { name = "false_endings_count", value = meta.get_false_endings_count() },
     }
 
+    local form_values = name_case_forms_for_gender(sm.get_gender() or "male")
+    for key, value in pairs(form_values) do
+        table.insert(injected, { name = key, value = value })
+    end
+
     for _, entry in ipairs(injected) do
         table.insert(history.input, entry)
     end
@@ -623,6 +667,7 @@ local function pull_gender_from_ink()
         -- пересчитываются save_manager'ом автоматически).
         story.variables.mc_name  = sm.get_mc_name()
         story.variables.npc_name = sm.get_npc_name()
+        push_name_case_forms(ink_gender, false)
     end
 end
 
