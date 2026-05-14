@@ -172,8 +172,10 @@ end
   оставлено в gui_script.
 - `phone_messenger.clamp_text` — у него своя логика (байтовая, с "..." вместо "…").
   Если хочешь привести к стандарту — миграция рискованная без визуальной проверки.
-- Анимации специальные (pulsing, bobbing, кросс-фейды) — это к
-  `gui_animations.lua` (отдельный модуль).
+- Анимации (pulsing, bobbing, кросс-фейды) — делаются прямо через
+  `gui.animate(node, "color.w", ...)` в gui_script'е. Раньше была заготовка
+  `gui_animations.lua` с готовыми хелперами, но она не прижилась — каждый
+  компонент использует свои inline-анимации, удалена в мае 2026.
 
 ## Куда ещё применить
 
@@ -194,5 +196,5 @@ end
 ## См. также
 
 - `docs/guides/DRAG_SCROLL.md` — модуль drag-to-scroll, родственник gui_utils.
-- `main/gui/modules/gui_animations.lua` — pulsing/bobbing/easing анимации.
-- `main/gui/modules/v2_theme.lua` — централизованные цвета и шрифты UI.
+- `docs/guides/MESSAGES.md` — реестр msg-сообщений.
+- `docs/guides/LOGGING.md` — единый logger.

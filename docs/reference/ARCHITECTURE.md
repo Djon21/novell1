@@ -195,8 +195,6 @@ Git Bash / Linux:
 - `messages.lua` — реестр всех `hash("...")` сообщений (`MSG.dialogue_next` и т.п.).
 - `gui_utils.lua` — общие GUI-хелперы (get_node, set_text, set_color, clamp_text, flash_node).
 - `drag_scroll.lua` — drag-to-scroll state-машина для phone-app'ов.
-- `gui_animations.lua` — pulsing/bobbing/easing анимации.
-- `v2_theme.lua` — централизованные цвета и шрифты.
 
 В `main/scripts/`:
 

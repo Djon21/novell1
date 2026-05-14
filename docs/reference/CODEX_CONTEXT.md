@@ -78,8 +78,6 @@
 - `drag_scroll.lua` — общий drag-to-scroll для phone-app'ов.
 - `gui_utils.lua` — общие GUI-хелперы (get_node, set_text, set_color, clamp_text,
   flash_node).
-- `gui_animations.lua` — pulsing/bobbing/easing.
-- `v2_theme.lua` — централизованные цвета и шрифты.
 
 ## Что Важно Помнить
 
