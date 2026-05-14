@@ -136,13 +136,6 @@ local function set_box(id, x, y, w, h, color, alpha, z)
     set_color(id, color, alpha)
 end
 
-local function set_border(prefix, x, y, w, h, color, alpha)
-    set_box(prefix .. "_top", x, y + h - 1, w, 1, color, alpha, 0.545)
-    set_box(prefix .. "_bottom", x, y, w, 1, color, alpha, 0.545)
-    set_box(prefix .. "_left", x, y, 1, h, color, alpha, 0.545)
-    set_box(prefix .. "_right", x + w - 1, y, 1, h, color, alpha, 0.545)
-end
-
 local function set_border_color(prefix, color, alpha)
     set_color(prefix .. "_top", color, alpha)
     set_color(prefix .. "_bottom", color, alpha)

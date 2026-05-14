@@ -148,33 +148,6 @@ local function click_flash(node)
     end)
 end
 
-local function make_box(parent, x, y, z, w, h, color)
-    local n = gui.new_box_node(vmath.vector3(x, y, z), vmath.vector3(w, h, 0))
-    gui.set_pivot(n, gui.PIVOT_SW)
-    gui.set_adjust_mode(n, gui.ADJUST_FIT)
-    gui.set_color(n, color)
-    if parent then gui.set_parent(n, parent, false) end
-    return n
-end
-
-local function make_text(parent, x, y, z, w, h, text, font, color, pivot)
-    local n = gui.new_text_node(vmath.vector3(x, y, z), text or "")
-    gui.set_pivot(n, pivot or gui.PIVOT_W)
-    gui.set_size(n, vmath.vector3(w, h, 0))
-    gui.set_font(n, font)
-    gui.set_adjust_mode(n, gui.ADJUST_FIT)
-    gui.set_color(n, color)
-    pcall(gui.set_line_break, n, true)
-    if parent then gui.set_parent(n, parent, false) end
-    return n
-end
-
-local function set_nodes_enabled(nodes, enabled)
-    for _, n in pairs(nodes or {}) do
-        if n then gui.set_enabled(n, enabled) end
-    end
-end
-
 local function ensure_backlog_nodes(self)
     if self.backlog_nodes then return end
     local n = {
@@ -190,10 +163,6 @@ local function set_dialogue_log_button_visible(self, visible)
     ensure_backlog_nodes(self)
     gui.set_enabled(self.backlog_nodes.btn_log, visible)
     gui.set_enabled(self.backlog_nodes.btn_log_label, visible)
-end
-
-local function refresh_backlog_view(self)
-    -- Backlog modal lives in hud_v2.gui_script.
 end
 
 local function set_backlog_open(self, open)

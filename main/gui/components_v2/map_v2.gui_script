@@ -14,7 +14,6 @@
 --   "map_verb" {pin_id, verb}           — verb ∈ {"route","save","share"}
 --   "map_hub_route" {knot}              — в hub-режиме: закрыть карту и прыгнуть в knot
 
-local theme = require "main.gui.modules.v2_theme"
 local meta = require "main.scripts.meta_state"
 
 local UI_MGR = "#ui_manager_v2"

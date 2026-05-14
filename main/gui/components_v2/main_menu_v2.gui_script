@@ -27,12 +27,7 @@ local LOGO_BASE = {
 
 -- Confirm-модалка подтверждения для «Сбросить итерацию» теперь лежит
 -- в main_menu_v2.gui. Скрипт только проставляет l10n-текст и включает/выключает ноды.
-local CONFIRM_BG_COLOR     = vmath.vector4(0.0, 0.0, 0.0, 0.85)
-local CONFIRM_BOX_COLOR    = vmath.vector4(0.06, 0.06, 0.10, 1.0)
-local CONFIRM_BORDER_COLOR = vmath.vector4(0.49, 0.976, 1.0, 1.0)
-local CONFIRM_TEXT_COLOR   = vmath.vector4(0.952, 0.925, 0.85, 1.0)
-local CONFIRM_YES_COLOR    = vmath.vector4(1.0, 0.55, 0.55, 1.0)
-local CONFIRM_NO_COLOR     = vmath.vector4(0.49, 0.976, 1.0, 1.0)
+-- (Цвета CONFIRM_* удалены — все стили живут в .gui.)
 
 local LOGO_Y = 498
 

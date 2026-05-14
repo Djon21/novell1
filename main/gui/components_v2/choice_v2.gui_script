@@ -357,49 +357,6 @@ local function normalize_loop_label(v)
     return string.upper(text)
 end
 
-local function normalize_location_text(v)
-    v = coalesce(v)
-    if not v then return nil end
-    local text = tostring(v)
-    local lower = string.lower(text)
-    if string.find(lower, "location unknown")
-        or string.find(text, "локация неизвест")
-        or string.find(text, "Локация неизвест")
-        or string.find(text, "ЛОКАЦИЯ НЕИЗВЕСТ") then
-        return nil
-    end
-    return string.upper(text)
-end
-
-local function format_location_text(message)
-    message = message or {}
-
-    -- message.name in show_choice is speaker/who_name, not location.
-    local explicit = normalize_location_text(coalesce(
-        message.location_label,
-        message.current_location_label,
-        message.location_name,
-        message.scene_label,
-        message.location,
-        message.current_location
-    ))
-    if explicit then return explicit end
-
-    local from_hud = normalize_location_text(current_location_name)
-    if from_hud then return from_hud end
-
-    local from_shared_state = normalize_location_text(coalesce(
-        ui_state.current_location_name,
-        ui_state.location_name
-    ))
-    if from_shared_state then return from_shared_state end
-
-    local legacy = normalize_location_text(coalesce(message.meta, message.location_time, message.time_label))
-    if legacy then return legacy end
-
-    return ""
-end
-
 local function remember_location(message)
     message = message or {}
 

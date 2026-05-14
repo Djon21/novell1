@@ -27,8 +27,8 @@ local _active   = false
 --   index = номер в массиве scene_data.hotspots / scene_data.objects
 local _sel = { kind = "hotspot", index = 1 }
 
-local STEP_SMALL = 5
-local STEP_LARGE = 20
+-- Шаги клавиатуры (5 px / Shift = 20 px) хардкодом в hotspots_v2.gui_script
+-- на вызовах nudge — здесь не дублируем.
 
 -- ------------------------------------------------------------
 -- Внутреннее

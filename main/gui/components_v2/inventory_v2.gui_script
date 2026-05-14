@@ -73,9 +73,7 @@ local CHROME_NODES = {
 
 -- Colors (mirror the v2 palette used in .gui).
 local COLOR_PAPER       = vmath.vector4(0.952, 0.925, 0.850, 1.00)
-local COLOR_PAPER_DIM   = vmath.vector4(0.952, 0.925, 0.850, 0.55)
 local COLOR_ACCENT      = vmath.vector4(0.490, 0.976, 1.000, 1.00)
-local COLOR_ACCENT_DIM  = vmath.vector4(0.490, 0.976, 1.000, 0.35)
 local COLOR_HOT         = vmath.vector4(1.000, 0.239, 0.498, 1.00)
 local COLOR_AMBER       = vmath.vector4(1.000, 0.702, 0.278, 1.00)
 local COLOR_VIOLET      = vmath.vector4(0.478, 0.361, 1.000, 1.00)

@@ -99,8 +99,6 @@ local CHAT_META = {
     changelog = { name = "avos · changelog", av = "АВ", tone = "amber", status = "канал", channel = true },
 }
 
-local EMPTY_CHAT_ID = nil
-
 -- Runtime list-row clones. В .gui держим chat1_* как prototype, а слоты
 -- chat2..chat7 создаём через gui.clone_tree(chat1_bg). Ключи clone_tree
 -- остаются id оригинального дерева: "messenger_list/chat1_name" / "chat1_name".
@@ -250,12 +248,6 @@ local function set_size_y(id, height)
         local s = gui.get_size(n)
         gui.set_size(n, vmath.vector3(s.x, height, s.z))
     end
-end
-
-local function get_pos(id)
-    local n = get_node(id)
-    if n then return gui.get_position(n) end
-    return vmath.vector3(0, 0, 0)
 end
 
 local function set_pos_y(id, y)
