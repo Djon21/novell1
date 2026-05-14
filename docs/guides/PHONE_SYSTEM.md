@@ -49,9 +49,11 @@
 
 - `phone_v2.gui` + `phone_v2.gui_script` — старый монолит, остался на диске для справки,
   в коллекцию не подключён. Можно удалить после стабилизации сплита.
-- `phone_cam.gui` + `phone_cam.gui_script` — приложение «камера», заменено на
-  `phone_messenger`. Файлы остались на диске, в коллекцию больше не включены.
 - `phone_map_beautiful.gui` — заготовка нового дизайна карты, пока не используется.
+
+Удалены в мае 2026: `phone_cam.gui`/`.gui_script` и весь camera-channel
+в game_state (set/get/reset_camera_feed), парсинг `# camera:` ink-тега,
+обработчик в dm_commands. Заменены полноценно на `phone_messenger`.
 
 ---
 

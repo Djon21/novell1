@@ -1,6 +1,6 @@
 -- game_state.lua
 -- Единый источник правды для point-and-click слоя.
--- Хранит flags, inventory, quests, current_scene + camera/terminal/map_pois.
+-- Хранит flags, inventory, quests, current_scene + terminal/map_pois.
 -- Канальные домены (sms, messenger, mail, calls, clues, notes) вынесены
 -- в main/scripts/state/<channel>.lua — этот файл их подключает и
 -- ре-экспортирует как M.add_sms / M.get_messages / etc. для обратной
@@ -43,23 +43,12 @@ local _listeners   = {}
 local _map_allowed_pois = {}
 local _map_all_pois_locked = false
 
--- Camera feed (вьюха «камера» в телефоне). Один активный канал.
 local TERMINAL_MAX_LINES = 4
-local DEFAULT_CAMERA = {
-    status  = "offline",
-    message = "канал закрыт",
-    meta    = "v0",
-}
 local DEFAULT_TERMINAL_LINES = {
     { level = "ok",     text = "[OK] AVOS-CLI ready"     },
     { level = "info",   text = "$ help"                  },
     { level = "info",   text = "1. logs · 2. cam · 3. ?" },
     { level = "prompt", text = "_"                       },
-}
-local _camera = {
-    status  = DEFAULT_CAMERA.status,
-    message = DEFAULT_CAMERA.message,
-    meta    = DEFAULT_CAMERA.meta,
 }
 local _terminal_lines = {}
 
@@ -88,19 +77,6 @@ local function sanitize_inventory(src)
         end
     end
     return out
-end
-
-local CAMERA_STATUSES = { offline = true, online = true, error = true }
-
-local function normalize_camera_state()
-    local raw = type(_camera) == "table" and _camera or {}
-    local status = raw.status
-    if not CAMERA_STATUSES[status] then status = DEFAULT_CAMERA.status end
-    _camera = {
-        status  = status,
-        message = tostring(raw.message or DEFAULT_CAMERA.message),
-        meta    = tostring(raw.meta    or DEFAULT_CAMERA.meta),
-    }
 end
 
 local TERMINAL_LEVELS = {
@@ -191,11 +167,6 @@ function M.reset()
     notes_state.reset()
     _map_allowed_pois = {}
     _map_all_pois_locked = false
-    _camera = {
-        status  = DEFAULT_CAMERA.status,
-        message = DEFAULT_CAMERA.message,
-        meta    = DEFAULT_CAMERA.meta,
-    }
     seed_default_terminal()
     _current_scene = nil
     M._notify()
@@ -336,54 +307,6 @@ function M.get_messages()
         end
     end
     return out
-end
-
--- ---------------------------------------------------------------------------
--- Camera feed
--- ---------------------------------------------------------------------------
-
-function M.set_camera_feed(opts)
-    if type(opts) ~= "table" then return end
-    local changed = false
-    if opts.status ~= nil and CAMERA_STATUSES[opts.status] and _camera.status ~= opts.status then
-        _camera.status = opts.status
-        changed = true
-    end
-    if opts.message ~= nil then
-        local new_msg = tostring(opts.message)
-        if _camera.message ~= new_msg then
-            _camera.message = new_msg
-            changed = true
-        end
-    end
-    if opts.meta ~= nil then
-        local new_meta = tostring(opts.meta)
-        if _camera.meta ~= new_meta then
-            _camera.meta = new_meta
-            changed = true
-        end
-    end
-    if changed then M._notify() end
-end
-
-function M.reset_camera_feed()
-    if _camera.status == DEFAULT_CAMERA.status
-       and _camera.message == DEFAULT_CAMERA.message
-       and _camera.meta == DEFAULT_CAMERA.meta then
-        return
-    end
-    _camera.status  = DEFAULT_CAMERA.status
-    _camera.message = DEFAULT_CAMERA.message
-    _camera.meta    = DEFAULT_CAMERA.meta
-    M._notify()
-end
-
-function M.get_camera_feed()
-    return {
-        status  = _camera.status,
-        message = _camera.message,
-        meta    = _camera.meta,
-    }
 end
 
 -- ---------------------------------------------------------------------------
@@ -532,7 +455,6 @@ function M.serialize()
         flags          = _flags,
         inventory      = H.clone_array(_inventory),
         quests         = _quests,
-        camera         = H.clone_value(_camera),
         terminal_lines = H.clone_value(_terminal_lines),
         map_allowed_pois = H.clone_value(_map_allowed_pois),
         map_all_pois_locked = _map_all_pois_locked == true,
@@ -556,7 +478,6 @@ function M.deserialize(data)
     _flags          = data.flags      or {}
     _inventory      = sanitize_inventory(data.inventory)
     _quests         = data.quests     or {}
-    _camera         = data.camera     or nil
     _terminal_lines = data.terminal_lines or nil
     _map_allowed_pois = data.map_allowed_pois or {}
     _map_all_pois_locked = data.map_all_pois_locked == true
@@ -568,7 +489,6 @@ function M.deserialize(data)
     calls_state.deserialize(data)
     clues_state.deserialize(data)
     notes_state.deserialize(data)
-    normalize_camera_state()
     if _terminal_lines == nil then
         seed_default_terminal()
     else

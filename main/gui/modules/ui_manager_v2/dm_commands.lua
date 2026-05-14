@@ -52,16 +52,6 @@ local function apply_single(cmd, ctx)
         if gs.mark_all_calls_seen then gs.mark_all_calls_seen() end
     elseif cmd.type == "add_clue" then
         if gs.add_clue then gs.add_clue(cmd.id, cmd.label) end
-    elseif cmd.type == "set_camera" then
-        if gs.set_camera_feed then
-            gs.set_camera_feed({
-                status = cmd.status,
-                message = cmd.message,
-                meta = cmd.meta,
-            })
-        end
-    elseif cmd.type == "reset_camera" then
-        if gs.reset_camera_feed then gs.reset_camera_feed() end
     elseif cmd.type == "add_terminal_line" then
         if gs.add_terminal_line then gs.add_terminal_line(cmd.level, cmd.text) end
     elseif cmd.type == "clear_terminal" then

@@ -152,8 +152,6 @@ Git Bash / Linux:
 | `call:missed:WHO` | `# call:missed:mila` | Пропущенный звонок. |
 | `call:seen` | `# call:seen` | Сбросить missed-счётчик. |
 | `clue:add:ID:LABEL` | `# clue:add:repeat:Повторяющийся сигнал` | Добавить улику. |
-| `camera:STATUS:MESSAGE[:META]` | `# camera:online:Видна шторка:CAM-01` | Обновить камеру. STATUS: `offline`/`online`/`error`. |
-| `camera:reset` | — | Сбросить камеру. |
 | `term:LEVEL:TEXT` | `# term:warn:missing field` | Строка терминала. LEVEL: `ok`/`warn`/`err`/`info`/`prompt`/`plain`. |
 | `term:clear` / `term:defaults` | — | Очистить / вернуть дефолтный терминал. |
 

@@ -9,7 +9,7 @@
 main/scripts/
 ├── game_state.lua              ← фасад (~580 строк):
 │                                  flags, inventory, quests, scene,
-│                                  camera, terminal, map_pois,
+│                                  terminal, map_pois,
 │                                  subscribe/_notify,
 │                                  serialize/deserialize composition,
 │                                  делегаты в channel-модули.
@@ -110,14 +110,10 @@ gs.add_note(title, body)
 gs.get_notes()
 ```
 
-### Camera / Terminal / Map POIs
+### Terminal / Map POIs
 Эти небольшие домены живут прямо в `game_state.lua` (не вынесены).
 
 ```lua
-gs.set_camera_feed({ status, message, meta })
-gs.reset_camera_feed()
-gs.get_camera_feed()
-
 gs.add_terminal_line(level, text)   -- level: ok|warn|err|info|prompt|plain
 gs.clear_terminal()
 gs.reset_terminal_to_defaults()
@@ -195,7 +191,6 @@ mail_state.set_deps     ({ notify = M._notify })
     flags         = ...,
     inventory     = [...],
     quests        = ...,
-    camera        = ...,
     terminal_lines = [...],
     map_allowed_pois = ...,
     map_all_pois_locked = bool,
@@ -233,8 +228,7 @@ top-level ключи, поэтому загружаются без миграц�
 - `flags` / `inventory` / `quests` — атомарные, малая поверхность,
   делать модуль ради 4 функций нет смысла.
 - `scene` — 2 функции.
-- `camera` / `terminal` — небольшие, частично специфичные. Можно вынести
-  если будут расти.
+- `terminal` — небольшой, частично специфичный. Можно вынести если будет расти.
 - `map_pois` — 7 функций, но все коротенькие.
 
 ## Миграция тестов / новых вызовов

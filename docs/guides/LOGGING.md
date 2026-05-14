@@ -94,7 +94,7 @@ log.warn("no atlas:", name)
 - `hotspots` — `hotspots_v2.gui_script`
 - `inventory` — `inventory_flow.lua`
 - `yandex_ads` — `yandex_ads.lua`
-- `l10n`, `gui_debugger`, `hotspot_editor` — соответствующие модули
+- `l10n`, `hotspot_editor` — соответствующие модули
 
 Когда добавляешь новую систему — выбери короткое имя (одно слово, snake_case).
 
@@ -141,7 +141,7 @@ local function dbg(...) log.debug("system", ...) end
 - `ui_manager_v2.script`, `dialogue_v2.gui_script`, `hotspots_v2.gui_script`,
   `phone_sms.gui_script`, `phone_v2_root.gui_script` — DEBUG_LOG → log.debug.
 - `dialogue_manager_ink.lua`, `scene_controller.lua`, `game_state.lua`,
-  `hotspot_editor.lua`, `gui_debugger.lua`, `l10n.lua` — print → log.warn/info.
+  `hotspot_editor.lua`, `l10n.lua` — print → log.warn/info.
 - `message_flow.lua`, `background_flow.lua`, `effects_flow.lua`,
   `inventory_flow.lua`, `run_state.lua` — то же.
 - `yandex_ads.lua` — все 20 prints.
