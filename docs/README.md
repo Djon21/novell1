@@ -41,7 +41,8 @@
 ### Работа с контентом
 - `HOW_TO_WRITE_INK.md` — все ink-теги и паттерны
 - `HOW_TO_ADD_SCENES.md` — фоны, сцены, hotspot'ы
-- `HOW_TO_ADD_PORTRAITS.md` — портреты персонажей
+- `HOW_TO_ADD_PORTRAITS.md` — портреты персонажей (статика)
+- `HOW_TO_ANIMATE_PORTRAITS.md` — layered-портреты: моргание + движение рта, пайплайн с нейронкой
 - `HOW_TO_ADD_SOUNDS.md` — sfx + музыка
 
 ### Подсистемы UI

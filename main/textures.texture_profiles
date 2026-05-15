@@ -15,6 +15,10 @@ path_settings {
   profile: "UI"
 }
 path_settings {
+  path: "/main/images/portraits/**"
+  profile: "UI"
+}
+path_settings {
   path: "**"
   profile: "Default"
 }

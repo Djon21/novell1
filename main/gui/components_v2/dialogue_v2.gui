@@ -36,8 +36,16 @@ fonts {
   font: "/main/fonts/manrope_medium_24.font"
 }
 textures {
-  name: "v2"
-  texture: "/main/images/v2.atlas"
+  name: "mila"
+  texture: "/main/images/portraits/mila/mila.atlas"
+}
+textures {
+  name: "artem"
+  texture: "/main/images/portraits/artem/artem.atlas"
+}
+textures {
+  name: "narrator"
+  texture: "/main/images/portraits/narrator/narrator.atlas"
 }
 textures {
   name: "backgrounds"
@@ -130,6 +138,36 @@ nodes {
   id: "portrait_bg"
   pivot: PIVOT_SW
   parent: "portrait_bg_fon"
+}
+nodes {
+  position {
+    x: -35.0
+    z: 0.015
+  }
+  size {
+    x: 290.0
+    y: 290.0
+  }
+  type: TYPE_BOX
+  id: "portrait_overlay"
+  pivot: PIVOT_SW
+  parent: "portrait_bg_fon"
+  enabled: false
+}
+nodes {
+  position {
+    x: -35.0
+    z: 0.016
+  }
+  size {
+    x: 290.0
+    y: 290.0
+  }
+  type: TYPE_BOX
+  id: "portrait_overlay_eyes"
+  pivot: PIVOT_SW
+  parent: "portrait_bg_fon"
+  enabled: false
 }
 nodes {
   position {

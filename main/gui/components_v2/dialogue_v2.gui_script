@@ -9,7 +9,7 @@
 -- Сообщения:
 --   "render_dialogue" {speaker, name, text, portrait}
 --        speaker — ключ в CHARS (mila/artem/narrator/…) — определяет цвет акцента.
---        portrait — опционально id спрайта из v2.atlas (пока не подключаем, используем icon).
+--        portrait — id спрайта из атласа персонажа (mila / artem / narrator).
 --   "show_dialogue" / "hide_dialogue"
 --   "set_auto" {on=bool}, "set_skip" {on=bool}
 --   "finish_typewriter" — мгновенно дорисовать текущую реплику
@@ -113,13 +113,54 @@ local function dbg(...) log.debug("dialogue", ...) end
 -- Шлём туда же, ui_manager перенаправит при необходимости.
 
 -- Словарь персонажей: цвет акцента для nameplate + иконка-заглушка.
+-- portrait_idle/blink/talk — flipbook-анимации для layered-портретов.
+-- atlas — имя текстуры в .gui (см. секцию textures {} в dialogue_v2.gui).
+-- Каждый персонаж теперь имеет свой атлас в main/images/portraits/<name>/.
+-- См. docs/guides/HOW_TO_ADD_PORTRAITS.md.
 local CHARS = {
-    mila     = { color = vmath.vector4(1.0, 0.239, 0.498, 1.0), icon = string.char(0xEE, 0x9F, 0xBB), portrait = "mila" }, -- face
-    artem    = { color = vmath.vector4(0.49, 0.976, 1.0, 1.0),  icon = string.char(0xEE, 0x9F, 0xBB), portrait = "artem" },
-    narrator = { color = vmath.vector4(0.353, 1.0, 0.478, 1.0), icon = string.char(0xEE, 0xA4, 0xB1), portrait = "narrator" }, -- terminal-ish
+    mila     = {
+        color = vmath.vector4(1.0, 0.239, 0.498, 1.0),
+        icon = string.char(0xEE, 0x9F, 0xBB),
+        atlas = "mila",
+        portrait = "mila_idle",
+        portrait_idle  = "mila_idle",
+        portrait_blink = "mila_blink",
+        portrait_talk  = "mila_talk",
+    },
+    artem    = {
+        color = vmath.vector4(0.49, 0.976, 1.0, 1.0),
+        icon = string.char(0xEE, 0x9F, 0xBB),
+        atlas = "artem",
+        portrait = "artem_idle",
+        portrait_idle  = "artem_idle",
+        portrait_blink = "artem_blink",
+        portrait_talk  = "artem_talk",
+    },
+    narrator = {
+        color = vmath.vector4(0.353, 1.0, 0.478, 1.0),
+        icon = string.char(0xEE, 0xA4, 0xB1),
+        atlas = "narrator",
+        portrait = "narrator",
+    },
     -- Кириллические алиасы для имён из Ink
-    ["мила"]  = { color = vmath.vector4(1.0, 0.239, 0.498, 1.0), icon = string.char(0xEE, 0x9F, 0xBB), portrait = "mila" },
-    ["артём"] = { color = vmath.vector4(0.49, 0.976, 1.0, 1.0),  icon = string.char(0xEE, 0x9F, 0xBB), portrait = "artem" },
+    ["мила"]  = {
+        color = vmath.vector4(1.0, 0.239, 0.498, 1.0),
+        icon = string.char(0xEE, 0x9F, 0xBB),
+        atlas = "mila",
+        portrait = "mila_idle",
+        portrait_idle  = "mila_idle",
+        portrait_blink = "mila_blink",
+        portrait_talk  = "mila_talk",
+    },
+    ["артём"] = {
+        color = vmath.vector4(0.49, 0.976, 1.0, 1.0),
+        icon = string.char(0xEE, 0x9F, 0xBB),
+        atlas = "artem",
+        portrait = "artem_idle",
+        portrait_idle  = "artem_idle",
+        portrait_blink = "artem_blink",
+        portrait_talk  = "artem_talk",
+    },
     -- fallback:
     _default = { color = vmath.vector4(0.952, 0.925, 0.85, 1.0), icon = string.char(0xEE, 0x9F, 0xBB) },
 }
@@ -198,6 +239,162 @@ local function resolve_speaker(key)
     return result or CHARS._default
 end
 
+-- ---- layered portrait animation ----
+-- Архитектура: base-портрет (portrait_bg) статичен, поверх него висит один
+-- overlay-нод (portrait_overlay) с прозрачным PNG. На overlay'е играются:
+--   *_blink — моргание (eye-area), playback ONCE, по таймеру в простое
+--   *_talk  — движение рта (mouth-area), PINGPONG-loop, пока работает typewriter
+-- Когда никакая анимация не активна — overlay disabled, виден только base.
+-- Blink и talk не пересекаются по времени (blink блокируется на время talk),
+-- поэтому одного overlay-нода хватает на оба слоя.
+--
+-- portrait_anim_token инвалидирует pending completion-callback'и от blink/talk
+-- предыдущего спикера. Та же схема что в effects.gui_script:play_pulse.
+--
+-- Если в .gui ещё нет ноды portrait_overlay (фаза 1 разработки) — все функции
+-- становятся no-op, layered-анимация просто не работает, но базовый портрет
+-- рендерится как раньше. Это позволяет коммитить код до создания ассетов.
+local BLINK_MIN_DELAY = 2.0
+local BLINK_MAX_DELAY = 5.5
+
+-- Tight-overlay геометрия. Кадры в атласе теперь не 512×512, а bbox'ы
+-- (eyes ~142×50, mouth ~74×58). Чтобы они рендерились в правильном месте
+-- portrait_bg'а, overlay-нод перед каждой анимацией ресайзится и
+-- перепозиционируется под bbox этой анимации.
+--
+-- bbox.x/y/w/h — в image-пикселях (исходник 512×512).
+-- Пересчёт в portrait_bg local coords (290×290, pivot SW) делается в
+-- apply_overlay_geometry().
+local PORTRAIT_BG_X = -35   -- из dialogue_v2.gui: portrait_bg.position.x
+local PORTRAIT_BG_Y = 0
+local PORTRAIT_BG_SIZE = 290
+local IMAGE_SIZE = 512
+
+local OVERLAY_GEOMETRY = {
+    -- Глаза Милы: union bbox обоих глаз
+    mila_blink = { x = 208, y = 157, w = 142, h = 50 },
+    -- Рот Милы
+    mila_talk  = { x = 231, y = 234, w = 74,  h = 58 },
+    -- Глаза Артёма: одна общая рамка обоих глаз
+    artem_blink = { x = 198, y = 130, w = 121, h = 54 },
+    -- Рот Артёма
+    artem_talk  = { x = 218, y = 189, w = 78,  h = 80 },
+}
+
+-- Какой overlay-нод используется для какой анимации. Два отдельных нода
+-- чтобы blink (глаза) и talk (рот) могли играть одновременно независимо.
+local OVERLAY_NODE_FOR_ANIM = {
+    mila_blink  = "portrait_overlay_eyes",
+    mila_talk   = "portrait_overlay",
+    artem_blink = "portrait_overlay_eyes",
+    artem_talk  = "portrait_overlay",
+}
+
+local function apply_overlay_geometry(node, anim_id)
+    local g = OVERLAY_GEOMETRY[anim_id]
+    if not g then return end
+    local s = PORTRAIT_BG_SIZE / IMAGE_SIZE
+    local node_w = g.w * s
+    local node_h = g.h * s
+    local node_x = PORTRAIT_BG_X + g.x * s
+    -- image y=0 сверху, portrait_bg pivot SW (y=0 снизу) — инвертируем
+    local node_y = PORTRAIT_BG_Y + PORTRAIT_BG_SIZE - (g.y + g.h) * s
+    local cur_pos = gui.get_position(node)
+    gui.set_position(node, vmath.vector3(node_x, node_y, cur_pos.z))
+    gui.set_size(node, vmath.vector3(node_w, node_h, 0))
+end
+
+-- Дефолтный overlay (мута/talk). Используется когда нет специфичного для анимации.
+local function get_overlay_node()
+    local ok, n = pcall(gui.get_node, "portrait_overlay")
+    if ok then return n end
+    return nil
+end
+
+-- Возвращает конкретный overlay-нод для данной анимации (eyes/mouth/...).
+-- Fallback на дефолтный portrait_overlay если для анимации нет специфичного нода.
+local function get_overlay_node_for_anim(anim_id)
+    local node_id = OVERLAY_NODE_FOR_ANIM[anim_id]
+    if node_id then
+        local ok, n = pcall(gui.get_node, node_id)
+        if ok and n then return n end
+    end
+    return get_overlay_node()
+end
+
+local function cancel_blink_timer(self)
+    if self.portrait_blink_timer then
+        timer.cancel(self.portrait_blink_timer)
+        self.portrait_blink_timer = nil
+    end
+end
+
+local function hide_node(node_id)
+    local ok, n = pcall(gui.get_node, node_id)
+    if ok and n then gui.set_enabled(n, false) end
+end
+
+-- Прячет ВСЕ overlay-ноды (mouth + eyes). Используется при смене спикера
+-- и при hide_dialogue.
+local function hide_overlay()
+    hide_node("portrait_overlay")
+    hide_node("portrait_overlay_eyes")
+end
+
+local function hide_overlay_eyes()  hide_node("portrait_overlay_eyes") end
+local function hide_overlay_mouth() hide_node("portrait_overlay")      end
+
+local function play_overlay_anim(self, anim_id, complete_fn)
+    if not anim_id or anim_id == "" then return false end
+    local n = get_overlay_node_for_anim(anim_id)
+    if not n then return false end
+    -- Текстура персонажа (атлас) берётся из current_char_meta. Фолбэк на
+    -- "mila" если не указан — minimal safety, не должно случаться.
+    local atlas = (self and self.current_char_meta and self.current_char_meta.atlas) or "mila"
+    pcall(gui.set_texture, n, atlas)
+    -- Tight-режим: ресайз и перепозиционирование под bbox этой анимации.
+    apply_overlay_geometry(n, anim_id)
+    gui.set_enabled(n, true)
+    local ok = pcall(gui.play_flipbook, n, anim_id, complete_fn)
+    if not ok then
+        log.warn("dialogue", "overlay anim not found:", tostring(anim_id))
+        gui.set_enabled(n, false)
+        return false
+    end
+    return true
+end
+
+local schedule_blink
+schedule_blink = function(self)
+    cancel_blink_timer(self)
+    local c = self.current_char_meta
+    if not c or not c.portrait_blink then return end
+
+    local delay = BLINK_MIN_DELAY + math.random() * (BLINK_MAX_DELAY - BLINK_MIN_DELAY)
+    local token = self.portrait_anim_token
+    self.portrait_blink_timer = timer.delay(delay, false, function()
+        self.portrait_blink_timer = nil
+        if token ~= self.portrait_anim_token then return end
+        -- Blink и talk теперь на разных overlay-нодах — играют независимо,
+        -- больше не нужно блокировать blink во время talk.
+        play_overlay_anim(self, c.portrait_blink, function()
+            if token ~= self.portrait_anim_token then return end
+            hide_overlay_eyes()
+            schedule_blink(self)
+        end)
+    end)
+end
+
+local function start_talk_anim(self)
+    local c = self.current_char_meta
+    if not c or not c.portrait_talk then return end
+    play_overlay_anim(self, c.portrait_talk)
+end
+
+local function stop_talk_anim(self)
+    hide_overlay_mouth()
+end
+
 -- ---- typewriter (step18) ----
 local TYPEWRITER_CPS = 45  -- символов в секунду
 local PUNCT_DELAY    = 0.12  -- доп. пауза после ",.!?:;…"
@@ -224,9 +421,15 @@ local function typewriter_start(self, text)
     self.tw_pending_pause = 0
     if self.tw_active then
         gui.set_text(gui.get_node("dlg_text"), "")
+        start_talk_anim(self)
     else
+        -- Пустой текст: мгновенно «typewriter_done», без talk-анимации.
+        -- Сразу запускаем blink-цикл (в режиме с текстом он шедулится из
+        -- typewriter_finish).
         gui.set_text(gui.get_node("dlg_text"), text or "")
         msg.post(UI_MGR, "typewriter_done")
+        stop_talk_anim(self)
+        schedule_blink(self)
     end
 end
 
@@ -235,12 +438,23 @@ local function typewriter_finish(self)
     self.tw_active = false
     gui.set_text(gui.get_node("dlg_text"), self.full_text or "")
     msg.post(UI_MGR, "typewriter_done")
+    -- Печать закончилась: гасим рот, шедулим следующий blink.
+    -- (blink будет тикать пока не сменится спикер — render бампает token
+    -- и cancel'ит таймер.)
+    stop_talk_anim(self)
+    schedule_blink(self)
 end
 
 local function render(self, msg)
     local speaker_key = msg.speaker or msg.char or "_default"
     if speaker_key == "" then speaker_key = "narrator" end
     local c = resolve_speaker(speaker_key)
+
+    -- Bump portrait-anim token: любые pending complete-callback'и от blink/talk
+    -- предыдущего спикера теперь будут проигнорированы. Чистим blink-таймер тоже.
+    self.portrait_anim_token = (self.portrait_anim_token or 0) + 1
+    self.current_char_meta = c
+    cancel_blink_timer(self)
     local loop_label = tostring(msg.loop_label or "")
     if loop_label == "" then
         loop_label = string.format("%03d", tonumber(msg.loop) or 1)
@@ -263,17 +477,23 @@ end
     local loop_num = tonumber(loop_label) or tonumber(msg.loop) or 1
     set_text("loop_counter", string.format("петля #%03d", loop_num))
 
-    -- Портрет: если передан portrait в msg или есть в CHARS, используем спрайт из v2.atlas, иначе icon-заглушку
+    -- Портрет: если передан portrait в msg или есть в CHARS, используем спрайт из атласа персонажа, иначе icon-заглушку
     local portrait_bg = gui.get_node("portrait_bg")
     local portrait_icon = gui.get_node("portrait_icon")
-    local portrait_id = msg.portrait or c.portrait
+    -- В layered-режиме portrait_id указывает на base-кадр (статика, 1 frame).
+    -- Анимации blink/talk играются на отдельном portrait_overlay-ноде —
+    -- см. helper'ы выше. Сразу прячем overlay, чтобы при смене спикера не
+    -- висел кадр от предыдущего.
+    hide_overlay()
+    local portrait_id = msg.portrait or c.portrait_idle or c.portrait
     
     dbg("[dialogue_v2] final portrait_id:", portrait_id)
 
     apply_portrait_clip_layout()
     if portrait_id then
-        -- Показываем квадратный спрайт портрета внутри stencil-окна: crop вместо stretch.
-        gui.set_texture(portrait_bg, "v2")
+        -- Текстура атласа берётся из персонажа (mila / artem / narrator).
+        local atlas = c.atlas or "mila"
+        pcall(gui.set_texture, portrait_bg, atlas)
         local ok, err = pcall(gui.play_flipbook, portrait_bg, portrait_id)
         if ok then
             gui.set_enabled(portrait_bg, true)
@@ -302,7 +522,11 @@ end
     else
         set_color("dlg_text", COLOR_PAPER)
     end
-    -- typewriter (step18): посимвольная анимация
+    -- typewriter (step18): посимвольная анимация.
+    -- typewriter_start сам управляет talk-анимацией:
+    --   tw_active=true  → start_talk_anim (рот шевелится во время печати)
+    --   tw_active=false → stop_talk_anim → schedule_blink (мгновенный finish)
+    -- После typewriter_finish талк гасится, blink шедулится — см. typewriter_finish.
     self.full_text = text
     self.current_text = text
     typewriter_start(self, text)
@@ -377,6 +601,10 @@ function init(self)
     self.current_bg = nil
     self.current_bg_animation = nil
     self.bg_visible = false
+    -- Layered portrait state. Подробнее в комментарии у helper'ов выше.
+    self.current_char_meta = nil
+    self.portrait_anim_token = 0
+    self.portrait_blink_timer = nil
     bind_bg_nodes_to_texture()
     gui.set_enabled(gui.get_node("scene_bg"), false)
     gui.set_enabled(gui.get_node("scene_bg_next"), false)
@@ -420,6 +648,10 @@ function on_message(self, message_id, message, sender)
 
     elseif message_id == hash("hide_dialogue") then
         self.visible = false
+        -- Гасим portrait-аниму: блинк-таймер, pending callback'и, overlay-нод.
+        cancel_blink_timer(self)
+        self.portrait_anim_token = (self.portrait_anim_token or 0) + 1
+        hide_overlay()
         gui.set_enabled(gui.get_node("dlg_root"), false)
         set_dialogue_log_button_visible(self, false)
 

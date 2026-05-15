@@ -1,0 +1,4 @@
+images {
+  image: "/main/images/portraits/narrator/narrator.png"
+}
+extrude_borders: 0

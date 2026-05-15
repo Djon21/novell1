@@ -1,105 +1,124 @@
-# Инструкция по добавлению портретов персонажей
+# Портреты персонажей
 
-В текущем `v2`-стеке портреты больше не требуют отдельных GUI-нод под каждого героя. `dialogue_v2.gui` использует один общий `portrait_bg`, а нужный спрайт подставляет `main/gui/components_v2/dialogue_v2.gui_script`.
+Статичные портреты (одна картинка, без анимации). Для **анимированных портретов** (моргание + рот) см. [`HOW_TO_ANIMATE_PORTRAITS.md`](HOW_TO_ANIMATE_PORTRAITS.md).
 
-## Куда сейчас добавляются портреты
+## Файловая структура
 
-- активный atlas: `main/images/v2.atlas`
-- активная логика: `main/gui/components_v2/dialogue_v2.gui_script`
-- legacy `archive/legacy_runtime/main/images/characters.atlas` нужен только как архив старого UI и не является текущим source of truth
+Каждый персонаж — отдельная папка и отдельный атлас:
 
-## Требования к файлу
-
-- формат: `PNG`
-- прозрачный фон
-- рекомендуемый размер: `512x512`
-- имя файла: латиница, lowercase
-
-Пример:
-
-```text
-main/images/v2/anya.png
+```
+main/images/portraits/
+├── mila/
+│   ├── mila.atlas
+│   └── mila_base.png        (для анимированной Милы)
+├── artem/
+│   ├── artem.atlas
+│   └── artem.png            (статичный)
+└── narrator/
+    ├── narrator.atlas
+    └── narrator.png
 ```
 
-## Шаг 1: Добавить файл в `main/images/v2/`
+Один портрет = один атлас = один texture-binding в `dialogue_v2.gui`. Никаких общих атласов, никакого `v2.atlas` (его больше нет).
 
-```text
-main/images/v2/anya.png
+## Шаги для нового статичного персонажа («аня»)
+
+### 1. Положить PNG
+
+```
+main/images/portraits/anya/anya.png
 ```
 
-## Шаг 2: Зарегистрировать его в `main/images/v2.atlas`
+Требования:
+- формат PNG, прозрачный фон
+- рекомендуемый размер `512×512` (квадрат)
+- латиница, lowercase
 
-```text
+### 2. Создать атлас `anya.atlas`
+
+```
+main/images/portraits/anya/anya.atlas
+```
+
+Содержимое:
+
+```
 images {
-  image: "/main/images/v2/anya.png"
+  image: "/main/images/portraits/anya/anya.png"
+}
+extrude_borders: 0
+```
+
+`extrude_borders: 0` нужен чтобы 512×512 атлас не разросся до 1024×1024 ради 2px бордюра. Для **статичных** нерастягивающихся спрайтов это OK.
+
+**Важно**: если будешь потом превращать персонажа в анимированного (см. `HOW_TO_ANIMATE_PORTRAITS.md`), `extrude_borders` нужно вернуть на `2` — иначе при flipbook-анимации соседние кадры в текстуре будут протекать в края и появится видимая полоса.
+
+### 3. Зарегистрировать texture в `dialogue_v2.gui`
+
+Найди секцию `textures {}` и добавь:
+
+```
+textures {
+  name: "anya"
+  texture: "/main/images/portraits/anya/anya.atlas"
 }
 ```
 
-После этого atlas frame будет называться `anya`.
+### 4. Добавить персонажа в `CHARS`
 
-## Шаг 3: Добавить персонажа в `dialogue_v2.gui_script`
-
-Найдите таблицу `CHARS` в `main/gui/components_v2/dialogue_v2.gui_script` и добавьте новый ключ.
-
-Пример:
+В `main/gui/components_v2/dialogue_v2.gui_script`:
 
 ```lua
 ["аня"] = {
     color = vmath.vector4(1.0, 0.702, 0.278, 1.0),
     icon = string.char(0xEE, 0x9F, 0xBB),
-    tag = "контакт",
+    atlas = "anya",
     portrait = "anya",
 },
 ```
 
-Что важно:
+Поля:
+- `color` — цвет акцента nameplate
+- `icon` — fallback-иконка если спрайт не найден
+- `atlas` — имя texture-binding из шага 3
+- `portrait` — animation id или image id из атласа (для статика совпадает с именем PNG без расширения)
 
-- ключ ищется после приведения speaker к нижнему регистру
-- `portrait` должен совпадать с именем кадра в `v2.atlas`
-- `tag` и `color` — это подпись и акцент nameplate
+Можно дублировать запись с латинским ключом если в ink-сценариях используется `# speaker:Anya`:
 
-## Шаг 4: Использовать персонажа в Ink
+```lua
+anya = { ... тот же контент ... },
+```
+
+### 5. Использовать в Ink
 
 ```ink
 # speaker:Аня
 Привет.
 ```
 
-или
+Lookup в `CHARS` приводит speaker к lower-case, так что `Аня` / `аня` / `АНЯ` найдут одну запись.
 
-```ink
-# speaker:аня
-Привет.
-```
+## Спецзначения speaker
 
-Поскольку lookup идёт в lower-case, обе формы будут работать, если ключ в `CHARS` добавлен корректно.
-
-## Спец-значения speaker
-
-- `# speaker:mc` — имя главного героя из `save_manager`
-- `# speaker:npc` — имя второго главного персонажа
+- `# speaker:mc` — имя главного героя из `save_manager` (Артём/Мила)
+- `# speaker:npc` — имя второго ключевого персонажа
 - `# speaker:none` — нарратив без портрета
+- `# speaker:narrator` — терминал-нарратор (зелёный текст)
 
-Для `mc` и `npc` уже настроены маппинги на текущие портреты Артёма и Милы.
+## Текстурный профиль
 
-## Что изменилось по сравнению с legacy UI
+Любой PNG под `main/images/portraits/**` автоматически попадает в профиль **UI** (см. `main/textures.texture_profiles`). Профиль определяет BASIS-сжатие для HTML5-сборки.
 
-Больше не нужно:
+## Чеклист добавления персонажа
 
-- править `novel_ui.gui`
-- создавать отдельную GUI-ноду `portrait_anya`
-- регистрировать портрет в `S.portraits`
+- [ ] PNG в `main/images/portraits/<name>/<name>.png`
+- [ ] `<name>.atlas` создан, ссылается на PNG
+- [ ] `textures {}` в `dialogue_v2.gui` содержит binding `<name>`
+- [ ] Запись в `CHARS` в `dialogue_v2.gui_script` с `atlas` и `portrait`
+- [ ] Реплика `# speaker:<Имя>` проверена в игре
 
-Всё это относилось к старому монолитному UI.
+## Что НЕ нужно делать
 
-## Fallback-поведение
-
-Если `portrait` не найден, `dialogue_v2.gui_script` покажет иконку-заглушку вместо спрайта. Это удобно для промежуточных персонажей, но для боевого контента лучше всё-таки добавить настоящий портрет.
-
-## Чеклист
-
-- [ ] PNG лежит в `main/images/v2/`
-- [ ] файл прописан в `main/images/v2.atlas`
-- [ ] персонаж добавлен в `CHARS` в `dialogue_v2.gui_script`
-- [ ] `portrait` совпадает с atlas frame
-- [ ] реплика с `# speaker:Имя` проверена в игре
+- НЕ редактируй `novel_ui.gui` — это legacy UI
+- НЕ добавляй портреты в общий атлас — каждый персонаж в своей папке/атласе
+- НЕ дублируй PNG в `main/images/` корне — там legacy-картинки от старой архитектуры, не используются

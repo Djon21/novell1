@@ -326,7 +326,7 @@ return {
         hotspots = {
             {
                 id = "coffee_setup",
-                rect = { x = 290, y = 285, w = 135, h = 135 },
+                rect = { x = 280, y = 395, w = 135, h = 135 },
                 label = "Кофе",
                 icon = "coffee",
                 hotspot_style = STYLE_USE,
@@ -338,7 +338,7 @@ return {
             },
             {
                 id = "take_mug_kitchen",
-                rect = { x = 980, y = 155, w = 135, h = 135 },
+                rect = { x = 980, y = 95, w = 135, h = 135 },
                 label = "Кружка",
                 icon = "mug",
                 hotspot_style = STYLE_PICKUP,
@@ -350,7 +350,7 @@ return {
             },
             {
                 id = "kitchen_apples",
-                rect = { x = 760, y = 150, w = 135, h = 135 },
+                rect = { x = 1120, y = 230, w = 135, h = 135 },
                 label = "Яблоко",
                 icon = "left_click",
                 hotspot_style = STYLE_PICKUP,
@@ -362,7 +362,7 @@ return {
             },
             {
                 id = "kitchen_fridge",
-                rect = { x = 1030, y = 210, w = 150, h = 330 },
+                rect = { x = 845, y = 375, w = 125, h = 125 },
                 label = "Холодильник",
                 icon = "left_click",
                 hotspot_style = STYLE_INSPECT,

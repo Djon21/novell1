@@ -1,0 +1,58 @@
+images {
+  image: "/main/images/portraits/artem/artem_base.png"
+}
+images {
+  image: "/main/images/portraits/artem/artem_blink_1.png"
+}
+images {
+  image: "/main/images/portraits/artem/artem_blink_2.png"
+}
+images {
+  image: "/main/images/portraits/artem/artem_blink_3.png"
+}
+images {
+  image: "/main/images/portraits/artem/artem_mouth_1.png"
+}
+images {
+  image: "/main/images/portraits/artem/artem_mouth_2.png"
+}
+images {
+  image: "/main/images/portraits/artem/artem_mouth_3.png"
+}
+animations {
+  id: "artem_idle"
+  images {
+    image: "/main/images/portraits/artem/artem_base.png"
+  }
+  playback: PLAYBACK_NONE
+  fps: 1
+}
+animations {
+  id: "artem_blink"
+  images {
+    image: "/main/images/portraits/artem/artem_blink_1.png"
+  }
+  images {
+    image: "/main/images/portraits/artem/artem_blink_2.png"
+  }
+  images {
+    image: "/main/images/portraits/artem/artem_blink_3.png"
+  }
+  playback: PLAYBACK_ONCE_PINGPONG
+  fps: 12
+}
+animations {
+  id: "artem_talk"
+  images {
+    image: "/main/images/portraits/artem/artem_mouth_1.png"
+  }
+  images {
+    image: "/main/images/portraits/artem/artem_mouth_2.png"
+  }
+  images {
+    image: "/main/images/portraits/artem/artem_mouth_3.png"
+  }
+  playback: PLAYBACK_LOOP_PINGPONG
+  fps: 8
+}
+extrude_borders: 2

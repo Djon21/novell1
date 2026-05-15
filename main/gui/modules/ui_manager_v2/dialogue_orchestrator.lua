@@ -67,25 +67,30 @@ end
 function M.update(self, ctx)
     ctx.cancel_autoplay(self)
 
-    -- 1) Применить команды из ink-тегов (могут поменять сцену)
-    if ctx.apply_dm_commands(self) then
-        return
-    end
+    -- 1) Применить команды из ink-тегов (могут поменять сцену / открыть модалку)
+    local cmds_paused_render = ctx.apply_dm_commands(self)
 
-    -- 1a) Если apply_dm_commands открыл map hub, не рендерим диалог поверх:
-    -- иначе на `-> DONE` сразу после `# map:hub:KNOT` dialogue уходит в
-    -- end-state, клик мимо пина ловится btn_next → advance → chapter_finished.
+    -- 1a) Проверить overlay-состояние ПОСЛЕ apply_dm_commands: команды могли
+    -- открыть phone/map. Нужно сделать ДО early-return на cmds_paused_render —
+    -- иначе при цепочке `# phone:app:X` + `# return_to_scene` мы возвращаемся,
+    -- не спрятав dialogue/hotspots, и они остаются торчать на фоне модалки.
     local UI = ctx.M
     if UI.overlays.map then
         UI.at_end = false
         msg.post(UI.components.dialogue, "hide_dialogue")
         ctx.hide_choice(self)
+        msg.post(UI.components.hotspots, "hide_all")
         return
     end
     if UI.overlays.phone then
         UI.at_end = false
         msg.post(UI.components.dialogue, "hide_dialogue")
         ctx.hide_choice(self)
+        msg.post(UI.components.hotspots, "hide_all")
+        return
+    end
+
+    if cmds_paused_render then
         return
     end
 

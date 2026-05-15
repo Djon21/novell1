@@ -77,7 +77,7 @@ return {
         hotspots = {
             {
                 id = "park_entrance_view",
-                rect = { x = 465, y = 245, w = 230, h = 180 },
+                rect = { x = 775, y = 300, w = 130, h = 130 },
                 label = "Осмотреться",
                 icon = "left_click",
                 hotspot_style = STYLE_INSPECT,
@@ -91,7 +91,7 @@ return {
             },
             {
                 id = "park_bin",
-                rect = { x = 1080, y = 110, w = 130, h = 160 },
+                rect = { x = 320, y = 85, w = 120, h = 120 },
                 label = "Урна",
                 icon = "delete",
                 hotspot_style = STYLE_ITEM_TARGET,
@@ -105,7 +105,7 @@ return {
             },
             {
                 id = "park_message_where",
-                rect = { x = 345, y = 120, w = 170, h = 150 },
+                rect = { x = 1050, y = 470, w = 130, h = 130 },
                 label = "Написать",
                 icon = "phone",
                 hotspot_style = STYLE_STORY,
@@ -120,7 +120,7 @@ return {
             },
             {
                 id = "park_npc_greeting",
-                rect = { x = 650, y = 205, w = 230, h = 210 },
+                rect = { x = 490, y = 85, w = 130, h = 130 },
                 label = "Поздороваться",
                 icon = "left_click",
                 hotspot_style = STYLE_STORY,
@@ -135,7 +135,7 @@ return {
             },
             {
                 id = "park_offer_place",
-                rect = { x = 650, y = 205, w = 230, h = 210 },
+                rect = { x = 805, y = 85, w = 120, h = 120 },
                 label = "Предложить",
                 icon = "left_click",
                 hotspot_style = STYLE_STORY,
@@ -152,9 +152,9 @@ return {
             },
             {
                 id = "park_to_bench",
-                rect = { x = 830, y = 165, w = 245, h = 300 },
+                rect = { x = 500, y = 205, w = 130, h = 130 },
                 label = "К скамейке",
-                icon = "arrow_forward",
+                icon = "arrow_up",
                 hotspot_style = STYLE_NAV,
                 icon_offset_x = -4,
                 icon_offset_y = 0,
@@ -167,7 +167,7 @@ return {
             },
             {
                 id = "park_to_path",
-                rect = { x = 520, y = 345, w = 235, h = 210 },
+                rect = { x = 175, y = 260, w = 130, h = 130 },
                 label = "По аллее",
                 icon = "arrow_up",
                 hotspot_style = STYLE_NAV,
@@ -202,7 +202,7 @@ return {
         hotspots = {
             {
                 id = "park_bench",
-                rect = { x = 645, y = 150, w = 230, h = 165 },
+                rect = { x = 420, y = 140, w = 120, h = 120 },
                 label = "Скамейка",
                 icon = "left_click",
                 hotspot_style = STYLE_INSPECT,
@@ -212,7 +212,7 @@ return {
             },
             {
                 id = "park_trash_cup",
-                rect = { x = 735, y = 215, w = 95, h = 90 },
+                rect = { x = 270, y = 175, w = 70, h = 90 },
                 label = "Стаканчик",
                 icon = "left_click",
                 hotspot_style = STYLE_PICKUP,
@@ -228,7 +228,7 @@ return {
             },
             {
                 id = "park_river_view",
-                rect = { x = 875, y = 260, w = 310, h = 230 },
+                rect = { x = 940, y = 275, w = 120, h = 120 },
                 label = "Река",
                 icon = "left_click",
                 hotspot_style = STYLE_INSPECT,
@@ -238,7 +238,7 @@ return {
             },
             {
                 id = "park_offer_place_bench",
-                rect = { x = 520, y = 250, w = 220, h = 190 },
+                rect = { x = 240, y = 165, w = 120, h = 120 },
                 label = "Предложить",
                 icon = "left_click",
                 hotspot_style = STYLE_STORY,
@@ -255,7 +255,7 @@ return {
             },
             {
                 id = "bench_to_path",
-                rect = { x = 300, y = 310, w = 300, h = 235 },
+                rect = { x = 265, y = 365, w = 120, h = 120 },
                 label = "Пройтись",
                 icon = "arrow_up",
                 hotspot_style = STYLE_NAV,
@@ -301,7 +301,7 @@ return {
             },
             {
                 id = "park_path_trees",
-                rect = { x = 125, y = 210, w = 250, h = 310 },
+                rect = { x = 270, y = 295, w = 130, h = 130 },
                 label = "Тень деревьев",
                 icon = "left_click",
                 hotspot_style = STYLE_INSPECT,
@@ -314,7 +314,7 @@ return {
             },
             {
                 id = "park_offer_place_path",
-                rect = { x = 520, y = 250, w = 220, h = 190 },
+                rect = { x = 720, y = 225, w = 120, h = 120 },
                 label = "Предложить",
                 icon = "left_click",
                 hotspot_style = STYLE_STORY,
@@ -331,7 +331,7 @@ return {
             },
             {
                 id = "path_to_bench",
-                rect = { x = 870, y = 155, w = 250, h = 300 },
+                rect = { x = 550, y = 340, w = 130, h = 130 },
                 label = "К скамейке",
                 icon = "arrow_forward",
                 hotspot_style = STYLE_NAV,
@@ -344,9 +344,9 @@ return {
             },
             {
                 id = "path_to_entrance",
-                rect = { x = 0, y = 0, w = 170, h = 220 },
+                rect = { x = 575, y = 55, w = 130, h = 130 },
                 label = "К входу",
-                icon = "arrow_back",
+                icon = "arrow_down",
                 hotspot_style = STYLE_NAV,
                 icon_offset_x = -4,
                 icon_offset_y = 0,
@@ -371,7 +371,7 @@ return {
         hotspots = {
             {
                 id = "shop_drinks",
-                rect = { x = 900, y = 240, w = 300, h = 300 },
+                rect = { x = 930, y = 365, w = 135, h = 135 },
                 label = "Напитки",
                 icon = "left_click",
                 hotspot_style = STYLE_PICKUP,
@@ -382,7 +382,7 @@ return {
             },
             {
                 id = "shop_snacks",
-                rect = { x = 520, y = 170, w = 260, h = 330 },
+                rect = { x = 705, y = 245, w = 135, h = 135 },
                 label = "Снеки",
                 icon = "left_click",
                 hotspot_style = STYLE_PICKUP,
@@ -393,7 +393,7 @@ return {
             },
             {
                 id = "shop_counter",
-                rect = { x = 0, y = 240, w = 400, h = 300 },
+                rect = { x = 160, y = 405, w = 135, h = 135 },
                 label = "Прилавок",
                 icon = "left_click",
                 hotspot_style = STYLE_INSPECT,

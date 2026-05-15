@@ -74,6 +74,7 @@ local close_phone
 local close_map
 local hide_choice
 local sync_modal_state
+local open_phone_map_app
 
 local AUTO_ADVANCE_MIN_DELAY = 1.0
 local AUTO_ADVANCE_MAX_DELAY = 3.0
@@ -533,7 +534,7 @@ close_phone = function(self)
     notify_overlay_state("phone", false)
 end
 
-local function open_phone_map_app(self)
+open_phone_map_app = function(self)
     return phone_flow.open_map_app(phone_ctx())
 end
 
