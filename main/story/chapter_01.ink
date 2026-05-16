@@ -17,6 +17,9 @@ INCLUDE chapters/32_tuesday_rooftop.ink
 
 INCLUDE chapters/41_hub_park.ink
 INCLUDE chapters/42_hub_cafe.ink
+INCLUDE chapters/43_hub_shop.ink
+INCLUDE chapters/44_hub_viewpoint.ink
+INCLUDE chapters/45_hub_bar.ink
 
 INCLUDE chapters/91_inventory_actions.ink
 INCLUDE chapters/92_phone_sms.ink
