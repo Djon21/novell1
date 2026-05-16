@@ -1,23 +1,14 @@
 // ================================================================
-// AVOS_S — 10_sunday_intro.ink
-// Apartment onboarding scene, synced with current 1920x1080 apartment backgrounds.
-//
-// ВАЖНО:
-// - Имена knot'ов сохранены под scenes.lua.
-// - До choose_character нет speaker:mc / speaker:npc.
-// - Описания мира идут через speaker:none.
-// - Внутренний голос/действия ГГ идут через speaker:mc.
-// - Визуальных аномалий нет: странность только через информацию.
-// - SMS больше не привязан жёстко к Миле: male -> mila, female -> artem.
-// - Воскресное приглашение перенесено из SMS в Messenger.
-//
-// Совместимые квесты: find_phone, make_coffee, reply_npc, meet_npc. go_to_office стартует позже, в понедельник.
-// Совместимые предметы: mug, phone, toothbrush, toothpaste, toothbrush_pasted.
+// AVOS_S - 10_apartment.ink
+// Квартира во все дни всех итераций. Центральная точка времени:
+//   - sunday-утро (выбор персонажа, телефон, ванная, кухня, выход)
+//   - sunday-вечер (возврат, переписка, сон)
+//   - monday/tuesday-секции добавятся при миграции этих дней
+//   - sleep -> переход на следующий день; reset петли -> 01_loop_entry
 // ================================================================
 
-
 // ================================================================
-// СТАРТ / ВЫБОР ПЕРСОНАЖА
+// ВОСКРЕСЕНЬЕ: УТРО В КВАРТИРЕ
 // ================================================================
 
 === choose_character ===
@@ -55,7 +46,6 @@
     ~ mc_name_prep = "Миле"
     ~ npc_name_prep = "Артёме"
     -> apartment_start
-
 
 === apartment_start ===
 # bg:bg_apartment_bedroom_morning # speaker:none
@@ -99,7 +89,6 @@
 # return_to_scene
 -> DONE
 
-
 === enter_kitchen_morning_first ===
 # bg:bg_apartment_kitchen_morning # speaker:none
 Кухня встречает сухим щелчком холодильника и светлым окном во двор.
@@ -136,7 +125,6 @@
 # return_to_scene
 -> DONE
 
-
 === bedroom_desk_morning ===
 # speaker:none
 На рабочем столе закрытый ноутбук, блокнот и кабель от телефона.
@@ -165,7 +153,6 @@
 # return_to_scene
 -> DONE
 
-
 === look_bedroom_window ===
 # bg:bg_apartment_bedroom_morning # speaker:none
 За окном город выглядит так, будто воскресенье у него началось раньше твоего: редкие машины, свет в стекле, кто-то с собакой у подъезда.
@@ -182,7 +169,6 @@
 # return_to_scene
 -> DONE
 
-
 === enter_bathroom_morning_first ===
 # bg:bg_apartment_bathroom_morning # speaker:none
 Ванная встречает прохладной плиткой, зеркалом и тем самым мятным запахом, который обещает бодрость, но пока только обещает.
@@ -195,7 +181,6 @@
 # set_flag:bathroom_morning_seen=true
 # return_to_scene
 -> DONE
-
 
 === look_bathroom_mirror ===
 # speaker:none
@@ -210,7 +195,6 @@
 }
 # return_to_scene
 -> DONE
-
 
 === take_toothbrush ===
 # speaker:none
@@ -231,7 +215,6 @@
 # return_to_scene
 -> DONE
 
-
 === take_toothpaste ===
 # speaker:none
 Тюбик пасты смят посередине и стоит так, будто его тоже подняли слишком рано.
@@ -250,7 +233,6 @@
 # hud:hint:bag
 # return_to_scene
 -> DONE
-
 
 === bathroom_sink_prompt ===
 # speaker:mc
@@ -276,7 +258,6 @@
 # return_to_scene
 -> DONE
 
-
 === bathroom_exit_locked ===
 # speaker:mc
 Нет. Я уже в ванной, щётка и паста передо мной.
@@ -286,13 +267,11 @@
 # return_to_scene
 -> DONE
 
-
 === bathroom_not_now ===
 # speaker:mc
 Умылся. Второй раз бодрее не станет.
 # return_to_scene
 -> DONE
-
 
 === take_phone ===
 # speaker:none
@@ -368,9 +347,6 @@
 # return_to_scene
 -> DONE
 
-
-
-
 === sunday_get_dressed ===
 # speaker:none
 Куртка с вешалки, обувь у двери. Никакого торжественного выхода — просто бытовая последовательность, без которой человек не попадает в город.
@@ -382,7 +358,6 @@
 ~ sunday_dressed = true
 # return_to_scene
 -> DONE
-
 
 === leave_apartment_prompt ===
 {not date_agreed:
@@ -420,7 +395,6 @@
         -> leave_apartment
     }
 }
-
 
 === leave_apartment ===
 # speaker:none
@@ -473,8 +447,6 @@
 # phone:map
 -> DONE
 
-
-
 === sunday_send_messenger_invite ===
 {not sunday_messenger_invite_sent:
     # speaker:none
@@ -520,7 +492,6 @@
 # return_to_scene
 -> DONE
 
-
 === take_mug ===
 # speaker:none
 На столе стоит белая кружка с тонкой трещиной на ручке.
@@ -541,15 +512,12 @@
 # return_to_scene
 -> DONE
 
-
-
 === use_coffee_machine_with_cup ===
 # speaker:mc
 Кружка у меня. Надо не просто смотреть на чайник, а использовать её здесь.
 
 # return_to_scene
 -> DONE
-
 
 === look_kitchen_window ===
 # speaker:none
@@ -576,7 +544,6 @@
     -> DONE
 }
 
-
 === take_kitchen_apple ===
 # bg:bg_apartment_kitchen_morning # speaker:none
 В миске на столе лежат зелёные яблоки. Одно холодит ладонь чуть сильнее остальных.
@@ -588,8 +555,6 @@
 ~ breakfast_done = true
 # return_to_scene
 -> DONE
-
-
 
 === look_kitchen_fridge ===
 # bg:bg_apartment_kitchen_morning # speaker:none
@@ -613,7 +578,6 @@
     # return_to_scene
     -> DONE
 
-
 === drink_water_kitchen ===
 # bg:bg_apartment_kitchen_morning # speaker:none
 Вода из-под фильтра прохладная и честная. Не кофе, не ритуал, просто способ напомнить телу, что оно существует.
@@ -623,3 +587,157 @@
 # return_to_scene
 -> DONE
 
+// ================================================================
+// ВОСКРЕСЕНЬЕ: ВЫБОР МАРШРУТА (из квартиры)
+// ================================================================
+
+=== sunday_date_map_fallback ===
+# speaker:none
+Карта открыта. Осталось выбрать маршрут.
+
+{date_place_cafe:
+    -> sunday_date_go_cafe
+- else:
+    -> sunday_date_go_park
+}
+
+=== sunday_date_go_cafe ===
+# set_flag:date_route_chosen=true
+~ date_route_chosen = true
+# explore:cafe_hub
+-> DONE
+
+=== sunday_date_go_park ===
+# set_flag:date_route_chosen=true
+~ date_route_chosen = true
+# map:lock_all
+# explore:park_hub
+-> DONE
+
+
+// ================================================================
+// КАФЕ
+// ================================================================
+
+// ================================================================
+// ВОСКРЕСЕНЬЕ: ВЕЧЕР И СОН
+// ================================================================
+
+=== sunday_home_after_date_router ===
+{sunday_after_date_active and not sunday_second_stop_done:
+    -> sunday_home_too_early
+- else:
+    -> sunday_evening_home
+}
+
+=== sunday_home_too_early ===
+# speaker:none
+Домой пока рано. День только начал становиться настоящим воскресеньем.
+
+# speaker:mc
+Нет. Сначала ещё куда-нибудь. Не хочется обрывать всё сразу.
+
+# phone:map
+-> DONE
+
+=== sunday_evening_home ===
+# bg:bg_apartment_bedroom_night # speaker:none
+Квартира встречает тем же спокойствием, с которого началось утро. Только теперь оно ощущается иначе: не как список дел, а как место, куда можно вернуться.
+
+Телефон вибрирует уже без тревоги — короткое сообщение от {npc_name_gen}.
+
+# sfx:phone_notify
+{mc_gender == "female":
+    # msg:add:artem:Спасибо за сегодня. Было хорошо.
+    # msg:read:artem
+- else:
+    # msg:add:mila:Спасибо за сегодня. Было хорошо.
+    # msg:read:mila
+}
+
+# speaker:npc
+Спасибо за сегодня. Было хорошо.
+
+# speaker:mc
+Мне тоже.
+
+# speaker:none
+Сообщение остаётся на экране чуть дольше, чем нужно. День наконец-то складывается в цельную форму: утро, встреча, прогулка, возвращение.
+
+* [Ответить тепло]
+    # speaker:mc
+    Спасибо, что продолжили день. Я рад{mc_gender == "female":а|}, что мы встретились.
+
+    {mc_gender == "female":
+        # msg:reply:artem:Спасибо, что продолжили день. Я рада, что мы встретились.
+    - else:
+        # msg:reply:mila:Спасибо, что продолжили день. Я рад, что мы встретились.
+    }
+
+    # speaker:none
+    Ответ уходит сразу. В нём нет ничего громкого, но есть точность.
+    ~ TRUST = TRUST + 1
+    -> sunday_evening_finish
+
+* [Ответить спокойно]
+    # speaker:mc
+    Да. Хороший день получился.
+
+    {mc_gender == "female":
+        # msg:reply:artem:Да. Хороший день получился.
+    - else:
+        # msg:reply:mila:Да. Хороший день получился.
+    }
+
+    # speaker:none
+    Простые слова подходят лучше длинных. Воскресенье не требует отчёта.
+    ~ SYNC = SYNC + 1
+    -> sunday_evening_finish
+
+* [Не отвечать сразу]
+    # speaker:none
+    Ты оставляешь сообщение открытым. Не из холодности — просто хочется ещё немного побыть внутри этого дня, не превращая его в переписку.
+    ~ INSIGHT = INSIGHT + 1
+    -> sunday_evening_finish
+
+=== sunday_evening_finish ===
+# speaker:none
+Вечер постепенно собирает квартиру вокруг тебя: коридор, кухня, свет из окна, телефон на ладони.
+
+Завтра понедельник. Рабочий день, офис, обычные маршруты.
+
+Но сегодня пока ещё воскресенье.
+
+# speaker:mc
+Пора в спальню. Иначе понедельник начнётся раньше, чем я успею лечь.
+
+# set_flag:sunday_evening_started=true
+~ sunday_evening_started = true
+# goto_scene:apartment_bedroom
+-> DONE
+
+=== sunday_sleep_in_bed ===
+# bg:bg_apartment_bedroom_night # speaker:none
+Спальня выглядит почти так же, как утром, только свет стал мягче и ниже.
+
+Кровать всё ещё помнит смятое одеяло, тяжёлый сон и то воскресное утро, которое начиналось с вибрации телефона.
+
+# speaker:mc
+Вот теперь день правда закончился.
+
+# speaker:none
+Телефон ложится на тумбочку экраном вниз.
+
+На этот раз он молчит.
+
+Ты закрываешь глаза — не потому что всё понятно, а потому что воскресенье наконец-то стало целым днём: утро, встреча, прогулка, возвращение.
+
+Понедельник придёт сам.
+
+# set_flag:sunday_finished=true
+# set_flag:monday_started=true
+# quest:done:spend_sunday
+# map:allow:reset
+~ sunday_finished = true
+~ monday_started = true
+-> monday_morning_start

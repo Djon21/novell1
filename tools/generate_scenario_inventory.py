@@ -149,8 +149,10 @@ def scan_ink_knots() -> dict:
     """
     knots = {}
     ink_dir = ROOT / "main" / "story" / "chapters"
-    for ink in sorted(ink_dir.glob("*.ink")):
+    for ink in sorted(ink_dir.rglob("*.ink")):
         if "_old" in ink.name:
+            continue
+        if "archive" in ink.parts:
             continue
         text = ink.read_text(encoding="utf-8", errors="replace")
         # === knot_name ===
@@ -264,8 +266,10 @@ def scan_items_and_flags() -> tuple:
     flags = set()
 
     # Ink files
-    for ink in (ROOT / "main" / "story" / "chapters").glob("*.ink"):
+    for ink in (ROOT / "main" / "story" / "chapters").rglob("*.ink"):
         if "_old" in ink.name:
+            continue
+        if "archive" in ink.parts:
             continue
         text = ink.read_text(encoding="utf-8", errors="replace")
         for m in re.finditer(r"#\s*(?:add_item|remove_item|item:(?:add|remove))\s*:\s*([a-zA-Z_][\w]*)", text):

@@ -20,7 +20,7 @@
 
 - `main/story/chapters/<нужный>.ink`
 
-Если сцена на переходе между днями — добавить соседний файл (например для воскресенья: `10_sunday_intro.ink` + `02_sunday_date.ink`).
+Структура: квартира (все дни) — в `10_apartment.ink`. Сцены в локациях — в `chapters/locations/<location>_<day>.ink` (например `park_sunday.ink`, `cafe_monday.ink`). Если задача про конкретную локацию в конкретный день — давай именно этот файл.
 
 **Не нужно**: `dialogue_manager_ink.lua`, lua-файлы сцен.
 
@@ -43,7 +43,7 @@
 Базовый пакет + 3 ink-файла:
 
 - `main/story/chapters/00_bootstrap.ink` (стартовые VAR + падежные формы)
-- `main/story/chapters/10_sunday_intro.ink` (выбор персонажа, реальная инициализация)
+- `main/story/chapters/10_apartment.ink` (выбор персонажа, реальная инициализация)
 - Текущий ink-файл сцены где используется имя
 
 **Не нужно**: `dialogue_manager_ink.lua`. Нужен только если меняется синхронизация форм со старыми сохранениями.

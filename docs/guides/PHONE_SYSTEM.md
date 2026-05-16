@@ -212,7 +212,7 @@ message_flow.lua handles "sms_open_contact"
 **Ink-knot для переписки** (`sms_thread_<contact_id>`) показывает сообщения,
 предлагает варианты ответа через choices и выполняет `# sms:reply:contact:text`.
 
-Пример: `sms_thread_mila` в `main/story/chapters/10_sunday_intro.ink`:
+Пример: `sms_thread_mila` в `main/story/chapters/10_apartment.ink`:
 
 ```ink
 === sms_thread_mila ===

@@ -5,7 +5,7 @@
 ## Активные Файлы
 
 - `00_bootstrap.ink` — общие `VAR`, стартовый переход, bootstrap
-- `10_sunday_intro.ink` — воскресная квартира и выход к карте
+- `10_apartment.ink` — воскресная квартира и выход к карте
 - `02_sunday_date.ink` — воскресная встреча с NPC
 - `20_monday_home.ink` / `21_monday_commute.ink` / `22_monday_office.ink` — понедельник
 - `30_tuesday_home.ink` / `31_tuesday_investigation.ink` / `32_tuesday_rooftop.ink` — вторник

@@ -1,154 +1,167 @@
 // ================================================================
-// AVOS_S - 11_sunday_meetup.ink
-// Воскресная встреча с NPC: прибытие в кафе/парк и основные диалоги.
+// AVOS_S - locations/park_sunday.ink
+// Парк у реки в воскресенье. Содержит: arc встречи с NPC (прибытие,
+// поиск через messenger, главный диалог у воды или в аллее) +
+// хотспот-реакции на entrance/bench/river/path/bin/trash для этого дня.
 //
-// Hub-specific reactions:
-//   - 41_hub_park.ink, 42_hub_cafe.ink
-//   - 43_hub_shop.ink (after-meetup магазин)
-//   - 44_hub_viewpoint.ink (after-meetup смотровая)
-//   - 45_hub_bar.ink (бар maybe)
-// Вечер и возврат домой - в 17_sunday_evening.ink.
+// Iteration 2+: добавлять новые knot'ы с условием iteration_number >= 2,
+// не плодить параллельные файлы.
 // ================================================================
 
-=== sunday_date_map_fallback ===
-# speaker:none
-Карта открыта. Осталось выбрать маршрут.
-
-{date_place_cafe:
-    -> sunday_date_go_cafe
+=== park_entrance_view ===
+# bg:bg_park_riverside_entrance_morning # speaker:none
+{park_entrance_seen:
+    Вход в парк уже понятен: дорожка, вода дальше справа, зелень, тёплый камень под солнцем.
 - else:
-    -> sunday_date_go_park
+    Отсюда парк кажется больше, чем на карте: справа вода и лавочки, впереди аллея, вокруг достаточно людей, чтобы не чувствовать себя одному, и достаточно пространства, чтобы не мешать друг другу.
+
+    # set_flag:park_entrance_seen=true
+    ~ park_entrance_seen = true
 }
 
-=== sunday_date_go_cafe ===
-# set_flag:date_route_chosen=true
-~ date_route_chosen = true
-# explore:cafe_hub
+{not park_where_message_sent:
+    Можно написать {npc_name_dat} и уточнить, где вы разминулись.
+- else:
+    {park_npc_greeted:
+        Теперь это уже не место ожидания, а точка, откуда вы начали день вдвоём.
+    - else:
+        {mc_gender == "female":
+            {npc_name} написал, что идёт к тебе. Теперь ожидание стало коротким и конкретным: осталось просто поздороваться.
+        - else:
+            {npc_name} написала, что идёт к тебе. Теперь ожидание стало коротким и конкретным: осталось просто поздороваться.
+        }
+    }
+}
+
+# return_to_scene
 -> DONE
 
-=== sunday_date_go_park ===
-# set_flag:date_route_chosen=true
-~ date_route_chosen = true
-# map:lock_all
-# explore:park_hub
+=== park_bench_interact ===
+# bg:bg_park_riverside_bench_morning # speaker:none
+{met_npc_sunday:
+    Скамейка у воды теперь запомнилась не видом, а паузой, в которой вы оба не стали ничего портить лишними словами.
+    # return_to_scene
+    -> DONE
+}
+
+
+{not park_bench_cleared:
+    {park_bench_trash_seen:
+        На лавочке всё ещё стоит чужой стаканчик. Место хорошее, но садиться рядом с мусором почему-то совсем не хочется.
+    - else:
+        Лавочка хорошая: рядом вода, чуть тени, достаточно места для двоих.
+
+        И почти сразу находится мелкая проблема — на краю стоит чужой пустой стаканчик. Никакой катастрофы, просто не то соседство для разговора, который хочется начать нормально.
+        # set_flag:park_bench_trash_seen=true
+        ~ park_bench_trash_seen = true
+    }
+
+    # speaker:mc
+    Надо убрать стаканчик в урну у входа. Тогда уже можно будет предлагать сесть.
+
+    # return_to_scene
+    -> DONE
+}
+
+{park_talk_place_bench:
+    -> park_bench_main_talk
+- else:
+    # speaker:mc
+    Теперь здесь нормально. Осталось решить: сесть у воды или всё-таки пройтись.
+    # return_to_scene
+    -> DONE
+}
+
+=== park_river_view ===
+# bg:bg_park_riverside_bench_morning # speaker:none
+Река движется медленно и уверенно. На таком фоне разговоры обычно становятся тише — не слабее, просто честнее.
+
+{park_npc_greeted and not met_npc_sunday:
+    {npc_name} смотрит на воду чуть дольше, чем на тебя. Не избегает — просто даёт вам обоим пару секунд без необходимости сразу быть смелыми.
+}
+
+# return_to_scene
 -> DONE
 
-
-// ================================================================
-// КАФЕ
-// ================================================================
-
-=== sunday_date_cafe_arrival ===
-# bg:bg_cafe_morning # speaker:none
-Кафе оказывается ровно таким, каким хотелось его увидеть утром: тёплый свет из окна, тёмное дерево, тихий звон чашек за стойкой.
-
-{npc_name} уже здесь — за столиком у окна. Не делает из встречи событие, просто поднимает взгляд и улыбается.
-
-# speaker:npc
-{mc_gender == "female":
-Ты пришла.
+=== park_path_trees ===
+# bg:bg_park_riverside_path_morning # speaker:none
+{park_path_seen:
+    Аллея остаётся хорошим вариантом: идти проще, чем сидеть напротив и делать вид, что это просто прогулка.
 - else:
-Ты пришёл.
+    Тень от деревьев ложится на дорожку пятнами. Здесь прохладнее, чем у воды, и меньше случайных взглядов. Если идти рядом, разговор может начаться сам.
+    # set_flag:park_path_seen=true
+    ~ park_path_seen = true
 }
 
-# speaker:mc
-Я стараюсь держать слово.
+Рядом с {npc_name_ins} эта дорожка перестаёт быть маршрутом и становится способом не торопить разговор.
 
-# speaker:npc
-Хорошо, что выбрали кафе. Тут спокойно.
+# return_to_scene
+-> DONE
 
-# speaker:none
-Вы садитесь друг напротив друга. Между вами — маленький столик, меню без спешки и воскресное утро, которое наконец-то перестаёт быть только списком дел.
-
-# speaker:npc
-Ну что, кофе сначала или сразу разговоры?
-
-{sunday_shop_bought_drink_for_npc:
-# speaker:mc
-Я по дороге взял{mc_gender == "female":а|} тебе напиток. Не знал{mc_gender == "female":а|}, что захочется, но вдруг.
-
-# speaker:npc
-Ты правда зашёл{mc_gender == "female":ла|} в магазин до встречи, чтобы взять это мне?
-
-# speaker:none
-Жест маленький, почти неловкий. Но именно поэтому он работает.
-~ TRUST = TRUST + 1
-# remove_item:water_bottle
-# set_flag:date_small_kindness=true
-~ date_small_kindness = true
+=== park_path_walk ===
+# bg:bg_park_riverside_path_morning # speaker:none
+{met_npc_sunday:
+    Вы проходите дальше по аллее. Несколько минут можно не решать ничего: только идти, слушать шаги и редкие голоса где-то впереди.
+    # return_to_scene
+    -> DONE
 }
 
-* [Спросить, как {npc_name_dat} хотелось провести день]
-    # speaker:mc
-    А тебе как хотелось провести сегодня? Не в смысле “куда правильно”, а как правда хочется.
+-> park_path_main_talk
 
-    # speaker:npc
-    Спасибо, что спрашиваешь. Наверное, спокойно. Без расписания.
-
-    # speaker:none
-    Ты не предлагаешь решение за двоих — сначала даёшь человеку место в разговоре. От этого столик у окна становится не просто выбранной точкой, а началом общего дня.
-    ~ TRUST = TRUST + 1
-    -> sunday_date_cafe_settle
-
-* [Пошутить, что воскресенье требует нормального завтрака]
-    # speaker:mc
-    Воскресенье требует нормального завтрака. Иначе оно не засчитывается.
-
-    # speaker:npc
-    Тогда придётся спасать воскресенье официально.
-
-    # speaker:none
-    {npc_name} улыбается шире. Напряжение, с которым закрывалась дверь квартиры, понемногу отпускает.
-    ~ SYNC = SYNC + 1
-    -> sunday_date_cafe_settle
-
-* [Признаться, что кафе было самым безопасным вариантом]
-    # speaker:mc
-    Я выбрал кафе, потому что это был самый безопасный вариант. Тёплый свет, столик, всё понятно.
-
-    # speaker:npc
-    Безопасный — не обязательно плохой. Главное, чтобы ты правда хотел быть здесь, а не просто выбрал первый понятный маршрут.
-
-    # speaker:none
-    Ответ не ранит, но слегка сдвигает разговор. Ты замечаешь: логичный выбор и внимательный выбор — не всегда одно и то же.
-    ~ INSIGHT = INSIGHT + 1
-    -> sunday_date_cafe_settle
-
-=== sunday_date_cafe_settle ===
-# speaker:none
-Разговор складывается из простых вещей: кто как спал, почему город утром кажется тише, что лучше — сладкое к кофе или просто второй кофе.
-
-# speaker:npc
-Хорошо, что мы списались.
+=== park_bin_prompt ===
+# bg:bg_park_riverside_entrance_morning # speaker:none
+Урна стоит у края дорожки — как будто специально для маленьких решений, которые никто не заметит, кроме тебя.
 
 # speaker:mc
-Я тоже.
+Урна рядом. Осталось не просто держать стаканчик в руке, а действительно выбросить его.
 
-# speaker:none
-Этого достаточно. Не для большого признания — для начала.
+# hud:hint:bag
+# return_to_scene
+-> DONE
 
-# speaker:npc
-У меня ещё есть немного времени. Можно не разбегаться сразу.
+=== take_park_trash_cup ===
+# bg:bg_park_riverside_bench_morning # speaker:none
+Чужой пустой стаканчик стоит на краю лавочки. Ничего драматичного: просто след чужого дня, который мешает начать свой.
 
 # speaker:mc
-Тогда выберем, куда пойти дальше.
+Ладно. Унесу к урне.
 
+# add_item:park_trash_cup
+# set_flag:park_trash_cup_taken=true
+~ park_trash_cup_taken = true
+# hud:hint:bag
+# return_to_scene
+-> DONE
+
+=== leave_park ===
 # speaker:none
-Встреча не заканчивается на первом разговоре. Теперь это уже не просто договорённость, а настоящий воскресный день.
-
-# set_flag:date_route_chosen=true
-# set_flag:met_npc_sunday=true
-# set_flag:sunday_after_date_active=true
-# quest:done:meet_npc
-# quest:start:spend_sunday
+{met_npc_sunday:
+Ты выходишь с набережной. Телефон уже в руке — можно выбрать, куда идти дальше.
 # map:allow:reset
 # map:allow:poi_shop
 # map:allow:poi_view
-~ date_route_chosen = true
-~ met_npc_sunday = true
-~ sunday_after_date_active = true
 # phone:map
+- else:
+    {park_place_chosen:
+Уходить сейчас будет странно. Место уже выбрано — осталось не сбежать из разговора раньше, чем он начался.
+    - else:
+        {park_npc_greeted:
+Уходить сейчас будет странно. Вы только нашли друг друга и ещё даже не выбрали, где нормально поговорить.
+        - else:
+        {park_where_message_sent:
+Уходить из парка пока рано. {npc_name} уже идёт к тебе.
+        - else:
+Уходить из парка пока рано. Сначала стоит хотя бы написать {npc_name_dat}, где вы разминулись.
+        }
+        }
+    }
+# return_to_scene
+}
 -> DONE
+
+// ================================================================
+// ПОСЛЕ ВСТРЕЧИ: ВТОРОЕ МЕСТО
+// ================================================================
 
 === sunday_date_park_arrival ===
 # bg:bg_park_riverside_entrance_morning # speaker:none
