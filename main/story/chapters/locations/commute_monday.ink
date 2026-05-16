@@ -1,12 +1,8 @@
 // ================================================================
-// AVOS_S — 21_monday_commute.ink
-// Понедельник: короткий путь от дома до работы.
-//
-// ВАЖНО:
-// - метро не используется: у карты нет POI метро, а офис ближе воскресных хабов;
-// - маршрут не открывает phone:map, потому что это не свободное перемещение;
-// - когда появится отдельный уличный фон, можно заменить первый bg на bg_city_street_morning;
-// - все узлы имеют префикс mon_commute_*.
+// AVOS_S - locations/commute_monday.ink
+// Дорога на работу в понедельник: выход из квартиры -> пеший маршрут
+// (3 варианта темпа: авто / наблюдение / ровный) -> бизнес-район -> офис.
+// Это transition-локация: не имеет хотспотов в scenes.lua, проходит линейно.
 // ================================================================
 
 === mon_commute_entry ===
@@ -32,7 +28,6 @@
     ~ SYNC = SYNC + 1
     -> mon_commute_walk_steady
 
-
 === mon_commute_walk_auto ===
 # speaker:none
 Автоматический маршрут удобен тем, что не требует участия.
@@ -43,7 +38,6 @@
 Главное — не начать так же работать.
 
 -> mon_commute_work_district
-
 
 === mon_commute_walk_observe ===
 # speaker:none
@@ -58,7 +52,6 @@
 
 -> mon_commute_work_district
 
-
 === mon_commute_walk_steady ===
 # speaker:none
 Ты держишь ровный темп, без рывков и без театральной собранности.
@@ -70,7 +63,6 @@
 
 -> mon_commute_work_district
 
-
 === mon_commute_work_district ===
 # bg:bg_office_lobby_day # speaker:none
 Бизнес-центр появляется слишком быстро.
@@ -81,7 +73,6 @@
 
 # set_flag:reached_work_district=true
 -> mon_commute_office_approach
-
 
 === mon_commute_office_approach ===
 # bg:bg_office_lobby_day # speaker:none

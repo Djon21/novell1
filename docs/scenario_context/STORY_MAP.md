@@ -32,7 +32,9 @@ Ink-файлы лежат в `main/story/chapters/`. Структура **лок
 | `shop_sunday.ink` | Магазин 24/7 в воскресенье: pre-date / with-npc сцены + хотспоты полок. |
 | `viewpoint_sunday.ink` | Смотровая в воскресенье. |
 | `bar_sunday.ink` | Бар Maybe в воскресенье (минимальный хаб). |
-| `*_monday.ink`, `*_tuesday.ink` | Заглушки до миграции. Понедельник/вторник пока в legacy-файлах. |
+| `commute_monday.ink` | Дорога на работу: выход из квартиры → пеший маршрут → офис. Transition-локация без хотспотов в scenes.lua. |
+| `office_monday.ink` | Офис в понедельник: вход, встреча с коллегой, рабочий кейс (auto/manual/clarify/stop), результаты, конец дня + хотспоты стола/переговорки/выхода. |
+| `*_tuesday.ink` | Заглушки до Stage 3. Вторник пока в legacy-файлах. |
 
 **Правила:**
 - **Одна локация × один день = один файл.** Хочешь сцену "парк во вторник" — она лежит **только** в `park_tuesday.ink`.
@@ -44,9 +46,6 @@ Ink-файлы лежат в `main/story/chapters/`. Структура **лок
 
 | Файл | Содержание |
 |---|---|
-| `20_monday_home.ink` | Понедельник дома → будет влит в `10_apartment.ink` (monday-секция). |
-| `21_monday_commute.ink` | Дорога → `locations/metro_monday.ink`. |
-| `22_monday_office.ink` | Офис → `locations/office_monday.ink`. |
 | `30_tuesday_home.ink` | Вторник дома → `10_apartment.ink` (tuesday). |
 | `31_tuesday_investigation.ink` | Расследование → расщепить: arc-knot'ы в `50_investigation.ink`, локационные сцены в соотв. `locations/*_tuesday.ink`. |
 | `32_tuesday_rooftop.ink` | → `locations/rooftop_tuesday.ink`. |

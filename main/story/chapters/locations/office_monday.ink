@@ -1,12 +1,11 @@
 // ================================================================
-// AVOS_S — 22_monday_office.ink
-// Понедельник: офис, рабочая ошибка и первый системный след.
+// AVOS_S - locations/office_monday.ink
+// Офис в понедельник: вход через турникет, встреча с коллегой,
+// рабочий кейс (auto/manual/clarify/stop), результаты, конец дня.
+// Плюс хотспот-реакции (стол, переговорка, выход).
 //
-// Правила файла:
-// - все knot'ы имеют префикс mon_office_*;
-// - первая итерация проходит без активного вмешательства игрока;
-// - выборы вмешательства открываются только во второй и следующих итерациях;
-// - используем зарегистрированные фоны: bg_office_lobby_day / bg_office_workspace_day / bg_office_meeting_room_day / bg_office_lobby_night / bg_office_workspace_night / bg_office_meeting_room_night.
+// Возврат домой ночью (mon_office_evening_close) уехал в 10_apartment.ink
+// как часть monday-вечера.
 // ================================================================
 
 === mon_office_entry ===
@@ -25,7 +24,6 @@
 # quest:start:work_monday_case
 # explore:work_hub
 -> DONE
-
 
 === mon_office_npc_greeting ===
 # bg:bg_office_workspace_day # speaker:npc
@@ -48,7 +46,6 @@
     Открывай. Лучше увидеть проблему до того, как она станет статусом.
     -> mon_office_task_intro
 
-
 === mon_office_npc_strange ===
 # speaker:npc
 Это называется “рабочий процесс”. Очень древняя аномалия. Люди веками делают вид, что привыкли.
@@ -63,7 +60,6 @@
 Шутка помогает, но ненадолго. За ней всё равно слышен ровный шум системы — не громкий, а постоянный.
 
 -> mon_office_task_intro
-
 
 === mon_office_task_intro ===
 # bg:bg_office_workspace_day # color:0.12,0.14,0.18 # speaker:none
@@ -88,7 +84,6 @@
 
 -> mon_office_system_warning
 
-
 === mon_office_system_warning ===
 # speaker:none
 ДАННЫХ НЕДОСТАТОЧНО.
@@ -108,14 +103,12 @@
 
 -> mon_office_case_router
 
-
 === mon_office_case_router ===
 {iteration_number <= 1:
     -> mon_office_auto_standard
 - else:
     -> mon_office_core_choice
 }
-
 
 === mon_office_auto_standard ===
 # speaker:none
@@ -151,7 +144,6 @@
 # clue:add:standard_solution:Стандартное решение применено без уточнения
 -> mon_office_result_system_bias
 
-
 === mon_office_core_choice ===
 # speaker:none
 На этот раз пауза не исчезает сама.
@@ -184,7 +176,6 @@
     Нет. Пока нет подтверждения, автоматическое решение должно быть остановлено.
     -> mon_office_stop_auto
 
-
 === mon_office_manual_standard ===
 # speaker:none
 Ты подтверждаешь стандартный путь вручную.
@@ -204,7 +195,6 @@
 # set_flag:mon_office_error_seen=true
 # note:add:Стандартное решение:оператор подтвердил стандартный путь при неполных данных
 -> mon_office_result_system_bias
-
 
 === mon_office_clarify ===
 # speaker:none
@@ -227,7 +217,6 @@
 # clue:add:missing_data:Недостающие данные нельзя заменить стандартным ответом
 -> mon_office_result_true_bias
 
-
 === mon_office_stop_auto ===
 # speaker:none
 Ты отключаешь автоприменение для кейса.
@@ -249,7 +238,6 @@
 # clue:add:auto_blocked:Автоматическое решение можно остановить
 -> mon_office_result_true_bias
 
-
 === mon_office_result_system_bias ===
 # bg:bg_office_workspace_night # speaker:none
 День продолжается так, будто ничего страшного не произошло.
@@ -269,7 +257,6 @@
 
 -> mon_office_day_end
 
-
 === mon_office_result_true_bias ===
 # bg:bg_office_meeting_room_night # speaker:none
 День не становится легче. Очередь не превращается в красивый отчёт. Никто не хлопает по плечу за то, что ты выбрал{mc_gender == "female":а|} более медленный путь.
@@ -286,7 +273,6 @@
 Вечерний свет ложится на монитор холоднее, чем дома. Здесь даже правильное решение не становится тёплым. Оно просто перестаёт быть ложным.
 
 -> mon_office_day_end
-
 
 === mon_office_day_end ===
 # bg:bg_office_workspace_night # speaker:none
@@ -319,30 +305,6 @@
 # quest:done:work_monday_case
 -> mon_office_evening_close
 
-
-=== mon_office_evening_close ===
-# bg:bg_apartment_hall_night # speaker:none
-Вечером квартира принимает тебя без вопросов.
-
-И это почти нечестно: рабочий день оставил след, а дом всё равно выглядит так, будто здесь можно просто выключить свет и стать человеком без очередей, статусов и стандартных решений.
-
-# speaker:mc
-Не получится забыть. Значит, хотя бы поспать.
-
-# speaker:none
-Понедельник заканчивается не крышей и не финалом. Он заканчивается открытым следом, который дойдёт до вторника раньше будильника.
-
-# set_flag:monday_finished=true
-# set_flag:tuesday_pending=true
--> tuesday_morning_start
-
-// ----------------------------------------------------------------
-// Point-and-click office playable task
-// ----------------------------------------------------------------
-// Эти knot'ы вызываются из универсального office hub в scenes.lua.
-// Первая итерация остаётся линейной по финалу, но офисный день теперь
-// требует действий игрока: use-on-target, read, combine, give/use.
-
 === office_turnstile_prompt ===
 # speaker:mc
 Турникет ждёт пропуск.
@@ -353,7 +315,6 @@
 Нужно открыть инвентарь, выбрать пропуск и использовать его на турникете.
 # return_to_scene
 -> DONE
-
 
 === work_desk_read_mail ===
 # bg:bg_office_workspace_day # speaker:none
@@ -374,7 +335,6 @@
 # return_to_scene
 -> DONE
 
-
 === work_desk_needs_case_file ===
 # speaker:mc
 Распечатка есть. Но отдавать один лист как “пакет по кейсу” — это уже совсем офисная магия.
@@ -383,7 +343,6 @@
 Нужна папка. Скорее всего, в переговорке: там всегда лежит что-то “для общих задач”, пока кто-нибудь не заберёт это первым.
 # return_to_scene
 -> DONE
-
 
 === work_desk_case_file_prompt ===
 # speaker:mc
@@ -395,13 +354,11 @@
 # return_to_scene
 -> DONE
 
-
 === work_desk_done ===
 # speaker:mc
 Кейс уже передан в работу. На столе остался только след от действия: пустое место там, где лежала папка.
 # return_to_scene
 -> DONE
-
 
 === meeting_room_take_folder ===
 # bg:bg_office_meeting_room_day # speaker:none
@@ -418,7 +375,6 @@
 # return_to_scene
 -> DONE
 
-
 === meeting_room_table_after ===
 # speaker:mc
 Стол в переговорке снова пустой. Как будто папка никогда здесь не лежала.
@@ -427,7 +383,6 @@
 Офис хорошо умеет возвращать поверхности к нейтральному виду.
 # return_to_scene
 -> DONE
-
 
 === leave_work ===
 # speaker:mc

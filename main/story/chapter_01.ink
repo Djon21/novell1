@@ -14,11 +14,10 @@ INCLUDE chapters/locations/shop_sunday.ink
 INCLUDE chapters/locations/viewpoint_sunday.ink
 INCLUDE chapters/locations/bar_sunday.ink
 
-// Понедельник и вторник пока в legacy-структуре, ждут миграции
-INCLUDE chapters/20_monday_home.ink
-INCLUDE chapters/21_monday_commute.ink
-INCLUDE chapters/22_monday_office.ink
+INCLUDE chapters/locations/commute_monday.ink
+INCLUDE chapters/locations/office_monday.ink
 
+// Вторник пока в legacy-структуре, ждёт Stage 3
 INCLUDE chapters/30_tuesday_home.ink
 INCLUDE chapters/31_tuesday_investigation.ink
 INCLUDE chapters/32_tuesday_rooftop.ink
