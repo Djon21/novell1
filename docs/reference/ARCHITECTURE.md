@@ -66,7 +66,7 @@
 - terminal
 - map entry
 
-Ink добавляет данные через теги `sms`, `msg`, `quest`, `note`, `mail`, `call`, `clue`, `camera`, `term`. Messenger использует `msg:*`; camera-feed остаётся в game_state как legacy/data-channel, но не является активным phone app.
+Ink добавляет данные через теги `sms`, `msg`, `quest`, `note`, `mail`, `call`, `clue`, `term`, `scene_char`. Messenger использует `msg:*`. Scene characters (`# scene_char:show:...`) — персонажи в полный рост на фоне сцены.
 
 ### Инвентарь
 
@@ -98,7 +98,6 @@ Run-state текущего прохождения:
 - SMS / notes
 - mail / call log / clues
 - messenger messages
-- camera feed (legacy/data-channel)
 - terminal lines
 
 Важно:
@@ -185,8 +184,7 @@ Git Bash / Linux:
 - `effects_flow.lua` — one-shot effects
 - `run_state.lua` — persist/restore/reset run-state
 
-Подробная карта: `docs/reference/UI_MANAGER_V2_ARCHITECTURE.md` (обзор + потоки)
-и `UI_MANAGER_V2_MODULES.md` (справочник модулей).
+Подробная карта (модули + потоки + рецепты): `docs/reference/UI_MANAGER_V2_ARCHITECTURE.md`.
 
 ## Shared Utilities
 

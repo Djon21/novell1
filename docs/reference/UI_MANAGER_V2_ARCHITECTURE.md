@@ -150,6 +150,65 @@ phone_v2 показывается, инпут идёт через phone_input
 Когда добавляешь новую функцию во flow и ей нужно что-то от ui_manager —
 добавь поле в соответствующий ctx-builder. Не глобал.
 
+## Когда что менять (рецепты)
+
+### Новый fullscreen background
+
+В `ui_manager_v2.script` (потому что `go.property` живёт только в `.script`):
+1. `go.property("bg_<name>_atlas", resource.atlas("/main/images/backgrounds/bg_<name>.atlas"))`
+2. Строка в `DEDICATED_BG_ATLAS_PROPS`
+
+Логика переключения — в `background_flow.lua`, обычно её трогать не нужно.
+
+### Новый SFX из Ink
+
+В `M.SFX_URLS` в `ui_manager_v2.script`:
+```lua
+M.SFX_URLS = {
+    door_open = "/sfx_player#door_open",
+}
+```
+Воспроизведение — `effects_flow.lua`.
+
+### Новый ink-тег
+
+См. чек-лист ниже.
+
+### Новое сообщение `msg.post(UI_MGR, ...)`
+
+См. чек-лист ниже.
+
+### Новый стиль/поле хотспота
+
+1. В `scene_flow.lua` — добавить в clean-copy данных
+2. В `hotspots_v2.gui_script` — принять и применить
+3. В `docs/guides/HOTSPOT_VISUALS.md` — описать
+
+### Новое действие предмета (verb)
+
+1. Добавить verb в `ENABLED_VERBS` в `inventory_flow.lua`
+2. Добавить поведение в `M.handle_verb`
+3. Описать ink-knot-цепочку в `docs/reference/INVENTORY_SYSTEM.md`
+
+### Новое приложение телефона
+
+1. Создать `phone_<app>.gui` + `phone_<app>.gui_script`
+2. Добавить в `phone_v2_root.gui_script` (`APP_COMPONENT`, `APP_TITLES`, `APPS`)
+3. Если особое открытие — `phone_flow.lua`
+4. Если приложение шлёт сообщения в UI_MGR — `message_flow.lua`
+
+### Что специально оставлено в `ui_manager_v2.script`
+
+Намеренно не вынесено:
+- `go.property(...)` для атласов фонов
+- `M.components`, `M.overlays`, `M.SFX_URLS`
+- Context-builders (`dialogue_ctx`, `inventory_ctx`, `overlay_ctx`, `message_ctx`)
+- `start_new_run`, `reset_iteration_and_restart`, `refresh_menu_state`
+- `handle_dialogue_update`
+- `on_input`
+
+Возможный будущий рефакторинг: `input_flow.lua` (для `on_input`), дробление `handle_dialogue_update`. Последнее связано с Ink/scene_controller/dialogue/choice/exploration и трогается осторожно.
+
 ## Чек-лист добавления нового сообщения
 
 1. Добавить hash в `main/gui/modules/messages.lua` (см. `MESSAGES.md`).

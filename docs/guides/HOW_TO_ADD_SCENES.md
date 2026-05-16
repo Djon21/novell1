@@ -34,7 +34,8 @@ main/images/
 │   └── ...
 ├── hotspots.atlas                      ← hotspot_circle, hotspot_ring, hotspot_dot
 ├── scene_objects.atlas                 ← mobile и другие overlay-спрайты
-└── v2.atlas                            ← UI-ассеты dialogue_v2 (портреты, рамки)
+├── portraits/<char>/<char>.atlas       ← диалоговые портреты (mila, artem, narrator)
+└── characters/<char>/<char>.atlas      ← персонажи в полный рост на сцене
 ```
 
 **Правило:** `1 fullscreen background = 1 atlas`. Никаких сборных «backgrounds.atlas».

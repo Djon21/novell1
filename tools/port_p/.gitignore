@@ -1,3 +1,10 @@
 debug/
 out/
+rembg_test/
 _*.png
+*_nobg.png
+*_nobg_eye_*.png
+*_nobg_mouth_*.png
+*_overlay.png
+*_overlay.png.offset.json
+*_tight.png

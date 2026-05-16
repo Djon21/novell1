@@ -12,7 +12,7 @@ history и commit messages.
 - [ ] Проверить `Continue` после крупных правок `chapter_01.json`: сохранение
   в диалоге, в exploration, после телефона, после карты, после инвентаря.
 - [ ] Проверить phone-apps на мобильных aspect ratio: SMS, messenger, quests,
-  notes, mail, calls, clues, camera, terminal, map entry.
+  notes, mail, calls, clues, terminal, map entry.
 
 ## P2 — Runtime И UX
 

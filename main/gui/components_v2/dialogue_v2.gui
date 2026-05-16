@@ -51,6 +51,10 @@ textures {
   name: "backgrounds"
   texture: "/main/images/backgrounds/bg_apartment_bedroom_morning.atlas"
 }
+textures {
+  name: "char_mila"
+  texture: "/main/images/characters/mila/mila.atlas"
+}
 nodes {
   position {
     x: 640.0
@@ -82,6 +86,40 @@ nodes {
   texture: "backgrounds/scene_bg"
   id: "scene_bg_next"
   adjust_mode: ADJUST_MODE_ZOOM
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    x: 0.0
+    y: 720.0
+    z: 0.06
+  }
+  size {
+    x: 200.0
+    y: 500.0
+  }
+  type: TYPE_BOX
+  id: "scene_character_1"
+  pivot: PIVOT_NW
+  adjust_mode: ADJUST_MODE_FIT
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    x: 0.0
+    y: 720.0
+    z: 0.07
+  }
+  size {
+    x: 200.0
+    y: 500.0
+  }
+  type: TYPE_BOX
+  id: "scene_character_2"
+  pivot: PIVOT_NW
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: true
   enabled: false
 }

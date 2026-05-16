@@ -43,20 +43,42 @@
 - имя без префикса `bg_`
 - размеры — оригинальные пиксели (масштабирование задаётся `size = { w, h }` в сцене)
 
-## 4. Портреты для активного v2 UI
+## 4. Диалоговые портреты (бюст в окне диалога)
 
 ### Где лежат
 
-- файлы: `main/images/v2/`
-- atlas: `main/images/v2.atlas`
+- per-character папка: `main/images/portraits/<name>/`
+- per-character atlas: `main/images/portraits/<name>/<name>.atlas`
+- texture binding в `dialogue_v2.gui` (по одному на персонажа: `mila`, `artem`, `narrator`)
 - runtime-логика: `main/gui/components_v2/dialogue_v2.gui_script`
 
 ### Правила
 
-- формат: `PNG`
-- прозрачный фон
-- рекомендуемый размер: `512x512`
-- atlas frame name должен совпадать с полем `portrait` в таблице `CHARS`
+- формат: `PNG`, прозрачный фон
+- размер base'а `512×512`; overlay'и (blink/talk) — tight-bbox (~150×50 для глаз, ~80×60 для рта)
+- atlas animations: `<char>_idle`, `<char>_blink`, `<char>_talk`
+- запись в `CHARS` (`dialogue_v2.gui_script`) с полями `atlas`, `portrait_idle/blink/talk`
+- `extrude_borders: 2` обязательно для атласов с animations (иначе видны полосы между кадрами)
+
+Подробно: `HOW_TO_ADD_PORTRAITS.md`, `HOW_TO_ANIMATE_PORTRAITS.md`.
+
+## 4b. Сценические персонажи (full-figure на фоне)
+
+### Где лежат
+
+- per-character папка: `main/images/characters/<name>/`
+- per-character atlas: `main/images/characters/<name>/<name>.atlas`
+- texture binding в `dialogue_v2.gui` с префиксом `char_` (`char_mila`, `char_artem`)
+- config: `main/scripts/scene_characters.lua` (SCENE_GROUPS + SCENES таблицы)
+
+### Правила
+
+- формат: `PNG`, прозрачный фон (вырезать через `tools/remove_background.py`)
+- одна поза = один PNG (`idle.png`, `sitting.png`, etc.), переиспользуется в разных сценах с разной позицией/размером
+- координаты `x, y, w, h` в SCENES — game coords `1280×720` с pivot top-left
+- опциональные поля: `action = { type="ink_knot", knot=... }`, `clickable_when(gs)` для hover/click
+
+Подробно: `HOW_TO_ADD_SCENE_CHARACTERS.md`.
 
 ## 5. Legacy ресурсы (НЕ для новых ассетов)
 
@@ -76,7 +98,8 @@
 
 - fullscreen фон → `main/images/backgrounds/<bg_name>.atlas` + регистрация `go.property`/`DEDICATED_BG_ATLAS_PROPS` в `ui_manager_v2.script`
 - мелкий overlay-спрайт сцены → `main/images/scene_objects.atlas`
-- портрет персонажа → `main/images/v2.atlas`
+- диалоговый портрет → `main/images/portraits/<name>/<name>.atlas`
+- сценический персонаж → `main/images/characters/<name>/<name>.atlas`
 - иконка/декор UI → `main/images/ui_common.atlas` (или новый dedicated atlas)
 - если сомневаетесь, проверьте, какой texture slot использует нужный `.gui` файл
 

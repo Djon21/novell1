@@ -1,152 +1,156 @@
-# Source File Packs For GPT
+# Source File Packs
 
-Эта папка с документацией не должна заменять реальные исходники. Она нужна, чтобы GPT быстрее понял проект и не держал в контексте всё подряд.
+Документация в `scenario_context/` — навигация и контекст. Когда задача требует **точной правки кода/координат/тегов**, AI понадобятся реальные source files. Этот документ — рецепты «какие файлы давать под какой тип задачи».
 
-Если задача требует точной правки кода, координат, тегов или условий, GPT нужно дать не только документы, но и актуальные source files ниже.
+> Перед началом сессии запусти `python tools/generate_scenario_inventory.py` —
+> обновит `PROJECT_INVENTORY.md`. С актуальным INVENTORY часто source-файлы
+> не нужны вообще (для большинства сценарных задач).
 
-## Минимальный базовый пакет
+---
 
-Давать почти всегда:
+## Базовый пакет
 
-- `docs/scenario_context/README.md`
-- `docs/scenario_context/ACTIVE_TASK.md`
-- `docs/scenario_context/STORY_BIBLE_SHORT.md`
-- `docs/scenario_context/WRITING_RULES.md`
-- `docs/scenario_context/INK_TAG_REFERENCE.md`
-- `docs/scenario_context/INK_STRUCTURE.md`
-- `docs/scenario_context/CURRENT_STATE_AND_FLAGS.md`
+Уже описан в `README.md` — 10 документов из `scenario_context/`, включая `PROJECT_INVENTORY.md`. Дальше — добавки под конкретные задачи.
 
-Если GPT помогает с локациями:
+---
 
-- `docs/scenario_context/HUB_AND_HOTSPOT_WORKFLOW.md`
-- `docs/scenario_context/BACKGROUND_CATALOG.md`
+## Чистый сценарный текст (ink без новых тегов)
 
-## Ink-сцена без новых тегов
+Достаточно базового пакета **+ нужный ink-файл**:
 
-Если надо написать или отредактировать обычную сцену:
+- `main/story/chapters/<нужный>.ink`
 
-- нужный файл из `main/story/chapters/`;
-- соседний файл по дню, если сцена стоит на переходе между днями;
-- `docs/scenario_context/SCENE_SUMMARIES.md`.
+Если сцена на переходе между днями — добавить соседний файл (например для воскресенья: `01_apartment.ink` + `02_sunday_date.ink`).
 
-Пример для парка как чистой Ink-сцены:
+**Не нужно**: `dialogue_manager_ink.lua`, lua-файлы сцен.
 
-- `main/story/chapters/02_sunday_date.ink`
-- `docs/scenario_context/SCENE_SUMMARIES.md`
-- `docs/scenario_context/STORY_BIBLE_SHORT.md`
-- `docs/scenario_context/WRITING_RULES.md`
+---
 
+## Ink-сцена с тегами (карта/телефон/инвентарь/реклама)
 
-## Имя, пол, обращение и склонения
+Базовый пакет + ink-файл сцены. Дополнительные документы из репо:
 
-Если задача касается выбранного персонажа, имён, местоимений, формы обращения или грамматики фраз с именами, дополнительно загрузи:
+- `docs/guides/HOW_TO_WRITE_INK.md` — все ink-теги с примерами и обработчиками
 
-- `main/story/chapters/00_bootstrap.ink`
-- `main/story/chapters/01_apartment.ink`
-- текущий Ink-файл сцены, где используется имя
+**Не нужно**: `dialogue_manager_ink.lua` (если только не добавляется новый тег или подозрение что reference устарел).
 
-Почему это нужно:
+Если реклама — также `docs/guides/YANDEX_SDK_AND_ADS.md`.
 
-- `00_bootstrap.ink` содержит стартовые `mc_name`, `npc_name` и падежные формы `mc_name_*`, `npc_name_*`.
-- `01_apartment.ink` задаёт реальные значения после выбора персонажа.
-- Сценарный файл нужен, чтобы заменить прямые `{mc_name}` / `{npc_name}` на правильные падежные формы только там, где это действительно требуется.
+---
 
-`dialogue_manager_ink.lua` нужен только если меняется синхронизация этих переменных со старыми сохранениями или save_manager. Для обычной правки текста достаточно Ink-файлов.
+## Имя / пол / обращение / падежи
 
-## Ink-сцена с тегами
+Базовый пакет + 3 ink-файла:
 
-Если сцена открывает карту, телефон, рекламу, exploration mode, фон, инвентарь или другой runtime-эффект, обычно достаточно добавить:
+- `main/story/chapters/00_bootstrap.ink` (стартовые VAR + падежные формы)
+- `main/story/chapters/01_apartment.ink` (выбор персонажа, реальная инициализация)
+- Текущий ink-файл сцены где используется имя
 
-- `docs/scenario_context/INK_TAG_REFERENCE.md`
-- `docs/guides/HOW_TO_WRITE_INK.md`
+**Не нужно**: `dialogue_manager_ink.lua`. Нужен только если меняется синхронизация форм со старыми сохранениями.
 
-`main/scripts/dialogue_manager_ink.lua` нужен только если:
+---
 
-- добавляется новый тег;
-- меняется поведение существующего тега;
-- есть подозрение, что `INK_TAG_REFERENCE.md` устарел;
-- нужно отладить баг парсинга или порядка выполнения тегов.
+## Exploration hub / хотспоты
 
-Если задача связана с рекламой:
+Базовый пакет + lua-файлы сцен:
 
-- `docs/guides/YANDEX_SDK_AND_ADS.md`
-- файлы, где подключён Yandex SDK и message flow рекламы.
+- `main/data/scenes/<нужный>.lua` (например `locations.lua` для парка)
+- `main/data/scenes/_shared.lua` (STYLE_*, icons, helpers)
+- `main/scripts/scenes.lua` (для проверки сборки и поддерживаемых action types)
+- связанный ink-файл если хотспоты вызывают `ink_knot`
 
-## Exploration hub или хотспоты
+Зачем именно эти:
+- `<scene>.lua` содержит реальные `rect`, `id`, `action` хотспотов
+- `_shared.lua` содержит реальные стили / иконки / bg-helpers
+- `scenes.lua` показывает как сцены собираются и какие action types поддерживаются
+- ink-файл нужен чтобы проверить существуют ли knot names для `action_knot`
 
-Если парк, квартира, офис или другая локация правится как exploration hub, а не только как текстовая Ink-сцена, обязательно дать:
+---
 
-- нужный файл из `main/data/scenes/`;
-- `main/data/scenes/_shared.lua`;
-- `main/scripts/scenes.lua`;
-- `docs/scenario_context/HUB_AND_HOTSPOT_WORKFLOW.md`;
-- `docs/scenario_context/BACKGROUND_CATALOG.md`.
+## Новый фон / новая локация
 
-Пример для парка:
+Базовый пакет +:
 
-- `main/data/scenes/locations.lua`
+- нужный `main/data/scenes/<file>.lua`
 - `main/data/scenes/_shared.lua`
 - `main/scripts/scenes.lua`
-- `main/story/chapters/02_sunday_date.ink`, если хотспоты вызывают Ink-knot из свидания
-- скрин или фон парка, если нужно подобрать `rect`
+- `docs/guides/HOW_TO_ADD_SCENES.md`
 
-Почему GPT попросит именно эти файлы:
+Если фон новый (нужно подключить):
+- атлас/коллекция файлы графического пайплайна
+- `main/gui/ui_manager_v2.script` (для `DEDICATED_BG_ATLAS_PROPS`)
 
-- `locations.lua` содержит реальные сцены парка и хотспоты.
-- `_shared.lua` содержит реальные стили, иконки и helper-функции.
-- `scenes.lua` показывает, как сцены собираются и какие action types поддерживаются.
-- Ink-файл нужен, чтобы проверить, существуют ли knot names для `action = { type = "ink_knot", knot = "..." }`.
+Если фон уже подключён (есть в `PROJECT_INVENTORY.md` секция Backgrounds) — атлас-файлы не нужны.
 
-## Новый фон или новая локация
+---
 
-Если нужно не просто расставить хотспоты, а добавить новую локацию:
+## Диалоговый портрет персонажа
 
-- нужный `main/data/scenes/*.lua`;
-- `main/data/scenes/_shared.lua`;
-- `main/scripts/scenes.lua`;
-- файлы atlas/collection/gui, если фон ещё не подключён;
-- `docs/guides/HOW_TO_ADD_SCENES.md`;
-- `docs/scenario_context/BACKGROUND_CATALOG.md`.
+Базовый пакет +:
 
-Если фон уже подключён и имеет background id, atlas-файлы можно не давать.
+- `main/gui/components_v2/dialogue_v2.gui_script` (CHARS table)
+- `docs/guides/HOW_TO_ADD_PORTRAITS.md` (для статичных)
+- `docs/guides/HOW_TO_ANIMATE_PORTRAITS.md` (для анимированных — blink/talk)
+- если меняются ассеты — описание pipeline rembg/character_for_scene.py
 
-## Телефон, карта, SMS
+---
 
-Если задача связана с телефоном или картой:
+## Scene character (full-figure)
+
+Базовый пакет +:
+
+- `main/scripts/scene_characters.lua` (SCENE_GROUPS + SCENES конфиг)
+- `docs/guides/HOW_TO_ADD_SCENE_CHARACTERS.md`
+
+Ink-тег `# scene_char:show:GROUP:KEY` — описан в `INK_TAGS.md` и `TEMPLATES.md`.
+
+---
+
+## Телефон / карта / SMS / Messenger
+
+Базовый пакет +:
 
 - `docs/guides/PHONE_SYSTEM.md`
-- `docs/guides/HUB_SYSTEM.md`, если есть переходы в exploration hub
-- `docs/scenario_context/INK_TAG_REFERENCE.md`, если карта вызывается из Ink
-- соответствующие GUI/script файлы телефона, если меняется поведение приложения
-- `92_phone_sms.ink` или `93_phone_messenger.ink`, если меняется текст переписки
+- `docs/guides/HUB_SYSTEM.md` (если затронуты переходы exploration ↔ phone)
+- `92_phone_sms.ink` или `93_phone_messenger.ink` (если меняется текст)
+- GUI/script нужного приложения (если меняется логика, например `phone_sms.gui_script`)
 
-Для карты важно проверять реальные `poi_id`, а не брать их из памяти.
+---
 
-## Инвентарь и применение предметов
+## Инвентарь / применение предметов
 
-Если задача связана с предметами:
+Базовый пакет +:
 
 - `docs/reference/INVENTORY_SYSTEM.md`
 - `main/story/chapters/91_inventory_actions.ink`
-- scene Lua-файл с хотспотом, на который применяется предмет
-- файлы inventory/state, если меняется логика предметов
+- scene Lua-файл с хотспотом-целью (если меняется `inv_use_<item>_on_<hotspot>`)
 
-## UI/GUI поведение
+---
 
-Если задача про кнопки HUD, лог, телефон, модалки, перекрытия слоёв или клики:
+## UI / GUI поведение (кнопки, лог, модалки, layout)
 
-- нужный `.gui`;
-- его `.gui_script`;
-- `main/gui/ui_manager_v2.script`;
-- соответствующий модуль из `main/gui/modules/ui_manager_v2/`;
-- `main/gui/modules/messages.lua`, если есть новые `msg`.
+Базовый пакет +:
 
-Документация может объяснить архитектуру, но не заменяет текущую структуру нод в `.gui`.
+- нужный `.gui` + его `.gui_script`
+- `main/gui/ui_manager_v2.script`
+- соответствующий модуль из `main/gui/modules/ui_manager_v2/`
+- `main/gui/modules/messages.lua` если новые msg-имена
+- `docs/reference/UI_MANAGER_V2_ARCHITECTURE.md`
+
+---
 
 ## Быстрая формула
 
-Если GPT должен писать художественный текст, ему достаточно документов и 1-2 Ink-файлов.
+| Тип задачи | Что добавлять к базе |
+|---|---|
+| Художественный текст в существующих knot'ах | 1-2 ink-файла |
+| Новый knot без новых тегов | 1 ink-файл |
+| Новый knot с тегом который надо проверить | + `HOW_TO_WRITE_INK.md` |
+| Новый hotspot в существующей сцене | + `<scene>.lua`, `_shared.lua` |
+| Новая локация | + `<scene>.lua`, `_shared.lua`, `scenes.lua`, `HOW_TO_ADD_SCENES.md` |
+| Новый портрет / scene character | + соответствующий HOW_TO |
+| Баг рантайма | + конкретный lua/gui_script где косяк |
 
-Если GPT должен править игру как систему, ему нужны документы плюс живые исходники того слоя, который меняется.
+**Если AI спрашивает «какие теги доступны»** — давать `INK_TAG_REFERENCE.md`, **не** `dialogue_manager_ink.lua`.
 
-Если GPT просто спрашивает "какие теги доступны", не давай ему `dialogue_manager_ink.lua`; давай `INK_TAG_REFERENCE.md`.
+**Если AI спрашивает «существует ли scene_id X»** — давать `PROJECT_INVENTORY.md`, **не** scene Lua-файлы (если только не нужно править).

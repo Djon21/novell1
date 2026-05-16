@@ -13,7 +13,7 @@
 ## Контент
 
 - расширять loop-aware реплики через `iteration_number`, `loop_awareness`, `false_endings_count`
-- наполнять телефон SMS, mail, calls, clues, camera и terminal через Ink-теги
+- наполнять телефон SMS, mail, calls, clues и terminal через Ink-теги
 - добавлять новые предметные реакции через `91_inventory_actions.ink`
 
 ## UI

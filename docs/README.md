@@ -28,7 +28,6 @@
 - `INVENTORY_SYSTEM.md` — инвентарь и ink-действия предметов
 - `GAME_STATE.md` — фасад state-системы, channel-модули в `main/scripts/state/`
 - `UI_MANAGER_V2_ARCHITECTURE.md` — архитектурный обзор + потоки + чек-листы
-- `UI_MANAGER_V2_MODULES.md` — справочник flow-модулей
 - `L10N_PLAN.md` — план локализации RU/EN/TR
 - `TESTING_CHECKLIST.md` — ручной QA перед релизом
 
@@ -43,6 +42,7 @@
 - `HOW_TO_ADD_SCENES.md` — фоны, сцены, hotspot'ы
 - `HOW_TO_ADD_PORTRAITS.md` — портреты персонажей (статика)
 - `HOW_TO_ANIMATE_PORTRAITS.md` — layered-портреты: моргание + движение рта, пайплайн с нейронкой
+- `HOW_TO_ADD_SCENE_CHARACTERS.md` — персонажи в полный рост на фоне сцены (клик/hover как у хотспотов)
 - `HOW_TO_ADD_SOUNDS.md` — sfx + музыка
 
 ### Подсистемы UI

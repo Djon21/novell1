@@ -242,6 +242,9 @@
 # set_flag:park_where_message_sent=true
 ~ park_where_message_sent = true
 # hud:hint:phone:off
+# scene_char:show:park:mila_idle
+// Появляется на фоне как часть «Уже иду к тебе» — игрок видит её
+// фигуру у воды и теперь может «Поздороваться» через хотспот.
 # return_to_scene
 -> DONE
 
@@ -392,6 +395,9 @@
 
 # set_flag:park_npc_greeted=true
 ~ park_npc_greeted = true
+# scene_char:show:park:mila_idle
+// TODO: когда появится спрайт artem_park.png — добавить условный
+//   show artem для случая mc_gender=="female"
 # return_to_scene
 -> DONE
 

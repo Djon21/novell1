@@ -36,7 +36,7 @@
 | `UI_TEXT_MAIN` | `{ r=0.953, g=0.925, b=0.851 }` | `#F3ECD9` | заголовки, labels, body text | основной текст |
 | `UI_TEXT_MUTED` | `{ r=0.788, g=0.753, b=0.659 }` | `#C9C0A8` | meta, time, secondary labels | вторичный текст |
 | `UI_CYAN` | `{ r=0.490, g=0.976, b=1.000 }` | `#7DFAFF` | phone, map coords, HUD, dialogue borders, inventory | системный primary accent |
-| `UI_CYAN_SOFT` | `{ r=0.282, g=0.961, b=1.000 }` | `#48F5FF` | map/work POI, camera/phone app | bright cyan variant |
+| `UI_CYAN_SOFT` | `{ r=0.282, g=0.961, b=1.000 }` | `#48F5FF` | map/work POI, phone-app accent | bright cyan variant |
 | `UI_MAGENTA` | `{ r=1.000, g=0.239, b=0.498 }` | `#FF3D7F` | phone SMS/mail, badges, logo hot, mail tags | уведомление/новое/важное |
 | `UI_ALERT_DARK` | `{ r=0.784, g=0.078, b=0.165 }` | `#C8142A` | dialogue loop mark, choice loop, badge dark | тревога/loop/критичное состояние |
 | `UI_AMBER` | `{ r=1.000, g=0.702, b=0.278 }` | `#FFB347` | map cafe/view, terminal app, inventory qty/star | действие/операция/подтверждение |

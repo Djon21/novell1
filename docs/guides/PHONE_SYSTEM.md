@@ -45,6 +45,29 @@
 | `phone_term.gui` | `phone_term.gui_script` | `gs.get_terminal_lines()` |
 | `phone_map.gui` | `phone_map.gui_script` | POI-кружки крутятся для разрешённых; runtime allow-set из `gs.map_is_poi_allowed()` |
 
+### GUI Templates (clone_tree подход)
+
+Большие phone-приложения вынесены в **GUI templates** — отдельные `.gui` файлы
+с прототипом строки/чата, которые подключаются как ноды-`type: TEMPLATE`:
+
+| Хост (.gui) | Templates | Что внутри |
+|---|---|---|
+| `phone_sms.gui` | `phone_sms_list_template.gui` + `phone_sms_thread_template.gui` | список тредов + thread-сообщения |
+| `phone_messenger.gui` | `phone_messenger_list_template.gui` + `phone_messenger_chat_template.gui` | список чатов + bubble-treads |
+
+В .gui редакторе каждый template даёт ОДИН прототип (`chat1_*`, `bub1_*`,
+`msg1_*`). Дополнительные слоты (chat2..chat7, bub2..bub8) создаются в
+скрипте через `gui.clone_tree(prototype_root)` в `init`, и удаляются в `final`
+через `gui.delete_node`. Идентификаторы клонов лежат в локальной таблице,
+обращение к ним идёт через wrapper `get_node()` который разрешает виртуальные id
+вида `chat3_name` → реальную ноду клона #3.
+
+То же самое для `phone_quests` — он использует `clone_tree` для динамического
+рендера карточек квестов.
+
+Преимущество: GUI редактор остаётся простым (один прототип строки), а runtime
+вы можете показывать столько слотов сколько влезает в видимую область.
+
 ### Архив (не в коллекции)
 
 - `phone_v2.gui` + `phone_v2.gui_script` — старый монолит, остался на диске для справки,

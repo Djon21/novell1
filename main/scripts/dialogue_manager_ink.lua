@@ -528,6 +528,23 @@ local function apply_tags(tags, trailing)
                 hint = hint:gsub("^%s+", ""):gsub("%s+$", "")
                 table.insert(pending_commands, { type = "hud_hint", target = hint })
             end
+        elseif key == "scene_char" and value and not suppress_effects then
+            -- # scene_char:show:SCENE:CHAR   — показать персонажа на фоне сцены
+            -- # scene_char:hide:SCENE:CHAR   — спрятать
+            -- # scene_char:hide_all          — спрятать всех
+            local op, rest = value:match("^([%w_]+)%s*:?%s*(.*)$")
+            if op == "hide_all" then
+                table.insert(pending_commands, { type = "scene_char_hide_all" })
+            elseif (op == "show" or op == "hide") and rest and rest ~= "" then
+                local scene_id, char_id = rest:match("^([%w_]+)%s*:%s*([%w_]+)$")
+                if scene_id and char_id then
+                    table.insert(pending_commands, {
+                        type = "scene_char_" .. op,
+                        scene = scene_id,
+                        char  = char_id,
+                    })
+                end
+            end
         elseif key == "map" and value and (not suppress_effects or restore_scene_transitions) then
             -- # map:hub:KNOT — открыть карту в hub-режиме. «МАРШРУТ» на пине с
             -- route_knot=KNOT прыгает в этот ink-узел. KNOT же — primary_knot,

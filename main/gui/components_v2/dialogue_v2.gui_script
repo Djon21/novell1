@@ -622,10 +622,68 @@ function init(self)
         gui.PLAYBACK_LOOP_PINGPONG)
 end
 
+-- scene_character_<slot> — спрайт персонажа в полный рост поверх фона сцены.
+-- В отличие от portrait_bg (бюст в stencil-окне диалога), эти ноды показывают
+-- персонажей в композиции сцены (например, Мила стоит в парке).
+local SCENE_CHAR_NODES = { "scene_character_1", "scene_character_2" }
+local GAME_HEIGHT = 720  -- логическое разрешение, из game.project
+
+-- Hover-эффект: масштаб на наведение и базовый масштаб обратно.
+local SCENE_CHAR_HOVER_SCALE = 1.04
+local SCENE_CHAR_HOVER_DURATION = 0.08
+
+local function scene_char_set_hover(self, slot, hovered)
+    self._scene_char_hover = self._scene_char_hover or {}
+    if self._scene_char_hover[slot] == hovered then return end
+    self._scene_char_hover[slot] = hovered
+    local node_id = SCENE_CHAR_NODES[slot]
+    local ok, n = pcall(gui.get_node, node_id)
+    if not ok or not n then return end
+    gui.cancel_animation(n, gui.PROP_SCALE)
+    local target = hovered and SCENE_CHAR_HOVER_SCALE or 1.0
+    gui.animate(n, gui.PROP_SCALE, vmath.vector3(target, target, 1),
+        gui.EASING_OUTQUAD, SCENE_CHAR_HOVER_DURATION)
+end
+
+local function set_scene_character(slot, atlas, sprite, x, y, w, h)
+    local node_id = SCENE_CHAR_NODES[slot]
+    if not node_id then return end
+    local ok, n = pcall(gui.get_node, node_id)
+    if not ok then return end
+    -- pivot NW: position.y в Defold-coords (Y растёт вверх) = GAME_HEIGHT - top_y
+    pcall(gui.set_texture, n, atlas)
+    pcall(gui.play_flipbook, n, sprite)
+    gui.set_size(n, vmath.vector3(w, h, 0))
+    gui.set_position(n, vmath.vector3(x, GAME_HEIGHT - y, 0.06 + slot * 0.001))
+    gui.set_enabled(n, true)
+end
+
+local function clear_scene_character(self, slot)
+    local node_id = SCENE_CHAR_NODES[slot]
+    if not node_id then return end
+    local ok, n = pcall(gui.get_node, node_id)
+    if not ok then return end
+    gui.cancel_animation(n, gui.PROP_SCALE)
+    gui.set_scale(n, vmath.vector3(1, 1, 1))
+    gui.set_enabled(n, false)
+    if self and self._scene_char_hover then
+        self._scene_char_hover[slot] = nil
+    end
+end
+
 function on_message(self, message_id, message, sender)
     if message_id == hash("render_dialogue") then
         apply_adaptive_layout(self)
         render(self, message or {})
+
+    elseif message_id == hash("set_scene_character") then
+        if message then
+            set_scene_character(message.slot, message.atlas, message.sprite,
+                                message.x, message.y, message.w, message.h)
+        end
+
+    elseif message_id == hash("clear_scene_character") then
+        if message then clear_scene_character(self, message.slot) end
 
     elseif message_id == hash("set_background") then
         set_bg(self, message and message.name, message and message.animation)
@@ -698,7 +756,46 @@ function on_message(self, message_id, message, sender)
     end
 end
 
+-- Возвращает slot если клик/наведение на активный (с action) scene_character.
+-- Работает независимо от self.visible — персонажи кликабельны и в exploration.
+local function scene_char_pick(action)
+    if not action or not action.x then return nil end
+    local scene_characters = require("main.scripts.scene_characters")
+    for slot = 1, 2 do
+        local node_id = SCENE_CHAR_NODES[slot]
+        local ok, n = pcall(gui.get_node, node_id)
+        if ok and n and gui.is_enabled(n) then
+            if scene_characters.get_action(slot)
+               and gui.pick_node(n, action.x, action.y) then
+                return slot
+            end
+        end
+    end
+    return nil
+end
+
 function on_input(self, action_id, action)
+    -- Scene characters: только в exploration (диалог скрыт). Во время разговора
+    -- они декоративные — клик по Миле не должен прерывать реплику.
+    if not self.visible and action and action.x then
+        -- Hover (mouse moved): action_id == nil + не pressed/released
+        if action_id == nil and not action.pressed and not action.released then
+            local hovered_slot = scene_char_pick(action)
+            self._scene_char_hover = self._scene_char_hover or {}
+            for slot = 1, 2 do
+                scene_char_set_hover(self, slot, hovered_slot == slot)
+            end
+        end
+        -- Click
+        if action_id == hash("touch") and action.pressed then
+            local clicked_slot = scene_char_pick(action)
+            if clicked_slot then
+                msg.post(UI_MGR, "scene_character_clicked", { slot = clicked_slot })
+                return true
+            end
+        end
+    end
+
     if not self.visible and not self.backlog_open then return false end
     if action_id ~= hash("touch") or not action.pressed then return false end
 

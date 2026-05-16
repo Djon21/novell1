@@ -81,6 +81,12 @@ local function apply_single(cmd, ctx)
         -- # hud:hint:phone | bag | reset — пульсация HUD-кнопки.
         -- ctx.set_hud_hint делегирует посыл сообщения в hud_v2.
         if ctx.set_hud_hint then ctx.set_hud_hint(cmd.target) end
+    elseif cmd.type == "scene_char_show" then
+        if ctx.scene_char_show then ctx.scene_char_show(cmd.scene, cmd.char) end
+    elseif cmd.type == "scene_char_hide" then
+        if ctx.scene_char_hide then ctx.scene_char_hide(cmd.scene, cmd.char) end
+    elseif cmd.type == "scene_char_hide_all" then
+        if ctx.scene_char_hide_all then ctx.scene_char_hide_all() end
     end
 end
 

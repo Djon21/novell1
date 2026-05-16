@@ -56,6 +56,7 @@ local MSG = require "main.gui.modules.messages"
 local lifecycle = require "main.gui.modules.ui_manager_v2.lifecycle"
 local dialogue_orchestrator = require "main.gui.modules.ui_manager_v2.dialogue_orchestrator"
 local dev_jump = require "main.gui.modules.ui_manager_v2.dev_jump"
+local scene_characters = require "main.scripts.scene_characters"
 local log = require "main.scripts.log"
 
 local ok_scenes, scenes = pcall(require, "main.scripts.scenes")
@@ -584,6 +585,15 @@ local function apply_dm_commands(self)
                 msg.post(M.components.hud, "set_hud_hint", { target = target })
             end
         end,
+        scene_char_show = function(scene, char)
+            scene_characters.show(scene, char)
+        end,
+        scene_char_hide = function(scene, char)
+            scene_characters.hide(scene, char)
+        end,
+        scene_char_hide_all = function()
+            scene_characters.hide_all()
+        end,
         on_resume = function() handle_dialogue_update(self) end,
     })
 end
@@ -652,6 +662,18 @@ function init(self)
     init_components()
     init_background_atlas_state(self)
     setup_scene_controller_ui(self)
+    scene_characters.set_ui({
+        log = function(...) log.info("scene_char", ...) end,
+        set_character_slot = function(slot, cfg)
+            msg.post(M.components.dialogue, "set_scene_character",
+                     { slot = slot, atlas = cfg.atlas, sprite = cfg.sprite,
+                       x = cfg.x, y = cfg.y, w = cfg.w, h = cfg.h })
+        end,
+        clear_character_slot = function(slot)
+            msg.post(M.components.dialogue, "clear_scene_character",
+                     { slot = slot })
+        end,
+    })
     sm.load()
     meta.init()
     yandex_ads.init()
@@ -668,6 +690,19 @@ function init(self)
     gs.subscribe(function()
         sync_ui_state(self)
         persist_run_state()
+    end)
+
+    -- Авто-hide scene-character'ов при смене group'ы сцены. Внутри одной
+    -- группы (park_hub → park_riverside_bench) персонаж остаётся, при
+    -- выходе из группы (park → apartment) прячется. См. SCENE_GROUPS в
+    -- scene_characters.lua.
+    self._last_scene_id_for_chars = nil
+    gs.subscribe(function()
+        local sid = gs.get_scene and gs.get_scene() or nil
+        if sid ~= self._last_scene_id_for_chars then
+            self._last_scene_id_for_chars = sid
+            scene_characters.on_scene_changed(sid)
+        end
     end)
 
     self.dialogue_auto = false
@@ -743,7 +778,30 @@ local function dev_jump_ctx(self)
     }
 end
 
+-- Обработка клика по scene_character (приходит из dialogue_v2.gui_script).
+-- Action структура такая же как у hotspot'ов: ink_knot/goto_scene/set_flag/etc.
+-- Для MVP поддерживается только ink_knot — это основной use-case.
+local function handle_scene_character_click(self, slot)
+    local action = scene_characters.get_action(slot)
+    if not action then return end
+    if action.type == "ink_knot" and action.knot then
+        local keep_bg = scene_controller.get_current_bg and scene_controller.get_current_bg() or nil
+        if scene_controller.is_active and scene_controller.is_active() and scene_controller.exit then
+            scene_controller.exit()
+        end
+        run_side_dialogue_knot(self, action.knot, keep_bg)
+    else
+        log.warn("ui_manager", "scene_character action.type не поддержан:", tostring(action.type))
+    end
+end
+
 function on_message(self, message_id, message, sender)
+    if message_id == hash("scene_character_clicked") then
+        if message and message.slot then
+            handle_scene_character_click(self, message.slot)
+        end
+        return
+    end
     message_flow.handle(message_ctx(self), message_id, message, sender)
 end
 

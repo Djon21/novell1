@@ -1,0 +1,4 @@
+images {
+  image: "/main/images/characters/mila/idle.png"
+}
+extrude_borders: 0

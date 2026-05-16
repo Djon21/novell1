@@ -70,7 +70,7 @@
 - `effects_flow.lua` — one-shot effects
 - `run_state.lua` — persist/restore/reset run-state
 
-Подробная карта: `docs/reference/UI_MANAGER_V2_ARCHITECTURE.md` и `UI_MANAGER_V2_MODULES.md`.
+Подробная карта (модули + рецепты «когда что менять» + чек-листы): `docs/reference/UI_MANAGER_V2_ARCHITECTURE.md`.
 
 ### Shared GUI utilities (`main/gui/modules/`)
 
