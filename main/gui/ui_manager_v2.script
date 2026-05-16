@@ -530,9 +530,33 @@ local function open_phone_app(self, app_id)
     return phone_flow.open_app(phone_ctx(), app_id)
 end
 
+-- После закрытия модалки (phone/map), которая была открыта через ink-команду
+-- внутри knot'а с `# return_to_scene`, scene_controller уже знает текущую
+-- сцену (return_to_scene успел re-enter'нуть), НО dialogue_orchestrator при
+-- виде overlay'я постит `hide_all` хотспотам. Когда модалка закрывается,
+-- никто заново их не показывает — поэтому player видит фон без интерактива.
+-- Решение: после закрытия модалки, если scene активна и других overlay'ев
+-- нет — перерендерить exploration (хотспоты + объекты).
+--
+-- Не вызываем show_exploration напрямую: она внутри сама зовёт close_phone,
+-- что даст бесконечную рекурсию. render_now() триггерит set_hotspot для
+-- всех visible хотспотов — этого достаточно.
+local function resume_exploration_if_needed()
+    if not scene_controller.is_active or not scene_controller.is_active() then
+        return
+    end
+    if M.overlays.phone or M.overlays.map or M.overlays.inventory or M.overlays.choice then
+        return
+    end
+    if scene_controller.render_now then
+        scene_controller.render_now()
+    end
+end
+
 close_phone = function(self)
     phone_flow.close(phone_ctx())
     notify_overlay_state("phone", false)
+    resume_exploration_if_needed()
 end
 
 open_phone_map_app = function(self)
@@ -552,6 +576,7 @@ end
 close_map = function(self)
     overlay_flow.close_map(overlay_ctx(self))
     notify_overlay_state("map", false)
+    resume_exploration_if_needed()
 end
 
 local function show_choice(self, opts, timer_sec, title)
