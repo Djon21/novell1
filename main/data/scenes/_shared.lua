@@ -168,6 +168,13 @@ M.STYLE_NEUTRAL = M.STYLE_INSPECT
 --   icon_offset_x, icon_offset_y
 --
 -- Примеры использования см. в любом scene-файле.
+--
+-- Override: любой рецепт можно перебить точечно, передав в opts:
+--   hotspot_style = s.STYLE_X  — поменять стиль для конкретного хотспота
+--   action        = { type=..., ... }  — поменять полностью action
+--   icon          = "name"     — поменять иконку
+--   icon_offset_x / icon_offset_y — точечный сдвиг glyph'а
+-- Дефолт рецепта применяется только если соответствующее поле в opts отсутствует.
 
 local function build(style, icon_default, action, opts)
     return {
@@ -175,8 +182,8 @@ local function build(style, icon_default, action, opts)
         rect          = opts.rect,
         label         = opts.label,
         icon          = opts.icon or icon_default,
-        hotspot_style = style,
-        action        = action,
+        hotspot_style = opts.hotspot_style or style,
+        action        = opts.action or action,
         icon_offset_x = opts.icon_offset_x or -4,
         icon_offset_y = opts.icon_offset_y,
         visible_when  = opts.visible_when,
