@@ -5,12 +5,13 @@
 ## Активные Файлы
 
 - `00_bootstrap.ink` — общие `VAR`, стартовый переход, bootstrap
-- `01_apartment.ink` — квартира и выход к карте
+- `10_sunday_intro.ink` — воскресная квартира и выход к карте
 - `02_sunday_date.ink` — воскресная встреча с NPC
-- `02_metro.ink` — метро
-- `03_office.ink` — офис
-- `04_rooftop.ink` — крыша и концовки
+- `20_monday_home.ink` / `21_monday_commute.ink` / `22_monday_office.ink` — понедельник
+- `30_tuesday_home.ink` / `31_tuesday_investigation.ink` / `32_tuesday_rooftop.ink` — вторник
 - `91_inventory_actions.ink` — действия предметов
+- `92_phone_sms.ink` / `93_phone_messenger.ink` / `94_phone_mail.ink` — телефон
+- `archive/` — старые версии (не подключены к `chapter_01.ink`)
 
 ## Правила
 

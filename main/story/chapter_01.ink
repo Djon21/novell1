@@ -3,7 +3,7 @@
 // Root must contain INCLUDE only.
 
 INCLUDE chapters/00_bootstrap.ink
-INCLUDE chapters/01_apartment.ink
+INCLUDE chapters/10_sunday_intro.ink
 INCLUDE chapters/02_sunday_date.ink
 
 INCLUDE chapters/20_monday_home.ink

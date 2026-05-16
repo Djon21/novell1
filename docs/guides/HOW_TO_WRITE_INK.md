@@ -36,7 +36,7 @@ main/story/
 ├── chapter_01.json
 └── chapters/
     ├── 00_bootstrap.ink
-    ├── 01_apartment.ink
+    ├── 10_sunday_intro.ink
     ├── 02_sunday_date.ink
     ├── 20_monday_home.ink
     ├── 21_monday_commute.ink
@@ -573,7 +573,7 @@ True Ending доступен только при `false_endings_count >= 2`. `lo
 | Файл | Назначение |
 |---|---|
 | `00_bootstrap.ink` | Глобальные VAR и стартовый переход. |
-| `01_apartment.ink` | Воскресное домашнее утро / onboarding. |
+| `10_sunday_intro.ink` | Воскресное домашнее утро / onboarding. |
 | `02_sunday_date.ink` | Воскресная встреча и возвращение домой. |
 | `20_monday_home.ink` | Понедельник: дом и сборы. |
 | `21_monday_commute.ink` | Понедельник: путь до офиса. |

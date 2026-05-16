@@ -47,7 +47,7 @@
 
 Весь нарратив в `main/story/chapter_01.ink` + `main/story/chapters/*.ink`:
 - `00_bootstrap.ink` (VAR-объявления, переводить не нужно)
-- `01_apartment.ink`, `02_sunday_date.ink`, `02_metro.ink`, `03_office.ink`, `04_rooftop.ink`
+- `10_sunday_intro.ink`, `02_sunday_date.ink`, `02_metro.ink`, `03_office.ink`, `04_rooftop.ink`
 - `91_inventory_actions.ink`
 
 Объём — тысячи строк. Переводить только после контентного freeze.
@@ -233,7 +233,7 @@ gui.set_text(node, l10n.t("menu_new"))
 | Файл | Слов | ≈ токенов | В один заход в LLM |
 |---|---:|---:|:---:|
 | `00_bootstrap.ink` | 213 | ~430 | ✅ (только VAR) |
-| `01_apartment.ink` | 2048 | ~4100 | ✅ |
+| `10_sunday_intro.ink` | 2048 | ~4100 | ✅ |
 | `02_metro.ink` | 1316 | ~2630 | ✅ |
 | `03_office.ink` | 2341 | ~4680 | ✅ |
 | `04_rooftop.ink` | 1260 | ~2520 | ✅ |
@@ -271,13 +271,13 @@ gui.set_text(node, l10n.t("menu_new"))
 
 Верни весь файл целиком — структура должна быть идентична оригиналу.
 
-[вставка содержимого 01_apartment.ink]
+[вставка содержимого 10_sunday_intro.ink]
 ```
 
 После перевода **обязательно**:
 1. Прогнать `tools/compile_ink.bat chapter_01_en` — должна быть `[OK]` без ошибок
-2. Сверить число knot'ов: `grep -c '^=== ' 01_apartment.ink` в RU и `_en` версии = одинаковое
-3. Сверить число хотспот-выборов: `grep -c '^\*' 01_apartment.ink` = одинаковое
+2. Сверить число knot'ов: `grep -c '^=== ' 10_sunday_intro.ink` в RU и `_en` версии = одинаковое
+3. Сверить число хотспот-выборов: `grep -c '^\*' 10_sunday_intro.ink` = одинаковое
 4. Smoke-тест в игре с `?lang=en` — пройти главу, проверить что выборы и SMS видны
 
 ### 4.4 Динамические данные (`scenes.lua`, `quests.lua`, `items_catalog.lua`)

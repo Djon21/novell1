@@ -1,5 +1,5 @@
 // ================================================================
-// AVOS_S — 01_apartment.ink
+// AVOS_S — 10_sunday_intro.ink
 // Apartment onboarding scene, synced with current 1920x1080 apartment backgrounds.
 //
 // ВАЖНО:
