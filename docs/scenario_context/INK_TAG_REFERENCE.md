@@ -138,17 +138,23 @@ Auto-hide при смене группы сцен — встроенное по�
 
 ## Реклама
 
+**Канонические теги — только эти два:**
+
 | Тег | Пример | Что делает |
 |---|---|---|
-| `adv:fullscreen` | `# adv:fullscreen` | Показывает полноэкранную рекламу. |
-| `ad:fullscreen` | `# ad:fullscreen` | Alias для fullscreen-рекламы. |
-| `adv:interstitial` | `# adv:interstitial` | То же, отправляется как fullscreen. |
-| `ad:interstitial` | `# ad:interstitial` | Alias. |
-| `adv:rewarded` | `# adv:rewarded` | Показывает rewarded-рекламу без флага награды. |
-| `adv:rewarded:FLAG` | `# adv:rewarded:watched_hint_ad` | Показывает rewarded-рекламу и ставит reward flag при успешном просмотре. |
-| `ad:rewarded:FLAG` | `# ad:rewarded:watched_hint_ad` | Alias. |
+| `adv:fullscreen` | `# adv:fullscreen` | Полноэкранная (interstitial) реклама. |
+| `adv:rewarded:FLAG` | `# adv:rewarded:watched_hint_ad` | Rewarded-видео; при успешном просмотре ставит `FLAG=true`. |
 
-Рекламу лучше ставить в паузах: перед картой, после эпизода, перед сменой локации, а не посреди реплики.
+Рекламу лучше ставить в паузах: перед картой, после эпизода, перед сменой
+локации — а не посреди реплики.
+
+> **Legacy aliases** (runtime принимает, но в новых сценах НЕ использовать):
+> `ad:fullscreen`, `adv:interstitial`, `ad:interstitial`,
+> `adv:rewarded` (без FLAG), `ad:rewarded:FLAG`.
+> Парсер в `dialogue_manager_ink.lua` поддерживает обе формы (`adv` и `ad`,
+> `fullscreen` и `interstitial`), но в narrative используем строго каноничные —
+> чтобы не разъезжалось с `NARRATIVE_STATE.md` и было одно очевидное имя для
+> каждого вида рекламы.
 
 ## Meta и концовки
 
