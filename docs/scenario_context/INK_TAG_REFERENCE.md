@@ -100,6 +100,30 @@ Source of truth в коде: `main/scripts/dialogue_manager_ink.lua`, функц
 
 Если `return_to_scene`, `explore`, `goto_scene`, `phone:*` или `adv:*` стоят после последнего текста, они выполняются после того, как игрок дочитает параграф.
 
+## Scene characters (full-figure на фоне)
+
+«Сценные персонажи» — спрайты-фигуры на фоне exploration-сцены
+(в стиле Persona 5), не путать с диалоговыми портретами в `dialogue_v2`.
+Конфиг — `main/scripts/scene_characters.lua` (`SCENE_GROUPS` + `SCENES`).
+Реальный список доступных групп/персонажей — в `PROJECT_INVENTORY.md`
+секция **Scene Characters**.
+
+| Тег | Пример | Что делает |
+|---|---|---|
+| `scene_char:show:GROUP:KEY` | `# scene_char:show:park:mila_idle` | Показать персонажа `KEY` в группе `GROUP`. |
+| `scene_char:hide:GROUP:KEY` | `# scene_char:hide:park:mila_idle` | Спрятать конкретного персонажа. |
+| `scene_char:hide_all` | `# scene_char:hide_all` | Спрятать всех персонажей текущей группы. |
+
+Auto-hide при смене группы сцен — встроенное поведение. При переходе
+между sub-сценами одной группы (например `park_hub` → `park_riverside_bench`,
+обе в группе `park`) персонажи **остаются**. При выходе из группы (выход
+из парка по `leave_park`) — авто-`hide_all`, явный тег не нужен.
+
+Если у scene character есть `action.type = "ink_knot"`, клик по нему
+запускает соответствующий knot — это альтернатива хотспоту на области
+персонажа. См. `scene_characters.lua` SCENES конфиг и
+`docs/guides/HOW_TO_ADD_SCENE_CHARACTERS.md`.
+
 ## HUD hints
 
 | Тег | Пример | Что делает |
