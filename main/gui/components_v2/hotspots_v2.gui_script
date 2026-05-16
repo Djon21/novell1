@@ -176,9 +176,11 @@ local function set_hotspot(i, data)
         end
     end
     
-    -- Прозрачность hotspot-rect
+    -- Прозрачность hotspot-rect. selected_slot() возвращает номер slot'а
+    -- видимого hotspot'а — сравниваем напрямую с i. Скрытые редактором не
+    -- выбираются вообще (см. hotspot_editor.lua).
     local editing = hotspot_editor.is_active()
-    local selected = editing and (i == hotspot_editor.selected_index())
+    local selected = editing and (i == hotspot_editor.selected_slot())
     local box_alpha
     
     if editing then
@@ -329,6 +331,8 @@ function on_input(self, action_id, action)
         elseif action_id == hash("edit_w_plus")   then hotspot_editor.nudge( 0, 0, s, 0)
         elseif action_id == hash("edit_h_minus")  then hotspot_editor.nudge( 0, 0, 0,-s)
         elseif action_id == hash("edit_h_plus")   then hotspot_editor.nudge( 0, 0, 0, s)
+        elseif action_id == hash("edit_style_prev") then hotspot_editor.cycle_style(-1)
+        elseif action_id == hash("edit_style_next") then hotspot_editor.cycle_style( 1)
         elseif action_id == hash("edit_print")    then hotspot_editor.print_current()
         elseif action_id == hash("touch") then
             -- click-to-select in edit mode

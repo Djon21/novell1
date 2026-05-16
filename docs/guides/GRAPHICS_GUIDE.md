@@ -92,7 +92,7 @@
 
 - hotspot'ы и scene objects в `scenes.lua` описываются в системе `1280x720`
 - origin — левый нижний угол
-- подгонка делается через `docs/guides/F1_HOTSPOT_EDITOR.md`
+- подгонка делается через `docs/guides/HOTSPOTS.md`
 
 ## 7. Практические правила
 

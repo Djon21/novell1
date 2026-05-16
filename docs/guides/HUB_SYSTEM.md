@@ -25,7 +25,7 @@ Source of truth:
 | Сцена, фон, hotspot'ы, `on_enter`, `npc` | `main/data/scenes/<location>.lua` (через фасад `main/scripts/scenes.lua`) |
 | Ink-реакции hotspot'ов | `main/story/chapters/*.ink` |
 | Правила добавления фонов | `HOW_TO_ADD_SCENES.md` |
-| Внешний вид hotspot'ов | `HOTSPOT_VISUALS.md` |
+| Внешний вид hotspot'ов | `HOTSPOTS.md` |
 
 ---
 

@@ -1,4 +1,4 @@
-﻿// ================================================================
+// ================================================================
 // AVOS_S — 00_bootstrap.ink
 // Общие переменные главы и стартовый переход.
 // ================================================================
@@ -68,6 +68,8 @@ VAR sunday_shop_bought_snack = false
 VAR sunday_shop_bought_drink_for_npc = false
 VAR sunday_shop_done = false
 VAR sunday_shop_with_npc_seen = false
+VAR sunday_shop_street_pre_date_seen = false
+VAR sunday_shop_street_with_npc_seen = false
 VAR date_small_kindness = false
 VAR park_arrived = false
 VAR park_where_message_sent = false

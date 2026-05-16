@@ -150,6 +150,18 @@ M.STYLE_STORY = {
 -- Старое имя как alias для совместимости со сценами/черновиками.
 M.STYLE_NEUTRAL = M.STYLE_INSPECT
 
+-- Упорядоченный список стилей. Используется hotspot-редактором (F1) для
+-- цикличного перебора кнопками `,` / `.` и для печати в консоль читаемого
+-- имени стиля. NEUTRAL пропущен (это alias на INSPECT).
+M.STYLES = {
+    { name = "STYLE_NAV",         style = M.STYLE_NAV },
+    { name = "STYLE_INSPECT",     style = M.STYLE_INSPECT },
+    { name = "STYLE_PICKUP",      style = M.STYLE_PICKUP },
+    { name = "STYLE_USE",         style = M.STYLE_USE },
+    { name = "STYLE_ITEM_TARGET", style = M.STYLE_ITEM_TARGET },
+    { name = "STYLE_STORY",       style = M.STYLE_STORY },
+}
+
 -- ---------------------------------------------------------------------------
 -- Hotspot recipes
 -- ---------------------------------------------------------------------------

@@ -48,8 +48,8 @@
 ### Подсистемы UI
 - `PHONE_SYSTEM.md` — phone overlay, apps, ink-теги телефона
 - `HUB_SYSTEM.md` — хабы и переходы
-- `HOTSPOT_VISUALS.md` — стили hotspot'ов
-- `F1_HOTSPOT_EDITOR.md` — dev-редактор координат
+- `HOTSPOTS.md` — стили hotspot'ов
+- `HOTSPOTS.md` — dev-редактор координат
 - `DEV_JUMP_CHECKPOINTS.md` — dev-прыжки по сценам для быстрой проверки
 - `DIALOGUE_BACKLOG.md` — backlog реплик и выборов
 - `UI_COLOR_SYSTEM_RECOMMENDATIONS.md`

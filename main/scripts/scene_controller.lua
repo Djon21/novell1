@@ -190,6 +190,21 @@ function M.is_active() return _active end
 function M.get_current_scene_data() return _scene_data end
 function M.get_current_scene_id()   return _scene_id   end
 
+-- Список индексов хотспотов в _scene_data.hotspots, прошедших visible_when.
+-- Порядок совпадает с порядком отрисовки в GUI (visible[1] = слот 1).
+-- Используется hotspot_editor чтобы корректно мапить slot ↔ full-index при
+-- click-select / Tab / highlight в сценах со скрытыми хотспотами.
+function M.get_visible_hotspot_indices()
+    if not _scene_data or not _scene_data.hotspots then return {} end
+    local out = {}
+    for i, h in ipairs(_scene_data.hotspots) do
+        local ok = true
+        if h.visible_when then ok = h.visible_when(gs) end
+        if ok then table.insert(out, i) end
+    end
+    return out
+end
+
 -- Резолвит текущий bg сцены: если scene.bg — функция, вызывает её с gs
 -- и возвращает имя bg как строку. Используется ui_manager_v2 для keep_bg
 -- при прыжках в side-knot (use-on-target, sms thread, и т.п.).

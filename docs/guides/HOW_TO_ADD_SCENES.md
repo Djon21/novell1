@@ -442,7 +442,7 @@ objects = {
    - `;` / `'` — менять высоту
    - `P` — напечатать координаты в консоль (готовая Lua-строка для вставки в `scenes.lua`)
 
-Полный гайд: `docs/guides/F1_HOTSPOT_EDITOR.md`.
+Полный гайд: `docs/guides/HOTSPOTS.md`.
 
 ---
 
@@ -497,5 +497,5 @@ objects = {
 ## Связанные документы
 
 - `docs/guides/HOW_TO_WRITE_INK.md` — теги, knot'ы, флаги, on_enter, return_to_scene
-- `docs/guides/F1_HOTSPOT_EDITOR.md` — горячие клавиши редактора
+- `docs/guides/HOTSPOTS.md` — горячие клавиши редактора
 - `docs/guides/GRAPHICS_GUIDE.md` — общие правила по графике

@@ -67,6 +67,14 @@ key_trigger {
   action: "edit_print"
 }
 key_trigger {
+  input: KEY_COMMA
+  action: "edit_style_prev"
+}
+key_trigger {
+  input: KEY_PERIOD
+  action: "edit_style_next"
+}
+key_trigger {
   input: KEY_LSHIFT
   action: "edit_shift"
 }

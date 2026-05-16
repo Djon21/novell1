@@ -182,7 +182,7 @@ M.SFX_URLS = {
 
 1. В `scene_flow.lua` — добавить в clean-copy данных
 2. В `hotspots_v2.gui_script` — принять и применить
-3. В `docs/guides/HOTSPOT_VISUALS.md` — описать
+3. В `docs/guides/HOTSPOTS.md` — описать
 
 ### Новое действие предмета (verb)
 
