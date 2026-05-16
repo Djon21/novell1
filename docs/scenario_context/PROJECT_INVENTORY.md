@@ -4,7 +4,7 @@
 Запускать перед каждой сессией AI-сценариста чтобы документ отражал
 текущее состояние проекта.
 
-_Сгенерировано: 2026-05-16 17:36_
+_Сгенерировано: 2026-05-16 21:13_
 
 Это **источник правды для AI** о том что реально существует в проекте:
 scene_id, knot имена, hotspot id, флаги, предметы. Не ссылайся на
@@ -21,222 +21,218 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 
 | Hotspot id | Label | Action |
 |---|---|---|
-| `bathroom_mirror` | Зеркало | knot: `look_bathroom_mirror` |
-| `bathroom_toothbrush` | Щётка | knot: `take_toothbrush` |
-| `bathroom_toothpaste` | Паста | knot: `take_toothpaste` |
-| `bathroom_sink` | Раковина | knot: `bathroom_sink_prompt` |
-| `bathroom_exit_locked` | В спальню | knot: `bathroom_exit_locked` |
-| `back_to_bedroom_from_bathroom` | В спальню | scene: `apartment_bedroom` |
+| `bathroom_mirror` | Зеркало | — |
+| `bathroom_toothbrush` | Щётка | — |
+| `bathroom_toothpaste` | Паста | — |
+| `bathroom_sink` | Раковина | — |
+| `bathroom_exit_locked` | В спальню | — |
+| `back_to_bedroom_from_bathroom` | В спальню | — |
 
 ### `apartment_bedroom` (Спальня)
  — source: `apartment.lua`, bg: `apartment_bg("bedroom")`, on_enter: `apartment_bedroom_intro`
 
 | Hotspot id | Label | Action |
 |---|---|---|
-| `phone_on_bedside` | Телефон | knot: `take_phone` |
-| `bedroom_desk` | Рабочий стол | knot: `bedroom_desk_morning` |
-| `bedroom_bed` | Встать | knot: `look_bed_morning` |
-| `bedroom_bed_sleep_sunday` | Лечь спать | knot: `sunday_sleep_in_bed` |
-| `to_bathroom_from_bedroom` | В ванную | scene: `apartment_bathroom` |
-| `bedroom_window` | Окно | knot: `look_bedroom_window` |
-| `back_to_hall_from_bedroom` | В коридор | scene: `apartment_hub` |
+| `phone_on_bedside` | Телефон | — |
+| `bedroom_desk` | Рабочий стол | — |
+| `bedroom_bed` | Встать | — |
+| `bedroom_bed_sleep_sunday` | Лечь спать | — |
+| `to_bathroom_from_bedroom` | В ванную | — |
+| `bedroom_window` | Окно | — |
+| `back_to_hall_from_bedroom` | В коридор | — |
 
 ### `apartment_hub` (Коридор)
  — source: `apartment.lua`, bg: `apartment_bg("hall")`, on_enter: `sunday_home_after_date_router`
 
 | Hotspot id | Label | Action |
 |---|---|---|
-| `to_bedroom` | В спальню | scene: `apartment_bedroom` |
-| `to_kitchen` | На кухню | scene: `apartment_kitchen` |
-| `exit_apartment` | Выйти | knot: `leave_apartment_prompt` |
-| `hall_mirror` | Зеркало | knot: `look_hall_mirror` |
-| `hall_jacket_shoes` | Куртка и обувь | knot: `sunday_get_dressed` |
+| `to_bedroom` | В спальню | — |
+| `to_kitchen` | На кухню | — |
+| `exit_apartment` | Выйти | — |
+| `hall_mirror` | Зеркало | — |
+| `hall_jacket_shoes` | Куртка и обувь | — |
 
 ### `apartment_kitchen` (Кухня)
  — source: `apartment.lua`, bg: `apartment_bg("kitchen")`, on_enter: `enter_kitchen_morning_first`
 
 | Hotspot id | Label | Action |
 |---|---|---|
-| `coffee_setup` | Кофе | knot: `use_coffee_setup_no_mug` |
-| `take_mug_kitchen` | Кружка | knot: `take_mug` |
-| `kitchen_apples` | Яблоко | knot: `take_kitchen_apple` |
-| `kitchen_fridge` | Холодильник | knot: `look_kitchen_fridge` |
-| `kitchen_window` | Окно | knot: `look_kitchen_window` |
-| `back_to_hall_from_kitchen` | В коридор | scene: `apartment_hub` |
+| `coffee_setup` | Кофе | — |
+| `take_mug_kitchen` | Кружка | — |
+| `kitchen_apples` | Яблоко | — |
+| `kitchen_fridge` | Холодильник | — |
+| `kitchen_window` | Окно | — |
+| `back_to_hall_from_kitchen` | В коридор | — |
 
 ### `archive_hub` (Архив)
  — source: `archive.lua`, bg: `"bg_archive_day"`
 
 | Hotspot id | Label | Action |
 |---|---|---|
-| `archive_shelves` | Стеллажи | knot: `archive_shelves_interact` |
-| `leave_archive` | Выйти | knot: `leave_archive` |
+| `archive_shelves` | Стеллажи | — |
+| `leave_archive` | — | — |
 
 ### `bar_hub` (Бар Maybe)
  — source: `bar.lua`, bg: `"bg_bar_maybe_night"`
 
 | Hotspot id | Label | Action |
 |---|---|---|
-| `bar_counter` | Стойка бара | knot: `bar_counter_interact` |
-| `leave_bar` | Выйти | knot: `leave_bar` |
+| `bar_counter` | Стойка бара | — |
+| `leave_bar` | — | — |
 
 ### `cafe_hub` (Кафе)
  — source: `cafe.lua`, bg: `"bg_cafe_morning"`, on_enter: `sunday_date_cafe_arrival`
 
 | Hotspot id | Label | Action |
 |---|---|---|
-| `cafe_window_table` | Столик у окна | knot: `cafe_window_table` |
-| `cafe_bar` | Стойка | knot: `cafe_bar_interact` |
-| `leave_cafe` | Выйти | knot: `leave_cafe` |
+| `cafe_window_table` | Столик у окна | — |
+| `cafe_bar` | Стойка | — |
+| `leave_cafe` | — | — |
+
+### `hotspots` (Хозтовары)
+ — source: `shop.lua`, bg: `—`
 
 ### `monday_apartment_bedroom_morning` (Спальня)
  — source: `apartment_monday.lua`, bg: `"bg_apartment_bedroom_morning"`, on_enter: `mon_home_bedroom_intro`
 
 | Hotspot id | Label | Action |
 |---|---|---|
-| `mon_bed` | Кровать | knot: `mon_home_bed` |
-| `mon_bedroom_desk` | Рабочий стол | knot: `mon_home_bedroom_desk` |
-| `mon_bathroom_wash` | Умыться | knot: `mon_home_wash_up` |
-| `mon_to_hall_from_bedroom` | В коридор | scene: `monday_apartment_hall_morning` |
+| `mon_bed` | Кровать | — |
+| `mon_bedroom_desk` | Рабочий стол | — |
+| `mon_bathroom_wash` | Умыться | — |
+| `mon_to_hall_from_bedroom` | В коридор | — |
 
 ### `monday_apartment_hall_morning` (Коридор)
  — source: `apartment_monday.lua`, bg: `"bg_apartment_hall_morning"`, on_enter: `mon_home_hall_intro`
 
 | Hotspot id | Label | Action |
 |---|---|---|
-| `mon_to_bedroom` | В спальню | scene: `monday_apartment_bedroom_morning` |
-| `mon_to_kitchen` | На кухню | scene: `monday_apartment_kitchen_morning` |
-| `mon_hall_mirror` | Зеркало | knot: `mon_home_hall_mirror` |
-| `mon_work_card` | Пропуск | knot: `mon_home_take_work_card` |
-| `mon_get_dressed` | Обувь и куртка | knot: `mon_home_get_dressed` |
-| `mon_exit_apartment` | Выйти | knot: `mon_home_leave_apartment` |
+| `mon_to_bedroom` | В спальню | — |
+| `mon_to_kitchen` | На кухню | — |
+| `mon_hall_mirror` | Зеркало | — |
+| `mon_work_card` | Пропуск | — |
+| `mon_get_dressed` | Обувь и куртка | — |
+| `mon_exit_apartment` | Выйти | — |
 
 ### `monday_apartment_kitchen_morning` (Кухня)
  — source: `apartment_monday.lua`, bg: `"bg_apartment_kitchen_morning"`, on_enter: `mon_home_kitchen_intro`
 
 | Hotspot id | Label | Action |
 |---|---|---|
-| `mon_kitchen_coffee` | Кофе | knot: `mon_home_kitchen_coffee` |
-| `mon_kitchen_window` | Окно | knot: `mon_home_kitchen_window` |
-| `mon_back_to_hall_from_kitchen` | В коридор | scene: `monday_apartment_hall_morning` |
+| `mon_kitchen_coffee` | Кофе | — |
+| `mon_kitchen_window` | Окно | — |
+| `mon_back_to_hall_from_kitchen` | В коридор | — |
 
 ### `office_meeting_room` (Переговорка)
  — source: `office_monday.lua`, bg: `office_bg("meeting_room")`
 
 | Hotspot id | Label | Action |
 |---|---|---|
-| `meeting_room_table_folder` | Стол | knot: `meeting_room_take_folder` |
-| `meeting_room_table_after` | Стол | knot: `meeting_room_table_after` |
-| `meeting_room_to_workspace` | К рабочему месту | scene: `office_workspace` |
-| `meeting_room_back_to_lobby` | В лобби | scene: `work_hub` |
+| `meeting_room_table_folder` | Стол | — |
+| `meeting_room_table_after` | Стол | — |
+| `meeting_room_to_workspace` | К рабочему месту | — |
+| `meeting_room_back_to_lobby` | В лобби | — |
 
 ### `office_workspace` (Рабочее место)
  — source: `office_monday.lua`, bg: `office_bg("workspace")`
 
 | Hotspot id | Label | Action |
 |---|---|---|
-| `work_desk_mail` | Рабочий стол | knot: `work_desk_read_mail` |
-| `work_desk_waiting` | Рабочий стол | knot: `work_desk_needs_case_file` |
-| `work_desk_submit` | Рабочий стол | knot: `work_desk_case_file_prompt` |
-| `work_desk_done` | Рабочий стол | knot: `work_desk_done` |
-| `workspace_to_meeting_room` | В переговорку | scene: `office_meeting_room` |
-| `workspace_back_to_lobby` | В лобби | scene: `work_hub` |
+| `work_desk_mail` | Рабочий стол | — |
+| `work_desk_waiting` | Рабочий стол | — |
+| `work_desk_submit` | Рабочий стол | — |
+| `work_desk_done` | Рабочий стол | — |
+| `workspace_to_meeting_room` | В переговорку | — |
+| `workspace_back_to_lobby` | В лобби | — |
+
+### `on_enter` (—)
+ — source: `shop.lua`, bg: `—`
 
 ### `park_hub` (Парк у реки)
  — source: `park.lua`, bg: `"bg_park_riverside_entrance_morning"`, on_enter: `sunday_date_park_arrival`
 
 | Hotspot id | Label | Action |
 |---|---|---|
-| `park_entrance_view` | Осмотреться | knot: `park_entrance_view` |
-| `park_bin` | Урна | knot: `park_bin_prompt` |
-| `park_message_where` | Написать | knot: `park_message_where_are_you` |
-| `park_npc_greeting` | Поздороваться | knot: `park_npc_arrives` |
-| `park_offer_place` | Предложить | knot: `park_offer_place` |
-| `park_to_bench` | К скамейке | scene: `park_riverside_bench` |
-| `park_to_path` | По аллее | scene: `park_riverside_path` |
-| `leave_park` | Уйти | knot: `leave_park` |
+| `park_entrance_view` | Осмотреться | — |
+| `park_bin` | Урна | — |
+| `park_message_where` | Написать | — |
+| `park_npc_greeting` | Поздороваться | — |
+| `park_offer_place` | Предложить | — |
+| `park_to_bench` | К скамейке | — |
+| `park_to_path` | По аллее | — |
+| `leave_park` | Уйти | — |
 
 ### `park_riverside_bench` (Парк у реки — скамейка)
  — source: `park.lua`, bg: `"bg_park_riverside_bench_morning"`
 
 | Hotspot id | Label | Action |
 |---|---|---|
-| `park_bench` | Скамейка | knot: `park_bench_interact` |
-| `park_trash_cup` | Стаканчик | knot: `take_park_trash_cup` |
-| `park_river_view` | Река | knot: `park_river_view` |
-| `park_offer_place_bench` | Предложить | knot: `park_offer_place` |
-| `bench_to_path` | Пройтись | scene: `park_riverside_path` |
-| `bench_to_entrance` | К входу | scene: `park_hub` |
+| `park_bench` | Скамейка | — |
+| `park_trash_cup` | Стаканчик | — |
+| `park_river_view` | Река | — |
+| `park_offer_place_bench` | Предложить | — |
+| `bench_to_path` | Пройтись | — |
+| `bench_to_entrance` | К входу | — |
 
 ### `park_riverside_path` (Парк у реки — аллея)
  — source: `park.lua`, bg: `"bg_park_riverside_path_morning"`
 
 | Hotspot id | Label | Action |
 |---|---|---|
-| `park_path_walk` | Пройтись | knot: `park_path_walk` |
-| `park_path_trees` | Тень деревьев | knot: `park_path_trees` |
-| `park_offer_place_path` | Предложить | knot: `park_offer_place` |
-| `path_to_bench` | К скамейке | scene: `park_riverside_bench` |
-| `path_to_entrance` | К входу | scene: `park_hub` |
-
-### `shop_hub` (Магазин 24/7)
- — source: `shop.lua`, bg: `"bg_shop_day"`, on_enter: `sunday_shop_arrival`
-
-| Hotspot id | Label | Action |
-|---|---|---|
-| `shop_drinks` | Напитки | knot: `shop_drinks_interact` |
-| `shop_snacks` | Снеки | knot: `shop_snacks_interact` |
-| `shop_counter` | Прилавок | knot: `shop_counter_interact` |
-| `leave_shop` | Выйти | knot: `leave_shop` |
+| `park_path_walk` | Пройтись | — |
+| `park_path_trees` | Тень деревьев | — |
+| `park_offer_place_path` | Предложить | — |
+| `path_to_bench` | К скамейке | — |
+| `path_to_entrance` | К входу | — |
 
 ### `tuesday_apartment_bedroom_morning` (Спальня)
  — source: `apartment_tuesday.lua`, bg: `"bg_apartment_bedroom_morning"`, on_enter: `tue_home_bedroom_intro`
 
 | Hotspot id | Label | Action |
 |---|---|---|
-| `tue_bed` | Кровать | knot: `tue_home_bed` |
-| `tue_phone_check` | Телефон | knot: `tue_home_check_phone` |
-| `tue_bedroom_desk` | Рабочий стол | knot: `tue_home_bedroom_desk` |
-| `tue_bathroom_wash` | Умыться | knot: `tue_home_wash_up` |
-| `tue_to_hall_from_bedroom` | В коридор | scene: `tuesday_apartment_hall_morning` |
+| `tue_bed` | Кровать | — |
+| `tue_phone_check` | Телефон | — |
+| `tue_bedroom_desk` | Рабочий стол | — |
+| `tue_bathroom_wash` | Умыться | — |
+| `tue_to_hall_from_bedroom` | В коридор | — |
 
 ### `tuesday_apartment_hall_morning` (Коридор)
  — source: `apartment_tuesday.lua`, bg: `"bg_apartment_hall_morning"`, on_enter: `tue_home_hall_intro`
 
 | Hotspot id | Label | Action |
 |---|---|---|
-| `tue_to_bedroom` | В спальню | scene: `tuesday_apartment_bedroom_morning` |
-| `tue_to_kitchen` | На кухню | scene: `tuesday_apartment_kitchen_morning` |
-| `tue_hall_mirror` | Зеркало | knot: `tue_home_hall_mirror` |
-| `tue_get_ready` | Обувь и куртка | knot: `tue_home_get_ready` |
-| `tue_exit_apartment` | Выйти | knot: `tue_home_leave_apartment` |
+| `tue_to_bedroom` | В спальню | — |
+| `tue_to_kitchen` | На кухню | — |
+| `tue_hall_mirror` | Зеркало | — |
+| `tue_get_ready` | Обувь и куртка | — |
+| `tue_exit_apartment` | Выйти | — |
 
 ### `tuesday_apartment_kitchen_morning` (Кухня)
  — source: `apartment_tuesday.lua`, bg: `"bg_apartment_kitchen_morning"`, on_enter: `tue_home_kitchen_intro`
 
 | Hotspot id | Label | Action |
 |---|---|---|
-| `tue_kitchen_coffee` | Кофе | knot: `tue_home_kitchen_coffee` |
-| `tue_kitchen_window` | Окно | knot: `tue_home_kitchen_window` |
-| `tue_back_to_hall_from_kitchen` | В коридор | scene: `tuesday_apartment_hall_morning` |
+| `tue_kitchen_coffee` | Кофе | — |
+| `tue_kitchen_window` | Окно | — |
+| `tue_back_to_hall_from_kitchen` | В коридор | — |
 
 ### `view_hub` (Смотровая)
  — source: `viewpoint.lua`, bg: `"bg_observation_day"`, on_enter: `sunday_viewpoint_arrival`
 
 | Hotspot id | Label | Action |
 |---|---|---|
-| `view_railing` | Поручни | knot: `view_railing_interact` |
-| `leave_view` | Уйти | knot: `leave_viewpoint` |
+| `view_railing` | Поручни | — |
+| `leave_view` | Уйти | — |
 
 ### `work_hub` (Офис — лобби)
  — source: `office_monday.lua`, bg: `office_bg("lobby")`
 
 | Hotspot id | Label | Action |
 |---|---|---|
-| `office_turnstile` | Турникет | knot: `office_turnstile_prompt` |
-| `office_to_workspace` | К рабочему месту | scene: `office_workspace` |
-| `office_to_meeting_room` | В переговорку | scene: `office_meeting_room` |
-| `leave_work` | Выйти | knot: `leave_work` |
+| `office_turnstile` | Турникет | — |
+| `office_to_workspace` | К рабочему месту | — |
+| `office_to_meeting_room` | В переговорку | — |
+| `leave_work` | — | — |
 
 ## Ink Knots
 
@@ -493,14 +489,20 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 
 | Knot | Аннотация |
 |---|---|
-| `leave_shop` | Автоматические двери выпускают тебя обратно в город. До встречи ещё можно выбрать маршрут. |
-| `shop_counter_interact` | Полки, холодильники, касса, пластиковая корзина у входа. Всё здесь устроено так, чтобы человек быстро взял нужное и не д |
+| `leave_shop` | Ты отходишь от витрины магазина. Стекло ещё держит отражение улицы, но телефон уже в руке — до встречи можно выбрать мар |
+| `shop_cleaning_supplies_interact` | На крючках висят перчатки, щётки и совки. Внизу стоят швабры, слишком прямые и терпеливые для предметов, которые обычно  |
+| `shop_counter_interact` | Касса стоит у выхода, как граница между “взял с полки” и “это теперь часть дня”. Терминал, сканер, пустое место за стойк |
 | `shop_drinks_interact` | Холодильники гудят ровно и уверенно. Вода, сок, холодный чай — маленькие решения, которые не требуют объяснений. |
+| `shop_household_goods_interact` | Бытовой отдел выглядит так, будто здесь продают не вещи, а обещание маленького контроля: пакеты, губки, лампочки, батаре |
+| `shop_paper_goods_interact` | Полка с бумажными полотенцами и салфетками выглядит почти абсурдно спокойной. Белые рулоны, мягкие упаковки, одинаковые  |
+| `shop_sign_interact` | Красная полоса над входом ничего не объясняет и не пытается понравиться. Просто сообщает: открыто, свет горит, можно зай |
 | `shop_snacks_interact` | Центральный стеллаж предлагает всё, что человек обычно покупает не потому, что нужно, а потому что день длиннее, чем каз |
+| `shop_window_interact` | Витрина работает как обещание: внутри светлее, чем снаружи, и всё разложено так, будто достаточно выбрать правильную пол |
 | `sunday_shop_arrival` | - else: |
-| `sunday_shop_arrival_pre_date` | Магазин у дома оказывается почти пустым: белый свет, ровные полки, холодильники с напитками у дальней стены. |
-| `sunday_shop_arrival_with_npc` | Магазин 24/7 выглядит слишком ярким для воскресенья: белый свет, ровные полки, холодильники у дальней стены. |
+| `sunday_shop_arrival_pre_date` | Внутри магазин оказывается почти пустым: белый свет, ровные полки, холодильники с напитками у дальней стены, касса у вых |
+| `sunday_shop_arrival_with_npc` | Магазин 24/7 выглядит слишком ярким для воскресенья: белый свет, ровные полки, холодильники у дальней стены, касса у вых |
 | `sunday_shop_settle` | Вы выходите из магазина с пакетом, который почти ничего не весит. Вода, сладкое, случайная мелочь — всё это не меняет де |
+| `sunday_shop_street_arrival` | Магазин стоит внизу жилого дома, слишком яркий для обычного воскресного маршрута. Стекло отражает улицу, но внутри всё р |
 
 ### `viewpoint_sunday.ink`
 
@@ -551,7 +553,7 @@ Source: `main/scripts/scene_characters.lua`.
 ## Flags
 
 Все имена флагов встречающиеся в `# set_flag:`, `get_flag(...)`,
-`set_flag(...)`. Всего: **106**.
+`set_flag(...)`. Всего: **108**.
 
 **`bathroom_*`**: `bathroom_morning_seen`
 
@@ -595,7 +597,7 @@ Source: `main/scripts/scene_characters.lua`.
 
 **`reached_*`**: `reached_office` `reached_work_district`
 
-**`sunday_*`**: `sunday_after_date_active` `sunday_bedroom_window_seen` `sunday_dressed` `sunday_evening_started` `sunday_finished` `sunday_kitchen_window_seen` `sunday_messenger_invite_sent` `sunday_morning_routine_seen` `sunday_ready_to_leave` `sunday_second_stop_done` `sunday_shop_bought_drink_for_npc` `sunday_shop_bought_snack` `sunday_shop_bought_water` `sunday_shop_done` `sunday_shop_pre_date_visited` `sunday_shop_with_npc_seen` `sunday_went_to_shop` `sunday_went_to_viewpoint`
+**`sunday_*`**: `sunday_after_date_active` `sunday_bedroom_window_seen` `sunday_dressed` `sunday_evening_started` `sunday_finished` `sunday_kitchen_window_seen` `sunday_messenger_invite_sent` `sunday_morning_routine_seen` `sunday_ready_to_leave` `sunday_second_stop_done` `sunday_shop_bought_drink_for_npc` `sunday_shop_bought_snack` `sunday_shop_bought_water` `sunday_shop_done` `sunday_shop_pre_date_visited` `sunday_shop_street_pre_date_seen` `sunday_shop_street_with_npc_seen` `sunday_shop_with_npc_seen` `sunday_went_to_shop` `sunday_went_to_viewpoint`
 
 **`teeth_*`**: `teeth_brushed`
 
@@ -640,7 +642,9 @@ Source: `main/images/backgrounds/*.atlas`.
 - `bg_park_riverside_entrance_morning`
 - `bg_park_riverside_path_morning`
 - `bg_rooftop`
-- `bg_shop_day`
+- `bg_shop_front_day`
+- `bg_shop_household_day`
+- `bg_shop_street_day`
 
 ## Phone Map POIs
 

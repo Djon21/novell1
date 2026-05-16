@@ -1,21 +1,11 @@
 -- main/data/scenes/apartment.lua
--- Сцены AVOS — раздел: apartment.
--- См. main/data/scenes/_shared.lua для STYLE_* и helper'ов.
+-- Сцены AVOS — раздел: apartment (воскресная база).
+-- См. _shared.lua для recipes.
 
 local s = require "main.data.scenes._shared"
-local STYLE_NAV         = s.STYLE_NAV
-local STYLE_INSPECT     = s.STYLE_INSPECT
-local STYLE_PICKUP      = s.STYLE_PICKUP
-local STYLE_USE         = s.STYLE_USE
-local STYLE_ITEM_TARGET = s.STYLE_ITEM_TARGET
-local STYLE_STORY       = s.STYLE_STORY
-local STYLE_NEUTRAL     = s.STYLE_NEUTRAL
-local apartment_bg      = s.apartment_bg
-local office_bg         = s.office_bg
-local is_apartment_night = s.is_apartment_night
-local is_office_night   = s.is_office_night
+local apartment_bg              = s.apartment_bg
+local is_apartment_night        = s.is_apartment_night
 local is_sunday_apartment_night = s.is_sunday_apartment_night
-local is_monday_apartment_night = s.is_monday_apartment_night
 
 return {
 
@@ -32,56 +22,44 @@ return {
             end,
         },
         hotspots = {
-            {
+            s.nav_scene{
                 id = "to_bedroom",
                 rect = { x = 110, y = 90, w = 175, h = 500 },
                 label = "В спальню",
                 icon = "left",
-                hotspot_style = STYLE_NAV,
-                icon_offset_x = -4,
-                action = { type = "goto_scene", scene = "apartment_bedroom" },
+                scene = "apartment_bedroom",
             },
-            {
+            s.nav_scene{
                 id = "to_kitchen",
                 rect = { x = 990, y = 90, w = 175, h = 500 },
                 label = "На кухню",
                 icon = "right",
-                hotspot_style = STYLE_NAV,
-                icon_offset_x = -4,
-                action = { type = "goto_scene", scene = "apartment_kitchen" },
+                scene = "apartment_kitchen",
                 visible_when = function(gs)
                     return is_apartment_night(gs) or gs.get_flag("washed_up")
                 end,
             },
-            {
+            s.nav_ink{
                 id = "exit_apartment",
                 rect = { x = 575, y = 215, w = 155, h = 345 },
                 label = "Выйти",
                 icon = "up",
-                hotspot_style = STYLE_NAV,
-                icon_offset_x = -4,
-                action = { type = "ink_knot", knot = "leave_apartment_prompt" },
+                knot = "leave_apartment_prompt",
                 visible_when = function(gs)
                     return not is_apartment_night(gs)
                 end,
             },
-            {
+            s.inspect{
                 id = "hall_mirror",
                 rect = { x = 360, y = 410, w = 135, h = 135 },
                 label = "Зеркало",
-                icon = "left_click",
-                hotspot_style = STYLE_INSPECT,
-                icon_offset_x = -4,
-                action = { type = "ink_knot", knot = "look_hall_mirror" },
+                knot = "look_hall_mirror",
             },
-            {
+            s.use{
                 id = "hall_jacket_shoes",
                 rect = { x = 805, y = 135, w = 135, h = 305 },
                 label = "Куртка и обувь",
-                icon = "left_click",
-                hotspot_style = STYLE_USE,
-                icon_offset_x = -4,
-                action = { type = "ink_knot", knot = "sunday_get_dressed" },
+                knot = "sunday_get_dressed",
                 visible_when = function(gs)
                     return not is_apartment_night(gs)
                        and gs.get_flag("date_agreed")
@@ -114,98 +92,80 @@ return {
             },
         },
         hotspots = {
-            {
+            s.pickup{
                 id = "phone_on_bedside",
                 rect = { x = 130, y = 215, w = 135, h = 135 },
                 label = "Телефон",
                 icon = "phone",
-                hotspot_style = STYLE_PICKUP,
-                action = { type = "ink_knot", knot = "take_phone" },
+                knot = "take_phone",
+                icon_offset_x = 0,  -- phone glyph центрируется штатно
                 visible_when = function(gs)
                     return not is_apartment_night(gs)
                        and not gs.has_item("phone")
                 end,
             },
-            {
+            s.inspect{
                 id = "bedroom_desk",
                 rect = { x = 710, y = 335, w = 135, h = 135 },
                 label = "Рабочий стол",
-                icon = "left_click",
-                hotspot_style = STYLE_INSPECT,
-                icon_offset_x = -4,
-                action = { type = "ink_knot", knot = "bedroom_desk_morning" },
+                knot = "bedroom_desk_morning",
                 visible_when = function(gs)
                     return not is_apartment_night(gs)
                        and gs.get_flag("got_out_of_bed")
                 end,
             },
-            {
+            s.story{
                 id = "bedroom_bed",
                 rect = { x = 425, y = 150, w = 135, h = 135 },
                 label = "Встать",
                 icon = "up",
-                hotspot_style = STYLE_STORY,
-                icon_offset_x = -4,
-                action = { type = "ink_knot", knot = "look_bed_morning" },
+                knot = "look_bed_morning",
                 visible_when = function(gs)
                     return not is_apartment_night(gs)
                        and gs.has_item("phone")
                        and not gs.get_flag("got_out_of_bed")
                 end,
             },
-            {
+            s.story{
                 id = "bedroom_bed_sleep_sunday",
                 rect = { x = 425, y = 150, w = 135, h = 135 },
                 label = "Лечь спать",
-                icon = "left_click",
-                hotspot_style = STYLE_STORY,
-                icon_offset_x = -4,
-                action = { type = "ink_knot", knot = "sunday_sleep_in_bed" },
-                visible_when = function(gs)
-                    return is_sunday_apartment_night(gs)
-                end,
+                knot = "sunday_sleep_in_bed",
+                visible_when = is_sunday_apartment_night,
             },
-            {
+            s.nav_scene{
                 id = "to_bathroom_from_bedroom",
                 rect = { x = 920, y = 145, w = 125, h = 480 },
                 label = "В ванную",
                 icon = "right",
-                hotspot_style = STYLE_NAV,
-                icon_offset_x = -4,
-                action = { type = "goto_scene", scene = "apartment_bathroom" },
+                scene = "apartment_bathroom",
                 visible_when = function(gs)
                     return is_apartment_night(gs) or gs.get_flag("got_out_of_bed")
                 end,
             },
-            {
+            s.inspect{
                 id = "bedroom_window",
                 rect = { x = 540, y = 330, w = 135, h = 190 },
                 label = "Окно",
-                icon = "left_click",
-                hotspot_style = STYLE_INSPECT,
-                icon_offset_x = -4,
-                action = { type = "ink_knot", knot = "look_bedroom_window" },
+                knot = "look_bedroom_window",
                 visible_when = function(gs)
                     return not is_apartment_night(gs)
                        and gs.get_flag("got_out_of_bed")
                        and not gs.get_flag("sunday_bedroom_window_seen")
                 end,
             },
-            {
+            s.nav_scene{
                 id = "back_to_hall_from_bedroom",
                 rect = { x = 1035, y = 70, w = 190, h = 260 },
                 label = "В коридор",
                 icon = "down",
-                hotspot_style = STYLE_NAV,
-                icon_offset_x = -4,
-                action = { type = "goto_scene", scene = "apartment_hub" },
+                scene = "apartment_hub",
                 visible_when = function(gs)
                     return is_apartment_night(gs) or gs.get_flag("washed_up")
                 end,
             },
         },
     },
-
 
     apartment_bathroom = {
         bg = apartment_bg("bathroom"),
@@ -218,76 +178,60 @@ return {
             end,
         },
         hotspots = {
-            {
+            s.inspect{
                 id = "bathroom_mirror",
                 rect = { x = 1025, y = 465, w = 180, h = 105 },
                 label = "Зеркало",
-                icon = "left_click",
-                hotspot_style = STYLE_INSPECT,
-                icon_offset_x = -4,
-                action = { type = "ink_knot", knot = "look_bathroom_mirror" },
+                knot = "look_bathroom_mirror",
             },
-            {
+            s.pickup{
                 id = "bathroom_toothbrush",
                 rect = { x = 870, y = 300, w = 105, h = 105 },
                 label = "Щётка",
-                icon = "left_click",
-                hotspot_style = STYLE_PICKUP,
-                icon_offset_x = -4,
-                action = { type = "ink_knot", knot = "take_toothbrush" },
+                knot = "take_toothbrush",
                 visible_when = function(gs)
                     return not gs.get_flag("teeth_brushed")
                        and not gs.has_item("toothbrush")
                        and not gs.has_item("toothbrush_pasted")
                 end,
             },
-            {
+            s.pickup{
                 id = "bathroom_toothpaste",
                 rect = { x = 1115, y = 290, w = 105, h = 105 },
                 label = "Паста",
-                icon = "left_click",
-                hotspot_style = STYLE_PICKUP,
-                icon_offset_x = -4,
-                action = { type = "ink_knot", knot = "take_toothpaste" },
+                knot = "take_toothpaste",
                 visible_when = function(gs)
                     return not gs.get_flag("teeth_brushed")
                        and not gs.has_item("toothpaste")
                        and not gs.has_item("toothbrush_pasted")
                 end,
             },
-            {
+            s.item_target{
                 id = "bathroom_sink",
                 rect = { x = 985, y = 175, w = 105, h = 105 },
                 label = "Раковина",
-                icon = "left_click",
-                hotspot_style = STYLE_ITEM_TARGET,
-                icon_offset_x = -4,
-                action = { type = "ink_knot", knot = "bathroom_sink_prompt" },
+                knot = "bathroom_sink_prompt",
                 visible_when = function(gs)
                     return not gs.get_flag("washed_up")
                 end,
             },
-            {
+            s.story{
                 id = "bathroom_exit_locked",
                 rect = { x = 85, y = 70, w = 180, h = 560 },
                 label = "В спальню",
                 icon = "left",
-                hotspot_style = STYLE_STORY,
-                icon_offset_x = -4,
-                action = { type = "ink_knot", knot = "bathroom_exit_locked" },
+                knot = "bathroom_exit_locked",
                 visible_when = function(gs)
                     return not is_apartment_night(gs)
                        and not gs.get_flag("washed_up")
                 end,
             },
-            {
+            s.nav_scene{
                 id = "back_to_bedroom_from_bathroom",
                 rect = { x = 85, y = 70, w = 180, h = 560 },
                 label = "В спальню",
                 icon = "left",
-                hotspot_style = STYLE_NAV,
-                icon_offset_x = -4,
-                action = { type = "goto_scene", scene = "apartment_bedroom" },
+                scene = "apartment_bedroom",
                 visible_when = function(gs)
                     return is_apartment_night(gs)
                         or gs.get_flag("washed_up")
@@ -307,69 +251,60 @@ return {
             end,
         },
         hotspots = {
-            {
+            s.use{
                 id = "coffee_setup",
                 rect = { x = 280, y = 395, w = 135, h = 135 },
                 label = "Кофе",
                 icon = "coffee",
-                hotspot_style = STYLE_USE,
-                action = { type = "ink_knot", knot = "use_coffee_setup_no_mug" },
+                knot = "use_coffee_setup_no_mug",
                 visible_when = function(gs)
                     return not is_apartment_night(gs)
                        and not gs.get_flag("coffee_drunk")
                 end,
             },
-            {
+            s.pickup{
                 id = "take_mug_kitchen",
                 rect = { x = 980, y = 95, w = 135, h = 135 },
                 label = "Кружка",
                 icon = "mug",
-                hotspot_style = STYLE_PICKUP,
-                action = { type = "ink_knot", knot = "take_mug" },
+                knot = "take_mug",
                 visible_when = function(gs)
                     return not is_apartment_night(gs)
                        and not gs.has_item("mug")
                 end,
             },
-            {
+            s.pickup{
                 id = "kitchen_apples",
                 rect = { x = 1120, y = 230, w = 135, h = 135 },
                 label = "Яблоко",
-                icon = "left_click",
-                hotspot_style = STYLE_PICKUP,
-                action = { type = "ink_knot", knot = "take_kitchen_apple" },
+                knot = "take_kitchen_apple",
                 visible_when = function(gs)
                     return not is_apartment_night(gs)
                        and not gs.get_flag("breakfast_done")
                 end,
             },
-            {
+            s.inspect{
                 id = "kitchen_fridge",
                 rect = { x = 845, y = 375, w = 125, h = 125 },
                 label = "Холодильник",
-                icon = "left_click",
-                hotspot_style = STYLE_INSPECT,
-                action = { type = "ink_knot", knot = "look_kitchen_fridge" },
+                knot = "look_kitchen_fridge",
                 visible_when = function(gs)
                     return not is_apartment_night(gs)
                        and not gs.get_flag("fridge_checked")
                 end,
             },
-            {
+            s.inspect{
                 id = "kitchen_window",
                 rect = { x = 455, y = 360, w = 155, h = 215 },
                 label = "Окно",
-                icon = "left_click",
-                hotspot_style = STYLE_INSPECT,
-                action = { type = "ink_knot", knot = "look_kitchen_window" },
+                knot = "look_kitchen_window",
             },
-            {
+            s.nav_scene{
                 id = "back_to_hall_from_kitchen",
                 rect = { x = 25, y = 95, w = 205, h = 520 },
                 label = "В коридор",
                 icon = "left",
-                hotspot_style = STYLE_NAV,
-                action = { type = "goto_scene", scene = "apartment_hub" },
+                scene = "apartment_hub",
             },
         },
     },
