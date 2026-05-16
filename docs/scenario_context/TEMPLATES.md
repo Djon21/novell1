@@ -119,16 +119,13 @@ s.leave{ id="...", rect={...}, knot="<leave_knot>" },
 
 ### Override стиля / action / иконки
 
-```lua
--- inspect, но кружок в стиле USE для визуального акцента:
-s.inspect{ ..., hotspot_style = s.STYLE_USE },
+Для AI-сценариста override **не является обычным шаблоном**. Сначала меняй
+рецепт по смыслу: `s.use{}` вместо `s.inspect{}` для действия, `s.pickup{}`
+для подбора предмета, `s.story{}` для сюжетного gate.
 
--- inspect-форма, но action — сразу set_flag (без ink-knot):
-s.inspect{
-    id = "...", rect = {...}, label = "...", knot = "ignored",
-    action = { type = "set_flag", flag = "<flag>", value = true },
-},
-```
+`hotspot_style = ...` или `action = {...}` можно предлагать только как
+низкоуровневое исключение, если пользователь явно просит code-level правку и
+дал `_shared.lua` + нужный `main/data/scenes/*.lua`.
 
 Полная спецификация рецептов и список иконок — `docs/guides/HOTSPOTS.md`.
 

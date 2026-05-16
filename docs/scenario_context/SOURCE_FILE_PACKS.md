@@ -26,15 +26,67 @@
 
 ---
 
-## Ink-сцена с тегами (карта/телефон/инвентарь/реклама)
+## Ink-сцена с тегами: authoring vs runtime/debug
 
-Базовый пакет + ink-файл сцены. Дополнительные документы из репо:
+Есть два разных режима. Их нельзя смешивать.
 
-- `docs/guides/HOW_TO_WRITE_INK.md` — все ink-теги с примерами и обработчиками
+### A. Authoring: написать сцену с уже известными тегами
 
-**Не нужно**: `dialogue_manager_ink.lua` (если только не добавляется новый тег или подозрение что reference устарел).
+Подходит, если задача звучит как:
 
-Если реклама — также `docs/guides/YANDEX_SDK_AND_ADS.md`.
+- "напиши сцену, где после текста открывается карта";
+- "добавь SMS в конце сцены";
+- "после реплики выдай предмет";
+- "поставь флаг после выбора";
+- "вставь рекламу перед переходом".
+
+Достаточно:
+
+- базовый пакет;
+- текущий ink-файл сцены;
+- `docs/guides/HOW_TO_WRITE_INK.md`;
+- `docs/scenario_context/INK_TAG_REFERENCE.md`.
+
+Для рекламы дополнительно:
+
+- `docs/guides/YANDEX_SDK_AND_ADS.md`.
+
+В этом режиме `dialogue_manager_ink.lua` **не нужен**, если GPT не меняет
+поведение тегов и не расследует баг.
+
+### B. Runtime/debug: почему тег работает не так
+
+Подходит, если задача звучит как:
+
+- "карта открывается не та";
+- "phone:map не срабатывает";
+- "после тега выкидывает в меню";
+- "инвентарь/предмет не меняется";
+- "реклама ломает переход";
+- "после return_to_scene сцена не возвращается";
+- "после continue/load/save поведение другое";
+- "проверь, почему этот тег не исполняется";
+- "раньше работало, теперь нет".
+
+Обязательно дать:
+
+- `main/scripts/dialogue_manager_ink.lua`;
+- `main/gui/modules/ui_manager_v2/dm_commands.lua`;
+- `main/gui/modules/ui_manager_v2/message_flow.lua`, если участвуют msg/overlay переходы;
+- `main/gui/ui_manager_v2.script`, если меняется общий orchestration;
+- текущий ink-файл сцены;
+- профильный документ/код подсистемы ниже.
+
+Профильные добавки:
+
+- Карта/телефон: `docs/guides/PHONE_SYSTEM.md`, `docs/guides/HUB_SYSTEM.md`, `main/gui/components_v2/phone_map.gui_script`, нужный `phone_*.gui_script`.
+- Exploration переходы: `main/scripts/scene_controller.lua`, `main/scripts/scenes.lua`, нужный `main/data/scenes/<location>.lua`.
+- Инвентарь: `docs/reference/INVENTORY_SYSTEM.md`, `main/story/chapters/91_inventory_actions.ink`, `main/gui/modules/ui_manager_v2/inventory_flow.lua`, scene Lua-файл цели.
+- Реклама: `docs/guides/YANDEX_SDK_AND_ADS.md` и модули, где обрабатывается `show_ad`.
+
+Если задача содержит слово "баг", "не работает", "выкидывает", "не открывается",
+"не возвращается", "не сохраняется", "после Continue", "после загрузки" —
+считать это Runtime/debug, а не Authoring.
 
 ---
 
@@ -72,15 +124,23 @@
 Базовый пакет + lua-файлы сцен:
 
 - `main/data/scenes/<location>.lua` (один файл на локацию: `park.lua`, `cafe.lua`, `shop.lua`, `bar.lua`, `viewpoint.lua`, `archive.lua`, `office_monday.lua`, `office_tuesday.lua`, `apartment.lua` + day-варианты)
-- `main/data/scenes/_shared.lua` (STYLE_*, icons, helpers)
+- `main/data/scenes/_shared.lua` (STYLE_*, icons, helpers, рецепты)
 - `main/scripts/scenes.lua` (для проверки сборки и поддерживаемых action types)
 - связанный ink-файл если хотспоты вызывают `ink_knot`
 
 Зачем именно эти:
-- `<scene>.lua` содержит реальные `rect`, `id`, `action` хотспотов
-- `_shared.lua` содержит реальные стили / иконки / bg-helpers
+- `<scene>.lua` содержит реальные `rect`, `id`, `action`, `visible_when`, `condition` хотспотов
+- `_shared.lua` содержит реальные стили / иконки / bg-helpers / рецепты
 - `scenes.lua` показывает как сцены собираются и какие action types поддерживаются
 - ink-файл нужен чтобы проверить существуют ли knot names для `action_knot`
+
+### Когда задача про **условия видимости** хотспотов
+
+**Всегда** давай `.lua`-файл сцены — `PROJECT_INVENTORY.md` показывает маркеры 👁/🔒
+(«у хотспота есть условие»), но не сами Lua-функции. Условия часто многострочные
+и могут ссылаться на shared-хелперы вроде `not_chosen_or_met`, `can_offer_place`.
+Триггеры этой задачи: «когда виден хотспот X», «почему не появляется», «при каких
+флагах», «после какого события доступен», «локед — почему».
 
 ---
 
@@ -119,18 +179,24 @@
 - `main/scripts/scene_characters.lua` (SCENE_GROUPS + SCENES конфиг)
 - `docs/guides/HOW_TO_ADD_SCENE_CHARACTERS.md`
 
-Ink-тег `# scene_char:show:GROUP:KEY` — описан в `INK_TAGS.md` и `TEMPLATES.md`.
+Ink-тег `# scene_char:show:GROUP:KEY` — описан в `INK_TAG_REFERENCE.md` и `TEMPLATES.md`.
 
 ---
 
 ## Телефон / карта / SMS / Messenger
 
-Базовый пакет +:
+Для авторинга текста/сообщений:
 
 - `docs/guides/PHONE_SYSTEM.md`
 - `docs/guides/HUB_SYSTEM.md` (если затронуты переходы exploration ↔ phone)
 - `92_phone_sms.ink` или `93_phone_messenger.ink` (если меняется текст)
-- GUI/script нужного приложения (если меняется логика, например `phone_sms.gui_script`)
+
+Если меняется логика или есть баг поведения, дополнительно:
+
+- `main/scripts/dialogue_manager_ink.lua`, если вход идёт через Ink-теги;
+- `main/gui/modules/ui_manager_v2/dm_commands.lua`;
+- GUI/script нужного приложения, например `phone_sms.gui_script`, `phone_map.gui_script`;
+- `main/gui/ui_manager_v2.script`, если проблема на уровне overlay/open/close.
 
 ---
 
@@ -162,7 +228,8 @@ Ink-тег `# scene_char:show:GROUP:KEY` — описан в `INK_TAGS.md` и `T
 |---|---|
 | Художественный текст в существующих knot'ах | 1-2 ink-файла |
 | Новый knot без новых тегов | 1 ink-файл |
-| Новый knot с тегом который надо проверить | + `HOW_TO_WRITE_INK.md` |
+| Новый knot с известным тегом | + `HOW_TO_WRITE_INK.md`, `INK_TAG_REFERENCE.md` |
+| Тег работает не так / runtime-баг | + `dialogue_manager_ink.lua`, `dm_commands.lua`, профильные flow/gui_script |
 | Новый hotspot в существующей сцене | + `<scene>.lua`, `_shared.lua` |
 | Новая локация | + `<scene>.lua`, `_shared.lua`, `scenes.lua`, `HOW_TO_ADD_SCENES.md` |
 | Новый портрет / scene character | + соответствующий HOW_TO |

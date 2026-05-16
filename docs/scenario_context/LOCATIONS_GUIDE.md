@@ -1,5 +1,10 @@
 # Locations Guide
 
+**Каноничная версия для AI-сценариста.** Если file search находит другой
+`LOCATIONS_GUIDE.md` или старые guides с verbose-hotspot форматом, считать их
+устаревшими для сценарных задач. Нормальный формат новых хотспотов сейчас —
+**recipes из `main/data/scenes/_shared.lua`**.
+
 Как устроены хабы / локации / фоны в проекте и как правильно их править
 или добавлять. Этот документ — концептуальный. Список **существующих**
 scene_id, hotspot id, bg-атласов — в `PROJECT_INVENTORY.md`.
@@ -48,9 +53,14 @@ ink-тег `# explore:`.
 
 ---
 
-## Структура хотспота — recipes из `_shared.lua`
+## Структура хотспота — только recipes из `_shared.lua`
 
-Хотспоты создаются через **рецепты** — функции из `_shared.lua`, которые сами подставляют стиль и тип action. Не пиши `hotspot_style = STYLE_X` и `action = { type = ... }` руками — используй соответствующий рецепт.
+Хотспоты создаются через **рецепты** — функции из `_shared.lua`, которые сами подставляют стиль и тип action.
+
+Для AI-сценариста правило простое: **не писать** `hotspot_style = STYLE_X` и
+`action = { type = ... }` руками. Нужно выбрать правильный рецепт:
+`s.inspect{}`, `s.pickup{}`, `s.use{}`, `s.story{}`, `s.item_target{}`,
+`s.nav_scene{}`, `s.nav_ink{}` или `s.leave{}`.
 
 ```lua
 local s = require "main.data.scenes._shared"
@@ -89,19 +99,36 @@ s.inspect{
 | `icon` | если дефолт не подходит | ключ из таблицы ICONS (см. HOTSPOTS.md) |
 | `visible_when(gs)` | нет | если `false` — хотспот полностью невидим |
 | `condition(gs)` | нет | если `false` — хотспот тусклый, не кликается |
-| `hotspot_style = s.STYLE_X` | нет | override стиля рецепта |
-| `action = {...}` | нет | override action (например `set_flag`) |
+| `hotspot_style = s.STYLE_X` | нет для AI | низкоуровневый override, не обычный формат |
+| `action = {...}` | нет для AI | низкоуровневый override, только если это отдельная кодовая задача |
 | `icon_offset_x/y` | нет | точечный сдвиг glyph'а |
 
-### Override стиля или action
+### Низкоуровневые overrides
 
-Любой рецепт можно перебить:
+В `_shared.lua` технически есть возможность перебить стиль или action рецепта.
+Но для сценарного GPT это **не основной формат**, а исключение.
+
+Используй overrides только если:
+
+- пользователь явно попросил изменить низкоуровневое поведение;
+- у AI на руках есть `_shared.lua` и нужный `main/data/scenes/*.lua`;
+- обычный рецепт не выражает нужную семантику;
+- результат помечен как code-level правка, а не обычный сценарный hotspot.
+
+Обычная замена стиля почти всегда означает, что выбран не тот рецепт:
+
+- нужно действие с объектом → `s.use{}`;
+- нужно взять предмет → `s.pickup{}`;
+- нужен сюжетный gate → `s.story{}`;
+- нужен переход → `s.nav_scene{}` или `s.nav_ink{}`.
+
+Только для понимания внутреннего устройства:
 
 ```lua
--- inspect, но кружок в стиле USE:
+-- Низкоуровневое исключение, НЕ шаблон для обычных хотспотов:
 s.inspect{ id=..., rect=..., label=..., knot=..., hotspot_style = s.STYLE_USE },
 
--- inspect-форма, но action — set_flag вместо ink_knot:
+-- Низкоуровневое исключение, НЕ шаблон для обычных хотспотов:
 s.inspect{
     id = "park_marker",
     rect = {...}, label = "Маркер", knot = "ignored",
@@ -111,7 +138,8 @@ s.inspect{
 
 Доступные `action.type`: `ink_knot`, `goto_scene`, `set_flag`, `add_item`, `remove_item`. Новый тип — **фича для кода**, не сценарная правка.
 
-Полная спецификация — `docs/guides/HOTSPOTS.md`.
+Полная низкоуровневая спецификация — `docs/guides/HOTSPOTS.md`. Для AI-сценариста
+канон всё равно этот документ и `TEMPLATES.md`.
 
 ---
 
@@ -142,7 +170,10 @@ s.inspect{
 
 **Стили** — `STYLE_NAV` / `INSPECT` / `PICKUP` / `USE` / `ITEM_TARGET` / `STORY` в `_shared.lua`. Цвета: cyan / violet / magenta-pink / amber / green / hot-pink соответственно. Кодируют ДЕЙСТВИЕ, не предмет.
 
-В норме AI **не задаёт** стиль вручную — берёт правильный рецепт (`s.use{}` для USE, `s.pickup{}` для PICKUP и т.д.). Override через `hotspot_style = s.STYLE_X` — только когда визуальный акцент в конкретной сцене требует отступления от семантики.
+AI **не задаёт** стиль вручную — берёт правильный recipe (`s.use{}` для USE,
+`s.pickup{}` для PICKUP и т.д.). Если кажется, что нужен
+`hotspot_style = s.STYLE_X`, сначала предложи сменить recipe. Override стиля —
+только code-level исключение после явного запроса пользователя.
 
 ---
 
@@ -193,7 +224,20 @@ s.inspect{
 Локация может состоять из нескольких scene_id (entrance, bench, path). Каждый
 sub-scene — отдельный hub со своим набором хотспотов.
 
-Связь между sub-сценами — через хотспот с `action = { type = "goto_scene", scene = "<other_sub_scene>" }`. Игрок ходит между ними как между «комнатами» одной локации.
+Связь между sub-сценами — через recipe:
+
+```lua
+s.nav_scene{
+    id = "to_other_sub_scene",
+    rect = { x = ..., y = ..., w = ..., h = ... },
+    label = "Перейти",
+    icon = "up",
+    scene = "<other_sub_scene>",
+}
+```
+
+Внутри recipe это станет `goto_scene`, но AI-сценарист не должен писать
+`action = { type = "goto_scene", ... }` руками.
 
 **Для scene_characters** (Persona-style персонажи на фоне) sub-сцены могут быть объединены в одну группу через `SCENE_GROUPS` в `scene_characters.lua` — тогда персонаж следует за игроком по всем sub-сценам группы. См. `HOW_TO_ADD_SCENE_CHARACTERS.md`.
 

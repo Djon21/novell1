@@ -33,6 +33,56 @@ OUT = ROOT / "docs" / "scenario_context" / "PROJECT_INVENTORY.md"
 
 # ---------------------------- Scenes & Hotspots ----------------------------
 
+def extract_brace_body(text: str, open_brace_index: int) -> tuple[str, int]:
+    """Return body inside {...} and index just after the matching closing brace."""
+    assert text[open_brace_index] == "{"
+    depth = 1
+    i = open_brace_index + 1
+    while i < len(text) and depth > 0:
+        ch = text[i]
+        if ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+        i += 1
+    return text[open_brace_index + 1:i - 1], i
+
+
+def iter_top_level_table_entries(body: str):
+    """
+    Iterate `name = {...}` / `name = other_name` entries in a Lua table body.
+    This deliberately only reads depth-0 entries so nested `hotspots = {}` and
+    `on_enter = {}` blocks are not mistaken for scene ids.
+    """
+    i = 0
+    depth = 0
+    while i < len(body):
+        if depth == 0:
+            m = re.match(r"\s*,?\s*([a-zA-Z_][\w]*)\s*=\s*", body[i:])
+            if m:
+                key = m.group(1)
+                i += m.end()
+                while i < len(body) and body[i].isspace():
+                    i += 1
+                if i < len(body) and body[i] == "{":
+                    entry_body, end = extract_brace_body(body, i)
+                    yield key, "block", entry_body
+                    i = end
+                    continue
+                expr_start = i
+                while i < len(body) and body[i] not in ",\n\r":
+                    i += 1
+                yield key, "expr", body[expr_start:i].strip()
+                continue
+
+        ch = body[i]
+        if ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+        i += 1
+
+
 def scan_scene_files() -> dict:
     """
     Парсит main/data/scenes/*.lua (кроме _shared.lua) и собирает scenes:
@@ -44,22 +94,31 @@ def scan_scene_files() -> dict:
         if lua.name == "_shared.lua":
             continue
         text = lua.read_text(encoding="utf-8")
-        # Top-level scene blocks: имя_сцены = {  ...  },
-        # Берём строки вида `    name = {` на уровне отступа 4 (внутри return {})
-        for m in re.finditer(r"^    ([a-z_][\w]*)\s*=\s*\{", text, re.MULTILINE):
-            scene_id = m.group(1)
-            start = m.end()
-            depth = 1
-            i = start
-            while i < len(text) and depth > 0:
-                ch = text[i]
-                if ch == "{":
-                    depth += 1
-                elif ch == "}":
-                    depth -= 1
-                i += 1
-            block = text[start:i - 1]
-            scenes[scene_id] = parse_scene_block(scene_id, block, lua.name)
+
+        # Newer location files may define scenes as locals and return aliases:
+        #   local shop_street = { ... }
+        #   return { shop_hub = shop_street }
+        local_defs = {}
+        for m in re.finditer(r"^local\s+([a-z_][\w]*)\s*=\s*\{", text, re.MULTILINE):
+            name = m.group(1)
+            body, _ = extract_brace_body(text, m.end() - 1)
+            local_defs[name] = body
+
+        # Source of exported scene ids is the module's return table.
+        rm = re.search(r"\breturn\s*\{", text)
+        if not rm:
+            continue
+        return_body, _ = extract_brace_body(text, rm.end() - 1)
+        for scene_id, kind, value in iter_top_level_table_entries(return_body):
+            if kind == "block":
+                scenes[scene_id] = parse_scene_block(scene_id, value, lua.name)
+            else:
+                ref = value.rstrip(",")
+                if ref in local_defs:
+                    info = parse_scene_block(scene_id, local_defs[ref], lua.name)
+                    if ref != scene_id:
+                        info["alias_of"] = ref
+                    scenes[scene_id] = info
     return scenes
 
 
@@ -69,6 +128,7 @@ def parse_scene_block(scene_id: str, block: str, source: str) -> dict:
         "label": None,
         "bg": None,
         "on_enter_knot": None,
+        "alias_of": None,
         "hotspots": [],
     }
     m = re.search(r"\blabel\s*=\s*['\"]([^'\"]+)['\"]", block)
@@ -93,30 +153,25 @@ def parse_hotspots(block: str) -> list:
     m = re.search(r"\bhotspots\s*=\s*\{", block)
     if not m:
         return out
-    start = m.end()
-    depth = 1
-    i = start
-    while i < len(block) and depth > 0:
-        ch = block[i]
-        if ch == "{":
-            depth += 1
-        elif ch == "}":
-            depth -= 1
-        i += 1
-    body = block[start:i - 1]
-    # Внутри hotspots — массив таблиц. Идём по top-level {...} парам.
+    body, _ = extract_brace_body(block, m.end() - 1)
+    # Внутри hotspots — массив таблиц или scene recipes: s.inspect{...}.
     j = 0
     while j < len(body):
-        if body[j] == "{":
-            depth2 = 1
-            k = j + 1
-            while k < len(body) and depth2 > 0:
-                if body[k] == "{":
-                    depth2 += 1
-                elif body[k] == "}":
-                    depth2 -= 1
-                k += 1
-            hb = body[j + 1:k - 1]
+        recipe = None
+        rm = re.match(r"\s*,?\s*s\.([a-z_][\w]*)\s*\{", body[j:])
+        if rm:
+            recipe = rm.group(1)
+            brace_index = j + rm.end() - 1
+            hb, k = extract_brace_body(body, brace_index)
+            j = k
+        elif body[j] == "{":
+            hb, k = extract_brace_body(body, j)
+            j = k
+        else:
+            j += 1
+            continue
+
+        if hb:
             h = {}
             mm = re.search(r"\bid\s*=\s*['\"]([^'\"]+)['\"]", hb)
             if mm: h["id"] = mm.group(1)
@@ -131,11 +186,27 @@ def parse_hotspots(block: str) -> list:
                 if mm3: h["action_scene"] = mm3.group(1)
                 mm4 = re.search(r"\bitem\s*=\s*['\"]([^'\"]+)['\"]", hb)
                 if mm4: h["action_item"] = mm4.group(1)
+            elif recipe:
+                if recipe == "nav_scene":
+                    h["action_type"] = "goto_scene"
+                    mm = re.search(r"\bscene\s*=\s*['\"]([^'\"]+)['\"]", hb)
+                    if mm: h["action_scene"] = mm.group(1)
+                elif recipe in ("nav_ink", "inspect", "pickup", "use", "story", "item_target", "leave"):
+                    h["action_type"] = "ink_knot"
+                    mm = re.search(r"\bknot\s*=\s*['\"]([^'\"]+)['\"]", hb)
+                    if mm: h["action_knot"] = mm.group(1)
+                h["recipe"] = recipe
+            # Маркер наличия условий видимости / доступности. Сами Lua-функции
+            # в inventory не вытаскиваем (могут быть многострочные + ссылаться
+            # на хелперы вроде not_chosen_or_met) — только флаг что условие есть.
+            # Если задача про "когда виден этот хотспот" — AI должен открыть
+            # source-файл сцены, не полагаться на inventory.
+            if re.search(r"\bvisible_when\s*=", hb):
+                h["has_visible_when"] = True
+            if re.search(r"\bcondition\s*=", hb):
+                h["has_condition"] = True
             if h.get("id"):
                 out.append(h)
-            j = k
-        else:
-            j += 1
     return out
 
 
@@ -409,6 +480,17 @@ def render(data) -> str:
     add("")
     add("Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua`.")
     add("")
+    add("**Gated column:**")
+    add("- 👁 — у хотспота есть `visible_when` (может быть скрыт по условию)")
+    add("- 🔒 — у хотспота есть `condition` (виден, но locked/неактивен по условию)")
+    add("- `—` — без условий, виден всегда")
+    add("")
+    add("> ⚠️ **Inventory НЕ показывает сами Lua-условия** видимости/доступности.")
+    add("> Если задача зависит от «когда виден этот хотспот», «при каких флагах»,")
+    add("> «почему он не появляется» — открой соответствующий `main/data/scenes/<file>.lua`")
+    add("> и читай `visible_when` / `condition` функции там. Они часто многострочные")
+    add("> и могут ссылаться на shared-хелперы (`not_chosen_or_met`, `can_offer_place`).")
+    add("")
     for sid, info in sorted(data["scenes"].items()):
         label = info.get("label") or "—"
         bg = info.get("bg") or "—"
@@ -416,13 +498,15 @@ def render(data) -> str:
         head = f"### `{sid}` ({label})"
         add(head)
         meta = [f"source: `{info['source']}`", f"bg: `{bg}`"]
+        if info.get("alias_of"):
+            meta.append(f"alias_of: `{info['alias_of']}`")
         if oek:
             meta.append(f"on_enter: `{oek}`")
         add(" — " + ", ".join(meta))
         if info["hotspots"]:
             add("")
-            add("| Hotspot id | Label | Action |")
-            add("|---|---|---|")
+            add("| Hotspot id | Label | Action | Gated |")
+            add("|---|---|---|---|")
             for h in info["hotspots"]:
                 if h.get("action_type") == "ink_knot":
                     act = f"knot: `{h.get('action_knot', '?')}`"
@@ -432,7 +516,13 @@ def render(data) -> str:
                     act = f"item: `{h.get('action_item', '?')}`"
                 else:
                     act = h.get("action_type", "—")
-                add(f"| `{h['id']}` | {h.get('label', '—')} | {act} |")
+                # Gated-маркер: хотспот имеет visible_when и/или condition.
+                # Сами Lua-условия сюда не выводятся — слишком сложные, читай source.
+                gated_marks = []
+                if h.get("has_visible_when"): gated_marks.append("👁")
+                if h.get("has_condition"):    gated_marks.append("🔒")
+                gated = " ".join(gated_marks) or "—"
+                add(f"| `{h['id']}` | {h.get('label', '—')} | {act} | {gated} |")
         add("")
 
     # Ink knots
