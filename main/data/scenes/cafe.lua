@@ -49,7 +49,7 @@ return {
                 id = "leave_cafe",
                 rect = { x = 0, y = 0, w = 170, h = 220 },
                 label = "Выйти",
-                icon = "arrow_back",
+                icon = "left",
                 hotspot_style = STYLE_NAV,
                 action = { type = "ink_knot", knot = "leave_cafe" },
             },

@@ -150,4 +150,95 @@ M.STYLE_STORY = {
 -- Старое имя как alias для совместимости со сценами/черновиками.
 M.STYLE_NEUTRAL = M.STYLE_INSPECT
 
+-- ---------------------------------------------------------------------------
+-- Hotspot recipes
+-- ---------------------------------------------------------------------------
+--
+-- Готовые билдеры под типовые хотспоты. Принимают таблицу opts с обязательными
+-- полями (rect/id/label/knot или scene в зависимости от рецепта) и возвращают
+-- полную hotspot-таблицу. Все дефолты:
+--   icon_offset_x = -4  (универсальная компенсация Material Icons по X)
+--   icon_offset_y = 0   (= центр кружка)
+-- Переопределяй через opts.icon_offset_x / opts.icon_offset_y когда glyph
+-- визуально не центрирован.
+--
+-- Опциональные поля для всех рецептов:
+--   visible_when = function(gs) ... end
+--   condition    = function(gs) ... end
+--   icon_offset_x, icon_offset_y
+--
+-- Примеры использования см. в любом scene-файле.
+
+local function build(style, icon_default, action, opts)
+    return {
+        id            = opts.id,
+        rect          = opts.rect,
+        label         = opts.label,
+        icon          = opts.icon or icon_default,
+        hotspot_style = style,
+        action        = action,
+        icon_offset_x = opts.icon_offset_x or -4,
+        icon_offset_y = opts.icon_offset_y,
+        visible_when  = opts.visible_when,
+        condition     = opts.condition,
+    }
+end
+
+-- Переход в другую exploration-сцену внутри хаба (sub-scene navigation).
+-- Обязательные: id, rect, label, icon, scene.
+function M.nav_scene(opts)
+    return build(M.STYLE_NAV, opts.icon, { type = "goto_scene", scene = opts.scene }, opts)
+end
+
+-- Навигация через ink-knot (например leave_park со специальным narrative).
+-- Обязательные: id, rect, label, icon, knot.
+function M.nav_ink(opts)
+    return build(M.STYLE_NAV, opts.icon, { type = "ink_knot", knot = opts.knot }, opts)
+end
+
+-- Осмотреть / прочитать. icon default = "left_click".
+function M.inspect(opts)
+    return build(M.STYLE_INSPECT, "left_click", { type = "ink_knot", knot = opts.knot }, opts)
+end
+
+-- Забрать предмет. icon default = "left_click".
+function M.pickup(opts)
+    return build(M.STYLE_PICKUP, "left_click", { type = "ink_knot", knot = opts.knot }, opts)
+end
+
+-- Совершить действие с объектом. icon default = "left_click".
+function M.use(opts)
+    return build(M.STYLE_USE, "left_click", { type = "ink_knot", knot = opts.knot }, opts)
+end
+
+-- Сюжетный gate / обязательное действие. icon default = "left_click".
+function M.story(opts)
+    return build(M.STYLE_STORY, "left_click", { type = "ink_knot", knot = opts.knot }, opts)
+end
+
+-- Цель для применения предмета. icon default = "left_click".
+function M.item_target(opts)
+    return build(M.STYLE_ITEM_TARGET, "left_click", { type = "ink_knot", knot = opts.knot }, opts)
+end
+
+-- Выход из локации. STYLE_NAV + icon "left" + label "Выйти" (можно переопределить).
+-- Обязательные: id, rect, knot.
+function M.leave(opts)
+    return build(
+        M.STYLE_NAV,
+        opts.icon or "left",
+        { type = "ink_knot", knot = opts.knot },
+        {
+            id            = opts.id,
+            rect          = opts.rect,
+            label         = opts.label or "Выйти",
+            icon          = opts.icon,
+            icon_offset_x = opts.icon_offset_x,
+            icon_offset_y = opts.icon_offset_y,
+            visible_when  = opts.visible_when,
+            condition     = opts.condition,
+        }
+    )
+end
+
 return M

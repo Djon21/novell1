@@ -29,19 +29,21 @@ local DEFAULT_RING_COLOR = vmath.vector4(1.0, 1.0, 1.0, 1.0)
 local DEFAULT_ICON_COLOR = vmath.vector4(1.0, 1.0, 1.0, 1.0)
 
 local ICONS = {
-    arrow_back = string.char(0xEE, 0x97, 0x84),
-    arrow_forward = string.char(0xEE, 0x97, 0x88),
-    arrow_up = string.char(0xEE, 0x97, 0x98),
-    arrow_down = string.char(0xEE, 0x97, 0x9B),
+    -- Стрелки навигации.
+    left  = string.char(0xEE, 0x97, 0x84),  -- arrow_back
+    right = string.char(0xEE, 0x97, 0x88),  -- arrow_forward
+    up    = string.char(0xEE, 0x97, 0x98),  -- arrow_upward
+    down  = string.char(0xEE, 0x97, 0x9B),  -- arrow_downward
+    -- Универсальный «клик» для inspect/pickup/use без специфичного глифа.
     left_click = string.char(0xEE, 0xA4, 0x93),
-    left_lick = string.char(0xEE, 0xA4, 0x93),
-    phone = string.char(0xEE, 0xA4, 0x93),
-    smartphone = string.char(0xEE, 0xA4, 0x93),
-    coffee = string.char(0xEE, 0x95, 0x81),
-    mug = string.char(0xEE, 0x95, 0x81),
-    note = string.char(0xEE, 0x8B, 0x87),
-    lock = string.char(0xEE, 0xA2, 0x97),
+    phone      = string.char(0xEE, 0xA4, 0x93),  -- alias на left_click (legacy)
+    -- Тематические.
+    coffee  = string.char(0xEE, 0x95, 0x81),
+    mug     = string.char(0xEE, 0x95, 0x81),  -- alias на coffee
+    note    = string.char(0xEE, 0x8B, 0x87),
+    lock    = string.char(0xEE, 0xA2, 0x97),
     warning = string.char(0xEE, 0x80, 0x82),
+    delete  = string.char(0xEE, 0xA1, 0xB2),  -- delete (мусорка) — для урны и т.п.
 }
 
 local function resolve_icon(icon)
