@@ -1,5 +1,10 @@
--- main/data/scenes/office.lua
--- Сцены AVOS — раздел: office.
+-- main/data/scenes/office_monday.lua
+-- Сцены AVOS — раздел: office (понедельник).
+-- scene_id'ы work_hub / office_workspace / office_meeting_room пока
+-- shared между Mon/Tue (Tuesday office имеет только narrative-content,
+-- собственные хотспоты не нужны). Если когда-то понадобится развести —
+-- переименовываем здесь в *_monday и одной волной апдейтим ink-ссылки +
+-- inventory knot names в 91_inventory_actions.ink.
 -- См. main/data/scenes/_shared.lua для STYLE_* и helper'ов.
 
 local s = require "main.data.scenes._shared"

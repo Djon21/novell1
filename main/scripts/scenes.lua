@@ -3,14 +3,19 @@
 -- определения сцен живут в main/data/scenes/<location>.lua, разбитые
 -- по локациям. Этот файл их собирает и экспортирует через M.scenes / M.get.
 --
--- Раньше всё (helpers + styles + сцены) было в одном файле на 1263 строки.
--- После рефакторинга:
---   main/data/scenes/_shared.lua          — STYLE_* + bg-функции для дня/ночи
---   main/data/scenes/apartment.lua        — apartment_hub / _bedroom / _kitchen
---   main/data/scenes/apartment_monday.lua — monday morning-flow в квартире
---   main/data/scenes/apartment_tuesday.lua — tuesday consequences-flow
---   main/data/scenes/office.lua           — work_hub + office workspaces
---   main/data/scenes/locations.lua        — cafe / park / shop / bar / view / archive
+-- Структура main/data/scenes/:
+--   _shared.lua             — STYLE_* + bg-функции для дня/ночи
+--   apartment.lua           — apartment_hub / _bedroom / _bathroom / _kitchen (воскресная база)
+--   apartment_monday.lua    — monday morning-flow в квартире
+--   apartment_tuesday.lua   — tuesday consequences-flow в квартире
+--   office_monday.lua       — work_hub / office_workspace / office_meeting_room (понедельник)
+--   office_tuesday.lua      — stub, пока без собственных хотспотов
+--   park.lua                — park_hub / park_riverside_bench / park_riverside_path
+--   cafe.lua                — cafe_hub
+--   shop.lua                — shop_hub
+--   bar.lua                 — bar_hub
+--   viewpoint.lua           — view_hub
+--   archive.lua             — archive_hub
 --
 -- Coordinates:
 --   rect = { x, y, w, h } uses GUI space 1280x720, origin at bottom-left.
@@ -40,8 +45,14 @@ end
 merge(require "main.data.scenes.apartment")
 merge(require "main.data.scenes.apartment_monday")
 merge(require "main.data.scenes.apartment_tuesday")
-merge(require "main.data.scenes.office")
-merge(require "main.data.scenes.locations")
+merge(require "main.data.scenes.office_monday")
+merge(require "main.data.scenes.office_tuesday")
+merge(require "main.data.scenes.park")
+merge(require "main.data.scenes.cafe")
+merge(require "main.data.scenes.shop")
+merge(require "main.data.scenes.bar")
+merge(require "main.data.scenes.viewpoint")
+merge(require "main.data.scenes.archive")
 
 -- ---------------------------------------------------------------------------
 -- Backwards-compatible aliases

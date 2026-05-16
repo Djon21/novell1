@@ -54,7 +54,7 @@
 
 Базовый пакет + lua-файлы сцен:
 
-- `main/data/scenes/<нужный>.lua` (например `locations.lua` для парка)
+- `main/data/scenes/<location>.lua` (один файл на локацию: `park.lua`, `cafe.lua`, `shop.lua`, `bar.lua`, `viewpoint.lua`, `archive.lua`, `office_monday.lua`, `office_tuesday.lua`, `apartment.lua` + day-варианты)
 - `main/data/scenes/_shared.lua` (STYLE_*, icons, helpers)
 - `main/scripts/scenes.lua` (для проверки сборки и поддерживаемых action types)
 - связанный ink-файл если хотспоты вызывают `ink_knot`

@@ -4,7 +4,7 @@
 Запускать перед каждой сессией AI-сценариста чтобы документ отражал
 текущее состояние проекта.
 
-_Сгенерировано: 2026-05-16 16:51_
+_Сгенерировано: 2026-05-16 17:01_
 
 Это **источник правды для AI** о том что реально существует в проекте:
 scene_id, knot имена, hotspot id, флаги, предметы. Не ссылайся на
@@ -65,7 +65,7 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `back_to_hall_from_kitchen` | В коридор | scene: `apartment_hub` |
 
 ### `archive_hub` (Архив)
- — source: `locations.lua`, bg: `"bg_archive_day"`
+ — source: `archive.lua`, bg: `"bg_archive_day"`
 
 | Hotspot id | Label | Action |
 |---|---|---|
@@ -73,7 +73,7 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `leave_archive` | Выйти | knot: `leave_archive` |
 
 ### `bar_hub` (Бар Maybe)
- — source: `locations.lua`, bg: `"bg_bar_maybe_night"`
+ — source: `bar.lua`, bg: `"bg_bar_maybe_night"`
 
 | Hotspot id | Label | Action |
 |---|---|---|
@@ -81,7 +81,7 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `leave_bar` | Выйти | knot: `leave_bar` |
 
 ### `cafe_hub` (Кафе)
- — source: `locations.lua`, bg: `"bg_cafe_morning"`, on_enter: `sunday_date_cafe_arrival`
+ — source: `cafe.lua`, bg: `"bg_cafe_morning"`, on_enter: `sunday_date_cafe_arrival`
 
 | Hotspot id | Label | Action |
 |---|---|---|
@@ -121,7 +121,7 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `mon_back_to_hall_from_kitchen` | В коридор | scene: `monday_apartment_hall_morning` |
 
 ### `office_meeting_room` (Переговорка)
- — source: `office.lua`, bg: `office_bg("meeting_room")`
+ — source: `office_monday.lua`, bg: `office_bg("meeting_room")`
 
 | Hotspot id | Label | Action |
 |---|---|---|
@@ -131,7 +131,7 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `meeting_room_back_to_lobby` | В лобби | scene: `work_hub` |
 
 ### `office_workspace` (Рабочее место)
- — source: `office.lua`, bg: `office_bg("workspace")`
+ — source: `office_monday.lua`, bg: `office_bg("workspace")`
 
 | Hotspot id | Label | Action |
 |---|---|---|
@@ -143,7 +143,7 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `workspace_back_to_lobby` | В лобби | scene: `work_hub` |
 
 ### `park_hub` (Парк у реки)
- — source: `locations.lua`, bg: `"bg_park_riverside_entrance_morning"`, on_enter: `sunday_date_park_arrival`
+ — source: `park.lua`, bg: `"bg_park_riverside_entrance_morning"`, on_enter: `sunday_date_park_arrival`
 
 | Hotspot id | Label | Action |
 |---|---|---|
@@ -157,7 +157,7 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `leave_park` | Уйти | knot: `leave_park` |
 
 ### `park_riverside_bench` (Парк у реки — скамейка)
- — source: `locations.lua`, bg: `"bg_park_riverside_bench_morning"`
+ — source: `park.lua`, bg: `"bg_park_riverside_bench_morning"`
 
 | Hotspot id | Label | Action |
 |---|---|---|
@@ -169,7 +169,7 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `bench_to_entrance` | К входу | scene: `park_hub` |
 
 ### `park_riverside_path` (Парк у реки — аллея)
- — source: `locations.lua`, bg: `"bg_park_riverside_path_morning"`
+ — source: `park.lua`, bg: `"bg_park_riverside_path_morning"`
 
 | Hotspot id | Label | Action |
 |---|---|---|
@@ -180,7 +180,7 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `path_to_entrance` | К входу | scene: `park_hub` |
 
 ### `shop_hub` (Магазин 24/7)
- — source: `locations.lua`, bg: `"bg_shop_day"`, on_enter: `sunday_shop_arrival`
+ — source: `shop.lua`, bg: `"bg_shop_day"`, on_enter: `sunday_shop_arrival`
 
 | Hotspot id | Label | Action |
 |---|---|---|
@@ -221,7 +221,7 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `tue_back_to_hall_from_kitchen` | В коридор | scene: `tuesday_apartment_hall_morning` |
 
 ### `view_hub` (Смотровая)
- — source: `locations.lua`, bg: `"bg_observation_day"`, on_enter: `sunday_viewpoint_arrival`
+ — source: `viewpoint.lua`, bg: `"bg_observation_day"`, on_enter: `sunday_viewpoint_arrival`
 
 | Hotspot id | Label | Action |
 |---|---|---|
@@ -229,7 +229,7 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `leave_view` | Уйти | knot: `leave_viewpoint` |
 
 ### `work_hub` (Офис — лобби)
- — source: `office.lua`, bg: `office_bg("lobby")`
+ — source: `office_monday.lua`, bg: `office_bg("lobby")`
 
 | Hotspot id | Label | Action |
 |---|---|---|
