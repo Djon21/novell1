@@ -71,17 +71,10 @@ function M.update(self, ctx)
     local cmds_paused_render = ctx.apply_dm_commands(self)
 
     -- 1a) Проверить overlay-состояние ПОСЛЕ apply_dm_commands: команды могли
-    -- открыть phone/map. Нужно сделать ДО early-return на cmds_paused_render —
+    -- открыть phone. Нужно сделать ДО early-return на cmds_paused_render —
     -- иначе при цепочке `# phone:app:X` + `# return_to_scene` мы возвращаемся,
     -- не спрятав dialogue/hotspots, и они остаются торчать на фоне модалки.
     local UI = ctx.M
-    if UI.overlays.map then
-        UI.at_end = false
-        msg.post(UI.components.dialogue, "hide_dialogue")
-        ctx.hide_choice(self)
-        msg.post(UI.components.hotspots, "hide_all")
-        return
-    end
     if UI.overlays.phone then
         UI.at_end = false
         msg.post(UI.components.dialogue, "hide_dialogue")

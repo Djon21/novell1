@@ -57,7 +57,6 @@ local function can_autoadvance(self, ctx)
         and not ctx.overlays.choice
         and not ctx.overlays.inventory
         and not ctx.overlays.phone
-        and not ctx.overlays.map
         and not ctx.overlays.backlog
         and not self.dialogue_waiting_for_typewriter
         and not ctx.at_end()

@@ -299,7 +299,6 @@ local function reset_ui(ctx, base_mode)
     UI.overlays.choice = false
     UI.overlays.inventory = false
     UI.overlays.phone = false
-    UI.overlays.map = false
     UI.overlays.backlog = false
 
     ctx.sync_modal_state()
@@ -308,7 +307,6 @@ local function reset_ui(ctx, base_mode)
     msg.post(UI.components.choice, "hide_choice")
     msg.post(UI.components.inventory, "hide_inventory")
     msg.post(UI.components.phone, "close_phone")
-    msg.post(UI.components.map, "close_map")
     msg.post(UI.components.hotspots, "hide_all")
 end
 

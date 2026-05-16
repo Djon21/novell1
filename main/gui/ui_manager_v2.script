@@ -1,9 +1,9 @@
 -- ui_manager_v2.script
 -- Оркестратор всех v2 GUI компонентов: main_menu_v2, hud_v2, inventory_v2,
--- phone_v2, map_v2, dialogue_v2, choice_v2, effects.
+-- phone_v2, dialogue_v2, choice_v2, effects.
 --
--- Режимы: menu / exploration / dialogue / choice / inventory / phone / map
--- Поверх модального режима (choice/inventory/phone/map) виден exploration или
+-- Режимы: menu / exploration / dialogue / choice / inventory / phone
+-- Поверх модального режима (choice/inventory/phone) виден exploration или
 -- dialogue — т.е. модалки не сбрасывают текущий базовый режим.
 --
 -- Совместимость: использует тот же dialogue_manager_ink, game_state,
@@ -42,7 +42,6 @@ local scene_controller = require "main.scripts.scene_controller"
 local l10n = require "main.scripts.l10n"
 local yandex_ads = require "main.scripts.yandex_ads"
 local dm_commands = require "main.gui.modules.ui_manager_v2.dm_commands"
-local map_flow = require "main.gui.modules.ui_manager_v2.map_flow"
 local inventory_flow = require "main.gui.modules.ui_manager_v2.inventory_flow"
 local dialogue_flow = require "main.gui.modules.ui_manager_v2.dialogue_flow"
 local run_state = require "main.gui.modules.ui_manager_v2.run_state"
@@ -72,7 +71,6 @@ local handle_dialogue_update
 local close_inventory
 local open_phone
 local close_phone
-local close_map
 local hide_choice
 local sync_modal_state
 local open_phone_map_app
@@ -107,7 +105,7 @@ local DEDICATED_BG_ATLAS_PROPS = {
 	bg_archive_day = "bg_archive_day_atlas",
 }
 
--- Базовый режим (menu / nav / exploration / dialogue). choice/inventory/phone/map —
+-- Базовый режим (menu / nav / exploration / dialogue). choice/inventory/phone —
 -- накладываются сверху.
 M.base_mode = "menu"
 
@@ -116,7 +114,6 @@ M.overlays = {
     choice    = false,
     inventory = false,
     phone     = false,
-    map       = false,
     backlog   = false,
 }
 
@@ -145,7 +142,6 @@ local function init_components()
     M.components.choice      = msg.url("#choice_v2")
     M.components.inventory   = msg.url("#inventory_v2")
     M.components.phone       = msg.url("#phone_v2")
-    M.components.map         = msg.url("#map_v2")
     M.components.hotspots    = msg.url("#hotspots_v2")
     M.components.effects     = msg.url("#effects")
     dbg("[ui_manager_v2] компоненты инициализированы")
@@ -177,18 +173,6 @@ end
 
 local function post_location_to_ui(location_label)
     background_flow.post_location(M.components, location_label)
-end
-
-local function resolve_map_selected_pin()
-    return map_flow.resolve_selected_pin()
-end
-
-local function sync_map_overlay(selected_id, log_text)
-    map_flow.sync_overlay(M.components.map, selected_id, log_text)
-end
-
-local function handle_map_verb(self, pin_id, verb)
-    map_flow.handle_verb(M.components.map, pin_id, verb)
 end
 
 local function dialogue_ctx()
@@ -448,20 +432,11 @@ local function overlay_ctx(self)
         close_inventory = function()
             close_inventory(self)
         end,
-        close_map = function()
-            close_map(self)
-        end,
         hide_choice = function()
             hide_choice(self)
         end,
         open_phone_map_app = function()
             return open_phone_map_app(self)
-        end,
-        resolve_map_selected_pin = function()
-            return resolve_map_selected_pin()
-        end,
-        sync_map_overlay = function(selected_id, log_text)
-            sync_map_overlay(selected_id, log_text)
         end,
         resolve_current_location_label = function(bg_name)
             return resolve_current_location_label(bg_name)
@@ -545,7 +520,7 @@ local function resume_exploration_if_needed()
     if not scene_controller.is_active or not scene_controller.is_active() then
         return
     end
-    if M.overlays.phone or M.overlays.map or M.overlays.inventory or M.overlays.choice then
+    if M.overlays.phone or M.overlays.inventory or M.overlays.choice then
         return
     end
     if scene_controller.render_now then
@@ -561,22 +536,6 @@ end
 
 open_phone_map_app = function(self)
     return phone_flow.open_map_app(phone_ctx())
-end
-
-local function open_map(self)
-    notify_overlay_state("map", true)
-    overlay_flow.open_map(overlay_ctx(self))
-end
-
-local function open_map_hub(self, primary_knot)
-    notify_overlay_state("map", true)
-    overlay_flow.open_map_hub(overlay_ctx(self), primary_knot)
-end
-
-close_map = function(self)
-    overlay_flow.close_map(overlay_ctx(self))
-    notify_overlay_state("map", false)
-    resume_exploration_if_needed()
 end
 
 local function show_choice(self, opts, timer_sec, title)
@@ -604,7 +563,6 @@ local function apply_dm_commands(self)
         open_phone = function() open_phone(self) end,
         close_phone = function() close_phone(self) end,
         open_phone_app = function(app) return open_phone_app(self, app) end,
-        open_map_hub = function(knot) open_map_hub(self, knot) end,
         set_hud_hint = function(target)
             if M.components.hud then
                 msg.post(M.components.hud, "set_hud_hint", { target = target })
@@ -783,9 +741,6 @@ local function message_ctx(self)
         open_phone = function() open_phone(self) end,
         close_phone = function() close_phone(self) end,
         run_side_dialogue_knot = function(knot_name, keep_bg, opts) run_side_dialogue_knot(self, knot_name, keep_bg, opts) end,
-        open_map = function() open_map(self) end,
-        close_map = function() close_map(self) end,
-        handle_map_verb = function(pin_id, verb) handle_map_verb(self, pin_id, verb) end,
     }
 end
 
@@ -845,8 +800,6 @@ function on_input(self, action_id, action)
             hide_choice(self)
             msg.post(".", MSG.choice_cancelled)
             return true
-        elseif M.overlays.map then
-            close_map(self); return true
         elseif M.overlays.phone then
             close_phone(self); return true
         elseif M.overlays.inventory then

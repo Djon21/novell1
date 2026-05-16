@@ -66,9 +66,6 @@ local function apply_single(cmd, ctx)
         ctx.close_phone()
     elseif cmd.type == "open_phone_app" then
         return ctx.open_phone_app(cmd.app)
-    elseif cmd.type == "open_map_hub" then
-        ctx.open_map_hub(cmd.knot)
-        return true
     elseif cmd.type == "map_allow" then
         if gs.map_allow then gs.map_allow(cmd.poi) end
     elseif cmd.type == "map_allow_reset" then

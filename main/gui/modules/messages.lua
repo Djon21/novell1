@@ -82,14 +82,9 @@ M.show_armed_banner       = hash("show_armed_banner")
 M.hide_armed_banner       = hash("hide_armed_banner")
 
 -- ---------------------------------------------------------------------------
--- Map (телефонный + хабовый роутинг)
+-- Map (телефонная карта — phone_map)
 -- ---------------------------------------------------------------------------
-M.open_map             = hash("open_map")
-M.close_map            = hash("close_map")
-M.open_map_hub         = hash("open_map_hub")
-M.map_hub_route        = hash("map_hub_route")
 M.map_travel           = hash("map_travel")
-M.map_verb             = hash("map_verb")
 M.select_pin           = hash("select_pin")
 
 -- ---------------------------------------------------------------------------

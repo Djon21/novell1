@@ -4,7 +4,7 @@ local ui_state = require "main.scripts.ui_state"
 local M = {}
 
 function M.sync_modal_state(overlays)
-    ui_state.modal_open = (overlays.phone or overlays.inventory or overlays.map or overlays.backlog) and true or false
+    ui_state.modal_open = (overlays.phone or overlays.inventory or overlays.backlog) and true or false
 end
 
 function M.show_menu(ctx)
@@ -14,7 +14,6 @@ function M.show_menu(ctx)
     ctx.overlays.choice = false
     ctx.overlays.inventory = false
     ctx.overlays.phone = false
-    ctx.overlays.map = false
     ctx.overlays.backlog = false
     M.sync_modal_state(ctx.overlays)
 
@@ -24,7 +23,6 @@ function M.show_menu(ctx)
     msg.post(ctx.components.choice,    "hide_choice")
     msg.post(ctx.components.inventory, "hide_inventory")
     msg.post(ctx.components.phone,     "close_phone")
-    msg.post(ctx.components.map,       "close_map")
     msg.post(ctx.components.hotspots,  "hide_all")
 
     ctx.refresh_menu_state()
@@ -35,7 +33,6 @@ end
 function M.prepare_run_restore(ctx)
     ctx.overlays.inventory = false
     ctx.overlays.phone = false
-    ctx.overlays.map = false
     ctx.overlays.backlog = false
     ctx.overlays.choice = false
     M.sync_modal_state(ctx.overlays)
@@ -45,7 +42,6 @@ function M.prepare_run_restore(ctx)
     msg.post(ctx.components.choice,    "hide_choice")
     msg.post(ctx.components.inventory, "hide_inventory")
     msg.post(ctx.components.phone,     "close_phone")
-    msg.post(ctx.components.map,       "close_map")
     msg.post(ctx.components.hotspots,  "hide_all")
 end
 
@@ -61,7 +57,6 @@ function M.show_exploration(ctx)
 
     ctx.close_phone()
     ctx.close_inventory()
-    ctx.close_map()
     ctx.hide_choice()
     ctx.dbg("[ui_manager_v2] mode: exploration")
 end
@@ -90,31 +85,6 @@ function M.close_inventory(ctx)
     ctx.overlays.inventory = false
     M.sync_modal_state(ctx.overlays)
     msg.post(ctx.components.inventory, "hide_inventory")
-end
-
-function M.open_map(ctx)
-    if ctx.open_phone_map_app() then
-        return
-    end
-    ctx.overlays.map = true
-    M.sync_modal_state(ctx.overlays)
-    ctx.sync_map_overlay(ctx.resolve_map_selected_pin(), "> карта синхронизирована _")
-    msg.post(ctx.components.map, "open_map")
-end
-
-function M.open_map_hub(ctx, primary_knot)
-    ctx.overlays.map = true
-    M.sync_modal_state(ctx.overlays)
-    ctx.set_at_end(false)
-    msg.post(ctx.components.dialogue, "hide_dialogue")
-    ctx.sync_map_overlay(ctx.resolve_map_selected_pin(), "> выбрать маршрут _")
-    msg.post(ctx.components.map, "open_map_hub", { primary_knot = primary_knot })
-end
-
-function M.close_map(ctx)
-    ctx.overlays.map = false
-    M.sync_modal_state(ctx.overlays)
-    msg.post(ctx.components.map, "close_map")
 end
 
 function M.show_choice(ctx, opts, timer_sec, title)

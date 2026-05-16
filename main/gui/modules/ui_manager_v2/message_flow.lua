@@ -302,29 +302,6 @@ local function handle_phone(ctx, message_id, message, sender)
     return false
 end
 
-local function handle_map(ctx, message_id, message, sender)
-    if message_id == MSG.open_map then
-        ctx.open_map()
-        return true
-    elseif message_id == MSG.close_map then
-        ctx.close_map()
-        return true
-    elseif message_id == MSG.map_verb then
-        ctx.dbg("[ui_manager_v2] map_verb", message.pin_id, message.verb)
-        ctx.handle_map_verb(message.pin_id, message.verb)
-        return true
-    elseif message_id == MSG.map_hub_route then
-        ctx.dbg("[ui_manager_v2] map_hub_route", message and message.knot)
-        local knot = message and message.knot
-        ctx.close_map()
-        if knot then
-            ctx.run_side_dialogue_knot(knot, nil, { allow_chapter_end = true })
-        end
-        return true
-    end
-    return false
-end
-
 function M.handle(ctx, message_id, message, sender)
     if handle_menu(ctx, message_id, message, sender) then return true end
     if handle_ending(ctx, message_id, message, sender) then return true end
@@ -333,7 +310,6 @@ function M.handle(ctx, message_id, message, sender)
     if handle_choice(ctx, message_id, message, sender) then return true end
     if handle_inventory(ctx, message_id, message, sender) then return true end
     if handle_phone(ctx, message_id, message, sender) then return true end
-    if handle_map(ctx, message_id, message, sender) then return true end
     return false
 end
 

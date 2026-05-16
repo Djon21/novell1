@@ -546,23 +546,14 @@ local function apply_tags(tags, trailing)
                 end
             end
         elseif key == "map" and value and (not suppress_effects or restore_scene_transitions) then
-            -- # map:hub:KNOT — открыть карту в hub-режиме. «МАРШРУТ» на пине с
-            -- route_knot=KNOT прыгает в этот ink-узел. KNOT же — primary_knot,
-            -- на который уйдёт карта при закрытии без выбора (safety fallback).
-            --
             -- # map:allow:poi_cafe       — добавить POI в allow-set phone_map'а
             -- # map:allow:reset          — очистить allow-set (все POI разрешены)
             -- # map:lock_to:poi_cafe     — clear + добавить (только этот разрешён)
             -- # map:lock_all             — заблокировать все POI
             -- # map:lock:all             — то же самое, более читаемый вариант
+            -- # map:hub: больше не поддерживается (standalone map_v2 удалён).
             local op, rest = value:match("([%w_]+)%s*:?%s*(.*)")
-            if op == "hub" and rest and rest ~= "" then
-                local knot = rest:gsub("^%s+", ""):gsub("%s+$", "")
-                                 :gsub('^"(.*)"$', "%1"):gsub("^'(.*)'$", "%1")
-                if knot ~= "" then
-                    table.insert(scene_bucket, { type = "open_map_hub", knot = knot })
-                end
-            elseif op == "allow" and rest then
+            if op == "allow" and rest then
                 local target = rest:gsub("^%s+", ""):gsub("%s+$", "")
                 if target == "reset" or target == "" then
                     table.insert(pending_commands, { type = "map_allow_reset" })

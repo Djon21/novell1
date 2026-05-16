@@ -4,7 +4,7 @@
 Запускать перед каждой сессией AI-сценариста чтобы документ отражал
 текущее состояние проекта.
 
-_Сгенерировано: 2026-05-16 17:01_
+_Сгенерировано: 2026-05-16 17:24_
 
 Это **источник правды для AI** о том что реально существует в проекте:
 scene_id, knot имена, hotspot id, флаги, предметы. Не ссылайся на
@@ -551,7 +551,7 @@ Source: `main/scripts/scene_characters.lua`.
 ## Flags
 
 Все имена флагов встречающиеся в `# set_flag:`, `get_flag(...)`,
-`set_flag(...)`. Всего: **117**.
+`set_flag(...)`. Всего: **106**.
 
 **`bathroom_*`**: `bathroom_morning_seen`
 
@@ -575,7 +575,7 @@ Source: `main/scripts/scene_characters.lua`.
 
 **`left_*`**: `left_apartment`
 
-**`map_*`**: `map_opened_after_apartment` `map_route_target` `map_saved_` `map_saved_cafe` `map_saved_shop` `map_shared_` `map_shared_cafe` `map_shared_gov` `map_shared_metro` `map_shared_shop` `map_shared_work`
+**`map_*`**: `map_opened_after_apartment`
 
 **`messenger_*`**: `messenger_prod_bot_questioned` `messenger_unknown_asked_synthesis` `messenger_unknown_asked_who` `messenger_work_team_ack`
 
@@ -593,7 +593,7 @@ Source: `main/scripts/scene_characters.lua`.
 
 **`phone_*`**: `phone_active` `phone_taken`
 
-**`reached_*`**: `reached_metro` `reached_office` `reached_work_district`
+**`reached_*`**: `reached_office` `reached_work_district`
 
 **`sunday_*`**: `sunday_after_date_active` `sunday_bedroom_window_seen` `sunday_dressed` `sunday_evening_started` `sunday_finished` `sunday_kitchen_window_seen` `sunday_messenger_invite_sent` `sunday_morning_routine_seen` `sunday_ready_to_leave` `sunday_second_stop_done` `sunday_shop_bought_drink_for_npc` `sunday_shop_bought_snack` `sunday_shop_bought_water` `sunday_shop_done` `sunday_shop_pre_date_visited` `sunday_shop_with_npc_seen` `sunday_went_to_shop` `sunday_went_to_viewpoint`
 
