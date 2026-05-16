@@ -34,7 +34,9 @@ Ink-файлы лежат в `main/story/chapters/`. Структура **лок
 | `bar_sunday.ink` | Бар Maybe в воскресенье (минимальный хаб). |
 | `commute_monday.ink` | Дорога на работу: выход из квартиры → пеший маршрут → офис. Transition-локация без хотспотов в scenes.lua. |
 | `office_monday.ink` | Офис в понедельник: вход, встреча с коллегой, рабочий кейс (auto/manual/clarify/stop), результаты, конец дня + хотспоты стола/переговорки/выхода. |
-| `*_tuesday.ink` | Заглушки до Stage 3. Вторник пока в legacy-файлах. |
+| `office_tuesday.ink` | Офис во вторник: возврат, разбор понедельничного кейса (log / appeal / спросить NPC), переход на крышу. |
+| `archive_tuesday.ink` | Архив во вторник: хотспот стеллажей + выход (пока минимум). |
+| `rooftop_tuesday.ink` | Крыша во вторник — финал петли. iter001 arc + loop arc для iter 2+ + три ending'а (npc / system / true). |
 
 **Правила:**
 - **Одна локация × один день = один файл.** Хочешь сцену "парк во вторник" — она лежит **только** в `park_tuesday.ink`.
@@ -42,13 +44,14 @@ Ink-файлы лежат в `main/story/chapters/`. Структура **лок
 - Видимостью хотспотов в зависимости от дня управляет `visible_when` в `scenes.lua`, не сам ink.
 - Если хотспот живёт на нескольких днях с разной реакцией — заводи `<location>_common.ink` с knot-диспетчером, который сам ветвится по `current_day`. **Лениво** — только когда реально нужно.
 
-### Legacy-файлы (ждут миграции)
+### Планируемые системные файлы (создавать лениво)
 
-| Файл | Содержание |
+| Файл | Когда создавать |
 |---|---|
-| `30_tuesday_home.ink` | Вторник дома → `10_apartment.ink` (tuesday). |
-| `31_tuesday_investigation.ink` | Расследование → расщепить: arc-knot'ы в `50_investigation.ink`, локационные сцены в соотв. `locations/*_tuesday.ink`. |
-| `32_tuesday_rooftop.ink` | → `locations/rooftop_tuesday.ink`. |
+| `01_loop_entry.ink` | Когда iter 2+ заработает: точка входа петли, проверка `iteration_number`, выбор маршрута rails/free-roam. |
+| `50_investigation.ink` | Когда iter 2+ обрастёт cross-location clue-ами для arc «собрать картину». |
+| `51_awareness.ink` | Когда iter 2+ начнёт показывать deja vu / мета-моменты из любой локации. |
+| `80_endings.ink` | Когда ложных концовок наберётся больше одной (сейчас 3 ending'а живут в `rooftop_tuesday.ink`). |
 
 ### Сервисные ink-файлы
 

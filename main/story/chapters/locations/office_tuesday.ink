@@ -1,11 +1,10 @@
 // ================================================================
-// AVOS_S — 31_tuesday_investigation.ink
-// Вторник: последствия понедельничного автоматического решения.
+// AVOS_S - locations/office_tuesday.ink
+// Офис во вторник: возврат, разбор понедельничного кейса
+// (log / appeal / спросить NPC), переход на крышу.
 //
-// Правила файла:
-// - без карты и без метро: это сюжетная цепочка последствий;
-// - новые городские/офисные фоны можно заменить позже;
-// - все узлы имеют префикс tue_route_*.
+// Когда iter 2+ обрастёт cross-location clue-ами для расследования,
+// арку можно вынести в отдельный 50_investigation.ink.
 // ================================================================
 
 === tue_route_entry ===
@@ -21,7 +20,6 @@
 Сегодня — как начало следа.
 
 -> tue_route_office_return
-
 
 === tue_route_office_return ===
 # bg:bg_office_workspace_day # color:0.14,0.16,0.20 # speaker:none
@@ -49,7 +47,6 @@
 
 -> tue_route_review_options
 
-
 === tue_route_review_options ===
 # speaker:none
 На экране открыты три вещи: лог решения, карточка апелляции и короткая цепочка комментариев.
@@ -67,7 +64,6 @@
 * [Открыть карточку апелляции]
     ~ SYNC = SYNC + 1
     -> tue_route_read_appeal
-
 
 === tue_route_read_log ===
 # speaker:none
@@ -88,7 +84,6 @@ operator timeout.
 # set_flag:tuesday_log_reviewed=true
 -> tue_route_after_review
 
-
 === tue_route_ask_npc ===
 # speaker:npc
 Я думаю, мы вчера слишком легко приняли слово “обычно”.
@@ -105,7 +100,6 @@ operator timeout.
 # set_flag:tuesday_npc_talked=true
 ~ npc_opened_up = true
 -> tue_route_after_review
-
 
 === tue_route_read_appeal ===
 # speaker:none
@@ -125,7 +119,6 @@ operator timeout.
 # set_flag:tuesday_appeal_read=true
 -> tue_route_after_review
 
-
 === tue_route_after_review ===
 # bg:bg_office_meeting_room_night # speaker:none
 К вечеру пазл не становится полным.
@@ -144,7 +137,6 @@ operator timeout.
 # set_flag:tuesday_investigation_done=true
 -> tue_route_to_rooftop
 
-
 === tue_route_to_rooftop ===
 # bg:bg_office_lobby_night # speaker:none
 Вы поднимаетесь наверх без офисной шутки про традиции.
@@ -158,17 +150,3 @@ operator timeout.
 // ================================================================
 // АРХИВ — минимальный хаб
 // ================================================================
-
-=== archive_shelves_interact ===
-# bg:bg_archive_day # speaker:none
-Стеллажи уходят вглубь ровными рядами. Папки, коробки, старые номера дел — всё выглядит так, будто память здесь давно превратилась в порядок.
-
-Сейчас нужной нити среди этих полок не найти. Но место явно пригодится позже.
-# return_to_scene
--> DONE
-
-=== leave_archive ===
-# bg:bg_archive_day # speaker:none
-Ты выходишь из архива. Воздух за дверью кажется легче, хотя вопросов меньше не стало.
-# phone:map
--> DONE

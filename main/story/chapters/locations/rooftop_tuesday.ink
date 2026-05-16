@@ -1,11 +1,12 @@
 // ================================================================
-// AVOS_S — 32_tuesday_rooftop.ink
-// Вторник: крыша, финал итерации и loop-endings для 002+.
+// AVOS_S - locations/rooftop_tuesday.ink
+// Крыша во вторник - финал петли.
+// Содержит:
+//   - iter001 arc (entry/talk/realization/finish)
+//   - loop arc для iter 2+ (loop_entry/talk/route/signal)
+//   - три ending'а (npc / system / true)
 //
-// Правила файла:
-// - Iteration 001: линейный prologue-финал, без loop:end:*;
-// - Iteration 002+: здесь живут ложные/истинная концовки Stage 2;
-// - все узлы имеют префикс tue_rooftop_*.
+// Когда ложных концовок наберётся больше - вынести ending'и в 80_endings.ink.
 // ================================================================
 
 === tue_rooftop_entry ===
@@ -39,7 +40,6 @@
 
 -> tue_rooftop_iter001_talk
 
-
 === tue_rooftop_iter001_talk ===
 # speaker:none
 Город внизу выглядит идеально нормальным.
@@ -64,7 +64,6 @@
 Пауза держится между вами дольше, чем обычная пауза в разговоре. В ней есть всё, что не поместилось в логи: скорость, удобство, чужой голос, который назвали недостающим полем.
 
 -> tue_rooftop_iter001_realization
-
 
 === tue_rooftop_iter001_realization ===
 # speaker:mc
@@ -98,7 +97,6 @@
 Не ответ. Скорее предупреждение.
 
 -> tue_rooftop_iter001_finish
-
 
 === tue_rooftop_iter001_finish ===
 # speaker:none
@@ -161,7 +159,6 @@
 
 -> tue_rooftop_loop_talk
 
-
 === tue_rooftop_loop_talk ===
 # speaker:npc
 Тогда что нам делать?
@@ -189,7 +186,6 @@
     # speaker:mc
     Нужны оба ответа. Человек рядом — чтобы не потерять контекст. Сомнение к системе — чтобы не принять удобство за истину.
     -> tue_rooftop_ending_true
-
 
 === tue_rooftop_loop_route ===
 {TRUST >= INSIGHT:

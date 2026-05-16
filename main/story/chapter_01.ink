@@ -17,10 +17,9 @@ INCLUDE chapters/locations/bar_sunday.ink
 INCLUDE chapters/locations/commute_monday.ink
 INCLUDE chapters/locations/office_monday.ink
 
-// Вторник пока в legacy-структуре, ждёт Stage 3
-INCLUDE chapters/30_tuesday_home.ink
-INCLUDE chapters/31_tuesday_investigation.ink
-INCLUDE chapters/32_tuesday_rooftop.ink
+INCLUDE chapters/locations/office_tuesday.ink
+INCLUDE chapters/locations/archive_tuesday.ink
+INCLUDE chapters/locations/rooftop_tuesday.ink
 
 // Сервисные модули
 INCLUDE chapters/91_inventory_actions.ink
