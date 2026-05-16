@@ -43,7 +43,6 @@ return {
                 icon = "left_click",
                 hotspot_style = STYLE_USE,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "office_turnstile_prompt" },
                 visible_when = function(gs)
                     return not gs.get_flag("monday_checked_in_office")
@@ -56,7 +55,6 @@ return {
                 icon = "arrow_up",
                 hotspot_style = STYLE_NAV,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "goto_scene", scene = "office_workspace" },
                 condition = function(gs)
                     return gs.get_flag("monday_checked_in_office")
@@ -69,7 +67,6 @@ return {
                 icon = "arrow_up",
                 hotspot_style = STYLE_NAV,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "goto_scene", scene = "office_meeting_room" },
                 condition = function(gs)
                     return gs.get_flag("monday_checked_in_office")
@@ -83,7 +80,6 @@ return {
                 icon = "arrow_back",
                 hotspot_style = STYLE_NAV,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "leave_work" },
             },
         },
@@ -101,7 +97,6 @@ return {
                 icon = "left_click",
                 hotspot_style = STYLE_USE,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "work_desk_read_mail" },
                 visible_when = function(gs)
                     return not gs.get_flag("monday_mail_read")
@@ -114,7 +109,6 @@ return {
                 icon = "left_click",
                 hotspot_style = STYLE_INSPECT,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "work_desk_needs_case_file" },
                 visible_when = function(gs)
                     return gs.get_flag("monday_mail_read")
@@ -128,7 +122,6 @@ return {
                 icon = "left_click",
                 hotspot_style = STYLE_USE,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "work_desk_case_file_prompt" },
                 visible_when = function(gs)
                     return gs.get_flag("monday_case_file_assembled")
@@ -142,7 +135,6 @@ return {
                 icon = "left_click",
                 hotspot_style = STYLE_INSPECT,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "work_desk_done" },
                 visible_when = function(gs)
                     return gs.get_flag("monday_case_file_submitted")
@@ -155,7 +147,6 @@ return {
                 icon = "arrow_up",
                 hotspot_style = STYLE_NAV,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "goto_scene", scene = "office_meeting_room" },
                 condition = function(gs)
                     return gs.get_flag("monday_mail_read")
@@ -168,7 +159,6 @@ return {
                 icon = "arrow_down",
                 hotspot_style = STYLE_NAV,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "goto_scene", scene = "work_hub" },
             },
         },
@@ -185,7 +175,6 @@ return {
                 icon = "left_click",
                 hotspot_style = STYLE_PICKUP,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "meeting_room_take_folder" },
                 visible_when = function(gs)
                     return not gs.get_flag("monday_folder_taken")
@@ -199,7 +188,6 @@ return {
                 icon = "left_click",
                 hotspot_style = STYLE_INSPECT,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "meeting_room_table_after" },
                 visible_when = function(gs)
                     return gs.get_flag("monday_folder_taken")
@@ -213,7 +201,6 @@ return {
                 icon = "arrow_up",
                 hotspot_style = STYLE_NAV,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "goto_scene", scene = "office_workspace" },
             },
             {
@@ -223,7 +210,6 @@ return {
                 icon = "arrow_forward",
                 hotspot_style = STYLE_NAV,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "goto_scene", scene = "work_hub" },
             },
         },

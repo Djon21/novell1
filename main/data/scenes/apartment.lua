@@ -39,7 +39,6 @@ return {
                 icon = "arrow_back",
                 hotspot_style = STYLE_NAV,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "goto_scene", scene = "apartment_bedroom" },
             },
             {
@@ -49,7 +48,6 @@ return {
                 icon = "arrow_forward",
                 hotspot_style = STYLE_NAV,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "goto_scene", scene = "apartment_kitchen" },
                 visible_when = function(gs)
                     return is_apartment_night(gs) or gs.get_flag("washed_up")
@@ -62,7 +60,6 @@ return {
                 icon = "arrow_up",
                 hotspot_style = STYLE_NAV,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "leave_apartment_prompt" },
                 visible_when = function(gs)
                     return not is_apartment_night(gs)
@@ -75,7 +72,6 @@ return {
                 icon = "left_click",
                 hotspot_style = STYLE_INSPECT,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "look_hall_mirror" },
             },
             {
@@ -85,7 +81,6 @@ return {
                 icon = "left_click",
                 hotspot_style = STYLE_USE,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "sunday_get_dressed" },
                 visible_when = function(gs)
                     return not is_apartment_night(gs)
@@ -138,7 +133,6 @@ return {
                 icon = "left_click",
                 hotspot_style = STYLE_INSPECT,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "bedroom_desk_morning" },
                 visible_when = function(gs)
                     return not is_apartment_night(gs)
@@ -152,7 +146,6 @@ return {
                 icon = "arrow_up",
                 hotspot_style = STYLE_STORY,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "look_bed_morning" },
                 visible_when = function(gs)
                     return not is_apartment_night(gs)
@@ -167,7 +160,6 @@ return {
                 icon = "left_click",
                 hotspot_style = STYLE_STORY,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "sunday_sleep_in_bed" },
                 visible_when = function(gs)
                     return is_sunday_apartment_night(gs)
@@ -180,7 +172,6 @@ return {
                 icon = "arrow_forward",
                 hotspot_style = STYLE_NAV,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "goto_scene", scene = "apartment_bathroom" },
                 visible_when = function(gs)
                     return is_apartment_night(gs) or gs.get_flag("got_out_of_bed")
@@ -193,7 +184,6 @@ return {
                 icon = "left_click",
                 hotspot_style = STYLE_INSPECT,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "look_bedroom_window" },
                 visible_when = function(gs)
                     return not is_apartment_night(gs)
@@ -208,7 +198,6 @@ return {
                 icon = "arrow_down",
                 hotspot_style = STYLE_NAV,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "goto_scene", scene = "apartment_hub" },
                 visible_when = function(gs)
                     return is_apartment_night(gs) or gs.get_flag("washed_up")
@@ -236,7 +225,6 @@ return {
                 icon = "left_click",
                 hotspot_style = STYLE_INSPECT,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "look_bathroom_mirror" },
             },
             {
@@ -246,7 +234,6 @@ return {
                 icon = "left_click",
                 hotspot_style = STYLE_PICKUP,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "take_toothbrush" },
                 visible_when = function(gs)
                     return not gs.get_flag("teeth_brushed")
@@ -261,7 +248,6 @@ return {
                 icon = "left_click",
                 hotspot_style = STYLE_PICKUP,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "take_toothpaste" },
                 visible_when = function(gs)
                     return not gs.get_flag("teeth_brushed")
@@ -276,7 +262,6 @@ return {
                 icon = "left_click",
                 hotspot_style = STYLE_ITEM_TARGET,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "bathroom_sink_prompt" },
                 visible_when = function(gs)
                     return not gs.get_flag("washed_up")
@@ -289,7 +274,6 @@ return {
                 icon = "arrow_back",
                 hotspot_style = STYLE_STORY,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "bathroom_exit_locked" },
                 visible_when = function(gs)
                     return not is_apartment_night(gs)
@@ -303,7 +287,6 @@ return {
                 icon = "arrow_back",
                 hotspot_style = STYLE_NAV,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "goto_scene", scene = "apartment_bedroom" },
                 visible_when = function(gs)
                     return is_apartment_night(gs)

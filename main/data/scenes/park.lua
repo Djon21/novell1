@@ -40,7 +40,6 @@ return {
                 icon = "left_click",
                 hotspot_style = STYLE_INSPECT,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "park_entrance_view" },
                 visible_when = function(gs)
                     return not gs.get_flag("park_place_chosen")
@@ -54,7 +53,6 @@ return {
                 icon = "delete",
                 hotspot_style = STYLE_ITEM_TARGET,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "park_bin_prompt" },
                 visible_when = function(gs)
                     return gs.has_item("park_trash_cup")
@@ -68,7 +66,6 @@ return {
                 icon = "phone",
                 hotspot_style = STYLE_STORY,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "park_message_where_are_you" },
                 visible_when = function(gs)
                     return not gs.get_flag("park_where_message_sent")
@@ -83,7 +80,6 @@ return {
                 icon = "left_click",
                 hotspot_style = STYLE_STORY,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "park_npc_arrives" },
                 visible_when = function(gs)
                     return gs.get_flag("park_where_message_sent")
@@ -98,7 +94,6 @@ return {
                 icon = "left_click",
                 hotspot_style = STYLE_STORY,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "park_offer_place" },
                 visible_when = function(gs)
                     return gs.get_flag("park_npc_greeted")
@@ -115,7 +110,6 @@ return {
                 icon = "arrow_up",
                 hotspot_style = STYLE_NAV,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "goto_scene", scene = "park_riverside_bench" },
                 visible_when = function(gs)
                     return gs.get_flag("park_npc_greeted")
@@ -130,7 +124,6 @@ return {
                 icon = "arrow_up",
                 hotspot_style = STYLE_NAV,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "goto_scene", scene = "park_riverside_path" },
                 visible_when = function(gs)
                     return gs.get_flag("park_npc_greeted")
@@ -145,7 +138,6 @@ return {
                 icon = "arrow_back",
                 hotspot_style = STYLE_NAV,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "leave_park" },
                 visible_when = function(gs)
                     return not (gs.get_flag("park_place_chosen") and not gs.get_flag("met_npc_sunday"))
@@ -166,7 +158,6 @@ return {
                 icon = "left_click",
                 hotspot_style = STYLE_INSPECT,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "park_bench_interact" },
             },
             {
@@ -176,7 +167,6 @@ return {
                 icon = "left_click",
                 hotspot_style = STYLE_PICKUP,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "take_park_trash_cup" },
                 visible_when = function(gs)
                     return gs.get_flag("park_npc_greeted")
@@ -192,7 +182,6 @@ return {
                 icon = "left_click",
                 hotspot_style = STYLE_INSPECT,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "park_river_view" },
             },
             {
@@ -202,7 +191,6 @@ return {
                 icon = "left_click",
                 hotspot_style = STYLE_STORY,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "park_offer_place" },
                 visible_when = function(gs)
                     return gs.get_flag("park_npc_greeted")
@@ -219,7 +207,6 @@ return {
                 icon = "arrow_up",
                 hotspot_style = STYLE_NAV,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "goto_scene", scene = "park_riverside_path" },
                 visible_when = function(gs)
                     return not (gs.get_flag("park_place_chosen") and not gs.get_flag("met_npc_sunday"))
@@ -232,7 +219,6 @@ return {
                 icon = "arrow_back",
                 hotspot_style = STYLE_NAV,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "goto_scene", scene = "park_hub" },
                 visible_when = function(gs)
                     return not (gs.get_flag("park_place_chosen") and not gs.get_flag("met_npc_sunday"))
@@ -253,7 +239,6 @@ return {
                 icon = "left_click",
                 hotspot_style = STYLE_USE,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "park_path_walk" },
                 visible_when = function(gs)
                     return gs.get_flag("park_talk_place_path") or gs.get_flag("met_npc_sunday")
@@ -266,7 +251,6 @@ return {
                 icon = "left_click",
                 hotspot_style = STYLE_INSPECT,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "park_path_trees" },
                 visible_when = function(gs)
                     return not (gs.get_flag("park_place_chosen") and not gs.get_flag("met_npc_sunday"))
@@ -279,7 +263,6 @@ return {
                 icon = "left_click",
                 hotspot_style = STYLE_STORY,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "ink_knot", knot = "park_offer_place" },
                 visible_when = function(gs)
                     return gs.get_flag("park_npc_greeted")
@@ -296,7 +279,6 @@ return {
                 icon = "arrow_forward",
                 hotspot_style = STYLE_NAV,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "goto_scene", scene = "park_riverside_bench" },
                 visible_when = function(gs)
                     return not (gs.get_flag("park_place_chosen") and not gs.get_flag("met_npc_sunday"))
@@ -309,7 +291,6 @@ return {
                 icon = "arrow_down",
                 hotspot_style = STYLE_NAV,
                 icon_offset_x = -4,
-                icon_offset_y = 0,
                 action = { type = "goto_scene", scene = "park_hub" },
                 visible_when = function(gs)
                     return not (gs.get_flag("park_place_chosen") and not gs.get_flag("met_npc_sunday"))

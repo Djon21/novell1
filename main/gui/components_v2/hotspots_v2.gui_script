@@ -105,12 +105,13 @@ local function set_hotspot(i, data)
         local ring_node = M.hotspot_rings[i]
         
         -- Позиционируем весь стек в центре hotspot'а.
-        -- Иконка дополнительно двигается, потому что разные glyph-ы в шрифте
-        -- Material Icons могут быть визуально смещены относительно центра.
-        local DEFAULT_ICON_Y_OFFSET = 4
+        -- Дефолт по обеим осям = 0 (иконка ровно по центру кружка). Если
+        -- конкретный glyph визуально смещён в своём box-е (Material Icons
+        -- местами оптически уезжают вправо/вверх), задавай icon_offset_x/y
+        -- в сцене на этом хотспоте, а не правь глобально.
         local style = data.hotspot_style or data.style or {}
         local icon_offset_x = first_value(data.icon_offset_x, style.icon_offset_x, 0)
-        local icon_offset_y = first_value(data.icon_offset_y, style.icon_offset_y, DEFAULT_ICON_Y_OFFSET)
+        local icon_offset_y = first_value(data.icon_offset_y, style.icon_offset_y, 0)
         gui.set_position(circle_node, vmath.vector3(cx, cy, 0.068))
         gui.set_position(ring_node, vmath.vector3(cx, cy, 0.067))
         gui.set_position(icon_node, vmath.vector3(cx + icon_offset_x, cy + icon_offset_y, 0.07))
