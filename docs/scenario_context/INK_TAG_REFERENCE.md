@@ -82,14 +82,13 @@ Source of truth в коде: `main/scripts/dialogue_manager_ink.lua`, функц
 
 | Тег | Пример | Что делает |
 |---|---|---|
-| `map:hub:KNOT` | `# map:hub:sunday_date_map_fallback` | Открывает карту в hub-режиме с fallback/route knot. |
 | `map:allow:POI_ID` | `# map:allow:poi_cafe` | Разрешает конкретную точку. |
 | `map:allow:reset` | `# map:allow:reset` | Сбрасывает временные ограничения карты. |
 | `map:lock_to:POI_ID` | `# map:lock_to:poi_cafe` | Оставляет доступной только одну точку. |
 | `map:lock_all` | `# map:lock_all` | Блокирует все точки. |
 | `map:lock:all` | `# map:lock:all` | То же, более читаемый вариант. |
 
-Актуальная карта живёт в телефоне. Не использовать старый отдельный вызов карты.
+Карта живёт **внутри телефона** (`phone_map`). Открывается через `# phone:map` или через тап иконки карты в phone-launcher'е. Standalone-карты больше нет — `# map:hub:` снят, теги выше управляют только доступностью POI на phone-карте.
 
 ## Сцены исследования
 
@@ -99,7 +98,7 @@ Source of truth в коде: `main/scripts/dialogue_manager_ink.lua`, функц
 | `goto_scene:SCENE_ID` | `# goto_scene:apartment_bedroom` | Alias для `explore`. |
 | `return_to_scene` | `# return_to_scene` | Возвращает в последнюю exploration scene. Обычно ставится в конце side-knot. |
 
-Если `return_to_scene`, `explore`, `goto_scene`, `phone:*`, `map:hub:*` или `adv:*` стоят после последнего текста, они выполняются после того, как игрок дочитает параграф.
+Если `return_to_scene`, `explore`, `goto_scene`, `phone:*` или `adv:*` стоят после последнего текста, они выполняются после того, как игрок дочитает параграф.
 
 ## HUD hints
 

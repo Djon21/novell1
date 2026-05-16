@@ -13,11 +13,17 @@ scene_id, hotspot id, bg-атласов — в `PROJECT_INVENTORY.md`.
 | Файл | Что внутри |
 |---|---|
 | `main/data/scenes/_shared.lua` | Стили (`STYLE_NAV`, `STYLE_INSPECT`, ...), иконки, helper'ы (`apartment_bg(...)` и т.п.) |
-| `main/data/scenes/apartment.lua` | Воскресная квартира |
-| `main/data/scenes/apartment_monday.lua` | Квартира в понедельник |
-| `main/data/scenes/apartment_tuesday.lua` | Квартира во вторник |
-| `main/data/scenes/office.lua` | Офисные сцены |
-| `main/data/scenes/locations.lua` | Внешние локации: кафе, парк, магазин, бар, смотровая, архив |
+| `main/data/scenes/apartment.lua` | Воскресная квартира (apartment_hub / _bedroom / _bathroom / _kitchen) |
+| `main/data/scenes/apartment_monday.lua` | Квартира в понедельник (monday_apartment_*) |
+| `main/data/scenes/apartment_tuesday.lua` | Квартира во вторник (tuesday_apartment_*) |
+| `main/data/scenes/office_monday.lua` | Офис в понедельник (work_hub / office_workspace / office_meeting_room) |
+| `main/data/scenes/office_tuesday.lua` | Stub: вторничный офис пока без собственных хотспотов |
+| `main/data/scenes/park.lua` | Парк у реки (park_hub + park_riverside_bench + park_riverside_path) |
+| `main/data/scenes/cafe.lua` | Кафе (cafe_hub) |
+| `main/data/scenes/shop.lua` | Магазин 24/7 (shop_hub) |
+| `main/data/scenes/bar.lua` | Бар Maybe (bar_hub) |
+| `main/data/scenes/viewpoint.lua` | Смотровая (view_hub) |
+| `main/data/scenes/archive.lua` | Архив (archive_hub) |
 
 Сборка в общий список — `main/scripts/scenes.lua`.
 

@@ -83,7 +83,6 @@ Ink-файлы лежат в `main/story/chapters/`. Структура **лок
 - другие ink-переходы (`-> knot_name`)
 - Lua-хотспоты (`action = { type = "ink_knot", knot = "..." }` в `main/data/scenes/*.lua`)
 - Телефон (`# phone:app:NAME` + соответствующие knot)
-- Карта (`# map:hub:KNOT`)
 - Scene characters (`# scene_char:show:...:...` с click-action)
 - Dev-jump / checkpoint система
 - Документация и SOURCE_FILE_PACKS

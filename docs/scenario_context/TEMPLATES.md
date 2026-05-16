@@ -271,27 +271,35 @@ Messenger аналогично через `# msg:add:...` / `# msg:reply:...`.
 
 ---
 
-## 7. Открыть карту с возвратом в knot
+## 7. Открыть карту телефона + выбор POI
+
+Карта — это приложение внутри телефона. Открывается через `# phone:map`
+(или само, если игрок тапнул иконку карты). После выбора POI игрок попадает
+в нужную сцену через POI_SCENES mapping (см. блок 9). Управление доступностью
+POI — через `# map:allow:` / `# map:lock_to:` / `# map:lock_all`:
 
 ```ink
-=== <knot_with_choice_of_location> ===
-# bg:bg_apartment_hall_morning # speaker:none
-Описание.
+=== <knot_offering_choice> ===
+# bg:<current_bg> # speaker:none
+Описание момента, когда нужно выбрать куда идти.
 
-# map:hub:<knot_after_travel>
--> DONE
-
-=== <knot_after_travel> ===
-// Сюда попадаем когда игрок выбрал POI на карте.
-// Дальше можно проверить какой POI был активен через флаги
-// или просто продолжить общий narrative.
+# map:allow:reset
+# map:allow:poi_cafe
+# map:allow:poi_park
+# phone:map
 -> DONE
 ```
 
-Чтобы ограничить карту одной точкой:
+Чтобы ограничить карту одной точкой (например, форсировать переход домой):
 ```ink
-# map:lock_to:poi_<id>
+# map:lock_to:poi_home
+# phone:map
 ```
+
+`# map:hub:KNOT` (standalone-карта с fallback-knot) **больше не поддерживается** —
+старая отдельная карта удалена. Если нужен общий «после-travel» knot для нескольких
+POI, заведи его как обычный narrative-knot, в который игрок попадёт через
+`on_enter` следующей сцены.
 
 ---
 
