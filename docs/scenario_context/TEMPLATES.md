@@ -70,20 +70,17 @@
 
 ---
 
-## 2. Новый hotspot
+## 2. Новый hotspot — через recipes
+
+Хотспоты создаются через **рецепты** из `_shared.lua`. Выбери рецепт по семантике действия, передай `opts` таблицу.
 
 ```lua
-{
+-- осмотреть / прочитать
+s.inspect{
     id = "<hotspot_id>",
     rect = { x = 100, y = 200, w = 150, h = 150 },
     label = "<Подпись>",
-    icon = "<icon_name>",        -- из icons table в _shared.lua
-    hotspot_style = STYLE_INSPECT,  -- или STYLE_NAV / STYLE_PICKUP / STYLE_USE / STYLE_STORY
-    action = { type = "ink_knot", knot = "<knot_name>" },
-
-    -- Опциональные поля:
-    icon_offset_x = 0,
-    icon_offset_y = -4,
+    knot = "<knot_name>",
     visible_when = function(gs)
         return gs.get_flag("<prereq_flag>")
            and not gs.get_flag("<done_flag>")
@@ -92,56 +89,91 @@
         return not gs.get_flag("<temporary_lock_flag>")
     end,
 },
+
+-- взять предмет в инвентарь
+s.pickup{
+    id = "<id>", rect = {...}, label = "<Подпись>",
+    icon = "<icon_name>",   -- опционально, дефолт "left_click"
+    knot = "<knot_name>",
+},
+
+-- действие с объектом (кофе, турникет, рабочий стол)
+s.use{ id="...", rect={...}, label="...", knot="..." },
+
+-- сюжетный gate / обязательный момент
+s.story{ id="...", rect={...}, label="...", knot="..." },
+
+-- цель для применения предмета из инвентаря
+s.item_target{ id="...", rect={...}, label="...", knot="..." },
+
+-- переход в sub-сцену
+s.nav_scene{
+    id = "<id>", rect = {...}, label = "...",
+    icon = "up",           -- up / down / left / right
+    scene = "<scene_id>",
+},
+
+-- выход с локации (label по умолчанию "Выйти", icon "left")
+s.leave{ id="...", rect={...}, knot="<leave_knot>" },
 ```
 
-### Action variants
+### Override стиля / action / иконки
 
 ```lua
--- Переход в другую сцену
-action = { type = "goto_scene", scene = "<scene_id>" },
+-- inspect, но кружок в стиле USE для визуального акцента:
+s.inspect{ ..., hotspot_style = s.STYLE_USE },
 
--- Установка флага без диалога
-action = { type = "set_flag", flag = "<flag_name>", value = true },
-
--- Выдача предмета без диалога
-action = { type = "add_item", item = "<item_id>" },
+-- inspect-форма, но action — сразу set_flag (без ink-knot):
+s.inspect{
+    id = "...", rect = {...}, label = "...", knot = "ignored",
+    action = { type = "set_flag", flag = "<flag>", value = true },
+},
 ```
+
+Полная спецификация рецептов и список иконок — `docs/guides/HOTSPOTS.md`.
 
 ---
 
 ## 3. Новая exploration-сцена (в `main/data/scenes/<file>.lua`)
 
 ```lua
-<scene_id> = {
-    bg = "<bg_atlas_name>",     -- например "bg_park_riverside_bench_morning"
-    label = "<Подпись локации>",
-    on_enter = {                 -- опционально — авто-knot при входе
-        knot = "<intro_knot>",
-        condition = function(gs)
-            return not gs.get_flag("<scene_intro_seen>")
-        end,
-    },
-    hotspots = {
-        {
-            id = "<hotspot1_id>",
-            rect = { x = ..., y = ..., w = ..., h = ... },
-            label = "...",
-            icon = "...",
-            hotspot_style = STYLE_INSPECT,
-            action = { type = "ink_knot", knot = "..." },
+local s = require "main.data.scenes._shared"
+
+return {
+    <scene_id> = {
+        bg = "<bg_atlas_name>",     -- например "bg_park_riverside_bench_morning"
+        label = "<Подпись локации>",
+        on_enter = {                 -- опционально — авто-knot при входе
+            knot = "<intro_knot>",
+            condition = function(gs)
+                return not gs.get_flag("<scene_intro_seen>")
+            end,
         },
-        -- ещё хотспоты ...
-    },
-    objects = {                  -- опционально — overlay-спрайты на фоне
-        {
-            id = "<object_id>",
-            image = "<sprite_id>",
-            pos = { x = ..., y = ... },
-            size = { w = ..., h = ... },
-            visible_when = function(gs) return ... end,
+        hotspots = {
+            s.inspect{
+                id = "<hotspot1_id>",
+                rect = { x = ..., y = ..., w = ..., h = ... },
+                label = "...",
+                knot = "...",
+            },
+            s.leave{
+                id = "leave_<scene_id>",
+                rect = { x = 0, y = 0, w = 170, h = 220 },
+                knot = "leave_<scene_id>",
+            },
+            -- ещё хотспоты ...
+        },
+        objects = {                  -- опционально — overlay-спрайты на фоне
+            {
+                id = "<object_id>",
+                image = "<sprite_id>",
+                pos = { x = ..., y = ... },
+                size = { w = ..., h = ... },
+                visible_when = function(gs) return ... end,
+            },
         },
     },
-},
+}
 ```
 
 Зарегистрировать в `main/scripts/scenes.lua` если файл новый.

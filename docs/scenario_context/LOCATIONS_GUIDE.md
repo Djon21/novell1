@@ -48,51 +48,70 @@ ink-тег `# explore:`.
 
 ---
 
-## Структура хотспота
+## Структура хотспота — recipes из `_shared.lua`
+
+Хотспоты создаются через **рецепты** — функции из `_shared.lua`, которые сами подставляют стиль и тип action. Не пиши `hotspot_style = STYLE_X` и `action = { type = ... }` руками — используй соответствующий рецепт.
 
 ```lua
-{
-    id = "example_hotspot",                        -- стабильный id, на него ссылаются
-    rect = { x = 100, y = 120, w = 180, h = 140 }, -- зона клика в game-coords 1280×720
-    label = "Осмотреть",                            -- подпись под хотспотом
-    icon = "search",                                -- ключ из icons таблицы _shared.lua
-    hotspot_style = STYLE_INSPECT,                  -- стиль кружка (см. _shared.lua)
-    icon_offset_x = 0,                              -- ручная коррекция иконки
-    icon_offset_y = -4,
-    action = { type = "ink_knot", knot = "example_inspect" },
-    visible_when = function(gs)
-        return gs.get_flag("some_flag")
-    end,
-    condition = function(gs)
-        return not gs.get_flag("locked_flag")
-    end,
-}
+local s = require "main.data.scenes._shared"
+
+s.inspect{
+    id = "example_hotspot",
+    rect = { x = 100, y = 120, w = 180, h = 140 },  -- 1280×720, origin bottom-left
+    label = "Осмотреть",
+    knot = "example_inspect",
+    visible_when = function(gs) return gs.get_flag("some_flag") end,
+    condition    = function(gs) return not gs.get_flag("locked_flag") end,
+},
 ```
 
-### Поля
+### Доступные рецепты
 
-| Поле | Описание |
-|---|---|
-| `id` | Стабильный уникальный id внутри сцены. На него ссылается inventory armed-state, dev-jump, и т.д. |
-| `rect` | Прямоугольник кликабельной зоны в game coords 1280×720, origin bottom-left. |
-| `label` | Текст под кружком. Краткий — одно-два слова. |
-| `icon` | Ключ из icons-таблицы (см. `_shared.lua`). Реальный набор иконок проверять там. |
-| `hotspot_style` | Стиль (цвет круга, пульс). Реальный набор стилей в `_shared.lua` — `STYLE_NAV`, `STYLE_INSPECT`, `STYLE_PICKUP`, `STYLE_USE`, `STYLE_ITEM_TARGET`, `STYLE_STORY`, `STYLE_NEUTRAL`. |
-| `icon_offset_x/y` | Если иконка визуально не по центру (особенности шрифта). Не двигай весь хотспот — двигай иконку. |
-| `action` | См. ниже |
-| `visible_when(gs)` | Видим ли хотспот вообще |
-| `condition(gs)` | Кликабелен ли (виден но locked если false) |
+| Рецепт | Стиль | Action | Дефолтная иконка | Когда юзать |
+|---|---|---|---|---|
+| `s.nav_scene{...scene=...}` | NAV | `goto_scene` | твоя (обязательна) | переход в sub-сцену (`up`/`down`/`left`/`right`) |
+| `s.nav_ink{...knot=...}` | NAV | `ink_knot` | твоя | навигация с ink-обвязкой |
+| `s.inspect{...knot=...}` | INSPECT | `ink_knot` | `"left_click"` | осмотреть / прочитать |
+| `s.pickup{...knot=...}` | PICKUP | `ink_knot` | `"left_click"` | взять в инвентарь |
+| `s.use{...knot=...}` | USE | `ink_knot` | `"left_click"` | действие с объектом (кофе, турникет) |
+| `s.story{...knot=...}` | STORY | `ink_knot` | `"left_click"` | сюжетный gate, важный момент |
+| `s.item_target{...knot=...}` | ITEM_TARGET | `ink_knot` | `"left_click"` | цель для применения предмета |
+| `s.leave{...knot=...}` | NAV | `ink_knot` | `"left"` + label `"Выйти"` | выход с локации |
 
-### Action types
+### Поля opts
 
-| Тип | Поле | Поведение |
+| Поле | Обязательно | Описание |
 |---|---|---|
-| `ink_knot` | `knot = "<name>"` | Прыжок в ink-knot, возврат через `# return_to_scene` |
-| `goto_scene` | `scene = "<scene_id>"` | Переход в другую exploration-сцену |
-| `set_flag` | `flag = "<name>", value = ...` | Установить флаг, остаться в сцене |
-| `add_item` | `item = "<id>"` | Дать предмет, остаться в сцене |
+| `id` | да | стабильный уникальный id внутри сцены |
+| `rect` | да | `{ x, y, w, h }` в 1280×720, origin bottom-left |
+| `label` | да | подпись под кружком |
+| `knot` / `scene` | да (зависит от рецепта) | куда вести по клику |
+| `icon` | если дефолт не подходит | ключ из таблицы ICONS (см. HOTSPOTS.md) |
+| `visible_when(gs)` | нет | если `false` — хотспот полностью невидим |
+| `condition(gs)` | нет | если `false` — хотспот тусклый, не кликается |
+| `hotspot_style = s.STYLE_X` | нет | override стиля рецепта |
+| `action = {...}` | нет | override action (например `set_flag`) |
+| `icon_offset_x/y` | нет | точечный сдвиг glyph'а |
 
-Если нужен новый тип — это **фича для кода**, не сценарная правка. См. dm_commands.lua и scene_controller.lua.
+### Override стиля или action
+
+Любой рецепт можно перебить:
+
+```lua
+-- inspect, но кружок в стиле USE:
+s.inspect{ id=..., rect=..., label=..., knot=..., hotspot_style = s.STYLE_USE },
+
+-- inspect-форма, но action — set_flag вместо ink_knot:
+s.inspect{
+    id = "park_marker",
+    rect = {...}, label = "Маркер", knot = "ignored",
+    action = { type = "set_flag", flag = "park_marker_seen", value = true },
+},
+```
+
+Доступные `action.type`: `ink_knot`, `goto_scene`, `set_flag`, `add_item`, `remove_item`. Новый тип — **фича для кода**, не сценарная правка.
+
+Полная спецификация — `docs/guides/HOTSPOTS.md`.
 
 ---
 
@@ -119,14 +138,11 @@ ink-тег `# explore:`.
 
 ## Иконки и стили
 
-Иконка — из icon-font'а проекта. Реальный набор — в `_shared.lua` таблица `icons` (search, phone, mug, note, lock, и т.д.).
+**Иконки** — Material Icons (классический шрифт, не Symbols). Имя резолвится через таблицу `ICONS` в `hotspots_v2.gui_script`. Базовый набор: `left`, `right`, `up`, `down`, `left_click`, `phone`, `coffee`, `mug`, `note`, `lock`, `warning`, `delete`. Если нужна новая — добавляется в `ICONS` (см. `HOTSPOTS.md` §4).
 
-Стиль — из `STYLE_*` constants там же. Они определяют:
-- Цвет ring + circle (например STYLE_INSPECT — синий, STYLE_PICKUP — жёлтый)
-- Анимацию пульса (некоторые стили пульсируют сильнее)
-- Альфу
+**Стили** — `STYLE_NAV` / `INSPECT` / `PICKUP` / `USE` / `ITEM_TARGET` / `STORY` в `_shared.lua`. Цвета: cyan / violet / magenta-pink / amber / green / hot-pink соответственно. Кодируют ДЕЙСТВИЕ, не предмет.
 
-Если стиль/иконка не подходят — расширяй существующие constants в `_shared.lua`, **не** хардкодь цвета в самом хотспоте.
+В норме AI **не задаёт** стиль вручную — берёт правильный рецепт (`s.use{}` для USE, `s.pickup{}` для PICKUP и т.д.). Override через `hotspot_style = s.STYLE_X` — только когда визуальный акцент в конкретной сцене требует отступления от семантики.
 
 ---
 
@@ -135,13 +151,15 @@ ink-тег `# explore:`.
 **Хороший ответ** содержит:
 - `scene_id` (с проверкой что не дублируется)
 - bg атлас (из существующих, см. `PROJECT_INVENTORY.md` секция Backgrounds)
-- Список хотспотов, для каждого: `id`, `rect`, `label`, `icon`, `hotspot_style`, `action`
+- Список хотспотов через **рецепты** (`s.inspect{}`, `s.use{}`, `s.leave{}`, ...) — не verbose-форма с `hotspot_style` и `action.type` на каждом
+- Для каждого хотспота: `id`, `rect`, `label`, `knot` (или `scene`), `icon` если нестандартный
 - Какие новые knot'ы нужны (а не «пусть будет какой-нибудь knot»)
 - Какие новые / существующие флаги управляют видимостью
 - Какие переходы могут сломаться
 
 **Плохой ответ**:
 - «добавь кнопку в GUI» (нет — хотспоты конфигурятся в Lua, не в GUI)
+- Verbose-форма хотспота с `hotspot_style = STYLE_X` и `action = { type = "ink_knot", knot = ... }` (нет — это легаси, бери рецепт)
 - «поставь любой id» (нет — id стабильный)
 - «пусть action = open_map_old» (нет — `goto_scene/ink_knot/set_flag/add_item`)
 - «координаты потом подберёшь» (нет — давай конкретные числа или явно «нужен F1 editor»)
