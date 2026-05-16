@@ -610,6 +610,23 @@ local function show_pin(prefix, tone, label)
     set_text(prefix .. "_pin", clamp_text(label, 8):upper())
 end
 
+-- Аватар: квадратный блок слева от имени/превью.
+-- 50×50 (под высоту строки 52), с 4-сторонней рамкой и инициалами в центре.
+local AV_W, AV_H, AV_PAD_X, AV_GAP = 50, 50, 6, 12
+
+local function layout_avatar_local(p)
+    -- positions inside row (parent: msgN_bg). y-pivot = SW, row = 52 tall.
+    set_local_box(p .. "_av_bg", AV_PAD_X, 1, AV_W, AV_H, nil, nil, 0.053)
+    set_local_box(p .. "_av_b_t", 0, AV_H - 1, AV_W, 1, nil, nil, 0.054)
+    set_local_box(p .. "_av_b_b", 0, 0,        AV_W, 1, nil, nil, 0.054)
+    set_local_box(p .. "_av_b_l", 0, 0,        1, AV_H, nil, nil, 0.054)
+    set_local_box(p .. "_av_b_r", AV_W - 1, 0, 1, AV_H, nil, nil, 0.054)
+    set_local_pos(p .. "_av",     AV_W / 2, AV_H / 2 - 9, 0.056)
+    set_size(p .. "_av", AV_W - 4, 18)
+    local av_node = get_node(p .. "_av")
+    if av_node then gui.set_pivot(av_node, gui.PIVOT_CENTER) end
+end
+
 local function layout_row_slot(i)
     local p = "msg" .. i
     local y = LIST_TOP - (i - 1) * (ROW_H + ROW_GAP) - ROW_H
@@ -621,12 +638,15 @@ local function layout_row_slot(i)
     set_local_box(p .. "_border", 0, 0, ROW_W, ROW_H, nil, nil, 0.054)
     set_local_box(p .. "_dot", -3, ROW_H - 24, 6, 18, nil, nil, 0.055)
 
-    set_local_pos(p .. "_name", 16, 40, 0.056)
+    layout_avatar_local(p)
+
+    local text_x = AV_PAD_X + AV_W + AV_GAP   -- 6 + 50 + 12 = 68
+    set_local_pos(p .. "_name", text_x, 40, 0.056)
     set_local_pos(p .. "_time", ROW_W - 12, 37, 0.056)
-    set_local_pos(p .. "_body", 16, 18, 0.056)
-    set_size(p .. "_name", 360, 14)
+    set_local_pos(p .. "_body", text_x, 18, 0.056)
+    set_size(p .. "_name", 320, 14)
     set_size(p .. "_time", 92, 10)
-    set_size(p .. "_body", 500, 14)
+    set_size(p .. "_body", 420, 14)
 
     local name_node = get_node(p .. "_name")
     if name_node then gui.set_pivot(name_node, gui.PIVOT_W) end
@@ -645,13 +665,65 @@ local function layout_row_slot(i)
     if pin_node then gui.set_pivot(pin_node, gui.PIVOT_CENTER) end
 end
 
+-- Инициалы: первая буква первого и первая буква второго слова имени,
+-- в верхнем регистре. Если слово одно — берём первые два символа.
+-- Кириллицу обрабатываем побайтно (utf-8): пропускаем continuation bytes (10xxxxxx).
+local function utf8_first_chars(s, n)
+    local out, i, count = {}, 1, 0
+    while i <= #s and count < n do
+        local byte = string.byte(s, i)
+        local size = 1
+        if byte >= 0xF0 then size = 4
+        elseif byte >= 0xE0 then size = 3
+        elseif byte >= 0xC0 then size = 2 end
+        table.insert(out, s:sub(i, i + size - 1))
+        i = i + size
+        count = count + 1
+    end
+    return table.concat(out)
+end
+
+local function compute_initials(name)
+    if not name or name == "" then return "?" end
+    -- skip non-letter prefixes (digits, +, ()) — для номеров типа "+7 (916)" получим "?"
+    local clean = name:gsub("[%+%(%)%-%d]", " ")
+    -- collapse whitespace, разделители " ", "·", "—", "-"
+    clean = clean:gsub("[·—]", " "):gsub("%s+", " "):gsub("^%s+", ""):gsub("%s+$", "")
+    if clean == "" then return "?" end
+    local parts = {}
+    for word in clean:gmatch("%S+") do table.insert(parts, word) end
+    local result
+    if #parts >= 2 then
+        result = utf8_first_chars(parts[1], 1) .. utf8_first_chars(parts[2], 1)
+    else
+        result = utf8_first_chars(parts[1], 2)
+    end
+    return result:upper()
+end
+
+-- Тон аватара по контакту + тегу превью. Возвращает (color, alpha_bg, alpha_border).
+-- Приоритеты:
+--   1) явный hot-тег → COLORS.hot
+--   2) amber-тег     → COLORS.amber
+--   3) контакт в "тёплом" списке (мама/мила/друзья) → COLORS.green
+--   4) дефолт → COLORS.accent
+local WARM_CONTACTS = { mama = true, mila = true, friends = true }
+
+local function avatar_tone(contact_id, tone_tag)
+    if tone_tag == "hot" or tone_tag == "danger" then return COLORS.hot end
+    if tone_tag == "amber" or tone_tag == "warn" then return COLORS.amber end
+    if contact_id and WARM_CONTACTS[contact_id] then return COLORS.green end
+    return COLORS.accent
+end
+
 local function show_row(i, m)
     local p = "msg" .. i
     layout_row_slot(i)
     local unread = msg_unread(m)
     local tone, tag = msg_tag(m)
 
-    for _, suffix in ipairs({ "_bg", "_border", "_name", "_time", "_body" }) do
+    for _, suffix in ipairs({ "_bg", "_border", "_name", "_time", "_body",
+                              "_av_bg", "_av_b_t", "_av_b_b", "_av_b_l", "_av_b_r", "_av" }) do
         set_node_enabled(p .. suffix, true)
     end
     set_node_enabled(p .. "_dot", unread)
@@ -664,9 +736,18 @@ local function show_row(i, m)
     set_color(p .. "_time", COLORS.paper_dim, 0.72)
     set_color(p .. "_body", unread and COLORS.paper or COLORS.paper_dim, 0.86)
 
-    set_text(p .. "_name", clamp_text(msg_name(m), 32))
+    -- Avatar: цвет от тона + unread override (unread → hot).
+    local av_color = unread and COLORS.hot or avatar_tone(msg_contact_id(m), tone)
+    set_color(p .. "_av_bg", av_color, unread and 0.20 or 0.15)
+    for _, suf in ipairs({ "_av_b_t", "_av_b_b", "_av_b_l", "_av_b_r" }) do
+        set_color(p .. suf, av_color, unread and 0.70 or 0.55)
+    end
+    set_color(p .. "_av", av_color, 0.95)
+    set_text(p .. "_av", compute_initials(msg_name(m)))
+
+    set_text(p .. "_name", clamp_text(msg_name(m), 28))
     set_text(p .. "_time", clamp_text(msg_time(m), 14))
-    set_text(p .. "_body", clamp_text(msg_body(m), 82))
+    set_text(p .. "_body", clamp_text(msg_body(m), 70))
     show_pin(p, tone, tag)
 end
 
@@ -715,12 +796,24 @@ local function apply_static_layout()
         set_local_box(p .. "_border", 0, 0, ROW_W, ROW_H, COLORS.accent, 0.18, 0.054)
         set_local_box(p .. "_dot", -3, ROW_H - 24, 6, 18, COLORS.hot, 1.0)
 
-        set_local_pos(p .. "_name", 16, 40, 0.056)
+        -- Avatar baseline layout. Цвет/инициалы переписываются в show_row().
+        set_local_box(p .. "_av_bg", AV_PAD_X, 1, AV_W, AV_H, COLORS.accent, 0.15, 0.053)
+        set_local_box(p .. "_av_b_t", 0, AV_H - 1, AV_W, 1, COLORS.accent, 0.55, 0.054)
+        set_local_box(p .. "_av_b_b", 0, 0,        AV_W, 1, COLORS.accent, 0.55, 0.054)
+        set_local_box(p .. "_av_b_l", 0, 0,        1, AV_H, COLORS.accent, 0.55, 0.054)
+        set_local_box(p .. "_av_b_r", AV_W - 1, 0, 1, AV_H, COLORS.accent, 0.55, 0.054)
+        set_local_pos(p .. "_av",     AV_W / 2, AV_H / 2 - 9, 0.056)
+        set_size(p .. "_av", AV_W - 4, 18)
+        local av_node_static = get_node(p .. "_av")
+        if av_node_static then gui.set_pivot(av_node_static, gui.PIVOT_CENTER) end
+
+        local text_x = AV_PAD_X + AV_W + AV_GAP
+        set_local_pos(p .. "_name", text_x, 40, 0.056)
         set_local_pos(p .. "_time", ROW_W - 12, 37, 0.056)
-        set_local_pos(p .. "_body", 16, 18, 0.056)
-        set_size(p .. "_name", 360, 14)
+        set_local_pos(p .. "_body", text_x, 18, 0.056)
+        set_size(p .. "_name", 320, 14)
         set_size(p .. "_time", 92, 10)
-        set_size(p .. "_body", 500, 14)
+        set_size(p .. "_body", 420, 14)
         local time_node = get_node(p .. "_time")
         if time_node then gui.set_pivot(time_node, gui.PIVOT_E) end
 

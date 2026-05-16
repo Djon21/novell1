@@ -411,5 +411,134 @@ nodes {
     w: 2.0
   }
 }
+nodes {
+  position {
+    x: 6.0
+    y: 2.0
+    z: 0.053
+  }
+  size {
+    x: 50.0
+    y: 50.0
+  }
+  color {
+    x: 0.490
+    y: 0.976
+    z: 1.000
+  }
+  type: TYPE_BOX
+  id: "msg1_av_bg"
+  pivot: PIVOT_SW
+  parent: "msg1_bg"
+  alpha: 0.15
+}
+nodes {
+  position {
+    x: 0.0
+    y: 49.0
+    z: 0.054
+  }
+  size {
+    x: 50.0
+    y: 1.0
+  }
+  color {
+    x: 0.490
+    y: 0.976
+    z: 1.000
+  }
+  type: TYPE_BOX
+  id: "msg1_av_b_t"
+  pivot: PIVOT_SW
+  parent: "msg1_av_bg"
+  alpha: 0.55
+}
+nodes {
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.054
+  }
+  size {
+    x: 50.0
+    y: 1.0
+  }
+  color {
+    x: 0.490
+    y: 0.976
+    z: 1.000
+  }
+  type: TYPE_BOX
+  id: "msg1_av_b_b"
+  pivot: PIVOT_SW
+  parent: "msg1_av_bg"
+  alpha: 0.55
+}
+nodes {
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.054
+  }
+  size {
+    x: 1.0
+    y: 50.0
+  }
+  color {
+    x: 0.490
+    y: 0.976
+    z: 1.000
+  }
+  type: TYPE_BOX
+  id: "msg1_av_b_l"
+  pivot: PIVOT_SW
+  parent: "msg1_av_bg"
+  alpha: 0.55
+}
+nodes {
+  position {
+    x: 49.0
+    y: 0.0
+    z: 0.054
+  }
+  size {
+    x: 1.0
+    y: 50.0
+  }
+  color {
+    x: 0.490
+    y: 0.976
+    z: 1.000
+  }
+  type: TYPE_BOX
+  id: "msg1_av_b_r"
+  pivot: PIVOT_SW
+  parent: "msg1_av_bg"
+  alpha: 0.55
+}
+nodes {
+  position {
+    x: 25.0
+    y: 19.0
+    z: 0.056
+  }
+  size {
+    x: 48.0
+    y: 18.0
+  }
+  color {
+    x: 0.490
+    y: 0.976
+    z: 1.000
+  }
+  type: TYPE_TEXT
+  text: "??"
+  font: "unbounded_bold_20"
+  id: "msg1_av"
+  parent: "msg1_av_bg"
+  alpha: 0.95
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT
