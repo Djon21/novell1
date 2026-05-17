@@ -188,7 +188,7 @@
 -> DONE
 
 === look_bedroom_window ===
-# bg:bg_apartment_bedroom_morning # speaker:none
+# speaker:none
 За окном город выглядит так, будто воскресенье у него началось раньше твоего: редкие машины, свет в стекле, кто-то с собакой у подъезда.
 
 {iteration_number > 1:
@@ -567,7 +567,7 @@
 }
 
 === take_kitchen_apple ===
-# bg:bg_apartment_kitchen_morning # speaker:none
+# speaker:none
 В миске на столе лежат зелёные яблоки. Одно холодит ладонь чуть сильнее остальных.
 
 # speaker:mc
@@ -579,7 +579,7 @@
 -> DONE
 
 === look_kitchen_fridge ===
-# bg:bg_apartment_kitchen_morning # speaker:none
+# speaker:none
 В холодильнике йогурт, сыр и контейнер, который лучше не открывать без отдельного морального разрешения.
 
 * [Взять йогурт]
@@ -601,7 +601,7 @@
     -> DONE
 
 === drink_water_kitchen ===
-# bg:bg_apartment_kitchen_morning # speaker:none
+# speaker:none
 Вода из-под фильтра прохладная и честная. Не кофе, не ритуал, просто способ напомнить телу, что оно существует.
 
 # set_flag:water_drunk=true
@@ -832,7 +832,7 @@
 -> DONE
 
 === mon_home_wash_up ===
-# bg:bg_apartment_bedroom_morning # speaker:none
+# speaker:none
 В ванной холодная вода быстро стирает остатки сна.
 
 Зеркало над раковиной не сообщает ничего нового: обычное лицо, обычное утро, обычный человек, который идёт на обычную работу.
@@ -899,7 +899,7 @@
 -> DONE
 
 === mon_home_leave_apartment ===
-# bg:bg_apartment_hall_morning # speaker:none
+# speaker:none
 Перед дверью всё на секунду останавливается.
 
 Не драматично. Просто так бывает перед выходом: тело уже знает маршрут, а мысль ещё проверяет, не забыла ли что-то важное.
@@ -1146,7 +1146,7 @@
 -> DONE
 
 === tue_home_leave_apartment ===
-# bg:bg_apartment_hall_morning # speaker:none
+# speaker:none
 У двери появляется привычная пауза.
 
 Вчера она была про готовность. Сегодня — про ответственность: можно выйти и проверить, что случилось, а можно позволить системе снова назвать последствия нормальным процессом.

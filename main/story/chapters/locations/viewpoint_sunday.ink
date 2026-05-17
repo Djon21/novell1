@@ -71,13 +71,13 @@
 -> DONE
 
 === leave_viewpoint ===
-# bg:bg_observation_day # speaker:none
+# speaker:none
 Телефон снова оказывается в руке. День уже не кажется коротким, но ему всё ещё нужен нормальный вечерний финал.
 # phone:map
 -> DONE
 
 === view_railing_interact ===
-# bg:bg_observation_day # speaker:none
+# speaker:none
 Поручни прохладные. За ними город выглядит собранным, почти спокойным.
 
 Можно было бы сказать что-то умное, но сейчас достаточно просто постоять и посмотреть вниз.

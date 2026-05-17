@@ -9,7 +9,7 @@
 // ================================================================
 
 === park_entrance_view ===
-# bg:bg_park_riverside_entrance_morning # speaker:none
+# speaker:none
 {park_entrance_seen:
     Вход в парк уже понятен: дорожка, вода дальше справа, зелень, тёплый камень под солнцем.
 - else:
@@ -37,7 +37,7 @@
 -> DONE
 
 === park_bench_interact ===
-# bg:bg_park_riverside_bench_morning # speaker:none
+# speaker:none
 {met_npc_sunday:
     Скамейка у воды теперь запомнилась не видом, а паузой, в которой вы оба не стали ничего портить лишними словами.
     # return_to_scene
@@ -73,7 +73,7 @@
 }
 
 === park_river_view ===
-# bg:bg_park_riverside_bench_morning # speaker:none
+# speaker:none
 Река движется медленно и уверенно. На таком фоне разговоры обычно становятся тише — не слабее, просто честнее.
 
 {park_npc_greeted and not met_npc_sunday:
@@ -84,7 +84,7 @@
 -> DONE
 
 === park_path_trees ===
-# bg:bg_park_riverside_path_morning # speaker:none
+# speaker:none
 {park_path_seen:
     Аллея остаётся хорошим вариантом: идти проще, чем сидеть напротив и делать вид, что это просто прогулка.
 - else:
@@ -99,7 +99,7 @@
 -> DONE
 
 === park_path_walk ===
-# bg:bg_park_riverside_path_morning # speaker:none
+# speaker:none
 {met_npc_sunday:
     Вы проходите дальше по аллее. Несколько минут можно не решать ничего: только идти, слушать шаги и редкие голоса где-то впереди.
     # return_to_scene
@@ -109,7 +109,7 @@
 -> park_path_main_talk
 
 === park_bin_prompt ===
-# bg:bg_park_riverside_entrance_morning # speaker:none
+# speaker:none
 Урна стоит у края дорожки — как будто специально для маленьких решений, которые никто не заметит, кроме тебя.
 
 # speaker:mc
@@ -120,7 +120,7 @@
 -> DONE
 
 === take_park_trash_cup ===
-# bg:bg_park_riverside_bench_morning # speaker:none
+# speaker:none
 Чужой пустой стаканчик стоит на краю лавочки. Ничего драматичного: просто след чужого дня, который мешает начать свой.
 
 # speaker:mc
@@ -182,7 +182,7 @@
 -> DONE
 
 === park_message_where_are_you ===
-# bg:bg_park_riverside_entrance_morning # speaker:none
+# speaker:none
 Ты открываешь Messenger. Палец зависает над полем ввода чуть дольше, чем нужно для простого вопроса.
 
 # speaker:mc
