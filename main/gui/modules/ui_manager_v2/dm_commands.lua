@@ -27,7 +27,10 @@ local function apply_single(cmd, ctx)
     elseif cmd.type == "set_quest" then
         if gs.set_quest then gs.set_quest(cmd.quest, cmd.status) end
     elseif cmd.type == "add_sms" then
-        if gs.add_sms then gs.add_sms(cmd.contact, cmd.text, cmd.hot) end
+        if gs.add_sms then
+            -- opts (для add_old) важнее одиночного hot-флага. Передаём то что есть.
+            gs.add_sms(cmd.contact, cmd.text, cmd.opts or cmd.hot)
+        end
     elseif cmd.type == "reply_sms" then
         if gs.reply_sms then gs.reply_sms(cmd.contact, cmd.text) end
     elseif cmd.type == "mark_sms_read" then
@@ -35,7 +38,7 @@ local function apply_single(cmd, ctx)
     elseif cmd.type == "set_sms_tag" then
         if gs.set_sms_tag then gs.set_sms_tag(cmd.contact, cmd.tone, cmd.label) end
     elseif cmd.type == "add_msg" then
-        if gs.add_msg then gs.add_msg(cmd.chat, cmd.text) end
+        if gs.add_msg then gs.add_msg(cmd.chat, cmd.text, cmd.opts) end
     elseif cmd.type == "reply_msg" then
         if gs.reply_msg then gs.reply_msg(cmd.chat, cmd.text) end
     elseif cmd.type == "mark_msg_read" then

@@ -134,25 +134,37 @@ function M.get_tag(contact_id)
     return t.tone, t.label
 end
 
--- hot_or_opts: true → пометить сообщение как hot (визуальный red-tinted bubble +
--- акцент при unread). Можно передать таблицу { hot = true, ... } для расширения
--- в будущем. Сейчас используется только для in-сообщений (входящих).
+-- hot_or_opts: true (legacy) → hot=true, unread=true, time=auto.
+-- Или таблица { hot, unread, time }:
+--   hot    = true → hot-стилизация bubble (по умолчанию false)
+--   unread = false → сообщение УЖЕ прочитано (для seed-истории до старта игры).
+--                    По умолчанию true (свежее входящее).
+--   time   = строка с готовым временем ("пн", "вчера", "03:17", ...). Если nil —
+--                    автогенерация из seq (07:12+).
+-- Используется только для in-сообщений.
 function M.add(contact_id, text, hot_or_opts)
     if not contact_id or contact_id == "" then return false end
     local seq = next_seq()
-    local hot = false
-    if hot_or_opts == true then hot = true
-    elseif type(hot_or_opts) == "table" and hot_or_opts.hot == true then hot = true end
+    local hot, unread, time = false, true, nil
+    if hot_or_opts == true then
+        hot = true
+    elseif type(hot_or_opts) == "table" then
+        hot    = hot_or_opts.hot == true
+        if hot_or_opts.unread == false then unread = false end
+        if hot_or_opts.time then time = tostring(hot_or_opts.time) end
+    end
     _sms[contact_id] = _sms[contact_id] or {}
     table.insert(_sms[contact_id], {
         text      = tostring(text or ""),
-        unread    = true,
+        unread    = unread,
         direction = "in",
         hot       = hot,
-        time      = default_time(seq),
+        time      = time or default_time(seq),
         seq       = seq,
     })
-    _sms_unread[contact_id] = (_sms_unread[contact_id] or 0) + 1
+    if unread then
+        _sms_unread[contact_id] = (_sms_unread[contact_id] or 0) + 1
+    end
     notify_cb()
     return true
 end

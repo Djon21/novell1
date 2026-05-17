@@ -40,6 +40,8 @@ Source of truth в коде: `main/scripts/dialogue_manager_ink.lua`, функц
 |---|---|---|
 | `sms:add:CONTACT:TEXT` | `# sms:add:mila:Есть планы?` | Добавляет входящее SMS. |
 | `sms:add_hot:CONTACT:TEXT` | `# sms:add_hot:unknown:если помнишь, ответь.` | То же что `sms:add`, но сообщение в треде подсвечивается hot-стилем (красно-розовый акцент, выделенный border). Для напряжённых / тревожных входящих. |
+| `sms:add_old:CONTACT:TIME:TEXT` | `# sms:add_old:mama:пн:Не забудь поесть.` | **Pre-existing** сообщение — уже прочитанное, с готовым временем (`пн`, `вчера`, `03:17` и т.п.). Не бампит unread-счётчик. Для seed телефонной истории на старте игры, чтобы лента не выглядела пустой. |
+| `msg:add_old:CHAT:TIME:TEXT` | `# msg:add_old:work_team:пн:Планёрка перенесена.` | То же для Messenger. |
 | `sms:reply:CONTACT:TEXT` | `# sms:reply:mila:Хорошо.` | Добавляет исходящее SMS от героя и ставит авто-флаг ответа. |
 | `sms:read:CONTACT` | `# sms:read:mila` | Помечает SMS-чат прочитанным. |
 | `sms:tag:CONTACT:TONE:LABEL` | `# sms:tag:unknown:hot:сигнал` | Ставит pin-тег на SMS-чат (цветной значок справа в списке). TONE ∈ `hot`, `amber`, `danger`, `warn`. LABEL — короткая подпись (выводится UPPERCASE, обрезается до ~8 символов). |

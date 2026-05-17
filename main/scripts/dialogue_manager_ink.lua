@@ -310,6 +310,26 @@ local function apply_tags(tags, trailing)
                         hot     = (op == "add_hot"),
                     })
                 end
+            elseif op == "add_old" and rest then
+                -- # sms:add_old:CONTACT:TIME:TEXT  — pre-existing message
+                -- (уже прочитанное, с готовым временем "пн"/"вчера"/"03:17").
+                -- Для seed телефонной истории на старте игры.
+                local contact, rest2 = rest:match("([^:]+)%s*:%s*(.+)")
+                if contact and rest2 then
+                    local time, text = rest2:match("([^:]+)%s*:%s*(.+)")
+                    if time and text then
+                        contact = contact:gsub("^%s+", ""):gsub("%s+$", "")
+                        time    = time:gsub("^%s+", ""):gsub("%s+$", "")
+                        text = text:gsub('^%s*"(.*)"%s*$', "%1")
+                                   :gsub("^%s*'(.*)'%s*$", "%1")
+                        table.insert(pending_commands, {
+                            type    = "add_sms",
+                            contact = contact,
+                            text    = text,
+                            opts    = { unread = false, time = time },
+                        })
+                    end
+                end
             elseif op == "reply" and rest then
                 -- # sms:reply:contact:текст  — ГГ отвечает на сообщение.
                 -- Автоматически ставит sms_<contact>_replied = true.
@@ -352,9 +372,10 @@ local function apply_tags(tags, trailing)
                 end
             end
         elseif key == "msg" and value and not suppress_effects then
-            -- # msg:add:<chat>:<text> | # msg:reply:<chat>:<text> | # msg:read:<chat>
+            -- # msg:add:<chat>:<text> | # msg:add_old:<chat>:<time>:<text>
+            -- # msg:reply:<chat>:<text> | # msg:read:<chat>
             -- Параллельный канал к sms — отдельный storage в game_state.
-            local op, rest = value:match("(%a+)%s*:%s*(.+)")
+            local op, rest = value:match("([%w_]+)%s*:%s*(.+)")
             if op == "add" and rest then
                 local chat, text = rest:match("([^:]+)%s*:%s*(.+)")
                 if chat and text then
@@ -362,6 +383,24 @@ local function apply_tags(tags, trailing)
                     text = text:gsub('^%s*"(.*)"%s*$', "%1")
                                :gsub("^%s*'(.*)'%s*$", "%1")
                     table.insert(pending_commands, { type = "add_msg", chat = chat, text = text })
+                end
+            elseif op == "add_old" and rest then
+                -- # msg:add_old:CHAT:TIME:TEXT  — pre-existing message (already read, custom time).
+                local chat, rest2 = rest:match("([^:]+)%s*:%s*(.+)")
+                if chat and rest2 then
+                    local time, text = rest2:match("([^:]+)%s*:%s*(.+)")
+                    if time and text then
+                        chat = chat:gsub("^%s+", ""):gsub("%s+$", "")
+                        time = time:gsub("^%s+", ""):gsub("%s+$", "")
+                        text = text:gsub('^%s*"(.*)"%s*$', "%1")
+                                   :gsub("^%s*'(.*)'%s*$", "%1")
+                        table.insert(pending_commands, {
+                            type = "add_msg",
+                            chat = chat,
+                            text = text,
+                            opts = { unread = false, time = time },
+                        })
+                    end
                 end
             elseif op == "reply" and rest then
                 local chat, text = rest:match("([^:]+)%s*:%s*(.+)")

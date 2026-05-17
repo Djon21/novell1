@@ -71,18 +71,28 @@ function M.reset()
     next_seq, _get_seq, _absorb_seq = H.make_seq()
 end
 
-function M.add(chat_id, text)
+-- opts (опционально):
+--   unread = false → сообщение УЖЕ прочитано (для seed-истории).
+--   time   = строка готового времени ("пн", "вчера"). Если nil — автогенерация.
+function M.add(chat_id, text, opts)
     if not chat_id or chat_id == "" then return false end
     local seq = next_seq()
+    local unread, time = true, nil
+    if type(opts) == "table" then
+        if opts.unread == false then unread = false end
+        if opts.time then time = tostring(opts.time) end
+    end
     _msg[chat_id] = _msg[chat_id] or {}
     table.insert(_msg[chat_id], {
         text      = tostring(text or ""),
-        unread    = true,
+        unread    = unread,
         direction = "in",
-        time      = default_time(seq),
+        time      = time or default_time(seq),
         seq       = seq,
     })
-    _msg_unread[chat_id] = (_msg_unread[chat_id] or 0) + 1
+    if unread then
+        _msg_unread[chat_id] = (_msg_unread[chat_id] or 0) + 1
+    end
     notify_cb()
     return true
 end

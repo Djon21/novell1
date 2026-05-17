@@ -96,6 +96,7 @@ VAR anomaly_interpreted = false
 VAR kitchen_intro_seen = false
 VAR mug_taken = false
 VAR phone_taken = false
+VAR phone_history_seeded = false
 VAR first_anomaly_seen = false
 
 VAR used_fallback = false
