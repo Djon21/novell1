@@ -475,6 +475,10 @@
 # phone:map
 -> DONE
 
+// Триггерится из 91_inventory_actions.ink ->
+// inv_apartment_kitchen_use_mug_on_coffee_setup (после варки кофе).
+// Идемпотентно через sunday_messenger_invite_sent — повторные стрелки
+// просто фолбэчат на «телефон уже вибрировал, ответ в Messenger».
 === sunday_send_messenger_invite ===
 {not sunday_messenger_invite_sent:
     # speaker:none
@@ -606,6 +610,15 @@
     # return_to_scene
     -> DONE
 
+// ORPHAN: knot объявлен, но в scenes/apartment.lua нет хотспота, который
+// бы его вызывал. Текст готов, осталось добавить хотспот на кухне
+// (например на раковину/фильтр), action = { type = "ink_knot", knot = "drink_water_kitchen" }.
+// Сейчас water_drunk читается только в leave_apartment как доп. flavor text:
+// «Хотя бы воды выпил{mc_gender == "female":а|}.» — без хотспота этот fallback недостижим.
+//
+// Решение откладывается до iter 2+ либо до момента когда понадобится
+// разгрузить coffee-gate (см. обсуждение в комментарии к
+// inv_apartment_kitchen_use_mug_on_coffee_setup в 91_inventory_actions.ink).
 === drink_water_kitchen ===
 # speaker:none
 Вода из-под фильтра прохладная и честная. Не кофе, не ритуал, просто способ напомнить телу, что оно существует.
