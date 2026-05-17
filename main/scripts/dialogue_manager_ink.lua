@@ -295,15 +295,20 @@ local function apply_tags(tags, trailing)
         elseif key == "sms" and value and not suppress_effects then
             -- # sms:add:contact:текст сообщения
             -- Текст может содержать двоеточия — берём contact и остаток.
-            local op, rest = value:match("(%a+)%s*:%s*(.+)")
-            if op == "add" and rest then
+            local op, rest = value:match("([%w_]+)%s*:%s*(.+)")
+            if (op == "add" or op == "add_hot") and rest then
                 local contact, text = rest:match("([^:]+)%s*:%s*(.+)")
                 if contact and text then
                     contact = contact:gsub("^%s+", ""):gsub("%s+$", "")
                     -- Убираем крайние кавычки, если автор их поставил.
                     text = text:gsub('^%s*"(.*)"%s*$', "%1")
                                :gsub("^%s*'(.*)'%s*$", "%1")
-                    table.insert(pending_commands, { type = "add_sms", contact = contact, text = text })
+                    table.insert(pending_commands, {
+                        type    = "add_sms",
+                        contact = contact,
+                        text    = text,
+                        hot     = (op == "add_hot"),
+                    })
                 end
             elseif op == "reply" and rest then
                 -- # sms:reply:contact:текст  — ГГ отвечает на сообщение.

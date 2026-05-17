@@ -27,7 +27,7 @@ local function apply_single(cmd, ctx)
     elseif cmd.type == "set_quest" then
         if gs.set_quest then gs.set_quest(cmd.quest, cmd.status) end
     elseif cmd.type == "add_sms" then
-        if gs.add_sms then gs.add_sms(cmd.contact, cmd.text) end
+        if gs.add_sms then gs.add_sms(cmd.contact, cmd.text, cmd.hot) end
     elseif cmd.type == "reply_sms" then
         if gs.reply_sms then gs.reply_sms(cmd.contact, cmd.text) end
     elseif cmd.type == "mark_sms_read" then

@@ -71,6 +71,7 @@ local function normalize()
                     text      = tostring(entry.text or ""),
                     unread    = entry.unread == true,
                     direction = (entry.direction == "out") and "out" or "in",
+                    hot       = entry.hot == true,
                     time      = entry.time and tostring(entry.time) or default_time(seq),
                     seq       = seq,
                 })
@@ -133,14 +134,21 @@ function M.get_tag(contact_id)
     return t.tone, t.label
 end
 
-function M.add(contact_id, text)
+-- hot_or_opts: true → пометить сообщение как hot (визуальный red-tinted bubble +
+-- акцент при unread). Можно передать таблицу { hot = true, ... } для расширения
+-- в будущем. Сейчас используется только для in-сообщений (входящих).
+function M.add(contact_id, text, hot_or_opts)
     if not contact_id or contact_id == "" then return false end
     local seq = next_seq()
+    local hot = false
+    if hot_or_opts == true then hot = true
+    elseif type(hot_or_opts) == "table" and hot_or_opts.hot == true then hot = true end
     _sms[contact_id] = _sms[contact_id] or {}
     table.insert(_sms[contact_id], {
         text      = tostring(text or ""),
         unread    = true,
         direction = "in",
+        hot       = hot,
         time      = default_time(seq),
         seq       = seq,
     })
