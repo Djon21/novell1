@@ -19,6 +19,13 @@
     ~ park_entrance_seen = true
 }
 
+{iteration_number > 1:
+    # speaker:none
+    Человек с собакой проходит мимо. Та же собака, тот же поводок, тот же темп. В третий раз ровно тот же шаг.
+    ~ INSIGHT = INSIGHT + 1
+    ~ anomaly_noticed = true
+}
+
 {not park_where_message_sent:
     Можно написать {npc_name_dat} и уточнить, где вы разминулись.
 - else:
@@ -76,6 +83,16 @@
 # speaker:none
 Река движется медленно и уверенно. На таком фоне разговоры обычно становятся тише — не слабее, просто честнее.
 
+{iteration_number > 1:
+    # speaker:none
+    Течение в той же самой точке делает ту же самую дугу. Как будто это не вода, а кадр.
+
+    # speaker:mc
+    Реки так не повторяются.
+    ~ INSIGHT = INSIGHT + 1
+    ~ anomaly_noticed = true
+}
+
 {park_npc_greeted and not met_npc_sunday:
     {npc_name} смотрит на воду чуть дольше, чем на тебя. Не избегает — просто даёт вам обоим пару секунд без необходимости сразу быть смелыми.
 }
@@ -91,6 +108,13 @@
     Тень от деревьев ложится на дорожку пятнами. Здесь прохладнее, чем у воды, и меньше случайных взглядов. Если идти рядом, разговор может начаться сам.
     # set_flag:park_path_seen=true
     ~ park_path_seen = true
+}
+
+{iteration_number > 1:
+    # speaker:none
+    Пятна тени ложатся ровно туда же, куда легли в прошлый раз. Даже самое крайнее пятно у бортика — на том же шве плитки.
+    ~ INSIGHT = INSIGHT + 1
+    ~ anomaly_noticed = true
 }
 
 Рядом с {npc_name_ins} эта дорожка перестаёт быть маршрутом и становится способом не торопить разговор.
@@ -110,10 +134,19 @@
 
 === park_bin_prompt ===
 # speaker:none
-Урна стоит у края дорожки — как будто специально для маленьких решений, которые никто не заметит, кроме тебя.
+{iteration_number > 1:
+    Урна стоит у края дорожки. Ты её уже выбирал. В неё уже летел такой же стаканчик с тем же глухим звуком.
 
-# speaker:mc
-Урна рядом. Осталось не просто держать стаканчик в руке, а действительно выбросить его.
+    # speaker:mc
+    Тогда давай. Снова.
+    ~ INSIGHT = INSIGHT + 1
+    ~ anomaly_noticed = true
+- else:
+    Урна стоит у края дорожки — как будто специально для маленьких решений, которые никто не заметит, кроме тебя.
+
+    # speaker:mc
+    Урна рядом. Осталось не просто держать стаканчик в руке, а действительно выбросить его.
+}
 
 # hud:hint:bag
 # return_to_scene
@@ -121,10 +154,19 @@
 
 === take_park_trash_cup ===
 # speaker:none
-Чужой пустой стаканчик стоит на краю лавочки. Ничего драматичного: просто след чужого дня, который мешает начать свой.
+{iteration_number > 1:
+    Чужой пустой стаканчик стоит на краю лавочки. Тот же самый. С теми же отпечатками пальцев — твоими.
 
-# speaker:mc
-Ладно. Унесу к урне.
+    # speaker:mc
+    След того же дня. Я уже его уносил.
+    ~ INSIGHT = INSIGHT + 1
+    ~ anomaly_noticed = true
+- else:
+    Чужой пустой стаканчик стоит на краю лавочки. Ничего драматичного: просто след чужого дня, который мешает начать свой.
+
+    # speaker:mc
+    Ладно. Унесу к урне.
+}
 
 # add_item:park_trash_cup
 # set_flag:park_trash_cup_taken=true
@@ -164,7 +206,7 @@
 // ================================================================
 
 === sunday_date_park_arrival ===
-# bg:bg_park_riverside_entrance_morning # speaker:none
+# speaker:none
 Парк у реки встречает светом и воздухом. Здесь уже день: солнце выше крыш, вода блестит между деревьями, дорожки живут своим спокойным движением.
 
 {npc_name_gen} нигде не видно. Не у лавочки, не у перил, не на дорожке к воде.
@@ -203,14 +245,16 @@
 # set_flag:park_where_message_sent=true
 ~ park_where_message_sent = true
 # hud:hint:phone:off
-# scene_char:show:park:mila_idle
-// Появляется на фоне как часть «Уже иду к тебе» — игрок видит её
-// фигуру у воды и теперь может «Поздороваться» через хотспот.
+// scene_char: только для male MC, NPC = Mila. Для female MC (NPC = Артём)
+// спрайт artem_park.png пока не нарисован — не показываем, иначе на фоне
+// появилась бы Mila при играющем за Милу.
+{mc_gender == "male":
+    # scene_char:show:park:mila_idle
+}
 # return_to_scene
 -> DONE
 
 === park_npc_arrives ===
-# bg:bg_park_riverside_entrance_morning # speaker:none
 {npc_name} появляется со стороны дорожки к воде. Сначала ты замечаешь движение между людьми, потом знакомую улыбку — осторожную, будто её тоже надо подвести поближе.
 
 # speaker:npc
@@ -229,11 +273,15 @@
 # speaker:none
 Вы стоите у входа рядом, но всё ещё на проходе. Теперь надо найти место для разговора: сесть у воды или уйти в тень аллеи.
 
+# speaker:mc
+Сначала пройдёмся: посмотрю и лавочку у воды, и аллею. Потом уже решим, где сесть.
+
 # set_flag:park_npc_greeted=true
 ~ park_npc_greeted = true
-# scene_char:show:park:mila_idle
-// TODO: когда появится спрайт artem_park.png — добавить условный
-//   show artem для случая mc_gender=="female"
+// scene_char: см. комментарий в park_message_where_are_you. TODO: artem_park.png.
+{mc_gender == "male":
+    # scene_char:show:park:mila_idle
+}
 # return_to_scene
 -> DONE
 
@@ -276,7 +324,7 @@
     -> DONE
 
 === park_bench_main_talk ===
-# bg:bg_park_riverside_bench_morning # speaker:none
+# speaker:none
 Вы садитесь на скамейку у воды. Не слишком близко, чтобы это требовало объяснений, но и не так далеко, чтобы можно было сделать вид, что между вами только случайная прогулка.
 
 # speaker:npc
@@ -358,7 +406,7 @@
     -> sunday_date_park_settle
 
 === park_path_main_talk ===
-# bg:bg_park_riverside_path_morning # speaker:none
+# speaker:none
 Вы идёте по аллее в тени деревьев. Дорожка сама задаёт темп: достаточно медленно, чтобы говорить, и достаточно легко, чтобы молчание не становилось проверкой.
 
 # speaker:npc
