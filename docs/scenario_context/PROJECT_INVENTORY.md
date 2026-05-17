@@ -4,7 +4,7 @@
 Запускать перед каждой сессией AI-сценариста чтобы документ отражал
 текущее состояние проекта.
 
-_Сгенерировано: 2026-05-17 12:23_
+_Сгенерировано: 2026-05-17 12:32_
 
 Это **источник правды для AI** о том что реально существует в проекте:
 scene_id, knot имена, hotspot id, флаги, предметы. Не ссылайся на
@@ -91,6 +91,22 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `bar_counter` | Стойка бара | knot: `bar_counter_interact` | — |
 | `leave_bar` | — | knot: `leave_bar` | — |
 
+### `cafe_backroom` (Кафе — задняя)
+ — source: `cafe.lua`, bg: `"bg_cafe_backroom_day"`
+
+| Hotspot id | Label | Action | Gated |
+|---|---|---|---|
+| `backroom_to_cafe` | В зал | scene: `cafe_hub` | — |
+| `leave_cafe_backroom` | — | knot: `leave_cafe` | — |
+
+### `cafe_corner` (Кафе — уголок)
+ — source: `cafe.lua`, bg: `"bg_cafe_corner_day"`
+
+| Hotspot id | Label | Action | Gated |
+|---|---|---|---|
+| `corner_to_cafe` | В зал | scene: `cafe_hub` | — |
+| `leave_cafe_corner` | — | knot: `leave_cafe` | — |
+
 ### `cafe_hub` (Кафе)
  — source: `cafe.lua`, bg: `"bg_cafe_morning"`, on_enter: `sunday_date_cafe_arrival`
 
@@ -98,6 +114,8 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 |---|---|---|---|
 | `cafe_window_table` | Столик у окна | knot: `cafe_window_table` | 👁 |
 | `cafe_bar` | Стойка | knot: `cafe_bar_interact` | — |
+| `cafe_to_corner` | В уголок | scene: `cafe_corner` | — |
+| `cafe_to_backroom` | Задняя | scene: `cafe_backroom` | — |
 | `leave_cafe` | — | knot: `leave_cafe` | — |
 
 ### `monday_apartment_bedroom_morning` (Спальня)
@@ -690,6 +708,8 @@ Source: `main/images/backgrounds/*.atlas`.
 - `bg_apartment_kitchen_night`
 - `bg_archive_day`
 - `bg_bar_maybe_night`
+- `bg_cafe_backroom_day`
+- `bg_cafe_corner_day`
 - `bg_cafe_morning`
 - `bg_observation_corner_day`
 - `bg_observation_railing_day`

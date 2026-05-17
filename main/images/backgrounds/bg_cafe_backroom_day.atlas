@@ -1,0 +1,5 @@
+images {
+  image: "/main/images/bg_image/bg_cafe_backroom_day.png"
+}
+extrude_borders: 2
+rename_patterns: "bg_cafe_backroom_day=scene_bg"
