@@ -301,6 +301,12 @@
 # return_to_scene
 -> DONE
 
+// TODO iter 2+: повторный клик на раковину/щётку ПОСЛЕ `washed_up`.
+// Сейчас все ванные хотспоты скрыты через visible_when после умывания,
+// так что knot недостижим. Когда iter 2+ откроет цикл «вернуться в петлю
+// и снова попробовать утренний ритуал», нужно добавить либо хотспот
+// `bathroom_sink_again` (visible_when = washed_up), либо routing через
+// существующий bathroom_sink_prompt с веткой по washed_up.
 === bathroom_not_now ===
 # speaker:mc
 Умылся. Второй раз бодрее не станет.
