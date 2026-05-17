@@ -26,7 +26,8 @@ go.property("bg_park_riverside_path_morning_atlas", resource.atlas("/main/images
 go.property("bg_shop_front_day_atlas", resource.atlas("/main/images/backgrounds/bg_shop_front_day.atlas"))
 go.property("bg_shop_household_day_atlas", resource.atlas("/main/images/backgrounds/bg_shop_household_day.atlas"))
 go.property("bg_shop_street_day_atlas", resource.atlas("/main/images/backgrounds/bg_shop_street_day.atlas"))
-go.property("bg_observation_day_atlas", resource.atlas("/main/images/backgrounds/bg_observation_day.atlas"))
+go.property("bg_observation_railing_day_atlas", resource.atlas("/main/images/backgrounds/bg_observation_railing_day.atlas"))
+go.property("bg_observation_corner_day_atlas", resource.atlas("/main/images/backgrounds/bg_observation_corner_day.atlas"))
 go.property("bg_office_lobby_day_atlas", resource.atlas("/main/images/backgrounds/bg_office_lobby_day.atlas"))
 go.property("bg_office_lobby_night_atlas", resource.atlas("/main/images/backgrounds/bg_office_lobby_night.atlas"))
 go.property("bg_office_workspace_day_atlas", resource.atlas("/main/images/backgrounds/bg_office_workspace_day.atlas"))
@@ -98,7 +99,8 @@ local DEDICATED_BG_ATLAS_PROPS = {
     bg_shop_front_day = "bg_shop_front_day_atlas",
 	bg_shop_household_day = "bg_shop_household_day_atlas",
 	bg_shop_street_day = "bg_shop_street_day_atlas",
-    bg_observation_day = "bg_observation_day_atlas",
+    bg_observation_railing_day = "bg_observation_railing_day_atlas",
+    bg_observation_corner_day = "bg_observation_corner_day_atlas",
 	bg_office_lobby_day = "bg_office_lobby_day_atlas",
 	bg_office_lobby_night = "bg_office_lobby_night_atlas",
 	bg_office_workspace_day = "bg_office_workspace_day_atlas",

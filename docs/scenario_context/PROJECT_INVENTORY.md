@@ -4,7 +4,7 @@
 Запускать перед каждой сессией AI-сценариста чтобы документ отражал
 текущее состояние проекта.
 
-_Сгенерировано: 2026-05-17 12:14_
+_Сгенерировано: 2026-05-17 12:23_
 
 Это **источник правды для AI** о том что реально существует в проекте:
 scene_id, knot имена, hotspot id, флаги, предметы. Не ссылайся на
@@ -263,12 +263,21 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `tue_kitchen_window` | Окно | knot: `tue_home_kitchen_window` | — |
 | `tue_back_to_hall_from_kitchen` | В коридор | scene: `tuesday_apartment_hall_morning` | — |
 
+### `view_corner` (Смотровая — угол)
+ — source: `viewpoint.lua`, bg: `"bg_observation_corner_day"`
+
+| Hotspot id | Label | Action | Gated |
+|---|---|---|---|
+| `corner_to_view` | К перилам | scene: `view_hub` | — |
+| `leave_view_corner` | Уйти | knot: `leave_viewpoint` | — |
+
 ### `view_hub` (Смотровая)
- — source: `viewpoint.lua`, bg: `"bg_observation_day"`, on_enter: `sunday_viewpoint_arrival`
+ — source: `viewpoint.lua`, bg: `"bg_observation_railing_day"`, on_enter: `sunday_viewpoint_arrival`
 
 | Hotspot id | Label | Action | Gated |
 |---|---|---|---|
 | `view_railing` | Поручни | knot: `view_railing_interact` | — |
+| `view_to_corner` | В угол | scene: `view_corner` | — |
 | `leave_view` | Уйти | knot: `leave_viewpoint` | — |
 
 ### `work_hub` (Офис — лобби)
@@ -682,7 +691,8 @@ Source: `main/images/backgrounds/*.atlas`.
 - `bg_archive_day`
 - `bg_bar_maybe_night`
 - `bg_cafe_morning`
-- `bg_observation_day`
+- `bg_observation_corner_day`
+- `bg_observation_railing_day`
 - `bg_office_lobby_day`
 - `bg_office_lobby_night`
 - `bg_office_meeting_room_day`

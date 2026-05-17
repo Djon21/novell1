@@ -1,0 +1,5 @@
+images {
+  image: "/main/images/bg_image/bg_observation_railing_day.jpg"
+}
+extrude_borders: 2
+rename_patterns: "bg_observation_railing_day=scene_bg"
