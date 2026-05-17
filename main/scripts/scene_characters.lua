@@ -46,6 +46,9 @@ local SCENE_GROUPS = {
 -- w, h — размер sprite'а в game coords.
 local SCENES = {
     park = {
+        -- Mila на входе (park_hub bg). Legacy: использовалось до перехода
+        -- на «NPC ждёт у скамейки / в аллее». Сейчас почти не показывается
+        -- — оставлена на случай отката или ручного debug-показа.
         mila_idle = {
             atlas  = "char_mila",
             sprite = "idle",
@@ -56,7 +59,29 @@ local SCENES = {
             action = { type = "ink_knot", knot = "park_npc_arrives" },
             -- Условие кликабельности: после приветствия Mila остаётся видна,
             -- но клик уже не запускает greeting-диалог повторно.
-            -- (visible_when для авто-скрытия по флагу — TODO когда понадобится.)
+            clickable_when = function(gs)
+                return not gs.get_flag("park_npc_greeted")
+            end,
+        },
+        -- Mila ждёт у скамейки (park_riverside_bench bg).
+        -- Coords скопированы с mila_idle — нужно подстроить через F1
+        -- под фон bg_park_riverside_bench_morning (Mila должна стоять у воды
+        -- или у лавочки, а не на дорожке-entrance).
+        mila_idle_bench = {
+            atlas  = "char_mila",
+            sprite = "idle",
+            x = 820, y = 340, w = 95, h = 340,  -- TODO F1-tune для bench bg
+            action = { type = "ink_knot", knot = "park_npc_arrives" },
+            clickable_when = function(gs)
+                return not gs.get_flag("park_npc_greeted")
+            end,
+        },
+        -- Mila ждёт в аллее (park_riverside_path bg).
+        mila_idle_path = {
+            atlas  = "char_mila",
+            sprite = "idle",
+            x = 820, y = 340, w = 95, h = 340,  -- TODO F1-tune для path bg
+            action = { type = "ink_knot", knot = "park_npc_arrives" },
             clickable_when = function(gs)
                 return not gs.get_flag("park_npc_greeted")
             end,

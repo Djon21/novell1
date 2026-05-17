@@ -6,11 +6,21 @@ local s = require "main.data.scenes._shared"
 -- =====================================================================
 -- ПАРК У РЕКИ — воскресная встреча, мини-хаб из 3 фонов
 -- =====================================================================
--- park_hub остаётся entrypoint с карты.
--- Внутри парка:
---   park_hub                 — вход / первая точка, Messenger "Ты где?"
---   park_riverside_bench     — скамейка у воды
---   park_riverside_path      — прогулочная аллея
+-- park_hub                 — вход / первая точка, Messenger "Ты где?"
+-- park_riverside_bench     — скамейка у воды; NPC может ждать ЗДЕСЬ
+-- park_riverside_path      — прогулочная аллея; NPC может ждать ЗДЕСЬ
+--
+-- NPC-flow (после рефакторинга item 7):
+--   1) В park_hub игрок жмёт «Написать» -> park_message_where_are_you.
+--      Knot выбирает локацию NPC: park_npc_at_bench ИЛИ park_npc_at_path
+--      (детерминированно по iteration_number; iter 1 = bench).
+--   2) NPC НЕ показывается в park_hub. Игрок видит расширенные nav-
+--      хотспоты park_to_bench / park_to_path (gate теперь принимает
+--      park_where_message_sent ИЛИ park_npc_greeted).
+--   3) При входе в sub-сцену с NPC, on_enter ink-knot показывает
+--      scene_char (mila_idle_bench / mila_idle_path) + появляется
+--      greeting hotspot.
+--   4) Click greeting -> park_npc_arrives (общий knot для любой локации).
 
 -- visible_when-выражения часто повторяются — выносим в helpers.
 local function not_chosen_or_met(gs)
@@ -21,6 +31,14 @@ local function can_offer_place(gs)
     return gs.get_flag("park_npc_greeted")
        and gs.get_flag("park_bench_cleared")
        and gs.get_flag("park_path_seen")
+       and not gs.get_flag("park_place_chosen")
+       and not gs.get_flag("met_npc_sunday")
+end
+
+-- Расширенный gate для nav-хотспотов из hub: после message_sent или после
+-- greeting (legacy путь). Используется park_to_bench / park_to_path.
+local function nav_to_subscene_visible(gs)
+    return (gs.get_flag("park_where_message_sent") or gs.get_flag("park_npc_greeted"))
        and not gs.get_flag("park_place_chosen")
        and not gs.get_flag("met_npc_sunday")
 end
@@ -70,17 +88,8 @@ return {
                        and not gs.get_flag("met_npc_sunday")
                 end,
             },
-            s.story{
-                id = "park_npc_greeting",
-                rect = { x = 490, y = 85, w = 130, h = 130 },
-                label = "Поздороваться",
-                knot = "park_npc_arrives",
-                visible_when = function(gs)
-                    return gs.get_flag("park_where_message_sent")
-                       and not gs.get_flag("park_npc_greeted")
-                       and not gs.get_flag("met_npc_sunday")
-                end,
-            },
+            -- park_npc_greeting в hub УБРАН. NPC после message_sent ждёт
+            -- в sub-сцене (bench или path), greeting хотспот там же.
             s.story{
                 id = "park_offer_place",
                 rect = { x = 805, y = 85, w = 120, h = 120 },
@@ -94,11 +103,7 @@ return {
                 label = "К скамейке",
                 icon = "up",
                 scene = "park_riverside_bench",
-                visible_when = function(gs)
-                    return gs.get_flag("park_npc_greeted")
-                       and not gs.get_flag("park_place_chosen")
-                       and not gs.get_flag("met_npc_sunday")
-                end,
+                visible_when = nav_to_subscene_visible,
             },
             s.nav_scene{
                 id = "park_to_path",
@@ -106,11 +111,7 @@ return {
                 label = "По аллее",
                 icon = "up",
                 scene = "park_riverside_path",
-                visible_when = function(gs)
-                    return gs.get_flag("park_npc_greeted")
-                       and not gs.get_flag("park_place_chosen")
-                       and not gs.get_flag("met_npc_sunday")
-                end,
+                visible_when = nav_to_subscene_visible,
             },
             s.leave{
                 id = "leave_park",
@@ -125,6 +126,15 @@ return {
     park_riverside_bench = {
         bg = "bg_park_riverside_bench_morning",
         label = "Парк у реки — скамейка",
+        -- NPC ждёт здесь, если park_message_where_are_you выбрал bench.
+        -- on_enter показывает scene_char один раз (до greeting).
+        on_enter = {
+            knot = "park_bench_npc_show",
+            condition = function(gs)
+                return gs.get_flag("park_npc_at_bench")
+                   and not gs.get_flag("park_npc_greeted")
+            end,
+        },
         hotspots = {
             s.inspect{
                 id = "park_bench",
@@ -142,6 +152,19 @@ return {
                        and gs.get_flag("park_bench_trash_seen")
                        and not gs.has_item("park_trash_cup")
                        and not gs.get_flag("park_bench_cleared")
+                end,
+            },
+            -- Greeting hotspot для bench (NPC ждёт здесь).
+            -- Альтернатива клику по scene_char (он тоже триггерит park_npc_arrives).
+            s.story{
+                id = "park_npc_greeting_bench",
+                rect = { x = 700, y = 140, w = 130, h = 280 },
+                label = "Поздороваться",
+                knot = "park_npc_arrives",
+                visible_when = function(gs)
+                    return gs.get_flag("park_npc_at_bench")
+                       and not gs.get_flag("park_npc_greeted")
+                       and not gs.get_flag("met_npc_sunday")
                 end,
             },
             s.inspect{
@@ -179,6 +202,14 @@ return {
     park_riverside_path = {
         bg = "bg_park_riverside_path_morning",
         label = "Парк у реки — аллея",
+        -- NPC ждёт здесь, если park_message_where_are_you выбрал path.
+        on_enter = {
+            knot = "park_path_npc_show",
+            condition = function(gs)
+                return gs.get_flag("park_npc_at_path")
+                   and not gs.get_flag("park_npc_greeted")
+            end,
+        },
         hotspots = {
             s.use{
                 id = "park_path_walk",
@@ -195,6 +226,18 @@ return {
                 label = "Тень деревьев",
                 knot = "park_path_trees",
                 visible_when = not_chosen_or_met,
+            },
+            -- Greeting hotspot для path (NPC ждёт здесь).
+            s.story{
+                id = "park_npc_greeting_path",
+                rect = { x = 720, y = 140, w = 130, h = 320 },
+                label = "Поздороваться",
+                knot = "park_npc_arrives",
+                visible_when = function(gs)
+                    return gs.get_flag("park_npc_at_path")
+                       and not gs.get_flag("park_npc_greeted")
+                       and not gs.get_flag("met_npc_sunday")
+                end,
             },
             s.story{
                 id = "park_offer_place_path",

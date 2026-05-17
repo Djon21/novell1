@@ -230,26 +230,67 @@
 # speaker:mc
 «Ты где?»
 
-{mc_gender == "female":
-# msg:reply:artem:Ты где?
-# msg:add:artem:У воды, ближе к лавочкам. Уже иду к тебе.
+// NPC может ждать у скамейки ИЛИ в аллее. Выбор детерминированный по
+// iteration_number: нечётные (включая 1) → скамейка, чётные → аллея.
+// Эффект: iter 1 = "у воды" (классический сценарий онбординга),
+// iter 2 = "в аллее" (тонкая аномалия повторения).
+// Спрайт NPC появляется НЕ здесь, а в on_enter соответствующей sub-сцены
+// (park_bench_npc_show / park_path_npc_show).
+{iteration_number % 2 == 0:
+    // EVEN iter (iter 2, 4, ...) — at path
+    {mc_gender == "female":
+    # msg:reply:artem:Ты где?
+    # msg:add:artem:В аллее, в тени. Подходи — я тут.
+    - else:
+    # msg:reply:mila:Ты где?
+    # msg:add:mila:В аллее, в тени. Подходи — я тут.
+    }
+    # set_flag:park_npc_at_path=true
 - else:
-# msg:reply:mila:Ты где?
-# msg:add:mila:У воды, ближе к лавочкам. Уже иду к тебе.
+    // ODD iter (iter 1, 3, ...) — at bench
+    {mc_gender == "female":
+    # msg:reply:artem:Ты где?
+    # msg:add:artem:У воды, ближе к лавочкам. Уже там, жду.
+    - else:
+    # msg:reply:mila:Ты где?
+    # msg:add:mila:У воды, ближе к лавочкам. Уже там, жду.
+    }
+    # set_flag:park_npc_at_bench=true
 }
 # sfx:phone_notify
 
 # speaker:none
-Ответ приходит почти сразу. Не тревожно — просто теперь ожидание стало конкретным.
+Ответ приходит почти сразу. Не тревожно — просто теперь ожидание стало конкретным: нужно подойти.
 
 # set_flag:park_where_message_sent=true
 ~ park_where_message_sent = true
 # hud:hint:phone:off
-// scene_char: только для male MC, NPC = Mila. Для female MC (NPC = Артём)
-// спрайт artem_park.png пока не нарисован — не показываем, иначе на фоне
-// появилась бы Mila при играющем за Милу.
+# return_to_scene
+-> DONE
+
+// On_enter knot для park_riverside_bench когда NPC ждёт у скамейки.
+// Гейтится в park.lua: park_npc_at_bench AND NOT park_npc_greeted.
+=== park_bench_npc_show ===
+# speaker:none
 {mc_gender == "male":
-    # scene_char:show:park:mila_idle
+    {npc_name} стоит у лавочки, спиной к воде. Замечает тебя сразу, поднимает руку.
+    # scene_char:show:park:mila_idle_bench
+- else:
+    {npc_name} стоит у лавочки, спиной к воде. Замечает тебя сразу, поднимает руку.
+    // TODO: artem_park.png — добавить # scene_char:show:park:artem_idle_bench
+}
+# return_to_scene
+-> DONE
+
+// On_enter knot для park_riverside_path когда NPC ждёт в аллее.
+=== park_path_npc_show ===
+# speaker:none
+{mc_gender == "male":
+    {npc_name} в нескольких шагах впереди, у дерева. Поворачивается на твои шаги.
+    # scene_char:show:park:mila_idle_path
+- else:
+    {npc_name} в нескольких шагах впереди, у дерева. Поворачивается на твои шаги.
+    // TODO: artem_park.png — добавить # scene_char:show:park:artem_idle_path
 }
 # return_to_scene
 -> DONE
@@ -278,10 +319,9 @@
 
 # set_flag:park_npc_greeted=true
 ~ park_npc_greeted = true
-// scene_char: см. комментарий в park_message_where_are_you. TODO: artem_park.png.
-{mc_gender == "male":
-    # scene_char:show:park:mila_idle
-}
+// scene_char уже показан в park_bench_npc_show / park_path_npc_show
+// (on_enter sub-сцены). Здесь не дублируем — show идемпотентен
+// и оставаться видимым после greeting NPC должен в той же sub-сцене.
 # return_to_scene
 -> DONE
 

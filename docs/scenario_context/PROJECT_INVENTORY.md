@@ -4,7 +4,7 @@
 Запускать перед каждой сессией AI-сценариста чтобы документ отражал
 текущее состояние проекта.
 
-_Сгенерировано: 2026-05-17 10:37_
+_Сгенерировано: 2026-05-17 11:45_
 
 Это **источник правды для AI** о том что реально существует в проекте:
 scene_id, knot имена, hotspot id, флаги, предметы. Не ссылайся на
@@ -161,31 +161,32 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `park_entrance_view` | Осмотреться | knot: `park_entrance_view` | 👁 |
 | `park_bin` | Урна | knot: `park_bin_prompt` | 👁 |
 | `park_message_where` | Написать | knot: `park_message_where_are_you` | 👁 |
-| `park_npc_greeting` | Поздороваться | knot: `park_npc_arrives` | 👁 |
 | `park_offer_place` | Предложить | knot: `park_offer_place` | 👁 |
 | `park_to_bench` | К скамейке | scene: `park_riverside_bench` | 👁 |
 | `park_to_path` | По аллее | scene: `park_riverside_path` | 👁 |
 | `leave_park` | Уйти | knot: `leave_park` | 👁 |
 
 ### `park_riverside_bench` (Парк у реки — скамейка)
- — source: `park.lua`, bg: `"bg_park_riverside_bench_morning"`
+ — source: `park.lua`, bg: `"bg_park_riverside_bench_morning"`, on_enter: `park_bench_npc_show`
 
 | Hotspot id | Label | Action | Gated |
 |---|---|---|---|
 | `park_bench` | Скамейка | knot: `park_bench_interact` | — |
 | `park_trash_cup` | Стаканчик | knot: `take_park_trash_cup` | 👁 |
+| `park_npc_greeting_bench` | Поздороваться | knot: `park_npc_arrives` | 👁 |
 | `park_river_view` | Река | knot: `park_river_view` | — |
 | `park_offer_place_bench` | Предложить | knot: `park_offer_place` | 👁 |
 | `bench_to_path` | Пройтись | scene: `park_riverside_path` | 👁 |
 | `bench_to_entrance` | К входу | scene: `park_hub` | 👁 |
 
 ### `park_riverside_path` (Парк у реки — аллея)
- — source: `park.lua`, bg: `"bg_park_riverside_path_morning"`
+ — source: `park.lua`, bg: `"bg_park_riverside_path_morning"`, on_enter: `park_path_npc_show`
 
 | Hotspot id | Label | Action | Gated |
 |---|---|---|---|
 | `park_path_walk` | Пройтись | knot: `park_path_walk` | 👁 |
 | `park_path_trees` | Тень деревьев | knot: `park_path_trees` | 👁 |
+| `park_npc_greeting_path` | Поздороваться | knot: `park_npc_arrives` | 👁 |
 | `park_offer_place_path` | Предложить | knot: `park_offer_place` | 👁 |
 | `path_to_bench` | К скамейке | scene: `park_riverside_bench` | 👁 |
 | `path_to_entrance` | К входу | scene: `park_hub` | 👁 |
@@ -290,7 +291,7 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 
 | Knot | Аннотация |
 |---|---|
-| `apartment_bedroom_intro` | Комната собирается из привычных деталей: смятая постель, тумбочка у кровати, рабочий стол у окна, дверь в ванную справа. |
+| `apartment_bedroom_intro` | Кто пишет в воскресенье с утра? |
 | `apartment_start` | Воскресное утро. |
 | `bathroom_exit_locked` | Нет. Я уже в ванной, щётка и паста передо мной. |
 | `bathroom_not_now` | Умылся. Второй раз бодрее не станет. |
@@ -502,18 +503,20 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `leave_park` | Ты выходишь с набережной. Телефон уже в руке — можно выбрать, куда идти дальше. |
 | `park_bench_interact` | Скамейка у воды теперь запомнилась не видом, а паузой, в которой вы оба не стали ничего портить лишними словами. |
 | `park_bench_main_talk` | Вы садитесь на скамейку у воды. Не слишком близко, чтобы это требовало объяснений, но и не так далеко, чтобы можно было  |
-| `park_bin_prompt` | Урна стоит у края дорожки — как будто специально для маленьких решений, которые никто не заметит, кроме тебя. |
+| `park_bench_npc_show` | - else: |
+| `park_bin_prompt` | Урна стоит у края дорожки. Ты её уже выбирал. В неё уже летел такой же стаканчик с тем же глухим звуком. |
 | `park_entrance_view` | Вход в парк уже понятен: дорожка, вода дальше справа, зелень, тёплый камень под солнцем. |
 | `park_message_where_are_you` | Ты открываешь Messenger. Палец зависает над полем ввода чуть дольше, чем нужно для простого вопроса. |
 | `park_npc_arrives` | Нашёл. То есть нашёл тебя, а не смысл жизни. Хотя день уже странно удачный. |
 | `park_offer_place` | Теперь место уже не абстрактный выбор на карте, а конкретная развилка: сесть у воды или уйти в тень аллеи. Лавочка приве |
 | `park_path_main_talk` | Вы идёте по аллее в тени деревьев. Дорожка сама задаёт темп: достаточно медленно, чтобы говорить, и достаточно легко, чт |
+| `park_path_npc_show` | - else: |
 | `park_path_trees` | Аллея остаётся хорошим вариантом: идти проще, чем сидеть напротив и делать вид, что это просто прогулка. |
 | `park_path_walk` | Вы проходите дальше по аллее. Несколько минут можно не решать ничего: только идти, слушать шаги и редкие голоса где-то в |
 | `park_river_view` | Река движется медленно и уверенно. На таком фоне разговоры обычно становятся тише — не слабее, просто честнее. |
 | `sunday_date_park_arrival` | Парк у реки встречает светом и воздухом. Здесь уже день: солнце выше крыш, вода блестит между деревьями, дорожки живут с |
 | `sunday_date_park_settle` | Разговор начинается с простого: погода, дорога, смешная неловкость у входа, кто сколько кофе уже успел выпить. Но рядом  |
-| `take_park_trash_cup` | Чужой пустой стаканчик стоит на краю лавочки. Ничего драматичного: просто след чужого дня, который мешает начать свой. |
+| `take_park_trash_cup` | Чужой пустой стаканчик стоит на краю лавочки. Тот же самый. С теми же отпечатками пальцев — твоими. |
 
 ### `rooftop_tuesday.ink`
 
@@ -539,7 +542,6 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `leave_shop` | Ты отходишь от витрины магазина. Стекло ещё держит отражение улицы, но телефон уже в руке — до встречи можно выбрать мар |
 | `shop_cleaning_supplies_interact` | На крючках висят перчатки, щётки и совки. Внизу стоят швабры — слишком прямые, слишком терпеливые, будто они давно приня |
 | `shop_counter_interact` | Касса уже сделала своё: короткий писк терминала, тонкий чек, пакет, который почти ничего не весит. |
-| `shop_drinks_interact` | Холодильники гудят ровно, будто у них воскресенье никогда не сбивается. За стеклом — вода, сок, холодный чай и одинокая  |
 | `shop_household_goods_interact` | Бытовой отдел встречает вещами, о которых вспоминают не вовремя: пакеты, губки, лампочки, батарейки, рулоны бумаги, чист |
 | `shop_paper_goods_interact` | Полка с бумажными полотенцами и салфетками выглядит почти абсурдно спокойной: белые рулоны, мягкие упаковки, одинаковые  |
 | `shop_sign_interact` | Вывеска светится без настроения: 24/7, красная полоса, белые буквы, обещание быть открытой даже тогда, когда человеку лу |
@@ -589,6 +591,8 @@ Source: `main/scripts/scene_characters.lua`.
 
 **`park`**:
   - `mila_idle` — sprite=`idle`, atlas=`char_mila`, click→knot=`park_npc_arrives`
+  - `mila_idle_bench` — sprite=`idle`, atlas=`char_mila`, click→knot=`park_npc_arrives`
+  - `mila_idle_path` — sprite=`idle`, atlas=`char_mila`, click→knot=`park_npc_arrives`
   - `mila_sitting` — sprite=`sitting`, atlas=`char_mila`
 
 ## Items
@@ -600,7 +604,7 @@ Source: `main/scripts/scene_characters.lua`.
 ## Flags
 
 Все имена флагов встречающиеся в `# set_flag:`, `get_flag(...)`,
-`set_flag(...)`. Всего: **109**.
+`set_flag(...)`. Всего: **111**.
 
 **`bathroom_*`**: `bathroom_morning_seen`
 
@@ -638,7 +642,7 @@ Source: `main/scripts/scene_characters.lua`.
 
 **`office_*`**: `office_auto_solution_blocked` `office_clarification_requested` `office_standard_solution_applied`
 
-**`park_*`**: `park_arrived` `park_bench_cleared` `park_bench_trash_seen` `park_entrance_seen` `park_npc_greeted` `park_path_seen` `park_place_chosen` `park_talk_place_bench` `park_talk_place_path` `park_trash_cup_taken` `park_water_given` `park_where_message_sent`
+**`park_*`**: `park_arrived` `park_bench_cleared` `park_bench_trash_seen` `park_entrance_seen` `park_npc_at_bench` `park_npc_at_path` `park_npc_greeted` `park_path_seen` `park_place_chosen` `park_talk_place_bench` `park_talk_place_path` `park_trash_cup_taken` `park_water_given` `park_where_message_sent`
 
 **`phone_*`**: `phone_active` `phone_history_seeded` `phone_taken`
 
