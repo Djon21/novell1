@@ -97,6 +97,11 @@ VAR kitchen_intro_seen = false
 VAR mug_taken = false
 VAR phone_taken = false
 VAR phone_history_seeded = false
+
+// One-shot гарды для tue_home_bedroom_desk и tue_home_kitchen_window —
+// чтобы +INSIGHT не фармился многократным кликом по описательному хотспоту.
+VAR tuesday_desk_checked = false
+VAR tuesday_kitchen_window_seen = false
 VAR first_anomaly_seen = false
 
 VAR used_fallback = false

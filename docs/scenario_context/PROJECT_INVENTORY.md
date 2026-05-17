@@ -4,7 +4,7 @@
 Запускать перед каждой сессией AI-сценариста чтобы документ отражал
 текущее состояние проекта.
 
-_Сгенерировано: 2026-05-17 12:03_
+_Сгенерировано: 2026-05-17 12:14_
 
 Это **источник правды для AI** о том что реально существует в проекте:
 scene_id, knot имена, hotspot id, флаги, предметы. Не ссылайся на
@@ -604,7 +604,7 @@ Source: `main/scripts/scene_characters.lua`.
 ## Flags
 
 Все имена флагов встречающиеся в `# set_flag:`, `get_flag(...)`,
-`set_flag(...)`. Всего: **111**.
+`set_flag(...)`. Всего: **112**.
 
 **`bathroom_*`**: `bathroom_morning_seen`
 
@@ -658,7 +658,7 @@ Source: `main/scripts/scene_characters.lua`.
 
 **`tue_*`**: `tue_home_bedroom_seen` `tue_home_hall_seen` `tue_home_kitchen_seen`
 
-**`tuesday_*`**: `tuesday_appeal_read` `tuesday_coffee_done` `tuesday_consequence_seen` `tuesday_desk_checked` `tuesday_investigation_done` `tuesday_left_home` `tuesday_log_reviewed` `tuesday_morning_started` `tuesday_npc_talked` `tuesday_pending` `tuesday_phone_checked` `tuesday_ready_to_leave` `tuesday_rooftop_reached` `tuesday_started` `tuesday_washed_up`
+**`tuesday_*`**: `tuesday_appeal_read` `tuesday_coffee_done` `tuesday_consequence_seen` `tuesday_desk_checked` `tuesday_investigation_done` `tuesday_kitchen_window_seen` `tuesday_left_home` `tuesday_log_reviewed` `tuesday_morning_started` `tuesday_npc_talked` `tuesday_pending` `tuesday_phone_checked` `tuesday_ready_to_leave` `tuesday_rooftop_reached` `tuesday_started` `tuesday_washed_up`
 
 **`washed_*`**: `washed_up`
 

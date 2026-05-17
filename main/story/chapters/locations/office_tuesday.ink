@@ -47,6 +47,14 @@
 
 -> tue_route_review_options
 
+// ============================================================
+// 3 пути расследования. Все ведут в tue_route_after_review.
+// Каждый ставит свой флаг:
+//   tuesday_log_reviewed / tuesday_npc_talked / tuesday_appeal_read
+// Сейчас флаги ORPHAN (никто не читает) — заготовка под iter 2+ finale:
+// «какой путь расследования игрок выбрал» можно использовать для variation
+// в tue_rooftop_loop_talk или для choice availability в rooftop_ending_true.
+// ============================================================
 === tue_route_review_options ===
 # speaker:none
 На экране открыты три вещи: лог решения, карточка апелляции и короткая цепочка комментариев.
