@@ -105,9 +105,11 @@ return {
                 label = "Выйти",
                 icon = "up",
                 knot = "tue_home_leave_apartment",
+                -- has_item("key") убран: key-pickup в локациях нет (item
+                -- был выпилен ранее). Если ключи вернутся — снова добавить
+                -- gs.has_item("key") сюда И в apartment_monday.lua.
                 condition = function(gs)
                     return gs.has_item("phone")
-                        and gs.has_item("key")
                         and gs.has_item("card")
                         and gs.get_flag("tuesday_phone_checked")
                         and gs.get_flag("tuesday_washed_up")
