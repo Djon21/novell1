@@ -32,6 +32,8 @@ local function apply_single(cmd, ctx)
         if gs.reply_sms then gs.reply_sms(cmd.contact, cmd.text) end
     elseif cmd.type == "mark_sms_read" then
         if gs.mark_sms_read then gs.mark_sms_read(cmd.contact) end
+    elseif cmd.type == "set_sms_tag" then
+        if gs.set_sms_tag then gs.set_sms_tag(cmd.contact, cmd.tone, cmd.label) end
     elseif cmd.type == "add_msg" then
         if gs.add_msg then gs.add_msg(cmd.chat, cmd.text) end
     elseif cmd.type == "reply_msg" then

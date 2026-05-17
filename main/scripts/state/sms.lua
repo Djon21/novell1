@@ -34,6 +34,10 @@ end
 -- Внутреннее состояние модуля.
 local _sms        = {}    -- { [contact_id] = { msg_entry, ... } }
 local _sms_unread = {}    -- { [contact_id] = N }
+-- Runtime-теги поверх статичного phone_contacts.lua. Из ink ставятся через
+-- `# sms:tag:CONTACT:TONE:LABEL`, очищаются через `# sms:tag:CONTACT:clear`.
+-- TONE ∈ { "hot", "amber", "danger", "warn" }. LABEL — короткая строка.
+local _sms_tags   = {}    -- { [contact_id] = { tone = "hot", label = "сигнал" } }
 local next_seq, _get_seq, _absorb_seq = H.make_seq()
 local default_time = H.make_default_time(7 * 60 + 12)  -- база 07:12
 
@@ -95,7 +99,38 @@ end
 function M.reset()
     _sms = {}
     _sms_unread = {}
+    _sms_tags = {}
     next_seq, _get_seq, _absorb_seq = H.make_seq()
+end
+
+-- ---------------------------------------------------------------------------
+-- Runtime tags (pin-теги в списке SMS)
+-- ---------------------------------------------------------------------------
+function M.set_tag(contact_id, tone, label)
+    if not contact_id or contact_id == "" then return false end
+    local id = tostring(contact_id)
+    -- Очистка: tone="clear" / nil / "" / "none" → снять тег.
+    if not tone or tone == "" or tone == "clear" or tone == "none" then
+        if _sms_tags[id] then
+            _sms_tags[id] = nil
+            notify_cb()
+            return true
+        end
+        return false
+    end
+    _sms_tags[id] = {
+        tone  = tostring(tone),
+        label = label and tostring(label) or nil,
+    }
+    notify_cb()
+    return true
+end
+
+function M.get_tag(contact_id)
+    if not contact_id or contact_id == "" then return nil, nil end
+    local t = _sms_tags[tostring(contact_id)]
+    if not t then return nil, nil end
+    return t.tone, t.label
 end
 
 function M.add(contact_id, text)
@@ -204,6 +239,7 @@ function M.serialize()
     return {
         sms = H.clone_value(_sms),
         sms_unread = H.clone_value(_sms_unread),
+        sms_tags = H.clone_value(_sms_tags),
     }
 end
 
@@ -211,6 +247,7 @@ function M.deserialize(data)
     data = data or {}
     _sms = type(data.sms) == "table" and data.sms or {}
     _sms_unread = type(data.sms_unread) == "table" and data.sms_unread or {}
+    _sms_tags = type(data.sms_tags) == "table" and data.sms_tags or {}
     normalize()
 end
 

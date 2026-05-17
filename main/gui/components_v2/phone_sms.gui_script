@@ -556,10 +556,23 @@ local function msg_tag(m)
     if type(m) ~= "table" then return nil, nil end
     local id = msg_contact_id(m)
     local tone, label = nil, nil
-    if id and contacts().get_tag then
+
+    -- 1) Runtime override через ink-тег `# sms:tag:CONTACT:TONE:LABEL`.
+    --    Высший приоритет — самое свежее сюжетное состояние.
+    if id then
+        local state = gs()
+        if state and state.get_sms_tag then
+            local rtone, rlabel = state.get_sms_tag(id)
+            if rtone then tone, label = rtone, rlabel end
+        end
+    end
+
+    -- 2) Статичный fallback из phone_contacts.lua (если runtime override нет).
+    if not tone and id and contacts().get_tag then
         tone, label = contacts().get_tag(id)
     end
 
+    -- 3) Tag, явно положенный в данные сообщения (legacy).
     local lp = m.listPreview or m.preview
     local tag = m.tag or m.pin or m.badge
     if type(lp) == "table" then tag = tag or lp.tag or lp.pin or lp.badge end

@@ -41,11 +41,16 @@ Source of truth в коде: `main/scripts/dialogue_manager_ink.lua`, функц
 | `sms:add:CONTACT:TEXT` | `# sms:add:mila:Есть планы?` | Добавляет входящее SMS. |
 | `sms:reply:CONTACT:TEXT` | `# sms:reply:mila:Хорошо.` | Добавляет исходящее SMS от героя и ставит авто-флаг ответа. |
 | `sms:read:CONTACT` | `# sms:read:mila` | Помечает SMS-чат прочитанным. |
+| `sms:tag:CONTACT:TONE:LABEL` | `# sms:tag:unknown:hot:сигнал` | Ставит pin-тег на SMS-чат (цветной значок справа в списке). TONE ∈ `hot`, `amber`, `danger`, `warn`. LABEL — короткая подпись (выводится UPPERCASE, обрезается до ~8 символов). |
+| `sms:tag:CONTACT:TONE` | `# sms:tag:prod:amber` | Тег без подписи — только цветная плашка-точка. |
+| `sms:tag:CONTACT:clear` | `# sms:tag:unknown:clear` | Снять pin-тег с чата. |
 | `msg:add:CHAT:TEXT` | `# msg:add:mila:Привет` | Добавляет входящее сообщение в Messenger. |
 | `msg:reply:CHAT:TEXT` | `# msg:reply:mila:Ок` | Добавляет исходящее сообщение в Messenger и ставит авто-флаг ответа. |
 | `msg:read:CHAT` | `# msg:read:mila` | Помечает Messenger-чат прочитанным. |
 
 Если текст содержит двоеточие, лучше обернуть его в кавычки или проверить результат после сборки.
+
+**Pin-теги:** хранятся в runtime-стейте (sms_state), сериализуются в save, переживают перезагрузку. Чтобы убрать тег — `# sms:tag:CONTACT:clear`. Аватар в списке тоже подкрашивается под tone: `hot` → magenta, `amber`/`warn` → жёлтый, `danger` → красно-розовый.
 
 ## Телефонные приложения и данные
 

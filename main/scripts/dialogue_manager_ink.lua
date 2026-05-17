@@ -320,6 +320,31 @@ local function apply_tags(tags, trailing)
                 if contact ~= "" then
                     table.insert(pending_commands, { type = "mark_sms_read", contact = contact })
                 end
+            elseif op == "tag" and rest then
+                -- # sms:tag:CONTACT:TONE:LABEL  — поставить pin-тег на чат
+                -- # sms:tag:CONTACT:TONE       — тег без подписи (просто цвет)
+                -- # sms:tag:CONTACT:clear      — снять тег
+                -- TONE ∈ {hot, amber, danger, warn, clear, none}.
+                local contact, tone, label = rest:match("([^:]+)%s*:%s*([^:]+)%s*:%s*(.+)")
+                if not contact then
+                    contact, tone = rest:match("([^:]+)%s*:%s*(.+)")
+                    label = nil
+                end
+                if contact and tone then
+                    contact = contact:gsub("^%s+", ""):gsub("%s+$", "")
+                    tone    = tone:gsub("^%s+", ""):gsub("%s+$", "")
+                    if label then
+                        label = label:gsub('^%s*"(.*)"%s*$', "%1")
+                                     :gsub("^%s*'(.*)'%s*$", "%1")
+                                     :gsub("^%s+", ""):gsub("%s+$", "")
+                    end
+                    table.insert(pending_commands, {
+                        type    = "set_sms_tag",
+                        contact = contact,
+                        tone    = tone,
+                        label   = label,
+                    })
+                end
             end
         elseif key == "msg" and value and not suppress_effects then
             -- # msg:add:<chat>:<text> | # msg:reply:<chat>:<text> | # msg:read:<chat>

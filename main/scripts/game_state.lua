@@ -242,6 +242,8 @@ M.get_sms              = sms_state.get
 M.get_sms_contacts     = sms_state.get_contacts
 M.get_sms_unread_total = sms_state.get_unread_total
 M.get_sms_unread       = sms_state.get_unread
+M.set_sms_tag          = sms_state.set_tag
+M.get_sms_tag          = sms_state.get_tag
 
 -- ---------------------------------------------------------------------------
 -- Messenger — делегаты в state/messenger.lua
