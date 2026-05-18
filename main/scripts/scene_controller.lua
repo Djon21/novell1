@@ -113,6 +113,17 @@ local function render()
     end
 end
 
+-- enter(scene_id, opts)
+--   opts.skip_on_enter — не триггерить on_enter-knot (используется при restore).
+--   opts.preserve_stack — НЕ чистить scene_stack (только для return_to_last_scene).
+--
+-- ВАЖНО про scene_stack: стек существует ТОЛЬКО для return_to_last_scene
+-- из короткого ink-монолога (hotspot ink_knot, scene_character click, inv_knot).
+-- Любой explicit переход (map_travel, прямая enter из ink-тэга, choose) делает
+-- старый стек невалидным: игрок осознанно сменил сцену, возвращаться в
+-- предыдущую через ink-END уже не должно. Без этого стек растёт навечно
+-- (apt_hub → shop → park → ...), и потом случайный # return_to_scene
+-- закидывает игрока в орфанную сцену вроде shop_street вместо park.
 function M.enter(scene_id, opts)
     opts = opts or {}
     local data = scenes.get(scene_id)
@@ -121,6 +132,9 @@ function M.enter(scene_id, opts)
         return
     end
     log.info("scene", "enter scene:", scene_id)
+    if not opts.preserve_stack then
+        _scene_stack = {}
+    end
     _active     = true
     _scene_id   = scene_id
     _scene_data = data
@@ -170,7 +184,9 @@ end
 function M.return_to_last_scene()
     if #_scene_stack > 0 then
         local last_id = table.remove(_scene_stack)  -- pop со стека
-        M.enter(last_id)
+        -- preserve_stack=true: если в стеке остались вложенные return-точки
+        -- (например scene→ink→inv_knot→ink), они должны пережить этот enter.
+        M.enter(last_id, { preserve_stack = true })
     end
 end
 

@@ -7,10 +7,17 @@
 
 local s = require "main.data.scenes._shared"
 
+local function monday_ready_to_leave(gs)
+    return gs.has_item("card")
+       and gs.get_flag("monday_washed_up")
+       and gs.get_flag("monday_dressed")
+       and gs.get_flag("monday_breakfast_done")
+end
+
 return {
 
     monday_apartment_bedroom_morning = {
-        bg = "bg_apartment_bedroom_morning",
+        bg = "bg_apartment_bedroom_day",
         label = "Спальня",
         on_enter = {
             knot = "mon_home_bedroom_intro",
@@ -51,7 +58,7 @@ return {
     },
 
     monday_apartment_hall_morning = {
-        bg = "bg_apartment_hall_morning",
+        bg = "bg_apartment_hall_day",
         label = "Коридор",
         on_enter = {
             knot = "mon_home_hall_intro",
@@ -99,27 +106,34 @@ return {
                     return not gs.get_flag("monday_dressed")
                 end,
             },
+            s.story{
+                id = "mon_exit_apartment_locked",
+                rect = { x = 575, y = 215, w = 155, h = 345 },
+                label = "Выйти",
+                icon = "up",
+                knot = "mon_home_leave_apartment_locked",
+                visible_when = function(gs)
+                    return not monday_ready_to_leave(gs)
+                end,
+            },
             s.nav_ink{
                 id = "mon_exit_apartment",
                 rect = { x = 575, y = 215, w = 155, h = 345 },
                 label = "Выйти",
                 icon = "up",
                 knot = "mon_home_leave_apartment",
+                -- has_item("phone") не нужен: телефон после воскресного утра
+                -- постоянный предмет игрока и не должен быть условием выхода.
                 -- has_item("key") убран: key-pickup в локациях нет (item
                 -- был выпилен ранее). Если ключи вернутся как item — снова
                 -- добавить gs.has_item("key") сюда И в apartment_tuesday.lua.
-                condition = function(gs)
-                    return gs.has_item("phone")
-                        and gs.has_item("card")
-                        and gs.get_flag("monday_washed_up")
-                        and gs.get_flag("monday_dressed")
-                end,
+                visible_when = monday_ready_to_leave,
             },
         },
     },
 
     monday_apartment_kitchen_morning = {
-        bg = "bg_apartment_kitchen_morning",
+        bg = "bg_apartment_kitchen_day",
         label = "Кухня",
         on_enter = {
             knot = "mon_home_kitchen_intro",
@@ -136,6 +150,34 @@ return {
                 knot = "mon_home_kitchen_coffee",
                 visible_when = function(gs)
                     return not gs.get_flag("monday_coffee_done")
+                end,
+            },
+            s.inspect{
+                id = "mon_kitchen_coffee_after",
+                rect = { x = 280, y = 270, w = 135, h = 135 },
+                label = "Кружка",
+                icon = "coffee",
+                knot = "mon_home_kitchen_coffee_after",
+                visible_when = function(gs)
+                    return gs.get_flag("monday_coffee_done")
+                end,
+            },
+            s.use{
+                id = "mon_kitchen_breakfast",
+                rect = { x = 625, y = 205, w = 190, h = 135 },
+                label = "Завтрак",
+                knot = "mon_home_kitchen_breakfast",
+                visible_when = function(gs)
+                    return not gs.get_flag("monday_breakfast_done")
+                end,
+            },
+            s.inspect{
+                id = "mon_kitchen_breakfast_after",
+                rect = { x = 625, y = 205, w = 190, h = 135 },
+                label = "Стол",
+                knot = "mon_home_kitchen_breakfast_after",
+                visible_when = function(gs)
+                    return gs.get_flag("monday_breakfast_done")
                 end,
             },
             s.inspect{

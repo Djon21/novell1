@@ -138,7 +138,7 @@ local s = require "main.data.scenes._shared"
 
 return {
     <scene_id> = {
-        bg = "<bg_atlas_name>",     -- например "bg_park_riverside_bench_morning"
+        bg = "<bg_atlas_name>",     -- например "bg_park_riverside_bench_day"
         label = "<Подпись локации>",
         on_enter = {                 -- опционально — авто-knot при входе
             knot = "<intro_knot>",

@@ -31,11 +31,11 @@
 
 ```
 main/images/
-├── bg_apartment_bedroom_morning.jpg    ← исходные .jpg
+├── bg_apartment_bedroom_day.jpg    ← исходные .jpg
 ├── bg_kitchen.jpg
 ├── ...
 ├── backgrounds/                        ← по одному atlas на фон
-│   ├── bg_apartment_bedroom_morning.atlas
+│   ├── bg_apartment_bedroom_day.atlas
 │   ├── bg_kitchen.atlas
 │   └── ...
 ├── hotspots.atlas                      ← hotspot_circle, hotspot_ring, hotspot_dot
@@ -282,7 +282,7 @@ apartment_hub = {
     bg = function(gs)
         if gs.get_flag("is_night")   then return "bg_apartment_hall_night"   end
         if gs.get_flag("is_evening") then return "bg_apartment_hall_evening" end
-        return "bg_apartment_hall_morning"   -- default утро
+        return "bg_apartment_hall_day"   -- default утро
     end,
     label = "Коридор",
     hotspots = {
@@ -458,7 +458,7 @@ objects = {
 
 ```ink
 === apartment_hub ===
-# bg:bg_apartment_bedroom_morning # explore:apartment_hub # speaker:none
+# bg:bg_apartment_bedroom_day # explore:apartment_hub # speaker:none
 Коридор. Тихо.
 -> DONE
 ```

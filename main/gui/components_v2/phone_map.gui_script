@@ -68,13 +68,20 @@ local function show_blocked(self, info)
     if g then gui.set_enabled(g, true) end
 end
 
--- ─── POI pulse: разблокированные POI пульсируют alpha-каналом ─────────
--- PINGPONG между 1.0 и PULSE_ALPHA_LO за PULSE_DURATION (на цикл вниз).
--- Пульс идёт синхронно на трёх нодах: _circle, _center, _icon — чтобы
--- POI «дышал» целиком, а не только обводка крутилась как раньше.
+-- ─── POI pulse: разблокированные POI пульсируют alpha + scale ─────────
+-- PINGPONG между 1.0 и PULSE_ALPHA_LO (яркость) и между 1.0 и PULSE_SCALE_HI
+-- (размер) за PULSE_DURATION (на цикл вниз). Анимации синхронизированы:
+-- POI одновременно «дышит» яркостью И размером — глаз цепляется заметно
+-- сильнее чем только alpha-пульс.
+--
+-- Пульс идёт на трёх нодах: _circle, _center, _icon. Scale пульсирует
+-- ТОЛЬКО на _circle (родитель остальных, чтобы они увеличивались тоже без
+-- двойного scale), alpha — на всех трёх.
 local PULSE_DURATION = 0.9
 local PULSE_ALPHA_LO = 0.65
+local PULSE_SCALE_HI = 1.18
 local PULSE_SUFFIXES = { "_circle", "_center", "_icon" }
+local SCALE_TARGET_SUFFIX = "_circle"   -- родительская нода для scale-anim
 
 local function start_poi_pulse(poi_id)
     for _, suf in ipairs(PULSE_SUFFIXES) do
@@ -91,6 +98,18 @@ local function start_poi_pulse(poi_id)
                 PULSE_DURATION, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
         end
     end
+    -- Scale-pulse на _circle. Дети (_center, _icon) parent'ятся к _circle —
+    -- увеличиваются автоматически. Если parent'инга нет — увеличится только круг,
+    -- что тоже OK для читаемости.
+    local scale_node = get_node(poi_id .. SCALE_TARGET_SUFFIX)
+    if scale_node then
+        gui.cancel_animation(scale_node, gui.PROP_SCALE)
+        gui.set_scale(scale_node, vmath.vector3(1, 1, 1))
+        gui.animate(scale_node, gui.PROP_SCALE,
+            vmath.vector3(PULSE_SCALE_HI, PULSE_SCALE_HI, 1),
+            gui.EASING_INOUTSINE, PULSE_DURATION, 0, nil,
+            gui.PLAYBACK_LOOP_PINGPONG)
+    end
 end
 
 local function stop_poi_pulse(poi_id)
@@ -101,6 +120,11 @@ local function stop_poi_pulse(poi_id)
             local c = gui.get_color(node)
             gui.set_color(node, vmath.vector4(c.x, c.y, c.z, 1))
         end
+    end
+    local scale_node = get_node(poi_id .. SCALE_TARGET_SUFFIX)
+    if scale_node then
+        gui.cancel_animation(scale_node, gui.PROP_SCALE)
+        gui.set_scale(scale_node, vmath.vector3(1, 1, 1))
     end
 end
 

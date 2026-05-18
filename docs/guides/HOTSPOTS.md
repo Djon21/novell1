@@ -81,7 +81,7 @@ local s = require "main.data.scenes._shared"
 
 return {
     cafe_hub = {
-        bg = "bg_cafe_morning",
+        bg = "bg_cafe_day",
         label = "Кафе",
         hotspots = {
             s.use{

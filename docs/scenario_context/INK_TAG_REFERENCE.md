@@ -10,7 +10,7 @@ Source of truth в коде: `main/scripts/dialogue_manager_ink.lua`, функц
 
 | Тег | Пример | Что делает |
 |---|---|---|
-| `bg:NAME` | `# bg:bg_apartment_bedroom_morning` | Меняет фон диалога. `bg:none` или пустое значение убирает фон. |
+| `bg:NAME` | `# bg:bg_apartment_bedroom_day` | Меняет фон диалога. `bg:none` или пустое значение убирает фон. |
 | `color:R,G,B` | `# color:0.1,0.1,0.15` | Меняет цвет подложки, значения 0..1. |
 | `speaker:ID` | `# speaker:mc` | Меняет говорящего. `mc` и `npc` подставляют текущие имена, `none` очищает говорящего. |
 | `sfx:NAME` | `# sfx:phone_notify` | Одноразовый звук. |
@@ -132,7 +132,7 @@ Source of truth в коде: `main/scripts/dialogue_manager_ink.lua`, функц
 # splash:day:monday
 
 // Ink ставится на паузу пока splash не закрыт игроком (тап). Затем продолжается.
-# bg:bg_apartment_bedroom_morning
+# bg:bg_apartment_bedroom_day
 Будильник звенит ровно в семь. Понедельник начался.
 -> monday_morning_start
 ```

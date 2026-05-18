@@ -105,6 +105,23 @@ VAR park_bench_cleared = false
 VAR park_water_given = false
 VAR monday_started = false
 VAR monday_morning_started = false
+VAR monday_workday_checked = false
+VAR monday_coffee_done = false
+VAR monday_breakfast_done = false
+VAR monday_checked_in_office = false
+VAR monday_mail_read = false
+VAR monday_case_file_assembled = false
+VAR monday_case_file_submitted = false
+// commute-варианты понедельника (выставляются в mon_commute_entry,
+// читаются в office_monday для выбора окраски турникет-сцены).
+VAR monday_commute_auto = false
+VAR monday_commute_observed = false
+VAR monday_commute_steady = false
+VAR office_standard_solution_applied = false
+// результаты понедельничного кейса в офисе — определяют ветку текста
+// для вторничного «эхо рабочего чата» (tue_home_check_phone, 10_apartment).
+VAR office_clarification_requested = false
+VAR office_auto_solution_blocked = false
 
 VAR day_strategy = ""
 VAR office_strategy = ""

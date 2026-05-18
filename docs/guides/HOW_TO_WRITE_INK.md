@@ -111,7 +111,7 @@ Git Bash / Linux:
 
 | Тег | Пример | Что делает |
 |---|---|---|
-| `bg:NAME` | `# bg:bg_apartment_bedroom_morning` | Меняет фон. `NAME` должен быть зарегистрирован как dedicated atlas в `ui_manager_v2.script`. |
+| `bg:NAME` | `# bg:bg_apartment_bedroom_day` | Меняет фон. `NAME` должен быть зарегистрирован как dedicated atlas в `ui_manager_v2.script`. |
 | `bg:none` | `# bg:none` | Убирает фон. Использовать редко. |
 | `color:R,G,B` | `# color:0.1,0.1,0.15` | Тинт фона, значения 0…1. |
 | `speaker:ID` | `# speaker:mc`, `# speaker:npc`, `# speaker:none` | `mc`/`npc` подменяются на текущие имена. `none` — нарратор. |
@@ -372,7 +372,7 @@ Ink:
 
 ```ink
 === wake_after_choice ===
-# bg:bg_apartment_bedroom_morning # speaker:mc
+# bg:bg_apartment_bedroom_day # speaker:mc
 Утро начинается слишком ровно.
 # explore:apartment_bedroom
 -> DONE

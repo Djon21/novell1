@@ -24,11 +24,21 @@ return {
         bg = office_bg("lobby"),
         label = "Офис — лобби",
         hotspots = {
-            s.use{
+            s.item_target{
                 id = "office_turnstile",
                 rect = { x = 885, y = 255, w = 135, h = 135 },
                 label = "Турникет",
                 knot = "office_turnstile_prompt",
+                visible_when = function(gs)
+                    return not gs.get_flag("monday_checked_in_office")
+                end,
+            },
+            s.story{
+                id = "office_to_workspace_locked",
+                rect = { x = 785, y = 400, w = 190, h = 135 },
+                label = "К рабочему месту",
+                icon = "up",
+                knot = "office_to_workspace_locked",
                 visible_when = function(gs)
                     return not gs.get_flag("monday_checked_in_office")
                 end,
@@ -39,8 +49,29 @@ return {
                 label = "К рабочему месту",
                 icon = "up",
                 scene = "office_workspace",
-                condition = function(gs)
+                visible_when = function(gs)
                     return gs.get_flag("monday_checked_in_office")
+                end,
+            },
+            s.story{
+                id = "office_to_meeting_room_locked_turnstile",
+                rect = { x = 390, y = 325, w = 150, h = 220 },
+                label = "В переговорку",
+                icon = "up",
+                knot = "office_to_meeting_room_locked_turnstile",
+                visible_when = function(gs)
+                    return not gs.get_flag("monday_checked_in_office")
+                end,
+            },
+            s.story{
+                id = "office_to_meeting_room_locked_mail",
+                rect = { x = 390, y = 325, w = 150, h = 220 },
+                label = "В переговорку",
+                icon = "up",
+                knot = "office_to_meeting_room_locked_mail",
+                visible_when = function(gs)
+                    return gs.get_flag("monday_checked_in_office")
+                       and not gs.get_flag("monday_mail_read")
                 end,
             },
             s.nav_scene{
@@ -49,7 +80,7 @@ return {
                 label = "В переговорку",
                 icon = "up",
                 scene = "office_meeting_room",
-                condition = function(gs)
+                visible_when = function(gs)
                     return gs.get_flag("monday_checked_in_office")
                        and gs.get_flag("monday_mail_read")
                 end,
@@ -70,7 +101,7 @@ return {
             s.use{
                 id = "work_desk_mail",
                 rect = { x = 400, y = 170, w = 365, h = 330 },
-                label = "Рабочий стол",
+                label = "Почта",
                 knot = "work_desk_read_mail",
                 visible_when = function(gs)
                     return not gs.get_flag("monday_mail_read")
@@ -86,10 +117,10 @@ return {
                        and not gs.get_flag("monday_case_file_assembled")
                 end,
             },
-            s.use{
+            s.item_target{
                 id = "work_desk_submit",
                 rect = { x = 290, y = 205, w = 135, h = 135 },
-                label = "Рабочий стол",
+                label = "Передать кейс",
                 knot = "work_desk_case_file_prompt",
                 visible_when = function(gs)
                     return gs.get_flag("monday_case_file_assembled")
@@ -105,13 +136,23 @@ return {
                     return gs.get_flag("monday_case_file_submitted")
                 end,
             },
+            s.story{
+                id = "workspace_to_meeting_room_locked",
+                rect = { x = 635, y = 290, w = 95, h = 240 },
+                label = "В переговорку",
+                icon = "up",
+                knot = "workspace_to_meeting_room_locked",
+                visible_when = function(gs)
+                    return not gs.get_flag("monday_mail_read")
+                end,
+            },
             s.nav_scene{
                 id = "workspace_to_meeting_room",
                 rect = { x = 635, y = 290, w = 95, h = 240 },
                 label = "В переговорку",
                 icon = "up",
                 scene = "office_meeting_room",
-                condition = function(gs)
+                visible_when = function(gs)
                     return gs.get_flag("monday_mail_read")
                 end,
             },
@@ -132,7 +173,7 @@ return {
             s.pickup{
                 id = "meeting_room_table_folder",
                 rect = { x = 515, y = 175, w = 200, h = 150 },
-                label = "Стол",
+                label = "Папки",
                 knot = "meeting_room_take_folder",
                 visible_when = function(gs)
                     return not gs.get_flag("monday_folder_taken")
@@ -142,7 +183,7 @@ return {
             s.inspect{
                 id = "meeting_room_table_after",
                 rect = { x = 320, y = 135, w = 610, h = 315 },
-                label = "Стол",
+                label = "Пустой стол",
                 knot = "meeting_room_table_after",
                 visible_when = function(gs)
                     return gs.get_flag("monday_folder_taken")

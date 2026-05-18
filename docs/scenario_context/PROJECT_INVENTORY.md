@@ -4,7 +4,7 @@
 Запускать перед каждой сессией AI-сценариста чтобы документ отражал
 текущее состояние проекта.
 
-_Сгенерировано: 2026-05-18 11:24_
+_Сгенерировано: 2026-05-18 21:16_
 
 Это **источник правды для AI** о том что реально существует в проекте:
 scene_id, knot имена, hotspot id, флаги, предметы. Не ссылайся на
@@ -114,7 +114,7 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `corner_to_cafe` | В зал | scene: `cafe_hub` | — |
 
 ### `cafe_hub` (Кафе)
- — source: `cafe.lua`, bg: `"bg_cafe_morning"`, on_enter: `sunday_date_cafe_arrival`
+ — source: `cafe.lua`, bg: `"bg_cafe_day"`, on_enter: `sunday_date_cafe_arrival`
 
 | Hotspot id | Label | Action | Gated |
 |---|---|---|---|
@@ -126,7 +126,7 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `leave_cafe` | Уйти | knot: `leave_cafe` | — |
 
 ### `monday_apartment_bedroom_morning` (Спальня)
- — source: `apartment_monday.lua`, bg: `"bg_apartment_bedroom_morning"`, on_enter: `mon_home_bedroom_intro`
+ — source: `apartment_monday.lua`, bg: `"bg_apartment_bedroom_day"`, on_enter: `mon_home_bedroom_intro`
 
 | Hotspot id | Label | Action | Gated |
 |---|---|---|---|
@@ -136,7 +136,7 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `mon_to_hall_from_bedroom` | В коридор | scene: `monday_apartment_hall_morning` | — |
 
 ### `monday_apartment_hall_morning` (Коридор)
- — source: `apartment_monday.lua`, bg: `"bg_apartment_hall_morning"`, on_enter: `mon_home_hall_intro`
+ — source: `apartment_monday.lua`, bg: `"bg_apartment_hall_day"`, on_enter: `mon_home_hall_intro`
 
 | Hotspot id | Label | Action | Gated |
 |---|---|---|---|
@@ -145,14 +145,18 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `mon_hall_mirror` | Зеркало | knot: `mon_home_hall_mirror` | — |
 | `mon_work_card` | Пропуск | knot: `mon_home_take_work_card` | 👁 |
 | `mon_get_dressed` | Обувь и куртка | knot: `mon_home_get_dressed` | 👁 |
-| `mon_exit_apartment` | Выйти | knot: `mon_home_leave_apartment` | 🔒 |
+| `mon_exit_apartment_locked` | Выйти | knot: `mon_home_leave_apartment_locked` | 👁 |
+| `mon_exit_apartment` | Выйти | knot: `mon_home_leave_apartment` | 👁 |
 
 ### `monday_apartment_kitchen_morning` (Кухня)
- — source: `apartment_monday.lua`, bg: `"bg_apartment_kitchen_morning"`, on_enter: `mon_home_kitchen_intro`
+ — source: `apartment_monday.lua`, bg: `"bg_apartment_kitchen_day"`, on_enter: `mon_home_kitchen_intro`
 
 | Hotspot id | Label | Action | Gated |
 |---|---|---|---|
 | `mon_kitchen_coffee` | Кофе | knot: `mon_home_kitchen_coffee` | 👁 |
+| `mon_kitchen_coffee_after` | Кружка | knot: `mon_home_kitchen_coffee_after` | 👁 |
+| `mon_kitchen_breakfast` | Завтрак | knot: `mon_home_kitchen_breakfast` | 👁 |
+| `mon_kitchen_breakfast_after` | Стол | knot: `mon_home_kitchen_breakfast_after` | 👁 |
 | `mon_kitchen_window` | Окно | knot: `mon_home_kitchen_window` | — |
 | `mon_back_to_hall_from_kitchen` | В коридор | scene: `monday_apartment_hall_morning` | — |
 
@@ -161,8 +165,8 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 
 | Hotspot id | Label | Action | Gated |
 |---|---|---|---|
-| `meeting_room_table_folder` | Стол | knot: `meeting_room_take_folder` | 👁 |
-| `meeting_room_table_after` | Стол | knot: `meeting_room_table_after` | 👁 |
+| `meeting_room_table_folder` | Папки | knot: `meeting_room_take_folder` | 👁 |
+| `meeting_room_table_after` | Пустой стол | knot: `meeting_room_table_after` | 👁 |
 | `meeting_room_to_workspace` | К рабочему месту | scene: `office_workspace` | — |
 | `meeting_room_back_to_lobby` | В лобби | scene: `work_hub` | — |
 
@@ -171,15 +175,16 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 
 | Hotspot id | Label | Action | Gated |
 |---|---|---|---|
-| `work_desk_mail` | Рабочий стол | knot: `work_desk_read_mail` | 👁 |
+| `work_desk_mail` | Почта | knot: `work_desk_read_mail` | 👁 |
 | `work_desk_waiting` | Рабочий стол | knot: `work_desk_needs_case_file` | 👁 |
-| `work_desk_submit` | Рабочий стол | knot: `work_desk_case_file_prompt` | 👁 |
+| `work_desk_submit` | Передать кейс | knot: `work_desk_case_file_prompt` | 👁 |
 | `work_desk_done` | Рабочий стол | knot: `work_desk_done` | 👁 |
-| `workspace_to_meeting_room` | В переговорку | scene: `office_meeting_room` | 🔒 |
+| `workspace_to_meeting_room_locked` | В переговорку | knot: `workspace_to_meeting_room_locked` | 👁 |
+| `workspace_to_meeting_room` | В переговорку | scene: `office_meeting_room` | 👁 |
 | `workspace_back_to_lobby` | В лобби | scene: `work_hub` | — |
 
 ### `park_hub` (Парк у реки)
- — source: `park.lua`, bg: `"bg_park_riverside_entrance_morning"`, on_enter: `sunday_date_park_arrival`
+ — source: `park.lua`, bg: `"bg_park_riverside_entrance_day"`, on_enter: `sunday_date_park_arrival`
 
 | Hotspot id | Label | Action | Gated |
 |---|---|---|---|
@@ -191,7 +196,7 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `leave_park` | Уйти | knot: `leave_park` | 👁 |
 
 ### `park_riverside_bench` (Парк у реки — скамейка)
- — source: `park.lua`, bg: `"bg_park_riverside_bench_morning"`, on_enter: `park_bench_npc_show`
+ — source: `park.lua`, bg: `"bg_park_riverside_bench_day"`, on_enter: `park_bench_npc_show`
 
 | Hotspot id | Label | Action | Gated |
 |---|---|---|---|
@@ -204,7 +209,7 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `bench_to_entrance` | К входу | scene: `park_hub` | 👁 |
 
 ### `park_riverside_path` (Парк у реки — аллея)
- — source: `park.lua`, bg: `"bg_park_riverside_path_morning"`, on_enter: `park_path_npc_show`
+ — source: `park.lua`, bg: `"bg_park_riverside_path_day"`, on_enter: `park_path_npc_show`
 
 | Hotspot id | Label | Action | Gated |
 |---|---|---|---|
@@ -257,7 +262,7 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `leave_shop_area` | Уйти | knot: `leave_shop` | — |
 
 ### `tuesday_apartment_bedroom_morning` (Спальня)
- — source: `apartment_tuesday.lua`, bg: `"bg_apartment_bedroom_morning"`, on_enter: `tue_home_bedroom_intro`
+ — source: `apartment_tuesday.lua`, bg: `"bg_apartment_bedroom_day"`, on_enter: `tue_home_bedroom_intro`
 
 | Hotspot id | Label | Action | Gated |
 |---|---|---|---|
@@ -268,7 +273,7 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `tue_to_hall_from_bedroom` | В коридор | scene: `tuesday_apartment_hall_morning` | — |
 
 ### `tuesday_apartment_hall_morning` (Коридор)
- — source: `apartment_tuesday.lua`, bg: `"bg_apartment_hall_morning"`, on_enter: `tue_home_hall_intro`
+ — source: `apartment_tuesday.lua`, bg: `"bg_apartment_hall_day"`, on_enter: `tue_home_hall_intro`
 
 | Hotspot id | Label | Action | Gated |
 |---|---|---|---|
@@ -279,7 +284,7 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `tue_exit_apartment` | Выйти | knot: `tue_home_leave_apartment` | 🔒 |
 
 ### `tuesday_apartment_kitchen_morning` (Кухня)
- — source: `apartment_tuesday.lua`, bg: `"bg_apartment_kitchen_morning"`, on_enter: `tue_home_kitchen_intro`
+ — source: `apartment_tuesday.lua`, bg: `"bg_apartment_kitchen_day"`, on_enter: `tue_home_kitchen_intro`
 
 | Hotspot id | Label | Action | Gated |
 |---|---|---|---|
@@ -315,8 +320,11 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | Hotspot id | Label | Action | Gated |
 |---|---|---|---|
 | `office_turnstile` | Турникет | knot: `office_turnstile_prompt` | 👁 |
-| `office_to_workspace` | К рабочему месту | scene: `office_workspace` | 🔒 |
-| `office_to_meeting_room` | В переговорку | scene: `office_meeting_room` | 🔒 |
+| `office_to_workspace_locked` | К рабочему месту | knot: `office_to_workspace_locked` | 👁 |
+| `office_to_workspace` | К рабочему месту | scene: `office_workspace` | 👁 |
+| `office_to_meeting_room_locked_turnstile` | В переговорку | knot: `office_to_meeting_room_locked_turnstile` | 👁 |
+| `office_to_meeting_room_locked_mail` | В переговорку | knot: `office_to_meeting_room_locked_mail` | 👁 |
+| `office_to_meeting_room` | В переговорку | scene: `office_meeting_room` | 👁 |
 | `leave_work` | — | knot: `leave_work` | — |
 
 ## Ink Knots
@@ -353,10 +361,14 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `mon_home_get_dressed` | Куртка снимается с крючка, обувь находится под банкеткой, ключи привычно проверяются в кармане. |
 | `mon_home_hall_intro` | Коридор встречает более деловито, чем вчера: дверь, зеркало, обувь, куртка, полка у входа. |
 | `mon_home_hall_mirror` | В зеркале всё выглядит собранно: светлая стена, край двери, человек, который должен выглядеть так, будто знает, куда идё |
+| `mon_home_kitchen_breakfast` | На кухне есть хлеб, сыр и вчерашний йогурт — не завтрак мечты, но достаточно, чтобы перестать делать вид, будто кофе зам |
+| `mon_home_kitchen_breakfast_after` | На столе остались крошки и пустая тарелка. Маленькое доказательство, что утро было не только маршрутом к офису. |
 | `mon_home_kitchen_coffee` | Кружка стоит на столе, как будто никогда не покидала кухню. И это правильно: кружки не носят в кармане через весь город. |
+| `mon_home_kitchen_coffee_after` | Кружка осталась на столе — тёмный круг на дне, тонкая полоска пара и запах, который уже сделал всё, что мог. |
 | `mon_home_kitchen_intro` | Кухня выглядит так, будто не знает разницы между воскресеньем и понедельником. |
 | `mon_home_kitchen_window` | За окном город уже не просыпается — он работает. |
 | `mon_home_leave_apartment` | Перед дверью всё на секунду останавливается. |
+| `mon_home_leave_apartment_locked` | Дверь уже здесь, маршрут уже понятен, но утро ещё не собрано в рабочую форму. |
 | `mon_home_take_work_card` | Пропуск находится в кармане куртки, где ему и положено быть. |
 | `mon_home_wash_up` | В ванной холодная вода быстро стирает остатки сна. |
 | `mon_office_evening_close` | Вечером квартира принимает тебя без вопросов. |
@@ -372,6 +384,7 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `sunday_home_too_early` | Домой пока рано. День только начал становиться настоящим воскресеньем. |
 | `sunday_send_messenger_invite` | Телефон на столешнице коротко вибрирует — не как утренний шум, а как сообщение, которое ждало, пока ты наконец сделаешь  |
 | `sunday_sleep_in_bed` | Спальня выглядит почти так же, как утром, только свет стал мягче и ниже. |
+| `sunday_start_splash` | Воскресное утро. |
 | `take_kitchen_apple` | В миске на столе лежат зелёные яблоки. Одно холодит ладонь чуть сильнее остальных. |
 | `take_mug` | На столе стоит белая кружка с тонкой трещиной на ручке. |
 | `take_phone` | Телефон лежит экраном вниз у тумбочки. |
@@ -405,6 +418,7 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `inv_combine_toothbrush_with_toothpaste` | Выдавливаю пасту на щётку. Самое сложное решение утра пока принято. |
 | `inv_fallback` | Сейчас я просто убираю предмет обратно. |
 | `inv_give_fallback` | Хочется передать {inventory_item_name}, но сейчас момент не тот. |
+| `inv_inspect_card` | Пропуск “АВОСЬ Системы”. Пластик затёрт там, где его чаще всего держат пальцами. Маленькая вещь, которая решает, считаюс |
 | `inv_inspect_case_file` | Папка выглядит готовой. И в этом проблема: готовый вид легко принять за готовый ответ. |
 | `inv_inspect_fallback` | Осматриваю {inventory_item_name}. Детали на месте. Ответов по-прежнему нет. |
 | `inv_inspect_folder` | Обычная офисная папка. Чем аккуратнее она выглядит, тем легче забыть, что внутри может быть недостающая часть решения. |
@@ -437,6 +451,8 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `inv_read_fallback` | На {inventory_item_name} нечего читать. По крайней мере, пока. |
 | `inv_read_note` | На смятом листке всего одна строка: |
 | `inv_read_report_page` | Кейс 017. |
+| `inv_use_card_on_fallback` | Пропуску нужен считыватель, а не моё нетерпение. Его место — турникет, не любой офисный предмет подряд. |
+| `inv_use_case_file_on_fallback` | Папку по кейсу нельзя просто “использовать” где попало. Её нужно передать в работу: на рабочий стол или коллеге. |
 | `inv_use_fallback` | Сжимаю {inventory_item_name} в руке. Сейчас это ничего не изменит. |
 | `inv_use_on_fallback` | - else: |
 | `inv_use_park_trash_cup_on_fallback` | Стаканчик надо выкинуть в урну. Носить его по парку как аргумент — странная стратегия. |
@@ -512,17 +528,17 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | Knot | Аннотация |
 |---|---|
 | `mon_commute_entry` | Лифт, подъезд, двор — всё проходит почти без текста. |
-| `mon_commute_office_approach` | Турникет принимает пропуск коротким писком. |
-| `mon_commute_walk_auto` | Автоматический маршрут удобен тем, что не требует участия. |
-| `mon_commute_walk_observe` | Ты намеренно замедляешься на пару шагов. |
-| `mon_commute_walk_steady` | Ты держишь ровный темп, без рывков и без театральной собранности. |
+| `mon_commute_office_approach` | Турникет ждёт пропуск. Маленький считыватель светится ровно и терпеливо, как будто рабочий день начинается только после  |
+| `mon_commute_walk_auto` | автомате:знакомый маршрут — ничего нового |
+| `mon_commute_walk_observe` | перестал быть невидимым |
+| `mon_commute_walk_steady` | темп:не спешить там, где нужно думать |
 | `mon_commute_work_district` | Бизнес-центр появляется слишком быстро. |
 
 ### `office_monday.ink`
 
 | Knot | Аннотация |
 |---|---|
-| `leave_work` | Пока рано уходить. День ещё держит тебя за рабочий кейс. |
+| `leave_work` | Сначала пройти турникет. Уйти из офиса, не войдя в него, звучит заманчиво, но подозрительно даже для понедельника. |
 | `meeting_room_table_after` | Стол в переговорке снова пустой. Как будто папка никогда здесь не лежала. |
 | `meeting_room_take_folder` | В переговорке слишком чисто для комнаты, где обычно пытаются договориться о сложном. |
 | `mon_office_auto_standard` | Ты не успеваешь сформулировать сомнение до конца. |
@@ -532,18 +548,22 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `mon_office_day_end` | К концу дня офис становится тише, но не мягче. |
 | `mon_office_entry` | Офис встречает ровным светом, стеклом и воздухом, который как будто уже отфильтровали от всего лишнего. |
 | `mon_office_manual_standard` | Ты подтверждаешь стандартный путь вручную. |
-| `mon_office_npc_greeting` | Собрал{mc_gender == "female":а|} папку? Отлично. Тогда можно открыть кейс нормально, а не по памяти и не с чужих слов. |
+| `mon_office_npc_greeting` | Собрал{mc_gender == "female":а|} папку? Отлично. Я уже успел{npc_gender == "female":а|} сделать вид, что это обычный пон |
 | `mon_office_npc_strange` | Это называется “рабочий процесс”. Очень древняя аномалия. Люди веками делают вид, что привыкли. |
 | `mon_office_result_system_bias` | День продолжается так, будто ничего страшного не произошло. |
 | `mon_office_result_true_bias` | День не становится легче. Очередь не превращается в красивый отчёт. Никто не хлопает по плечу за то, что ты выбрал{mc_ge |
 | `mon_office_stop_auto` | Ты отключаешь автоприменение для кейса. |
 | `mon_office_system_warning` | ДАННЫХ НЕДОСТАТОЧНО. |
 | `mon_office_task_intro` | Собранная папка оказывается рядом с клавиатурой. Бумага, разделитель, короткая выжимка по кейсу — всё выглядит достаточн |
+| `office_to_meeting_room_locked_mail` | Пока рано идти в переговорку. Сначала надо прочитать письмо и понять, какую именно проблему сегодня нужно упаковать в па |
+| `office_to_meeting_room_locked_turnstile` | Сначала нужно пройти турникет. В переговорку нельзя попасть раньше, чем офис признает, что я вообще вош{mc_gender == "fe |
+| `office_to_workspace_locked` | Сначала турникет. Рабочее место никуда не денется, а вот система без короткого писка пропуска делает вид, что меня здесь |
 | `office_turnstile_prompt` | Турникет ждёт пропуск. |
 | `work_desk_case_file_prompt` | Папка собрана. Теперь её нужно передать в работу — не просто посмотреть на стол. |
 | `work_desk_done` | Кейс уже передан в работу. На столе остался только след от действия: пустое место там, где лежала папка. |
 | `work_desk_needs_case_file` | Распечатка есть. Но отдавать один лист как “пакет по кейсу” — это уже совсем офисная магия. |
 | `work_desk_read_mail` | Рабочий стол встречает тебя не вещами, а очередью: монитор, почта, панель AVOS, короткое уведомление сверху. |
+| `workspace_to_meeting_room_locked` | Пока неясно, что искать в переговорке. Сначала почта, потом папки, потом видимость порядка. |
 
 ### `office_tuesday.ink`
 
@@ -570,7 +590,7 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `park_entrance_view` | Вход в парк уже понятен: дорожка, вода дальше справа, зелень, тёплый камень под солнцем. |
 | `park_message_where_are_you` | Ты открываешь Messenger. Палец зависает над полем ввода чуть дольше, чем нужно для простого вопроса. |
 | `park_npc_arrives` | Нашла. То есть нашла тебя, а не смысл жизни. Хотя день уже странно удачный. |
-| `park_npc_arrives_after_gift` | Вы стоите у входа рядом, но всё ещё на проходе. Теперь надо найти место для разговора: сесть у воды или уйти в тень алле |
+| `park_npc_arrives_after_gift` | Вы стоите рядом, но разговор всё ещё не нашёл себе места. Теперь нужно решить: сесть у воды или уйти в тень аллеи. |
 | `park_offer_place` | Теперь место уже не абстрактный выбор на карте, а конкретная развилка: сесть у воды или уйти в тень аллеи. Лавочка приве |
 | `park_path_main_talk` | Вы идёте по аллее в тени деревьев. Дорожка сама задаёт темп: достаточно медленно, чтобы говорить, и достаточно легко, чт |
 | `park_path_npc_show` | - else: |
@@ -578,7 +598,7 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `park_path_walk` | Вы проходите дальше по аллее. Несколько минут можно не решать ничего: только идти, слушать шаги и редкие голоса где-то в |
 | `park_river_view` | Река движется медленно и уверенно. На таком фоне разговоры обычно становятся тише — не слабее, просто честнее. |
 | `sunday_date_park_arrival` | Парк у реки встречает светом и воздухом. Здесь уже день: солнце выше крыш, вода блестит между деревьями, дорожки живут с |
-| `sunday_date_park_settle` | Разговор начинается с простого: погода, дорога, смешная неловкость у входа, кто сколько кофе уже успел выпить. Но рядом  |
+| `sunday_date_park_settle` | Разговор начинается с простого: погода, дорога, смешная неловкость первых минут, кто сколько кофе уже успел выпить. Но р |
 | `take_park_trash_cup` | Чужой пустой стаканчик стоит на краю лавочки. Тот же самый. С теми же отпечатками пальцев — твоими. |
 
 ### `rooftop_tuesday.ink`
@@ -603,13 +623,19 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | Knot | Аннотация |
 |---|---|
 | `leave_shop` | Ты отходишь от витрины магазина. Стекло ещё держит отражение улицы, но телефон уже в руке — до встречи можно выбрать мар |
-| `shop_cleaning_supplies_interact` | На крючках висят перчатки, щётки и совки. Внизу стоят швабры — слишком прямые, слишком терпеливые, будто они давно приня |
+| `shop_cleaning_supplies_interact` | - else: |
+| `shop_cleaning_supplies_pre_date` | На крючках висят перчатки, щётки и совки. Внизу стоят швабры — слишком прямые, слишком терпеливые, будто они давно приня |
+| `shop_cleaning_supplies_with_npc` | На крючках висят перчатки, щётки и совки. Внизу стоят швабры — слишком прямые, слишком терпеливые, будто они давно приня |
 | `shop_counter_interact` | Касса уже сделала своё: короткий писк терминала, тонкий чек, пакет, который почти ничего не весит. |
 | `shop_drinks_interact` | - else: |
 | `shop_drinks_pre_date` | Холодильники гудят ровно, будто у них воскресенье никогда не сбивается. За стеклом — вода, холодный чай, газировка, кофе |
 | `shop_drinks_with_npc` | Холодильники гудят ровно, будто у них воскресенье никогда не сбивается. После прогулки холодные бутылки выглядят не как  |
-| `shop_household_goods_interact` | Бытовой отдел встречает вещами, о которых вспоминают не вовремя: пакеты, губки, лампочки, батарейки, рулоны бумаги, чист |
-| `shop_paper_goods_interact` | Полка с бумажными полотенцами и салфетками выглядит почти абсурдно спокойной: белые рулоны, мягкие упаковки, одинаковые  |
+| `shop_household_goods_interact` | - else: |
+| `shop_household_goods_pre_date` | Бытовой отдел встречает вещами, о которых вспоминают не вовремя: пакеты, губки, лампочки, батарейки, рулоны бумаги, чист |
+| `shop_household_goods_with_npc` | Бытовой отдел встречает вещами, о которых вспоминают не вовремя: пакеты, губки, лампочки, батарейки, рулоны бумаги, чист |
+| `shop_paper_goods_interact` | - else: |
+| `shop_paper_goods_pre_date` | Полка с бумажными полотенцами и салфетками выглядит почти абсурдно спокойной: белые рулоны, мягкие упаковки, одинаковые  |
+| `shop_paper_goods_with_npc` | Полка с бумажными полотенцами и салфетками выглядит почти абсурдно спокойной: белые рулоны, мягкие упаковки, одинаковые  |
 | `shop_sign_interact` | Вывеска светится без настроения: 24/7, красная полоса, белые буквы, обещание быть открытой даже тогда, когда человеку лу |
 | `shop_snacks_interact` | - else: |
 | `shop_snacks_pre_date` | Центральный стеллаж выглядит убедительнее, чем должен: крекеры, чипсы, орешки, вафли и шоколадки. Всё слишком яркое и сл |
@@ -686,7 +712,7 @@ Source: `main/scripts/scene_characters.lua`.
 ## Flags
 
 Все имена флагов встречающиеся в `# set_flag:`, `get_flag(...)`,
-`set_flag(...)`. Всего: **143**.
+`set_flag(...)`. Всего: **147**.
 
 **`bathroom_*`**: `bathroom_morning_seen`
 
@@ -720,7 +746,7 @@ Source: `main/scripts/scene_characters.lua`.
 
 **`mon_*`**: `mon_home_bedroom_seen` `mon_home_hall_seen` `mon_home_kitchen_seen` `mon_office_arrived` `mon_office_error_seen`
 
-**`monday_*`**: `monday_case_file_assembled` `monday_case_file_submitted` `monday_checked_in_office` `monday_coffee_done` `monday_dressed` `monday_finished` `monday_folder_taken` `monday_left_home` `monday_mail_read` `monday_morning_started` `monday_office_finished` `monday_ready_for_work` `monday_report_page_taken` `monday_started` `monday_washed_up` `monday_workday_checked`
+**`monday_*`**: `monday_breakfast_done` `monday_case_file_assembled` `monday_case_file_submitted` `monday_checked_in_office` `monday_coffee_done` `monday_commute_auto` `monday_commute_observed` `monday_commute_steady` `monday_dressed` `monday_finished` `monday_folder_taken` `monday_left_home` `monday_mail_read` `monday_morning_started` `monday_office_finished` `monday_ready_for_work` `monday_report_page_taken` `monday_started` `monday_washed_up` `monday_workday_checked`
 
 **`mug_*`**: `mug_taken`
 
@@ -755,19 +781,19 @@ Source: `main/scripts/scene_characters.lua`.
 Доступные bg-атласы (используются в `# bg:NAME` и `scene.bg`).
 Source: `main/images/backgrounds/*.atlas`.
 
-- `bg_apartment_bathroom_morning`
+- `bg_apartment_bathroom_day`
 - `bg_apartment_bathroom_night`
-- `bg_apartment_bedroom_morning`
+- `bg_apartment_bedroom_day`
 - `bg_apartment_bedroom_night`
-- `bg_apartment_hall_morning`
+- `bg_apartment_hall_day`
 - `bg_apartment_hall_night`
-- `bg_apartment_kitchen_morning`
+- `bg_apartment_kitchen_day`
 - `bg_apartment_kitchen_night`
 - `bg_archive_day`
 - `bg_bar_maybe_night`
 - `bg_cafe_backroom_day`
 - `bg_cafe_corner_day`
-- `bg_cafe_morning`
+- `bg_cafe_day`
 - `bg_observation_corner_day`
 - `bg_observation_railing_day`
 - `bg_office_lobby_day`
@@ -776,9 +802,9 @@ Source: `main/images/backgrounds/*.atlas`.
 - `bg_office_meeting_room_night`
 - `bg_office_workspace_day`
 - `bg_office_workspace_night`
-- `bg_park_riverside_bench_morning`
-- `bg_park_riverside_entrance_morning`
-- `bg_park_riverside_path_morning`
+- `bg_park_riverside_bench_day`
+- `bg_park_riverside_entrance_day`
+- `bg_park_riverside_path_day`
 - `bg_rooftop`
 - `bg_shop_front_day`
 - `bg_shop_household_day`

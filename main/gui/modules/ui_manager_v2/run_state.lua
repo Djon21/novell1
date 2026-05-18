@@ -37,6 +37,14 @@ function M.restore(set_suppressed, opts)
             scene_to_enter = saved.scene_controller.scene_id
         elseif saved.gs.current_scene then
             scene_to_enter = saved.gs.current_scene
+        elseif saved.scene_controller and saved.scene_controller.scene_stack
+               and #saved.scene_controller.scene_stack > 0 then
+            -- Fallback: игрок вышел из игры пока был в side-dialog (scene
+            -- временно сброшена через scene_controller.exit, но стек хранит
+            -- предыдущую сцену). Восстанавливаем верх стека — иначе игрок
+            -- появится в произвольной точке через ink-replay.
+            local stack = saved.scene_controller.scene_stack
+            scene_to_enter = stack[#stack]
         end
     elseif saved then
         gs.deserialize(saved)

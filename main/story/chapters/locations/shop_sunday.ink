@@ -527,6 +527,13 @@
 // PROJECT_INVENTORY потеряет существующий scene_id.
 
 === shop_household_goods_interact ===
+{met_npc_sunday:
+    -> shop_household_goods_with_npc
+- else:
+    -> shop_household_goods_pre_date
+}
+
+=== shop_household_goods_pre_date ===
 # speaker:none
 Бытовой отдел встречает вещами, о которых вспоминают не вовремя: пакеты, губки, лампочки, батарейки, рулоны бумаги, чистящие средства.
 
@@ -541,51 +548,71 @@
     На нижней полке один ценник наклеен чуть ниже остальных. Ничего странного — просто глаз почему-то возвращается к нему снова.
 }
 
-{not met_npc_sunday:
-    {sunday_gift_bought:
-        # speaker:mc
-        Подарок уже есть. Второй предмет превратит подготовку в странный набор для выживания.
-    - else:
-        # speaker:mc
-        Вот он. Самый странный кандидат в подарки.
-
-        * [Взять фонарик-брелок]
-            # speaker:none
-            На маленьком блистере висит фонарик-брелок: пластиковый корпус, металлическое кольцо, кнопка, которая обещает крошечный круг света.
-
-            # speaker:mc
-            Это не красиво. Зато понятно. Способ не потеряться — тоже подарок.
-            # add_item:gift_keychain_flashlight
-            # set_flag:sunday_gift_bought=true
-            # set_flag:sunday_gift_keychain_flashlight=true
-            ~ sunday_gift_bought = true
-            ~ sunday_gift_keychain_flashlight = true
-            # return_to_scene
-            -> DONE
-
-        * [Оставить фонарик]
-            # speaker:mc
-            Нет. Не сейчас. Если я беру странный подарок, пусть это будет осознанно, а не потому что он первым попался на полке.
-            # return_to_scene
-            -> DONE
-    }
+{sunday_gift_bought:
+    # speaker:mc
+    Подарок уже есть. Второй предмет превратит подготовку в странный набор для выживания.
+    # return_to_scene
+    -> DONE
 }
 
-{met_npc_sunday:
-    # speaker:npc
-    Вот это уже серьёзный уровень свидания. Отдел губок и пакетов.
+# speaker:mc
+Вот он. Самый странный кандидат в подарки.
+
+* [Взять фонарик-брелок]
+    # speaker:none
+    На маленьком блистере висит фонарик-брелок: пластиковый корпус, металлическое кольцо, кнопка, которая обещает крошечный круг света.
 
     # speaker:mc
-    Зато честно. Никто не притворяется, что жизнь состоит только из кофе и красивых видов.
+    Это не красиво. Зато понятно. Способ не потеряться — тоже подарок.
+    # add_item:gift_keychain_flashlight
+    # set_flag:sunday_gift_bought=true
+    # set_flag:sunday_gift_keychain_flashlight=true
+    ~ sunday_gift_bought = true
+    ~ sunday_gift_keychain_flashlight = true
+    # return_to_scene
+    -> DONE
 
-    # speaker:npc
-    Ладно. Это неожиданно сильный аргумент.
++ [Оставить фонарик]
+    # speaker:mc
+    Нет. Не сейчас. Если я беру странный подарок, пусть это будет осознанно, а не потому что он первым попался на полке.
+    # return_to_scene
+    -> DONE
+
+=== shop_household_goods_with_npc ===
+# speaker:none
+Бытовой отдел встречает вещами, о которых вспоминают не вовремя: пакеты, губки, лампочки, батарейки, рулоны бумаги, чистящие средства.
+
+{iteration_number > 1:
+    На нижней полке один ценник наклеен чуть ниже остальных. Тот же самый: тот же угол, тот же шрифт, тот же кусочек скотча.
+
+    # speaker:mc
+    Почему я знаю, что он именно этот.
+    ~ INSIGHT = INSIGHT + 1
+    ~ anomaly_noticed = true
+- else:
+    На нижней полке один ценник наклеен чуть ниже остальных. Ничего странного — просто глаз почему-то возвращается к нему снова.
 }
+
+# speaker:npc
+Вот это уже серьёзный уровень свидания. Отдел губок и пакетов.
+
+# speaker:mc
+Зато честно. Никто не притворяется, что жизнь состоит только из кофе и красивых видов.
+
+# speaker:npc
+Ладно. Это неожиданно сильный аргумент.
 
 # return_to_scene
 -> DONE
 
 === shop_cleaning_supplies_interact ===
+{met_npc_sunday:
+    -> shop_cleaning_supplies_with_npc
+- else:
+    -> shop_cleaning_supplies_pre_date
+}
+
+=== shop_cleaning_supplies_pre_date ===
 # speaker:none
 На крючках висят перчатки, щётки и совки. Внизу стоят швабры — слишком прямые, слишком терпеливые, будто они давно приняли человеческий хаос как условие работы.
 
@@ -602,42 +629,64 @@
     Каждый раз кажется, что если купить правильную щётку, дома станет чуть больше порядка.
 }
 
-{not met_npc_sunday:
-    {sunday_gift_bought:
-        # speaker:mc
-        Веник смотрит укоризненно, но поезд уже ушёл: подарок выбран.
-    - else:
-        * [Взять маленький веник]
-            # speaker:mc
-            Если это сработает, значит у нас с {npc_name_ins} очень специфическое будущее.
-            # add_item:gift_small_broom
-            # set_flag:sunday_gift_bought=true
-            # set_flag:sunday_gift_small_broom=true
-            ~ sunday_gift_bought = true
-            ~ sunday_gift_small_broom = true
-            # return_to_scene
-            -> DONE
-
-        * [Оставить веник]
-            # speaker:mc
-            Нет. Даже для меня это пока слишком смелый бытовой жест.
-            # return_to_scene
-            -> DONE
-    }
-}
-
-{met_npc_sunday:
-    # speaker:npc
-    Опасная мысль. Так люди и уходят отсюда с ведром, которое им не нужно.
-
+{sunday_gift_bought:
     # speaker:mc
-    Ведро хотя бы честнее большинства импульсивных покупок.
+    Веник смотрит укоризненно, но поезд уже ушёл: подарок выбран.
+    # return_to_scene
+    -> DONE
 }
+
+* [Взять маленький веник]
+    # speaker:mc
+    Если это сработает, значит у нас с {npc_name_ins} очень специфическое будущее.
+    # add_item:gift_small_broom
+    # set_flag:sunday_gift_bought=true
+    # set_flag:sunday_gift_small_broom=true
+    ~ sunday_gift_bought = true
+    ~ sunday_gift_small_broom = true
+    # return_to_scene
+    -> DONE
+
++ [Оставить веник]
+    # speaker:mc
+    Нет. Даже для меня это пока слишком смелый бытовой жест.
+    # return_to_scene
+    -> DONE
+
+=== shop_cleaning_supplies_with_npc ===
+# speaker:none
+На крючках висят перчатки, щётки и совки. Внизу стоят швабры — слишком прямые, слишком терпеливые, будто они давно приняли человеческий хаос как условие работы.
+
+{iteration_number > 1:
+    # speaker:mc
+    Каждый раз кажется, что если купить правильную щётку, дома станет чуть больше порядка.
+
+    # speaker:none
+    «Каждый раз». Слово звучит привычнее, чем должно.
+    ~ INSIGHT = INSIGHT + 1
+    ~ anomaly_noticed = true
+- else:
+    # speaker:mc
+    Каждый раз кажется, что если купить правильную щётку, дома станет чуть больше порядка.
+}
+
+# speaker:npc
+Опасная мысль. Так люди и уходят отсюда с ведром, которое им не нужно.
+
+# speaker:mc
+Ведро хотя бы честнее большинства импульсивных покупок.
 
 # return_to_scene
 -> DONE
 
 === shop_paper_goods_interact ===
+{met_npc_sunday:
+    -> shop_paper_goods_with_npc
+- else:
+    -> shop_paper_goods_pre_date
+}
+
+=== shop_paper_goods_pre_date ===
 # speaker:none
 Полка с бумажными полотенцами и салфетками выглядит почти абсурдно спокойной: белые рулоны, мягкие упаковки, одинаковые обещания “на всякий случай”.
 
@@ -652,51 +701,64 @@
     Одна упаковка развёрнута лицом не в ту сторону. Среди такой ровной выкладки это выглядит почти как личное решение.
 }
 
-{not met_npc_sunday:
-    {sunday_gift_bought:
-        # speaker:mc
-        Салфетки остаются на полке. Сегодня у меня уже есть один странный ответ.
-    - else:
-        * [Взять влажные салфетки]
-            # speaker:mc
-            Практично. Слишком практично. Но вдруг это и есть мой стиль.
-            # add_item:gift_wet_wipes
-            # set_flag:sunday_gift_bought=true
-            # set_flag:sunday_gift_wet_wipes=true
-            ~ sunday_gift_bought = true
-            ~ sunday_gift_wet_wipes = true
-            # return_to_scene
-            -> DONE
-
-        * [Взять бумажные салфетки]
-            # speaker:mc
-            На случай крошек, неловкости и слишком оптимистичных планов.
-            # add_item:gift_paper_napkins
-            # set_flag:sunday_gift_bought=true
-            # set_flag:sunday_gift_paper_napkins=true
-            ~ sunday_gift_bought = true
-            ~ sunday_gift_paper_napkins = true
-            # return_to_scene
-            -> DONE
-
-        * [Оставить салфетки]
-            # speaker:mc
-            Не надо превращать заботу в закупку на всякий случай. Посмотрю ещё.
-            # return_to_scene
-            -> DONE
-    }
+{sunday_gift_bought:
+    # speaker:mc
+    Салфетки остаются на полке. Сегодня у меня уже есть один странный ответ.
+    # return_to_scene
+    -> DONE
 }
 
-{met_npc_sunday:
-    # speaker:npc
-    У этой полки очень взрослая энергетика.
+* [Взять влажные салфетки]
+    # speaker:mc
+    Практично. Слишком практично. Но вдруг это и есть мой стиль.
+    # add_item:gift_wet_wipes
+    # set_flag:sunday_gift_bought=true
+    # set_flag:sunday_gift_wet_wipes=true
+    ~ sunday_gift_bought = true
+    ~ sunday_gift_wet_wipes = true
+    # return_to_scene
+    -> DONE
+
+* [Взять бумажные салфетки]
+    # speaker:mc
+    На случай крошек, неловкости и слишком оптимистичных планов.
+    # add_item:gift_paper_napkins
+    # set_flag:sunday_gift_bought=true
+    # set_flag:sunday_gift_paper_napkins=true
+    ~ sunday_gift_bought = true
+    ~ sunday_gift_paper_napkins = true
+    # return_to_scene
+    -> DONE
+
++ [Оставить салфетки]
+    # speaker:mc
+    Не надо превращать заботу в закупку на всякий случай. Посмотрю ещё.
+    # return_to_scene
+    -> DONE
+
+=== shop_paper_goods_with_npc ===
+# speaker:none
+Полка с бумажными полотенцами и салфетками выглядит почти абсурдно спокойной: белые рулоны, мягкие упаковки, одинаковые обещания “на всякий случай”.
+
+{iteration_number > 1:
+    Одна упаковка развёрнута лицом не в ту сторону. Та же самая.
 
     # speaker:mc
-    Да. Тут даже импульсивная покупка звучит как хозяйственное решение.
-
-    # speaker:npc
-    Страшное место.
+    Я её не трогал. И в прошлый раз не трогал. Но она снова повёрнута именно так.
+    ~ INSIGHT = INSIGHT + 1
+    ~ anomaly_noticed = true
+- else:
+    Одна упаковка развёрнута лицом не в ту сторону. Среди такой ровной выкладки это выглядит почти как личное решение.
 }
+
+# speaker:npc
+У этой полки очень взрослая энергетика.
+
+# speaker:mc
+Да. Тут даже импульсивная покупка звучит как хозяйственное решение.
+
+# speaker:npc
+Страшное место.
 
 # return_to_scene
 -> DONE

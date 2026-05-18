@@ -9,7 +9,7 @@ local s = require "main.data.scenes._shared"
 return {
 
     tuesday_apartment_bedroom_morning = {
-        bg = "bg_apartment_bedroom_morning",
+        bg = "bg_apartment_bedroom_day",
         label = "Спальня",
         on_enter = {
             knot = "tue_home_bedroom_intro",
@@ -61,7 +61,7 @@ return {
     },
 
     tuesday_apartment_hall_morning = {
-        bg = "bg_apartment_hall_morning",
+        bg = "bg_apartment_hall_day",
         label = "Коридор",
         on_enter = {
             knot = "tue_home_hall_intro",
@@ -120,7 +120,7 @@ return {
     },
 
     tuesday_apartment_kitchen_morning = {
-        bg = "bg_apartment_kitchen_morning",
+        bg = "bg_apartment_kitchen_day",
         label = "Кухня",
         on_enter = {
             knot = "tue_home_kitchen_intro",

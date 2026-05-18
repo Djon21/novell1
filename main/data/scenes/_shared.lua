@@ -29,7 +29,7 @@ local function apartment_bg(room)
         if is_apartment_night(gs) then
             return "bg_apartment_" .. room .. "_night"
         end
-        return "bg_apartment_" .. room .. "_morning"
+        return "bg_apartment_" .. room .. "_day"
     end
 end
 

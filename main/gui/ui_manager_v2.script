@@ -11,20 +11,20 @@
 -- переключение bootstrap.main_collection на main_v2 (step16 — опциональный).
 
 go.property("bg_rooftop_atlas", resource.atlas("/main/images/backgrounds/bg_rooftop.atlas"))
-go.property("bg_apartment_hall_morning_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_hall_morning.atlas"))
+go.property("bg_apartment_hall_day_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_hall_day.atlas"))
 go.property("bg_apartment_hall_night_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_hall_night.atlas"))
-go.property("bg_apartment_bathroom_morning_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_bathroom_morning.atlas"))
+go.property("bg_apartment_bathroom_day_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_bathroom_day.atlas"))
 go.property("bg_apartment_bathroom_night_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_bathroom_night.atlas"))
-go.property("bg_apartment_bedroom_morning_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_bedroom_morning.atlas"))
+go.property("bg_apartment_bedroom_day_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_bedroom_day.atlas"))
 go.property("bg_apartment_bedroom_night_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_bedroom_night.atlas"))
-go.property("bg_apartment_kitchen_morning_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_kitchen_morning.atlas"))
+go.property("bg_apartment_kitchen_day_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_kitchen_day.atlas"))
 go.property("bg_apartment_kitchen_night_atlas", resource.atlas("/main/images/backgrounds/bg_apartment_kitchen_night.atlas"))
-go.property("bg_cafe_morning_atlas", resource.atlas("/main/images/backgrounds/bg_cafe_morning.atlas"))
+go.property("bg_cafe_day_atlas", resource.atlas("/main/images/backgrounds/bg_cafe_day.atlas"))
 go.property("bg_cafe_backroom_day_atlas", resource.atlas("/main/images/backgrounds/bg_cafe_backroom_day.atlas"))
 go.property("bg_cafe_corner_day_atlas", resource.atlas("/main/images/backgrounds/bg_cafe_corner_day.atlas"))
-go.property("bg_park_riverside_entrance_morning_atlas", resource.atlas("/main/images/backgrounds/bg_park_riverside_entrance_morning.atlas"))
-go.property("bg_park_riverside_bench_morning_atlas", resource.atlas("/main/images/backgrounds/bg_park_riverside_bench_morning.atlas"))
-go.property("bg_park_riverside_path_morning_atlas", resource.atlas("/main/images/backgrounds/bg_park_riverside_path_morning.atlas"))
+go.property("bg_park_riverside_entrance_day_atlas", resource.atlas("/main/images/backgrounds/bg_park_riverside_entrance_day.atlas"))
+go.property("bg_park_riverside_bench_day_atlas", resource.atlas("/main/images/backgrounds/bg_park_riverside_bench_day.atlas"))
+go.property("bg_park_riverside_path_day_atlas", resource.atlas("/main/images/backgrounds/bg_park_riverside_path_day.atlas"))
 go.property("bg_shop_front_day_atlas", resource.atlas("/main/images/backgrounds/bg_shop_front_day.atlas"))
 go.property("bg_shop_household_day_atlas", resource.atlas("/main/images/backgrounds/bg_shop_household_day.atlas"))
 go.property("bg_shop_street_day_atlas", resource.atlas("/main/images/backgrounds/bg_shop_street_day.atlas"))
@@ -87,20 +87,20 @@ local SKIP_ADVANCE_DELAY = 0.05
 
 local DEDICATED_BG_ATLAS_PROPS = {
     bg_rooftop        = "bg_rooftop_atlas",
-    bg_apartment_hall_morning = "bg_apartment_hall_morning_atlas",
+    bg_apartment_hall_day = "bg_apartment_hall_day_atlas",
 	bg_apartment_hall_night = "bg_apartment_hall_night_atlas",
-	bg_apartment_bathroom_morning = "bg_apartment_bathroom_morning_atlas",
+	bg_apartment_bathroom_day = "bg_apartment_bathroom_day_atlas",
 	bg_apartment_bathroom_night = "bg_apartment_bathroom_night_atlas",
-    bg_apartment_bedroom_morning = "bg_apartment_bedroom_morning_atlas",
+    bg_apartment_bedroom_day = "bg_apartment_bedroom_day_atlas",
     bg_apartment_bedroom_night = "bg_apartment_bedroom_night_atlas",
-    bg_apartment_kitchen_morning = "bg_apartment_kitchen_morning_atlas",
+    bg_apartment_kitchen_day = "bg_apartment_kitchen_day_atlas",
 	bg_apartment_kitchen_night = "bg_apartment_kitchen_night_atlas",
-    bg_cafe_morning = "bg_cafe_morning_atlas",
+    bg_cafe_day = "bg_cafe_day_atlas",
     bg_cafe_backroom_day = "bg_cafe_backroom_day_atlas",
     bg_cafe_corner_day = "bg_cafe_corner_day_atlas",
-    bg_park_riverside_entrance_morning = "bg_park_riverside_entrance_morning_atlas",
-	bg_park_riverside_bench_morning = "bg_park_riverside_bench_morning_atlas",
-	bg_park_riverside_path_morning = "bg_park_riverside_path_morning_atlas",
+    bg_park_riverside_entrance_day = "bg_park_riverside_entrance_day_atlas",
+	bg_park_riverside_bench_day = "bg_park_riverside_bench_day_atlas",
+	bg_park_riverside_path_day = "bg_park_riverside_path_day_atlas",
     bg_shop_front_day = "bg_shop_front_day_atlas",
 	bg_shop_household_day = "bg_shop_household_day_atlas",
 	bg_shop_street_day = "bg_shop_street_day_atlas",
@@ -290,15 +290,13 @@ local function run_side_dialogue_knot(self, knot_name, keep_bg, opts)
     return true
 end
 
+-- forward declaration: enter_side_dialogue определён ниже после
+-- set_run_save_suppressed/persist_run_state — он использует обе функции
+-- как upvalue. Без forward declare ссылки бы захватились как globals (nil).
+local enter_side_dialogue
+
 local function jump_inventory_knot(self, knot_name)
-    local keep_bg = nil
-    if scene_controller.is_active and scene_controller.is_active() then
-        keep_bg = scene_controller.get_current_bg and scene_controller.get_current_bg() or nil
-        if scene_controller.exit then
-            scene_controller.exit()
-        end
-    end
-    return run_side_dialogue_knot(self, knot_name, keep_bg)
+    return enter_side_dialogue(self, knot_name)
 end
 
 local function inventory_ctx(self)
@@ -375,6 +373,30 @@ end
 
 local function persist_run_state()
     run_state.persist(M.suppress_run_save)
+end
+
+-- Этап 2 сейв-системы: вход в side-dialog (sms-тред, ink_knot-hotspot, ink-инвентарь,
+-- scene_character клик) — это атомарный переход «exploration scene → ink knot».
+-- Между scene_controller.exit() (scene=nil) и dm.jump_to_knot есть микроокно,
+-- в котором gs.subscribe → persist_run_state писал scene=nil в сейв. Если игрок
+-- закрывал вкладку именно в этот тик, при загрузке current_scene было nil
+-- (баг «вышел в парке, вернулся к магазину»).
+-- Решение: suppress save на время перехода, после settle сохраняем чистое
+-- состояние явным persist_run_state(). enter_side_dialogue — единая точка.
+enter_side_dialogue = function(self, knot_name, opts)
+    local keep_bg = nil
+    local was_active = scene_controller.is_active and scene_controller.is_active()
+    if was_active then
+        keep_bg = scene_controller.get_current_bg and scene_controller.get_current_bg() or nil
+        set_run_save_suppressed(true)
+        if scene_controller.exit then scene_controller.exit() end
+    end
+    local ok = run_side_dialogue_knot(self, knot_name, keep_bg, opts)
+    if was_active then
+        set_run_save_suppressed(false)
+        persist_run_state()
+    end
+    return ok
 end
 
 local function restore_run_state(opts)
@@ -774,6 +796,13 @@ function init(self)
 end
 
 function final(self)
+    -- Форсируем flush save'а: после моего debounce-патча save_manager.save()
+    -- батчит записи в окне 0.5 сек. На закрытии игры (final) debounce может
+    -- ещё не отстреляться → теряем последние мутации. save_now() пишет на
+    -- диск немедленно, без таймера.
+    if sm and sm.save_now then
+        sm.save_now()
+    end
     msg.post(".", "release_input_focus")
 end
 
@@ -809,6 +838,7 @@ local function message_ctx(self)
         open_phone = function() open_phone(self) end,
         close_phone = function() close_phone(self) end,
         run_side_dialogue_knot = function(knot_name, keep_bg, opts) run_side_dialogue_knot(self, knot_name, keep_bg, opts) end,
+        enter_side_dialogue = function(knot_name, opts) enter_side_dialogue(self, knot_name, opts) end,
     }
 end
 
@@ -833,11 +863,7 @@ local function handle_scene_character_click(self, slot)
     local action = scene_characters.get_action(slot)
     if not action then return end
     if action.type == "ink_knot" and action.knot then
-        local keep_bg = scene_controller.get_current_bg and scene_controller.get_current_bg() or nil
-        if scene_controller.is_active and scene_controller.is_active() and scene_controller.exit then
-            scene_controller.exit()
-        end
-        run_side_dialogue_knot(self, action.knot, keep_bg)
+        enter_side_dialogue(self, action.knot)
     else
         log.warn("ui_manager", "scene_character action.type не поддержан:", tostring(action.type))
     end

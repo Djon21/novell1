@@ -75,6 +75,18 @@
 // ПОНЕДЕЛЬНИК / ОФИС — playable task
 // ----------------------------------------------------------------
 
+=== inv_inspect_card ===
+# speaker:mc
+Пропуск “АВОСЬ Системы”. Пластик затёрт там, где его чаще всего держат пальцами. Маленькая вещь, которая решает, считаюсь ли я здесь человеком с доступом.
+# return_to_scene
+-> DONE
+
+=== inv_use_card_on_fallback ===
+# speaker:mc
+Пропуску нужен считыватель, а не моё нетерпение. Его место — турникет, не любой офисный предмет подряд.
+# return_to_scene
+-> DONE
+
 === inv_work_hub_use_card_on_office_turnstile ===
 # speaker:mc
 Прикладываю пропуск к считывателю.
@@ -85,6 +97,8 @@
 Доступ разрешён.
 
 # set_flag:monday_checked_in_office=true
+~ monday_checked_in_office = true
+# hud:hint:bag:off
 # return_to_scene
 -> DONE
 
@@ -121,10 +135,13 @@
 
 Получается “пакет по кейсу”. Слишком солидное название для одного неполного набора данных.
 
+В руках теперь не ответ, а форма для ответа. Это важно не перепутать.
+
 # remove_item:folder
 # remove_item:report_page
 # add_item:case_file
 # set_flag:monday_case_file_assembled=true
+~ monday_case_file_assembled = true
 # hud:hint:bag
 # return_to_scene
 -> DONE
@@ -146,14 +163,23 @@
 # return_to_scene
 -> DONE
 
+=== inv_use_case_file_on_fallback ===
+# speaker:mc
+Папку по кейсу нельзя просто “использовать” где попало. Её нужно передать в работу: на рабочий стол или коллеге.
+# return_to_scene
+-> DONE
+
 === inv_office_workspace_use_case_file_on_work_desk_submit ===
 # speaker:mc
 Кладу папку рядом с клавиатурой и прикрепляю её к рабочему кейсу.
 
 Теперь система видит не просто красную строку, а собранный пакет. Этого достаточно, чтобы она начала следующий шаг.
 
+Не потому что данных стало больше. Потому что им наконец придали правильный вид.
+
 # remove_item:case_file
 # set_flag:monday_case_file_submitted=true
+~ monday_case_file_submitted = true
 # hud:hint:bag:off
 -> mon_office_npc_greeting
 
@@ -166,6 +192,7 @@
 
 # remove_item:case_file
 # set_flag:monday_case_file_submitted=true
+~ monday_case_file_submitted = true
 # hud:hint:bag:off
 -> mon_office_npc_greeting
 

@@ -51,7 +51,7 @@ end
 return {
 
     park_hub = {
-        bg = "bg_park_riverside_entrance_morning",
+        bg = "bg_park_riverside_entrance_day",
         label = "Парк у реки",
         on_enter = {
             knot = "sunday_date_park_arrival",
@@ -120,7 +120,7 @@ return {
     },
 
     park_riverside_bench = {
-        bg = "bg_park_riverside_bench_morning",
+        bg = "bg_park_riverside_bench_day",
         label = "Парк у реки — скамейка",
         -- NPC ждёт здесь, если park_message_where_are_you выбрал bench.
         -- on_enter показывает scene_char один раз (до greeting). Отдельный
@@ -199,7 +199,7 @@ return {
     },
 
     park_riverside_path = {
-        bg = "bg_park_riverside_path_morning",
+        bg = "bg_park_riverside_path_day",
         label = "Парк у реки — аллея",
         -- NPC ждёт здесь, если park_message_where_are_you выбрал path.
         on_enter = {

@@ -49,7 +49,7 @@ textures {
 }
 textures {
   name: "backgrounds"
-  texture: "/main/images/backgrounds/bg_apartment_bedroom_morning.atlas"
+  texture: "/main/images/backgrounds/bg_apartment_bedroom_day.atlas"
 }
 textures {
   name: "char_mila"

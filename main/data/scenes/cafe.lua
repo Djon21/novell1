@@ -3,7 +3,7 @@
 --
 -- Кафе — хаб из трёх фонов:
 --   cafe_hub      — основной зал (стойка, общий вход, переходы)
---                   bg_cafe_morning  [исторически morning-lit]
+--                   bg_cafe_day  [исторически morning-lit]
 --   cafe_corner   — уютный уголок / диванная зона для основного разговора
 --                   bg_cafe_corner_day
 --   cafe_backroom — тихая задняя зона: зеркало, объявления, вешалка, полки
@@ -28,7 +28,7 @@ end
 return {
 
     cafe_hub = {
-        bg = "bg_cafe_morning",
+        bg = "bg_cafe_day",
         label = "Кафе",
         npc = "npc",       -- для inventory verb=give: inv_give_<item>_on_npc
 

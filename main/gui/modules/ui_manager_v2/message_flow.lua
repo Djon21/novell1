@@ -235,12 +235,7 @@ local function handle_sms_open_contact(ctx, contact_id)
     end
     knot_name = knot_name or ("sms_thread_" .. tostring(contact_id))
     if dm.has_knot and dm.has_knot(knot_name) then
-        local keep_bg = nil
-        if scene_controller.is_active and scene_controller.is_active() then
-            keep_bg = scene_controller.get_current_bg and scene_controller.get_current_bg() or nil
-            if scene_controller.exit then scene_controller.exit() end
-        end
-        ctx.run_side_dialogue_knot(knot_name, keep_bg)
+        ctx.enter_side_dialogue(knot_name)
     end
 end
 
@@ -249,23 +244,30 @@ end
 -- или уже ответили — игнорим (phone_messenger показывает inline view).
 local function handle_messenger_open_chat(ctx, chat_id)
     if not chat_id then return end
-    local replied_flag = "msg_" .. tostring(chat_id) .. "_replied"
-    if gs.get_flag and gs.get_flag(replied_flag) then return end
 
+    -- Приоритет №1 — runtime prompt (# msg:prompt:CHAT:KNOT). Это
+    -- «открытая инициатива» из конкретной сцены: игнорим _replied и
+    -- штатный msg_thread, идём в указанный knot.
     local knot_name = nil
-    if contacts and contacts.get_ink_thread then
-        knot_name = contacts.get_ink_thread("msg", chat_id)
+    if gs.get_msg_prompt then
+        local pknot = gs.get_msg_prompt(chat_id)
+        if pknot and pknot ~= "" then knot_name = pknot end
     end
-    knot_name = knot_name or ("msg_thread_" .. tostring(chat_id))
+
+    if not knot_name then
+        -- Нет prompt'а — обычный flow. Тут уже работает _replied gate.
+        local replied_flag = "msg_" .. tostring(chat_id) .. "_replied"
+        if gs.get_flag and gs.get_flag(replied_flag) then return end
+
+        if contacts and contacts.get_ink_thread then
+            knot_name = contacts.get_ink_thread("msg", chat_id)
+        end
+        knot_name = knot_name or ("msg_thread_" .. tostring(chat_id))
+    end
 
     if not (dm.has_knot and dm.has_knot(knot_name)) then return end
     ctx.close_phone()
-    local keep_bg = nil
-    if scene_controller.is_active and scene_controller.is_active() then
-        keep_bg = scene_controller.get_current_bg and scene_controller.get_current_bg() or nil
-        if scene_controller.exit then scene_controller.exit() end
-    end
-    ctx.run_side_dialogue_knot(knot_name, keep_bg)
+    ctx.enter_side_dialogue(knot_name)
 end
 
 local function handle_phone(ctx, message_id, message, sender)

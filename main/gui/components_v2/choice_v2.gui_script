@@ -30,6 +30,8 @@ local STATIC_NODES = {
     "head_divider",
     "prompt", "caveat", "opts_panel",
     "foot_label",  -- foot_divider убран из модалки (освободил место под 5-й вариант)
+    "opts_scroll_track", "opts_scroll_thumb",  -- иначе после scroll-choice (>=7 опций)
+                                               -- thumb остаётся висеть на экране при hide
 }
 
 local function get_node(id)

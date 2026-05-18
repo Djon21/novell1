@@ -67,7 +67,7 @@ poi_cafe = { scene = "cafe_hub", label = "Кафе" }
 
 ```lua
 cafe_hub = {
-    bg = "bg_cafe_morning",
+    bg = "bg_cafe_day",
     label = "Кафе",
     npc = "npc", -- если в сцене разрешён inventory verb=give
 

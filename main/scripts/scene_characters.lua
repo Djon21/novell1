@@ -65,7 +65,7 @@ local SCENES = {
         },
         -- Mila ждёт у скамейки (park_riverside_bench bg).
         -- Coords скопированы с mila_idle — нужно подстроить через F1
-        -- под фон bg_park_riverside_bench_morning (Mila должна стоять у воды
+        -- под фон bg_park_riverside_bench_day (Mila должна стоять у воды
         -- или у лавочки, а не на дорожке-entrance).
         mila_idle_bench = {
             atlas  = "char_mila",
