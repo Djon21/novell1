@@ -16,6 +16,7 @@
 - else:
     После прогулки магазин выглядит почти смешно: слишком яркий, слишком обычный, с рекламой кофе на двери и корзинками у входа. Но именно поэтому здесь легко не играть в красивый момент, а просто быть рядом.
 
+    # map:lock_all
     # set_flag:sunday_shop_street_with_npc_seen=true
     ~ sunday_shop_street_with_npc_seen = true
 }
@@ -43,6 +44,7 @@
 
 === sunday_shop_arrival_with_npc ===
 # speaker:none
+# map:lock_all
 Магазин 24/7 встречает белым светом, гулом холодильников и корзинками у входа. После прогулки это место выглядит не романтично, зато очень убедительно: здесь не нужно придумывать повод стоять рядом.
 
 # set_flag:sunday_shop_with_npc_seen=true
@@ -127,7 +129,7 @@
 # set_flag:sunday_second_stop_done=true
 # set_flag:sunday_went_to_shop=true
 # set_flag:sunday_shop_done=true
-# map:allow:reset
+# map:lock_all
 # map:lock_to:poi_home
 ~ sunday_second_stop_done = true
 ~ sunday_went_to_shop = true
@@ -150,7 +152,7 @@
 - else:
     {sunday_second_stop_done:
 Вы выходите от магазина обратно к улице. Свет за стеклом остаётся позади, а телефон уже в руке — пора домой.
-# map:allow:reset
+# map:lock_all
 # map:lock_to:poi_home
 # phone:map
     - else:

@@ -790,9 +790,45 @@ function init(self)
     reset_dialogue_backlog(self)
     apply_dialogue_toggle_state(self)
     sync_ui_state(self)
-    show_menu(self)
     msg.post(".", "acquire_input_focus")
-    dbg("[ui_manager_v2] init done")
+
+    -- Stage 3 (cloud sync): до показа меню тянем облачный сейв. Если облачный
+    -- save_time > локального — _data заменяется. Это даёт сценарий: играл на
+    -- ПК (Яндекс.Браузер) → открыл с телефона → Continue ведёт в актуальное
+    -- место. Cloud_init гарантированно вызывает callback (через таймаут 3с
+    -- внутри cloud_sync.init/pull), так что меню откроется максимум через ~6с
+    -- даже если Яндекс совсем не отвечает.
+    --
+    -- Пока callback не пришёл — меню не показываем. Это короткое окно (на
+    -- практике <1с при готовом SDK). TODO: добавить splash «Синхронизация...»
+    -- если окажется что 0.5-1.5с черного экрана выглядит криво.
+    sm.cloud_init(function(err)
+        if err then
+            dbg("[ui_manager_v2] cloud_init done with err:", err, "- using local save")
+        else
+            dbg("[ui_manager_v2] cloud_init done - save in sync")
+        end
+        show_menu(self)
+        dbg("[ui_manager_v2] init done")
+    end)
+
+    -- Stage 4: visibility/focus hook. На HTML5 (Яндекс) final() не вызывается
+    -- при закрытии вкладки или переключении — браузер просто убивает страницу.
+    -- WINDOW_EVENT_FOCUS_LOST на HTML5 мапится на visibilitychange+blur, что
+    -- даёт нам момент сохранить ДО возможной смерти страницы.
+    --
+    -- На desktop то же событие срабатывает на alt-tab — это тоже полезно
+    -- (если игра в фоне упадёт, последние мутации уже на диске и в облаке).
+    --
+    -- pcall защищает от старых билдов где window-API нет.
+    pcall(window.set_listener, function(_, event, _data)
+        if event == window.WINDOW_EVENT_FOCUS_LOST
+           or event == window.WINDOW_EVENT_ICONIFY then
+            dbg("[ui_manager_v2] focus_lost - flushing save")
+            if sm and sm.save_now then sm.save_now() end
+            if sm and sm.cloud_flush_now then sm.cloud_flush_now() end
+        end
+    end)
 end
 
 function final(self)
@@ -802,6 +838,13 @@ function final(self)
     -- диск немедленно, без таймера.
     if sm and sm.save_now then
         sm.save_now()
+    end
+    -- Cloud flush: после локальной записи дёргаем cloud push с flush=true.
+    -- На HTML5 это shoot-and-forget — final завершится до того как Яндекс
+    -- ответит, но запрос уже в очереди браузера и отстреляется по beacon.
+    -- На ПК cloud_sync.ready=false → no-op.
+    if sm and sm.cloud_flush_now then
+        sm.cloud_flush_now()
     end
     msg.post(".", "release_input_focus")
 end

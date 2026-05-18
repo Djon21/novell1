@@ -166,7 +166,33 @@ nodes {
 nodes {
   position {
     x: 25.0
-    y: -370.0
+    y: -340.0
+    z: 0.22
+  }
+  size {
+    x: 400.0
+    y: 26.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "\320\227\320\220\320\223\320\240\320\243\320\227\320\230\320\242\320\254"
+  font: "unbounded_bold_20"
+  id: "mi_load"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "left_menu_root"
+  alpha: 0.78
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 25.0
+    y: -400.0
     z: 0.22
   }
   size {
@@ -192,7 +218,7 @@ nodes {
 nodes {
   position {
     x: 25.0
-    y: -430.0
+    y: -460.0
     z: 0.22
   }
   size {
@@ -883,6 +909,269 @@ nodes {
   text: "\320\275\320\265\321\202"
   font: "unbounded_bold_20"
   id: "confirm_no"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    z: 0.5
+  }
+  size {
+    x: 1280.0
+    y: 720.0
+  }
+  color {
+    x: 0.019607844
+    y: 0.011764706
+    z: 0.101960786
+  }
+  type: TYPE_BOX
+  id: "load_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_root"
+  alpha: 0.86
+}
+nodes {
+  position {
+    x: 640.0
+    y: 360.0
+    z: 0.51
+  }
+  size {
+    x: 820.0
+    y: 460.0
+  }
+  color {
+    x: 0.06
+    y: 0.06
+    z: 0.1
+  }
+  type: TYPE_BOX
+  id: "load_box"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_root"
+}
+nodes {
+  position {
+    x: 640.0
+    y: 545.0
+    z: 0.52
+  }
+  size {
+    x: 760.0
+    y: 36.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "\320\227\320\260\320\263\321\200\321\203\320\267\320\272\320\260"
+  font: "unbounded_bold_20"
+  id: "load_title"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 640.0
+    y: 480.0
+    z: 0.52
+  }
+  size {
+    x: 760.0
+    y: 56.0
+  }
+  type: TYPE_BOX
+  id: "load_row_0_hit"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_root"
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 640.0
+    y: 480.0
+    z: 0.53
+  }
+  size {
+    x: 760.0
+    y: 30.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "\320\220\320\262\321\202\320\276\321\201\320\265\320\271\320\262"
+  font: "unbounded_bold_20"
+  id: "load_row_0_label"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 640.0
+    y: 415.0
+    z: 0.52
+  }
+  size {
+    x: 760.0
+    y: 56.0
+  }
+  type: TYPE_BOX
+  id: "load_row_1_hit"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_root"
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 640.0
+    y: 415.0
+    z: 0.53
+  }
+  size {
+    x: 760.0
+    y: 30.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "\320\241\320\273\320\276\321\202 1"
+  font: "unbounded_bold_20"
+  id: "load_row_1_label"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 640.0
+    y: 350.0
+    z: 0.52
+  }
+  size {
+    x: 760.0
+    y: 56.0
+  }
+  type: TYPE_BOX
+  id: "load_row_2_hit"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_root"
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 640.0
+    y: 350.0
+    z: 0.53
+  }
+  size {
+    x: 760.0
+    y: 30.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "\320\241\320\273\320\276\321\202 2"
+  font: "unbounded_bold_20"
+  id: "load_row_2_label"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 640.0
+    y: 285.0
+    z: 0.52
+  }
+  size {
+    x: 760.0
+    y: 56.0
+  }
+  type: TYPE_BOX
+  id: "load_row_3_hit"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_root"
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 640.0
+    y: 285.0
+    z: 0.53
+  }
+  size {
+    x: 760.0
+    y: 30.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "\320\241\320\273\320\276\321\202 3"
+  font: "unbounded_bold_20"
+  id: "load_row_3_label"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 640.0
+    y: 180.0
+    z: 0.52
+  }
+  size {
+    x: 200.0
+    y: 56.0
+  }
+  type: TYPE_BOX
+  id: "load_back_hit"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_root"
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 640.0
+    y: 180.0
+    z: 0.53
+  }
+  size {
+    x: 200.0
+    y: 32.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "\320\235\320\260\320\267\320\260\320\264"
+  font: "unbounded_bold_20"
+  id: "load_back"
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "menu_root"
   outline_alpha: 0.0

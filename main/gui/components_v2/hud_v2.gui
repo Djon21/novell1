@@ -11,6 +11,10 @@ fonts {
   name: "jb_mono_16"
   font: "/main/fonts/jb_mono_16.font"
 }
+fonts {
+  name: "unbounded_bold_20"
+  font: "/main/fonts/unbounded_bold_20.font"
+}
 textures {
   name: "ui_common"
   texture: "/main/images/ui_common.atlas"
@@ -372,10 +376,6 @@ nodes {
     x: -1.0
     y: -1.0
     z: 0.12
-  }
-  scale {
-    x: 1.0
-    y: 1.0
   }
   size {
     x: 40.0
@@ -895,6 +895,472 @@ nodes {
     z: 2.0
     w: 2.0
   }
+}
+nodes {
+  position {
+    x: 800.0
+    y: 645.0
+    z: 0.1
+  }
+  size {
+    x: 70.0
+    y: 70.0
+  }
+  color {
+    x: 0.031
+    y: 0.023
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "save_ring"
+  xanchor: XANCHOR_RIGHT
+  yanchor: YANCHOR_TOP
+  parent: "hud_root"
+  inherit_alpha: true
+  alpha: 0.85
+}
+nodes {
+  position {
+    y: 1.0
+    z: 0.12
+  }
+  scale {
+    x: 0.48
+    y: 0.48
+  }
+  size {
+    x: 120.0
+    y: 40.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "SAVE"
+  font: "unbounded_bold_32"
+  id: "save_label"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "save_ring"
+  alpha: 0.9
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    z: 0.7
+  }
+  size {
+    x: 1280.0
+    y: 720.0
+  }
+  color {
+    x: 0.019607844
+    y: 0.011764706
+    z: 0.101960786
+  }
+  type: TYPE_BOX
+  id: "slots_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  alpha: 0.86
+}
+nodes {
+  position {
+    x: 640.0
+    y: 360.0
+    z: 0.71
+  }
+  size {
+    x: 880.0
+    y: 420.0
+  }
+  color {
+    x: 0.06
+    y: 0.06
+    z: 0.1
+  }
+  type: TYPE_BOX
+  id: "slots_box"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+}
+nodes {
+  position {
+    x: 640.0
+    y: 530.0
+    z: 0.72
+  }
+  size {
+    x: 800.0
+    y: 36.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "\320\241\320\233\320\236\320\242\320\253"
+  font: "unbounded_bold_20"
+  id: "slots_title"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 246.0
+    y: 450.0
+    z: 0.73
+  }
+  size {
+    x: 520.0
+    y: 30.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "\320\241\320\273\320\276\321\202 1"
+  font: "unbounded_bold_20"
+  id: "slot_1_label"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 806.0
+    y: 450.0
+    z: 0.72
+  }
+  size {
+    x: 140.0
+    y: 50.0
+  }
+  type: TYPE_BOX
+  id: "slot_1_save_hit"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 806.0
+    y: 450.0
+    z: 0.73
+  }
+  size {
+    x: 140.0
+    y: 30.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "\320\241\320\236\320\245\320\240"
+  font: "unbounded_bold_20"
+  id: "slot_1_save_btn"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 966.0
+    y: 450.0
+    z: 0.72
+  }
+  size {
+    x: 140.0
+    y: 50.0
+  }
+  type: TYPE_BOX
+  id: "slot_1_load_hit"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 966.0
+    y: 450.0
+    z: 0.73
+  }
+  size {
+    x: 140.0
+    y: 30.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "\320\227\320\220\320\223\320\240"
+  font: "unbounded_bold_20"
+  id: "slot_1_load_btn"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 246.0
+    y: 380.0
+    z: 0.73
+  }
+  size {
+    x: 520.0
+    y: 30.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "\320\241\320\273\320\276\321\202 2"
+  font: "unbounded_bold_20"
+  id: "slot_2_label"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 806.0
+    y: 380.0
+    z: 0.72
+  }
+  size {
+    x: 140.0
+    y: 50.0
+  }
+  type: TYPE_BOX
+  id: "slot_2_save_hit"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 806.0
+    y: 380.0
+    z: 0.73
+  }
+  size {
+    x: 140.0
+    y: 30.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "\320\241\320\236\320\245\320\240"
+  font: "unbounded_bold_20"
+  id: "slot_2_save_btn"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 966.0
+    y: 380.0
+    z: 0.72
+  }
+  size {
+    x: 140.0
+    y: 50.0
+  }
+  type: TYPE_BOX
+  id: "slot_2_load_hit"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 966.0
+    y: 380.0
+    z: 0.73
+  }
+  size {
+    x: 140.0
+    y: 30.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "\320\227\320\220\320\223\320\240"
+  font: "unbounded_bold_20"
+  id: "slot_2_load_btn"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 246.0
+    y: 310.0
+    z: 0.73
+  }
+  size {
+    x: 520.0
+    y: 30.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "\320\241\320\273\320\276\321\202 3"
+  font: "unbounded_bold_20"
+  id: "slot_3_label"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 806.0
+    y: 310.0
+    z: 0.72
+  }
+  size {
+    x: 140.0
+    y: 50.0
+  }
+  type: TYPE_BOX
+  id: "slot_3_save_hit"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 806.0
+    y: 310.0
+    z: 0.73
+  }
+  size {
+    x: 140.0
+    y: 30.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "\320\241\320\236\320\245\320\240"
+  font: "unbounded_bold_20"
+  id: "slot_3_save_btn"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 966.0
+    y: 310.0
+    z: 0.72
+  }
+  size {
+    x: 140.0
+    y: 50.0
+  }
+  type: TYPE_BOX
+  id: "slot_3_load_hit"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 966.0
+    y: 310.0
+    z: 0.73
+  }
+  size {
+    x: 140.0
+    y: 30.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "\320\227\320\220\320\223\320\240"
+  font: "unbounded_bold_20"
+  id: "slot_3_load_btn"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 640.0
+    y: 210.0
+    z: 0.72
+  }
+  size {
+    x: 200.0
+    y: 56.0
+  }
+  type: TYPE_BOX
+  id: "slots_back_hit"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 640.0
+    y: 210.0
+    z: 0.73
+  }
+  size {
+    x: 200.0
+    y: 32.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "\320\235\320\220\320\227\320\220\320\224"
+  font: "unbounded_bold_20"
+  id: "slots_back"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT

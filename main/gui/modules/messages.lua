@@ -113,6 +113,8 @@ M.continue_game        = hash("continue_game")
 M.reset_iteration      = hash("reset_iteration")
 M.open_gallery         = hash("open_gallery")
 M.open_achievements    = hash("open_achievements")
+M.load_slot            = hash("load_slot")
+M.save_slot            = hash("save_slot")
 
 -- ---------------------------------------------------------------------------
 -- Backgrounds / эффекты

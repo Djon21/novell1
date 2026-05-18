@@ -52,6 +52,40 @@ local function handle_menu(ctx, message_id, message, sender)
     elseif message_id == MSG.open_achievements then
         ctx.dbg("[ui_manager_v2] open_achievements (TODO)")
         return true
+    elseif message_id == MSG.load_slot then
+        -- Save slots: загрузка из конкретного слота. slot=0 → autosave (как
+        -- обычный continue_game), slot=1..3 → ручной слот.
+        local slot = message and message.slot or 0
+        sm.load()
+        meta.init()
+        local ok = true
+        if slot ~= 0 then
+            ok = sm.load_from_slot(slot)
+        end
+        if not ok or not sm.has_save() then
+            log.info("ui_manager", "load_slot ignored: slot", slot, "empty/invalid")
+            ctx.refresh_menu_state()
+            return true
+        end
+        local bytes = ctx.load_main_story_bytes and ctx.load_main_story_bytes() or nil
+        if not bytes then
+            local ok_b, b = pcall(sys.load_resource, "/main/story/chapter_01.json")
+            if ok_b then bytes = b end
+        end
+        if not bytes then
+            log.error("ui_manager", "chapter_01.json not found")
+            return true
+        end
+        ctx.prepare_run_restore()
+        local restored = ctx.restore_run_state({ defer_scene_enter = true })
+        ctx.reset_dialogue_backlog()
+        dm.load_saved(bytes)
+        if restored and restored.scene_to_enter then
+            ctx.enter_restored_scene(restored.scene_to_enter)
+        end
+        ctx.handle_dialogue_update()
+        ctx.sync_ui_state()
+        return true
     end
     return false
 end

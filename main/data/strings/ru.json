@@ -6,8 +6,12 @@
 
     "menu_new_iteration_fmt":      "НАЧАТЬ ИТЕРАЦИЮ %s",
     "menu_continue":               "ПРОДОЛЖИТЬ",
+    "menu_load":                   "ЗАГРУЗИТЬ",
     "menu_reset":                  "СБРОСИТЬ ИТЕРАЦИЮ",
     "menu_achievements":           "ДОСТИЖЕНИЯ",
+
+    "menu_load_title":             "ЗАГРУЗКА",
+    "menu_back":                   "НАЗАД",
 
     "menu_reset_confirm":          "Сбросить итерацию?\nВесь прогресс будет утерян.",
     "menu_reset_yes":              "ДА",
