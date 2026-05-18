@@ -40,6 +40,13 @@ local ICON_PASTE   = string.char(0xEE, 0x90, 0xA9)
 -- вода / мусор: близкие Material Icons, fallback допустим
 local ICON_WATER   = string.char(0xEE, 0x95, 0x84)
 local ICON_TRASH   = string.char(0xEE, 0xA1, 0xB2)
+-- Подарки воскресенья. Пока inventory отображает Material Icons, поэтому
+-- используем близкие существующие глифы. PNG-иконки — отдельный UI/asset этап.
+local ICON_GIFT    = ICON_KEY
+local ICON_DRINK   = ICON_WATER
+local ICON_SNACK   = ICON_CUP
+local ICON_BROOM   = ICON_BRUSH
+local ICON_NAPKINS = ICON_NOTE
 
 M.items = {
     mug = {
@@ -240,6 +247,188 @@ M.items = {
         description = "Бутылка воды.",
         verbs  = { "inspect" },
         icon   = ICON_WATER,
+        qty    = 1,
+    },
+
+    gift_iced_tea = {
+        name   = "Холодный чай",
+        type   = "подарок",
+        source = "магазин",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Бутылка холодного чая. Почти забота, если не говорить слишком уверенно.",
+        description = "Холодный чай из магазина перед встречей.",
+        verbs  = { "inspect" },
+        icon   = ICON_DRINK,
+        qty    = 1,
+    },
+
+    gift_berry_soda = {
+        name   = "Ягодная газировка",
+        type   = "подарок",
+        source = "магазин",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Слишком яркая бутылка. Выглядит как попытка сделать день легче.",
+        description = "Ягодная газировка из магазина.",
+        verbs  = { "inspect" },
+        icon   = ICON_DRINK,
+        qty    = 1,
+    },
+
+    gift_coffee_can = {
+        name   = "Кофе в банке",
+        type   = "подарок",
+        source = "магазин",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Холодный кофе в банке. Удобный, бодрый и немного безличный.",
+        description = "Кофе в банке из магазина.",
+        verbs  = { "inspect" },
+        icon   = ICON_DRINK,
+        qty    = 1,
+    },
+
+    gift_energy_drink = {
+        name   = "Энергетик",
+        type   = "подарок",
+        source = "магазин",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Банка энергетика. Подарок с тревожным намёком на ночную смену.",
+        description = "Энергетик из магазина.",
+        verbs  = { "inspect" },
+        icon   = ICON_DRINK,
+        qty    = 1,
+    },
+
+    gift_crackers = {
+        name   = "Солёные крекеры",
+        type   = "подарок",
+        source = "магазин",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Маленькая пачка крекеров. Слишком практично, чтобы быть романтично, но не бесполезно.",
+        description = "Солёные крекеры из магазина.",
+        verbs  = { "inspect" },
+        icon   = ICON_SNACK,
+        qty    = 1,
+    },
+
+    gift_chips = {
+        name   = "Маленькие чипсы",
+        type   = "подарок",
+        source = "магазин",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Пачка чипсов. Хрустит ещё до того, как её открыли.",
+        description = "Маленькая пачка чипсов.",
+        verbs  = { "inspect" },
+        icon   = ICON_SNACK,
+        qty    = 1,
+    },
+
+    gift_nuts = {
+        name   = "Орешки",
+        type   = "подарок",
+        source = "магазин",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Пакетик орешков. Вежливо маскируется под взрослый выбор.",
+        description = "Пакетик орешков из магазина.",
+        verbs  = { "inspect" },
+        icon   = ICON_SNACK,
+        qty    = 1,
+    },
+
+    gift_dark_chocolate = {
+        name   = "Тёмный шоколад",
+        type   = "подарок",
+        source = "магазин",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Плитка тёмного шоколада. Нормальный подарок, почти слишком нормальный.",
+        description = "Тёмный шоколад из магазина.",
+        verbs  = { "inspect" },
+        icon   = ICON_SNACK,
+        qty    = 1,
+    },
+
+    gift_milk_chocolate = {
+        name   = "Молочный шоколад",
+        type   = "подарок",
+        source = "магазин",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Плитка молочного шоколада. Добрый, простой и немного школьный выбор.",
+        description = "Молочный шоколад из магазина.",
+        verbs  = { "inspect" },
+        icon   = ICON_SNACK,
+        qty    = 1,
+    },
+
+    gift_waffle_bar = {
+        name   = "Вафельный батончик",
+        type   = "подарок",
+        source = "магазин",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Вафельный батончик. Самый короткий путь от неловкости к сахару.",
+        description = "Вафельный батончик из магазина.",
+        verbs  = { "inspect" },
+        icon   = ICON_SNACK,
+        qty    = 1,
+    },
+
+    gift_keychain_flashlight = {
+        name   = "Фонарик-брелок",
+        type   = "ключ",
+        source = "магазин",
+        iter   = "#017",
+        clue   = "да",
+        desc   = "Маленький фонарик на кольце. Странный подарок, зато с очень ясной функцией: не потеряться.",
+        description = "Маленький фонарик-брелок из бытового отдела.",
+        verbs  = { "inspect" },
+        icon   = ICON_GIFT,
+        qty    = 1,
+    },
+
+    gift_small_broom = {
+        name   = "Веник",
+        type   = "подарок",
+        source = "магазин",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Небольшой веник. Социально рискованный предмет для первого свидания.",
+        description = "Небольшой веник из бытового отдела.",
+        verbs  = { "inspect" },
+        icon   = ICON_BROOM,
+        qty    = 1,
+    },
+
+    gift_wet_wipes = {
+        name   = "Влажные салфетки",
+        type   = "подарок",
+        source = "магазин",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Упаковка влажных салфеток. Забота, которая очень старается выглядеть практично.",
+        description = "Влажные салфетки из магазина.",
+        verbs  = { "inspect" },
+        icon   = ICON_NAPKINS,
+        qty    = 1,
+    },
+
+    gift_paper_napkins = {
+        name   = "Бумажные салфетки",
+        type   = "подарок",
+        source = "магазин",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Пачка бумажных салфеток. На случай, если у дня будут крошки.",
+        description = "Бумажные салфетки из магазина.",
+        verbs  = { "inspect" },
+        icon   = ICON_NAPKINS,
         qty    = 1,
     },
 

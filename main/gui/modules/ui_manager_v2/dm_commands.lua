@@ -43,6 +43,10 @@ local function apply_single(cmd, ctx)
         if gs.reply_msg then gs.reply_msg(cmd.chat, cmd.text) end
     elseif cmd.type == "mark_msg_read" then
         if gs.mark_msg_read then gs.mark_msg_read(cmd.chat) end
+    elseif cmd.type == "set_msg_tag" then
+        if gs.set_msg_tag then gs.set_msg_tag(cmd.chat, cmd.tone, cmd.label) end
+    elseif cmd.type == "set_msg_prompt" then
+        if gs.set_msg_prompt then gs.set_msg_prompt(cmd.chat, cmd.knot, cmd.label) end
     elseif cmd.type == "add_note" then
         if gs.add_note then gs.add_note(cmd.title, cmd.body) end
     elseif cmd.type == "add_mail" then

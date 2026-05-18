@@ -549,11 +549,16 @@ open_phone_map_app = function(self)
 end
 
 local function show_choice(self, opts, timer_sec, title)
+    -- Notify dialogue/HUD что choice-модалка открылась: иначе клик по опции
+    -- проваливается ещё и в dialogue (advance/btn_next), который перерисует
+    -- текущий choice и сбросит scroll-offset.
+    notify_overlay_state("choice", true)
     overlay_flow.show_choice(overlay_ctx(self), opts, timer_sec, title)
 end
 
 hide_choice = function(self)
     overlay_flow.hide_choice(overlay_ctx(self))
+    notify_overlay_state("choice", false)
 end
 
 local function consume_dm_effects()
@@ -821,6 +826,10 @@ function on_input(self, action_id, action)
         return dev_jump.select_next()
     elseif action.pressed and action_id == MSG.dev_jump_apply then
         return dev_jump.apply_selected(dev_jump_ctx(self))
+    elseif action.pressed and action_id == MSG.dev_jump_toggle_gender then
+        return dev_jump.toggle_gender()
+    elseif action.pressed and action_id == MSG.dev_jump_record then
+        return dev_jump.record_snapshot(dev_jump_ctx(self))
     end
 
     return false

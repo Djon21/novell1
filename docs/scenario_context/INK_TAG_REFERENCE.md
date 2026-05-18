@@ -47,13 +47,65 @@ Source of truth в коде: `main/scripts/dialogue_manager_ink.lua`, функц
 | `sms:tag:CONTACT:TONE:LABEL` | `# sms:tag:unknown:hot:сигнал` | Ставит pin-тег на SMS-чат (цветной значок справа в списке). TONE ∈ `hot`, `amber`, `danger`, `warn`. LABEL — короткая подпись (выводится UPPERCASE, обрезается до ~8 символов). |
 | `sms:tag:CONTACT:TONE` | `# sms:tag:prod:amber` | Тег без подписи — только цветная плашка-точка. |
 | `sms:tag:CONTACT:clear` | `# sms:tag:unknown:clear` | Снять pin-тег с чата. |
+| `sms:need_reply:CONTACT[:LABEL]` | `# sms:need_reply:mila` / `# sms:need_reply:prod:СРОЧНО` | Пин «ждёт ответа» — голубой акцент + label (дефолт `ОТВЕТЬ`). Автоматически снимается при `# sms:reply:CONTACT:...`. Используй когда без ответа в этот чат сюжет не пойдёт дальше. |
 | `msg:add:CHAT:TEXT` | `# msg:add:mila:Привет` | Добавляет входящее сообщение в Messenger. |
 | `msg:reply:CHAT:TEXT` | `# msg:reply:mila:Ок` | Добавляет исходящее сообщение в Messenger и ставит авто-флаг ответа. |
 | `msg:read:CHAT` | `# msg:read:mila` | Помечает Messenger-чат прочитанным. |
+| `msg:tag:CHAT:TONE[:LABEL]` | `# msg:tag:loop:hot:сигнал` | Pin-тег для Messenger. TONE ∈ `hot`, `amber`, `danger`, `warn`, `need_reply`. |
+| `msg:tag:CHAT:clear` | `# msg:tag:loop:clear` | Снять pin-тег. |
+| `msg:need_reply:CHAT[:LABEL]` | `# msg:need_reply:mila` | Пин «ждёт ответа» для Messenger. Авто-снимается при `# msg:reply:CHAT:...`. |
+| `msg:prompt:CHAT:KNOT[:LABEL]` | `# msg:prompt:mila:park_message_where_are_you:НАПИСАТЬ` | Открытая инициатива в любом чате. См. ниже **«Открытая инициатива (`msg:prompt`)»**. |
+| `msg:prompt:CHAT:clear` | `# msg:prompt:mila:clear` | Снять prompt вручную (если игрок ушёл из сцены не отправив). |
 
 Если текст содержит двоеточие, лучше обернуть его в кавычки или проверить результат после сборки.
 
-**Pin-теги:** хранятся в runtime-стейте (sms_state), сериализуются в save, переживают перезагрузку. Чтобы убрать тег — `# sms:tag:CONTACT:clear`. Аватар в списке тоже подкрашивается под tone: `hot` → magenta, `amber`/`warn` → жёлтый, `danger` → красно-розовый.
+**Pin-теги:** хранятся в runtime-стейте (sms_state / messenger_state), сериализуются в save, переживают перезагрузку. Чтобы убрать тег — `# sms:tag:CONTACT:clear` / `# msg:tag:CHAT:clear`. Аватар в списке тоже подкрашивается под tone: `hot` → розовый/magenta, `amber`/`warn` → жёлтый, `danger` → красно-розовый, `need_reply` → розовый/magenta (тот же что у `hot`, с pingpong-анимацией alpha).
+
+**`need_reply` vs обычный `tag`:** `need_reply` — это семантический пин «без ответа сюжет не двинется». Он автоматически снимается при `# sms:reply` / `# msg:reply` в этот чат, label по умолчанию `ОТВЕТЬ`. Обычные `tag` — это произвольный маркер (`hot:сигнал`, `amber:напомни`), руками снимается через `:clear`. Если игроку обязательно нужно ответить — используй `need_reply`, не `tag`.
+
+**Открытая инициатива (`msg:prompt`):**
+
+Синтаксис: `# msg:prompt:CHAT:KNOT[:LABEL]`
+
+Это основной паттерн «дать игроку написать первым из сцены». Заменяет хотспоты «Написать». Делает за один тег сразу три вещи:
+
+- ставит pin-плашку на чате CHAT в списке мессенджера (label = `LABEL` или `НАПИСАТЬ` по дефолту, мигает розовым);
+- разрешает писать в чат **игнорируя** `msg_<chat>_replied` — даже если игрок уже отвечал в этот чат раньше;
+- при тапе input'а в чате диверитит **в указанный KNOT** (не в `msg_thread_<chat>`).
+
+Авто-снимается при первом `# msg:reply:CHAT:...` внутри KNOT. Если игрок не отправил и инициатива больше не нужна — снять вручную: `# msg:prompt:CHAT:clear`.
+
+Пример (парк, игрок не нашёл NPC):
+
+```ink
+=== sunday_date_park_arrival ===
+# speaker:none
+В Messenger мигает чат — можно написать {npc_name_dat}, где вы разминулись.
+
+{mc_gender == "female":
+    # msg:prompt:artem:park_message_where_are_you:НАПИСАТЬ
+- else:
+    # msg:prompt:mila:park_message_where_are_you:НАПИСАТЬ
+}
+# hud:hint:phone
+# return_to_scene
+-> DONE
+
+=== park_message_where_are_you ===
+# speaker:mc
+«Ты где?»
+
+* [Спросить]
+    # msg:reply:mila:Ты где?     // pin/prompt снимется автоматически
+    # msg:add:mila:У воды, ближе к лавочкам.
+    # hud:hint:phone:off
+    -> DONE
+```
+
+**Когда что использовать:**
+- Игроку приходит сообщение, надо ответить → `# msg:need_reply` (pin «ОТВЕТЬ», использует штатный `msg_thread_<chat>`).
+- Игрок должен написать первым из конкретной сцены → `# msg:prompt:CHAT:KNOT` (pin «НАПИСАТЬ», свой knot).
+- Просто визуальный маркер на чате без авто-снятия → `# msg:tag:CHAT:TONE:LABEL`.
 
 ## Телефонные приложения и данные
 

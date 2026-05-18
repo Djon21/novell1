@@ -17,6 +17,12 @@ local function shop_bg(zone)
     return "bg_shop_" .. zone .. "_day"
 end
 
+local function can_choose_pre_date_gift(gs)
+    return not gs.get_flag("met_npc_sunday")
+       and not gs.get_flag("sunday_gift_bought")
+end
+
+
 local shop_street = {
     bg = shop_bg("street"),
     label = "У магазина",
@@ -84,7 +90,8 @@ local shop_front = {
             label = "Напитки",
             knot = "shop_drinks_interact",
             visible_when = function(gs)
-                return not gs.get_flag("sunday_shop_done")
+                return (not gs.get_flag("met_npc_sunday") and not gs.get_flag("sunday_gift_bought"))
+                    or (gs.get_flag("met_npc_sunday") and not gs.get_flag("sunday_shop_done"))
             end,
         },
         s.pickup{
@@ -93,7 +100,8 @@ local shop_front = {
             label = "Снеки",
             knot = "shop_snacks_interact",
             visible_when = function(gs)
-                return not gs.get_flag("sunday_shop_done")
+                return (not gs.get_flag("met_npc_sunday") and not gs.get_flag("sunday_gift_bought"))
+                    or (gs.get_flag("met_npc_sunday") and not gs.get_flag("sunday_shop_done"))
             end,
         },
         s.inspect{
@@ -127,6 +135,10 @@ local shop_household = {
     bg = shop_bg("household"),
     label = "Бытовой отдел",
     hotspots = {
+        -- До свидания это те же категорийные полки, но внутри Ink они
+        -- открывают выбор подарка. Не дробить на отдельные gift-хотспоты:
+        -- UX должен совпадать с напитками/снеками — клик по категории,
+        -- затем текстовый список выбора и вариант отмены.
         s.inspect{
             id = "shop_household_goods",
             rect = { x = 680, y = 140, w = 280, h = 270 },

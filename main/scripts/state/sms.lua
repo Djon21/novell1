@@ -181,6 +181,10 @@ function M.reply(contact_id, text)
         seq       = seq,
     })
     set_flag_cb("sms_" .. tostring(contact_id) .. "_replied", true)
+    -- Сняли need_reply pin: ответ дан, висящий тег больше не нужен.
+    if _sms_tags[tostring(contact_id)] and _sms_tags[tostring(contact_id)].tone == "need_reply" then
+        _sms_tags[tostring(contact_id)] = nil
+    end
     notify_cb()
     return true
 end

@@ -64,7 +64,7 @@ nodes {
 nodes {
   position {
     x: 528.0
-    y: 608.0
+    y: 597.0
     z: 0.55
   }
   size {
@@ -86,7 +86,7 @@ nodes {
 nodes {
   position {
     x: 528.0
-    y: 608.0
+    y: 597.0
     z: 0.552
   }
   size {
@@ -107,7 +107,7 @@ nodes {
 nodes {
   position {
     x: 528.0
-    y: 647.0
+    y: 636.0
     z: 0.552
   }
   size {
@@ -128,7 +128,7 @@ nodes {
 nodes {
   position {
     x: 528.0
-    y: 608.0
+    y: 597.0
     z: 0.552
   }
   size {
@@ -149,7 +149,7 @@ nodes {
 nodes {
   position {
     x: 645.0
-    y: 608.0
+    y: 597.0
     z: 0.552
   }
   size {
@@ -170,7 +170,7 @@ nodes {
 nodes {
   position {
     x: 546.0
-    y: 628.0
+    y: 617.0
     z: 0.56
   }
   size {
@@ -194,7 +194,7 @@ nodes {
 nodes {
   position {
     x: 660.0
-    y: 606.0
+    y: 595.0
     z: 0.553
   }
   size {
@@ -215,7 +215,7 @@ nodes {
 nodes {
   position {
     x: 682.0
-    y: 628.0
+    y: 617.0
     z: 0.56
   }
   size {
@@ -238,7 +238,7 @@ nodes {
 nodes {
   position {
     x: 718.0
-    y: 634.0
+    y: 623.0
     z: 0.56
   }
   size {
@@ -263,7 +263,7 @@ nodes {
 nodes {
   position {
     x: 718.0
-    y: 612.0
+    y: 601.0
     z: 0.56
   }
   size {
@@ -289,7 +289,7 @@ nodes {
 nodes {
   position {
     x: 1074.0
-    y: 610.0
+    y: 599.0
     z: 0.55
   }
   size {
@@ -311,7 +311,7 @@ nodes {
 nodes {
   position {
     x: 1074.0
-    y: 610.0
+    y: 599.0
     z: 0.552
   }
   size {
@@ -333,7 +333,7 @@ nodes {
 nodes {
   position {
     x: 1074.0
-    y: 647.0
+    y: 636.0
     z: 0.552
   }
   size {
@@ -355,7 +355,7 @@ nodes {
 nodes {
   position {
     x: 1074.0
-    y: 610.0
+    y: 599.0
     z: 0.552
   }
   size {
@@ -377,7 +377,7 @@ nodes {
 nodes {
   position {
     x: 1111.0
-    y: 610.0
+    y: 599.0
     z: 0.552
   }
   size {
@@ -399,7 +399,7 @@ nodes {
 nodes {
   position {
     x: 1093.0
-    y: 629.0
+    y: 618.0
     z: 0.56
   }
   size {
@@ -423,7 +423,7 @@ nodes {
 nodes {
   position {
     x: 1118.0
-    y: 610.0
+    y: 599.0
     z: 0.55
   }
   size {
@@ -445,7 +445,7 @@ nodes {
 nodes {
   position {
     x: 1118.0
-    y: 610.0
+    y: 599.0
     z: 0.552
   }
   size {
@@ -467,7 +467,7 @@ nodes {
 nodes {
   position {
     x: 1118.0
-    y: 647.0
+    y: 636.0
     z: 0.552
   }
   size {
@@ -489,7 +489,7 @@ nodes {
 nodes {
   position {
     x: 1118.0
-    y: 610.0
+    y: 599.0
     z: 0.552
   }
   size {
@@ -511,7 +511,7 @@ nodes {
 nodes {
   position {
     x: 1155.0
-    y: 610.0
+    y: 599.0
     z: 0.552
   }
   size {
@@ -533,7 +533,7 @@ nodes {
 nodes {
   position {
     x: 1137.0
-    y: 629.0
+    y: 618.0
     z: 0.56
   }
   size {
@@ -557,7 +557,7 @@ nodes {
 nodes {
   position {
     x: 1162.0
-    y: 610.0
+    y: 599.0
     z: 0.55
   }
   size {
@@ -579,7 +579,7 @@ nodes {
 nodes {
   position {
     x: 1162.0
-    y: 610.0
+    y: 599.0
     z: 0.552
   }
   size {
@@ -601,7 +601,7 @@ nodes {
 nodes {
   position {
     x: 1162.0
-    y: 647.0
+    y: 636.0
     z: 0.552
   }
   size {
@@ -623,7 +623,7 @@ nodes {
 nodes {
   position {
     x: 1162.0
-    y: 610.0
+    y: 599.0
     z: 0.552
   }
   size {
@@ -645,7 +645,7 @@ nodes {
 nodes {
   position {
     x: 1199.0
-    y: 610.0
+    y: 599.0
     z: 0.552
   }
   size {
@@ -667,7 +667,7 @@ nodes {
 nodes {
   position {
     x: 1181.0
-    y: 629.0
+    y: 618.0
     z: 0.56
   }
   size {

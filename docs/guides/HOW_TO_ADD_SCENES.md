@@ -1,5 +1,11 @@
 # Как добавить новую сцену и фон
 
+> Для AI-сценариста актуальный краткий контракт по локациям и хотспотам лежит в
+> `docs/scenario_context/LOCATIONS_GUIDE.md` и `docs/scenario_context/TEMPLATES.md`.
+> Новые хотспоты писать через recipes из `_shared.lua`, а не через verbose
+> `hotspot_style` + `action = {...}` форму, если пользователь явно не просит
+> низкоуровневую кодовую правку.
+
 > Один файл-инструкция: добавление fullscreen-фонов, point-and-click сцен,
 > hotspot'ов, scene objects. Поглотил `HOW_TO_ADD_BACKGROUNDS.md` и
 > `BACKGROUND_SYSTEM_MIGRATION_PLAN.md`.

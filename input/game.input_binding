@@ -23,6 +23,14 @@ key_trigger {
   action: "dev_jump_apply"
 }
 key_trigger {
+  input: KEY_F5
+  action: "dev_jump_toggle_gender"
+}
+key_trigger {
+  input: KEY_F6
+  action: "dev_jump_record"
+}
+key_trigger {
   input: KEY_ESC
   action: "edit_exit"
 }

@@ -349,7 +349,7 @@ local function apply_tags(tags, trailing)
                 -- # sms:tag:CONTACT:TONE:LABEL  — поставить pin-тег на чат
                 -- # sms:tag:CONTACT:TONE       — тег без подписи (просто цвет)
                 -- # sms:tag:CONTACT:clear      — снять тег
-                -- TONE ∈ {hot, amber, danger, warn, clear, none}.
+                -- TONE ∈ {hot, amber, danger, warn, need_reply, clear, none}.
                 local contact, tone, label = rest:match("([^:]+)%s*:%s*([^:]+)%s*:%s*(.+)")
                 if not contact then
                     contact, tone = rest:match("([^:]+)%s*:%s*(.+)")
@@ -368,6 +368,25 @@ local function apply_tags(tags, trailing)
                         contact = contact,
                         tone    = tone,
                         label   = label,
+                    })
+                end
+            elseif op == "need_reply" and rest then
+                -- # sms:need_reply:CONTACT[:LABEL]  — пин «ждёт ответа».
+                -- LABEL опционален (дефолт "ОТВЕТЬ"). Авто-снимается при # sms:reply.
+                local contact, label = rest:match("([^:]+)%s*:%s*(.+)")
+                if not contact then contact = rest end
+                contact = contact:gsub("^%s+", ""):gsub("%s+$", "")
+                if label then
+                    label = label:gsub('^%s*"(.*)"%s*$', "%1")
+                                 :gsub("^%s*'(.*)'%s*$", "%1")
+                                 :gsub("^%s+", ""):gsub("%s+$", "")
+                end
+                if contact ~= "" then
+                    table.insert(pending_commands, {
+                        type    = "set_sms_tag",
+                        contact = contact,
+                        tone    = "need_reply",
+                        label   = (label and label ~= "") and label or "ОТВЕТЬ",
                     })
                 end
             end
@@ -414,6 +433,86 @@ local function apply_tags(tags, trailing)
                 local chat = rest:gsub("^%s+", ""):gsub("%s+$", "")
                 if chat ~= "" then
                     table.insert(pending_commands, { type = "mark_msg_read", chat = chat })
+                end
+            elseif op == "tag" and rest then
+                -- # msg:tag:CHAT:TONE:LABEL  — pin-тег для мессенджера
+                -- # msg:tag:CHAT:clear       — снять тег
+                local chat, tone, label = rest:match("([^:]+)%s*:%s*([^:]+)%s*:%s*(.+)")
+                if not chat then
+                    chat, tone = rest:match("([^:]+)%s*:%s*(.+)")
+                    label = nil
+                end
+                if chat and tone then
+                    chat = chat:gsub("^%s+", ""):gsub("%s+$", "")
+                    tone = tone:gsub("^%s+", ""):gsub("%s+$", "")
+                    if label then
+                        label = label:gsub('^%s*"(.*)"%s*$', "%1")
+                                     :gsub("^%s*'(.*)'%s*$", "%1")
+                                     :gsub("^%s+", ""):gsub("%s+$", "")
+                    end
+                    table.insert(pending_commands, {
+                        type  = "set_msg_tag",
+                        chat  = chat,
+                        tone  = tone,
+                        label = label,
+                    })
+                end
+            elseif op == "need_reply" and rest then
+                -- # msg:need_reply:CHAT[:LABEL]  — пин «ждёт ответа», авто-снимается
+                -- при # msg:reply:CHAT:...
+                local chat, label = rest:match("([^:]+)%s*:%s*(.+)")
+                if not chat then chat = rest end
+                chat = chat:gsub("^%s+", ""):gsub("%s+$", "")
+                if label then
+                    label = label:gsub('^%s*"(.*)"%s*$', "%1")
+                                 :gsub("^%s*'(.*)'%s*$", "%1")
+                                 :gsub("^%s+", ""):gsub("%s+$", "")
+                end
+                if chat ~= "" then
+                    table.insert(pending_commands, {
+                        type  = "set_msg_tag",
+                        chat  = chat,
+                        tone  = "need_reply",
+                        label = (label and label ~= "") and label or "ОТВЕТЬ",
+                    })
+                end
+            elseif op == "prompt" and rest then
+                -- # msg:prompt:CHAT:KNOT[:LABEL]  — открыть «инициативу» в чате:
+                -- pin-бейдж + игнор msg_<chat>_replied + диверт на KNOT при тапе
+                -- input'а в чате. LABEL опционален (дефолт "НАПИСАТЬ").
+                -- # msg:prompt:CHAT:clear  — снять prompt вручную.
+                -- Авто-снимается когда внутри KNOT происходит # msg:reply:CHAT:...
+                local chat, knot_or_clear, label = rest:match("([^:]+)%s*:%s*([^:]+)%s*:%s*(.+)")
+                if not chat then
+                    chat, knot_or_clear = rest:match("([^:]+)%s*:%s*(.+)")
+                    label = nil
+                end
+                if chat and knot_or_clear then
+                    chat = chat:gsub("^%s+", ""):gsub("%s+$", "")
+                    knot_or_clear = knot_or_clear:gsub("^%s+", ""):gsub("%s+$", "")
+                    if label then
+                        label = label:gsub('^%s*"(.*)"%s*$', "%1")
+                                     :gsub("^%s*'(.*)'%s*$", "%1")
+                                     :gsub("^%s+", ""):gsub("%s+$", "")
+                    end
+                    if knot_or_clear == "clear" or knot_or_clear == "none" then
+                        table.insert(pending_commands, {
+                            type = "set_msg_prompt", chat = chat, knot = nil,
+                        })
+                        table.insert(pending_commands, {
+                            type = "set_msg_tag", chat = chat, tone = "clear",
+                        })
+                    else
+                        local final_label = (label and label ~= "") and label or "НАПИСАТЬ"
+                        table.insert(pending_commands, {
+                            type = "set_msg_prompt", chat = chat,
+                            knot = knot_or_clear, label = final_label,
+                        })
+                        table.insert(pending_commands, {
+                            type = "set_msg_tag", chat = chat,
+                            tone = "need_reply", label = final_label,
+                        })
+                    end
                 end
             end
         elseif key == "note" and value and not suppress_effects then
@@ -1056,6 +1155,10 @@ function M.set_var(name, value, track_in_state)
         return false
     end
     return true
+end
+
+function M.save_state()
+    save_ink_state()
 end
 
 function M.set_inventory_action_context(ctx)

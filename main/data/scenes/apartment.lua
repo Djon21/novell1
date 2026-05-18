@@ -190,7 +190,8 @@ return {
                 label = "Щётка",
                 knot = "take_toothbrush",
                 visible_when = function(gs)
-                    return not gs.get_flag("teeth_brushed")
+                    return not is_apartment_night(gs)
+                       and not gs.get_flag("teeth_brushed")
                        and not gs.has_item("toothbrush")
                        and not gs.has_item("toothbrush_pasted")
                 end,
@@ -201,7 +202,8 @@ return {
                 label = "Паста",
                 knot = "take_toothpaste",
                 visible_when = function(gs)
-                    return not gs.get_flag("teeth_brushed")
+                    return not is_apartment_night(gs)
+                       and not gs.get_flag("teeth_brushed")
                        and not gs.has_item("toothpaste")
                        and not gs.has_item("toothbrush_pasted")
                 end,
@@ -212,7 +214,8 @@ return {
                 label = "Раковина",
                 knot = "bathroom_sink_prompt",
                 visible_when = function(gs)
-                    return not gs.get_flag("washed_up")
+                    return not is_apartment_night(gs)
+                       and not gs.get_flag("washed_up")
                 end,
             },
             s.story{

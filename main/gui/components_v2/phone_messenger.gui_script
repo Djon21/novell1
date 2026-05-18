@@ -13,7 +13,7 @@ local MSG = require "main.gui.modules.messages"
 
 local UI_MGR = "#ui_manager_v2"
 
-local MAX_LIST_ROWS = 7
+local MAX_LIST_ROWS = 6
 local MAX_BUBBLES = 8
 local LIST_SCROLL_STEP = 1
 local CHAT_SCROLL_STEP = 1
@@ -25,7 +25,7 @@ local BUBBLE_PAD_TOP = 12
 local BUBBLE_STAMP_AREA_H = 22
 local CHAT_AREA_TOP = 578
 local CHAT_AREA_BOTTOM = 148
-local LIST_ROW_SLOT_GAP_Y = 64
+local LIST_ROW_SLOT_GAP_Y = 76
 
 -- Drag-scroll параметры (как в phone_sms): pixel-сдвиг при котором делаем
 -- ровно 1 step (одна строка чата / один bubble), и порог в пикселях, после
@@ -537,6 +537,31 @@ local function hide_rows()
     for i = 1, MAX_LIST_ROWS do set_row_enabled(i, false) end
 end
 
+-- Pulse-анимация бейджа `need_reply` / tag-пина. Запускается один раз на
+-- (slot, pulse_key), при смене ключа или его очистке — отменяется и alpha
+-- возвращается к 1. PINGPONG между alpha=1 и alpha=0.35.
+local function update_badge_pulse(self, slot, pulse_key)
+    self.badge_pulse = self.badge_pulse or {}
+    local current = self.badge_pulse[slot]
+    if current == pulse_key then return end
+    local p = "chat" .. slot
+    for _, suffix in ipairs({ "_badge_bg", "_badge" }) do
+        local node = get_node(p .. suffix)
+        if node then
+            gui.cancel_animation(node, gui.PROP_COLOR)
+            local c = gui.get_color(node)
+            gui.set_color(node, vmath.vector4(c.x, c.y, c.z, 1))
+            if pulse_key then
+                local target = vmath.vector4(c.x, c.y, c.z, 0.35)
+                gui.animate(node, gui.PROP_COLOR, target,
+                    gui.EASING_INOUTSINE, 0.6, 0, nil,
+                    gui.PLAYBACK_LOOP_PINGPONG)
+            end
+        end
+    end
+    self.badge_pulse[slot] = pulse_key
+end
+
 local function render_tab(self)
     local all_count = #runtime_chat_ids()
     local unread = unread_total()
@@ -585,6 +610,9 @@ local function render_list(self)
 
     for slot = 1, MAX_LIST_ROWS do
         local id = ids[(self.list_offset or 0) + slot]
+        if not id then
+            update_badge_pulse(self, slot, nil)
+        end
         if id then
             local p = "chat" .. slot
             local meta = get_meta(id)
@@ -592,6 +620,17 @@ local function render_list(self)
             local unread_n = chat_unread(id)
             local unread = unread_n > 0
             local last = last_runtime_message(id)
+
+            -- Runtime pin-тег (# msg:tag / # msg:need_reply). НЕ трогает фон
+            -- строки — только окрашивает badge. Строка живёт по unread.
+            local rtone, rlabel = nil, nil
+            if gs.get_msg_tag then rtone, rlabel = gs.get_msg_tag(id) end
+            local pin_color = nil
+            if rtone == "hot" or rtone == "danger" then pin_color = COLORS.hot
+            elseif rtone == "amber" or rtone == "warn" then pin_color = COLORS.amber
+            elseif rtone == "need_reply" then pin_color = COLORS.hot
+            elseif rtone then pin_color = COLORS.accent end
+
             set_row_enabled(slot, true)
             set_color(p .. "_bg", unread and COLORS.accent or COLORS.card, unread and 0.06 or 0.55)
             set_border(p, unread and COLORS.accent or COLORS.paper, unread and 0.30 or 0.10)
@@ -608,7 +647,16 @@ local function render_list(self)
             set_text(p .. "_icons", icons)
             set_text(p .. "_preview", clamp_text(preview_from_message(last), 66))
             set_text(p .. "_time", last and last.time or "")
-            if unread_n > 0 then
+            local pulse_key = nil
+            if rtone then
+                -- Pin-тег приоритетнее unread-счётчика: показываем label.
+                set_node_enabled(p .. "_badge_bg", true)
+                set_node_enabled(p .. "_badge", true)
+                set_color(p .. "_badge_bg", pin_color or COLORS.accent, 1)
+                local label = (rlabel and rlabel ~= "") and rlabel or "!"
+                set_text(p .. "_badge", label)
+                pulse_key = id .. ":" .. tostring(rtone)
+            elseif unread_n > 0 then
                 set_node_enabled(p .. "_badge_bg", true)
                 set_node_enabled(p .. "_badge", true)
                 set_color(p .. "_badge_bg", meta.tone == "hot" and COLORS.hot or COLORS.accent, 1)
@@ -617,6 +665,7 @@ local function render_list(self)
                 set_node_enabled(p .. "_badge_bg", false)
                 set_node_enabled(p .. "_badge", false)
             end
+            update_badge_pulse(self, slot, pulse_key)
         end
     end
     set_text("list_footer_left", "messenger · runtime channel")
@@ -645,18 +694,28 @@ local function hide_bubbles()
     for i = 1, MAX_BUBBLES do set_bubble_enabled(i, false) end
 end
 
+-- Сегодняшнее ли время? Сегодняшние авто-сгенерированы как "HH:MM"
+-- (см. state/messenger.lua default_time). Pre-existing seed-сообщения через
+-- # msg:add_old: имеют человеческий label ("пн", "вчера", "пт") — НЕ today.
+local function is_today_time(t)
+    if not t or t == "" then return true end
+    return tostring(t):match("^%d%d:%d%d$") ~= nil
+end
+
 -- Конвертирует runtime-сообщения из game_state в формат bubble-renderer.
 -- Отличия от SMS-вида: исходящие получают галочки read-receipt (✓✓),
--- в начало вставляется day-separator с именем чата для атмосферы.
+-- day-separator «сегодня» вставляется ПЕРЕД первым today-сообщением,
+-- чтобы pre-existing seed-история выше выглядела как настоящие старые
+-- сообщения, а не «сегодняшние».
 local function runtime_msgs_to_ui(chat_id, raw)
     local out = {}
     local meta = get_meta(chat_id)
-    if raw and #raw > 0 then
-        -- Day-separator как «шапка» чата — выделяет messenger от плоского
-        -- SMS-списка. Текст «сегодня» — простой и универсальный.
-        table.insert(out, { type = "daysep", text = "сегодня" })
-    end
+    local sep_inserted = false
     for _, m in ipairs(raw or {}) do
+        if not sep_inserted and is_today_time(m.time) then
+            table.insert(out, { type = "daysep", text = "сегодня" })
+            sep_inserted = true
+        end
         local entry = {
             dir  = m.direction or "in",
             text = m.text or "",
@@ -664,9 +723,6 @@ local function runtime_msgs_to_ui(chat_id, raw)
             tone = meta.tone,
         }
         if entry.dir == "out" then
-            -- Read receipt: пока всегда «прочитано» (получатель — NPC,
-            -- ink-сценарий обычно отвечает сразу через # msg:add:).
-            -- Можно сделать гейт по флагу msg_<chat>_replied позже.
             entry.status = "✓✓"
         end
         table.insert(out, entry)
@@ -683,12 +739,19 @@ local function bubble_layout(m, meta)
     local is_out = m.dir == "out"
     local is_sep = m.type == "daysep" or m.type == "sys"
     if is_sep then
-        local text, lines = wrap_text_to_width((m.text or ""):upper(), 54)
+        -- Day-separator: чип по центру чат-зоны. Чат-bubbles рендерятся от
+        -- x=540 (incoming) до x=540+560=1100, центр ~820. Шире 200 не делаем
+        -- чтобы выглядело как лейбл, не как пустой пузырь.
+        -- :upper() пропускаем — для кириллицы стандартный string.upper не
+        -- работает, а делать UTF-8 upper только ради разделителя избыточно.
+        local text, lines = wrap_text_to_width(m.text or "", 30)
+        local sep_w = 200
+        local sep_x = 820 - sep_w / 2
         return {
-            x = 610,
-            w = 380,
+            x = sep_x,
+            w = sep_w,
             h = math.max(24, 10 + lines * 14),
-            text_w = 340,
+            text_w = sep_w - 20,
             text = text,
             lines = lines,
             is_sep = true,
@@ -777,7 +840,9 @@ local function render_chat(self)
             set_text(p .. "_text", layout.text)
             set_text(p .. "_stamp", "")
             set_pos_x(p .. "_bg", layout.x)
-            set_pos_x(p .. "_text", layout.x + 14)
+            -- Text node имеет PIVOT_CENTER ниже — позицию ставим в центр
+            -- плашки, иначе текст сместится влево на layout.x + 14.
+            set_pos_x(p .. "_text", layout.x + layout.w / 2)
             set_pos_x(p .. "_stamp", layout.x + layout.w - 12)
             set_size_x(p .. "_bg", layout.w)
             set_size_x(p .. "_border", layout.w)
@@ -860,8 +925,18 @@ local function is_inside_rect(id, x, y)
     return gui.pick_node(n, x, y)
 end
 
+-- Приоритет источников knot'а:
+--   1) Runtime prompt (поставленный из ink через # msg:prompt:CHAT:KNOT[:LABEL]).
+--      Это override для конкретной ситуации — игнорирует _replied-флаг.
+--   2) contacts.get_ink_thread("msg", chat_id) — статичный override из
+--      phone_contacts.lua (ink_thread = "...").
+--   3) msg_thread_<chat_id> — конвенция по умолчанию.
 local function resolve_reply_knot(chat_id)
     if not chat_id or chat_id == "" then return nil end
+    if gs.get_msg_prompt then
+        local pknot = gs.get_msg_prompt(chat_id)
+        if pknot and pknot ~= "" then return pknot end
+    end
     local knot_name = nil
     if contacts and contacts.get_ink_thread then
         knot_name = contacts.get_ink_thread("msg", chat_id)
@@ -869,13 +944,18 @@ local function resolve_reply_knot(chat_id)
     return knot_name or ("msg_thread_" .. tostring(chat_id))
 end
 
--- Можно ли отвечать в этом чате. Должны быть выполнены оба условия:
---   1) Автор написал msg-thread knot (по умолчанию msg_thread_<chat>,
---      но можно переопределить через phone_contacts.lua).
---   2) Игрок ещё не отвечал (флаг msg_<chat>_replied != true; авто-флаг
---      ставится при # msg:reply:).
+-- Можно ли писать в этот чат:
+--   1) Есть активный prompt → можно (игнорим _replied — это «новая инициатива»).
+--   2) Или: есть msg-thread knot + игрок ещё не отвечал (msg_<chat>_replied=false).
 local function can_reply(chat_id)
     if not chat_id or chat_id == "" then return false end
+    -- Prompt overrides всё: гарантированно writable пока висит.
+    if gs.get_msg_prompt then
+        local pknot = gs.get_msg_prompt(chat_id)
+        if pknot and pknot ~= "" and dm.has_knot and dm.has_knot(pknot) then
+            return true
+        end
+    end
     local knot_name = resolve_reply_knot(chat_id)
     if not (knot_name and dm.has_knot and dm.has_knot(knot_name)) then return false end
     local replied_flag = "msg_" .. tostring(chat_id) .. "_replied"

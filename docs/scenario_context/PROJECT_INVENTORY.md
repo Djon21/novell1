@@ -4,7 +4,7 @@
 Запускать перед каждой сессией AI-сценариста чтобы документ отражал
 текущее состояние проекта.
 
-_Сгенерировано: 2026-05-17 12:37_
+_Сгенерировано: 2026-05-18 10:18_
 
 Это **источник правды для AI** о том что реально существует в проекте:
 scene_id, knot имена, hotspot id, флаги, предметы. Не ссылайся на
@@ -91,32 +91,39 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `bar_counter` | Стойка бара | knot: `bar_counter_interact` | — |
 | `leave_bar` | — | knot: `leave_bar` | — |
 
-### `cafe_backroom` (Кафе — задняя)
+### `cafe_backroom` (Кафе — проход)
  — source: `cafe.lua`, bg: `"bg_cafe_backroom_day"`
 
 | Hotspot id | Label | Action | Gated |
 |---|---|---|---|
+| `cafe_backroom_mirror` | Зеркало | knot: `cafe_backroom_mirror_interact` | — |
+| `cafe_backroom_board` | Объявления | knot: `cafe_backroom_board_interact` | — |
+| `cafe_backroom_coatrack` | Вешалка | knot: `cafe_backroom_coatrack_interact` | — |
+| `cafe_backroom_books` | Книги | knot: `cafe_backroom_books_interact` | — |
 | `backroom_to_cafe` | В зал | scene: `cafe_hub` | — |
-| `leave_cafe_backroom` | — | knot: `leave_cafe` | — |
 
 ### `cafe_corner` (Кафе — уголок)
  — source: `cafe.lua`, bg: `"bg_cafe_corner_day"`
 
 | Hotspot id | Label | Action | Gated |
 |---|---|---|---|
+| `cafe_corner_talk` | Разговор | knot: `cafe_corner_main_talk` | 👁 |
+| `cafe_corner_table` | Столик | knot: `cafe_corner_table_interact` | — |
+| `cafe_corner_window` | Окно | knot: `cafe_corner_window_interact` | — |
+| `cafe_corner_shelf` | Полка | knot: `cafe_corner_shelf_interact` | — |
 | `corner_to_cafe` | В зал | scene: `cafe_hub` | — |
-| `leave_cafe_corner` | — | knot: `leave_cafe` | — |
 
 ### `cafe_hub` (Кафе)
  — source: `cafe.lua`, bg: `"bg_cafe_morning"`, on_enter: `sunday_date_cafe_arrival`
 
 | Hotspot id | Label | Action | Gated |
 |---|---|---|---|
-| `cafe_window_table` | Столик у окна | knot: `cafe_window_table` | 👁 |
-| `cafe_bar` | Стойка | knot: `cafe_bar_interact` | — |
-| `cafe_to_corner` | В уголок | scene: `cafe_corner` | — |
-| `cafe_to_backroom` | Задняя | scene: `cafe_backroom` | — |
-| `leave_cafe` | — | knot: `leave_cafe` | — |
+| `cafe_bar` | Заказ | knot: `cafe_bar_interact` | 👁 |
+| `cafe_window_table` | Столик у окна | knot: `cafe_window_table` | — |
+| `cafe_hall_light` | Зал | knot: `cafe_hall_light_interact` | — |
+| `cafe_to_corner` | В уголок | scene: `cafe_corner` | 🔒 |
+| `cafe_to_backroom` | К проходу | scene: `cafe_backroom` | — |
+| `leave_cafe` | Уйти | knot: `leave_cafe` | — |
 
 ### `monday_apartment_bedroom_morning` (Спальня)
  — source: `apartment_monday.lua`, bg: `"bg_apartment_bedroom_morning"`, on_enter: `mon_home_bedroom_intro`
@@ -178,7 +185,6 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 |---|---|---|---|
 | `park_entrance_view` | Осмотреться | knot: `park_entrance_view` | 👁 |
 | `park_bin` | Урна | knot: `park_bin_prompt` | 👁 |
-| `park_message_where` | Написать | knot: `park_message_where_are_you` | 👁 |
 | `park_offer_place` | Предложить | knot: `park_offer_place` | 👁 |
 | `park_to_bench` | К скамейке | scene: `park_riverside_bench` | 👁 |
 | `park_to_path` | По аллее | scene: `park_riverside_path` | 👁 |
@@ -281,13 +287,16 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `tue_kitchen_window` | Окно | knot: `tue_home_kitchen_window` | — |
 | `tue_back_to_hall_from_kitchen` | В коридор | scene: `tuesday_apartment_hall_morning` | — |
 
-### `view_corner` (Смотровая — угол)
+### `view_corner` (Смотровая — лавочка)
  — source: `viewpoint.lua`, bg: `"bg_observation_corner_day"`
 
 | Hotspot id | Label | Action | Gated |
 |---|---|---|---|
+| `view_corner_sit` | Сесть рядом | knot: `view_corner_main_talk` | 👁 |
+| `view_corner_bench` | Скамейка | knot: `view_corner_bench_interact` | — |
+| `view_corner_glass` | Стекло | knot: `view_corner_glass_interact` | — |
+| `view_corner_planter` | Зелень | knot: `view_corner_planter_interact` | — |
 | `corner_to_view` | К перилам | scene: `view_hub` | — |
-| `leave_view_corner` | Уйти | knot: `leave_viewpoint` | — |
 
 ### `view_hub` (Смотровая)
  — source: `viewpoint.lua`, bg: `"bg_observation_railing_day"`, on_enter: `sunday_viewpoint_arrival`
@@ -295,7 +304,9 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | Hotspot id | Label | Action | Gated |
 |---|---|---|---|
 | `view_railing` | Поручни | knot: `view_railing_interact` | — |
-| `view_to_corner` | В угол | scene: `view_corner` | — |
+| `view_city` | Город | knot: `view_city_interact` | — |
+| `view_binoculars` | Бинокль | knot: `view_binoculars_interact` | — |
+| `view_to_corner` | К лавочке | scene: `view_corner` | — |
 | `leave_view` | Уйти | knot: `leave_viewpoint` | — |
 
 ### `work_hub` (Офис — лобби)
@@ -330,12 +341,12 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `enter_kitchen_morning_first` | Кухня встречает сухим щелчком холодильника и светлым окном во двор. |
 | `leave_apartment` | Куртка и обувь наконец делают намерение выйти похожим на действие. |
 | `leave_apartment_prompt` | Телефон уже вибрировал. Сначала надо ответить в Messenger — иначе выходить всё ещё некуда. |
-| `look_bathroom_mirror` | Зеркало показывает человека, который уже взял телефон, но ещё не совсем проснулся. |
+| `look_bathroom_mirror` | В ванной горит только ровный искусственный свет. Зеркало больше не пытается сделать утро бодрым — просто возвращает лицо |
 | `look_bed_morning` | Постель смята точно так же, как в прошлый раз. |
 | `look_bedroom_window` | За окном город выглядит так, будто воскресенье у него началось раньше твоего: редкие машины, свет в стекле, кто-то с соб |
-| `look_hall_mirror` | Зеркало в коридоре показывает ровно то, что должно: лицо, плечи, входную дверь за спиной. |
+| `look_hall_mirror` | Ночной коридор в зеркале выглядит глубже, чем утром: тёмная дверь за спиной, тонкая полоска света из кухни, плечи чуть н |
 | `look_kitchen_fridge` | В холодильнике йогурт, сыр и контейнер, который лучше не открывать без отдельного морального разрешения. |
-| `look_kitchen_window` | Лето держится во дворе уверенно: солнце на стекле машин, тени от деревьев, кто-то медленно несёт пакет из магазина. |
+| `look_kitchen_window` | За кухонным окном двор уже не светлый, а точечный: окна напротив, лампа у подъезда, редкие фары за деревьями. Утреннее с |
 | `mon_home_bed` | Кровать выглядит слишком убедительно для понедельника. |
 | `mon_home_bedroom_desk` | На рабочем столе лежит закрытый ноутбук. Воскресенье почти стерло его из внимания, но понедельник возвращает всё на мест |
 | `mon_home_bedroom_intro` | Спальня собирается в понедельник из тех же предметов: кровать, окно, рабочий стол, дверь в ванную. |
@@ -355,7 +366,7 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `sunday_date_go_park` | - else: |
 | `sunday_date_map_fallback` | Карта открыта. Осталось выбрать маршрут. |
 | `sunday_evening_finish` | Вечер постепенно собирает квартиру вокруг тебя: коридор, кухня, свет из окна, телефон на ладони. |
-| `sunday_evening_home` | Квартира встречает тем же спокойствием, с которого началось утро. Только теперь оно ощущается иначе: не как список дел,  |
+| `sunday_evening_home` | Коридор встречает тем же спокойствием, с которого началось утро. Только теперь оно ощущается иначе: не как список дел, а |
 | `sunday_get_dressed` | Куртка с вешалки, обувь у двери. Никакого торжественного выхода — просто бытовая последовательность, без которой человек |
 | `sunday_home_after_date_router` | - else: |
 | `sunday_home_too_early` | Домой пока рано. День только начал становиться настоящим воскресеньем. |
@@ -397,6 +408,20 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `inv_inspect_case_file` | Папка выглядит готовой. И в этом проблема: готовый вид легко принять за готовый ответ. |
 | `inv_inspect_fallback` | Осматриваю {inventory_item_name}. Детали на месте. Ответов по-прежнему нет. |
 | `inv_inspect_folder` | Обычная офисная папка. Чем аккуратнее она выглядит, тем легче забыть, что внутри может быть недостающая часть решения. |
+| `inv_inspect_gift_berry_soda` | Ягодная газировка. Слишком яркая бутылка для человека, который пытается выглядеть спокойнее. |
+| `inv_inspect_gift_chips` | Маленькие чипсы. Слишком громкий подарок для тихого начала свидания. |
+| `inv_inspect_gift_coffee_can` | Кофе в банке. Бодрость в алюминии. Не самый романтичный предмет, зато понятный. |
+| `inv_inspect_gift_crackers` | Солёные крекеры. Можно разделить, можно хрустеть в неловкой паузе. Уже почти социальный инструмент. |
+| `inv_inspect_gift_dark_chocolate` | Тёмный шоколад. Нормальный хороший подарок — почти слишком нормальный для этого воскресенья. |
+| `inv_inspect_gift_energy_drink` | Энергетик. Подарок, который звучит как план на ночную смену, даже если ты так не задумывал{mc_gender == "female":а|}. |
+| `inv_inspect_gift_iced_tea` | Холодный чай из магазина. Нейтральный, вежливый и чуть более личный, чем вода. |
+| `inv_inspect_gift_keychain_flashlight` | Фонарик-брелок. Маленький, почти смешной, но у него есть ясная функция: дать свет, когда его не хватает. Странный подаро |
+| `inv_inspect_gift_milk_chocolate` | Молочный шоколад. Мягкий, безопасный, немного школьный. |
+| `inv_inspect_gift_nuts` | Орешки. Пытаются выглядеть взрослым выбором. Получается подозрительно убедительно. |
+| `inv_inspect_gift_paper_napkins` | Бумажные салфетки. На случай крошек, пауз и попыток всё предусмотреть. |
+| `inv_inspect_gift_small_broom` | Маленький веник. Подарок для человека, которому ты либо очень доверяешь, либо совсем не умеешь выбирать подарки. |
+| `inv_inspect_gift_waffle_bar` | Вафельный батончик. Аварийный запас сахара на случай, если разговор станет слишком взрослым. |
+| `inv_inspect_gift_wet_wipes` | Влажные салфетки. Очень практичная форма заботы. Возможно, слишком практичная. |
 | `inv_inspect_note` | Моя бумага. Мой почерк. Но ощущение, что писал это не я сегодняшний. |
 | `inv_inspect_park_trash_cup` | Чужой пустой стаканчик. Не самая великая проблема дня, но начать разговор рядом с ним почему-то не хочется. |
 | `inv_inspect_phone` | Телефон тёплый, будто я уже держал его в руках минуту назад. |
@@ -464,13 +489,23 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 
 | Knot | Аннотация |
 |---|---|
-| `cafe_bar_interact` | Стойка пахнет кофе и тёплой выпечкой. Бариста двигается быстро, но без суеты — как будто воскресенье здесь умеют не торо |
-| `cafe_bar_interact_right_place` | Надо будет взять что-нибудь к столу. Не только же пытаться красиво разговаривать. |
-| `cafe_bar_interact_wrong_place` | Кафе хорошее, но мы договорились не здесь. |
-| `cafe_window_table` | Столик у окна держит ровно ту дистанцию, которая нужна для первого воскресного разговора: достаточно близко, чтобы слыша |
-| `leave_cafe` | Ты выходишь из кафе на улицу. Телефон уже в руке — можно выбрать, куда идти дальше. |
-| `sunday_date_cafe_arrival` | Кафе оказывается ровно таким, каким хотелось его увидеть утром: тёплый свет из окна, тёмное дерево, тихий звон чашек за  |
-| `sunday_date_cafe_settle` | Разговор складывается из простых вещей: кто как спал, почему город утром кажется тише, что лучше — сладкое к кофе или пр |
+| `cafe_backroom_board_interact` | На доске объявлений — афиша квартирника, потерявшийся зонт, уроки английского, скидка на капучино для тех, кто почему-то |
+| `cafe_backroom_books_interact` | Книги на полке не столько читают, сколько используют как доказательство уюта. Пара сборников рецептов, старый фотоальбом |
+| `cafe_backroom_coatrack_interact` | На вешалке чужая куртка и кожаная сумка. Вещи выглядят временно оставленными, но уверенными в своём возвращении. |
+| `cafe_backroom_mirror_interact` | Зеркало в задней части кафе делает пространство глубже, чем оно есть: лампа, край консоли, листья растения, кусок проход |
+| `cafe_bar_interact` | Стойка пахнет кофе, тёплой выпечкой и корицей, которую кто-то насыпал щедрее, чем собирался. Бариста двигается быстро, н |
+| `cafe_bar_interact_right_place` | Тут есть правило: если человек слишком долго смотрит на витрину, он уже выбрал самое сладкое, но пытается выглядеть взро |
+| `cafe_bar_interact_wrong_place` | Кафе хорошее, но мы договорились не здесь. Лучше не превращать маршрут в эксперимент без второго участника. |
+| `cafe_corner_main_talk` | Уголок оказывается тише, чем общий зал. Не беззвучным — просто здесь шум кафе становится мягкой подложкой, а не требован |
+| `cafe_corner_shelf_interact` | На полке стоят книги, керамическая банка и растение, которое явно пережило больше разговоров, чем большинство людей в эт |
+| `cafe_corner_table_interact` | На столике помещается ровно столько, сколько нужно для разговора: чашки, маленькая вазочка, салфетки, светлый след от ок |
+| `cafe_corner_window_interact` | За шторой улица идёт своим ходом: листья двигаются в свете, на балконе напротив кто-то снимает бельё, машина у подъезда  |
+| `cafe_hall_light_interact` | Зал держится на тёплых несовпадениях: где-то слишком яркий прямоугольник солнца на полу, где-то тень от растения, где-то |
+| `cafe_window_table` | Столики у окна выглядят как безопасный вариант: светло, красиво, видно улицу, можно делать вид, что пауза случилась из-з |
+| `leave_cafe` | Выходить из кафе пока рано. Воскресный разговор ещё не случился: сначала заказ, потом место, потом хотя бы одна честная  |
+| `sunday_date_cafe_arrival` | Кафе встречает не тишиной, а аккуратным шумом: кофемолка за стойкой, ложка о керамику, короткий смех у окна, мягкий свет |
+| `sunday_date_cafe_arrival_after_gift` | Ну что, сначала возьмём что-нибудь, а потом найдём место, где можно не держать лица? |
+| `sunday_date_cafe_settle` | Разговор не становится большим. И в этом его сила: сон, дорога, странная привычка читать меню до конца, нелепые способы  |
 
 ### `commute_monday.ink`
 
@@ -535,6 +570,7 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `park_entrance_view` | Вход в парк уже понятен: дорожка, вода дальше справа, зелень, тёплый камень под солнцем. |
 | `park_message_where_are_you` | Ты открываешь Messenger. Палец зависает над полем ввода чуть дольше, чем нужно для простого вопроса. |
 | `park_npc_arrives` | Нашёл. То есть нашёл тебя, а не смысл жизни. Хотя день уже странно удачный. |
+| `park_npc_arrives_after_gift` | Вы стоите у входа рядом, но всё ещё на проходе. Теперь надо найти место для разговора: сесть у воды или уйти в тень алле |
 | `park_offer_place` | Теперь место уже не абстрактный выбор на карте, а конкретная развилка: сесть у воды или уйти в тень аллеи. Лавочка приве |
 | `park_path_main_talk` | Вы идёте по аллее в тени деревьев. Дорожка сама задаёт темп: достаточно медленно, чтобы говорить, и достаточно легко, чт |
 | `park_path_npc_show` | - else: |
@@ -569,10 +605,15 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `leave_shop` | Ты отходишь от витрины магазина. Стекло ещё держит отражение улицы, но телефон уже в руке — до встречи можно выбрать мар |
 | `shop_cleaning_supplies_interact` | На крючках висят перчатки, щётки и совки. Внизу стоят швабры — слишком прямые, слишком терпеливые, будто они давно приня |
 | `shop_counter_interact` | Касса уже сделала своё: короткий писк терминала, тонкий чек, пакет, который почти ничего не весит. |
+| `shop_drinks_interact` | - else: |
+| `shop_drinks_pre_date` | Холодильники гудят ровно, будто у них воскресенье никогда не сбивается. За стеклом — вода, холодный чай, газировка, кофе |
+| `shop_drinks_with_npc` | Холодильники гудят ровно, будто у них воскресенье никогда не сбивается. После прогулки холодные бутылки выглядят не как  |
 | `shop_household_goods_interact` | Бытовой отдел встречает вещами, о которых вспоминают не вовремя: пакеты, губки, лампочки, батарейки, рулоны бумаги, чист |
 | `shop_paper_goods_interact` | Полка с бумажными полотенцами и салфетками выглядит почти абсурдно спокойной: белые рулоны, мягкие упаковки, одинаковые  |
 | `shop_sign_interact` | Вывеска светится без настроения: 24/7, красная полоса, белые буквы, обещание быть открытой даже тогда, когда человеку лу |
-| `shop_snacks_interact` | Центральный стеллаж выглядит убедительнее, чем должен: батончики, жвачка, мармелад, маленькие пачки печенья. Всё слишком |
+| `shop_snacks_interact` | - else: |
+| `shop_snacks_pre_date` | Центральный стеллаж выглядит убедительнее, чем должен: крекеры, чипсы, орешки, вафли и шоколадки. Всё слишком яркое и сл |
+| `shop_snacks_with_npc` | Центральный стеллаж выглядит убедительнее, чем должен: батончики, жвачка, мармелад, маленькие пачки печенья. Всё слишком |
 | `shop_window_interact` | Витрина собирает внутри маленькую выставку нормальности: вода ровными рядами, шоколадки у кассы, корзинки одна в другой, |
 | `sunday_shop_arrival` | - else: |
 | `sunday_shop_arrival_pre_date` | Внутри магазин почти пустой: холодильники гудят у дальней стены, возле кассы мигает терминал, на стеллаже кто-то оставил |
@@ -580,14 +621,28 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `sunday_shop_settle` | Касса отвечает коротким писком, пакет шуршит у запястья, дверь выпускает вас обратно к улице. |
 | `sunday_shop_street_arrival` | Магазин стоит внизу жилого дома: красная полоса над входом, бумажный штендер у двери, холодный свет за стеклом. Витрина  |
 
+### `sunday_gift_reactions.ink`
+
+| Knot | Аннотация |
+|---|---|
+| `sunday_gift_react` | - else: |
+| `sunday_gift_react_cafe` | Пауза у края зала напоминает про пакет из магазина. Здесь, среди шума кофемолки и чужих чашек, маленький подарок кажется |
+| `sunday_gift_react_park` | Перед тем как выбрать место, ты вспоминаешь про пакет из магазина. Момент получается не торжественный — скорее такой, ко |
+
 ### `viewpoint_sunday.ink`
 
 | Knot | Аннотация |
 |---|---|
-| `leave_viewpoint` | Телефон снова оказывается в руке. День уже не кажется коротким, но ему всё ещё нужен нормальный вечерний финал. |
-| `sunday_viewpoint_arrival` | Смотровая оказывается не торжественной, а простой: город внизу, перила перед вами, ветер, который не требует разговарива |
+| `leave_viewpoint` | Вы возвращаетесь от перил к выходу. После высоты город кажется ближе, но не тяжелее. Телефон уже в руке — теперь маршрут |
+| `sunday_viewpoint_arrival` | Смотровая оказывается не торжественной, а простой: деревянный настил под ногами, стеклянные перила, город ниже уровня ды |
 | `sunday_viewpoint_settle` | Город снизу выглядит собранным и спокойным. Будто все маршруты в нём уже проложены, но сегодня можно не выбирать самый к |
-| `view_railing_interact` | Поручни прохладные. За ними город выглядит собранным, почти спокойным. |
+| `view_binoculars_interact` | Бинокль закреплён на короткой металлической стойке. Монетоприёмник закрыт прозрачной крышкой, линзы смотрят в город с вы |
+| `view_city_interact` | Город внизу не становится меньше — просто перестаёт давить. С высоты маршруты выглядят честнее: вот где люди спешат, вот |
+| `view_corner_bench_interact` | Скамейка стоит в стороне от основной площадки: не прячется, но и не зовёт всех подряд. Рядом бетонная клумба, стеклянное |
+| `view_corner_glass_interact` | Стекло у края почти не видно, пока в нём не ловится отражение: кусок неба, линия перил, твой силуэт и силуэт {npc_name_g |
+| `view_corner_main_talk` | Вы садитесь в тихом углу смотровой. Не вплотную, но достаточно близко, чтобы ветер перестал быть главным участником разг |
+| `view_corner_planter_interact` | В клумбе растут кусты и маленькое дерево, слишком домашнее для высоты, на которой ему приходится жить. Листья ловят солн |
+| `view_railing_interact` | Поручни прохладные. Металл под ладонью держит дневное тепло хуже, чем кажется на расстоянии. |
 
 ## Characters (CHARS)
 
@@ -626,18 +681,20 @@ Source: `main/scripts/scene_characters.lua`.
 
 Все ID из ink-тегов `# add_item:` / `# remove_item:`.
 
-`card` `case_file` `folder` `mug` `park_trash_cup` `phone` `report_page` `toothbrush` `toothbrush_pasted` `toothpaste` `water_bottle`
+`card` `case_file` `folder` `gift_berry_soda` `gift_chips` `gift_coffee_can` `gift_crackers` `gift_dark_chocolate` `gift_energy_drink` `gift_iced_tea` `gift_keychain_flashlight` `gift_milk_chocolate` `gift_nuts` `gift_paper_napkins` `gift_small_broom` `gift_waffle_bar` `gift_wet_wipes` `mug` `park_trash_cup` `phone` `report_page` `toothbrush` `toothbrush_pasted` `toothpaste` `water_bottle`
 
 ## Flags
 
 Все имена флагов встречающиеся в `# set_flag:`, `get_flag(...)`,
-`set_flag(...)`. Всего: **112**.
+`set_flag(...)`. Всего: **143**.
 
 **`bathroom_*`**: `bathroom_morning_seen`
 
 **`bedroom_*`**: `bedroom_morning_seen`
 
 **`breakfast_*`**: `breakfast_done`
+
+**`cafe_*`**: `cafe_arrived` `cafe_backroom_board_seen` `cafe_backroom_books_seen` `cafe_backroom_mirror_seen` `cafe_order_coffee` `cafe_order_done` `cafe_order_sweet` `cafe_order_tea` `cafe_shelf_detail_seen` `cafe_talk_done` `cafe_window_detail_seen`
 
 **`coffee_*`**: `coffee_drunk`
 
@@ -669,13 +726,13 @@ Source: `main/scripts/scene_characters.lua`.
 
 **`office_*`**: `office_auto_solution_blocked` `office_clarification_requested` `office_standard_solution_applied`
 
-**`park_*`**: `park_arrived` `park_bench_cleared` `park_bench_trash_seen` `park_entrance_seen` `park_npc_at_bench` `park_npc_at_path` `park_npc_greeted` `park_path_seen` `park_place_chosen` `park_talk_place_bench` `park_talk_place_path` `park_trash_cup_taken` `park_water_given` `park_where_message_sent`
+**`park_*`**: `park_arrived` `park_bench_cleared` `park_bench_trash_seen` `park_entrance_seen` `park_npc_at_bench` `park_npc_at_path` `park_npc_bench_shown` `park_npc_greeted` `park_npc_path_shown` `park_path_seen` `park_place_chosen` `park_talk_place_bench` `park_talk_place_path` `park_trash_cup_taken` `park_water_given` `park_where_message_sent`
 
 **`phone_*`**: `phone_active` `phone_history_seeded` `phone_taken`
 
 **`reached_*`**: `reached_office` `reached_work_district`
 
-**`sunday_*`**: `sunday_after_date_active` `sunday_bedroom_window_seen` `sunday_dressed` `sunday_evening_started` `sunday_finished` `sunday_kitchen_window_seen` `sunday_messenger_invite_sent` `sunday_morning_routine_seen` `sunday_ready_to_leave` `sunday_second_stop_done` `sunday_shop_bought_drink_for_npc` `sunday_shop_bought_snack` `sunday_shop_bought_water` `sunday_shop_done` `sunday_shop_pre_date_visited` `sunday_shop_street_pre_date_seen` `sunday_shop_street_with_npc_seen` `sunday_shop_with_npc_seen` `sunday_went_to_shop` `sunday_went_to_viewpoint`
+**`sunday_*`**: `sunday_after_date_active` `sunday_bedroom_window_seen` `sunday_dressed` `sunday_evening_started` `sunday_finished` `sunday_gift_berry_soda` `sunday_gift_bought` `sunday_gift_chips` `sunday_gift_coffee_can` `sunday_gift_crackers` `sunday_gift_dark_chocolate` `sunday_gift_energy_drink` `sunday_gift_given` `sunday_gift_iced_tea` `sunday_gift_keychain_flashlight` `sunday_gift_milk_chocolate` `sunday_gift_nuts` `sunday_gift_paper_napkins` `sunday_gift_right` `sunday_gift_small_broom` `sunday_gift_waffle_bar` `sunday_gift_water_bottle` `sunday_gift_wet_wipes` `sunday_kitchen_window_seen` `sunday_messenger_invite_sent` `sunday_morning_routine_seen` `sunday_ready_to_leave` `sunday_second_stop_done` `sunday_shop_bought_drink_for_npc` `sunday_shop_bought_snack` `sunday_shop_done` `sunday_shop_pre_date_visited` `sunday_shop_street_pre_date_seen` `sunday_shop_street_with_npc_seen` `sunday_shop_with_npc_seen` `sunday_viewpoint_seen` `sunday_went_to_shop` `sunday_went_to_viewpoint`
 
 **`teeth_*`**: `teeth_brushed`
 

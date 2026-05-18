@@ -16,6 +16,15 @@ end
 
 local _msg        = {}
 local _msg_unread = {}
+-- Runtime pin-теги поверх статичного CHAT_META в phone_messenger.gui_script.
+-- Из ink ставятся через `# msg:tag:CHAT:TONE:LABEL` / `# msg:need_reply:CHAT`,
+-- очищаются через `# msg:tag:CHAT:clear`. Авто-очистка в reply() для need_reply.
+local _msg_tags   = {}
+-- Активные prompts: { [chat_id] = { knot = "...", label = "..." } }
+-- Ставятся из ink через `# msg:prompt:CHAT:KNOT[:LABEL]`. Это «открытая
+-- инициатива»: чат можно писать (can_reply ← true игнорит _replied), а тап
+-- по input'у диверитит в указанный knot. Авто-снимается при reply().
+local _msg_prompts = {}
 local next_seq, _get_seq, _absorb_seq = H.make_seq()
 local default_time = H.make_default_time(7 * 60 + 5)
 
@@ -68,7 +77,71 @@ end
 function M.reset()
     _msg = {}
     _msg_unread = {}
+    _msg_tags = {}
+    _msg_prompts = {}
     next_seq, _get_seq, _absorb_seq = H.make_seq()
+end
+
+-- ---------------------------------------------------------------------------
+-- Prompts (открытая инициатива: «можно написать в чат X через knot Y»)
+-- ---------------------------------------------------------------------------
+function M.set_prompt(chat_id, knot, label)
+    if not chat_id or chat_id == "" then return false end
+    local id = tostring(chat_id)
+    if not knot or knot == "" or knot == "clear" or knot == "none" then
+        if _msg_prompts[id] then
+            _msg_prompts[id] = nil
+            notify_cb()
+            return true
+        end
+        return false
+    end
+    _msg_prompts[id] = {
+        knot  = tostring(knot),
+        label = label and tostring(label) or nil,
+    }
+    notify_cb()
+    return true
+end
+
+function M.get_prompt(chat_id)
+    if not chat_id or chat_id == "" then return nil, nil end
+    local p = _msg_prompts[tostring(chat_id)]
+    if not p then return nil, nil end
+    return p.knot, p.label
+end
+
+function M.clear_prompt(chat_id)
+    return M.set_prompt(chat_id, nil)
+end
+
+-- ---------------------------------------------------------------------------
+-- Runtime tags (pin-теги в списке мессенджера)
+-- ---------------------------------------------------------------------------
+function M.set_tag(chat_id, tone, label)
+    if not chat_id or chat_id == "" then return false end
+    local id = tostring(chat_id)
+    if not tone or tone == "" or tone == "clear" or tone == "none" then
+        if _msg_tags[id] then
+            _msg_tags[id] = nil
+            notify_cb()
+            return true
+        end
+        return false
+    end
+    _msg_tags[id] = {
+        tone  = tostring(tone),
+        label = label and tostring(label) or nil,
+    }
+    notify_cb()
+    return true
+end
+
+function M.get_tag(chat_id)
+    if not chat_id or chat_id == "" then return nil, nil end
+    local t = _msg_tags[tostring(chat_id)]
+    if not t then return nil, nil end
+    return t.tone, t.label
 end
 
 -- opts (опционально):
@@ -109,6 +182,13 @@ function M.reply(chat_id, text)
         seq       = seq,
     })
     set_flag_cb("msg_" .. tostring(chat_id) .. "_replied", true)
+    local id = tostring(chat_id)
+    if _msg_tags[id] and _msg_tags[id].tone == "need_reply" then
+        _msg_tags[id] = nil
+    end
+    if _msg_prompts[id] then
+        _msg_prompts[id] = nil
+    end
     notify_cb()
     return true
 end
@@ -187,6 +267,8 @@ function M.serialize()
     return {
         msg = H.clone_value(_msg),
         msg_unread = H.clone_value(_msg_unread),
+        msg_tags = H.clone_value(_msg_tags),
+        msg_prompts = H.clone_value(_msg_prompts),
     }
 end
 
@@ -194,6 +276,8 @@ function M.deserialize(data)
     data = data or {}
     _msg = type(data.msg) == "table" and data.msg or {}
     _msg_unread = type(data.msg_unread) == "table" and data.msg_unread or {}
+    _msg_tags = type(data.msg_tags) == "table" and data.msg_tags or {}
+    _msg_prompts = type(data.msg_prompts) == "table" and data.msg_prompts or {}
     normalize()
 end
 

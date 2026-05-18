@@ -1,5 +1,10 @@
 # Система хабов и POI-карты
 
+> Для AI-сценариста каноничный документ по новым хабам/хотспотам:
+> `docs/scenario_context/LOCATIONS_GUIDE.md`. Этот файл описывает runtime и
+> legacy-контекст; новые хотспоты по умолчанию писать через recipes из
+> `main/data/scenes/_shared.lua`.
+
 Хаб — это point-and-click сцена, в которую игрок попадает через карту телефона. Карта сама не содержит сценарий: она только выбирает `scene_id`, закрывает телефон и передаёт управление `scene_controller`.
 
 Сцены живут в `main/data/scenes/<location>.lua` (apartment, office, locations и т.п.); `main/scripts/scenes.lua` — тонкий фасад который агрегирует location-файлы. См. `HOW_TO_ADD_SCENES.md` для деталей.

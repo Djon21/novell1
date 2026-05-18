@@ -9,7 +9,7 @@
 Магазин стоит внизу жилого дома: красная полоса над входом, бумажный штендер у двери, холодный свет за стеклом. Витрина отражает улицу так чётко, будто внутри и снаружи идут два разных воскресенья.
 
 {not met_npc_sunday:
-    До встречи ещё есть время. Можно зайти за водой или чем-нибудь случайным — не подарок, не жест, просто способ прийти не совсем с пустыми руками.
+    До встречи ещё есть время. Можно зайти за чем-нибудь небольшим: не обязательный ритуал, не большой жест, а способ прийти не совсем с пустыми руками.
 
     # set_flag:sunday_shop_street_pre_date_seen=true
     ~ sunday_shop_street_pre_date_seen = true
@@ -34,7 +34,7 @@
 # speaker:none
 Внутри магазин почти пустой: холодильники гудят у дальней стены, возле кассы мигает терминал, на стеллаже кто-то оставил шоколадку не в том ряду.
 
-До встречи ещё есть время. Можно взять воду, что-нибудь сладкое или просто выйти обратно — не каждое намерение обязано становиться покупкой.
+До встречи ещё есть время. Можно взять один маленький подарок — напиток, сладкое или что-нибудь совсем неочевидное из бытового отдела. А можно выйти обратно: не каждое намерение обязано становиться покупкой.
 
 # set_flag:sunday_shop_pre_date_visited=true
 ~ sunday_shop_pre_date_visited = true
@@ -218,69 +218,253 @@
 // нигде не читается. Заготовка под iter 2+ или дополнительный
 // flavor в парке.
 // ============================================================
-# speaker:none
-Холодильники гудят ровно, будто у них воскресенье никогда не сбивается. За стеклом — вода, сок, холодный чай и одинокая банка энергетика, которую кто-то поставил не в тот ряд.
+=== shop_drinks_interact ===
+{met_npc_sunday:
+    -> shop_drinks_with_npc
+- else:
+    -> shop_drinks_pre_date
+}
 
-* [Взять воду себе]
+=== shop_drinks_pre_date ===
+# speaker:none
+Холодильники гудят ровно, будто у них воскресенье никогда не сбивается. За стеклом — вода, холодный чай, газировка, кофе в банке и энергетик с таким дизайном, будто он обещает не бодрость, а сюжетный поворот.
+
+{sunday_gift_bought:
     # speaker:mc
-    Вода — самый честный план на утро.
+    Один подарок уже есть. Докупать второй — это уже не забота, а тревожная закупка.
+    # return_to_scene
+    -> DONE
+}
+
+* [Взять воду]
+    # speaker:mc
+    Вода — самый безопасный вариант. Почти не подарок. Зато честно.
 
     # speaker:none
     Бутылка холодит ладонь и сразу делает подготовку чуть менее абстрактной.
-    # set_flag:sunday_shop_bought_water=true
-    # set_flag:sunday_shop_done=true
-    ~ sunday_shop_bought_water = true
-    ~ sunday_shop_done = true
-    # return_to_scene
-    -> DONE
-
-* [Взять напиток для {npc_name_gen}]
-    # speaker:mc
-    Возьму ещё один. Не подарок. Просто вдруг пригодится.
-
-    # speaker:none
-    Бутылка оказывается в сумке — лёгкая, почти незаметная, но теперь у дня есть маленький запасной жест.
-    # set_flag:sunday_shop_bought_drink_for_npc=true
-    # set_flag:sunday_shop_done=true
     # add_item:water_bottle
-    ~ sunday_shop_bought_drink_for_npc = true
-    ~ sunday_shop_done = true
+    # set_flag:sunday_gift_bought=true
+    # set_flag:sunday_gift_water_bottle=true
+    ~ sunday_gift_bought = true
+    ~ sunday_gift_water_bottle = true
     # return_to_scene
     -> DONE
 
-* [Ничего не брать]
+* [Взять холодный чай]
+    # speaker:mc
+    Холодный чай звучит так, будто я хотя бы попытал{mc_gender == "female":ась|ся} угадать настроение.
+    # add_item:gift_iced_tea
+    # set_flag:sunday_gift_bought=true
+    # set_flag:sunday_gift_iced_tea=true
+    ~ sunday_gift_bought = true
+    ~ sunday_gift_iced_tea = true
+    # return_to_scene
+    -> DONE
+
+* [Взять ягодную газировку]
+    # speaker:mc
+    Слишком яркая. Может, это и хорошо.
+    # add_item:gift_berry_soda
+    # set_flag:sunday_gift_bought=true
+    # set_flag:sunday_gift_berry_soda=true
+    ~ sunday_gift_bought = true
+    ~ sunday_gift_berry_soda = true
+    # return_to_scene
+    -> DONE
+
+* [Взять кофе в банке]
+    # speaker:mc
+    Кофе — подарок человеку, которому я пока не знаю, что сказать.
+    # add_item:gift_coffee_can
+    # set_flag:sunday_gift_bought=true
+    # set_flag:sunday_gift_coffee_can=true
+    ~ sunday_gift_bought = true
+    ~ sunday_gift_coffee_can = true
+    # return_to_scene
+    -> DONE
+
+* [Взять энергетик]
+    # speaker:mc
+    Это либо забота, либо угроза провести вместе ещё восемь часов.
+    # add_item:gift_energy_drink
+    # set_flag:sunday_gift_bought=true
+    # set_flag:sunday_gift_energy_drink=true
+    ~ sunday_gift_bought = true
+    ~ sunday_gift_energy_drink = true
+    # return_to_scene
+    -> DONE
+
++ [Ничего не брать]
     # speaker:mc
     Нет. Я просто посмотрел{mc_gender == "female":а|}. Так тоже бывает.
     # return_to_scene
     -> DONE
 
+=== shop_drinks_with_npc ===
+# speaker:none
+Холодильники гудят ровно, будто у них воскресенье никогда не сбивается. После прогулки холодные бутылки выглядят не как подарок, а как очень понятная бытовая идея.
+
+* [Взять воду на двоих]
+    # speaker:mc
+    Возьму воды. На двоих.
+
+    # speaker:npc
+    Заботливо. Засчитано.
+
+    # speaker:none
+    Холод пластика быстро переходит в ладонь. Две бутылки выглядят смешно серьёзно — как будто заботу правда можно просто снять с полки.
+    # set_flag:sunday_shop_bought_drink_for_npc=true
+    # set_flag:sunday_shop_done=true
+    # add_item:water_bottle
+    ~ sunday_shop_bought_drink_for_npc = true
+    ~ sunday_shop_done = true
+    ~ TRUST = TRUST + 1
+    -> sunday_shop_settle
+
+* [Взять холодный чай]
+    # speaker:mc
+    Может, чай? Он хотя бы делает вид, что это не просто сахар и вода.
+
+    # speaker:npc
+    Уважаю напитки с биографией.
+    # set_flag:sunday_shop_bought_drink_for_npc=true
+    # set_flag:sunday_shop_done=true
+    ~ sunday_shop_done = true
+    -> sunday_shop_settle
+
++ [Не брать напитки]
+    # speaker:mc
+    Нет, холодильники сегодня слишком уверенные.
+    # return_to_scene
+    -> DONE
+
 === shop_snacks_interact ===
+{met_npc_sunday:
+    -> shop_snacks_with_npc
+- else:
+    -> shop_snacks_pre_date
+}
+
+=== shop_snacks_pre_date ===
+# speaker:none
+Центральный стеллаж выглядит убедительнее, чем должен: крекеры, чипсы, орешки, вафли и шоколадки. Всё слишком яркое и слишком готовое стать “ну ладно, возьму”.
+
+{sunday_gift_bought:
+    # speaker:mc
+    Подарок уже выбран. Переигрывать его у стеллажа со снеками — плохой жанр тревоги.
+    # return_to_scene
+    -> DONE
+}
+
+* [Взять солёные крекеры]
+    # speaker:mc
+    Крекеры. Не романтично, зато можно разделить без церемонии.
+    # add_item:gift_crackers
+    # set_flag:sunday_gift_bought=true
+    # set_flag:sunday_gift_crackers=true
+    ~ sunday_gift_bought = true
+    ~ sunday_gift_crackers = true
+    # return_to_scene
+    -> DONE
+
+* [Взять маленькие чипсы]
+    # speaker:mc
+    Чипсы — это уже смелее. И громче.
+    # add_item:gift_chips
+    # set_flag:sunday_gift_bought=true
+    # set_flag:sunday_gift_chips=true
+    ~ sunday_gift_bought = true
+    ~ sunday_gift_chips = true
+    # return_to_scene
+    -> DONE
+
+* [Взять орешки]
+    # speaker:mc
+    Орешки выглядят почти взросло. Значит, подозрительно.
+    # add_item:gift_nuts
+    # set_flag:sunday_gift_bought=true
+    # set_flag:sunday_gift_nuts=true
+    ~ sunday_gift_bought = true
+    ~ sunday_gift_nuts = true
+    # return_to_scene
+    -> DONE
+
+* [Взять тёмный шоколад]
+    # speaker:mc
+    Тёмный шоколад. Нормальный выбор. Может, даже слишком нормальный.
+    # add_item:gift_dark_chocolate
+    # set_flag:sunday_gift_bought=true
+    # set_flag:sunday_gift_dark_chocolate=true
+    ~ sunday_gift_bought = true
+    ~ sunday_gift_dark_chocolate = true
+    # return_to_scene
+    -> DONE
+
+* [Взять молочный шоколад]
+    # speaker:mc
+    Молочный шоколад — это честная попытка быть приятным{mc_gender == "female":ой|ым}.
+    # add_item:gift_milk_chocolate
+    # set_flag:sunday_gift_bought=true
+    # set_flag:sunday_gift_milk_chocolate=true
+    ~ sunday_gift_bought = true
+    ~ sunday_gift_milk_chocolate = true
+    # return_to_scene
+    -> DONE
+
+* [Взять вафельный батончик]
+    # speaker:mc
+    Вафля — компактная форма оптимизма.
+    # add_item:gift_waffle_bar
+    # set_flag:sunday_gift_bought=true
+    # set_flag:sunday_gift_waffle_bar=true
+    ~ sunday_gift_bought = true
+    ~ sunday_gift_waffle_bar = true
+    # return_to_scene
+    -> DONE
+
++ [Оставить как есть]
+    # speaker:mc
+    Снеки переживут моё отсутствие.
+    # return_to_scene
+    -> DONE
+
+=== shop_snacks_with_npc ===
 # speaker:none
 Центральный стеллаж выглядит убедительнее, чем должен: батончики, жвачка, мармелад, маленькие пачки печенья. Всё слишком яркое и слишком готовое стать “ну ладно, возьму”.
 
-* [Взять батончик]
+* [Взять что-нибудь сладкое]
     # speaker:mc
-    Не завтрак, но хотя бы признание проблемы.
+    Надо взять что-нибудь сладкое. Чтобы день официально не был взрослым.
+
+    # speaker:npc
+    Хорошая защита от взрослости.
+
+    # speaker:none
+    {npc_name} выбирает не сразу: батончик, мармелад, снова батончик. Решение маленькое, но пауза получается настоящей.
     # set_flag:sunday_shop_bought_snack=true
     # set_flag:sunday_shop_done=true
     ~ sunday_shop_bought_snack = true
     ~ sunday_shop_done = true
-    # return_to_scene
-    -> DONE
+    ~ TRUST = TRUST + 1
+    -> sunday_shop_settle
 
-* [Взять жвачку]
+* [Спросить, что обычно берёт {npc_name}]
     # speaker:mc
-    Жвачка — странный способ сказать себе, что ты подготовился.
-    # set_flag:sunday_shop_bought_snack=true
+    А ты что обычно берёшь в таких местах?
+
+    # speaker:npc
+    Что-нибудь ненужное. Чтобы почувствовать, что день не весь по плану.
+
+    # speaker:none
+    В итоге в пакете оказывается маленькая упаковка мармелада и чек, который выглядит серьёзнее покупки. Ответ звучит легко, но в нём есть маленькая правда. Ты её не комментируешь — просто слышишь.
     # set_flag:sunday_shop_done=true
-    ~ sunday_shop_bought_snack = true
     ~ sunday_shop_done = true
-    # return_to_scene
-    -> DONE
+    ~ TRUST = TRUST + 1
+    -> sunday_shop_settle
 
-* [Оставить как есть]
++ [Оставить как есть]
     # speaker:mc
-    Снеки переживут моё отсутствие.
+    Сладкое подождёт другого импульса.
     # return_to_scene
     -> DONE
 
@@ -300,7 +484,11 @@
         Главное — не потерять чек раньше, чем смысл покупки.
     }
 - else:
-    Касса стоит у выхода: терминал, сканер, маленькая зона ожидания. Пока здесь нечего делать — сначала надо выбрать что-то с полки.
+    Касса стоит у выхода: терминал, сканер, маленькая зона ожидания. {not met_npc_sunday:
+        Если брать подарок, сначала надо выбрать один — и только один. Касса не спасает от нерешительности.
+    - else:
+        Пока здесь нечего делать — сначала надо выбрать что-то с полки.
+    }
 }
 # return_to_scene
 -> DONE
@@ -344,6 +532,36 @@
     На нижней полке один ценник наклеен чуть ниже остальных. Ничего странного — просто глаз почему-то возвращается к нему снова.
 }
 
+{not met_npc_sunday:
+    {sunday_gift_bought:
+        # speaker:mc
+        Подарок уже есть. Второй предмет превратит подготовку в странный набор для выживания.
+    - else:
+        # speaker:mc
+        Вот он. Самый странный кандидат в подарки.
+
+        * [Взять фонарик-брелок]
+            # speaker:none
+            На маленьком блистере висит фонарик-брелок: пластиковый корпус, металлическое кольцо, кнопка, которая обещает крошечный круг света.
+
+            # speaker:mc
+            Это не красиво. Зато понятно. Способ не потеряться — тоже подарок.
+            # add_item:gift_keychain_flashlight
+            # set_flag:sunday_gift_bought=true
+            # set_flag:sunday_gift_keychain_flashlight=true
+            ~ sunday_gift_bought = true
+            ~ sunday_gift_keychain_flashlight = true
+            # return_to_scene
+            -> DONE
+
+        * [Оставить фонарик]
+            # speaker:mc
+            Нет. Не сейчас. Если я беру странный подарок, пусть это будет осознанно, а не потому что он первым попался на полке.
+            # return_to_scene
+            -> DONE
+    }
+}
+
 {met_npc_sunday:
     # speaker:npc
     Вот это уже серьёзный уровень свидания. Отдел губок и пакетов.
@@ -375,6 +593,30 @@
     Каждый раз кажется, что если купить правильную щётку, дома станет чуть больше порядка.
 }
 
+{not met_npc_sunday:
+    {sunday_gift_bought:
+        # speaker:mc
+        Веник смотрит укоризненно, но поезд уже ушёл: подарок выбран.
+    - else:
+        * [Взять маленький веник]
+            # speaker:mc
+            Если это сработает, значит у нас с {npc_name_ins} очень специфическое будущее.
+            # add_item:gift_small_broom
+            # set_flag:sunday_gift_bought=true
+            # set_flag:sunday_gift_small_broom=true
+            ~ sunday_gift_bought = true
+            ~ sunday_gift_small_broom = true
+            # return_to_scene
+            -> DONE
+
+        * [Оставить веник]
+            # speaker:mc
+            Нет. Даже для меня это пока слишком смелый бытовой жест.
+            # return_to_scene
+            -> DONE
+    }
+}
+
 {met_npc_sunday:
     # speaker:npc
     Опасная мысль. Так люди и уходят отсюда с ведром, которое им не нужно.
@@ -399,6 +641,41 @@
     ~ anomaly_noticed = true
 - else:
     Одна упаковка развёрнута лицом не в ту сторону. Среди такой ровной выкладки это выглядит почти как личное решение.
+}
+
+{not met_npc_sunday:
+    {sunday_gift_bought:
+        # speaker:mc
+        Салфетки остаются на полке. Сегодня у меня уже есть один странный ответ.
+    - else:
+        * [Взять влажные салфетки]
+            # speaker:mc
+            Практично. Слишком практично. Но вдруг это и есть мой стиль.
+            # add_item:gift_wet_wipes
+            # set_flag:sunday_gift_bought=true
+            # set_flag:sunday_gift_wet_wipes=true
+            ~ sunday_gift_bought = true
+            ~ sunday_gift_wet_wipes = true
+            # return_to_scene
+            -> DONE
+
+        * [Взять бумажные салфетки]
+            # speaker:mc
+            На случай крошек, неловкости и слишком оптимистичных планов.
+            # add_item:gift_paper_napkins
+            # set_flag:sunday_gift_bought=true
+            # set_flag:sunday_gift_paper_napkins=true
+            ~ sunday_gift_bought = true
+            ~ sunday_gift_paper_napkins = true
+            # return_to_scene
+            -> DONE
+
+        * [Оставить салфетки]
+            # speaker:mc
+            Не надо превращать заботу в закупку на всякий случай. Посмотрю ещё.
+            # return_to_scene
+            -> DONE
+    }
 }
 
 {met_npc_sunday:

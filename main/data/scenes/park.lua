@@ -10,17 +10,21 @@ local s = require "main.data.scenes._shared"
 -- park_riverside_bench     — скамейка у воды; NPC может ждать ЗДЕСЬ
 -- park_riverside_path      — прогулочная аллея; NPC может ждать ЗДЕСЬ
 --
--- NPC-flow (после рефакторинга item 7):
---   1) В park_hub игрок жмёт «Написать» -> park_message_where_are_you.
---      Knot выбирает локацию NPC: park_npc_at_bench ИЛИ park_npc_at_path
---      (детерминированно по iteration_number; iter 1 = bench).
---   2) NPC НЕ показывается в park_hub. Игрок видит расширенные nav-
---      хотспоты park_to_bench / park_to_path (gate теперь принимает
---      park_where_message_sent ИЛИ park_npc_greeted).
---   3) При входе в sub-сцену с NPC, on_enter ink-knot показывает
---      scene_char (mila_idle_bench / mila_idle_path) + появляется
---      greeting hotspot.
---   4) Click greeting -> park_npc_arrives (общий knot для любой локации).
+-- NPC-flow:
+--   1) sunday_date_park_arrival ставит # msg:prompt:<npc>:park_message_where_are_you
+--      с pin "НАПИСАТЬ" и # hud:hint:phone. Игрок открывает Messenger,
+--      заходит в чат NPC и тапает input — prompt сам дивертит в
+--      park_message_where_are_you. Обычный msg_thread_<npc> в этом flow
+--      не участвует.
+--   2) park_message_where_are_you отправляет сообщение, снимает prompt через
+--      # msg:reply и выбирает локацию NPC: park_npc_at_bench ИЛИ
+--      park_npc_at_path (детерминированно по iteration_number; iter 1 = bench).
+--   3) NPC НЕ показывается в park_hub. Игрок видит nav-хотспоты
+--      park_to_bench / park_to_path после park_where_message_sent.
+--   4) При входе в sub-сцену с NPC, on_enter ink-knot показывает
+--      scene_char (mila_idle_bench / mila_idle_path; Артём пока TODO)
+--      и появляется greeting hotspot.
+--   5) Click greeting -> park_npc_arrives (общий knot для любой локации).
 
 -- visible_when-выражения часто повторяются — выносим в helpers.
 local function not_chosen_or_met(gs)
@@ -35,8 +39,9 @@ local function can_offer_place(gs)
        and not gs.get_flag("met_npc_sunday")
 end
 
--- Расширенный gate для nav-хотспотов из hub: после message_sent или после
--- greeting (legacy путь). Используется park_to_bench / park_to_path.
+-- Gate для nav-хотспотов из hub: после сообщения через msg:prompt игрок
+-- может перейти в sub-сцену, где NPC ждёт. park_npc_greeted оставлен как
+-- страховка для старых сейвов/ручных dev-jump сценариев.
 local function nav_to_subscene_visible(gs)
     return (gs.get_flag("park_where_message_sent") or gs.get_flag("park_npc_greeted"))
        and not gs.get_flag("park_place_chosen")
@@ -76,18 +81,9 @@ return {
                        and not gs.get_flag("park_bench_cleared")
                 end,
             },
-            s.story{
-                id = "park_message_where",
-                rect = { x = 1050, y = 470, w = 130, h = 130 },
-                label = "Написать",
-                icon = "phone",
-                knot = "park_message_where_are_you",
-                visible_when = function(gs)
-                    return not gs.get_flag("park_where_message_sent")
-                       and not gs.get_flag("park_npc_greeted")
-                       and not gs.get_flag("met_npc_sunday")
-                end,
-            },
+            -- "Написать" хотспот убран: игрок пишет через Messenger.
+            -- sunday_date_park_arrival ставит # msg:prompt на чат NPC;
+            -- при тапе input prompt сам ведёт в park_message_where_are_you.
             -- park_npc_greeting в hub УБРАН. NPC после message_sent ждёт
             -- в sub-сцене (bench или path), greeting хотспот там же.
             s.story{
@@ -127,11 +123,14 @@ return {
         bg = "bg_park_riverside_bench_morning",
         label = "Парк у реки — скамейка",
         -- NPC ждёт здесь, если park_message_where_are_you выбрал bench.
-        -- on_enter показывает scene_char один раз (до greeting).
+        -- on_enter показывает scene_char один раз (до greeting). Отдельный
+        -- park_npc_bench_shown нужен, иначе return_to_scene снова входит сюда
+        -- до клика "Поздороваться" и on_enter зацикливается.
         on_enter = {
             knot = "park_bench_npc_show",
             condition = function(gs)
                 return gs.get_flag("park_npc_at_bench")
+                   and not gs.get_flag("park_npc_bench_shown")
                    and not gs.get_flag("park_npc_greeted")
             end,
         },
@@ -207,6 +206,7 @@ return {
             knot = "park_path_npc_show",
             condition = function(gs)
                 return gs.get_flag("park_npc_at_path")
+                   and not gs.get_flag("park_npc_path_shown")
                    and not gs.get_flag("park_npc_greeted")
             end,
         },

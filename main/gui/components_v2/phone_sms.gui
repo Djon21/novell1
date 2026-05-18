@@ -167,6 +167,42 @@ nodes {
   template_node_child: true
 }
 nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg1_av_bg"
+  parent: "sms_list/msg1_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg1_av_b_t"
+  parent: "sms_list/msg1_av_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg1_av_b_b"
+  parent: "sms_list/msg1_av_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg1_av_b_l"
+  parent: "sms_list/msg1_av_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg1_av_b_r"
+  parent: "sms_list/msg1_av_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg1_av"
+  parent: "sms_list/msg1_av_bg"
+  template_node_child: true
+}
+nodes {
   type: TYPE_TEMPLATE
   id: "sms_thread"
   parent: "sms_runtime_root"

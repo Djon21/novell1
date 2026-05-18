@@ -171,6 +171,8 @@ M.edit_print           = hash("edit_print")
 -- ---------------------------------------------------------------------------
 M.dev_jump_next        = hash("dev_jump_next")
 M.dev_jump_apply       = hash("dev_jump_apply")
+M.dev_jump_toggle_gender = hash("dev_jump_toggle_gender")
+M.dev_jump_record      = hash("dev_jump_record")
 
 -- ---------------------------------------------------------------------------
 -- Input action_id'ы (стандартные Defold-инпуты, пригодятся для сравнений)

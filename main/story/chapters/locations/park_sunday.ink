@@ -215,11 +215,20 @@
 Ладно. Значит, сначала — не паниковать. Потом — написать.
 
 # speaker:none
-Можно осмотреться и написать {npc_name_dat} в Messenger: уточнить, где вы разминулись.
+В Messenger мигает чат — можно открыть и написать {npc_name_dat}, где вы разминулись.
 
 # set_flag:park_arrived=true
 ~ park_arrived = true
 # map:lock_all
+// # msg:prompt — генерик-механизм: pin "НАПИСАТЬ" на чате, тап input'а
+// диверитит в указанный knot независимо от _replied-флага. Pin авто-снимется
+// при первом # msg:reply:CHAT:... внутри knot'а.
+{mc_gender == "female":
+    # msg:prompt:artem:park_message_where_are_you:НАПИСАТЬ
+- else:
+    # msg:prompt:mila:park_message_where_are_you:НАПИСАТЬ
+}
+# hud:hint:phone
 # return_to_scene
 -> DONE
 
@@ -269,7 +278,9 @@
 -> DONE
 
 // On_enter knot для park_riverside_bench когда NPC ждёт у скамейки.
-// Гейтится в park.lua: park_npc_at_bench AND NOT park_npc_greeted.
+// Гейтится в park.lua: park_npc_at_bench AND NOT park_npc_bench_shown
+// AND NOT park_npc_greeted. Флаг shown обязателен: иначе return_to_scene
+// снова войдёт в sub-сцену до клика "Поздороваться" и on_enter зациклится.
 === park_bench_npc_show ===
 # speaker:none
 {mc_gender == "male":
@@ -279,10 +290,12 @@
     {npc_name} стоит у лавочки, спиной к воде. Замечает тебя сразу, поднимает руку.
     // TODO: artem_park.png — добавить # scene_char:show:park:artem_idle_bench
 }
+# set_flag:park_npc_bench_shown=true
 # return_to_scene
 -> DONE
 
 // On_enter knot для park_riverside_path когда NPC ждёт в аллее.
+// См. park_bench_npc_show: shown-флаг нужен чтобы on_enter не зацикливался.
 === park_path_npc_show ===
 # speaker:none
 {mc_gender == "male":
@@ -292,6 +305,7 @@
     {npc_name} в нескольких шагах впереди, у дерева. Поворачивается на твои шаги.
     // TODO: artem_park.png — добавить # scene_char:show:park:artem_idle_path
 }
+# set_flag:park_npc_path_shown=true
 # return_to_scene
 -> DONE
 
@@ -311,6 +325,17 @@
 # speaker:npc
 Почти — это мило.
 
+{sunday_gift_bought and not sunday_gift_given:
+    -> sunday_gift_react
+}
+-> park_npc_arrives_after_gift
+
+// sunday_gift_auto_park вынесен в locations/sunday_gift_reactions.ink
+// (общая логика реакции на подарок — теперь шарится с cafe-вариантом).
+// Сюда переадресует sunday_gift_react → sunday_gift_react_park →
+// park_npc_arrives_after_gift (см. shared file).
+
+=== park_npc_arrives_after_gift ===
 # speaker:none
 Вы стоите у входа рядом, но всё ещё на проходе. Теперь надо найти место для разговора: сесть у воды или уйти в тень аллеи.
 

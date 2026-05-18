@@ -11,10 +11,10 @@
 --   office_monday.lua       — work_hub / office_workspace / office_meeting_room (понедельник)
 --   office_tuesday.lua      — stub, пока без собственных хотспотов
 --   park.lua                — park_hub / park_riverside_bench / park_riverside_path
---   cafe.lua                — cafe_hub
---   shop.lua                — shop_hub
+--   cafe.lua                — cafe_hub / cafe_corner / cafe_backroom
+--   shop.lua                — shop_street / shop_front / shop_household / shop_hub alias
 --   bar.lua                 — bar_hub
---   viewpoint.lua           — view_hub
+--   viewpoint.lua           — view_hub / view_corner
 --   archive.lua             — archive_hub
 --
 -- Coordinates:
@@ -25,6 +25,7 @@
 --   "ink_knot"    -- leave exploration and jump to an Ink knot
 --   "set_flag"    -- set a game_state flag
 --   "add_item"    -- add an inventory item
+--   "remove_item" -- remove an inventory item
 --
 -- Hotspot visibility:
 --   visible_when(gs) -> false  hides hotspot completely

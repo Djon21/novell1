@@ -24,10 +24,10 @@ scene_id, hotspot id, bg-атласов — в `PROJECT_INVENTORY.md`.
 | `main/data/scenes/office_monday.lua` | Офис в понедельник (work_hub / office_workspace / office_meeting_room) |
 | `main/data/scenes/office_tuesday.lua` | Stub: вторничный офис пока без собственных хотспотов |
 | `main/data/scenes/park.lua` | Парк у реки (park_hub + park_riverside_bench + park_riverside_path) |
-| `main/data/scenes/cafe.lua` | Кафе (cafe_hub) |
-| `main/data/scenes/shop.lua` | Магазин 24/7 (shop_hub) |
+| `main/data/scenes/cafe.lua` | Кафе (cafe_hub / cafe_corner / cafe_backroom) |
+| `main/data/scenes/shop.lua` | Магазин 24/7 (shop_street / shop_front / shop_household / shop_hub alias) |
 | `main/data/scenes/bar.lua` | Бар Maybe (bar_hub) |
-| `main/data/scenes/viewpoint.lua` | Смотровая (view_hub) |
+| `main/data/scenes/viewpoint.lua` | Смотровая (view_hub / view_corner) |
 | `main/data/scenes/archive.lua` | Архив (archive_hub) |
 
 Сборка в общий список — `main/scripts/scenes.lua`.

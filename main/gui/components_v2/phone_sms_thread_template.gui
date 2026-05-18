@@ -452,7 +452,7 @@ nodes {
 nodes {
   position {
     x: 12.0
-    y: 28.0
+    y: 21.0
     z: 0.059
   }
   size {
@@ -467,7 +467,10 @@ nodes {
   type: TYPE_TEXT
   font: "Manrope-Medium_16"
   id: "bub1_text"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
   pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
   line_break: true
   parent: "bub1_bg"
   alpha: 0.95

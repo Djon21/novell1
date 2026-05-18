@@ -68,44 +68,60 @@ local function show_blocked(self, info)
     if g then gui.set_enabled(g, true) end
 end
 
--- ─── POI spin: разблокированные POI крутят свой circle-нод ────────────
--- 360° за SPIN_DURATION секунд, EASING_LINEAR, LOOP_FORWARD (0→360
--- идентичны визуально, шва не видно).
-local SPIN_DURATION = 6.0
+-- ─── POI pulse: разблокированные POI пульсируют alpha-каналом ─────────
+-- PINGPONG между 1.0 и PULSE_ALPHA_LO за PULSE_DURATION (на цикл вниз).
+-- Пульс идёт синхронно на трёх нодах: _circle, _center, _icon — чтобы
+-- POI «дышал» целиком, а не только обводка крутилась как раньше.
+local PULSE_DURATION = 0.9
+local PULSE_ALPHA_LO = 0.65
+local PULSE_SUFFIXES = { "_circle", "_center", "_icon" }
 
-local function start_poi_spin(node)
-    if not node then return end
-    gui.cancel_animation(node, "euler.z")
-    gui.set_rotation(node, vmath.vector3(0, 0, 0))
-    gui.animate(node, "euler.z", 360, gui.EASING_LINEAR,
-        SPIN_DURATION, 0, nil, gui.PLAYBACK_LOOP_FORWARD)
+local function start_poi_pulse(poi_id)
+    for _, suf in ipairs(PULSE_SUFFIXES) do
+        local node = get_node(poi_id .. suf)
+        if node then
+            gui.cancel_animation(node, "color.w")
+            -- Прежний spin мог оставить rotation ≠ 0 на _circle. Сбросим
+            -- на всякий случай, чтобы при миграции старых сейвов не было
+            -- косых иконок.
+            gui.set_rotation(node, vmath.vector3(0, 0, 0))
+            local c = gui.get_color(node)
+            gui.set_color(node, vmath.vector4(c.x, c.y, c.z, 1))
+            gui.animate(node, "color.w", PULSE_ALPHA_LO, gui.EASING_INOUTSINE,
+                PULSE_DURATION, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
+        end
+    end
 end
 
-local function stop_poi_spin(node)
-    if not node then return end
-    gui.cancel_animation(node, "euler.z")
-    gui.set_rotation(node, vmath.vector3(0, 0, 0))
+local function stop_poi_pulse(poi_id)
+    for _, suf in ipairs(PULSE_SUFFIXES) do
+        local node = get_node(poi_id .. suf)
+        if node then
+            gui.cancel_animation(node, "color.w")
+            local c = gui.get_color(node)
+            gui.set_color(node, vmath.vector4(c.x, c.y, c.z, 1))
+        end
+    end
 end
 
 -- Перерисовать состояние всех POI-кружков. Вызывается при open_app,
 -- refresh_app и любом изменении allowed-set из ink-тегов
 -- # map:allow:poi_X / # map:lock_to:poi_X.
 --
--- Использует self.spinning_pois для трекинга: если POI УЖЕ крутится —
--- не перезапускаем (иначе start_poi_spin сделает cancel + set_rotation(0)
--- → визуальный «прыжок» на 0 каждый refresh).
+-- Использует self.pulsing_pois для трекинга: если POI УЖЕ пульсирует —
+-- не перезапускаем, иначе будет визуальный «прыжок» alpha на каждый refresh.
 local function refresh_pois(self)
-    self.spinning_pois = self.spinning_pois or {}
+    self.pulsing_pois = self.pulsing_pois or {}
     for poi_id, _ in pairs(POI_SCENES) do
         local circle = get_node(poi_id .. "_circle")
         if circle then
             local allowed = (not gs.map_is_poi_allowed) or gs.map_is_poi_allowed(poi_id)
-            if allowed and not self.spinning_pois[poi_id] then
-                start_poi_spin(circle)
-                self.spinning_pois[poi_id] = true
-            elseif not allowed and self.spinning_pois[poi_id] then
-                stop_poi_spin(circle)
-                self.spinning_pois[poi_id] = nil
+            if allowed and not self.pulsing_pois[poi_id] then
+                start_poi_pulse(poi_id)
+                self.pulsing_pois[poi_id] = true
+            elseif not allowed and self.pulsing_pois[poi_id] then
+                stop_poi_pulse(poi_id)
+                self.pulsing_pois[poi_id] = nil
             end
         end
     end
@@ -114,10 +130,9 @@ end
 -- Полный стоп — экономит CPU когда карта закрыта.
 local function stop_all_pois(self)
     for poi_id, _ in pairs(POI_SCENES) do
-        local circle = get_node(poi_id .. "_circle")
-        if circle then stop_poi_spin(circle) end
+        stop_poi_pulse(poi_id)
     end
-    if self then self.spinning_pois = {} end
+    if self then self.pulsing_pois = {} end
 end
 
 -- -----------------------------------------------------------------------

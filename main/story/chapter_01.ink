@@ -11,6 +11,7 @@ INCLUDE chapters/10_apartment.ink
 INCLUDE chapters/locations/park_sunday.ink
 INCLUDE chapters/locations/cafe_sunday.ink
 INCLUDE chapters/locations/shop_sunday.ink
+INCLUDE chapters/locations/sunday_gift_reactions.ink
 INCLUDE chapters/locations/viewpoint_sunday.ink
 INCLUDE chapters/locations/bar_sunday.ink
 

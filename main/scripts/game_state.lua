@@ -256,6 +256,11 @@ M.get_msg              = messenger_state.get
 M.get_msg_chats        = messenger_state.get_chats
 M.get_msg_unread_total = messenger_state.get_unread_total
 M.get_msg_unread       = messenger_state.get_unread
+M.set_msg_tag          = messenger_state.set_tag
+M.get_msg_tag          = messenger_state.get_tag
+M.set_msg_prompt       = messenger_state.set_prompt
+M.get_msg_prompt       = messenger_state.get_prompt
+M.clear_msg_prompt     = messenger_state.clear_prompt
 
 -- ---------------------------------------------------------------------------
 -- Notes

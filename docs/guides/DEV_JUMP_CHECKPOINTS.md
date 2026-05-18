@@ -60,6 +60,8 @@ scene = "apartment_hub"
 skip_on_enter = false
 ```
 
+Если `skip_on_enter = false` и сцена сразу уводит в Ink через `on_enter`, dev jump должен остаться в dialogue-режиме. Не вызывай exploration вручную после такого прыжка: `dev_jump.lua` сам проверяет, активна ли exploration-сцена после `scene_controller.enter()`.
+
 `knot` используется, когда нужно начать конкретную Ink-сцену:
 
 ```lua
