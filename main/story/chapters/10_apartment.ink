@@ -17,6 +17,7 @@
 
 * [Артём]
     ~ mc_gender = "male"
+    ~ npc_gender = "female"
     ~ mc_name = "Артём"
     ~ npc_name = "Мила"
     ~ mc_name_gen = "Артёма"
@@ -29,10 +30,11 @@
     ~ npc_name_ins = "Милой"
     ~ mc_name_prep = "Артёме"
     ~ npc_name_prep = "Миле"
-    -> apartment_start
+    -> sunday_start_splash
 
 * [Мила]
     ~ mc_gender = "female"
+    ~ npc_gender = "male"
     ~ mc_name = "Мила"
     ~ npc_name = "Артём"
     ~ mc_name_gen = "Милы"
@@ -45,7 +47,13 @@
     ~ npc_name_ins = "Артёмом"
     ~ mc_name_prep = "Миле"
     ~ npc_name_prep = "Артёме"
-    -> apartment_start
+    -> sunday_start_splash
+
+// Splash «ВОСКРЕСЕНЬЕ» сразу после выбора персонажа. Отдельный knot —
+// чтобы не дублировать тег в обоих * [персонаж] ветках.
+=== sunday_start_splash ===
+# splash:day:sunday
+-> apartment_start
 
 === apartment_start ===
 # bg:bg_apartment_bedroom_morning # speaker:none
@@ -856,7 +864,7 @@
     {sunday_gift_right:
         Фонарик-брелок ненадолго вспыхивает в памяти. Маленький круг света днём почти ничего не освещал, но ты всё равно помнишь именно его.
     - else:
-        Подарок был не тем самым, но {npc_name} принял{mc_gender == "female": его|а его} так деликатно, что неловкость не осталась на коже.
+        Подарок был не тем самым, но {npc_name} принял{npc_gender == "female":а его| его} так деликатно, что неловкость не осталась на коже.
     }
 - else:
     Пустые руки тоже вспоминаются. Не как ошибка — скорее как напоминание, что иногда прийти самому важнее, чем принести правильную вещь.

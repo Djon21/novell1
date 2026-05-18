@@ -696,6 +696,85 @@ local function apply_tags(tags, trailing)
                 hint = hint:gsub("^%s+", ""):gsub("%s+$", "")
                 table.insert(pending_commands, { type = "hud_hint", target = hint })
             end
+        elseif key == "day_transition" and value and not suppress_effects then
+            -- Backward-compat: # day_transition:to:DAY переадресуем в новый
+            -- splash:day. См. # splash:day:DAY ниже.
+            local to_day = value:match("^to%s*:%s*([%w_]+)")
+            if to_day then
+                to_day = to_day:gsub("^%s+", ""):gsub("%s+$", "")
+                table.insert(pending_commands, {
+                    type = "splash",
+                    variant = "day",
+                    day = to_day,
+                })
+            end
+        elseif key == "splash" and value and not suppress_effects then
+            -- # splash:day:DAY                 — день: terminal-лог + название
+            -- # splash:location:SCENE_ID       — локация: eyebrow + название места
+            -- # splash:text:TITLE              — нейтральный title-only
+            -- # splash:text:TITLE:SUBTITLE     — title + subtitle
+            -- # splash:memory:TEXT             — воспоминание (тёплая палитра)
+            -- # splash:alarm:TEXT              — тревога (hot-палитра)
+            --
+            -- ВАЖНО: пишем в pending_commands напрямую (не в scene_bucket).
+            -- Иначе при тегах в knot'е без текста (trailing=true) splash
+            -- уехал бы в deferred и сработал ПОСЛЕ текста следующей сцены.
+            local op, rest = value:match("^([%w_]+)%s*:?%s*(.*)$")
+            op = op and op:gsub("^%s+", ""):gsub("%s+$", "")
+            rest = rest and rest:gsub("^%s+", ""):gsub("%s+$", "")
+
+            if op == "day" and rest and rest ~= "" then
+                table.insert(pending_commands, {
+                    type = "splash", variant = "day", day = rest,
+                })
+            elseif op == "location" and rest and rest ~= "" then
+                table.insert(pending_commands, {
+                    type = "splash", variant = "location", scene_id = rest,
+                })
+            elseif (op == "text" or op == "memory" or op == "alarm" or op == "generic")
+                   and rest and rest ~= "" then
+                -- text/memory/alarm/generic могут иметь "TITLE:SUBTITLE" формат
+                local title, subtitle = rest:match("^([^:]+):(.+)$")
+                if not title then title = rest end
+                title = title:gsub("^%s+", ""):gsub("%s+$", "")
+                if subtitle then subtitle = subtitle:gsub("^%s+", ""):gsub("%s+$", "") end
+                local variant = (op == "text") and "generic" or op
+                table.insert(pending_commands, {
+                    type = "splash",
+                    variant = variant,
+                    title = title,
+                    subtitle = subtitle,
+                })
+            end
+        elseif key == "transit" and value and not suppress_effects then
+            -- # transit:start:TITLE[:SUBTITLE[:EYEBROW]]  — атмосферный overlay
+            -- который висит ПОВЕРХ bg сцены, но НЕ закрывает dialogue. Не блокирует
+            -- ink — текст продолжает идти. Закрывается тегом `# transit:end`.
+            -- Использовать для дорог, монтажей, флешбэков-перебивок.
+            local op, rest = value:match("^([%w_]+)%s*:?%s*(.*)$")
+            op = op and op:gsub("^%s+", ""):gsub("%s+$", "")
+            rest = rest and rest:gsub("^%s+", ""):gsub("%s+$", "")
+            if op == "start" and rest and rest ~= "" then
+                -- Разбираем title[:subtitle[:eyebrow]]
+                local title, after = rest:match("^([^:]+):(.+)$")
+                if not title then title = rest end
+                local subtitle, eyebrow = nil, nil
+                if after then
+                    subtitle, eyebrow = after:match("^([^:]+):(.+)$")
+                    if not subtitle then subtitle = after end
+                end
+                title = title:gsub("^%s+", ""):gsub("%s+$", "")
+                if subtitle then subtitle = subtitle:gsub("^%s+", ""):gsub("%s+$", "") end
+                if eyebrow then eyebrow = eyebrow:gsub("^%s+", ""):gsub("%s+$", "") end
+                table.insert(pending_commands, {
+                    type = "transit_start",
+                    title = title,
+                    subtitle = subtitle,
+                    eyebrow = eyebrow,
+                })
+            elseif op == "end" then
+                table.insert(pending_commands, { type = "transit_end" })
+            end
         elseif key == "scene_char" and value and not suppress_effects then
             -- # scene_char:show:SCENE:CHAR   — показать персонажа на фоне сцены
             -- # scene_char:hide:SCENE:CHAR   — спрятать

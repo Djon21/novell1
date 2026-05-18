@@ -70,6 +70,14 @@ embedded_instances {
   "  id: \"phone_term\"\n"
   "  component: \"/main/gui/components_v2/phone_term.gui\"\n"
   "}\n"
+  "components {\n"
+  "  id: \"transit\"\n"
+  "  component: \"/main/gui/components_v2/transit.gui\"\n"
+  "}\n"
+  "components {\n"
+  "  id: \"splash\"\n"
+  "  component: \"/main/gui/components_v2/splash.gui\"\n"
+  "}\n"
   ""
 }
 embedded_instances {

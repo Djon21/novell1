@@ -1,0 +1,172 @@
+-- transit.gui_script
+-- Атмосферный overlay для "narrative transit" моментов: дорога на работу,
+-- флешбэк-монтаж, путешествие — что-то где есть пара параграфов текста, но
+-- статичный bg сцены не отрабатывает. Заменяет верхнюю часть экрана
+-- стилизованной заглушкой, dialogue-панель внизу остаётся видимой.
+--
+-- Отличия от splash:
+--   - НЕ требует тапа: висит пока ink не пошлёт # transit:end
+--   - НЕ блокирует input — игрок продолжает кликать через dialogue
+--   - НЕ pause-render — ink идёт нормально, transit просто рендерится как фон
+--
+-- Сообщения:
+--   "show_transit" { title = "...", subtitle = "..." (opt), eyebrow = "..." (opt) }
+--   "hide_transit"
+--
+-- Анимация: fade_in элементов ~1.2 сек, потом перпетуальный motion-dot
+-- бежит туда-сюда по горизонтальной линии (визуальный сигнал «движемся»).
+-- На hide_transit — fade_out ~0.4 сек.
+
+local UI_MGR = "#ui_manager_v2"
+local DIALOGUE_URL = "#dialogue_v2"
+
+local NODE_IDS = {
+    "tr_eyebrow", "tr_underline", "tr_title", "tr_subtitle",
+    "tr_motion_dot", "tr_motion_track",
+}
+
+local COLORS = {
+    paper       = vmath.vector4(0.953, 0.925, 0.851, 1),
+    paper_dim   = vmath.vector4(0.788, 0.753, 0.659, 1),
+    accent      = vmath.vector4(0.490, 0.976, 1.000, 1),
+}
+
+local function get_node(id)
+    local ok, n = pcall(gui.get_node, id)
+    if ok then return n end
+    return nil
+end
+
+local function set_text(id, value)
+    local n = get_node(id)
+    if n then gui.set_text(n, tostring(value or "")) end
+end
+
+local function set_alpha(id, alpha)
+    local n = get_node(id)
+    if n then
+        local c = gui.get_color(n)
+        gui.set_color(n, vmath.vector4(c.x, c.y, c.z, alpha))
+    end
+end
+
+local function cancel_color_anim(id)
+    local n = get_node(id)
+    if n then gui.cancel_animation(n, "color.w") end
+end
+
+local function cancel_pos_anim(id)
+    local n = get_node(id)
+    if n then gui.cancel_animation(n, gui.PROP_POSITION) end
+end
+
+local function set_enabled(id, enabled)
+    local n = get_node(id)
+    if n then gui.set_enabled(n, enabled) end
+end
+
+local function set_all_enabled(enabled)
+    for _, id in ipairs(NODE_IDS) do set_enabled(id, enabled) end
+end
+
+local function reset_visual()
+    for _, id in ipairs(NODE_IDS) do
+        cancel_color_anim(id)
+        set_alpha(id, 0)
+    end
+    cancel_pos_anim("tr_motion_dot")
+end
+
+local function fade_in(id, target_alpha, duration, delay)
+    local n = get_node(id)
+    if not n then return end
+    local c = gui.get_color(n)
+    gui.set_color(n, vmath.vector4(c.x, c.y, c.z, 0))
+    gui.animate(n, "color.w", target_alpha,
+        gui.EASING_OUTQUAD, duration, delay or 0)
+end
+
+local function fade_out(id, duration, delay, on_complete)
+    local n = get_node(id)
+    if not n then return end
+    gui.animate(n, "color.w", 0,
+        gui.EASING_INQUAD, duration, delay or 0,
+        on_complete)
+end
+
+-- Motion-dot бежит по линии слева-направо и обратно, бесконечно. Сигнал
+-- «движение идёт». Запускается ОТДЕЛЬНЫМ кадром после fade_in (см. timer.delay
+-- в show_transit) чтобы fade_in alpha-анимации не конфликтовали с position-анимацией.
+local function start_motion_loop(self)
+    local n = get_node("tr_motion_dot")
+    if not n then return end
+    local x_start = 440
+    local x_end = 820   -- 440 (track start) + 400 (track width) - 20 (dot width)
+    local y = 340
+    gui.set_position(n, vmath.vector3(x_start, y, 0.41))
+    -- PINGPONG: x от start до end и обратно, 2 сек на полный цикл (туда+обратно).
+    gui.animate(n, gui.PROP_POSITION,
+        vmath.vector3(x_end, y, 0.41),
+        gui.EASING_INOUTSINE, 1.0, 0, nil,
+        gui.PLAYBACK_LOOP_PINGPONG)
+end
+
+function init(self)
+    self.visible = false
+    set_all_enabled(false)
+    reset_visual()
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash("show_transit") then
+        message = message or {}
+        local title = tostring(message.title or "")
+        local subtitle = message.subtitle and tostring(message.subtitle) or nil
+        local eyebrow = message.eyebrow and tostring(message.eyebrow) or "В ПУТИ"
+
+        self.visible = true
+        reset_visual()
+        set_text("tr_eyebrow", eyebrow)
+        set_text("tr_title", title)
+        set_text("tr_subtitle", subtitle or "")
+
+        set_all_enabled(true)
+        set_enabled("tr_subtitle", subtitle ~= nil and subtitle ~= "")
+
+        -- Fullscreen dim рисует dialogue_v2 (узел transit_dim между scene_bg
+        -- и dlg_root) — так dialogue-панель остаётся читаемой поверх.
+        msg.post(DIALOGUE_URL, "show_transit_dim")
+
+        -- fade_in пайплайн для текстовых элементов
+        fade_in("tr_eyebrow", 1.0, 0.3, 0.25)
+        fade_in("tr_underline", 0.85, 0.25, 0.55)
+        fade_in("tr_title", 1.0, 0.4, 0.55)
+        if subtitle then
+            fade_in("tr_subtitle", 0.95, 0.3, 0.9)
+        end
+        fade_in("tr_motion_track", 0.30, 0.3, 1.1)
+        fade_in("tr_motion_dot", 1.0, 0.3, 1.1)
+
+        -- motion loop стартуем отдельным кадром (после fade_in motion_dot),
+        -- иначе gui.animate(PROP_POSITION) может конфликтовать с alpha-анимацией.
+        timer.delay(1.4, false, function()
+            start_motion_loop(self)
+        end)
+
+    elseif message_id == hash("hide_transit") then
+        if not self.visible then return end
+        self.visible = false
+        cancel_pos_anim("tr_motion_dot")
+        msg.post(DIALOGUE_URL, "hide_transit_dim")
+        local targets = {
+            "tr_eyebrow", "tr_underline", "tr_title", "tr_subtitle",
+            "tr_motion_dot", "tr_motion_track",
+        }
+        for i, id in ipairs(targets) do
+            local last = (i == #targets)
+            fade_out(id, 0.4, 0, last and function()
+                set_all_enabled(false)
+            end or nil)
+        end
+    end
+end

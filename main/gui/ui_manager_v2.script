@@ -61,6 +61,7 @@ local lifecycle = require "main.gui.modules.ui_manager_v2.lifecycle"
 local dialogue_orchestrator = require "main.gui.modules.ui_manager_v2.dialogue_orchestrator"
 local dev_jump = require "main.gui.modules.ui_manager_v2.dev_jump"
 local scene_characters = require "main.scripts.scene_characters"
+local scenes_module = require "main.scripts.scenes"
 local log = require "main.scripts.log"
 
 local ok_scenes, scenes = pcall(require, "main.scripts.scenes")
@@ -154,6 +155,8 @@ local function init_components()
     M.components.phone       = msg.url("#phone_v2")
     M.components.hotspots    = msg.url("#hotspots_v2")
     M.components.effects     = msg.url("#effects")
+    M.components.splash      = msg.url("#splash")
+    M.components.transit     = msg.url("#transit")
     dbg("[ui_manager_v2] компоненты инициализированы")
 end
 
@@ -592,6 +595,56 @@ local function apply_dm_commands(self)
         scene_char_hide_all = function()
             scene_characters.hide_all()
         end,
+        show_splash = function(cmd, on_done)
+            -- Универсальный показ splash-перебивки. cmd содержит variant +
+            -- payload (см. dialogue_manager_ink.lua парсер тегов splash:*).
+            -- on_done вызовется когда игрок тапнет splash и fade-out отыграет
+            -- (компонент шлёт splash_done в ui_manager).
+            if not M.components.splash then
+                if on_done then on_done() end
+                return
+            end
+            self.splash_done_cb = on_done
+            notify_overlay_state("splash", true)
+
+            local variant = cmd.variant or "generic"
+            local payload = { variant = variant }
+
+            if variant == "day" then
+                payload.day = cmd.day or cmd.to
+                payload.iteration = (meta and meta.get) and meta.get("iteration_number", 1) or 1
+            elseif variant == "location" then
+                -- Берём label из scenes.lua. Если сцена неизвестна — fallback в scene_id.
+                local scene_id = cmd.scene_id
+                payload.title = scene_id
+                if scene_id and scenes_module and scenes_module.get then
+                    local data = scenes_module.get(scene_id)
+                    if data and data.label then payload.title = data.label end
+                end
+                payload.subtitle = cmd.subtitle
+            else
+                -- generic / memory / alarm
+                payload.title = cmd.title
+                payload.subtitle = cmd.subtitle
+                payload.eyebrow = cmd.eyebrow
+            end
+
+            msg.post(M.components.splash, MSG.show_splash, payload)
+        end,
+        show_transit = function(cmd)
+            -- Persistent atmospheric overlay. Не ждёт callback'а — ink идёт
+            -- параллельно, текст реплик плывёт через dialogue-панель внизу.
+            if not M.components.transit then return end
+            msg.post(M.components.transit, MSG.show_transit, {
+                title = cmd.title,
+                subtitle = cmd.subtitle,
+                eyebrow = cmd.eyebrow,
+            })
+        end,
+        hide_transit = function()
+            if not M.components.transit then return end
+            msg.post(M.components.transit, MSG.hide_transit)
+        end,
         on_resume = function() handle_dialogue_update(self) end,
     })
 end
@@ -795,6 +848,15 @@ function on_message(self, message_id, message, sender)
         if message and message.slot then
             handle_scene_character_click(self, message.slot)
         end
+        return
+    end
+    if message_id == MSG.splash_done then
+        -- Splash отрисовался и игрок тапнул — продолжаем ink. Снимаем
+        -- overlay-флаг и зовём сохранённый callback из show_splash.
+        notify_overlay_state("splash", false)
+        local cb = self.splash_done_cb
+        self.splash_done_cb = nil
+        if cb then cb() end
         return
     end
     message_flow.handle(message_ctx(self), message_id, message, sender)

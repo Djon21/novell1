@@ -84,8 +84,12 @@
                                                         ~ sunday_current_gift = "wet_wipes"
                                                         # remove_item:gift_wet_wipes
                                                     - else:
-                                                        ~ sunday_current_gift = "paper_napkins"
-                                                        # remove_item:gift_paper_napkins
+                                                        {sunday_gift_paper_napkins:
+                                                            ~ sunday_current_gift = "paper_napkins"
+                                                            # remove_item:gift_paper_napkins
+                                                        - else:
+                                                            ~ sunday_current_gift = "unknown"
+                                                        }
                                                     }
                                                 }
                                             }
@@ -253,12 +257,19 @@
                                                         # speaker:npc
                                                         Зато честно. Очень бытовая форма заботы.
                                                     - else:
-                                                        # paper_napkins (fallback)
-                                                        # speaker:mc
-                                                        Я взял{mc_gender == "female":а|} салфетки. На всякий случай.
+                                                        {sunday_current_gift == "paper_napkins":
+                                                            # speaker:mc
+                                                            Я взял{mc_gender == "female":а|} салфетки. На всякий случай.
 
-                                                        # speaker:npc
-                                                        Уважаю людей, которые приходят на встречу с планом против крошек.
+                                                            # speaker:npc
+                                                            Уважаю людей, которые приходят на встречу с планом против крошек.
+                                                        - else:
+                                                            # speaker:mc
+                                                            Я взял{mc_gender == "female":а|} что-то из магазина. И только сейчас понимаю, что сам{mc_gender == "female":а|} не до конца уверен{mc_gender == "female":а|}, что именно.
+
+                                                            # speaker:npc
+                                                            Тогда будем считать это подарком с элементом расследования.
+                                                        }
                                                     }
                                                 }
                                             }
@@ -403,12 +414,19 @@
                                                         # speaker:npc
                                                         Как человек, который готов к бытовому хаосу. Это не худшее качество.
                                                     - else:
-                                                        # paper_napkins (fallback)
-                                                        # speaker:mc
-                                                        Я взял{mc_gender == "female":а|} салфетки. На всякий случай.
+                                                        {sunday_current_gift == "paper_napkins":
+                                                            # speaker:mc
+                                                            Я взял{mc_gender == "female":а|} салфетки. На всякий случай.
 
-                                                        # speaker:npc
-                                                        Спасибо. Очень взрослая форма тревоги.
+                                                            # speaker:npc
+                                                            Спасибо. Очень взрослая форма тревоги.
+                                                        - else:
+                                                            # speaker:mc
+                                                            Я взял{mc_gender == "female":а|} что-то из магазина. И только сейчас понимаю, что сам{mc_gender == "female":а|} не до конца уверен{mc_gender == "female":а|}, что именно.
+
+                                                            # speaker:npc
+                                                            Тогда это концептуальный подарок. Кафе такое выдержит.
+                                                        }
                                                     }
                                                 }
                                             }

@@ -93,6 +93,10 @@ local function apply_single(cmd, ctx)
         if ctx.scene_char_hide then ctx.scene_char_hide(cmd.scene, cmd.char) end
     elseif cmd.type == "scene_char_hide_all" then
         if ctx.scene_char_hide_all then ctx.scene_char_hide_all() end
+    elseif cmd.type == "transit_start" then
+        if ctx.show_transit then ctx.show_transit(cmd) end
+    elseif cmd.type == "transit_end" then
+        if ctx.hide_transit then ctx.hide_transit() end
     end
 end
 
@@ -118,6 +122,16 @@ local function apply_from(cmds, start_index, ctx)
                 yandex_ads.show_fullscreen(resume_after_ad)
             end
             return true
+        elseif cmd.type == "splash" then
+            -- Универсальная splash-перебивка. Async-паттерн как у show_ad:
+            -- запускаем компонент, остаток очереди — в on_done callback.
+            if ctx.show_splash then
+                ctx.show_splash(cmd, function()
+                    apply_from(cmds, i + 1, ctx)
+                    ctx.on_resume()
+                end)
+                return true
+            end
         end
 
         if apply_single(cmd, ctx) then

@@ -174,6 +174,13 @@ M.dev_jump_apply       = hash("dev_jump_apply")
 M.dev_jump_toggle_gender = hash("dev_jump_toggle_gender")
 M.dev_jump_record      = hash("dev_jump_record")
 
+M.show_splash          = hash("show_splash")
+M.hide_splash          = hash("hide_splash")
+M.splash_done          = hash("splash_done")
+
+M.show_transit         = hash("show_transit")
+M.hide_transit         = hash("hide_transit")
+
 -- ---------------------------------------------------------------------------
 -- Input action_id'ы (стандартные Defold-инпуты, пригодятся для сравнений)
 -- ---------------------------------------------------------------------------

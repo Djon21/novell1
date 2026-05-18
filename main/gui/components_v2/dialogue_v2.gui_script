@@ -753,6 +753,26 @@ function on_message(self, message_id, message, sender)
         self._adaptive_w = nil
         self._adaptive_h = nil
         apply_adaptive_layout(self)
+
+    elseif message_id == hash("show_transit_dim") then
+        -- Fullscreen dim-overlay для transit-механики. Узел transit_dim
+        -- сидит МЕЖДУ scene_bg (z=0.04-0.05) и dlg_root (z=0.1), поэтому
+        -- затемняет фон сцены, но dialogue-панель остаётся читаемой над ним.
+        -- Управляется transit.gui_script через ui_manager.
+        local n = gui.get_node("transit_dim")
+        if n then
+            gui.cancel_animation(n, "color.w")
+            local c = gui.get_color(n)
+            gui.set_color(n, vmath.vector4(c.x, c.y, c.z, 0))
+            gui.animate(n, "color.w", 0.92, gui.EASING_OUTQUAD, 0.30)
+        end
+
+    elseif message_id == hash("hide_transit_dim") then
+        local n = gui.get_node("transit_dim")
+        if n then
+            gui.cancel_animation(n, "color.w")
+            gui.animate(n, "color.w", 0, gui.EASING_INQUAD, 0.40)
+        end
     end
 end
 

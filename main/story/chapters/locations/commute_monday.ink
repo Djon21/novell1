@@ -29,6 +29,7 @@
     -> mon_commute_walk_steady
 
 === mon_commute_walk_auto ===
+# transit:start:На автомате:знакомый маршрут — ничего нового
 # speaker:none
 Автоматический маршрут удобен тем, что не требует участия.
 
@@ -37,9 +38,11 @@
 # speaker:mc
 Главное — не начать так же работать.
 
+# transit:end
 -> mon_commute_work_district
 
 === mon_commute_walk_observe ===
+# transit:start:Наблюдение:маршрут перестал быть невидимым
 # speaker:none
 Ты намеренно замедляешься на пару шагов.
 
@@ -50,9 +53,11 @@
 # speaker:mc
 Хорошо. Не на автомате.
 
+# transit:end
 -> mon_commute_work_district
 
 === mon_commute_walk_steady ===
+# transit:start:Ровный темп:не спешить там, где нужно думать
 # speaker:none
 Ты держишь ровный темп, без рывков и без театральной собранности.
 
@@ -61,6 +66,7 @@
 # speaker:mc
 Дойти. Начать. Не спешить там, где нужно думать.
 
+# transit:end
 -> mon_commute_work_district
 
 === mon_commute_work_district ===

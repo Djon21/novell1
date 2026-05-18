@@ -546,6 +546,7 @@ local function apply_snapshot(ctx, snap, bytes)
         set_story_var(name, value)
     end
     set_story_var("mc_gender", snap.gender or "male")
+    set_story_var("npc_gender", (snap.gender == "female") and "male" or "female")
 
     if snap.scene_id then
         scene_controller.enter(snap.scene_id, { skip_on_enter = true })
@@ -586,6 +587,7 @@ function M.apply_selected(ctx)
     local state = merge_state({}, preset.state)
     apply_state(state)
     set_story_var("mc_gender", gender)
+    set_story_var("npc_gender", gender == "female" and "male" or "female")
     -- Полный набор падежных форм — иначе фразы вида {npc_name_dat} в ink
     -- будут рендериться пустотой/мужским дефолтом.
     local forms = NAME_FORMS[gender] or NAME_FORMS.male
