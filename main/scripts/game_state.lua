@@ -1,7 +1,7 @@
 -- game_state.lua
 -- Единый источник правды для point-and-click слоя.
 -- Хранит flags, inventory, quests, current_scene + terminal/map_pois.
--- Канальные домены (sms, messenger, mail, calls, clues, notes) вынесены
+-- Канальные домены (sms, messenger, bank, mail, calls, clues, notes) вынесены
 -- в main/scripts/state/<channel>.lua — этот файл их подключает и
 -- ре-экспортирует как M.add_sms / M.get_messages / etc. для обратной
 -- совместимости со всем кодом, который ходит за gs.add_sms(...).
@@ -15,6 +15,7 @@ local log = require "main.scripts.log"
 -- Зависимости (notify_cb, set_flag_cb) пробрасываем ниже после M._notify.
 local sms_state       = require "main.scripts.state.sms"
 local messenger_state = require "main.scripts.state.messenger"
+local bank_state      = require "main.scripts.state.bank"
 local mail_state      = require "main.scripts.state.mail"
 local calls_state     = require "main.scripts.state.calls"
 local clues_state     = require "main.scripts.state.clues"
@@ -146,6 +147,7 @@ end
 -- Подключаем зависимости в channel-модули.
 sms_state.set_deps      ({ notify = M._notify, set_flag = set_flag_internal })
 messenger_state.set_deps({ notify = M._notify, set_flag = set_flag_internal })
+bank_state.set_deps     ({ notify = M._notify, add_sms = sms_state.add })
 mail_state.set_deps     ({ notify = M._notify })
 calls_state.set_deps    ({ notify = M._notify })
 clues_state.set_deps    ({ notify = M._notify })
@@ -161,6 +163,7 @@ function M.reset()
     _quests = {}
     sms_state.reset()
     messenger_state.reset()
+    bank_state.reset()
     mail_state.reset()
     calls_state.reset()
     clues_state.reset()
@@ -236,6 +239,7 @@ end
 -- ---------------------------------------------------------------------------
 M.add_sms              = sms_state.add
 M.reply_sms            = sms_state.reply
+M.reply_old_sms        = sms_state.reply_old
 M.mark_sms_read        = sms_state.mark_read
 M.mark_all_sms_read    = sms_state.mark_all_read
 M.get_sms              = sms_state.get
@@ -246,10 +250,18 @@ M.set_sms_tag          = sms_state.set_tag
 M.get_sms_tag          = sms_state.get_tag
 
 -- ---------------------------------------------------------------------------
+-- Bank — баланс + автоматические SMS о списаниях
+-- ---------------------------------------------------------------------------
+M.set_bank_balance     = bank_state.set_balance
+M.get_bank_balance     = bank_state.get_balance
+M.bank_charge          = bank_state.charge
+
+-- ---------------------------------------------------------------------------
 -- Messenger — делегаты в state/messenger.lua
 -- ---------------------------------------------------------------------------
 M.add_msg              = messenger_state.add
 M.reply_msg            = messenger_state.reply
+M.reply_old_msg        = messenger_state.reply_old
 M.mark_msg_read        = messenger_state.mark_read
 M.mark_all_msg_read    = messenger_state.mark_all_read
 M.get_msg              = messenger_state.get
@@ -469,7 +481,7 @@ function M.serialize()
     }
     -- Channel snapshots — каждый возвращает таблицу со своими ключами,
     -- которые мы мерджим в общий snapshot.
-    for _, ch in ipairs({ sms_state, messenger_state, mail_state, calls_state, clues_state, notes_state }) do
+    for _, ch in ipairs({ sms_state, messenger_state, bank_state, mail_state, calls_state, clues_state, notes_state }) do
         for k, v in pairs(ch.serialize() or {}) do
             snap[k] = v
         end
@@ -492,6 +504,7 @@ function M.deserialize(data)
     -- Делегируем каждому channel-модулю восстановление + normalize.
     sms_state.deserialize(data)
     messenger_state.deserialize(data)
+    bank_state.deserialize(data)
     mail_state.deserialize(data)
     calls_state.deserialize(data)
     clues_state.deserialize(data)

@@ -273,6 +273,63 @@ Auto-hide при выходе из группы — встроенное пов�
 # sms:reply:<contact_id>:Текст ответа от игрока
 ```
 
+### Телефонное событие через централизованный файл
+
+Канон: сценовые `.ink` не хранят тексты SMS/Messenger. Сцена вызывает event-knot через tunnel, а все `# sms:*`, `# msg:*`, `# bank:*` лежат в `92_phone_sms.ink` / `93_phone_messenger.ink`.
+
+В сцене:
+
+```ink
+-> phone_sms_seed_sunday_morning ->
+-> phone_msg_seed_sunday_morning ->
+```
+
+В `92_phone_sms.ink`:
+
+```ink
+=== phone_sms_seed_sunday_morning ===
+# sms:add_old:mama:пн:Не забудь поесть.
+# sms:reply_old:mama:пн:Я поел.
+# sms:add:delivery:Курьер будет у подъезда через 12 минут.
+->->
+```
+
+В `93_phone_messenger.ink`:
+
+```ink
+=== phone_msg_seed_sunday_morning ===
+{mc_gender == "female":
+    # msg:add_old:artem:пн:Есть планы на сегодня?
+    # msg:need_reply:artem
+- else:
+    # msg:add_old:mila:пн:Есть планы на сегодня?
+    # msg:need_reply:mila
+}
+->->
+```
+
+`-> phone_sms_* ->` вызывает телефонный блок и возвращается в сцену. `->->` в конце телефонного блока возвращает управление туда, откуда его вызвали.
+
+### Read-only SMS / Messenger-лента без ответа игрока
+
+Если это банк, доставка, такси, управдом, метро, маркет, клиника, канал, бот или старая история без выбора ответа — **не создавай** `sms_thread_<contact>` / `msg_thread_<chat>`.
+
+```ink
+// Старые уже прочитанные сообщения
+# sms:add_old:bank:вчера:Карта *4821: списание 349 ₽.
+# sms:reply_old:mama:пн:Да, всё нормально. Просто устал.
+# msg:add_old:metro:пн:Синяя ветка работает с увеличенными интервалами.
+# msg:reply_old:friends:пт:Я могу отменить заранее, чтобы не рушить традицию.
+
+// Новое входящее, которое игрок только читает
+# sms:add:delivery:Курьер будет у подъезда через 12 минут.
+# msg:add:metro:Вход на станцию временно ограничен.
+```
+
+`sms:reply_old` / `msg:reply_old` нужны только для старых исходящих сообщений в seed-истории. Они не ставят `*_replied`, поэтому не блокируют будущий настоящий ответ игрока.
+
+`sms:read` / `msg:read` снимают unread, но не делают чат read-only. Read-only для автора — это отсутствие интерактивного thread-knot'а.
+
 ### Полный thread c условием
 
 ```ink
@@ -296,7 +353,7 @@ Auto-hide при выходе из группы — встроенное пов�
 -> DONE
 ```
 
-Messenger аналогично через `# msg:add:...` / `# msg:reply:...`.
+Messenger аналогично через `# msg:add:...` / `# msg:reply:...`, но создавай `msg_thread_<chat>` только если игрок действительно должен отвечать. Для «написать первым из конкретной сцены» лучше использовать `# msg:prompt:CHAT:KNOT[:LABEL]`, а не общий `msg_thread_<chat>`.
 
 ### Сообщение с hot-стилизацией (тревожный/срочный тон)
 
@@ -311,8 +368,10 @@ Messenger аналогично через `# msg:add:...` / `# msg:reply:...`.
 
 ```ink
 # sms:add_old:mama:пн:Не забудь поесть.
+# sms:reply_old:mama:пн:Я поел.
 # sms:add_old:bank:вчера:Карта *4821: списание 349 ₽.
 # msg:add_old:work_team:пн:Планёрка перенесена.
+# msg:reply_old:work_team:пн:Ок, увидел.
 ```
 
 ### Pin-теги в списке чатов

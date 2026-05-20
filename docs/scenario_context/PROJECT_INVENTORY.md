@@ -4,7 +4,7 @@
 Запускать перед каждой сессией AI-сценариста чтобы документ отражал
 текущее состояние проекта.
 
-_Сгенерировано: 2026-05-18 22:50_
+_Сгенерировано: 2026-05-20 19:48_
 
 Это **источник правды для AI** о том что реально существует в проекте:
 scene_id, knot имена, hotspot id, флаги, предметы. Не ссылайся на
@@ -333,342 +333,366 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 (без `_old*` версий). Используй ТОЛЬКО эти имена для `action_knot`
 в hotspot'ах и для `# scene_char:show:...:...` если требуется.
 
+Колонка `Kind` — структурная подсказка, не пересказ содержимого. Тексты
+knot'ов в inventory намеренно не выводятся, чтобы файл оставался
+компактным source of truth по ID.
+
 ### `10_apartment.ink`
 
-| Knot | Аннотация |
+| Knot | Kind |
 |---|---|
-| `apartment_bedroom_intro` | Кто пишет в воскресенье с утра? |
-| `apartment_start` | Воскресное утро. |
-| `bathroom_exit_locked` | Нет. Я уже в ванной, щётка и паста передо мной. |
-| `bathroom_not_now` | Умылся. Второй раз бодрее не станет. |
-| `bathroom_sink_prompt` | Щётка уже готова. Надо использовать её на раковине. |
-| `bedroom_desk_morning` | На рабочем столе закрытый ноутбук, блокнот и кабель от телефона. |
-| `choose_character` | Кто я? |
-| `drink_water_kitchen` | Вода из-под фильтра прохладная и честная. Не кофе, не ритуал, просто способ напомнить телу, что оно существует. |
-| `enter_bathroom_morning_first` | Ванная встречает прохладной плиткой, зеркалом и тем самым мятным запахом, который обещает бодрость, но пока только обеща |
-| `enter_kitchen_morning_first` | Кухня встречает сухим щелчком холодильника и светлым окном во двор. |
-| `leave_apartment` | Куртка и обувь наконец делают намерение выйти похожим на действие. |
-| `leave_apartment_prompt` | Телефон уже вибрировал. Сначала надо ответить в Messenger — иначе выходить всё ещё некуда. |
-| `look_bathroom_mirror` | В ванной горит только ровный искусственный свет. Зеркало больше не пытается сделать утро бодрым — просто возвращает лицо |
-| `look_bed_morning` | Постель смята точно так же, как в прошлый раз. |
-| `look_bedroom_window` | За окном город выглядит так, будто воскресенье у него началось раньше твоего: редкие машины, свет в стекле, кто-то с соб |
-| `look_hall_mirror` | Ночной коридор в зеркале выглядит глубже, чем утром: тёмная дверь за спиной, тонкая полоска света из кухни, плечи чуть н |
-| `look_kitchen_fridge` | В холодильнике йогурт, сыр и контейнер, который лучше не открывать без отдельного морального разрешения. |
-| `look_kitchen_window` | За кухонным окном двор уже не светлый, а точечный: окна напротив, лампа у подъезда, редкие фары за деревьями. Утреннее с |
-| `mon_home_bed` | Кровать выглядит слишком убедительно для понедельника. |
-| `mon_home_bedroom_desk` | На рабочем столе лежит закрытый ноутбук. Воскресенье почти стерло его из внимания, но понедельник возвращает всё на мест |
-| `mon_home_bedroom_intro` | Спальня собирается в понедельник из тех же предметов: кровать, окно, рабочий стол, дверь в ванную. |
-| `mon_home_get_dressed` | Куртка снимается с крючка, обувь находится под банкеткой, ключи привычно проверяются в кармане. |
-| `mon_home_hall_intro` | Коридор встречает более деловито, чем вчера: дверь, зеркало, обувь, куртка, полка у входа. |
-| `mon_home_hall_mirror` | В зеркале всё выглядит собранно: светлая стена, край двери, человек, который должен выглядеть так, будто знает, куда идё |
-| `mon_home_kitchen_breakfast` | На кухне есть хлеб, сыр и вчерашний йогурт — не завтрак мечты, но достаточно, чтобы перестать делать вид, будто кофе зам |
-| `mon_home_kitchen_breakfast_after` | На столе остались крошки и пустая тарелка. Маленькое доказательство, что утро было не только маршрутом к офису. |
-| `mon_home_kitchen_coffee` | Кружка стоит на столе, как будто никогда не покидала кухню. И это правильно: кружки не носят в кармане через весь город. |
-| `mon_home_kitchen_coffee_after` | Кружка осталась на столе — тёмный круг на дне, тонкая полоска пара и запах, который уже сделал всё, что мог. |
-| `mon_home_kitchen_intro` | Кухня выглядит так, будто не знает разницы между воскресеньем и понедельником. |
-| `mon_home_kitchen_window` | За окном город уже не просыпается — он работает. |
-| `mon_home_leave_apartment` | Перед дверью всё на секунду останавливается. |
-| `mon_home_leave_apartment_locked` | Дверь уже здесь, маршрут уже понятен, но утро ещё не собрано в рабочую форму. |
-| `mon_home_take_work_card` | Пропуск находится в кармане куртки, где ему и положено быть. |
-| `mon_home_wash_up` | В ванной холодная вода быстро стирает остатки сна. |
-| `mon_office_evening_close` | Вечером квартира принимает тебя без вопросов. |
-| `monday_morning_start` | Понедельник начинается без вибрации телефона. |
-| `seed_phone_history` | *4821: списание 480 ₽. Кофейня «петля». 12 апр. Баланс 12 740 ₽. |
-| `sunday_date_go_cafe` | — |
-| `sunday_date_go_park` | - else: |
-| `sunday_date_map_fallback` | Карта открыта. Осталось выбрать маршрут. |
-| `sunday_evening_finish` | Вечер постепенно собирает квартиру вокруг тебя: коридор, кухня, свет из окна, телефон на ладони. |
-| `sunday_evening_home` | Коридор встречает тем же спокойствием, с которого началось утро. Только теперь оно ощущается иначе: не как список дел, а |
-| `sunday_get_dressed` | Куртка с вешалки, обувь у двери. Никакого торжественного выхода — просто бытовая последовательность, без которой человек |
-| `sunday_home_after_date_router` | - else: |
-| `sunday_home_too_early` | Домой пока рано. День только начал становиться настоящим воскресеньем. |
-| `sunday_send_messenger_invite` | Телефон на столешнице коротко вибрирует — не как утренний шум, а как сообщение, которое ждало, пока ты наконец сделаешь  |
-| `sunday_sleep_in_bed` | Спальня выглядит почти так же, как утром, только свет стал мягче и ниже. |
-| `sunday_start_splash` | Воскресное утро. |
-| `take_kitchen_apple` | В миске на столе лежат зелёные яблоки. Одно холодит ладонь чуть сильнее остальных. |
-| `take_mug` | На столе стоит белая кружка с тонкой трещиной на ручке. |
-| `take_phone` | Телефон лежит экраном вниз у тумбочки. |
-| `take_toothbrush` | Зубная щётка стоит в стакане у раковины. |
-| `take_toothpaste` | Тюбик пасты смят посередине и стоит так, будто его тоже подняли слишком рано. |
-| `tue_home_bed` | Кровать уже не предлагает остаться. Она просто хранит форму тела, которое не выспалось до конца. |
-| `tue_home_bedroom_desk` | Ноутбук на столе выглядит как быстрый способ сделать вид, что контроль возвращается. |
-| `tue_home_bedroom_intro` | Спальня не изменилась. |
-| `tue_home_check_phone` | Экран загорается сразу. |
-| `tue_home_get_ready` | Обувь, куртка, ключи, пропуск. |
-| `tue_home_hall_intro` | Коридор собирает вторник в маршрут: зеркало, дверь, обувь, ключи, куртка. |
-| `tue_home_hall_mirror` | В зеркале нет ответа. |
-| `tue_home_kitchen_coffee` | Кофе получается крепче, чем нужно. |
-| `tue_home_kitchen_intro` | Кухня держится за бытовое упрямство. |
-| `tue_home_kitchen_window` | За окном город выглядит так, будто вчерашний день нигде не задержался. |
-| `tue_home_leave_apartment` | У двери появляется привычная пауза. |
-| `tue_home_wash_up` | Холодная вода возвращает лицо в настоящее. |
-| `tuesday_morning_start` | Вторник начинается не как повтор. |
-| `use_coffee_machine_with_cup` | Кружка у меня. Надо не просто смотреть на чайник, а использовать её здесь. |
-| `use_coffee_setup_no_mug` | Кружка у меня. Надо не просто смотреть на чайник, а использовать её здесь. |
+| `apartment_bedroom_intro` | `knot` |
+| `apartment_start` | `knot` |
+| `bathroom_exit_locked` | `knot` |
+| `bathroom_not_now` | `knot` |
+| `bathroom_sink_prompt` | `knot` |
+| `bedroom_desk_morning` | `knot` |
+| `choose_character` | `knot` |
+| `drink_water_kitchen` | `knot` |
+| `enter_bathroom_morning_first` | `knot` |
+| `enter_kitchen_morning_first` | `knot` |
+| `leave_apartment` | `knot` |
+| `leave_apartment_prompt` | `knot` |
+| `look_bathroom_mirror` | `knot` |
+| `look_bed_morning` | `knot` |
+| `look_bedroom_window` | `knot` |
+| `look_hall_mirror` | `knot` |
+| `look_kitchen_fridge` | `knot` |
+| `look_kitchen_window` | `knot` |
+| `mon_home_bed` | `knot` |
+| `mon_home_bedroom_desk` | `knot` |
+| `mon_home_bedroom_intro` | `knot` |
+| `mon_home_get_dressed` | `knot` |
+| `mon_home_hall_intro` | `knot` |
+| `mon_home_hall_mirror` | `knot` |
+| `mon_home_kitchen_breakfast` | `knot` |
+| `mon_home_kitchen_breakfast_after` | `knot` |
+| `mon_home_kitchen_coffee` | `knot` |
+| `mon_home_kitchen_coffee_after` | `knot` |
+| `mon_home_kitchen_intro` | `knot` |
+| `mon_home_kitchen_window` | `knot` |
+| `mon_home_leave_apartment` | `knot` |
+| `mon_home_leave_apartment_locked` | `knot` |
+| `mon_home_take_work_card` | `knot` |
+| `mon_home_wash_up` | `knot` |
+| `mon_office_evening_close` | `knot` |
+| `monday_morning_start` | `knot` |
+| `seed_phone_history` | `knot` |
+| `sunday_date_go_cafe` | `knot` |
+| `sunday_date_go_park` | `knot` |
+| `sunday_date_map_fallback` | `knot` |
+| `sunday_evening_finish` | `knot` |
+| `sunday_evening_home` | `knot` |
+| `sunday_get_dressed` | `knot` |
+| `sunday_home_after_date_router` | `knot` |
+| `sunday_home_too_early` | `knot` |
+| `sunday_send_messenger_invite` | `knot` |
+| `sunday_sleep_in_bed` | `knot` |
+| `sunday_start_splash` | `knot` |
+| `take_kitchen_apple` | `knot` |
+| `take_mug` | `knot` |
+| `take_phone` | `knot` |
+| `take_toothbrush` | `knot` |
+| `take_toothpaste` | `knot` |
+| `tue_home_bed` | `knot` |
+| `tue_home_bedroom_desk` | `knot` |
+| `tue_home_bedroom_intro` | `knot` |
+| `tue_home_check_phone` | `knot` |
+| `tue_home_get_ready` | `knot` |
+| `tue_home_hall_intro` | `knot` |
+| `tue_home_hall_mirror` | `knot` |
+| `tue_home_kitchen_coffee` | `knot` |
+| `tue_home_kitchen_intro` | `knot` |
+| `tue_home_kitchen_window` | `knot` |
+| `tue_home_leave_apartment` | `knot` |
+| `tue_home_wash_up` | `knot` |
+| `tuesday_morning_start` | `knot` |
+| `use_coffee_machine_with_cup` | `knot` |
+| `use_coffee_setup_no_mug` | `knot` |
 
 ### `91_inventory_actions.ink`
 
-| Knot | Аннотация |
+| Knot | Kind |
 |---|---|
-| `inv_apartment_bathroom_use_toothbrush_pasted_on_bathroom_sink` | Холодная вода. Мята. Несколько секунд перед зеркалом, в которых день наконец становится похож на день. |
-| `inv_apartment_kitchen_morning_use_mug_on_coffee_setup` | На смятом листке всего одна строка: |
-| `inv_apartment_kitchen_use_mug_on_coffee_setup` | Ставлю кружку на столешницу рядом с чайником. |
-| `inv_combine_fallback` | - else: |
-| `inv_combine_folder_with_report_page` | Вкладываю распечатку в папку, выравниваю край листа и закрываю обложку. |
-| `inv_combine_toothbrush_with_toothpaste` | Выдавливаю пасту на щётку. Самое сложное решение утра пока принято. |
-| `inv_fallback` | Сейчас я просто убираю предмет обратно. |
-| `inv_give_fallback` | Хочется передать {inventory_item_name}, но сейчас момент не тот. |
-| `inv_inspect_card` | Пропуск “АВОСЬ Системы”. Пластик затёрт там, где его чаще всего держат пальцами. Маленькая вещь, которая решает, считаюс |
-| `inv_inspect_case_file` | Папка выглядит готовой. И в этом проблема: готовый вид легко принять за готовый ответ. |
-| `inv_inspect_fallback` | Осматриваю {inventory_item_name}. Детали на месте. Ответов по-прежнему нет. |
-| `inv_inspect_folder` | Обычная офисная папка. Чем аккуратнее она выглядит, тем легче забыть, что внутри может быть недостающая часть решения. |
-| `inv_inspect_gift_berry_soda` | Ягодная газировка. Слишком яркая бутылка для человека, который пытается выглядеть спокойнее. |
-| `inv_inspect_gift_chips` | Маленькие чипсы. Слишком громкий подарок для тихого начала свидания. |
-| `inv_inspect_gift_coffee_can` | Кофе в банке. Бодрость в алюминии. Не самый романтичный предмет, зато понятный. |
-| `inv_inspect_gift_crackers` | Солёные крекеры. Можно разделить, можно хрустеть в неловкой паузе. Уже почти социальный инструмент. |
-| `inv_inspect_gift_dark_chocolate` | Тёмный шоколад. Нормальный хороший подарок — почти слишком нормальный для этого воскресенья. |
-| `inv_inspect_gift_energy_drink` | Энергетик. Подарок, который звучит как план на ночную смену, даже если ты так не задумывал{mc_gender == "female":а|}. |
-| `inv_inspect_gift_iced_tea` | Холодный чай из магазина. Нейтральный, вежливый и чуть более личный, чем вода. |
-| `inv_inspect_gift_keychain_flashlight` | Фонарик-брелок. Маленький, почти смешной, но у него есть ясная функция: дать свет, когда его не хватает. Странный подаро |
-| `inv_inspect_gift_milk_chocolate` | Молочный шоколад. Мягкий, безопасный, немного школьный. |
-| `inv_inspect_gift_nuts` | Орешки. Пытаются выглядеть взрослым выбором. Получается подозрительно убедительно. |
-| `inv_inspect_gift_paper_napkins` | Бумажные салфетки. На случай крошек, пауз и попыток всё предусмотреть. |
-| `inv_inspect_gift_small_broom` | Маленький веник. Подарок для человека, которому ты либо очень доверяешь, либо совсем не умеешь выбирать подарки. |
-| `inv_inspect_gift_waffle_bar` | Вафельный батончик. Аварийный запас сахара на случай, если разговор станет слишком взрослым. |
-| `inv_inspect_gift_wet_wipes` | Влажные салфетки. Очень практичная форма заботы. Возможно, слишком практичная. |
-| `inv_inspect_note` | Моя бумага. Мой почерк. Но ощущение, что писал это не я сегодняшний. |
-| `inv_inspect_park_trash_cup` | Чужой пустой стаканчик. Не самая великая проблема дня, но начать разговор рядом с ним почему-то не хочется. |
-| `inv_inspect_phone` | Телефон тёплый, будто я уже держал его в руках минуту назад. |
-| `inv_inspect_report_page` | Один лист, несколько полей и слишком много пустых мест между строками. |
-| `inv_inspect_toothbrush` | Обычная зубная щётка. Никакой тайны. Просто вещь, без которой утро становится социально рискованным. |
-| `inv_inspect_toothbrush_pasted` | Щётка с пастой. Очень узкоспециализированный инструмент против воскресного состояния. |
-| `inv_inspect_toothpaste` | Мятная паста. Тюбик смят посередине — классика людей, которые не хотят признавать, что пора купить новый. |
-| `inv_inspect_water_bottle` | Бутылка воды из магазина. После второго кофе это почти романтическая предусмотрительность, если не произносить это вслух |
-| `inv_office_workspace_give_case_file_on_npc` | Передаю папку коллеге. |
-| `inv_office_workspace_use_case_file_on_work_desk_submit` | Кладу папку рядом с клавиатурой и прикрепляю её к рабочему кейсу. |
-| `inv_park_hub_use_park_trash_cup_on_park_bin` | Стаканчик падает в урну с тихим пластиковым шорохом. Ничего героического — просто место у лавочки стало чуть больше похо |
-| `inv_read_case_file` | Кейс 017. |
-| `inv_read_fallback` | На {inventory_item_name} нечего читать. По крайней мере, пока. |
-| `inv_read_note` | На смятом листке всего одна строка: |
-| `inv_read_report_page` | Кейс 017. |
-| `inv_use_card_on_fallback` | Пропуску нужен считыватель, а не моё нетерпение. Его место — турникет, не любой офисный предмет подряд. |
-| `inv_use_case_file_on_fallback` | Папку по кейсу нельзя просто “использовать” где попало. Её нужно передать в работу: на рабочий стол или коллеге. |
-| `inv_use_fallback` | Сжимаю {inventory_item_name} в руке. Сейчас это ничего не изменит. |
-| `inv_use_on_fallback` | - else: |
-| `inv_use_park_trash_cup_on_fallback` | Стаканчик надо выкинуть в урну. Носить его по парку как аргумент — странная стратегия. |
-| `inv_work_hub_use_card_on_office_turnstile` | Прикладываю пропуск к считывателю. |
+| `inv_apartment_bathroom_use_toothbrush_pasted_on_bathroom_sink` | `inventory` |
+| `inv_apartment_kitchen_morning_use_mug_on_coffee_setup` | `inventory` |
+| `inv_apartment_kitchen_use_mug_on_coffee_setup` | `inventory` |
+| `inv_combine_fallback` | `inventory` |
+| `inv_combine_folder_with_report_page` | `inventory` |
+| `inv_combine_toothbrush_with_toothpaste` | `inventory` |
+| `inv_fallback` | `inventory` |
+| `inv_give_fallback` | `inventory` |
+| `inv_inspect_card` | `inventory` |
+| `inv_inspect_case_file` | `inventory` |
+| `inv_inspect_fallback` | `inventory` |
+| `inv_inspect_folder` | `inventory` |
+| `inv_inspect_gift_berry_soda` | `inventory` |
+| `inv_inspect_gift_chips` | `inventory` |
+| `inv_inspect_gift_coffee_can` | `inventory` |
+| `inv_inspect_gift_crackers` | `inventory` |
+| `inv_inspect_gift_dark_chocolate` | `inventory` |
+| `inv_inspect_gift_energy_drink` | `inventory` |
+| `inv_inspect_gift_iced_tea` | `inventory` |
+| `inv_inspect_gift_keychain_flashlight` | `inventory` |
+| `inv_inspect_gift_milk_chocolate` | `inventory` |
+| `inv_inspect_gift_nuts` | `inventory` |
+| `inv_inspect_gift_paper_napkins` | `inventory` |
+| `inv_inspect_gift_small_broom` | `inventory` |
+| `inv_inspect_gift_waffle_bar` | `inventory` |
+| `inv_inspect_gift_wet_wipes` | `inventory` |
+| `inv_inspect_note` | `inventory` |
+| `inv_inspect_park_trash_cup` | `inventory` |
+| `inv_inspect_phone` | `inventory` |
+| `inv_inspect_report_page` | `inventory` |
+| `inv_inspect_toothbrush` | `inventory` |
+| `inv_inspect_toothbrush_pasted` | `inventory` |
+| `inv_inspect_toothpaste` | `inventory` |
+| `inv_inspect_water_bottle` | `inventory` |
+| `inv_office_workspace_give_case_file_on_npc` | `inventory` |
+| `inv_office_workspace_use_case_file_on_work_desk_submit` | `inventory` |
+| `inv_park_hub_use_park_trash_cup_on_park_bin` | `inventory` |
+| `inv_read_case_file` | `inventory` |
+| `inv_read_fallback` | `inventory` |
+| `inv_read_note` | `inventory` |
+| `inv_read_report_page` | `inventory` |
+| `inv_use_card_on_fallback` | `inventory` |
+| `inv_use_case_file_on_fallback` | `inventory` |
+| `inv_use_fallback` | `inventory` |
+| `inv_use_on_fallback` | `inventory` |
+| `inv_use_park_trash_cup_on_fallback` | `inventory` |
+| `inv_work_hub_use_card_on_office_turnstile` | `inventory` |
 
 ### `92_phone_sms.ink`
 
-| Knot | Аннотация |
+| Knot | Kind |
 |---|---|
-| `sms_service_done` | — |
-| `sms_thread_bank` | БАНК · СберID: |
-| `sms_thread_clinic` | КЛИНИКА: |
-| `sms_thread_coffee` | КОФЕЙНЯ РЯДОМ: |
-| `sms_thread_delivery` | ДОСТАВКА: |
-| `sms_thread_mama` | МАМА: |
-| `sms_thread_market` | МАРКЕТ: |
-| `sms_thread_metro` | МЕТРО: |
-| `sms_thread_nm` | Н. М.: |
-| `sms_thread_prod` | ОТДЕЛ · ПРОД: |
-| `sms_thread_taxi` | ТАКСИ · ЯКС: |
-| `sms_thread_unknown` | НОМЕР СКРЫТ: |
-| `sms_thread_upravdom` | УПРАВДОМ: |
+| `phone_bank_charge_cafe_coffee_sweet` | `knot` |
+| `phone_bank_charge_cafe_tea_small` | `knot` |
+| `phone_bank_charge_cafe_two_coffee` | `knot` |
+| `phone_bank_charge_shop_120` | `knot` |
+| `phone_bank_charge_shop_140` | `knot` |
+| `phone_bank_charge_shop_160` | `knot` |
+| `phone_bank_charge_shop_170` | `knot` |
+| `phone_bank_charge_shop_180` | `knot` |
+| `phone_bank_charge_shop_190` | `knot` |
+| `phone_bank_charge_shop_210` | `knot` |
+| `phone_bank_charge_shop_220` | `knot` |
+| `phone_bank_charge_shop_230` | `knot` |
+| `phone_bank_charge_shop_240` | `knot` |
+| `phone_bank_charge_shop_320` | `knot` |
+| `phone_bank_charge_shop_350` | `knot` |
+| `phone_bank_charge_shop_360` | `knot` |
+| `phone_bank_charge_shop_380` | `knot` |
+| `phone_bank_charge_shop_420` | `knot` |
+| `phone_bank_charge_shop_490` | `knot` |
+| `phone_bank_charge_shop_95` | `knot` |
+| `phone_sms_seed_sunday_morning` | `phone_sms_event` |
+| `phone_sms_take_phone_sunday_morning` | `phone_sms_event` |
+| `phone_sms_tuesday_case_followup` | `phone_sms_event` |
+| `sms_service_done` | `knot` |
 
 ### `93_phone_messenger.ink`
 
-| Knot | Аннотация |
+| Knot | Kind |
 |---|---|
-| `msg_npc_place_sent` | Сообщение отправлено. |
-| `msg_thread_artem` | Открываешь Messenger. |
-| `msg_thread_mila` | Открываешь Messenger. |
-| `msg_thread_prod_bot` | PROD-BOT: |
-| `msg_thread_unknown` | Чат без имени. Аватар пустой. |
-| `msg_thread_work_team` | Командный чат листается короткими служебными сообщениями. |
+| `msg_npc_place_sent` | `knot` |
+| `msg_thread_artem` | `msg_thread` |
+| `msg_thread_mila` | `msg_thread` |
+| `msg_thread_prod_bot` | `msg_thread` |
+| `msg_thread_unknown` | `msg_thread` |
+| `msg_thread_work_team` | `msg_thread` |
+| `phone_msg_park_arrival_prompt` | `phone_msg_event` |
+| `phone_msg_park_where_reply_bench` | `phone_msg_event` |
+| `phone_msg_park_where_reply_path` | `phone_msg_event` |
+| `phone_msg_seed_sunday_morning` | `phone_msg_event` |
+| `phone_msg_sunday_evening_home_thanks` | `phone_msg_event` |
+| `phone_msg_sunday_evening_reply_calm` | `phone_msg_event` |
+| `phone_msg_sunday_evening_reply_warm` | `phone_msg_event` |
+| `phone_msg_sunday_invite_after_coffee` | `phone_msg_event` |
+| `phone_msg_take_phone_sunday_morning` | `phone_msg_event` |
 
 ### `archive_tuesday.ink`
 
-| Knot | Аннотация |
+| Knot | Kind |
 |---|---|
-| `archive_shelves_interact` | Стеллажи уходят вглубь ровными рядами. Папки, коробки, старые номера дел — всё выглядит так, будто память здесь давно пр |
-| `leave_archive` | Ты выходишь из архива. Воздух за дверью кажется легче, хотя вопросов меньше не стало. |
+| `archive_shelves_interact` | `knot` |
+| `leave_archive` | `knot` |
 
 ### `bar_sunday.ink`
 
-| Knot | Аннотация |
+| Knot | Kind |
 |---|---|
-| `bar_counter_interact` | Барная стойка тянется вдоль стены тёмной линией. За ней — бутылки, отражения и низкий свет, в котором легко сделать вид, |
-| `leave_bar` | Ты выходишь из бара обратно в город. Ночной воздух кажется проще, чем свет внутри. |
+| `bar_counter_interact` | `knot` |
+| `leave_bar` | `knot` |
 
 ### `cafe_sunday.ink`
 
-| Knot | Аннотация |
+| Knot | Kind |
 |---|---|
-| `cafe_backroom_board_interact` | На доске объявлений — афиша квартирника, потерявшийся зонт, уроки английского, скидка на капучино для тех, кто почему-то |
-| `cafe_backroom_books_interact` | Книги на полке не столько читают, сколько используют как доказательство уюта. Пара сборников рецептов, старый фотоальбом |
-| `cafe_backroom_coatrack_interact` | На вешалке чужая куртка и кожаная сумка. Вещи выглядят временно оставленными, но уверенными в своём возвращении. |
-| `cafe_backroom_mirror_interact` | Зеркало в задней части кафе делает пространство глубже, чем оно есть: лампа, край консоли, листья растения, кусок проход |
-| `cafe_bar_interact` | Стойка пахнет кофе, тёплой выпечкой и корицей, которую кто-то насыпал щедрее, чем собирался. Бариста двигается быстро, н |
-| `cafe_bar_interact_right_place` | Тут есть правило: если человек слишком долго смотрит на витрину, он уже выбрал самое сладкое, но пытается выглядеть взро |
-| `cafe_bar_interact_wrong_place` | Кафе хорошее, но мы договорились не здесь. Лучше не превращать маршрут в эксперимент без второго участника. |
-| `cafe_corner_main_talk` | Уголок оказывается тише, чем общий зал. Не беззвучным — просто здесь шум кафе становится мягкой подложкой, а не требован |
-| `cafe_corner_shelf_interact` | На полке стоят книги, керамическая банка и растение, которое явно пережило больше разговоров, чем большинство людей в эт |
-| `cafe_corner_table_interact` | На столике помещается ровно столько, сколько нужно для разговора: чашки, маленькая вазочка, салфетки, светлый след от ок |
-| `cafe_corner_window_interact` | За шторой улица идёт своим ходом: листья двигаются в свете, на балконе напротив кто-то снимает бельё, машина у подъезда  |
-| `cafe_hall_light_interact` | Зал держится на тёплых несовпадениях: где-то слишком яркий прямоугольник солнца на полу, где-то тень от растения, где-то |
-| `cafe_window_table` | Столики у окна выглядят как безопасный вариант: светло, красиво, видно улицу, можно делать вид, что пауза случилась из-з |
-| `leave_cafe` | Выходить из кафе пока рано. Воскресный разговор ещё не случился: сначала заказ, потом место, потом хотя бы одна честная  |
-| `sunday_date_cafe_arrival` | Кафе встречает не тишиной, а аккуратным шумом: кофемолка за стойкой, ложка о керамику, короткий смех у окна, мягкий свет |
-| `sunday_date_cafe_arrival_after_gift` | Ну что, сначала возьмём что-нибудь, а потом найдём место, где можно не держать лица? |
-| `sunday_date_cafe_settle` | Разговор не становится большим. И в этом его сила: сон, дорога, странная привычка читать меню до конца, нелепые способы  |
+| `cafe_backroom_board_interact` | `knot` |
+| `cafe_backroom_books_interact` | `knot` |
+| `cafe_backroom_coatrack_interact` | `knot` |
+| `cafe_backroom_mirror_interact` | `knot` |
+| `cafe_bar_interact` | `knot` |
+| `cafe_bar_interact_right_place` | `knot` |
+| `cafe_bar_interact_wrong_place` | `knot` |
+| `cafe_corner_main_talk` | `knot` |
+| `cafe_corner_shelf_interact` | `knot` |
+| `cafe_corner_table_interact` | `knot` |
+| `cafe_corner_window_interact` | `knot` |
+| `cafe_hall_light_interact` | `knot` |
+| `cafe_window_table` | `knot` |
+| `leave_cafe` | `knot` |
+| `sunday_date_cafe_arrival` | `knot` |
+| `sunday_date_cafe_arrival_after_gift` | `knot` |
+| `sunday_date_cafe_settle` | `knot` |
 
 ### `commute_monday.ink`
 
-| Knot | Аннотация |
+| Knot | Kind |
 |---|---|
-| `mon_commute_entry` | Лифт, подъезд, двор — всё проходит почти без текста. |
-| `mon_commute_office_approach` | Турникет ждёт пропуск. Маленький считыватель светится ровно и терпеливо, как будто рабочий день начинается только после  |
-| `mon_commute_walk_auto` | автомате:знакомый маршрут — ничего нового |
-| `mon_commute_walk_observe` | перестал быть невидимым |
-| `mon_commute_walk_steady` | темп:не спешить там, где нужно думать |
-| `mon_commute_work_district` | Бизнес-центр появляется слишком быстро. |
+| `mon_commute_entry` | `knot` |
+| `mon_commute_office_approach` | `knot` |
+| `mon_commute_walk_auto` | `knot` |
+| `mon_commute_walk_observe` | `knot` |
+| `mon_commute_walk_steady` | `knot` |
+| `mon_commute_work_district` | `knot` |
 
 ### `office_monday.ink`
 
-| Knot | Аннотация |
+| Knot | Kind |
 |---|---|
-| `leave_work` | Сначала пройти турникет. Уйти из офиса, не войдя в него, звучит заманчиво, но подозрительно даже для понедельника. |
-| `meeting_room_table_after` | Стол в переговорке снова пустой. Как будто папка никогда здесь не лежала. |
-| `meeting_room_take_folder` | В переговорке слишком чисто для комнаты, где обычно пытаются договориться о сложном. |
-| `mon_office_auto_standard` | Ты не успеваешь сформулировать сомнение до конца. |
-| `mon_office_case_router` | - else: |
-| `mon_office_clarify` | Ты выбираешь запрос уточнения. |
-| `mon_office_core_choice` | На этот раз пауза не исчезает сама. |
-| `mon_office_day_end` | К концу дня офис становится тише, но не мягче. |
-| `mon_office_entry` | Офис встречает ровным светом, стеклом и воздухом, который как будто уже отфильтровали от всего лишнего. |
-| `mon_office_manual_standard` | Ты подтверждаешь стандартный путь вручную. |
-| `mon_office_npc_greeting` | Собрал{mc_gender == "female":а|} папку? Отлично. Я уже успел{npc_gender == "female":а|} сделать вид, что это обычный пон |
-| `mon_office_npc_strange` | Это называется “рабочий процесс”. Очень древняя аномалия. Люди веками делают вид, что привыкли. |
-| `mon_office_result_system_bias` | День продолжается так, будто ничего страшного не произошло. |
-| `mon_office_result_true_bias` | День не становится легче. Очередь не превращается в красивый отчёт. Никто не хлопает по плечу за то, что ты выбрал{mc_ge |
-| `mon_office_stop_auto` | Ты отключаешь автоприменение для кейса. |
-| `mon_office_system_warning` | ДАННЫХ НЕДОСТАТОЧНО. |
-| `mon_office_task_intro` | Собранная папка оказывается рядом с клавиатурой. Бумага, разделитель, короткая выжимка по кейсу — всё выглядит достаточн |
-| `office_to_meeting_room_locked_mail` | Пока рано идти в переговорку. Сначала надо прочитать письмо и понять, какую именно проблему сегодня нужно упаковать в па |
-| `office_to_meeting_room_locked_turnstile` | Сначала нужно пройти турникет. В переговорку нельзя попасть раньше, чем офис признает, что я вообще вош{mc_gender == "fe |
-| `office_to_workspace_locked` | Сначала турникет. Рабочее место никуда не денется, а вот система без короткого писка пропуска делает вид, что меня здесь |
-| `office_turnstile_prompt` | Турникет ждёт пропуск. |
-| `work_desk_case_file_prompt` | Папка собрана. Теперь её нужно передать в работу — не просто посмотреть на стол. |
-| `work_desk_done` | Кейс уже передан в работу. На столе остался только след от действия: пустое место там, где лежала папка. |
-| `work_desk_needs_case_file` | Распечатка есть. Но отдавать один лист как “пакет по кейсу” — это уже совсем офисная магия. |
-| `work_desk_read_mail` | Рабочий стол встречает тебя не вещами, а очередью: монитор, почта, панель AVOS, короткое уведомление сверху. |
-| `workspace_to_meeting_room_locked` | Пока неясно, что искать в переговорке. Сначала почта, потом папки, потом видимость порядка. |
+| `leave_work` | `knot` |
+| `meeting_room_table_after` | `knot` |
+| `meeting_room_take_folder` | `knot` |
+| `mon_office_auto_standard` | `knot` |
+| `mon_office_case_router` | `knot` |
+| `mon_office_clarify` | `knot` |
+| `mon_office_core_choice` | `knot` |
+| `mon_office_day_end` | `knot` |
+| `mon_office_entry` | `knot` |
+| `mon_office_manual_standard` | `knot` |
+| `mon_office_npc_greeting` | `knot` |
+| `mon_office_npc_strange` | `knot` |
+| `mon_office_result_system_bias` | `knot` |
+| `mon_office_result_true_bias` | `knot` |
+| `mon_office_stop_auto` | `knot` |
+| `mon_office_system_warning` | `knot` |
+| `mon_office_task_intro` | `knot` |
+| `office_to_meeting_room_locked_mail` | `knot` |
+| `office_to_meeting_room_locked_turnstile` | `knot` |
+| `office_to_workspace_locked` | `knot` |
+| `office_turnstile_prompt` | `knot` |
+| `work_desk_case_file_prompt` | `knot` |
+| `work_desk_done` | `knot` |
+| `work_desk_needs_case_file` | `knot` |
+| `work_desk_read_mail` | `knot` |
+| `workspace_to_meeting_room_locked` | `knot` |
 
 ### `office_tuesday.ink`
 
-| Knot | Аннотация |
+| Knot | Kind |
 |---|---|
-| `tue_route_after_review` | К вечеру пазл не становится полным. |
-| `tue_route_ask_npc` | Я думаю, мы вчера слишком легко приняли слово “обычно”. |
-| `tue_route_entry` | Дорога до бизнес-центра снова оказывается короткой. |
-| `tue_route_office_return` | На рабочем этаже всё как обычно. |
-| `tue_route_read_appeal` | Карточка апелляции написана простым языком. |
-| `tue_route_read_log` | Лог выглядит сухо и почти невиновно. |
-| `tue_route_review_options` | На экране открыты три вещи: лог решения, карточка апелляции и короткая цепочка комментариев. |
-| `tue_route_to_rooftop` | Вы поднимаетесь наверх без офисной шутки про традиции. |
+| `tue_route_after_review` | `knot` |
+| `tue_route_ask_npc` | `knot` |
+| `tue_route_entry` | `knot` |
+| `tue_route_office_return` | `knot` |
+| `tue_route_read_appeal` | `knot` |
+| `tue_route_read_log` | `knot` |
+| `tue_route_review_options` | `knot` |
+| `tue_route_to_rooftop` | `knot` |
 
 ### `park_sunday.ink`
 
-| Knot | Аннотация |
+| Knot | Kind |
 |---|---|
-| `leave_park` | Ты выходишь с набережной. Телефон уже в руке — можно выбрать, куда идти дальше. |
-| `park_bench_interact` | Скамейка у воды теперь запомнилась не видом, а паузой, в которой вы оба не стали ничего портить лишними словами. |
-| `park_bench_main_talk` | Вы садитесь на скамейку у воды. Не слишком близко, чтобы это требовало объяснений, но и не так далеко, чтобы можно было  |
-| `park_bench_npc_show` | - else: |
-| `park_bin_prompt` | Урна стоит у края дорожки. Ты её уже выбирал. В неё уже летел такой же стаканчик с тем же глухим звуком. |
-| `park_entrance_view` | Вход в парк уже понятен: дорожка, вода дальше справа, зелень, тёплый камень под солнцем. |
-| `park_message_where_are_you` | Ты открываешь Messenger. Палец зависает над полем ввода чуть дольше, чем нужно для простого вопроса. |
-| `park_npc_arrives` | Нашла. То есть нашла тебя, а не смысл жизни. Хотя день уже странно удачный. |
-| `park_npc_arrives_after_gift` | Вы стоите рядом, но разговор всё ещё не нашёл себе места. Теперь нужно решить: сесть у воды или уйти в тень аллеи. |
-| `park_offer_place` | Теперь место уже не абстрактный выбор на карте, а конкретная развилка: сесть у воды или уйти в тень аллеи. Лавочка приве |
-| `park_path_main_talk` | Вы идёте по аллее в тени деревьев. Дорожка сама задаёт темп: достаточно медленно, чтобы говорить, и достаточно легко, чт |
-| `park_path_npc_show` | - else: |
-| `park_path_trees` | Аллея остаётся хорошим вариантом: идти проще, чем сидеть напротив и делать вид, что это просто прогулка. |
-| `park_path_walk` | Вы проходите дальше по аллее. Несколько минут можно не решать ничего: только идти, слушать шаги и редкие голоса где-то в |
-| `park_river_view` | Река движется медленно и уверенно. На таком фоне разговоры обычно становятся тише — не слабее, просто честнее. |
-| `sunday_date_park_arrival` | Парк у реки встречает светом и воздухом. Здесь уже день: солнце выше крыш, вода блестит между деревьями, дорожки живут с |
-| `sunday_date_park_settle` | Разговор начинается с простого: погода, дорога, смешная неловкость первых минут, кто сколько кофе уже успел выпить. Но р |
-| `take_park_trash_cup` | Чужой пустой стаканчик стоит на краю лавочки. Тот же самый. С теми же отпечатками пальцев — твоими. |
+| `leave_park` | `knot` |
+| `park_bench_interact` | `knot` |
+| `park_bench_main_talk` | `knot` |
+| `park_bench_npc_show` | `knot` |
+| `park_bin_prompt` | `knot` |
+| `park_entrance_view` | `knot` |
+| `park_message_where_are_you` | `knot` |
+| `park_npc_arrives` | `knot` |
+| `park_npc_arrives_after_gift` | `knot` |
+| `park_offer_place` | `knot` |
+| `park_path_main_talk` | `knot` |
+| `park_path_npc_show` | `knot` |
+| `park_path_trees` | `knot` |
+| `park_path_walk` | `knot` |
+| `park_river_view` | `knot` |
+| `sunday_date_park_arrival` | `knot` |
+| `sunday_date_park_settle` | `knot` |
+| `take_park_trash_cup` | `knot` |
 
 ### `rooftop_tuesday.ink`
 
-| Knot | Аннотация |
+| Knot | Kind |
 |---|---|
-| `tue_rooftop_ending_npc` | Становится легче. |
-| `tue_rooftop_ending_system` | Формула складывается холодно и красиво. |
-| `tue_rooftop_ending_true` | На этот раз мысль не выбирает между теплом и точностью. |
-| `tue_rooftop_entry` | - else: |
-| `tue_rooftop_iter001_entry` | Крыша во вторник холоднее, чем могла бы быть в понедельник. |
-| `tue_rooftop_iter001_finish` | Ветер поднимается резко, но мир не ломается. |
-| `tue_rooftop_iter001_realization` | Если данных недостаточно, нельзя просто выбрать стандартный ответ. |
-| `tue_rooftop_iter001_talk` | Город внизу выглядит идеально нормальным. |
-| `tue_rooftop_loop_entry` | Крыша снова встречает ветром. |
-| `tue_rooftop_loop_route` | - else: |
-| `tue_rooftop_loop_signal` | Ветер замирает. |
-| `tue_rooftop_loop_talk` | Тогда что нам делать? |
+| `tue_rooftop_ending_npc` | `knot` |
+| `tue_rooftop_ending_system` | `knot` |
+| `tue_rooftop_ending_true` | `knot` |
+| `tue_rooftop_entry` | `knot` |
+| `tue_rooftop_iter001_entry` | `knot` |
+| `tue_rooftop_iter001_finish` | `knot` |
+| `tue_rooftop_iter001_realization` | `knot` |
+| `tue_rooftop_iter001_talk` | `knot` |
+| `tue_rooftop_loop_entry` | `knot` |
+| `tue_rooftop_loop_route` | `knot` |
+| `tue_rooftop_loop_signal` | `knot` |
+| `tue_rooftop_loop_talk` | `knot` |
 
 ### `shop_sunday.ink`
 
-| Knot | Аннотация |
+| Knot | Kind |
 |---|---|
-| `leave_shop` | Ты отходишь от витрины магазина. Стекло ещё держит отражение улицы, но телефон уже в руке — до встречи можно выбрать мар |
-| `shop_cleaning_supplies_interact` | - else: |
-| `shop_cleaning_supplies_pre_date` | На крючках висят перчатки, щётки и совки. Внизу стоят швабры — слишком прямые, слишком терпеливые, будто они давно приня |
-| `shop_cleaning_supplies_with_npc` | На крючках висят перчатки, щётки и совки. Внизу стоят швабры — слишком прямые, слишком терпеливые, будто они давно приня |
-| `shop_counter_interact` | Касса уже сделала своё: короткий писк терминала, тонкий чек, пакет, который почти ничего не весит. |
-| `shop_drinks_interact` | - else: |
-| `shop_drinks_pre_date` | Холодильники гудят ровно, будто у них воскресенье никогда не сбивается. За стеклом — вода, холодный чай, газировка, кофе |
-| `shop_drinks_with_npc` | Холодильники гудят ровно, будто у них воскресенье никогда не сбивается. После прогулки холодные бутылки выглядят не как  |
-| `shop_household_goods_interact` | - else: |
-| `shop_household_goods_pre_date` | Бытовой отдел встречает вещами, о которых вспоминают не вовремя: пакеты, губки, лампочки, батарейки, рулоны бумаги, чист |
-| `shop_household_goods_with_npc` | Бытовой отдел встречает вещами, о которых вспоминают не вовремя: пакеты, губки, лампочки, батарейки, рулоны бумаги, чист |
-| `shop_paper_goods_interact` | - else: |
-| `shop_paper_goods_pre_date` | Полка с бумажными полотенцами и салфетками выглядит почти абсурдно спокойной: белые рулоны, мягкие упаковки, одинаковые  |
-| `shop_paper_goods_with_npc` | Полка с бумажными полотенцами и салфетками выглядит почти абсурдно спокойной: белые рулоны, мягкие упаковки, одинаковые  |
-| `shop_sign_interact` | Вывеска светится без настроения: 24/7, красная полоса, белые буквы, обещание быть открытой даже тогда, когда человеку лу |
-| `shop_snacks_interact` | - else: |
-| `shop_snacks_pre_date` | Центральный стеллаж выглядит убедительнее, чем должен: крекеры, чипсы, орешки, вафли и шоколадки. Всё слишком яркое и сл |
-| `shop_snacks_with_npc` | Центральный стеллаж выглядит убедительнее, чем должен: батончики, жвачка, мармелад, маленькие пачки печенья. Всё слишком |
-| `shop_window_interact` | Витрина собирает внутри маленькую выставку нормальности: вода ровными рядами, шоколадки у кассы, корзинки одна в другой, |
-| `sunday_shop_arrival` | - else: |
-| `sunday_shop_arrival_pre_date` | Внутри магазин почти пустой: холодильники гудят у дальней стены, возле кассы мигает терминал, на стеллаже кто-то оставил |
-| `sunday_shop_arrival_with_npc` | Магазин 24/7 встречает белым светом, гулом холодильников и корзинками у входа. После прогулки это место выглядит не рома |
-| `sunday_shop_settle` | Касса отвечает коротким писком, пакет шуршит у запястья, дверь выпускает вас обратно к улице. |
-| `sunday_shop_street_arrival` | Магазин стоит внизу жилого дома: красная полоса над входом, бумажный штендер у двери, холодный свет за стеклом. Витрина  |
+| `leave_shop` | `knot` |
+| `shop_cleaning_supplies_interact` | `knot` |
+| `shop_cleaning_supplies_pre_date` | `knot` |
+| `shop_cleaning_supplies_with_npc` | `knot` |
+| `shop_counter_interact` | `knot` |
+| `shop_drinks_interact` | `knot` |
+| `shop_drinks_pre_date` | `knot` |
+| `shop_drinks_with_npc` | `knot` |
+| `shop_household_goods_interact` | `knot` |
+| `shop_household_goods_pre_date` | `knot` |
+| `shop_household_goods_with_npc` | `knot` |
+| `shop_paper_goods_interact` | `knot` |
+| `shop_paper_goods_pre_date` | `knot` |
+| `shop_paper_goods_with_npc` | `knot` |
+| `shop_sign_interact` | `knot` |
+| `shop_snacks_interact` | `knot` |
+| `shop_snacks_pre_date` | `knot` |
+| `shop_snacks_with_npc` | `knot` |
+| `shop_window_interact` | `knot` |
+| `sunday_shop_arrival` | `knot` |
+| `sunday_shop_arrival_pre_date` | `knot` |
+| `sunday_shop_arrival_with_npc` | `knot` |
+| `sunday_shop_settle` | `knot` |
+| `sunday_shop_street_arrival` | `knot` |
 
 ### `sunday_gift_reactions.ink`
 
-| Knot | Аннотация |
+| Knot | Kind |
 |---|---|
-| `sunday_gift_react` | - else: |
-| `sunday_gift_react_cafe` | Пауза у края зала напоминает про пакет из магазина. Здесь, среди шума кофемолки и чужих чашек, маленький подарок кажется |
-| `sunday_gift_react_park` | Перед тем как выбрать место, ты вспоминаешь про пакет из магазина. Момент получается не торжественный — скорее такой, ко |
+| `sunday_gift_react` | `knot` |
+| `sunday_gift_react_cafe` | `knot` |
+| `sunday_gift_react_park` | `knot` |
 
 ### `viewpoint_sunday.ink`
 
-| Knot | Аннотация |
+| Knot | Kind |
 |---|---|
-| `leave_viewpoint` | Вы возвращаетесь от перил к выходу. После высоты город кажется ближе, но не тяжелее. Телефон уже в руке — теперь маршрут |
-| `sunday_viewpoint_arrival` | Смотровая оказывается не торжественной, а простой: деревянный настил под ногами, стеклянные перила, город ниже уровня ды |
-| `sunday_viewpoint_settle` | Город снизу выглядит собранным и спокойным. Будто все маршруты в нём уже проложены, но сегодня можно не выбирать самый к |
-| `view_binoculars_interact` | Бинокль закреплён на короткой металлической стойке. Монетоприёмник закрыт прозрачной крышкой, линзы смотрят в город с вы |
-| `view_city_interact` | Город внизу не становится меньше — просто перестаёт давить. С высоты маршруты выглядят честнее: вот где люди спешат, вот |
-| `view_corner_bench_interact` | Скамейка стоит в стороне от основной площадки: не прячется, но и не зовёт всех подряд. Рядом бетонная клумба, стеклянное |
-| `view_corner_glass_interact` | Стекло у края почти не видно, пока в нём не ловится отражение: кусок неба, линия перил, твой силуэт и силуэт {npc_name_g |
-| `view_corner_main_talk` | Вы садитесь в тихом углу смотровой. Не вплотную, но достаточно близко, чтобы ветер перестал быть главным участником разг |
-| `view_corner_planter_interact` | В клумбе растут кусты и маленькое дерево, слишком домашнее для высоты, на которой ему приходится жить. Листья ловят солн |
-| `view_railing_interact` | Поручни прохладные. Металл под ладонью держит дневное тепло хуже, чем кажется на расстоянии. |
+| `leave_viewpoint` | `knot` |
+| `sunday_viewpoint_arrival` | `knot` |
+| `sunday_viewpoint_settle` | `knot` |
+| `view_binoculars_interact` | `knot` |
+| `view_city_interact` | `knot` |
+| `view_corner_bench_interact` | `knot` |
+| `view_corner_glass_interact` | `knot` |
+| `view_corner_main_talk` | `knot` |
+| `view_corner_planter_interact` | `knot` |
+| `view_railing_interact` | `knot` |
 
 ## Characters (CHARS)
 

@@ -140,9 +140,13 @@ Git Bash / Linux:
 |---|---|---|
 | `sms:add:CONTACT:TEXT` | `# sms:add:mila:Есть планы?` | Входящее SMS. |
 | `sms:reply:CONTACT:TEXT` | `# sms:reply:mila:Хорошо.` | Исходящее SMS от ГГ. Авто-флаг: `sms_<contact>_replied=true`. |
+| `sms:reply_old:CONTACT:TIME:TEXT` | `# sms:reply_old:mama:пн:Да, всё нормально.` | Старое исходящее SMS для seed-истории. Не ставит `sms_<contact>_replied`. |
 | `sms:read:CONTACT` | `# sms:read:mila` | Пометить чат прочитанным вручную. |
+| `bank:set:AMOUNT` | `# bank:set:272229` | Выставить runtime-баланс карты. Обычно только в seed истории телефона. |
+| `bank:charge:AMOUNT:MERCHANT` | `# bank:charge:980:Кофейня «петля»` | Списать деньги и автоматически добавить SMS от банка с новым балансом. |
 | `msg:add:CHAT:TEXT` | `# msg:add:mila:Привет в мессенджере` | Входящее сообщение в Messenger-приложение (отдельно от SMS). |
 | `msg:reply:CHAT:TEXT` | `# msg:reply:mila:Ок` | Исходящее в Messenger. Авто-флаг: `msg_<chat>_replied=true`. |
+| `msg:reply_old:CHAT:TIME:TEXT` | `# msg:reply_old:friends:пт:Я могу отменить заранее.` | Старое исходящее сообщение для seed-истории. Не ставит `msg_<chat>_replied`. |
 | `msg:read:CHAT` | `# msg:read:mila` | Пометить чат прочитанным вручную. Авто-флаг `msg_<chat>_read=true` ставится при открытии Messenger. |
 | `note:add:TITLE:BODY` | `# note:add:Кейс:не хватает данных` | Добавить заметку. |
 | `mail:add:FROM:SUBJECT[:BODY]` | `# mail:add:system:Кейс 017:Собрать пакет` | Добавить письмо. |
@@ -154,6 +158,25 @@ Git Bash / Linux:
 | `clue:add:ID:LABEL` | `# clue:add:repeat:Повторяющийся сигнал` | Добавить улику. |
 | `term:LEVEL:TEXT` | `# term:warn:missing field` | Строка терминала. LEVEL: `ok`/`warn`/`err`/`info`/`prompt`/`plain`. |
 | `term:clear` / `term:defaults` | — | Очистить / вернуть дефолтный терминал. |
+
+Для покупок не пиши вручную `# sms:add:bank:... Баланс ...`. Используй `# bank:charge:AMOUNT:MERCHANT`, иначе баланс быстро начнёт расходиться между ветками.
+
+**Read-only SMS / Messenger:** если контакт нужен только как сервисная или старая лента без ответа игрока, не создавай `sms_thread_<contact>` / `msg_thread_<chat>`. Добавляй историю через `# sms:add_old`, `# sms:reply_old`, `# sms:add`, `# msg:add_old`, `# msg:reply_old`, `# msg:add`. `sms:read` и `msg:read` только снимают unread, но не делают чат read-only. Thread-knot создаётся только когда игрок реально должен написать/ответить или открыть специальную интерактивную сцену. Для старых исходящих сообщений не используй обычные `sms:reply` / `msg:reply`, потому что они ставят `*_replied`.
+
+**Где хранить тексты телефона:** сценовые `.ink` файлы не должны разрастаться SMS/Messenger-текстами. В сцене вызывай телефонное событие через tunnel:
+
+```ink
+-> phone_sms_seed_sunday_morning ->
+-> phone_msg_seed_sunday_morning ->
+```
+
+А сами события держи в `92_phone_sms.ink` (`sms:*`, `bank:*`) и `93_phone_messenger.ink` (`msg:*`):
+
+```ink
+=== phone_sms_seed_sunday_morning ===
+# sms:add_old:mama:пн:Не забудь поесть.
+->->
+```
 
 ### Сцены и overlays
 
@@ -431,7 +454,9 @@ Ink:
 - писать `sms_thread_<contact>` для side-dialogue переписки в SMS;
 - писать `msg_thread_<chat>` для интерактивного ответа в Messenger.
 
-> **Поведение pulse-индикатора:** в открытом thread-вью (и SMS, и Messenger) поле ввода и кнопка SEND начинают пульсировать, **только если** есть соответствующий `sms_thread_<contact>` / `msg_thread_<chat>` knot **и** игрок ещё не отвечал (`*_replied != true`). Если автор не написал thread-knot, чат остаётся read-only — без пульса, тап на input/send игнорируется. Так meme-чаты, боты-нотификации и каналы без интерактивного ответа выглядят правильно. Игрок тапает по чату → видит inline bubbles → тапает по полю/SEND (если оно пульсирует) → попадает в thread-knot для выбора ответа.
+Тексты SMS/Messenger при этом держим централизованно: `92_phone_sms.ink` для `sms:*`/`bank:*`, `93_phone_messenger.ink` для `msg:*`. Сцены вызывают `phone_sms_*` / `phone_msg_*` через `-> event ->`, а не хранят текст сообщений у себя.
+
+> **Поведение pulse-индикатора:** игрок сначала открывает inline-чат внутри телефона. Поле ввода и кнопка SEND пульсируют только если UI считает чат интерактивным. Для SMS нужны: `sms_thread_<contact>` или `contact.ink_thread`, `sms_<contact>_replied != true`, и контакт не `readonly` в `phone_contacts.lua`. Для Messenger нужны: активный `# msg:prompt:CHAT:KNOT` или `msg_thread_<chat>` / `chat.ink_thread`, плюс `msg_<chat>_replied != true` для обычного thread'а. Если автор не написал thread-knot и не поставил prompt, чат остаётся read-only: без пульса, тап на input/SEND игнорируется.
 
 Запрещено:
 

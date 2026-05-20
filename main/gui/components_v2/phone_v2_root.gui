@@ -35,6 +35,14 @@ fonts {
   name: "unbounded_bold_64"
   font: "/main/fonts/unbounded_bold_64.font"
 }
+fonts {
+  name: "jb_mono_16"
+  font: "/main/fonts/jb_mono_16.font"
+}
+fonts {
+  name: "jb_mono_bold_20"
+  font: "/main/fonts/jb_mono_bold_20.font"
+}
 textures {
   name: "icon_phone"
   texture: "/main/images/phone/icon_phone.atlas"
@@ -154,30 +162,6 @@ nodes {
 }
 nodes {
   position {
-    x: 248.0
-    y: 620.0
-    z: 0.59
-  }
-  size {
-    x: 90.0
-    y: 12.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  text: "07:12"
-  font: "jb_mono_10"
-  id: "status_time"
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.82
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
     x: 406.0
     y: 620.0
     z: 0.59
@@ -207,7 +191,7 @@ nodes {
     z: 0.588
   }
   size {
-    x: 240.0
+    x: 260.0
     y: 40.0
   }
   color {
@@ -216,7 +200,7 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: "07:12"
+  text: "\320\222\320\276\321\201\320\272\321\200\320\265\321\201\320\265\320\275\321\214\320\265"
   font: "unbounded_bold_32"
   id: "wall_time"
   adjust_mode: ADJUST_MODE_STRETCH
@@ -227,20 +211,20 @@ nodes {
 nodes {
   position {
     x: 248.0
-    y: 540.0
+    y: 538.0
     z: 0.588
   }
   size {
     x: 260.0
-    y: 12.0
+    y: 20.0
   }
   color {
     y: 0.23921569
     z: 0.49803922
   }
   type: TYPE_TEXT
-  text: "\320\237\320\236\320\235\320\225\320\224\320\225\320\233\320\254\320\235\320\230\320\232 \302\267 23 \320\220\320\237\320\240\320\225\320\233\320\257"
-  font: "jb_mono_10"
+  text: "21 \320\270\321\216\320\275\321\217"
+  font: "jb_mono_bold_20"
   id: "wall_date"
   adjust_mode: ADJUST_MODE_STRETCH
   alpha: 0.96
@@ -249,8 +233,8 @@ nodes {
 }
 nodes {
   position {
-    x: 118.0
-    y: 365.0
+    x: 143.0
+    y: 422.0
     z: 0.55
   }
   size {
@@ -274,8 +258,8 @@ nodes {
 }
 nodes {
   position {
-    x: 118.0
-    y: 365.0
+    x: 143.0
+    y: 422.0
     z: 0.55
   }
   size {
@@ -301,8 +285,8 @@ nodes {
 }
 nodes {
   position {
-    x: 118.0
-    y: 365.0
+    x: 143.0
+    y: 422.0
     z: 0.568
   }
   size {
@@ -320,8 +304,8 @@ nodes {
 }
 nodes {
   position {
-    x: 118.0
-    y: 321.0
+    x: 143.0
+    y: 378.0
     z: 0.574
   }
   size {
@@ -344,8 +328,8 @@ nodes {
 }
 nodes {
   position {
-    x: 203.0
-    y: 365.0
+    x: 245.0
+    y: 422.0
     z: 0.55
   }
   size {
@@ -369,8 +353,8 @@ nodes {
 }
 nodes {
   position {
-    x: 203.0
-    y: 365.0
+    x: 245.0
+    y: 422.0
     z: 0.55
   }
   scale {
@@ -400,8 +384,8 @@ nodes {
 }
 nodes {
   position {
-    x: 203.0
-    y: 365.0
+    x: 245.0
+    y: 422.0
     z: 0.568
   }
   size {
@@ -419,8 +403,8 @@ nodes {
 }
 nodes {
   position {
-    x: 203.0
-    y: 321.0
+    x: 245.0
+    y: 378.0
     z: 0.574
   }
   size {
@@ -443,8 +427,8 @@ nodes {
 }
 nodes {
   position {
-    x: 288.0
-    y: 365.0
+    x: 347.0
+    y: 422.0
     z: 0.55
   }
   size {
@@ -462,8 +446,8 @@ nodes {
 }
 nodes {
   position {
-    x: 288.0
-    y: 365.0
+    x: 347.0
+    y: 422.0
     z: 0.55
   }
   scale {
@@ -487,8 +471,8 @@ nodes {
 }
 nodes {
   position {
-    x: 288.0
-    y: 365.0
+    x: 347.0
+    y: 422.0
     z: 0.568
   }
   size {
@@ -506,8 +490,8 @@ nodes {
 }
 nodes {
   position {
-    x: 288.0
-    y: 321.0
+    x: 347.0
+    y: 378.0
     z: 0.574
   }
   size {
@@ -530,8 +514,8 @@ nodes {
 }
 nodes {
   position {
-    x: 373.0
-    y: 365.0
+    x: 348.0
+    y: 303.0
     z: 0.55
   }
   size {
@@ -550,8 +534,8 @@ nodes {
 }
 nodes {
   position {
-    x: 373.0
-    y: 365.0
+    x: 348.0
+    y: 303.0
     z: 0.55
   }
   scale {
@@ -575,8 +559,8 @@ nodes {
 }
 nodes {
   position {
-    x: 373.0
-    y: 365.0
+    x: 348.0
+    y: 303.0
     z: 0.568
   }
   size {
@@ -595,8 +579,8 @@ nodes {
 }
 nodes {
   position {
-    x: 373.0
-    y: 321.0
+    x: 348.0
+    y: 259.0
     z: 0.574
   }
   size {
@@ -619,8 +603,8 @@ nodes {
 }
 nodes {
   position {
-    x: 118.0
-    y: 250.0
+    x: 245.0
+    y: 303.0
     z: 0.55
   }
   size {
@@ -638,8 +622,8 @@ nodes {
 }
 nodes {
   position {
-    x: 118.0
-    y: 250.0
+    x: 245.0
+    y: 303.0
     z: 0.55
   }
   scale {
@@ -663,8 +647,8 @@ nodes {
 }
 nodes {
   position {
-    x: 118.0
-    y: 250.0
+    x: 245.0
+    y: 303.0
     z: 0.568
   }
   size {
@@ -682,8 +666,8 @@ nodes {
 }
 nodes {
   position {
-    x: 118.0
-    y: 206.0
+    x: 245.0
+    y: 259.0
     z: 0.574
   }
   size {
@@ -706,8 +690,8 @@ nodes {
 }
 nodes {
   position {
-    x: 203.0
-    y: 250.0
+    x: 142.0
+    y: 183.0
     z: 0.55
   }
   size {
@@ -726,8 +710,8 @@ nodes {
 }
 nodes {
   position {
-    x: 203.0
-    y: 250.0
+    x: 142.0
+    y: 183.0
     z: 0.55
   }
   scale {
@@ -751,8 +735,8 @@ nodes {
 }
 nodes {
   position {
-    x: 203.0
-    y: 250.0
+    x: 142.0
+    y: 183.0
     z: 0.568
   }
   size {
@@ -770,8 +754,8 @@ nodes {
 }
 nodes {
   position {
-    x: 203.0
-    y: 206.0
+    x: 142.0
+    y: 139.0
     z: 0.574
   }
   size {
@@ -794,8 +778,8 @@ nodes {
 }
 nodes {
   position {
-    x: 288.0
-    y: 250.0
+    x: 141.0
+    y: 303.0
     z: 0.55
   }
   size {
@@ -814,8 +798,8 @@ nodes {
 }
 nodes {
   position {
-    x: 288.0
-    y: 250.0
+    x: 141.0
+    y: 303.0
     z: 0.55
   }
   scale {
@@ -839,8 +823,8 @@ nodes {
 }
 nodes {
   position {
-    x: 288.0
-    y: 250.0
+    x: 141.0
+    y: 303.0
     z: 0.568
   }
   size {
@@ -858,8 +842,8 @@ nodes {
 }
 nodes {
   position {
-    x: 288.0
-    y: 206.0
+    x: 141.0
+    y: 259.0
     z: 0.574
   }
   size {
@@ -882,8 +866,8 @@ nodes {
 }
 nodes {
   position {
-    x: 373.0
-    y: 250.0
+    x: 247.0
+    y: 183.0
     z: 0.55
   }
   size {
@@ -902,8 +886,8 @@ nodes {
 }
 nodes {
   position {
-    x: 373.0
-    y: 250.0
+    x: 247.0
+    y: 183.0
     z: 0.55
   }
   scale {
@@ -927,8 +911,8 @@ nodes {
 }
 nodes {
   position {
-    x: 373.0
-    y: 250.0
+    x: 247.0
+    y: 183.0
     z: 0.568
   }
   size {
@@ -946,8 +930,8 @@ nodes {
 }
 nodes {
   position {
-    x: 373.0
-    y: 206.0
+    x: 247.0
+    y: 139.0
     z: 0.574
   }
   size {
@@ -970,8 +954,8 @@ nodes {
 }
 nodes {
   position {
-    x: 148.0
-    y: 395.0
+    x: 173.0
+    y: 452.0
     z: 0.585
   }
   size {
@@ -996,8 +980,8 @@ nodes {
 }
 nodes {
   position {
-    x: 148.0
-    y: 395.0
+    x: 173.0
+    y: 452.0
     z: 0.59
   }
   size {
@@ -1019,8 +1003,8 @@ nodes {
 }
 nodes {
   position {
-    x: 318.0
-    y: 280.0
+    x: 171.0
+    y: 333.0
     z: 0.585
   }
   size {
@@ -1045,8 +1029,8 @@ nodes {
 }
 nodes {
   position {
-    x: 318.0
-    y: 280.0
+    x: 171.0
+    y: 333.0
     z: 0.59
   }
   size {

@@ -2,9 +2,9 @@
 // ============================================================================
 // PHONE / MESSENGER THREADS
 // ============================================================================
-// Все msg_thread_<chat_id> живут здесь.
-// Сюжетные файлы добавляют сообщения через # msg:add:<chat_id>:text.
-// Ответы игрока пишутся через # msg:reply:<chat_id>:text.
+// Messenger-события и интерактивные msg_thread_<chat_id> живут здесь.
+// Сценовые файлы вызывают phone_msg_* tunnel-блоки, а не держат # msg:* напрямую.
+// msg_thread_* создаётся только если игрок реально должен отвечать/выбирать.
 //
 // Важно:
 // - Messenger не смешиваем с SMS: sms_thread_* остаются в 92_phone_sms.ink.
@@ -12,6 +12,103 @@
 // - Если для chat_id нет msg_thread_<chat_id>, чат остаётся обычной inline-
 //   перепиской внутри телефона без side-dialogue.
 // ============================================================================
+
+// -----------------------------------------------------------------------------
+// PHONE MESSENGER EVENTS
+// Сцены вызывают эти блоки через tunnel: -> phone_msg_* ->
+// Здесь живут все msg:* теги, которые относятся к событиям телефона.
+// -----------------------------------------------------------------------------
+
+=== phone_msg_seed_sunday_morning ===
+{mc_gender == "female":
+    # msg:add_old:artem:пн:Есть планы на сегодня? Может, выберемся куда-нибудь после работы.
+- else:
+    # msg:add_old:mila:пн:Есть планы на сегодня? Может, выберемся куда-нибудь после работы.
+}
+# msg:add_old:friends:пт:Доброе утро, выжившие. Кто сегодня не отменяет планы в последний момент?
+# msg:reply_old:friends:пт:Я могу отменить заранее, чтобы не рушить традицию.
+# msg:add_old:work_team:пт:Планёрку в понедельник сдвинули на 10:40. Календарь говорит, что это забота.
+# msg:add_old:work_team:вчера:По завтрашнему кейсу проверьте входящие перед автоответом.
+# msg:add_old:prod_bot:вчера:Новый кейс создан. Часть полей ожидает подтверждения.
+# msg:add_old:neighbor_chat:пн:У кого опять будильник играет с 07:00?
+# msg:add_old:city_bot:вчера:Солнечно. Летний день без осадков, будто специально для прогулки.
+->->
+
+=== phone_msg_take_phone_sunday_morning ===
+# msg:add:friends:Артём опять онлайн в 07:13. Подозрительно.
+# msg:add:friends:Мила тоже. Вы там синхронизировались или что?
+# msg:add:calendar_bot:Сегодня: встреча без названия. Место: не указано.
+->->
+
+=== phone_msg_sunday_invite_after_coffee ===
+{mc_gender == "female":
+    # msg:add:artem:Ты сегодня вообще живая?
+    # msg:add:artem:Я уже второй кофе пью.
+    # msg:add:artem:Выберемся куда-нибудь, пока день не стал совсем домашним?
+    # msg:need_reply:artem
+- else:
+    # msg:add:mila:Ты сегодня вообще живой?
+    # msg:add:mila:Я уже второй кофе пью.
+    # msg:add:mila:Выберемся куда-нибудь, пока день не стал совсем домашним?
+    # msg:need_reply:mila
+}
+->->
+
+=== phone_msg_sunday_evening_home_thanks ===
+{mc_gender == "female":
+    # msg:add:artem:Спасибо за сегодня. Было хорошо.
+    # msg:read:artem
+- else:
+    # msg:add:mila:Спасибо за сегодня. Было хорошо.
+    # msg:read:mila
+}
+->->
+
+=== phone_msg_sunday_evening_reply_warm ===
+{mc_gender == "female":
+    # msg:reply:artem:Спасибо, что продолжили день. Я рада, что мы встретились.
+- else:
+    # msg:reply:mila:Спасибо, что продолжили день. Я рад, что мы встретились.
+}
+->->
+
+=== phone_msg_sunday_evening_reply_calm ===
+{mc_gender == "female":
+    # msg:reply:artem:Да. Хороший день получился.
+- else:
+    # msg:reply:mila:Да. Хороший день получился.
+}
+->->
+
+=== phone_msg_park_arrival_prompt ===
+{mc_gender == "female":
+    # msg:prompt:artem:park_message_where_are_you:НАПИСАТЬ
+- else:
+    # msg:prompt:mila:park_message_where_are_you:НАПИСАТЬ
+}
+->->
+
+=== phone_msg_park_where_reply_path ===
+{mc_gender == "female":
+    # msg:reply:artem:Ты где?
+    # msg:add:artem:В аллее, в тени. Подходи — я тут.
+- else:
+    # msg:reply:mila:Ты где?
+    # msg:add:mila:В аллее, в тени. Подходи — я тут.
+}
+# sfx:phone_notify
+->->
+
+=== phone_msg_park_where_reply_bench ===
+{mc_gender == "female":
+    # msg:reply:artem:Ты где?
+    # msg:add:artem:У воды, ближе к лавочкам. Уже там, жду.
+- else:
+    # msg:reply:mila:Ты где?
+    # msg:add:mila:У воды, ближе к лавочкам. Уже там, жду.
+}
+# sfx:phone_notify
+->->
 
 // -----------------------------------------------------------------------------
 // PERSONAL THREADS

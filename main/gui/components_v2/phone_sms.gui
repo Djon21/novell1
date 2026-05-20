@@ -342,24 +342,6 @@ nodes {
 }
 nodes {
   type: TYPE_BOX
-  id: "sms_thread/th_input_bg"
-  parent: "sms_thread/thread_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "sms_thread/border_input"
-  parent: "sms_thread/th_input_bg"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "sms_thread/th_input_text"
-  parent: "sms_thread/th_input_bg"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
   id: "sms_thread/th_send_bg"
   parent: "sms_thread/thread_root"
   template_node_child: true

@@ -6,7 +6,7 @@
 --   "close_phone"           — закрыть телефон (только скрыть, не постить обратно)
 --   "refresh_phone"         — обновить счётчик + переслать активному приложению
 --   "set_phone_notif" {n}   — обновить "сообщений: N"
---   "set_phone_time" {time} — обновить время в статус-баре
+--   "set_phone_time" {time} — legacy no-op; wall_time показывает текущий день
 --
 -- Исходящие сообщения (к #ui_manager_v2):
 --   "close_phone"           — пользователь нажал X
@@ -52,7 +52,7 @@ local APP_TITLES = {
 local CHROME_NODES = {
     "phone_bg",
     "phone_case", "phone_case_top", "phone_screen1", "phone_screen", "phone_notch", "phone_side_btn",
-    "stats_msg", "status_time", "status_meta",
+    "stats_msg", "status_meta",
     "wall_time", "wall_date", "wall_glitch",
     "home_indicator", "home_btn",
     "side_panel1", "side_panel", "head_divider",
@@ -99,6 +99,37 @@ local set_text          = U.set_text
 
 local function update_app_title(id)
     set_text("title_main", APP_TITLES[id or "sms"] or "ДОМАШНИЙ ЭКРАН")
+end
+
+local function current_day_label()
+    if gs.get_flag and gs.get_flag("tuesday_started") then
+        return "Вторник"
+    elseif gs.get_flag and gs.get_flag("monday_started") then
+        return "Понедельник"
+    end
+    return "Воскресенье"
+end
+
+local function update_wall_day()
+    set_text("wall_time", current_day_label())
+end
+
+local function current_date_label()
+    if gs.get_flag and gs.get_flag("tuesday_started") then
+        return "23 июня"
+    elseif gs.get_flag and gs.get_flag("monday_started") then
+        return "22 июня"
+    end
+    return "21 июня"
+end
+
+local function update_wall_date()
+    set_text("wall_date", current_date_label())
+end
+
+local function update_wall_calendar()
+    update_wall_day()
+    update_wall_date()
 end
 
 local function set_badge(self_or_prefix, prefix_or_value, maybe_value)
@@ -202,6 +233,7 @@ function init(self)
     self.active_app = nil
     set_nodes_enabled(CHROME_NODES, false)
     update_app_title("sms")
+    update_wall_calendar()
     -- Берём фокус сразу и держим всегда (как исходный phone_v2.gui_script).
     -- Когда телефон закрыт — on_input возвращает false, инпут проходит дальше.
     -- Это сохраняет правильный порядок стека acquire_input_focus.
@@ -213,6 +245,7 @@ function on_message(self, message_id, message, sender)
         self.visible = true
         set_nodes_enabled(CHROME_NODES, true)
         update_notif(self)
+        update_wall_calendar()
         -- Открыть SMS по умолчанию
         local comp = APP_COMPONENT["sms"]
         if comp then msg.post(comp, MSG.open_app) end
@@ -230,6 +263,7 @@ function on_message(self, message_id, message, sender)
 
     elseif message_id == MSG.refresh_phone then
         update_notif(self)
+        update_wall_calendar()
         if self.active_app then
             local comp = APP_COMPONENT[self.active_app]
             if comp then msg.post(comp, MSG.refresh_app) end
@@ -255,9 +289,7 @@ function on_message(self, message_id, message, sender)
         set_badge(self, "app7", msg_unread)
 
     elseif message_id == MSG.set_phone_time then
-        local t = (message and message.time) or "07:12"
-        set_text("status_time", t)
-        set_text("wall_time", t)
+        update_wall_calendar()
     end
 end
 

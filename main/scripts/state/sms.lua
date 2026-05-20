@@ -7,6 +7,7 @@
 --   M.reset()                — обнулить состояние (новый run / load).
 --   M.add(contact_id, text)  — входящее сообщение от контакта (unread=true).
 --   M.reply(contact_id, text) — исходящее от ГГ (флаг sms_<contact>_replied).
+--   M.reply_old(contact_id, text, opts) — старое исходящее от ГГ без reply-флага.
 --   M.mark_read(contact_id)  — пометить чат прочитанным (флаг sms_<contact>_read).
 --   M.mark_all_read()        — пометить все чаты.
 --   M.get(contact_id)        — клонированный список сообщений чата.
@@ -185,6 +186,27 @@ function M.reply(contact_id, text)
     if _sms_tags[tostring(contact_id)] and _sms_tags[tostring(contact_id)].tone == "need_reply" then
         _sms_tags[tostring(contact_id)] = nil
     end
+    notify_cb()
+    return true
+end
+
+-- Старое исходящее сообщение для seed-истории телефона. В отличие от reply(),
+-- не ставит sms_<contact>_replied и не снимает need_reply pin.
+function M.reply_old(contact_id, text, opts)
+    if not contact_id or contact_id == "" then return false end
+    local seq = next_seq()
+    local time = nil
+    if type(opts) == "table" and opts.time then
+        time = tostring(opts.time)
+    end
+    _sms[contact_id] = _sms[contact_id] or {}
+    table.insert(_sms[contact_id], {
+        text      = tostring(text or ""),
+        unread    = false,
+        direction = "out",
+        time      = time or default_time(seq),
+        seq       = seq,
+    })
     notify_cb()
     return true
 end

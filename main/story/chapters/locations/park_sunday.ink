@@ -220,14 +220,8 @@
 # set_flag:park_arrived=true
 ~ park_arrived = true
 # map:lock_all
-// # msg:prompt — генерик-механизм: pin "НАПИСАТЬ" на чате, тап input'а
-// диверитит в указанный knot независимо от _replied-флага. Pin авто-снимется
-// при первом # msg:reply:CHAT:... внутри knot'а.
-{mc_gender == "female":
-    # msg:prompt:artem:park_message_where_are_you:НАПИСАТЬ
-- else:
-    # msg:prompt:mila:park_message_where_are_you:НАПИСАТЬ
-}
+// Messenger prompt живёт в 93_phone_messenger.ink.
+-> phone_msg_park_arrival_prompt ->
 # hud:hint:phone
 # return_to_scene
 -> DONE
@@ -247,27 +241,13 @@
 // (park_bench_npc_show / park_path_npc_show).
 {iteration_number % 2 == 0:
     // EVEN iter (iter 2, 4, ...) — at path
-    {mc_gender == "female":
-    # msg:reply:artem:Ты где?
-    # msg:add:artem:В аллее, в тени. Подходи — я тут.
-    - else:
-    # msg:reply:mila:Ты где?
-    # msg:add:mila:В аллее, в тени. Подходи — я тут.
-    }
+    -> phone_msg_park_where_reply_path ->
     # set_flag:park_npc_at_path=true
 - else:
     // ODD iter (iter 1, 3, ...) — at bench
-    {mc_gender == "female":
-    # msg:reply:artem:Ты где?
-    # msg:add:artem:У воды, ближе к лавочкам. Уже там, жду.
-    - else:
-    # msg:reply:mila:Ты где?
-    # msg:add:mila:У воды, ближе к лавочкам. Уже там, жду.
-    }
+    -> phone_msg_park_where_reply_bench ->
     # set_flag:park_npc_at_bench=true
 }
-# sfx:phone_notify
-
 # speaker:none
 Ответ приходит почти сразу. Не тревожно — просто теперь ожидание стало конкретным: нужно подойти.
 

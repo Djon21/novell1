@@ -122,8 +122,7 @@ local THREAD_NODE_IDS = {
     "th_info_bg", "th_info_border", "th_info_label",
     "th_menu_bg", "th_menu_border", "th_menu_label",
     "th_header_line", "th_empty",
-    "th_input_line", "th_input_bg", "th_input_border", "th_input_text",
-    "th_send_bg", "th_send_border", "th_send_label",
+    "th_input_line", "th_input_border", "th_input_text",
 }
 
 for i = 1, MAX_BUBBLES do
@@ -214,7 +213,6 @@ local THREAD_BORDER_IDS = {
     th_info_border  = "border_info",
     th_menu_border  = "border_menu",
     th_input_border = "border_input",
-    th_send_border  = "border_send",
 }
 
 local function resolve_thread_border(id)
@@ -889,11 +887,6 @@ local function apply_static_layout()
         local size = bg and gui.get_size(bg) or vmath.vector3(118, 36, 0)
         set_border("th_back", 0, 0, size.x, size.y, COLORS.accent, 0.35)
     end
-    set_local_pos("th_back_label", 12, 18, 0.056)
-    set_size("th_back_label", 100, 14)
-    set_text("th_back_label", "‹ ВХОДЯЩИЕ")
-    set_color("th_back_label", COLORS.accent, 0.95)
-
     for _, id in ipairs({ "th_call", "th_info", "th_menu" }) do
         set_color(id .. "_bg", COLORS.card, 0.60)
         local bg = get_node(id .. "_bg")
@@ -910,22 +903,13 @@ local function apply_static_layout()
     end
     set_pos("th_empty", CONTENT_X + ROW_W / 2, 384, 0.559)
     set_box("th_input_line", CONTENT_X, 140, ROW_W, 1, COLORS.paper, 0.15)
-    set_box("th_input_bg", CONTENT_X, 92, 540, 38, COLORS.card, 0.60)
     set_border("th_input", CONTENT_X, 92, 540, 38, COLORS.accent, 0.30)
     set_local_pos("th_input_text", 14, 20, 0.056)
     set_size("th_input_text", 510, 14)
-    set_box("th_send_bg", CONTENT_X + 548, 92, 112, 38, COLORS.accent, 1.0)
-    set_border("th_send", CONTENT_X + 548, 92, 112, 38, COLORS.accent, 1.0)
-    set_local_pos("th_send_label", 56, 20, 0.056)
-    set_text("th_send_label", "SEND ▶")
-    set_color("th_send_label", COLORS.dark, 0.95)
-
-    for _, id in ipairs({ "th_call_label", "th_info_label", "th_menu_label", "th_send_label" }) do
+    for _, id in ipairs({ "th_call_label", "th_info_label", "th_menu_label" }) do
         local n = get_node(id)
         if n then gui.set_pivot(n, gui.PIVOT_CENTER) end
     end
-    local back_label = get_node("th_back_label")
-    if back_label then gui.set_pivot(back_label, gui.PIVOT_W) end
     local input_text = get_node("th_input_text")
     if input_text then gui.set_pivot(input_text, gui.PIVOT_W) end
 end
@@ -1201,9 +1185,6 @@ render_thread = function(self)
     set_text("th_num", "SIM 1 · " .. tostring(contact.number or "—"))
     set_text("th_input_text", contact.readonly and "ответы запрещены оператором" or "нажмите, чтобы выбрать ответ...")
     set_color("th_input_text", COLORS.paper_dim, contact.readonly and 0.42 or 0.55)
-    set_text("th_send_label", "SEND ▶")
-    set_color("th_send_bg", contact.readonly and COLORS.paper_dim or COLORS.accent, contact.readonly and 0.18 or 1.0)
-    set_color("th_send_label", contact.readonly and COLORS.paper_dim or COLORS.dark, contact.readonly and 0.70 or 0.95)
 
     -- Запустить или остановить pulse только при изменении состояния.
     -- Иначе render_thread/refresh_app будет постоянно cancel+restart animation.
@@ -1419,10 +1400,10 @@ local function handle_thread_touch(self, action_id, action)
             return true
         end
 
-        for _, id in ipairs({ "th_input_bg", "th_send_bg" }) do
+        for _, id in ipairs({ "th_input_text", "th_send_bg" }) do
             local n = get_node(id)
             if n and gui.is_enabled(n) and gui.pick_node(n, x, y) then
-                flash_node(id)
+                if id ~= "th_send_bg" then flash_node(id) end
                 trigger_reply_choices(self)
                 return true
             end

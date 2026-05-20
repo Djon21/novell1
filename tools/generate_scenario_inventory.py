@@ -215,8 +215,11 @@ def parse_hotspots(block: str) -> list:
 def scan_ink_knots() -> dict:
     """
     Парсит main/story/chapters/*.ink (без _old/_old3 версий) и возвращает:
-      { knot_name: { source, summary } }
-    summary = первая non-tag, non-empty строка после знака `===`.
+      { knot_name: { source, kind } }
+
+    Inventory intentionally does not include story-text previews. This file is
+    loaded into AI context as an ID index, not as a compressed retelling of the
+    story. Keeping knot rows short prevents the scenario pack from ballooning.
     """
     knots = {}
     ink_dir = ROOT / "main" / "story" / "chapters"
@@ -229,33 +232,25 @@ def scan_ink_knots() -> dict:
         # === knot_name ===
         for m in re.finditer(r"^===\s*([a-zA-Z_][\w]*)\s*===", text, re.MULTILINE):
             name = m.group(1)
-            tail = text[m.end():]
-            summary = first_meaningful_line(tail)
-            knots[name] = {"source": ink.name, "summary": summary}
+            knots[name] = {"source": ink.name, "kind": classify_knot(name)}
     return knots
 
 
-def first_meaningful_line(tail: str) -> str:
-    """Берёт первую содержательную строку из knot body, до 80 символов."""
-    for raw in tail.splitlines()[:25]:
-        line = raw.strip()
-        if not line:
-            continue
-        if line.startswith("//") or line.startswith("==="):
-            continue
-        if line.startswith("#"):  # пропускаем теги
-            # Возможна одна строка с несколькими тегами + текст после
-            stripped = re.sub(r"#\s*\S+(?:\s*:\s*\S+)*", "", line).strip()
-            if stripped:
-                return stripped[:100]
-            continue
-        if line.startswith("~") or line.startswith("{") or line.startswith("->"):
-            continue
-        if line.startswith("*") or line.startswith("+"):
-            # Choice option — но контента нет, пропустим
-            continue
-        return line[:120]
-    return ""
+def classify_knot(name: str) -> str:
+    """Small structural hint for AI without leaking prose into inventory."""
+    if name.startswith("phone_sms_"):
+        return "phone_sms_event"
+    if name.startswith("phone_msg_"):
+        return "phone_msg_event"
+    if name.startswith("sms_thread_"):
+        return "sms_thread"
+    if name.startswith("msg_thread_"):
+        return "msg_thread"
+    if name.startswith("inv_"):
+        return "inventory"
+    if name.startswith("dev_"):
+        return "dev"
+    return "knot"
 
 
 # ---------------------------- Characters ----------------------------
@@ -532,16 +527,20 @@ def render(data) -> str:
     add("(без `_old*` версий). Используй ТОЛЬКО эти имена для `action_knot`")
     add("в hotspot'ах и для `# scene_char:show:...:...` если требуется.")
     add("")
+    add("Колонка `Kind` — структурная подсказка, не пересказ содержимого. Тексты")
+    add("knot'ов в inventory намеренно не выводятся, чтобы файл оставался")
+    add("компактным source of truth по ID.")
+    add("")
     by_file = {}
     for kname, kinfo in data["knots"].items():
-        by_file.setdefault(kinfo["source"], []).append((kname, kinfo["summary"]))
+        by_file.setdefault(kinfo["source"], []).append((kname, kinfo["kind"]))
     for src in sorted(by_file.keys()):
         add(f"### `{src}`")
         add("")
-        add("| Knot | Аннотация |")
+        add("| Knot | Kind |")
         add("|---|---|")
-        for kname, summary in sorted(by_file[src]):
-            add(f"| `{kname}` | {summary or '—'} |")
+        for kname, kind in sorted(by_file[src]):
+            add(f"| `{kname}` | `{kind}` |")
         add("")
 
     # Characters

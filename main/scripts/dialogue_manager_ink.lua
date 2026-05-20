@@ -330,6 +330,25 @@ local function apply_tags(tags, trailing)
                         })
                     end
                 end
+            elseif op == "reply_old" and rest then
+                -- # sms:reply_old:CONTACT:TIME:TEXT — старое исходящее сообщение
+                -- для seed-истории. Не ставит sms_<contact>_replied.
+                local contact, rest2 = rest:match("([^:]+)%s*:%s*(.+)")
+                if contact and rest2 then
+                    local time, text = rest2:match("([^:]+)%s*:%s*(.+)")
+                    if time and text then
+                        contact = contact:gsub("^%s+", ""):gsub("%s+$", "")
+                        time    = time:gsub("^%s+", ""):gsub("%s+$", "")
+                        text = text:gsub('^%s*"(.*)"%s*$', "%1")
+                                   :gsub("^%s*'(.*)'%s*$", "%1")
+                        table.insert(pending_commands, {
+                            type    = "reply_old_sms",
+                            contact = contact,
+                            text    = text,
+                            opts    = { time = time },
+                        })
+                    end
+                end
             elseif op == "reply" and rest then
                 -- # sms:reply:contact:текст  — ГГ отвечает на сообщение.
                 -- Автоматически ставит sms_<contact>_replied = true.
@@ -390,9 +409,34 @@ local function apply_tags(tags, trailing)
                     })
                 end
             end
+        elseif key == "bank" and value and not suppress_effects then
+            -- # bank:set:272229
+            -- # bank:charge:980:Кофейня «петля»
+            -- Баланс и текст SMS банка считает Lua runtime, не Ink.
+            local op, rest = value:match("([%w_]+)%s*:%s*(.+)")
+            if op == "set" and rest then
+                local amount = tonumber((rest:gsub("%s+", "")))
+                if amount then
+                    table.insert(pending_commands, { type = "bank_set_balance", amount = amount })
+                end
+            elseif op == "charge" and rest then
+                local amount_raw, merchant = rest:match("([^:]+)%s*:%s*(.+)")
+                local amount = amount_raw and tonumber((amount_raw:gsub("%s+", ""))) or nil
+                if amount and merchant then
+                    merchant = merchant:gsub('^%s*"(.*)"%s*$', "%1")
+                                       :gsub("^%s*'(.*)'%s*$", "%1")
+                                       :gsub("^%s+", ""):gsub("%s+$", "")
+                    table.insert(pending_commands, {
+                        type = "bank_charge",
+                        amount = amount,
+                        merchant = merchant,
+                    })
+                end
+            end
         elseif key == "msg" and value and not suppress_effects then
             -- # msg:add:<chat>:<text> | # msg:add_old:<chat>:<time>:<text>
-            -- # msg:reply:<chat>:<text> | # msg:read:<chat>
+            -- # msg:reply:<chat>:<text> | # msg:reply_old:<chat>:<time>:<text>
+            -- # msg:read:<chat>
             -- Параллельный канал к sms — отдельный storage в game_state.
             local op, rest = value:match("([%w_]+)%s*:%s*(.+)")
             if op == "add" and rest then
@@ -418,6 +462,25 @@ local function apply_tags(tags, trailing)
                             chat = chat,
                             text = text,
                             opts = { unread = false, time = time },
+                        })
+                    end
+                end
+            elseif op == "reply_old" and rest then
+                -- # msg:reply_old:CHAT:TIME:TEXT — старое исходящее сообщение.
+                -- Не ставит msg_<chat>_replied и не очищает prompt.
+                local chat, rest2 = rest:match("([^:]+)%s*:%s*(.+)")
+                if chat and rest2 then
+                    local time, text = rest2:match("([^:]+)%s*:%s*(.+)")
+                    if time and text then
+                        chat = chat:gsub("^%s+", ""):gsub("%s+$", "")
+                        time = time:gsub("^%s+", ""):gsub("%s+$", "")
+                        text = text:gsub('^%s*"(.*)"%s*$', "%1")
+                                   :gsub("^%s*'(.*)'%s*$", "%1")
+                        table.insert(pending_commands, {
+                            type = "reply_old_msg",
+                            chat = chat,
+                            text = text,
+                            opts = { time = time },
                         })
                     end
                 end

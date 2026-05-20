@@ -93,8 +93,32 @@
 ~ phone_history_seeded = true
 # set_flag:phone_history_seeded=true
 
+# sms:add_old:bank:чт:Карта *4821: списание 1 180 ₽. Такси. Баланс 284 360 ₽.
+# sms:add_old:bank:пт:Карта *4821: списание 7 430 ₽. Маркет у дома. Баланс 276 930 ₽.
+# sms:add_old:bank:сб:Карта *4821: списание 740 ₽. Кофейня «петля». Баланс 276 190 ₽.
+# sms:add_old:bank:сб:Карта *4821: списание 3 890 ₽. Ресторан. Баланс 272 300 ₽.
+# sms:add_old:bank:вчера:Карта *4821: списание 71 ₽. Метро. Баланс 272 229 ₽.
+# bank:set:272229
+# sms:add_old:delivery:ср:Самокат: заказ №51988 доставлен. Пакет оставлен у консьержа.
+# sms:add_old:delivery:пт:Ozon: заказ №18406 готов к выдаче до 21:00. Постамат у метро.
+# sms:add_old:delivery:пт:Заказ №74021 оставлен у двери. Курьер завершил доставку.
+# sms:add_old:upravdom:пн:Плановая проверка пожарной сигнализации 23 апр. Возможны короткие звуковые сигналы.
+# sms:add_old:upravdom:ср:Лифт №1 временно работает с задержками. Сервисная служба вызвана.
+# sms:add_old:upravdom:чт:Отключение горячей воды 24–26 апр. Ремонт стояка в подъезде №2.
+# sms:add_old:taxi:вт:Поездка завершена. 980 ₽. Дом — офис. Спасибо, что выбрали ЯКС.
+# sms:add_old:taxi:чт:Поездка завершена. 1 180 ₽. Оцените водителя в приложении.
+# sms:add_old:taxi:сб:Поездка завершена. 760 ₽. Кофейня «петля» — дом.
 -> phone_sms_seed_sunday_morning ->
 -> phone_msg_seed_sunday_morning ->
+# sms:add_old:prod:вчера:Прод упал. Тех. долг догнал. Подними, пожалуйста.
+
+# msg:add_old:friends:пт:Доброе утро, выжившие. Кто сегодня не отменяет планы в последний момент?
+# msg:add_old:friends:пт:Я могу отменить заранее, чтобы не рушить традицию.
+# msg:add_old:work_team:пт:Планёрку в понедельник сдвинули на 10:40. Календарь говорит, что это забота.
+# msg:add_old:work_team:вчера:По завтрашнему кейсу проверьте входящие перед автоответом.
+# msg:add_old:prod_bot:вчера:Новый кейс создан. Часть полей ожидает подтверждения.
+# msg:add_old:neighbor_chat:пн:У кого опять будильник играет с 07:00?
+# msg:add_old:city_bot:вчера:Солнечно. Летний день без осадков, будто специально для прогулки.
 
 # quest:start:find_phone
 # explore:apartment_bedroom
@@ -339,11 +363,23 @@
 # set_flag:phone_active=true
 # set_flag:phone_taken=true
 
-// Сегодняшние свежие SMS-беспокойства поверх истории живут в 92_phone_sms.ink.
--> phone_sms_take_phone_sunday_morning ->
+// Сегодняшние свежие беспокойства поверх истории.
+// mama — обычная утренняя забота.
+// prod — пятничный кейс догнал в воскресенье.
+// unknown — атмосферный hook, hot+tag (см. # sms:tag ниже).
+# sms:add:mama:Не забудь позавтракать. И не сиди весь день дома.
+# sms:read:mama
+# sms:add:prod:Напоминание: в понедельник до 11:00 подтвердите статус по кейсу 017.
+# sms:read:prod
+# sms:add_hot:unknown:Не торопись.
+# sms:add_hot:unknown:Сначала прочитай.
+# sms:tag:unknown:hot:сигнал
+# sms:tag:prod:amber:офис
 
-// Свежие в Messenger (пара штук, не лавина) живут в 93_phone_messenger.ink.
--> phone_msg_take_phone_sunday_morning ->
+// Свежие в Messenger (пара штук, не лавина):
+# msg:add:friends:Артём опять онлайн в 07:13. Подозрительно.
+# msg:add:friends:Мила тоже. Вы там синхронизировались или что?
+# msg:add:calendar_bot:Сегодня: встреча без названия. Место: не указано.
 
 # quest:done:find_phone
 # quest:start:make_coffee
@@ -496,7 +532,20 @@
     # set_flag:sunday_messenger_invite_sent=true
     ~ sunday_morning_routine_seen = true
     ~ sunday_messenger_invite_sent = true
-    -> phone_msg_sunday_invite_after_coffee ->
+    {mc_gender == "female":
+        # msg:add:artem:Ты сегодня вообще живая?
+        # msg:add:artem:Я уже второй кофе пью.
+        # msg:add:artem:Выберемся куда-нибудь, пока день не стал совсем домашним?
+    - else:
+        # msg:add:mila:Ты сегодня вообще живой?
+        # msg:add:mila:Я уже второй кофе пью.
+        # msg:add:mila:Выберемся куда-нибудь, пока день не стал совсем домашним?
+    }
+    {mc_gender == "female":
+        # msg:need_reply:artem
+    - else:
+        # msg:need_reply:mila
+    }
     # quest:start:reply_npc
     # hud:hint:phone
 - else:
@@ -705,7 +754,13 @@
 Телефон вибрирует уже без тревоги — короткое сообщение от {npc_name_gen}.
 
 # sfx:phone_notify
--> phone_msg_sunday_evening_home_thanks ->
+{mc_gender == "female":
+    # msg:add:artem:Спасибо за сегодня. Было хорошо.
+    # msg:read:artem
+- else:
+    # msg:add:mila:Спасибо за сегодня. Было хорошо.
+    # msg:read:mila
+}
 
 # speaker:npc
 Спасибо за сегодня. Было хорошо.
@@ -720,7 +775,11 @@
     # speaker:mc
     Спасибо, что продолжили день. Я рад{mc_gender == "female":а|}, что мы встретились.
 
-    -> phone_msg_sunday_evening_reply_warm ->
+    {mc_gender == "female":
+        # msg:reply:artem:Спасибо, что продолжили день. Я рада, что мы встретились.
+    - else:
+        # msg:reply:mila:Спасибо, что продолжили день. Я рад, что мы встретились.
+    }
 
     # speaker:none
     Ответ уходит сразу. В нём нет ничего громкого, но есть точность.
@@ -731,7 +790,11 @@
     # speaker:mc
     Да. Хороший день получился.
 
-    -> phone_msg_sunday_evening_reply_calm ->
+    {mc_gender == "female":
+        # msg:reply:artem:Да. Хороший день получился.
+    - else:
+        # msg:reply:mila:Да. Хороший день получился.
+    }
 
     # speaker:none
     Простые слова подходят лучше длинных. Воскресенье не требует отчёта, чтобы быть настоящим.
@@ -1221,8 +1284,32 @@
     В рабочем чате короткая строка: вчерашний кейс вернулся на ручную проверку. Не авария. Не катастрофа. Просто последствие, аккуратно оформленное в интерфейсе.
 }
 
-// SMS от NPC живёт в 92_phone_sms.ink; здесь только событие телефона.
--> phone_sms_tuesday_case_followup ->
+// SMS от NPC — эмоционально нагруженное, помечаем как hot.
+// Pin-тег "amber:важное" на чат: это рабочее последствие, не "сигнал" (hot
+// зарезервирован за unknown). NPC-чат теперь визуально выделен в списке.
+{mc_gender == "female":
+    {
+    - office_clarification_requested:
+        # sms:add_hot:artem:Ты видела рабочий чат? Твой запрос по кейсу всплыл. Нам лучше поговорить до вечера.
+    - office_auto_solution_blocked:
+        # sms:add_hot:artem:Ты видела рабочий чат? Заблокированный кейс всплыл. Нам лучше поговорить до вечера.
+    - else:
+        # sms:add_hot:artem:Ты видела рабочий чат? Вчерашний кейс всплыл. Нам лучше поговорить до вечера.
+    }
+    # sms:tag:artem:amber:важное
+    # sms:read:artem
+- else:
+    {
+    - office_clarification_requested:
+        # sms:add_hot:mila:Ты видел рабочий чат? Твой запрос по кейсу всплыл. Нам лучше поговорить до вечера.
+    - office_auto_solution_blocked:
+        # sms:add_hot:mila:Ты видел рабочий чат? Заблокированный кейс всплыл. Нам лучше поговорить до вечера.
+    - else:
+        # sms:add_hot:mila:Ты видел рабочий чат? Вчерашний кейс всплыл. Нам лучше поговорить до вечера.
+    }
+    # sms:tag:mila:amber:важное
+    # sms:read:mila
+}
 
 {
 - office_clarification_requested:

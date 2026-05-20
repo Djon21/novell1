@@ -221,6 +221,45 @@ viewpoint_sunday_route_aware.ink
 
 Точные имена `poi_id` надо брать из текущих файлов телефона/карты.
 
+### SMS и Messenger
+
+Канон проекта: **тексты SMS/Messenger не пишутся прямо в сценовых `.ink` файлах**. Сцена вызывает телефонное событие через Ink tunnel, а сами `# sms:*`, `# msg:*`, `# bank:*` лежат в телефонных файлах:
+
+- SMS и банк: `main/story/chapters/92_phone_sms.ink`
+- Messenger: `main/story/chapters/93_phone_messenger.ink`
+
+В сцене:
+
+```ink
+-> phone_sms_seed_sunday_morning ->
+-> phone_msg_seed_sunday_morning ->
+```
+
+В телефонном файле:
+
+```ink
+=== phone_sms_seed_sunday_morning ===
+# sms:add_old:bank:вчера:Карта *4821: списание 349 ₽.
+# sms:reply_old:mama:пн:Да, всё нормально. Просто устал.
+# sms:add:delivery:Курьер будет у подъезда через 12 минут.
+->->
+
+=== phone_msg_seed_sunday_morning ===
+# msg:add_old:metro:пн:Синяя ветка работает с увеличенными интервалами.
+# msg:reply_old:friends:пт:Я могу отменить заранее, чтобы не рушить традицию.
+->->
+```
+
+Если задача добавляет или меняет текст сообщения, правь телефонный event-knot, а в сцене оставляй только вызов `-> phone_sms_* ->` / `-> phone_msg_* ->`. Это нужно, чтобы все телефонные тексты искались в одном месте, а сцены не разрастались техническими тегами.
+
+Read-only лента без ответа игрока не должна получать `sms_thread_<contact>` или `msg_thread_<chat>`. Для банка, доставки, такси, управдома, метро, маркета, клиники, каналов, ботов и старой истории используй только message history внутри `phone_sms_*` / `phone_msg_*` events.
+
+Для старых исходящих сообщений используй только `sms:reply_old` / `msg:reply_old`. Не используй обычные `sms:reply` / `msg:reply` в seed-истории: они ставят `*_replied` и могут заблокировать будущий интерактивный ответ.
+
+Создавай `sms_thread_<contact>` / `msg_thread_<chat>` только если игрок реально должен написать или выбрать ответ. `sms:read` и `msg:read` снимают unread-состояние, но не делают чат read-only.
+
+Для Messenger-инициативы из конкретной сцены используй `# msg:prompt:CHAT:KNOT[:LABEL]`, а не общий `msg_thread_<chat>`. Prompt — это временное разрешение написать первым, и оно снимается через `# msg:reply` или `# msg:prompt:CHAT:clear`.
+
 ## Хотспоты
 
 Обычные хотспоты описываются в `main/data/scenes/*.lua`, а не руками в GUI.

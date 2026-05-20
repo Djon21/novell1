@@ -28,6 +28,10 @@ VAR loop_awareness = 0
 VAR completed_iterations = 0
 VAR false_endings_count = 0
 
+// Bank / purchase state lives in Lua runtime.
+// Ink only sends tags like `# bank:set:272229` and
+// `# bank:charge:980:Кофейня «петля»`.
+
 VAR TRUST = 0
 VAR INSIGHT = 0
 VAR SYNC = 0

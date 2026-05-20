@@ -41,7 +41,9 @@ Source of truth в коде: `main/scripts/dialogue_manager_ink.lua`, функц
 | `sms:add:CONTACT:TEXT` | `# sms:add:mila:Есть планы?` | Добавляет входящее SMS. |
 | `sms:add_hot:CONTACT:TEXT` | `# sms:add_hot:unknown:если помнишь, ответь.` | То же что `sms:add`, но сообщение в треде подсвечивается hot-стилем (красно-розовый акцент, выделенный border). Для напряжённых / тревожных входящих. |
 | `sms:add_old:CONTACT:TIME:TEXT` | `# sms:add_old:mama:пн:Не забудь поесть.` | **Pre-existing** сообщение — уже прочитанное, с готовым временем (`пн`, `вчера`, `03:17` и т.п.). Не бампит unread-счётчик. Для seed телефонной истории на старте игры, чтобы лента не выглядела пустой. |
+| `sms:reply_old:CONTACT:TIME:TEXT` | `# sms:reply_old:mama:пн:Да, всё нормально.` | Старое исходящее SMS от героя для seed-истории. Не бампит unread и **не** ставит `sms_<contact>_replied`. |
 | `msg:add_old:CHAT:TIME:TEXT` | `# msg:add_old:work_team:пн:Планёрка перенесена.` | То же для Messenger. |
+| `msg:reply_old:CHAT:TIME:TEXT` | `# msg:reply_old:friends:пт:Я могу отменить заранее.` | Старое исходящее сообщение героя в Messenger. Не бампит unread и **не** ставит `msg_<chat>_replied`. |
 | `sms:reply:CONTACT:TEXT` | `# sms:reply:mila:Хорошо.` | Добавляет исходящее SMS от героя и ставит авто-флаг ответа. |
 | `sms:read:CONTACT` | `# sms:read:mila` | Помечает SMS-чат прочитанным. |
 | `sms:tag:CONTACT:TONE:LABEL` | `# sms:tag:unknown:hot:сигнал` | Ставит pin-тег на SMS-чат (цветной значок справа в списке). TONE ∈ `hot`, `amber`, `danger`, `warn`. LABEL — короткая подпись (выводится UPPERCASE, обрезается до ~8 символов). |
@@ -59,9 +61,44 @@ Source of truth в коде: `main/scripts/dialogue_manager_ink.lua`, функц
 
 Если текст содержит двоеточие, лучше обернуть его в кавычки или проверить результат после сборки.
 
+**Где хранить тексты сообщений:**
+
+В проекте принят централизованный формат: сценовые `.ink` файлы не должны держать тексты SMS/Messenger напрямую. Сцены вызывают телефонные события через Ink tunnel, а сами теги сообщений лежат в телефонных файлах.
+
+```ink
+// В сцене:
+-> phone_sms_seed_sunday_morning ->
+-> phone_msg_seed_sunday_morning ->
+
+// В 92_phone_sms.ink:
+=== phone_sms_seed_sunday_morning ===
+# sms:add_old:mama:пн:Не забудь поесть.
+# sms:reply_old:mama:пн:Я поел.
+->->
+
+// В 93_phone_messenger.ink:
+=== phone_msg_seed_sunday_morning ===
+# msg:add_old:friends:пт:Доброе утро, выжившие.
+->->
+```
+
+`92_phone_sms.ink` хранит `sms:*` и `bank:*`, потому что банковская система создаёт SMS. `93_phone_messenger.ink` хранит `msg:*`, включая `msg:prompt` и `msg:need_reply`. Если нужен новый текст сообщения, добавляй или меняй `phone_sms_*` / `phone_msg_*` event-knot, а в сцене оставляй только вызов.
+
 **Pin-теги:** хранятся в runtime-стейте (sms_state / messenger_state), сериализуются в save, переживают перезагрузку. Чтобы убрать тег — `# sms:tag:CONTACT:clear` / `# msg:tag:CHAT:clear`. Аватар в списке тоже подкрашивается под tone: `hot` → розовый/magenta, `amber`/`warn` → жёлтый, `danger` → красно-розовый, `need_reply` → розовый/magenta (тот же что у `hot`, с pingpong-анимацией alpha).
 
 **`need_reply` vs обычный `tag`:** `need_reply` — это семантический пин «без ответа сюжет не двинется». Он автоматически снимается при `# sms:reply` / `# msg:reply` в этот чат, label по умолчанию `ОТВЕТЬ`. Обычные `tag` — это произвольный маркер (`hot:сигнал`, `amber:напомни`), руками снимается через `:clear`. Если игроку обязательно нужно ответить — используй `need_reply`, не `tag`.
+
+**Read-only SMS / Messenger-ленты:**
+
+Если контакт нужен только как сервисная или старая лента без ответа игрока, **не создавай** `sms_thread_<contact>` / `msg_thread_<chat>`. Достаточно добавлять историю через `# sms:add_old:...`, `# sms:add:...`, `# msg:add_old:...`, `# msg:add:...`.
+
+Наличие thread-knot'а — это авторский сигнал UI, что input/SEND может открыть интерактивный Ink-ответ. Даже пустой `=== sms_thread_delivery === -> DONE` или `=== msg_thread_metro === -> DONE` может сделать чат похожим на интерактивный, если остальные runtime-условия позволяют.
+
+`sms:read` и `msg:read` только снимают unread-состояние. Они **не** делают чат read-only.
+
+Для SMS есть дополнительный runtime-предохранитель в `phone_contacts.lua`: `readonly = true` блокирует SEND даже при существующем `sms_thread_*`. Но для новых сервисных контактов всё равно держи канон проще: read-only = message history без thread-knot'а. Банк, доставка, такси, управдом, метро, маркет, клиника и похожие сервисы не должны получать `sms_thread_*`, если игрок реально не должен им отвечать.
+
+Для Messenger `channel`, `bot`, `readonly` — это в основном presentation metadata. Если существует `msg_thread_<chat>` или активен `# msg:prompt:CHAT:KNOT`, input/SEND может стать интерактивным. Для каналов, ботов и старых лент не создавай `msg_thread_*` и не ставь `msg:prompt`.
 
 **Открытая инициатива (`msg:prompt`):**
 
@@ -206,6 +243,15 @@ Source of truth в коде: `main/scripts/dialogue_manager_ink.lua`, функц
 | `call:seen` | `# call:seen` | Сбрасывает счётчик пропущенных. |
 | `clue:add:ID:LABEL` | `# clue:add:repeat:Повтор сигнала` | Добавляет улику. |
 
+## Банк и деньги
+
+| Тег | Пример | Что делает |
+|---|---|---|
+| `bank:set:AMOUNT` | `# bank:set:272229` | Выставляет текущий баланс банковской карты в runtime. Используй при seed старой истории телефона. |
+| `bank:charge:AMOUNT:MERCHANT` | `# bank:charge:980:Кофейня «петля»` | Списывает сумму, пересчитывает баланс и автоматически добавляет SMS от `bank`. |
+
+Не пиши банковские SMS со статичным остатком вручную для новых покупок. Ink должен знать только сумму и место покупки, а баланс считает Lua-система банка.
+
 ## Терминал
 
 | Тег | Пример | Что делает |
@@ -348,4 +394,3 @@ Auto-hide при смене группы сцен — встроенное по�
 # phone:map
 -> DONE
 ```
-

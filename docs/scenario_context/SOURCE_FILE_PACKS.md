@@ -197,6 +197,13 @@ Ink-тег `# scene_char:show:GROUP:KEY` — описан в `INK_TAG_REFERENCE.
 - `docs/guides/HUB_SYSTEM.md` (если затронуты переходы exploration ↔ phone)
 - `92_phone_sms.ink` или `93_phone_messenger.ink` (если меняется текст)
 
+Канон авторинга: сценовые `.ink` файлы вызывают телефонные события через tunnel (`-> phone_sms_* ->`, `-> phone_msg_* ->`), а сами тексты сообщений хранятся централизованно:
+
+- `92_phone_sms.ink` — все `sms:*` и `bank:*`
+- `93_phone_messenger.ink` — все `msg:*`
+
+Если задача просит добавить SMS/Messenger-текст в конкретной сцене, всё равно нужен соответствующий телефонный файл. Сценовый файл нужен только чтобы вставить или проверить вызов event-knot'а.
+
 Если меняется логика или есть баг поведения, дополнительно:
 
 - `main/scripts/dialogue_manager_ink.lua`, если вход идёт через Ink-теги;

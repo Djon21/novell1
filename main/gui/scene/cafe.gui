@@ -1,0 +1,22 @@
+textures {
+  name: "cafe_test"
+  texture: "/main/gui/scene/cafe_test.atlas"
+}
+nodes {
+  type: TYPE_BOX
+  texture: "cafe_test/fon"
+  id: "fon"
+  pivot: PIVOT_SW
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  type: TYPE_BOX
+  texture: "cafe_test/table"
+  id: "fon1"
+  pivot: PIVOT_SW
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT

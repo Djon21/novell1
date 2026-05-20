@@ -109,7 +109,7 @@
     Заказ оказывается на подносе быстрее, чем вы успеваете подготовиться к следующей паузе. Две чашки, две ложки, маленький чек, который выглядит серьёзнее разговора.
     # set_flag:cafe_order_done=true
     # set_flag:cafe_order_coffee=true
-    -> phone_bank_charge_cafe_two_coffee ->
+    # bank:charge:980:Кофейня «петля»
     ~ TRUST = TRUST + 1
     # goto_scene:cafe_corner
     -> DONE
@@ -125,7 +125,7 @@
     Вы выбираете маленькую тарталетку на двоих. Это смешно практично и почему-то менее неловко, чем отдельные тарелки.
     # set_flag:cafe_order_done=true
     # set_flag:cafe_order_sweet=true
-    -> phone_bank_charge_cafe_coffee_sweet ->
+    # bank:charge:1420:Кофейня «петля»
     ~ SYNC = SYNC + 1
     # goto_scene:cafe_corner
     -> DONE
@@ -144,7 +144,7 @@
     Ты не подменяешь внимание готовым решением. И от этого обычный заказ внезапно становится первым нормальным совместным действием.
     # set_flag:cafe_order_done=true
     # set_flag:cafe_order_tea=true
-    -> phone_bank_charge_cafe_tea_small ->
+    # bank:charge:1160:Кофейня «петля»
     ~ TRUST = TRUST + 1
     # goto_scene:cafe_corner
     -> DONE

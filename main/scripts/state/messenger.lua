@@ -193,6 +193,27 @@ function M.reply(chat_id, text)
     return true
 end
 
+-- Старое исходящее сообщение для seed-истории. Не ставит msg_<chat>_replied,
+-- не снимает need_reply и не очищает active prompt.
+function M.reply_old(chat_id, text, opts)
+    if not chat_id or chat_id == "" then return false end
+    local seq = next_seq()
+    local time = nil
+    if type(opts) == "table" and opts.time then
+        time = tostring(opts.time)
+    end
+    _msg[chat_id] = _msg[chat_id] or {}
+    table.insert(_msg[chat_id], {
+        text      = tostring(text or ""),
+        unread    = false,
+        direction = "out",
+        time      = time or default_time(seq),
+        seq       = seq,
+    })
+    notify_cb()
+    return true
+end
+
 function M.mark_read(chat_id)
     local chat = _msg[chat_id]
     if not chat then return end

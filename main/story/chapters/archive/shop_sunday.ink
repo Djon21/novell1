@@ -69,7 +69,7 @@
     # speaker:none
     Холод пластика быстро переходит в ладонь. Две бутылки выглядят смешно серьёзно — как будто заботу правда можно просто снять с полки. Одна бутылка оказывается в сумке: достаточно лёгкая, чтобы забыть о ней, и достаточно полезная, чтобы потом вспомнить.
     # add_item:water_bottle
-    -> phone_bank_charge_shop_240 ->
+    # bank:charge:240:Магазин 24/7
     # set_flag:sunday_shop_bought_drink_for_npc=true
     # set_flag:sunday_shop_done=true
     ~ sunday_shop_bought_drink_for_npc = true
@@ -86,7 +86,7 @@
 
     # speaker:none
     {npc_name} выбирает не сразу: батончик, мармелад, снова батончик. Решение маленькое, но пауза получается настоящей.
-    -> phone_bank_charge_shop_420 ->
+    # bank:charge:420:Магазин 24/7
     # set_flag:sunday_shop_bought_snack=true
     # set_flag:sunday_shop_done=true
     ~ sunday_shop_bought_snack = true
@@ -103,7 +103,7 @@
 
     # speaker:none
     В итоге в пакете оказывается маленькая упаковка мармелада и чек, который выглядит серьёзнее покупки. Ответ звучит легко, но в нём есть маленькая правда. Ты её не комментируешь — просто слышишь.
-    -> phone_bank_charge_shop_360 ->
+    # bank:charge:360:Магазин 24/7
     # set_flag:sunday_shop_done=true
     ~ sunday_shop_done = true
     ~ TRUST = TRUST + 1
@@ -248,7 +248,7 @@
     # speaker:none
     Бутылка холодит ладонь и сразу делает подготовку чуть менее абстрактной.
     # add_item:water_bottle
-    -> phone_bank_charge_shop_120 ->
+    # bank:charge:120:Магазин 24/7
     # set_flag:sunday_gift_bought=true
     # set_flag:sunday_gift_water_bottle=true
     ~ sunday_gift_bought = true
@@ -260,7 +260,7 @@
     # speaker:mc
     Холодный чай звучит так, будто я хотя бы попытал{mc_gender == "female":ась|ся} угадать настроение.
     # add_item:gift_iced_tea
-    -> phone_bank_charge_shop_190 ->
+    # bank:charge:190:Магазин 24/7
     # set_flag:sunday_gift_bought=true
     # set_flag:sunday_gift_iced_tea=true
     ~ sunday_gift_bought = true
@@ -272,7 +272,7 @@
     # speaker:mc
     Слишком яркая. Может, это и хорошо.
     # add_item:gift_berry_soda
-    -> phone_bank_charge_shop_160 ->
+    # bank:charge:160:Магазин 24/7
     # set_flag:sunday_gift_bought=true
     # set_flag:sunday_gift_berry_soda=true
     ~ sunday_gift_bought = true
@@ -284,7 +284,7 @@
     # speaker:mc
     Кофе — подарок человеку, которому я пока не знаю, что сказать.
     # add_item:gift_coffee_can
-    -> phone_bank_charge_shop_230 ->
+    # bank:charge:230:Магазин 24/7
     # set_flag:sunday_gift_bought=true
     # set_flag:sunday_gift_coffee_can=true
     ~ sunday_gift_bought = true
@@ -296,7 +296,7 @@
     # speaker:mc
     Это либо забота, либо угроза провести вместе ещё восемь часов.
     # add_item:gift_energy_drink
-    -> phone_bank_charge_shop_210 ->
+    # bank:charge:210:Магазин 24/7
     # set_flag:sunday_gift_bought=true
     # set_flag:sunday_gift_energy_drink=true
     ~ sunday_gift_bought = true
@@ -324,7 +324,7 @@
     # speaker:none
     Холод пластика быстро переходит в ладонь. Две бутылки выглядят смешно серьёзно — как будто заботу правда можно просто снять с полки.
     # add_item:water_bottle
-    -> phone_bank_charge_shop_240 ->
+    # bank:charge:240:Магазин 24/7
     # set_flag:sunday_shop_bought_drink_for_npc=true
     # set_flag:sunday_shop_done=true
     ~ sunday_shop_bought_drink_for_npc = true
@@ -338,7 +338,7 @@
 
     # speaker:npc
     Уважаю напитки с биографией.
-    -> phone_bank_charge_shop_380 ->
+    # bank:charge:380:Магазин 24/7
     # set_flag:sunday_shop_bought_drink_for_npc=true
     # set_flag:sunday_shop_done=true
     ~ sunday_shop_bought_drink_for_npc = true
@@ -373,7 +373,7 @@
     # speaker:mc
     Крекеры. Не романтично, зато можно разделить без церемонии.
     # add_item:gift_crackers
-    -> phone_bank_charge_shop_170 ->
+    # bank:charge:170:Магазин 24/7
     # set_flag:sunday_gift_bought=true
     # set_flag:sunday_gift_crackers=true
     ~ sunday_gift_bought = true
@@ -385,7 +385,7 @@
     # speaker:mc
     Чипсы — это уже смелее. И громче.
     # add_item:gift_chips
-    -> phone_bank_charge_shop_220 ->
+    # bank:charge:220:Магазин 24/7
     # set_flag:sunday_gift_bought=true
     # set_flag:sunday_gift_chips=true
     ~ sunday_gift_bought = true
@@ -397,7 +397,7 @@
     # speaker:mc
     Орешки выглядят почти взросло. Значит, подозрительно.
     # add_item:gift_nuts
-    -> phone_bank_charge_shop_360 ->
+    # bank:charge:360:Магазин 24/7
     # set_flag:sunday_gift_bought=true
     # set_flag:sunday_gift_nuts=true
     ~ sunday_gift_bought = true
@@ -409,7 +409,7 @@
     # speaker:mc
     Тёмный шоколад. Нормальный выбор. Может, даже слишком нормальный.
     # add_item:gift_dark_chocolate
-    -> phone_bank_charge_shop_320 ->
+    # bank:charge:320:Магазин 24/7
     # set_flag:sunday_gift_bought=true
     # set_flag:sunday_gift_dark_chocolate=true
     ~ sunday_gift_bought = true
@@ -421,7 +421,7 @@
     # speaker:mc
     Молочный шоколад — это честная попытка быть приятным{mc_gender == "female":ой|ым}.
     # add_item:gift_milk_chocolate
-    -> phone_bank_charge_shop_240 ->
+    # bank:charge:240:Магазин 24/7
     # set_flag:sunday_gift_bought=true
     # set_flag:sunday_gift_milk_chocolate=true
     ~ sunday_gift_bought = true
@@ -433,7 +433,7 @@
     # speaker:mc
     Вафля — компактная форма оптимизма.
     # add_item:gift_waffle_bar
-    -> phone_bank_charge_shop_95 ->
+    # bank:charge:95:Магазин 24/7
     # set_flag:sunday_gift_bought=true
     # set_flag:sunday_gift_waffle_bar=true
     ~ sunday_gift_bought = true
@@ -460,7 +460,7 @@
 
     # speaker:none
     {npc_name} выбирает не сразу: батончик, мармелад, снова батончик. Решение маленькое, но пауза получается настоящей.
-    -> phone_bank_charge_shop_420 ->
+    # bank:charge:420:Магазин 24/7
     # set_flag:sunday_shop_bought_snack=true
     # set_flag:sunday_shop_done=true
     ~ sunday_shop_bought_snack = true
@@ -477,7 +477,7 @@
 
     # speaker:none
     В итоге в пакете оказывается маленькая упаковка мармелада и чек, который выглядит серьёзнее покупки. Ответ звучит легко, но в нём есть маленькая правда. Ты её не комментируешь — просто слышишь.
-    -> phone_bank_charge_shop_360 ->
+    # bank:charge:360:Магазин 24/7
     # set_flag:sunday_shop_done=true
     ~ sunday_shop_done = true
     ~ TRUST = TRUST + 1
@@ -586,7 +586,7 @@
     # speaker:mc
     Это не красиво. Зато понятно. Способ не потеряться — тоже подарок.
     # add_item:gift_keychain_flashlight
-    -> phone_bank_charge_shop_490 ->
+    # bank:charge:490:Магазин 24/7
     # set_flag:sunday_gift_bought=true
     # set_flag:sunday_gift_keychain_flashlight=true
     ~ sunday_gift_bought = true
@@ -662,7 +662,7 @@
     # speaker:mc
     Если это сработает, значит у нас с {npc_name_ins} очень специфическое будущее.
     # add_item:gift_small_broom
-    -> phone_bank_charge_shop_350 ->
+    # bank:charge:350:Магазин 24/7
     # set_flag:sunday_gift_bought=true
     # set_flag:sunday_gift_small_broom=true
     ~ sunday_gift_bought = true
@@ -735,7 +735,7 @@
     # speaker:mc
     Практично. Слишком практично. Но вдруг это и есть мой стиль.
     # add_item:gift_wet_wipes
-    -> phone_bank_charge_shop_180 ->
+    # bank:charge:180:Магазин 24/7
     # set_flag:sunday_gift_bought=true
     # set_flag:sunday_gift_wet_wipes=true
     ~ sunday_gift_bought = true
@@ -747,7 +747,7 @@
     # speaker:mc
     На случай крошек, неловкости и слишком оптимистичных планов.
     # add_item:gift_paper_napkins
-    -> phone_bank_charge_shop_140 ->
+    # bank:charge:140:Магазин 24/7
     # set_flag:sunday_gift_bought=true
     # set_flag:sunday_gift_paper_napkins=true
     ~ sunday_gift_bought = true

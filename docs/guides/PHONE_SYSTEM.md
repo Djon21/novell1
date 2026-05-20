@@ -195,22 +195,71 @@ end
 
 ## 5. Поток сообщений: SMS → открытие переписки
 
+### Где хранить тексты
+
+Канон проекта: тексты SMS/Messenger централизованы в телефонных Ink-файлах.
+
+- `main/story/chapters/92_phone_sms.ink` — все `sms:*` и `bank:*`.
+- `main/story/chapters/93_phone_messenger.ink` — все `msg:*`.
+
+Сценовые `.ink` файлы не должны держать текст сообщений напрямую. Они вызывают телефонные event-knot'ы через Ink tunnel:
+
+```ink
+// В сцене
+-> phone_sms_seed_sunday_morning ->
+-> phone_msg_seed_sunday_morning ->
+
+// В 92_phone_sms.ink
+=== phone_sms_seed_sunday_morning ===
+# sms:add_old:mama:пн:Не забудь поесть.
+# sms:reply_old:mama:пн:Я поел.
+->->
+
+// В 93_phone_messenger.ink
+=== phone_msg_seed_sunday_morning ===
+# msg:add_old:friends:пт:Доброе утро, выжившие.
+->->
+```
+
+Так сцены остаются чистыми, а все телефонные тексты ищутся в одном месте.
+
 Когда игрок тапает на строку переписки в SMS-приложении:
 
 ```
-phone_sms.gui_script.on_input (тап на msg1_bg..msg4_bg)
+phone_sms.gui_script.open_thread(contact_id)
+  ├─ открывает inline bubble-view внутри телефона
+  ├─ gs.mark_sms_read(contact_id)   -- ставит sms_<contact>_read=true
+  └─ если sms_can_reply(contact_id):
+       поле input и кнопка SEND начинают пульсировать
+
+Тап игрока на input/SEND в открытом SMS-thread:
   └─ msg.post("#ui_manager_v2", "sms_open_contact", { contact_id = "mila" })
 
 message_flow.lua handles "sms_open_contact"
-  ├─ gs.mark_sms_read(contact_id)   -- ставит sms_<contact>_read=true
-  ├─ close_phone(self)              -- закрывает телефон
-  └─ run_side_dialogue_knot("sms_thread_mila")   -- прыгает в Ink
-       -- knot должен лежать в chapters/*.ink
-       -- завершается через # return_to_scene -> вернуться в текущую сцену
+  ├─ sms_<contact>_replied != true
+  ├─ dm.has_knot("sms_thread_<contact>" или contact.ink_thread) = true
+  │    └─ close_phone + run_side_dialogue_knot(...)
+  └─ иначе игнорируется
 ```
 
 **Ink-knot для переписки** (`sms_thread_<contact_id>`) показывает сообщения,
 предлагает варианты ответа через choices и выполняет `# sms:reply:contact:text`.
+
+Для старой истории телефона есть отдельный исходящий seed-тег:
+
+```ink
+# sms:reply_old:mama:пн:Да, всё нормально. Просто устал.
+```
+
+Он добавляет bubble от героя с указанным временем, но не ставит `sms_<contact>_replied`. Обычный `# sms:reply` в seed-истории использовать нельзя: он пометит контакт как уже отвеченный и может выключить будущий SEND.
+
+`sms_can_reply(contact_id)` возвращает true только если выполнены все условия:
+
+1. Есть `sms_thread_<contact>` или `ink_thread` для контакта в `phone_contacts.lua`.
+2. Игрок ещё не отвечал (`sms_<contact>_replied != true`).
+3. Контакт не помечен `readonly = true` в `phone_contacts.lua`.
+
+Для read-only SMS-лент без ответа игрока не создавай `sms_thread_<contact>`. Достаточно добавлять сообщения через `# sms:add_old:...` и `# sms:add:...`. `# sms:read:<contact>` только снимает unread-состояние, но не делает чат read-only.
 
 Пример: `sms_thread_mila` в `main/story/chapters/10_apartment.ink`:
 
@@ -239,8 +288,8 @@ message_flow.lua handles "sms_open_contact"
 
 > **Как добавить переписку с новым контактом:**
 > 1. `# sms:add:<contact>:<текст>` — прислать входящее (из любого knot'а)
-> 2. Написать knot `sms_thread_<contact>` в нужном `.ink`-файле
-> 3. Готово — ui_manager найдёт knot по имени автоматически
+> 2. Написать knot `sms_thread_<contact>` в нужном `.ink`-файле только если игрок должен отвечать.
+> 3. Если это банк/доставка/такси/управдом/метро/маркет/клиника или другая сервисная лента — thread-knot не писать.
 
 ### Messenger — параллельный канал
 
@@ -252,6 +301,7 @@ Messenger-приложение (`phone_messenger`) работает зеркал
 |---|---|
 | `# sms:add:mila:текст` | `# msg:add:mila:текст` |
 | `# sms:reply:mila:текст` | `# msg:reply:mila:текст` |
+| `# sms:reply_old:mila:пн:текст` | `# msg:reply_old:mila:пн:текст` |
 | `# sms:read:mila` | `# msg:read:mila` |
 | auto-flag `sms_<contact>_read` | auto-flag `msg_<chat>_read` |
 | auto-flag `sms_<contact>_replied` | auto-flag `msg_<chat>_replied` |
@@ -270,18 +320,21 @@ phone_messenger.gui_script.open_chat
   └─ msg.post("#ui_manager_v2", "messenger_open_chat", { chat_id })
 
 message_flow.handle_messenger_open_chat
-  ├─ msg_<chat>_replied != true
-  ├─ dm.has_knot("msg_thread_<chat>") = true
-  │    └─ close_phone + run_side_dialogue_knot("msg_thread_<chat>")
+  ├─ если есть runtime prompt (# msg:prompt:CHAT:KNOT) — берёт KNOT, игнорируя _replied
+  ├─ иначе: msg_<chat>_replied != true
+  ├─ dm.has_knot("msg_thread_<chat>" или chat.ink_thread / prompt KNOT) = true
+  │    └─ close_phone + run_side_dialogue_knot(...)
   └─ иначе игнорируется (тап не делает ничего)
 ```
 
-`can_reply(chat_id)` возвращает true только если выполнены все условия:
+`can_reply(chat_id)` возвращает true если выполнен один из сценариев:
 
-1. Есть ink-knot `msg_thread_<chat>`.
-2. Игрок ещё не отвечал в этом чате (`msg_<chat>_replied != true`).
+1. Есть активный runtime prompt `# msg:prompt:CHAT:KNOT[:LABEL]`, и KNOT существует. Prompt игнорирует `msg_<chat>_replied`, потому что это новая инициатива.
+2. Или есть обычный `msg_thread_<chat>` / `ink_thread`, KNOT существует, и игрок ещё не отвечал в этом чате (`msg_<chat>_replied != true`).
 
-Для чатов без интерактивного ответа (meme-чаты, боты-нотификации, каналы) пульса не будет — input/send выглядят статичными. Тап тоже игнорируется.
+Для чатов без интерактивного ответа (meme-чаты, боты-нотификации, каналы) не создавай `msg_thread_<chat>` и не ставь `msg:prompt`. Тогда пульса не будет, input/send выглядят статичными, тап игнорируется. `# msg:read:<chat>` только снимает unread-состояние, но не делает чат read-only.
+
+Для старых исходящих сообщений в Messenger используй `# msg:reply_old:CHAT:TIME:TEXT`. Он рисует сообщение от героя, но не ставит `msg_<chat>_replied`, не очищает `need_reply` и не снимает активный `msg:prompt`.
 
 `open_app` Messenger не вызывает автоматически `gs.mark_all_msg_read()`.
 Непрочитанные сбрасываются точечно при открытии конкретного чата через

@@ -158,7 +158,7 @@ Ink-файлы лежат в `main/story/chapters/`. Структура **лок
 - В диалоговом окне (overlay поверх dialog)
 - В режиме исследования (overlay поверх scene)
 
-Phone-теги в ink: `# phone:app:NAME`, `# phone:map`, `# sms:add:...`, `# msg:add:...`. См. `INK_TAG_REFERENCE.md`.
+Phone-теги в сценах: `# phone:app:NAME`, `# phone:map`, а для сообщений — вызовы централизованных телефонных событий `-> phone_sms_* ->` / `-> phone_msg_* ->`. Сами `# sms:*`, `# bank:*` лежат в `92_phone_sms.ink`, `# msg:*` — в `93_phone_messenger.ink`. См. `INK_TAG_REFERENCE.md`.
 
 **Открытая инициатива в чате (`# msg:prompt:CHAT:KNOT[:LABEL]`)** — основной паттерн «дать игроку написать первым» из сцены. Заменяет хотспоты «Написать». Ставит pin-плашку на чате в списке мессенджера, зажигает мигалку на иконке телефона (через `# hud:hint:phone`), и при тапе input'а в этом чате диверитит в указанный ink-knot. Auto-clear при `# msg:reply:CHAT:...` внутри knot'а. Например, в парке игрок не находит NPC → `sunday_date_park_arrival` ставит prompt → игрок открывает мессенджер как нормальный человек, пишет «Ты где?» через choice-knot, а не через костыль-хотспот в hub-сцене.
 
