@@ -136,6 +136,11 @@ VAR current_iteration_end = ""
 VAR anomaly_noticed = false
 VAR anomaly_interpreted = false
 
+// Iter 2 entry / fake Wednesday state.
+VAR loop2_fake_wednesday_started = false
+VAR loop2_work_check_done = false
+VAR loop2_invite_after_office_sent = false
+
 VAR kitchen_intro_seen = false
 VAR mug_taken = false
 VAR phone_taken = false
@@ -149,6 +154,7 @@ VAR tuesday_kitchen_window_seen = false
 // Вторник: квартирная подготовка.
 // Дублируем game-state flags в Ink VAR там, где они нужны
 // для авторских условий внутри .ink (не только для Lua visible_when).
+VAR tuesday_started = false
 VAR tuesday_phone_checked = false
 VAR tuesday_washed_up = false
 VAR tuesday_ready_to_leave = false

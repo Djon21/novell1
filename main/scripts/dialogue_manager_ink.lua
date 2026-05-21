@@ -119,6 +119,14 @@ local function current_meta_value(name, default_value)
     return meta.get(name, default_value)
 end
 
+local function current_story_day_order()
+    if story and story.variables then
+        if story.variables.tuesday_started then return 2 end
+        if story.variables.monday_started then return 1 end
+    end
+    return 7 -- Sunday is the base day for initial phone seeds.
+end
+
 local function sync_meta_story_value(name, value)
     if not set_story_value or name == "iteration_label" then return end
     set_story_value(name, value, true)
@@ -307,7 +315,7 @@ local function apply_tags(tags, trailing)
                         type    = "add_sms",
                         contact = contact,
                         text    = text,
-                        hot     = (op == "add_hot"),
+                        opts    = { hot = (op == "add_hot"), current_day = current_story_day_order() },
                     })
                 end
             elseif op == "add_old" and rest then
@@ -326,7 +334,7 @@ local function apply_tags(tags, trailing)
                             type    = "add_sms",
                             contact = contact,
                             text    = text,
-                            opts    = { unread = false, time = time },
+                            opts    = { unread = false, time = time, current_day = current_story_day_order() },
                         })
                     end
                 end
@@ -345,7 +353,7 @@ local function apply_tags(tags, trailing)
                             type    = "reply_old_sms",
                             contact = contact,
                             text    = text,
-                            opts    = { time = time },
+                            opts    = { time = time, current_day = current_story_day_order() },
                         })
                     end
                 end
@@ -357,7 +365,10 @@ local function apply_tags(tags, trailing)
                     contact = contact:gsub("^%s+", ""):gsub("%s+$", "")
                     text = text:gsub('^%s*"(.*)"%s*$', "%1")
                                 :gsub("^%s*'(.*)'%s*$", "%1")
-                    table.insert(pending_commands, { type = "reply_sms", contact = contact, text = text })
+                    table.insert(pending_commands, {
+                        type = "reply_sms", contact = contact, text = text,
+                        current_day = current_story_day_order(),
+                    })
                 end
             elseif op == "read" and rest then
                 local contact = rest:gsub("^%s+", ""):gsub("%s+$", "")

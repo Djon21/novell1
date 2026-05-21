@@ -42,6 +42,57 @@ local _sms_tags   = {}    -- { [contact_id] = { tone = "hot", label = "сигн�
 local next_seq, _get_seq, _absorb_seq = H.make_seq()
 local default_time = H.make_default_time(7 * 60 + 12)  -- база 07:12
 
+local CURRENT_DAY_ORDER = 7 -- Воскресенье. Можно менять через opts.current_day.
+
+local DAY_ORDER = {
+    ["пн"] = 1, ["пон"] = 1, ["понедельник"] = 1,
+    ["вт"] = 2, ["вторник"] = 2,
+    ["ср"] = 3, ["среда"] = 3,
+    ["чт"] = 4, ["четверг"] = 4,
+    ["пт"] = 5, ["пятница"] = 5,
+    ["сб"] = 6, ["суббота"] = 6,
+    ["вс"] = 7, ["воскресенье"] = 7,
+}
+
+local function normalize_day_order(day)
+    local n = tonumber(day) or CURRENT_DAY_ORDER
+    n = math.floor(n)
+    if n < 1 then return CURRENT_DAY_ORDER end
+    if n > 7 then return CURRENT_DAY_ORDER end
+    return n
+end
+
+local function relative_day(raw, current_day)
+    if raw == "сегодня" then return current_day end
+    if raw == "вчера" then return ((current_day + 5) % 7) + 1 end
+    if raw == "позавчера" then return ((current_day + 4) % 7) + 1 end
+    return nil
+end
+
+local function sort_day(time, current_day)
+    current_day = normalize_day_order(current_day)
+    local raw = tostring(time or ""):gsub("^%s+", ""):gsub("%s+$", ""):lower()
+    local rel = relative_day(raw, current_day)
+    if rel then return rel end
+
+    local day = DAY_ORDER[raw]
+    if day then return day end
+
+    local h, m = raw:match("^(%d%d?):(%d%d)$")
+    if h and m then
+        return 7 + ((tonumber(h) or 0) * 60 + (tonumber(m) or 0)) / 1440
+    end
+    return current_day
+end
+
+local function make_sort_ts(time, seq, current_day)
+    return sort_day(time, current_day) * 100000 + (tonumber(seq) or 0)
+end
+
+function M.set_current_day(day)
+    CURRENT_DAY_ORDER = normalize_day_order(day)
+end
+
 local function read_flag(contact_id)
     if not contact_id or contact_id == "" then return nil end
     return "sms_" .. tostring(contact_id) .. "_read"
@@ -51,7 +102,7 @@ local function get_contact_last_seq(contact_id)
     local chat = _sms[contact_id]
     if not chat or #chat == 0 then return 0 end
     local last = chat[#chat]
-    return tonumber(last and last.seq) or 0
+    return tonumber(last and (last.sort_ts or last.seq)) or 0
 end
 
 local function normalize()
@@ -68,16 +119,24 @@ local function normalize()
                 local seq = tonumber(entry.seq)
                 if not seq or seq < 1 then seq = max_seq + 1 end
                 if seq > max_seq then max_seq = seq end
+                local time = entry.time and tostring(entry.time) or default_time(seq)
+                local current_day = entry.current_day or entry.context_day
+                local sort_ts = tonumber(entry.sort_ts) or make_sort_ts(time, seq, current_day)
                 table.insert(out_chat, {
                     text      = tostring(entry.text or ""),
                     unread    = entry.unread == true,
                     direction = (entry.direction == "out") and "out" or "in",
                     hot       = entry.hot == true,
-                    time      = entry.time and tostring(entry.time) or default_time(seq),
+                    time      = time,
+                    current_day = normalize_day_order(current_day),
                     seq       = seq,
+                    sort_ts   = sort_ts,
                 })
             end
             table.sort(out_chat, function(a, b)
+                local ta = tonumber(a.sort_ts) or tonumber(a.seq) or 0
+                local tb = tonumber(b.sort_ts) or tonumber(b.seq) or 0
+                if ta ~= tb then return ta < tb end
                 return (tonumber(a.seq) or 0) < (tonumber(b.seq) or 0)
             end)
             if #out_chat > 0 then
@@ -146,22 +205,28 @@ end
 function M.add(contact_id, text, hot_or_opts)
     if not contact_id or contact_id == "" then return false end
     local seq = next_seq()
-    local hot, unread, time = false, true, nil
+    local hot, unread, time, current_day = false, true, nil, CURRENT_DAY_ORDER
     if hot_or_opts == true then
         hot = true
     elseif type(hot_or_opts) == "table" then
         hot    = hot_or_opts.hot == true
         if hot_or_opts.unread == false then unread = false end
         if hot_or_opts.time then time = tostring(hot_or_opts.time) end
+        if hot_or_opts.current_day or hot_or_opts.context_day then
+            current_day = normalize_day_order(hot_or_opts.current_day or hot_or_opts.context_day)
+        end
     end
     _sms[contact_id] = _sms[contact_id] or {}
+    time = time or default_time(seq)
     table.insert(_sms[contact_id], {
         text      = tostring(text or ""),
         unread    = unread,
         direction = "in",
         hot       = hot,
-        time      = time or default_time(seq),
+        time      = time,
+        current_day = current_day,
         seq       = seq,
+        sort_ts   = make_sort_ts(time, seq, current_day),
     })
     if unread then
         _sms_unread[contact_id] = (_sms_unread[contact_id] or 0) + 1
@@ -173,13 +238,17 @@ end
 function M.reply(contact_id, text)
     if not contact_id or contact_id == "" then return false end
     local seq = next_seq()
+    local time = default_time(seq)
+    local current_day = CURRENT_DAY_ORDER
     _sms[contact_id] = _sms[contact_id] or {}
     table.insert(_sms[contact_id], {
         text      = tostring(text or ""),
         unread    = false,
         direction = "out",
-        time      = default_time(seq),
+        time      = time,
+        current_day = current_day,
         seq       = seq,
+        sort_ts   = make_sort_ts(time, seq, current_day),
     })
     set_flag_cb("sms_" .. tostring(contact_id) .. "_replied", true)
     -- Сняли need_reply pin: ответ дан, висящий тег больше не нужен.
@@ -196,16 +265,23 @@ function M.reply_old(contact_id, text, opts)
     if not contact_id or contact_id == "" then return false end
     local seq = next_seq()
     local time = nil
+    local current_day = CURRENT_DAY_ORDER
     if type(opts) == "table" and opts.time then
         time = tostring(opts.time)
+        if opts.current_day or opts.context_day then
+            current_day = normalize_day_order(opts.current_day or opts.context_day)
+        end
     end
     _sms[contact_id] = _sms[contact_id] or {}
+    time = time or default_time(seq)
     table.insert(_sms[contact_id], {
         text      = tostring(text or ""),
         unread    = false,
         direction = "out",
-        time      = time or default_time(seq),
+        time      = time,
+        current_day = current_day,
         seq       = seq,
+        sort_ts   = make_sort_ts(time, seq, current_day),
     })
     notify_cb()
     return true

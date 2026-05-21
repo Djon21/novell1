@@ -1,4 +1,18 @@
+-- LAYOUT_FIX_V8_SYMMETRIC_GUTTERS: thread uses real panel gutters; scrollbar is near the right frame, no fake right dead zone.
+-- LAYOUT_FIX_V9_HEADER_TIDY: lowered back button, rebuilt thread header into a cleaner two-row block.
+-- LAYOUT_FIX_V10_FOOTER_BACK_CLEAN_HEADER: moved inbox/back action into footer row and simplified header alignment.
+-- LAYOUT_FIX_V11_HEADER_FIX_NO_SIDE_ICONS: footer buttons lifted, header title brought inside frame, th_call/th_info/th_menu hidden.
+-- LAYOUT_FIX_V12_NO_HEADER_GARBAGE: hard-disables header side icons after view toggles and removes their hit tests.
+-- LAYOUT_FIX_V16_COMPACT_HEADER_REAL: actually compresses the thread header and gives the saved height back to the bubble viewport.
+-- LAYOUT_FIX_V17_NO_HEADER_OVERLAP: fixes thread virtualization so partially visible top bubbles cannot draw into the compact header.
+-- LAYOUT_FIX_V18_VISUAL_POLISH: calmer bubble surfaces, fewer debug-like outlines, wider breathing gaps.
+-- LAYOUT_FIX_V14_FOOTER_INBOX_BUTTON: fixes footer inbox button pivots/child layout to match reply action.
+-- LAYOUT_FIX_V13_COMPACT_HEADER_FOOTER: compacts header/footer, enlarges bubble viewport, and restyles inbox button to match reply action.
 -- phone_sms.gui_script
+-- LAYOUT_FIX_V3: right SMS thread geometry was normalized after screenshot review.
+-- LAYOUT_FIX_V4_ADULT: compact composer, balanced chat margins, tighter message viewport.
+-- LAYOUT_FIX_V5_MESSENGER: adds real input field nodes, dynamic bubble widths, calmer borders.
+-- LAYOUT_FIX_V6_NO_INPUT: no input field; single compact reply action and tighter footer rhythm.
 -- SMS app v2 with GUI Templates:
 --   phone_sms.gui = host/root only
 --   phone_sms_list_template.gui = inbox list
@@ -38,23 +52,45 @@ local point_in_rect = U.point_in_rect
 local PANEL_X, PANEL_Y = 500, 40
 local PANEL_W, PANEL_H = 728, 640
 local CONTENT_X = 524
-local CONTENT_R = 1184
+local CONTENT_R = 1154
 local SCROLL_X = 1188
+local SCROLL_W = 4
 local LIST_TOP = 594
 local LIST_BOTTOM = 112
 local LIST_H = LIST_TOP - LIST_BOTTOM
 local ROW_W, ROW_H, ROW_GAP = 660, 72, 10
-local THREAD_TOP = 580
-local THREAD_BOTTOM = 154
-local THREAD_SCROLL_X = 1188
-local THREAD_SCROLL_H = THREAD_TOP - THREAD_BOTTOM
-local BUBBLE_GAP = 14
-local BUBBLE_H = 40
-local BUBBLE_SYS_H = 24
-local BUBBLE_LINE_H = 18
-local BUBBLE_PAD_X = 12
+
+-- Thread layout is intentionally separate from inbox ROW_W. The old script
+-- mixed list-row geometry with message-thread geometry, which made the chat
+-- look like a table. Keep the thread on its own grid:
+--   THREAD_X..THREAD_R: message column
+--   THREAD_SCROLL_X: scrollbar just outside the message column
+--   THREAD_SAFE_BOTTOM..THREAD_TOP: bubble viewport
+--   THREAD_DIVIDER_Y / THREAD_ACTION_*: footer action area, no input field
+local THREAD_X = 524
+local THREAD_R = 1184
+local THREAD_W = THREAD_R - THREAD_X
+local THREAD_TOP = 568
+local THREAD_DIVIDER_Y = 102
+local THREAD_SAFE_BOTTOM = 132
+local THREAD_ACTION_Y = 50
+local THREAD_ACTION_H = 32
+local THREAD_ACTION_W = 170
+local THREAD_SEND_X, THREAD_SEND_Y = THREAD_R - THREAD_ACTION_W, THREAD_ACTION_Y
+local THREAD_SEND_W, THREAD_SEND_H = THREAD_ACTION_W, THREAD_ACTION_H
+local THREAD_SCROLL_X = 1200
+local THREAD_SCROLL_W = 4
+local THREAD_SCROLL_H = THREAD_TOP - THREAD_SAFE_BOTTOM
+local BUBBLE_GAP = 16
+local BUBBLE_H = 42
+local BUBBLE_SYS_H = 20
+local BUBBLE_LINE_H = 20
+local BUBBLE_PAD_X = 18
 local BUBBLE_PAD_TOP = 12
-local BUBBLE_STAMP_AREA_H = 20
+local BUBBLE_STAMP_AREA_H = 18
+local BUBBLE_IN_MIN_W, BUBBLE_OUT_MIN_W = 220, 190
+local BUBBLE_IN_MAX_W, BUBBLE_OUT_MAX_W = 520, 410
+local BUBBLE_AVG_GLYPH_W = 8.6
 local THREAD_WHEEL_STEP_PX = 72
 local THREAD_DRAG_STEP_PX = 12
 local THREAD_DRAG_THRESHOLD_PX = 8
@@ -126,7 +162,8 @@ local THREAD_NODE_IDS = {
     "th_menu_bg", "th_menu_border", "th_menu_label",
     "th_header_line", "th_empty",
     "th_scrollbar_track", "th_scrollbar_thumb",
-    "th_input_line", "th_input_border", "th_input_text",
+    "th_input_line",
+    "th_send_bg", "border_send", "th_send_label",
 }
 
 for i = 1, MAX_BUBBLES do
@@ -216,7 +253,6 @@ local THREAD_BORDER_IDS = {
     th_call_border  = "border_call",
     th_info_border  = "border_info",
     th_menu_border  = "border_menu",
-    th_input_border = "border_input",
 }
 
 local function resolve_thread_border(id)
@@ -267,6 +303,20 @@ end
 
 local function set_many_enabled(ids, enabled)
     for _, id in ipairs(ids) do set_node_enabled(id, enabled) end
+end
+
+local function hide_thread_side_actions()
+    -- These nodes still exist in the .gui template, but this SMS thread design
+    -- no longer uses call/info/menu buttons. Hide both the virtual ids and the
+    -- real template border ids so set_view() cannot accidentally re-enable them.
+    for _, id in ipairs({
+        "th_call_bg", "th_call_border", "th_call_label",
+        "th_info_bg", "th_info_border", "th_info_label",
+        "th_menu_bg", "th_menu_border", "th_menu_label",
+        "border_call", "border_info", "border_menu",
+    }) do
+        set_node_enabled(id, false)
+    end
 end
 
 local function set_host_visible(enabled)
@@ -821,7 +871,7 @@ local function update_scrollbar(self, total)
     local t = max_offset > 0 and (self.list_offset / max_offset) or 0
     local y = (top_y - h) - ((track_h - h) * t)
 
-    gui.set_size(thumb, vmath.vector3(4, h, 0))
+    gui.set_size(thumb, vmath.vector3(SCROLL_W, h, 0))
     gui.set_position(thumb, vmath.vector3(SCROLL_X, y, 0.545))
 end
 
@@ -835,7 +885,7 @@ local function apply_static_layout()
     -- same as msgr_title in Messenger. Keep script responsible only for
     -- enabling/text/style, not for editor layout.
     set_box("sms_header_line", CONTENT_X, 610, ROW_W, 1, COLORS.paper, 0.15)
-    set_box("sms_scrollbar_track", SCROLL_X, LIST_BOTTOM, 4, LIST_H, COLORS.paper, 0.08)
+    set_box("sms_scrollbar_track", SCROLL_X, LIST_BOTTOM, SCROLL_W, LIST_H, COLORS.paper, 0.08)
 
     for i = 1, MAX_ROWS do
         local p = "msg" .. i
@@ -880,44 +930,64 @@ local function apply_static_layout()
     end
 
     -- Thread header and input bar. Bubble positions are data-driven in render_bubble.
-    -- Header/action layout is authored in phone_sms.gui. Do not overwrite
-    -- positions of th_back_bg/th_name/th_num/th_call_bg/th_info_bg/th_menu_bg
-    -- here: the script only applies visual state and text.
-    set_box("th_header_line", CONTENT_X, 598, ROW_W, 1, COLORS.paper, 0.15)
+    -- In v10 the inbox/back action is moved out of the header into the footer,
+    -- so the top area becomes a simpler title + meta block with a neat action cluster.
+    local HEADER_TITLE_Y = 652
+    local HEADER_META_Y = 620
+    local HEADER_LINE_Y = 604
+    local FOOTER_BACK_W, FOOTER_BACK_H = 144, THREAD_ACTION_H
+    local FOOTER_BACK_X, FOOTER_BACK_Y = THREAD_X, THREAD_ACTION_Y
 
-    set_color("th_back_bg", COLORS.card, 0.60)
-    do
-        local bg = get_node("th_back_bg")
-        local size = bg and gui.get_size(bg) or vmath.vector3(118, 36, 0)
-        set_border("th_back", 0, 0, size.x, size.y, COLORS.accent, 0.35)
-    end
-    for _, id in ipairs({ "th_call", "th_info", "th_menu" }) do
-        set_color(id .. "_bg", COLORS.card, 0.60)
-        local bg = get_node(id .. "_bg")
-        local size = bg and gui.get_size(bg) or vmath.vector3(32, 32, 0)
-        set_border(id, 0, 0, size.x, size.y, COLORS.paper_dim, 0.18)
-        set_local_pos(id .. "_label", size.x * 0.5, size.y * 0.5, 0.056)
-    end
-    set_text("th_call_label", "☏")
-    set_text("th_info_label", "i")
-    set_text("th_menu_label", "⋮")
-    for _, id in ipairs({ "th_call_label", "th_info_label", "th_menu_label" }) do
-        set_size(id, 20, 13)
-        set_color(id, COLORS.paper_dim, 0.78)
-    end
-    set_pos("th_empty", CONTENT_X + ROW_W / 2, 384, 0.559)
-    set_box("th_scrollbar_track", THREAD_SCROLL_X, THREAD_BOTTOM, 4, THREAD_SCROLL_H, COLORS.paper, 0.08)
-    set_box("th_scrollbar_thumb", THREAD_SCROLL_X, THREAD_TOP - 80, 4, 80, COLORS.accent, 0.18)
-    set_box("th_input_line", CONTENT_X, 140, ROW_W, 1, COLORS.paper, 0.15)
-    set_border("th_input", CONTENT_X, 92, 540, 38, COLORS.accent, 0.30)
-    set_local_pos("th_input_text", 14, 20, 0.056)
-    set_size("th_input_text", 510, 14)
+    set_box("th_header_line", THREAD_X, HEADER_LINE_Y, THREAD_W, 1, COLORS.paper, 0.15)
+
+    -- Match the reply button architecture exactly: bg and border use SW pivot,
+    -- label is centered as a child of th_back_bg. The template used to keep
+    -- th_back_bg/border_back as NW-pivot nodes, which made the footer label and
+    -- frame drift apart after script-driven repositioning.
+    local back_bg = get_node("th_back_bg")
+    if back_bg then gui.set_pivot(back_bg, gui.PIVOT_SW) end
+    local back_border = get_node("th_back_border")
+    if back_border then gui.set_pivot(back_border, gui.PIVOT_SW) end
+    local back_label = get_node("th_back_label")
+    if back_label then gui.set_pivot(back_label, gui.PIVOT_CENTER) end
+
+    set_box("th_back_bg", FOOTER_BACK_X, FOOTER_BACK_Y, FOOTER_BACK_W, FOOTER_BACK_H, COLORS.dark, 0.36)
+    set_local_box("th_back_border", 0, 0, FOOTER_BACK_W, FOOTER_BACK_H, COLORS.accent, 0.50, 0.054)
+    set_local_pos("th_back_label", FOOTER_BACK_W / 2, FOOTER_BACK_H / 2, 0.059)
+    set_size("th_back_label", FOOTER_BACK_W - 20, 18)
+    set_text("th_back_label", "ВХОДЯЩИЕ")
+    set_color("th_back_label", COLORS.accent, 0.92)
+
+    set_pos("th_name", THREAD_X, HEADER_TITLE_Y, 0.559)
+    set_size("th_name", 360, 34)
+    set_color("th_name", COLORS.paper, 0.95)
+
+    set_pos("th_num", THREAD_X, HEADER_META_Y, 0.559)
+    set_size("th_num", 420, 20)
+    set_color("th_num", COLORS.paper_dim, 0.78)
+
+    hide_thread_side_actions()
+    set_pos("th_empty", THREAD_X + THREAD_W / 2, (THREAD_SAFE_BOTTOM + THREAD_TOP) / 2, 0.559)
+
+    -- Message viewport. The scrollbar stops above the composer, so it does
+    -- not visually collide with the divider or SEND button.
+    set_box("th_scrollbar_track", THREAD_SCROLL_X, THREAD_SAFE_BOTTOM, THREAD_SCROLL_W, THREAD_SCROLL_H, COLORS.paper, 0.08)
+    set_box("th_scrollbar_thumb", THREAD_SCROLL_X, THREAD_TOP - 80, THREAD_SCROLL_W, 80, COLORS.accent, 0.18)
+
+    -- Footer/action. No input field exists by design: the footer has one
+    -- compact reply action aligned to the same right edge as outgoing bubbles.
+    set_box("th_input_line", THREAD_X, THREAD_DIVIDER_Y, THREAD_W, 1, COLORS.paper, 0.10)
+
+    set_box("th_send_bg", THREAD_SEND_X, THREAD_SEND_Y, THREAD_SEND_W, THREAD_SEND_H, COLORS.dark, 0.36)
+    set_local_box("border_send", 0, 0, THREAD_SEND_W, THREAD_SEND_H, COLORS.accent, 0.50, 0.054)
+    set_local_pos("th_send_label", THREAD_SEND_W / 2, THREAD_SEND_H / 2, 0.059)
+    set_size("th_send_label", THREAD_SEND_W - 20, 18)
+    set_text("th_send_label", "ОТВЕТИТЬ")
+    set_color("th_send_label", COLORS.accent, 0.92)
     for _, id in ipairs({ "th_call_label", "th_info_label", "th_menu_label" }) do
         local n = get_node(id)
         if n then gui.set_pivot(n, gui.PIVOT_CENTER) end
     end
-    local input_text = get_node("th_input_text")
-    if input_text then gui.set_pivot(input_text, gui.PIVOT_W) end
 end
 
 local function refresh_list(self)
@@ -989,7 +1059,7 @@ set_border = function(prefix, x, y, w, h, color, alpha)
     end
 
     -- Thread control borders are now single slice9 child nodes:
-    -- th_back_border -> border_back, th_input_border -> border_input, etc.
+    -- th_back_border -> border_back, etc.
     if THREAD_BORDER_IDS[key .. "_border"] then
         set_local_box(key .. "_border", 0, 0, w, h, color, alpha)
         return
@@ -1002,14 +1072,30 @@ set_border = function(prefix, x, y, w, h, color, alpha)
     set_box(key .. "_border_r", x + w - 1, y, 1, h, color, alpha)
 end
 
+local function max_line_len_safe(wrapped)
+    local max_len = 0
+    for line in (tostring(wrapped or "") .. "\n"):gmatch("(.-)\n") do
+        max_len = math.max(max_len, utf8_len_safe(line))
+    end
+    return max_len
+end
+
+local function fit_bubble_width(raw, min_w, max_w)
+    local wrapped, lines = wrap_text_to_width(raw, text_cols_for_width(max_w - BUBBLE_PAD_X * 2))
+    local natural = math.ceil(max_line_len_safe(wrapped) * BUBBLE_AVG_GLYPH_W + BUBBLE_PAD_X * 2 + 14)
+    local w = math.max(min_w, math.min(max_w, natural))
+    wrapped, lines = wrap_text_to_width(raw, text_cols_for_width(w - BUBBLE_PAD_X * 2))
+    return w, wrapped, lines
+end
+
 local function bubble_layout(sms)
     local typ = sms.type or sms.kind
     if typ == "sys" or typ == "daysep" then
         local raw = tostring(sms.text or sms.body or ""):upper()
-        local wrapped, lines = wrap_text_to_width(raw, 54)
+        local wrapped, lines = wrap_text_to_width(raw, 44)
         return {
-            w = 440,
-            h = math.max(BUBBLE_SYS_H, 10 + lines * 14),
+            w = 360,
+            h = math.max(BUBBLE_SYS_H, 8 + lines * 14),
             text = wrapped,
             lines = lines,
             is_sep = true,
@@ -1017,9 +1103,10 @@ local function bubble_layout(sms)
     end
 
     local is_out = sms.direction == "out" or typ == "out"
-    local w = is_out and 430 or 500
     local raw = sms.text or sms.body or sms.message or ""
-    local wrapped, lines = wrap_text_to_width(raw, text_cols_for_width(w - BUBBLE_PAD_X * 2))
+    local min_w = is_out and BUBBLE_OUT_MIN_W or BUBBLE_IN_MIN_W
+    local max_w = is_out and BUBBLE_OUT_MAX_W or BUBBLE_IN_MAX_W
+    local w, wrapped, lines = fit_bubble_width(raw, min_w, max_w)
     local h = math.max(BUBBLE_H, BUBBLE_PAD_TOP + lines * BUBBLE_LINE_H + BUBBLE_STAMP_AREA_H)
     return { w = w, h = h, text = wrapped, lines = lines, is_out = is_out }
 end
@@ -1041,7 +1128,7 @@ local function render_bubble(slot, sms, y)
     if is_sep then
         local layout = bubble_layout(sms)
         local w, h = layout.w, layout.h
-        local x = CONTENT_X + (ROW_W - w) / 2
+        local x = THREAD_X + (THREAD_W - w) / 2
         set_box(p .. "_bg", x, y, w, h, COLORS.dark, typ == "daysep" and 0.40 or 0.22)
         set_border(p, x, y, w, h, COLORS.paper_dim, 0.08)
         set_local_pos(p .. "_text", w / 2, h / 2, 0.059)
@@ -1061,11 +1148,11 @@ local function render_bubble(slot, sms, y)
     local layout = bubble_layout(sms)
     local raw_text = layout.text
     local w, h = layout.w, layout.h
-    local x = is_out and (CONTENT_R - w) or CONTENT_X
+    local x = is_out and (THREAD_R - w) or THREAD_X
     local bg = is_out and COLORS.accent or (is_hot and COLORS.card_hot or COLORS.card)
     local border = is_out and COLORS.accent or (is_hot and COLORS.hot or COLORS.accent)
-    local bg_alpha = is_out and 0.10 or 0.70
-    local border_alpha = is_out and 0.40 or (is_hot and 0.45 or 0.25)
+    local bg_alpha = is_out and 0.16 or 0.18
+    local border_alpha = is_out and 0.34 or (is_hot and 0.30 or 0.09)
 
     set_box(p .. "_bg", x, y, w, h, bg, bg_alpha)
     set_border(p, x, y, w, h, border, border_alpha)
@@ -1081,7 +1168,7 @@ local function render_bubble(slot, sms, y)
     set_local_pos(p .. "_text", BUBBLE_PAD_X, h - BUBBLE_PAD_TOP, 0.059)
     set_size(p .. "_text", w - BUBBLE_PAD_X * 2, math.max(BUBBLE_LINE_H, layout.lines * BUBBLE_LINE_H))
     set_text(p .. "_text", raw_text)
-    set_color(p .. "_text", COLORS.paper, 0.95)
+    set_color(p .. "_text", COLORS.paper, is_out and 0.94 or 0.90)
 
     local status = sms.status or (is_out and "delivered" or nil)
     local stamp = tostring(sms.time or "")
@@ -1096,7 +1183,7 @@ local function render_bubble(slot, sms, y)
     set_local_pos(p .. "_stamp", w - 12, 8, 0.059)
     set_size(p .. "_stamp", w - 24, 10)
     set_text(p .. "_stamp", stamp)
-    set_color(p .. "_stamp", status == "delivered" and COLORS.green or COLORS.paper_dim, 0.76)
+    set_color(p .. "_stamp", status == "delivered" and COLORS.green or COLORS.paper_dim, is_out and 0.72 or 0.52)
     set_node_enabled(p .. "_stamp", stamp ~= "")
     return h
 end
@@ -1129,7 +1216,7 @@ end
 -- Pulse alpha-mod на input/send элементах thread'а — подсказка что ответ
 -- доступен. Применяется только в режиме thread, останавливается при
 -- отсутствии knot'а или после выполнения # sms:reply:.
-local SMS_PULSE_TARGETS = { "th_input_text", "th_send_label", "th_send_bg" }
+local SMS_PULSE_TARGETS = { "th_send_label", "th_send_bg" }
 local SMS_PULSE_DURATION = 0.6
 local SMS_PULSE_ALPHA_LO = 0.45
 
@@ -1162,7 +1249,7 @@ local render_thread
 local function build_thread_layout(chat)
     local items = {}
     local y = 0
-    for i = #chat, 1, -1 do
+    for i = 1, #chat do
         local _, h = bubble_metrics(chat[i])
         items[i] = {
             bottom = y,
@@ -1183,23 +1270,31 @@ end
 
 local function update_thread_scrollbar(self, content_h)
     local thumb = get_node("th_scrollbar_thumb")
+    local track = get_node("th_scrollbar_track")
     if not thumb then return end
 
     content_h = tonumber(content_h) or 0
     local max_offset = clamp_thread_offset(self, content_h)
     if content_h <= THREAD_SCROLL_H or max_offset <= 0 then
-        gui.set_size(thumb, vmath.vector3(4, THREAD_SCROLL_H, 0))
-        gui.set_position(thumb, vmath.vector3(THREAD_SCROLL_X, THREAD_BOTTOM, 0.545))
-        gui.set_alpha(thumb, 0.18)
+        -- A mature chat view does not show a fake full-height thumb when the
+        -- conversation fits. Hide the scrollbar instead of adding noise.
+        if track then gui.set_enabled(track, false) end
+        gui.set_enabled(thumb, false)
         return
     end
+
+    if track then
+        gui.set_enabled(track, true)
+        gui.set_alpha(track, 0.08)
+    end
+    gui.set_enabled(thumb, true)
 
     local ratio = math.min(1, THREAD_SCROLL_H / content_h)
     local h = math.max(46, THREAD_SCROLL_H * ratio)
     local travel = THREAD_SCROLL_H - h
     local t = (self.thread_offset or 0) / max_offset
-    local y = (THREAD_BOTTOM + THREAD_SCROLL_H - h) - travel * t
-    gui.set_size(thumb, vmath.vector3(4, h, 0))
+    local y = (THREAD_SAFE_BOTTOM + THREAD_SCROLL_H - h) - travel * t
+    gui.set_size(thumb, vmath.vector3(THREAD_SCROLL_W, h, 0))
     gui.set_position(thumb, vmath.vector3(THREAD_SCROLL_X, y, 0.545))
     gui.set_alpha(thumb, 0.70)
 end
@@ -1229,9 +1324,6 @@ render_thread = function(self)
 
     set_text("th_name", contact.name or "—")
     set_text("th_num", "SIM 1 · " .. tostring(contact.number or "—"))
-    set_text("th_input_text", contact.readonly and "ответы запрещены оператором" or "нажмите, чтобы выбрать ответ...")
-    set_color("th_input_text", COLORS.paper_dim, contact.readonly and 0.42 or 0.55)
-
     -- Запустить или остановить pulse только при изменении состояния.
     -- Иначе render_thread/refresh_app будет постоянно cancel+restart animation.
     local should_pulse = sms_can_reply(contact_id, contact)
@@ -1251,25 +1343,32 @@ render_thread = function(self)
         return
     end
 
-    -- Pixel-based virtualization: offset is measured in real bubble height,
-    -- not in message count. This keeps long wrapped SMS from jumping oddly.
-    --   offset = 0        → latest MAX_BUBBLES messages
-    --   offset = max      → oldest messages
-    -- This keeps bubble geometry stable while still allowing long threads.
+    -- Pixel-based virtualization: oldest messages are at the top of the
+    -- virtual column, newest at the bottom, like a normal chat.
     local layout, content_h = build_thread_layout(chat)
     clamp_thread_offset(self, content_h)
-    local view_bottom = self.thread_offset or 0
-    local view_top = view_bottom + THREAD_SCROLL_H
-    local slot = MAX_BUBBLES
+    local view_top = self.thread_offset or 0
+    local view_bottom = view_top + THREAD_SCROLL_H
+    -- If the thread fits in the viewport, anchor it to the bottom like a real
+    -- messenger. The previous top-anchored layout left a large dead zone above
+    -- the reply button and made the screen feel unfinished.
+    local bottom_anchor_shift = math.max(0, THREAD_SCROLL_H - content_h)
+    local slot = 1
 
-    -- Layout from bottom to top so the newest message is never pushed out by
-    -- older, taller wrapped bubbles. Offset still moves by message, not pixel.
-    for idx = #chat, 1, -1 do
+    for idx = 1, #chat do
         local item = layout[idx]
-        if item and item.bottom >= view_bottom and item.top <= view_top then
-            render_bubble(slot, chat[idx], THREAD_BOTTOM + item.bottom - view_bottom)
-            slot = slot - 1
-            if slot < 1 then break end
+        -- Only draw bubbles that are fully inside the virtual viewport.
+        -- The old condition allowed a partially visible top bubble to extend
+        -- above THREAD_TOP and visually collide with the compact header line.
+        -- Without a real clipping node, hiding partial bubbles is safer than
+        -- letting them bleed into the header.
+        if item and item.bottom >= view_top and item.top <= view_bottom then
+            local y = THREAD_TOP - (item.top - view_top) - bottom_anchor_shift
+            if y >= THREAD_SAFE_BOTTOM and (y + item.height) <= THREAD_TOP then
+                render_bubble(slot, chat[idx], y)
+                slot = slot + 1
+            end
+            if slot > MAX_BUBBLES then break end
         end
     end
     update_thread_scrollbar(self, content_h)
@@ -1297,6 +1396,7 @@ local function set_view(self, view)
     set_node_enabled("sms_thread/thread_root", show_thread)
     set_many_enabled(LIST_NODE_IDS, show_list)
     set_many_enabled(THREAD_NODE_IDS, show_thread)
+    hide_thread_side_actions()
     if show_list and self.thread_drag then drag_scroll.reset(self.thread_drag) end
     if show_thread and self.list_drag then drag_scroll.reset(self.list_drag) end
     -- Pulse только в thread-режиме. List-режим — гарантированный stop.
@@ -1330,13 +1430,14 @@ end
 local function open_thread(self, contact_id)
     if not contact_id or contact_id == "" then return end
     self.active_contact_id = tostring(contact_id)
-    self.thread_offset = 0
 
     local state = gs()
     if state.mark_sms_read then state.mark_sms_read(self.active_contact_id) end
     msg.post(PHONE_ROOT, MSG.refresh_phone)
 
     self.thread_messages = sms_storage_messages(self.active_contact_id)
+    local _, content_h = build_thread_layout(self.thread_messages)
+    self.thread_offset = math.max(0, content_h - THREAD_SCROLL_H)
     self.list_messages = nil
 
     apply_static_layout()
@@ -1449,22 +1550,13 @@ local function handle_thread_touch(self, action_id, action)
             return true
         end
 
-        for _, id in ipairs({ "th_input_text", "th_send_bg" }) do
-            local n = get_node(id)
-            if n and gui.is_enabled(n) and gui.pick_node(n, x, y) then
-                if id ~= "th_send_bg" then flash_node(id) end
-                trigger_reply_choices(self)
-                return true
-            end
+        local send = get_node("th_send_bg")
+        if send and gui.is_enabled(send) and gui.pick_node(send, x, y) then
+            flash_node("th_send_bg")
+            trigger_reply_choices(self)
+            return true
         end
 
-        for _, id in ipairs({ "th_call_bg", "th_info_bg", "th_menu_bg" }) do
-            local n = get_node(id)
-            if n and gui.is_enabled(n) and gui.pick_node(n, x, y) then
-                flash_node(id)
-                return true
-            end
-        end
         return true
     end
 
@@ -1529,7 +1621,6 @@ function init(self)
         step_px      = THREAD_DRAG_STEP_PX,
         threshold_px = THREAD_DRAG_THRESHOLD_PX,
         owner        = self,
-        invert       = true,
         on_step      = function(owner, delta) step_thread(owner, delta * THREAD_DRAG_STEP_PX) end,
     })
     clone_rows()

@@ -250,6 +250,7 @@ end
 M.add_sms              = sms_state.add
 M.reply_sms            = sms_state.reply
 M.reply_old_sms        = sms_state.reply_old
+M.set_sms_current_day  = sms_state.set_current_day
 M.mark_sms_read        = sms_state.mark_read
 M.mark_all_sms_read    = sms_state.mark_all_read
 M.get_sms              = sms_state.get
@@ -332,6 +333,7 @@ function M.get_messages()
                 body      = last.text or "",
                 direction = last.direction or "in",
                 unread    = unread_n > 0,
+                sort_ts   = last.sort_ts,
             })
         end
     end

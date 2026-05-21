@@ -129,8 +129,7 @@
 # set_flag:iteration_001_finished=true
 # pulse:1.0,255,255,255
 # shake:0.15,0.5
-# chapter_finished
--> END
+-> loop1_to_iter2_reset
 
 
 // ================================================================

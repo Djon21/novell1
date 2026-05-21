@@ -4,7 +4,7 @@
 Запускать перед каждой сессией AI-сценариста чтобы документ отражал
 текущее состояние проекта.
 
-_Сгенерировано: 2026-05-21 13:11_
+_Сгенерировано: 2026-05-21 15:03_
 
 Это **источник правды для AI** о том что реально существует в проекте:
 scene_id, knot имена, hotspot id, флаги, предметы. Не ссылайся на
@@ -362,6 +362,9 @@ knot'ов в inventory намеренно не выводятся, чтобы ф
 | `look_hall_mirror` | `knot` |
 | `look_kitchen_fridge` | `knot` |
 | `look_kitchen_window` | `knot` |
+| `loop1_to_iter2_reset` | `knot` |
+| `loop2_fake_wednesday_leave_for_work` | `knot` |
+| `loop2_fake_wednesday_work_check` | `knot` |
 | `mon_home_bed` | `knot` |
 | `mon_home_bedroom_desk` | `knot` |
 | `mon_home_bedroom_intro` | `knot` |
@@ -501,9 +504,17 @@ knot'ов в inventory намеренно не выводятся, чтобы ф
 
 | Knot | Kind |
 |---|---|
+| `msg_artem_loop2_place_choice` | `knot` |
+| `msg_artem_loop2_place_pressure` | `knot` |
+| `msg_mila_loop2_place_choice` | `knot` |
+| `msg_mila_loop2_place_pressure` | `knot` |
 | `msg_npc_place_sent` | `knot` |
 | `msg_thread_artem` | `msg_thread` |
+| `msg_thread_artem_iter1` | `msg_thread` |
+| `msg_thread_artem_loop2` | `msg_thread` |
 | `msg_thread_mila` | `msg_thread` |
+| `msg_thread_mila_iter1` | `msg_thread` |
+| `msg_thread_mila_loop2` | `msg_thread` |
 | `msg_thread_prod_bot` | `msg_thread` |
 | `msg_thread_unknown` | `msg_thread` |
 | `msg_thread_work_team` | `msg_thread` |
@@ -742,7 +753,7 @@ Source: `main/scripts/scene_characters.lua`.
 ## Flags
 
 Все имена флагов встречающиеся в `# set_flag:`, `get_flag(...)`,
-`set_flag(...)`. Всего: **149**.
+`set_flag(...)`. Всего: **155**.
 
 **`bathroom_*`**: `bathroom_morning_seen`
 
@@ -768,6 +779,8 @@ Source: `main/scripts/scene_characters.lua`.
 
 **`left_*`**: `left_apartment`
 
+**`loop2_*`**: `loop2_fake_wednesday_started` `loop2_invite_after_office_sent` `loop2_work_check_done`
+
 **`map_*`**: `map_opened_after_apartment`
 
 **`messenger_*`**: `messenger_prod_bot_questioned` `messenger_unknown_asked_synthesis` `messenger_unknown_asked_who` `messenger_work_team_ack`
@@ -777,6 +790,8 @@ Source: `main/scripts/scene_characters.lua`.
 **`mon_*`**: `mon_home_bedroom_seen` `mon_home_hall_seen` `mon_home_kitchen_seen` `mon_office_arrived` `mon_office_error_seen`
 
 **`monday_*`**: `monday_breakfast_done` `monday_case_file_assembled` `monday_case_file_submitted` `monday_checked_in_office` `monday_coffee_done` `monday_commute_auto` `monday_commute_observed` `monday_commute_steady` `monday_dressed` `monday_finished` `monday_folder_taken` `monday_left_home` `monday_mail_read` `monday_morning_started` `monday_office_finished` `monday_ready_for_work` `monday_report_page_taken` `monday_started` `monday_washed_up` `monday_water_drunk` `monday_workday_checked`
+
+**`msg_*`**: `msg_artem_replied` `msg_mila_replied`
 
 **`mug_*`**: `mug_taken`
 
@@ -801,6 +816,8 @@ Source: `main/scripts/scene_characters.lua`.
 **`tuesday_*`**: `tuesday_appeal_read` `tuesday_coffee_done` `tuesday_consequence_seen` `tuesday_desk_checked` `tuesday_investigation_done` `tuesday_kitchen_window_seen` `tuesday_left_home` `tuesday_log_reviewed` `tuesday_morning_started` `tuesday_npc_talked` `tuesday_pending` `tuesday_phone_checked` `tuesday_ready_to_leave` `tuesday_rooftop_reached` `tuesday_started` `tuesday_washed_up` `tuesday_water_drunk`
 
 **`washed_*`**: `washed_up`
+
+**`water_*`**: `water_drunk`
 
 **`work_*`**: `work_card_taken`
 

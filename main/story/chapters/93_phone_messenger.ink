@@ -115,6 +115,13 @@
 // -----------------------------------------------------------------------------
 
 === msg_thread_mila ===
+{iteration_number > 1 and loop2_work_check_done:
+    -> msg_thread_mila_loop2
+- else:
+    -> msg_thread_mila_iter1
+}
+
+=== msg_thread_mila_iter1 ===
 # speaker:none
 Открываешь Messenger.
 
@@ -184,6 +191,13 @@
 
 
 === msg_thread_artem ===
+{iteration_number > 1 and loop2_work_check_done:
+    -> msg_thread_artem_loop2
+- else:
+    -> msg_thread_artem_iter1
+}
+
+=== msg_thread_artem_iter1 ===
 # speaker:none
 Открываешь Messenger.
 
@@ -252,10 +266,173 @@
     -> DONE
 
 
+=== msg_thread_mila_loop2 ===
+# speaker:none
+Открываешь Messenger.
+
+Мила:
+«Ты сегодня вообще живой?»
+«Я уже второй кофе пью.»
+«Выберемся куда-нибудь, пока день не стал совсем домашним?»
+
+# speaker:mc
+Слово в слово.
+
+Не “похоже”. Не “почти”. Ровно так же.
+
+* [«Очень смешно.»]
+    # msg:reply:mila:Очень смешно.
+    # msg:add:mila:Что смешно?
+    # msg:add:mila:Я просто спросила.
+    ~ INSIGHT = INSIGHT + 1
+    -> msg_mila_loop2_place_pressure
+
+* [«Ты уже писала это.»]
+    # msg:reply:mila:Ты уже писала это.
+    # msg:add:mila:Сегодня?
+    # msg:add:mila:Я тебе сегодня первый раз пишу.
+    ~ INSIGHT = INSIGHT + 2
+    -> msg_mila_loop2_place_pressure
+
+* [«Ок. Давай встретимся.»]
+    # msg:reply:mila:Ок. Давай встретимся.
+    # msg:add:mila:Ого. После такого вступления звучит почти подозрительно спокойно.
+    ~ SYNC = SYNC + 1
+    -> msg_mila_loop2_place_choice
+
+=== msg_mila_loop2_place_pressure ===
+# speaker:none
+Пауза в чате становится длиннее обычной.
+
+Мила не знает, что должна была повторить это сообщение. Для неё это просто странный ответ на обычное воскресное приглашение.
+
+# msg:add:mila:Ты точно нормально себя чувствуешь?
+
+* [«Нет. Но давай всё равно встретимся.»]
+    # msg:reply:mila:Нет. Но давай всё равно встретимся.
+    ~ TRUST = TRUST + 1
+    -> msg_mila_loop2_place_choice
+
+* [«Если это розыгрыш — я хочу увидеть лицо, когда ты признаешься.»]
+    # msg:reply:mila:Если это розыгрыш — я хочу увидеть лицо, когда ты признаешься.
+    ~ INSIGHT = INSIGHT + 1
+    -> msg_mila_loop2_place_choice
+
+=== msg_mila_loop2_place_choice ===
+# speaker:none
+Теперь нужно выбрать место. Не потому что день стал понятнее — наоборот, потому что единственный способ проверить воскресенье дальше это войти в него ногами.
+
+* [«Давай в кафе. Спокойно посидим.»]
+    # msg:reply:mila:Давай в кафе. Спокойно посидим.
+    # set_flag:date_agreed=true
+    # set_flag:date_place_cafe=true
+    ~ date_agreed = true
+    ~ date_place_cafe = true
+    ~ TRUST = TRUST + 1
+    -> msg_npc_place_sent
+
+* [«Давай в парк у реки. Хочется пройтись.»]
+    # msg:reply:mila:Давай в парк у реки. Хочется пройтись.
+    # set_flag:date_agreed=true
+    # set_flag:date_place_park=true
+    ~ date_agreed = true
+    ~ date_place_park = true
+    ~ SYNC = SYNC + 1
+    -> msg_npc_place_sent
+
+=== msg_thread_artem_loop2 ===
+# speaker:none
+Открываешь Messenger.
+
+Артём:
+«Ты сегодня вообще живая?»
+«Я уже второй кофе пью.»
+«Выберемся куда-нибудь, пока день не стал совсем домашним?»
+
+# speaker:mc
+Слово в слово.
+
+Не “похоже”. Не “почти”. Ровно так же.
+
+* [«Очень смешно.»]
+    # msg:reply:artem:Очень смешно.
+    # msg:add:artem:Что смешно?
+    # msg:add:artem:Я просто спросил.
+    ~ INSIGHT = INSIGHT + 1
+    -> msg_artem_loop2_place_pressure
+
+* [«Ты уже писал это.»]
+    # msg:reply:artem:Ты уже писал это.
+    # msg:add:artem:Сегодня?
+    # msg:add:artem:Я тебе сегодня первый раз пишу.
+    ~ INSIGHT = INSIGHT + 2
+    -> msg_artem_loop2_place_pressure
+
+* [«Ок. Давай встретимся.»]
+    # msg:reply:artem:Ок. Давай встретимся.
+    # msg:add:artem:Ого. После такого вступления звучит почти подозрительно спокойно.
+    ~ SYNC = SYNC + 1
+    -> msg_artem_loop2_place_choice
+
+=== msg_artem_loop2_place_pressure ===
+# speaker:none
+Пауза в чате становится длиннее обычной.
+
+Артём не знает, что должен был повторить это сообщение. Для него это просто странный ответ на обычное воскресное приглашение.
+
+# msg:add:artem:Ты точно нормально себя чувствуешь?
+
+* [«Нет. Но давай всё равно встретимся.»]
+    # msg:reply:artem:Нет. Но давай всё равно встретимся.
+    ~ TRUST = TRUST + 1
+    -> msg_artem_loop2_place_choice
+
+* [«Если это розыгрыш — я хочу увидеть лицо, когда ты признаешься.»]
+    # msg:reply:artem:Если это розыгрыш — я хочу увидеть лицо, когда ты признаешься.
+    ~ INSIGHT = INSIGHT + 1
+    -> msg_artem_loop2_place_choice
+
+=== msg_artem_loop2_place_choice ===
+# speaker:none
+Теперь нужно выбрать место. Не потому что день стал понятнее — наоборот, потому что единственный способ проверить воскресенье дальше это войти в него ногами.
+
+* [«Давай в кафе. Спокойно посидим.»]
+    # msg:reply:artem:Давай в кафе. Спокойно посидим.
+    # set_flag:date_agreed=true
+    # set_flag:date_place_cafe=true
+    ~ date_agreed = true
+    ~ date_place_cafe = true
+    ~ TRUST = TRUST + 1
+    -> msg_npc_place_sent
+
+* [«Давай в парк у реки. Хочется пройтись.»]
+    # msg:reply:artem:Давай в парк у реки. Хочется пройтись.
+    # set_flag:date_agreed=true
+    # set_flag:date_place_park=true
+    ~ date_agreed = true
+    ~ date_place_park = true
+    ~ SYNC = SYNC + 1
+    -> msg_npc_place_sent
+
 === msg_npc_place_sent ===
 # speaker:none
 Сообщение отправлено.
 
+{iteration_number > 1 and loop2_work_check_done:
+Теперь у воскресенья есть адрес — и это уже не теория о сломанном телефоне, а маршрут, который придётся проверить.
+
+# quest:done:reply_npc
+# quest:start:meet_npc
+# hud:hint:phone:off
+# map:allow:reset
+{date_place_cafe:
+    # map:allow:poi_cafe
+- else:
+    # map:allow:poi_park
+}
+# phone:map
+-> DONE
+- else:
 Теперь у воскресенья есть адрес. Осталось одеться и выйти.
 
 # quest:done:reply_npc
@@ -264,6 +441,7 @@
 # hud:hint:phone:off
 # return_to_scene
 -> DONE
+}
 
 // -----------------------------------------------------------------------------
 // WORK / SYSTEM THREADS

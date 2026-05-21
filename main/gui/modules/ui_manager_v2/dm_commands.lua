@@ -28,13 +28,26 @@ local function apply_single(cmd, ctx)
         if gs.set_quest then gs.set_quest(cmd.quest, cmd.status) end
     elseif cmd.type == "add_sms" then
         if gs.add_sms then
+            if gs.set_sms_current_day and cmd.opts and cmd.opts.current_day then
+                gs.set_sms_current_day(cmd.opts.current_day)
+            end
             -- opts (для add_old) важнее одиночного hot-флага. Передаём то что есть.
             gs.add_sms(cmd.contact, cmd.text, cmd.opts or cmd.hot)
         end
     elseif cmd.type == "reply_sms" then
-        if gs.reply_sms then gs.reply_sms(cmd.contact, cmd.text) end
+        if gs.reply_sms then
+            if gs.set_sms_current_day and cmd.current_day then
+                gs.set_sms_current_day(cmd.current_day)
+            end
+            gs.reply_sms(cmd.contact, cmd.text)
+        end
     elseif cmd.type == "reply_old_sms" then
-        if gs.reply_old_sms then gs.reply_old_sms(cmd.contact, cmd.text, cmd.opts) end
+        if gs.reply_old_sms then
+            if gs.set_sms_current_day and cmd.opts and cmd.opts.current_day then
+                gs.set_sms_current_day(cmd.opts.current_day)
+            end
+            gs.reply_old_sms(cmd.contact, cmd.text, cmd.opts)
+        end
     elseif cmd.type == "mark_sms_read" then
         if gs.mark_sms_read then gs.mark_sms_read(cmd.contact) end
     elseif cmd.type == "set_sms_tag" then

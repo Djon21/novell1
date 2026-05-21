@@ -1225,26 +1225,6 @@ nodes {
 }
 nodes {
   position {
-    x: 500.0
-    y: 644.0
-    z: 0.587
-  }
-  size {
-    x: 728.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "head_divider"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.25
-}
-nodes {
-  position {
     x: 1193.0
     y: 646.0
     z: 0.59
