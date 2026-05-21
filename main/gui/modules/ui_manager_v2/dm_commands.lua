@@ -43,6 +43,8 @@ local function apply_single(cmd, ctx)
         if gs.set_bank_balance then gs.set_bank_balance(cmd.amount) end
     elseif cmd.type == "bank_charge" then
         if gs.bank_charge then gs.bank_charge(cmd.amount, cmd.merchant) end
+    elseif cmd.type == "phone_loop_reset" then
+        if gs.loop_reset_phone then gs.loop_reset_phone() end
     elseif cmd.type == "add_msg" then
         if gs.add_msg then gs.add_msg(cmd.chat, cmd.text, cmd.opts) end
     elseif cmd.type == "reply_msg" then

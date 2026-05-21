@@ -208,6 +208,8 @@ Ink-тег `# scene_char:show:GROUP:KEY` — описан в `INK_TAG_REFERENCE.
 
 - `main/scripts/dialogue_manager_ink.lua`, если вход идёт через Ink-теги;
 - `main/gui/modules/ui_manager_v2/dm_commands.lua`;
+- `main/scripts/game_state.lua`;
+- `main/scripts/state/sms.lua`, `main/scripts/state/messenger.lua`, `main/scripts/state/bank.lua`, если задача касается очистки/пересборки телефона между петлями (`phone:loop_reset`);
 - GUI/script нужного приложения, например `phone_sms.gui_script`, `phone_map.gui_script`;
 - `main/gui/ui_manager_v2.script`, если проблема на уровне overlay/open/close.
 

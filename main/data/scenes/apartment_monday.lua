@@ -163,6 +163,15 @@ return {
                 end,
             },
             s.use{
+                id = "mon_kitchen_water",
+                rect = { x = 835, y = 210, w = 135, h = 135 },
+                label = "Вода",
+                knot = "mon_home_kitchen_water",
+                visible_when = function(gs)
+                    return not gs.get_flag("monday_water_drunk")
+                end,
+            },
+            s.use{
                 id = "mon_kitchen_breakfast",
                 rect = { x = 625, y = 205, w = 190, h = 135 },
                 label = "Завтрак",

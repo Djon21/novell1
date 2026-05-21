@@ -69,25 +69,29 @@
 === phone_sms_tuesday_case_followup ===
 // SMS от NPC — эмоционально нагруженное, помечаем как hot.
 // Pin-тег "amber:важное" на чат: это рабочее последствие, не "сигнал".
+// Условия намеренно разложены в бинарные блоки, без вложенного switch внутри gender-ветки:
+// так меньше риск случайно смешать ink-синтаксис `{condition: ... - else: ...}` и `{ - condition: ... }`.
 {mc_gender == "female":
-    {
-    - office_clarification_requested:
+    {office_clarification_requested:
         # sms:add_hot:artem:Ты видела рабочий чат? Твой запрос по кейсу всплыл. Нам лучше поговорить до вечера.
-    - office_auto_solution_blocked:
-        # sms:add_hot:artem:Ты видела рабочий чат? Заблокированный кейс всплыл. Нам лучше поговорить до вечера.
     - else:
-        # sms:add_hot:artem:Ты видела рабочий чат? Вчерашний кейс всплыл. Нам лучше поговорить до вечера.
+        {office_auto_solution_blocked:
+            # sms:add_hot:artem:Ты видела рабочий чат? Заблокированный кейс всплыл. Нам лучше поговорить до вечера.
+        - else:
+            # sms:add_hot:artem:Ты видела рабочий чат? Вчерашний кейс всплыл. Нам лучше поговорить до вечера.
+        }
     }
     # sms:tag:artem:amber:важное
     # sms:read:artem
 - else:
-    {
-    - office_clarification_requested:
+    {office_clarification_requested:
         # sms:add_hot:mila:Ты видел рабочий чат? Твой запрос по кейсу всплыл. Нам лучше поговорить до вечера.
-    - office_auto_solution_blocked:
-        # sms:add_hot:mila:Ты видел рабочий чат? Заблокированный кейс всплыл. Нам лучше поговорить до вечера.
     - else:
-        # sms:add_hot:mila:Ты видел рабочий чат? Вчерашний кейс всплыл. Нам лучше поговорить до вечера.
+        {office_auto_solution_blocked:
+            # sms:add_hot:mila:Ты видел рабочий чат? Заблокированный кейс всплыл. Нам лучше поговорить до вечера.
+        - else:
+            # sms:add_hot:mila:Ты видел рабочий чат? Вчерашний кейс всплыл. Нам лучше поговорить до вечера.
+        }
     }
     # sms:tag:mila:amber:важное
     # sms:read:mila

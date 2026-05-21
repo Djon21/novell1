@@ -4,7 +4,7 @@
 Запускать перед каждой сессией AI-сценариста чтобы документ отражал
 текущее состояние проекта.
 
-_Сгенерировано: 2026-05-20 19:48_
+_Сгенерировано: 2026-05-21 13:11_
 
 Это **источник правды для AI** о том что реально существует в проекте:
 scene_id, knot имена, hotspot id, флаги, предметы. Не ссылайся на
@@ -155,6 +155,7 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 |---|---|---|---|
 | `mon_kitchen_coffee` | Кофе | knot: `mon_home_kitchen_coffee` | 👁 |
 | `mon_kitchen_coffee_after` | Кружка | knot: `mon_home_kitchen_coffee_after` | 👁 |
+| `mon_kitchen_water` | Вода | knot: `mon_home_kitchen_water` | 👁 |
 | `mon_kitchen_breakfast` | Завтрак | knot: `mon_home_kitchen_breakfast` | 👁 |
 | `mon_kitchen_breakfast_after` | Стол | knot: `mon_home_kitchen_breakfast_after` | 👁 |
 | `mon_kitchen_window` | Окно | knot: `mon_home_kitchen_window` | — |
@@ -281,7 +282,8 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | `tue_to_kitchen` | На кухню | scene: `tuesday_apartment_kitchen_morning` | — |
 | `tue_hall_mirror` | Зеркало | knot: `tue_home_hall_mirror` | — |
 | `tue_get_ready` | Обувь и куртка | knot: `tue_home_get_ready` | 👁 |
-| `tue_exit_apartment` | Выйти | knot: `tue_home_leave_apartment` | 🔒 |
+| `tue_exit_apartment_locked` | Выйти | knot: `tue_home_leave_apartment_locked` | 👁 |
+| `tue_exit_apartment` | Выйти | knot: `tue_home_leave_apartment` | 👁 |
 
 ### `tuesday_apartment_kitchen_morning` (Кухня)
  — source: `apartment_tuesday.lua`, bg: `"bg_apartment_kitchen_day"`, on_enter: `tue_home_kitchen_intro`
@@ -289,6 +291,8 @@ Exploration-сцены и их хотспоты. Source: `main/data/scenes/*.lua
 | Hotspot id | Label | Action | Gated |
 |---|---|---|---|
 | `tue_kitchen_coffee` | Кофе | knot: `tue_home_kitchen_coffee` | 👁 |
+| `tue_kitchen_coffee_after` | Кружка | knot: `tue_home_kitchen_coffee_after` | 👁 |
+| `tue_kitchen_water` | Вода | knot: `tue_home_kitchen_water` | 👁 |
 | `tue_kitchen_window` | Окно | knot: `tue_home_kitchen_window` | — |
 | `tue_back_to_hall_from_kitchen` | В коридор | scene: `tuesday_apartment_hall_morning` | — |
 
@@ -348,7 +352,6 @@ knot'ов в inventory намеренно не выводятся, чтобы ф
 | `bathroom_sink_prompt` | `knot` |
 | `bedroom_desk_morning` | `knot` |
 | `choose_character` | `knot` |
-| `drink_water_kitchen` | `knot` |
 | `enter_bathroom_morning_first` | `knot` |
 | `enter_kitchen_morning_first` | `knot` |
 | `leave_apartment` | `knot` |
@@ -370,6 +373,7 @@ knot'ов в inventory намеренно не выводятся, чтобы ф
 | `mon_home_kitchen_coffee` | `knot` |
 | `mon_home_kitchen_coffee_after` | `knot` |
 | `mon_home_kitchen_intro` | `knot` |
+| `mon_home_kitchen_water` | `knot` |
 | `mon_home_kitchen_window` | `knot` |
 | `mon_home_leave_apartment` | `knot` |
 | `mon_home_leave_apartment_locked` | `knot` |
@@ -402,12 +406,14 @@ knot'ов в inventory намеренно не выводятся, чтобы ф
 | `tue_home_hall_intro` | `knot` |
 | `tue_home_hall_mirror` | `knot` |
 | `tue_home_kitchen_coffee` | `knot` |
+| `tue_home_kitchen_coffee_after` | `knot` |
 | `tue_home_kitchen_intro` | `knot` |
+| `tue_home_kitchen_water` | `knot` |
 | `tue_home_kitchen_window` | `knot` |
 | `tue_home_leave_apartment` | `knot` |
+| `tue_home_leave_apartment_locked` | `knot` |
 | `tue_home_wash_up` | `knot` |
 | `tuesday_morning_start` | `knot` |
-| `use_coffee_machine_with_cup` | `knot` |
 | `use_coffee_setup_no_mug` | `knot` |
 
 ### `91_inventory_actions.ink`
@@ -736,7 +742,7 @@ Source: `main/scripts/scene_characters.lua`.
 ## Flags
 
 Все имена флагов встречающиеся в `# set_flag:`, `get_flag(...)`,
-`set_flag(...)`. Всего: **147**.
+`set_flag(...)`. Всего: **149**.
 
 **`bathroom_*`**: `bathroom_morning_seen`
 
@@ -770,7 +776,7 @@ Source: `main/scripts/scene_characters.lua`.
 
 **`mon_*`**: `mon_home_bedroom_seen` `mon_home_hall_seen` `mon_home_kitchen_seen` `mon_office_arrived` `mon_office_error_seen`
 
-**`monday_*`**: `monday_breakfast_done` `monday_case_file_assembled` `monday_case_file_submitted` `monday_checked_in_office` `monday_coffee_done` `monday_commute_auto` `monday_commute_observed` `monday_commute_steady` `monday_dressed` `monday_finished` `monday_folder_taken` `monday_left_home` `monday_mail_read` `monday_morning_started` `monday_office_finished` `monday_ready_for_work` `monday_report_page_taken` `monday_started` `monday_washed_up` `monday_workday_checked`
+**`monday_*`**: `monday_breakfast_done` `monday_case_file_assembled` `monday_case_file_submitted` `monday_checked_in_office` `monday_coffee_done` `monday_commute_auto` `monday_commute_observed` `monday_commute_steady` `monday_dressed` `monday_finished` `monday_folder_taken` `monday_left_home` `monday_mail_read` `monday_morning_started` `monday_office_finished` `monday_ready_for_work` `monday_report_page_taken` `monday_started` `monday_washed_up` `monday_water_drunk` `monday_workday_checked`
 
 **`mug_*`**: `mug_taken`
 
@@ -782,7 +788,7 @@ Source: `main/scripts/scene_characters.lua`.
 
 **`reached_*`**: `reached_office` `reached_work_district`
 
-**`sunday_*`**: `sunday_after_date_active` `sunday_bedroom_window_seen` `sunday_dressed` `sunday_evening_started` `sunday_finished` `sunday_gift_berry_soda` `sunday_gift_bought` `sunday_gift_chips` `sunday_gift_coffee_can` `sunday_gift_crackers` `sunday_gift_dark_chocolate` `sunday_gift_energy_drink` `sunday_gift_given` `sunday_gift_iced_tea` `sunday_gift_keychain_flashlight` `sunday_gift_milk_chocolate` `sunday_gift_nuts` `sunday_gift_paper_napkins` `sunday_gift_right` `sunday_gift_small_broom` `sunday_gift_waffle_bar` `sunday_gift_water_bottle` `sunday_gift_wet_wipes` `sunday_kitchen_window_seen` `sunday_messenger_invite_sent` `sunday_morning_routine_seen` `sunday_ready_to_leave` `sunday_second_stop_done` `sunday_shop_bought_drink_for_npc` `sunday_shop_bought_snack` `sunday_shop_done` `sunday_shop_pre_date_visited` `sunday_shop_street_pre_date_seen` `sunday_shop_street_with_npc_seen` `sunday_shop_with_npc_seen` `sunday_viewpoint_seen` `sunday_went_to_shop` `sunday_went_to_viewpoint`
+**`sunday_*`**: `sunday_after_date_active` `sunday_bedroom_window_seen` `sunday_dressed` `sunday_evening_started` `sunday_finished` `sunday_gift_berry_soda` `sunday_gift_bought` `sunday_gift_chips` `sunday_gift_coffee_can` `sunday_gift_crackers` `sunday_gift_dark_chocolate` `sunday_gift_energy_drink` `sunday_gift_given` `sunday_gift_iced_tea` `sunday_gift_keychain_flashlight` `sunday_gift_milk_chocolate` `sunday_gift_nuts` `sunday_gift_paper_napkins` `sunday_gift_right` `sunday_gift_small_broom` `sunday_gift_waffle_bar` `sunday_gift_water_bottle` `sunday_gift_wet_wipes` `sunday_kitchen_window_seen` `sunday_messenger_invite_sent` `sunday_morning_routine_seen` `sunday_ready_to_leave` `sunday_return_home_ad_seen` `sunday_second_stop_done` `sunday_shop_bought_drink_for_npc` `sunday_shop_bought_snack` `sunday_shop_done` `sunday_shop_pre_date_visited` `sunday_shop_street_pre_date_seen` `sunday_shop_street_with_npc_seen` `sunday_shop_with_npc_seen` `sunday_viewpoint_seen` `sunday_went_to_shop` `sunday_went_to_viewpoint`
 
 **`teeth_*`**: `teeth_brushed`
 
@@ -792,11 +798,9 @@ Source: `main/scripts/scene_characters.lua`.
 
 **`tue_*`**: `tue_home_bedroom_seen` `tue_home_hall_seen` `tue_home_kitchen_seen`
 
-**`tuesday_*`**: `tuesday_appeal_read` `tuesday_coffee_done` `tuesday_consequence_seen` `tuesday_desk_checked` `tuesday_investigation_done` `tuesday_kitchen_window_seen` `tuesday_left_home` `tuesday_log_reviewed` `tuesday_morning_started` `tuesday_npc_talked` `tuesday_pending` `tuesday_phone_checked` `tuesday_ready_to_leave` `tuesday_rooftop_reached` `tuesday_started` `tuesday_washed_up`
+**`tuesday_*`**: `tuesday_appeal_read` `tuesday_coffee_done` `tuesday_consequence_seen` `tuesday_desk_checked` `tuesday_investigation_done` `tuesday_kitchen_window_seen` `tuesday_left_home` `tuesday_log_reviewed` `tuesday_morning_started` `tuesday_npc_talked` `tuesday_pending` `tuesday_phone_checked` `tuesday_ready_to_leave` `tuesday_rooftop_reached` `tuesday_started` `tuesday_washed_up` `tuesday_water_drunk`
 
 **`washed_*`**: `washed_up`
-
-**`water_*`**: `water_drunk`
 
 **`work_*`**: `work_card_taken`
 

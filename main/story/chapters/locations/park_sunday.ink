@@ -568,5 +568,9 @@
 ~ date_route_chosen = true
 ~ met_npc_sunday = true
 ~ sunday_after_date_active = true
+# speaker:none
+Система делает паузу. На экране появится короткая реклама, потом всё продолжится с того же места.
+
+# adv:fullscreen
 # phone:map
 -> DONE

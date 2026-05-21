@@ -741,6 +741,10 @@ local function apply_tags(tags, trailing)
             end
         elseif key == "phone" and value == "map" and (not suppress_effects or restore_scene_transitions) then
             table.insert(scene_bucket, { type = "open_phone_app", app = "map" })
+        elseif key == "phone" and value == "loop_reset" and not suppress_effects then
+            -- # phone:loop_reset — очистить телефонный runtime-слой новой петли.
+            -- Не трогает meta-state/выбор персонажа; seed-события вызываются Ink'ом.
+            table.insert(pending_commands, { type = "phone_loop_reset" })
         elseif key == "phone" and value and value:match("^app%s*:") and (not suppress_effects or restore_scene_transitions) then
             local app = value:gsub("^app%s*:%s*", ""):gsub("^%s+", ""):gsub("%s+$", "")
                              :gsub('^"(.*)"$', "%1"):gsub("^'(.*)'$", "%1")

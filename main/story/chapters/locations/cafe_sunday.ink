@@ -279,12 +279,16 @@
 # set_flag:cafe_talk_done=true
 # quest:done:meet_npc
 # quest:start:spend_sunday
-# map:allow:reset
+# map:lock_all
 # map:allow:poi_shop
 # map:allow:poi_view
 ~ date_route_chosen = true
 ~ met_npc_sunday = true
 ~ sunday_after_date_active = true
+# speaker:none
+Система делает паузу. На экране появится короткая реклама, потом всё продолжится с того же места.
+
+# adv:fullscreen
 # phone:map
 -> DONE
 

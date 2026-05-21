@@ -56,6 +56,7 @@
 -> apartment_start
 
 === apartment_start ===
+# map:lock_all
 # bg:bg_apartment_bedroom_day # speaker:none
 Воскресное утро.
 
@@ -347,7 +348,7 @@
 
 # quest:done:find_phone
 # quest:start:make_coffee
-# map:lock_to:poi_home
+# map:lock_all
 # phone:app:sms
 # return_to_scene
 -> DONE
@@ -469,6 +470,9 @@
 ~ can_leave_apt = true
 # quest:done:make_coffee
 # quest:start:meet_npc
+# speaker:none
+Система делает паузу. На экране появится короткая реклама, потом всё продолжится с того же места.
+
 # adv:fullscreen
 # set_flag:map_opened_after_apartment=true
 ~ map_opened_after_apartment = true
@@ -543,12 +547,6 @@
 # return_to_scene
 -> DONE
 
-=== use_coffee_machine_with_cup ===
-# speaker:mc
-Кружка у меня. Надо не просто смотреть на чайник, а использовать её здесь.
-
-# return_to_scene
--> DONE
 
 === look_kitchen_window ===
 {sunday_evening_started:
@@ -623,23 +621,6 @@
     # return_to_scene
     -> DONE
 
-// ORPHAN: knot объявлен, но в scenes/apartment.lua нет хотспота, который
-// бы его вызывал. Текст готов, осталось добавить хотспот на кухне
-// (например на раковину/фильтр), action = { type = "ink_knot", knot = "drink_water_kitchen" }.
-// Сейчас water_drunk читается только в leave_apartment как доп. flavor text:
-// «Хотя бы воды выпил{mc_gender == "female":а|}.» — без хотспота этот fallback недостижим.
-//
-// Решение откладывается до iter 2+ либо до момента когда понадобится
-// разгрузить coffee-gate (см. обсуждение в комментарии к
-// inv_apartment_kitchen_use_mug_on_coffee_setup в 91_inventory_actions.ink).
-=== drink_water_kitchen ===
-# speaker:none
-Вода из-под фильтра прохладная и честная. Не кофе, не ритуал, просто способ напомнить телу, что оно существует.
-
-# set_flag:water_drunk=true
-~ water_drunk = true
-# return_to_scene
--> DONE
 
 // ================================================================
 // ВОСКРЕСЕНЬЕ: ВЫБОР МАРШРУТА (из квартиры)
@@ -1011,7 +992,11 @@
     {monday_coffee_done:
         Кофе держит утро на честном слове. Не еда, но хотя бы попытка включить человека до того, как его включит офис.
     - else:
-        Желудок напоминает, что человек не обязан работать только на расписании. Но расписание, как обычно, думает иначе.
+        {monday_water_drunk:
+            Хотя бы воды выпил{mc_gender == "female":а|}. Не завтрак, не план, но минимальная вежливость к телу перед рабочим днём.
+        - else:
+            Желудок напоминает, что человек не обязан работать только на расписании. Но расписание, как обычно, думает иначе.
+        }
     }
 }
 
@@ -1067,6 +1052,18 @@
 # speaker:mc
 Второй кофе сейчас будет не заботой, а сделкой с нервной системой. Хватит.
 
+# return_to_scene
+-> DONE
+
+=== mon_home_kitchen_water ===
+# speaker:none
+Вода из-под фильтра холодная и простая. Не обещает собраться, не требует ритуала — просто возвращает телу право быть телом.
+
+# speaker:mc
+Ладно. Хотя бы не только кофе.
+
+# set_flag:monday_water_drunk=true
+~ monday_water_drunk = true
 # return_to_scene
 -> DONE
 
@@ -1134,6 +1131,7 @@
 
 # set_flag:monday_finished=true
 # set_flag:tuesday_pending=true
+# splash:day:tuesday
 -> tuesday_morning_start
 
 // ----------------------------------------------------------------
@@ -1148,6 +1146,7 @@
 // ================================================================
 
 === tuesday_morning_start ===
+# map:lock_all
 # bg:bg_apartment_bedroom_day # speaker:none
 Вторник начинается не как повтор.
 
@@ -1254,6 +1253,7 @@
 }
 
 # set_flag:tuesday_phone_checked=true
+~ tuesday_phone_checked = true
 # return_to_scene
 -> DONE
 
@@ -1289,6 +1289,7 @@
 Сначала увидеть след. Потом делать выводы.
 
 # set_flag:tuesday_washed_up=true
+~ tuesday_washed_up = true
 # return_to_scene
 -> DONE
 
@@ -1336,6 +1337,27 @@
 Телефон. Ключи. Пропуск. И вопрос, который нельзя оставить дома.
 
 # set_flag:tuesday_ready_to_leave=true
+~ tuesday_ready_to_leave = true
+# return_to_scene
+-> DONE
+
+
+=== tue_home_leave_apartment_locked ===
+# speaker:none
+Дверь уже рядом, но вторник не отпускает на автомате.
+
+Перед выходом нужно сделать минимальные вещи: проверить телефон, умыться, собраться и не забыть рабочий пропуск. Сегодня это не рутина, а способ не приехать к последствиям неподготовленн{mc_gender == "female":ой|ым}.
+
+{not tuesday_phone_checked:
+    Телефон всё ещё требует внимания: там вчерашний кейс и след, с которого начнётся день.
+}
+{not tuesday_washed_up:
+    Ванная ещё не закрыта утренним действием. Вода нужна хотя бы затем, чтобы лицо перестало выглядеть как продолжение понедельника.
+}
+{not tuesday_ready_to_leave:
+    Куртка и обувь всё ещё ждут в коридоре.
+}
+
 # return_to_scene
 -> DONE
 
@@ -1351,7 +1373,12 @@
 # speaker:none
 Замок щёлкает за спиной. Квартира остаётся безопасной, но больше не может быть оправданием.
 
+{tuesday_water_drunk:
+    Холодная вода не успокаивает. Зато оставляет во рту простую, честную ясность: сначала тело, потом след.
+}
+
 # set_flag:tuesday_left_home=true
+# map:lock_all
 -> tue_route_entry
 
 
@@ -1388,6 +1415,31 @@
 }
 
 # set_flag:tuesday_coffee_done=true
+~ tuesday_coffee_done = true
+# return_to_scene
+-> DONE
+
+=== tue_home_kitchen_coffee_after ===
+# speaker:none
+Кружка стоит рядом с раковиной. На дне тёмный след, слишком похожий на точку в конце строки.
+
+# speaker:mc
+Кофе не помог. Но хотя бы подтвердил, что утро настоящее.
+
+# return_to_scene
+-> DONE
+
+=== tue_home_kitchen_water ===
+# speaker:none
+Вода холодная настолько, что мысль на секунду становится ровнее.
+
+Не легче. Просто чётче.
+
+# speaker:mc
+Хорошо. Сначала тело. Потом след.
+
+# set_flag:tuesday_water_drunk=true
+~ tuesday_water_drunk = true
 # return_to_scene
 -> DONE
 

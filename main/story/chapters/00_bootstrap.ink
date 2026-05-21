@@ -53,6 +53,7 @@ VAR sunday_evening_started = false
 VAR sunday_finished = false
 VAR sunday_dressed = false
 VAR sunday_ready_to_leave = false
+VAR sunday_return_home_ad_seen = false
 VAR got_out_of_bed = false
 VAR washed_up = false
 VAR bathroom_morning_seen = false
@@ -112,6 +113,7 @@ VAR monday_morning_started = false
 VAR monday_workday_checked = false
 VAR monday_coffee_done = false
 VAR monday_breakfast_done = false
+VAR monday_water_drunk = false
 VAR monday_checked_in_office = false
 VAR monday_mail_read = false
 VAR monday_case_file_assembled = false
@@ -143,6 +145,15 @@ VAR phone_history_seeded = false
 // чтобы +INSIGHT не фармился многократным кликом по описательному хотспоту.
 VAR tuesday_desk_checked = false
 VAR tuesday_kitchen_window_seen = false
+
+// Вторник: квартирная подготовка.
+// Дублируем game-state flags в Ink VAR там, где они нужны
+// для авторских условий внутри .ink (не только для Lua visible_when).
+VAR tuesday_phone_checked = false
+VAR tuesday_washed_up = false
+VAR tuesday_ready_to_leave = false
+VAR tuesday_coffee_done = false
+VAR tuesday_water_drunk = false
 VAR first_anomaly_seen = false
 
 VAR used_fallback = false

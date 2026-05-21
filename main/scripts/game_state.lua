@@ -175,6 +175,16 @@ function M.reset()
     M._notify()
 end
 
+-- Сброс только телефонного runtime-слоя для новой петли. Не трогает flags,
+-- inventory, quests, scene, map/clues/notes/mail/calls и cross-loop meta state.
+-- После этого Ink должен заново вызвать seed-события телефона.
+function M.loop_reset_phone()
+    sms_state.reset()
+    messenger_state.reset()
+    bank_state.reset()
+    M._notify()
+end
+
 -- ---------------------------------------------------------------------------
 -- Inventory
 -- ---------------------------------------------------------------------------

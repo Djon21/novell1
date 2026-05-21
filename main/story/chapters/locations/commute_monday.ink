@@ -107,4 +107,8 @@
 
 # set_flag:reached_office=true
 # quest:done:go_to_office
+# speaker:none
+Система делает паузу. На экране появится короткая реклама, потом всё продолжится с того же места.
+
+# adv:fullscreen
 -> mon_office_entry

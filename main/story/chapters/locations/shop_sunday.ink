@@ -137,6 +137,14 @@
 ~ sunday_second_stop_done = true
 ~ sunday_went_to_shop = true
 ~ sunday_shop_done = true
+{not sunday_return_home_ad_seen:
+    # speaker:none
+    Система делает паузу. На экране появится короткая реклама, потом всё продолжится с того же места.
+
+    # adv:fullscreen
+    # set_flag:sunday_return_home_ad_seen=true
+    ~ sunday_return_home_ad_seen = true
+}
 # phone:map
 -> DONE
 
@@ -157,6 +165,14 @@
 Вы выходите от магазина обратно к улице. Свет за стеклом остаётся позади, а телефон уже в руке — пора домой.
 # map:lock_all
 # map:lock_to:poi_home
+{not sunday_return_home_ad_seen:
+    # speaker:none
+    Система делает паузу. На экране появится короткая реклама, потом всё продолжится с того же места.
+
+    # adv:fullscreen
+    # set_flag:sunday_return_home_ad_seen=true
+    ~ sunday_return_home_ad_seen = true
+}
 # phone:map
     - else:
 Вы задерживаетесь у выхода. Автоматическая дверь послушно ждёт, но уходить сейчас странно: вы пришли сюда вместе и ещё даже ничего не выбрали.

@@ -232,6 +232,7 @@ Source of truth в коде: `main/scripts/dialogue_manager_ink.lua`, функц
 | `phone:map` | `# phone:map` | Открывает телефон сразу на карте. |
 | `phone:app:NAME` | `# phone:app:sms` | Открывает конкретное приложение телефона. |
 | `phone:close` | `# phone:close` | Закрывает phone overlay. Использовать только в специальных случаях. |
+| `phone:loop_reset` | `# phone:loop_reset` | Очищает телефонный runtime-слой новой петли: SMS, Messenger, unread, tags/prompts и банк/баланс. Не трогает meta-state и выбор персонажа. |
 | `note:add:TITLE:BODY` | `# note:add:Кейс:не хватает данных` | Добавляет заметку. |
 | `mail:add:FROM:SUBJECT` | `# mail:add:system:Кейс 017` | Добавляет письмо без отдельного тела. |
 | `mail:add:FROM:SUBJECT:BODY` | `# mail:add:system:Кейс 017:Текст` | Добавляет письмо с телом. |

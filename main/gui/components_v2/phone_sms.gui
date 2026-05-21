@@ -342,6 +342,18 @@ nodes {
 }
 nodes {
   type: TYPE_BOX
+  id: "sms_thread/th_scrollbar_track"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_scrollbar_thumb"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
   id: "sms_thread/th_send_bg"
   parent: "sms_thread/thread_root"
   template_node_child: true

@@ -368,6 +368,10 @@
 # quest:done:work_monday_case
 // После офисного выбора переход домой тоже сюжетный, а не free-roam.
 # map:lock_all
+# speaker:none
+Система делает паузу. На экране появится короткая реклама, потом всё продолжится с того же места.
+
+# adv:fullscreen
 -> mon_office_evening_close
 
 === office_turnstile_prompt ===

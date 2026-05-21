@@ -254,10 +254,18 @@
 
 # set_flag:sunday_second_stop_done=true
 # set_flag:sunday_went_to_viewpoint=true
-# map:allow:reset
+# map:lock_all
 # map:lock_to:poi_home
 ~ sunday_second_stop_done = true
 ~ sunday_went_to_viewpoint = true
+{not sunday_return_home_ad_seen:
+    # speaker:none
+    Система делает паузу. На экране появится короткая реклама, потом всё продолжится с того же места.
+
+    # adv:fullscreen
+    # set_flag:sunday_return_home_ad_seen=true
+    ~ sunday_return_home_ad_seen = true
+}
 # phone:map
 -> DONE
 
@@ -269,8 +277,16 @@
 # speaker:none
 {sunday_second_stop_done:
     Вы возвращаетесь от перил к выходу. После высоты город кажется ближе, но не тяжелее. Телефон уже в руке — теперь маршрут только домой.
-    # map:allow:reset
+    # map:lock_all
     # map:lock_to:poi_home
+    {not sunday_return_home_ad_seen:
+        # speaker:none
+        Система делает паузу. На экране появится короткая реклама, потом всё продолжится с того же места.
+
+        # adv:fullscreen
+        # set_flag:sunday_return_home_ad_seen=true
+        ~ sunday_return_home_ad_seen = true
+    }
     # phone:map
 - else:
     {sunday_after_date_active:

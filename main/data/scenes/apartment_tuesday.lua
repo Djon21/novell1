@@ -6,6 +6,14 @@
 
 local s = require "main.data.scenes._shared"
 
+local function tuesday_ready_to_leave(gs)
+    return gs.has_item("phone")
+       and gs.has_item("card")
+       and gs.get_flag("tuesday_phone_checked")
+       and gs.get_flag("tuesday_washed_up")
+       and gs.get_flag("tuesday_ready_to_leave")
+end
+
 return {
 
     tuesday_apartment_bedroom_morning = {
@@ -99,6 +107,16 @@ return {
                     return not gs.get_flag("tuesday_ready_to_leave")
                 end,
             },
+            s.story{
+                id = "tue_exit_apartment_locked",
+                rect = { x = 575, y = 215, w = 155, h = 345 },
+                label = "Выйти",
+                icon = "up",
+                knot = "tue_home_leave_apartment_locked",
+                visible_when = function(gs)
+                    return not tuesday_ready_to_leave(gs)
+                end,
+            },
             s.nav_ink{
                 id = "tue_exit_apartment",
                 rect = { x = 575, y = 215, w = 155, h = 345 },
@@ -108,13 +126,7 @@ return {
                 -- has_item("key") убран: key-pickup в локациях нет (item
                 -- был выпилен ранее). Если ключи вернутся — снова добавить
                 -- gs.has_item("key") сюда И в apartment_monday.lua.
-                condition = function(gs)
-                    return gs.has_item("phone")
-                        and gs.has_item("card")
-                        and gs.get_flag("tuesday_phone_checked")
-                        and gs.get_flag("tuesday_washed_up")
-                        and gs.get_flag("tuesday_ready_to_leave")
-                end,
+                visible_when = tuesday_ready_to_leave,
             },
         },
     },
@@ -137,6 +149,25 @@ return {
                 knot = "tue_home_kitchen_coffee",
                 visible_when = function(gs)
                     return not gs.get_flag("tuesday_coffee_done")
+                end,
+            },
+            s.inspect{
+                id = "tue_kitchen_coffee_after",
+                rect = { x = 280, y = 270, w = 135, h = 135 },
+                label = "Кружка",
+                icon = "coffee",
+                knot = "tue_home_kitchen_coffee_after",
+                visible_when = function(gs)
+                    return gs.get_flag("tuesday_coffee_done")
+                end,
+            },
+            s.use{
+                id = "tue_kitchen_water",
+                rect = { x = 835, y = 210, w = 135, h = 135 },
+                label = "Вода",
+                knot = "tue_home_kitchen_water",
+                visible_when = function(gs)
+                    return not gs.get_flag("tuesday_water_drunk")
                 end,
             },
             s.inspect{

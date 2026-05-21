@@ -153,8 +153,9 @@ operator timeout.
 
 # set_flag:tuesday_rooftop_reached=true
 # quest:done:follow_monday_trace
--> tue_rooftop_entry
 
-// ================================================================
-// АРХИВ — минимальный хаб
-// ================================================================
+# speaker:none
+Система делает паузу. На экране появится короткая реклама, потом всё продолжится с того же места.
+
+# adv:fullscreen
+-> tue_rooftop_entry
