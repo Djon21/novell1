@@ -1,0 +1,513 @@
+# Templates
+
+Готовые copy-paste блоки для типовых задач. AI должен **брать паттерн отсюда**, а не выдумывать структуру из памяти.
+
+Все имена в шаблонах — заглушки (`<PLACEHOLDER>`). Реальные значения подбирай по контексту, проверяя существующие ID в `PROJECT_INVENTORY.md`.
+
+---
+
+## 1. Новый ink-knot
+
+### Минимальный knot
+
+```ink
+=== <knot_name> ===
+# bg:<bg_name> # speaker:none
+Описание сцены / нарратив в speaker:none.
+
+# speaker:mc
+Реплика главного героя.
+
+# speaker:npc
+Реплика NPC.
+
+# return_to_scene
+-> DONE
+```
+
+### Knot с условиями и выбором
+
+```ink
+=== <knot_name> ===
+# bg:<bg_name> # speaker:none
+{<flag_name>:
+    Текст если флаг есть.
+- else:
+    Текст если флага нет.
+}
+
+* [Вариант 1]
+    # speaker:mc
+    Текст выбора 1.
+    ~ TRUST = TRUST + 1
+    -> <knot_continuation>
+
+* [Вариант 2]
+    # speaker:mc
+    Текст выбора 2.
+    -> <knot_continuation>
+
+=== <knot_continuation> ===
+# set_flag:<flag_name>=true
+~ <flag_name> = true
+# return_to_scene
+-> DONE
+```
+
+### Knot который выдаёт предмет
+
+```ink
+=== take_<item> ===
+# bg:<bg_name> # speaker:none
+Описание взятия предмета.
+
+# add_item:<item_id>
+# set_flag:<item>_taken=true
+~ <item>_taken = true
+# return_to_scene
+-> DONE
+```
+
+---
+
+## 2. Новый hotspot — через recipes
+
+Хотспоты создаются через **рецепты** из `_shared.lua`. Выбери рецепт по семантике действия, передай `opts` таблицу.
+
+```lua
+-- осмотреть / прочитать
+s.inspect{
+    id = "<hotspot_id>",
+    rect = { x = 100, y = 200, w = 150, h = 150 },
+    label = "<Подпись>",
+    knot = "<knot_name>",
+    visible_when = function(gs)
+        return gs.get_flag("<prereq_flag>")
+           and not gs.get_flag("<done_flag>")
+    end,
+    condition = function(gs)
+        return not gs.get_flag("<temporary_lock_flag>")
+    end,
+},
+
+-- взять предмет в инвентарь
+s.pickup{
+    id = "<id>", rect = {...}, label = "<Подпись>",
+    icon = "<icon_name>",   -- опционально, дефолт "left_click"
+    knot = "<knot_name>",
+},
+
+-- действие с объектом (кофе, турникет, рабочий стол)
+s.use{ id="...", rect={...}, label="...", knot="..." },
+
+-- сюжетный gate / обязательный момент
+s.story{ id="...", rect={...}, label="...", knot="..." },
+
+-- цель для применения предмета из инвентаря
+s.item_target{ id="...", rect={...}, label="...", knot="..." },
+
+-- переход в sub-сцену
+s.nav_scene{
+    id = "<id>", rect = {...}, label = "...",
+    icon = "up",           -- up / down / left / right
+    scene = "<scene_id>",
+},
+
+-- выход с локации (label по умолчанию "Выйти", icon "left")
+s.leave{ id="...", rect={...}, knot="<leave_knot>" },
+```
+
+### Override стиля / action / иконки
+
+Для AI-сценариста override **не является обычным шаблоном**. Сначала меняй
+рецепт по смыслу: `s.use{}` вместо `s.inspect{}` для действия, `s.pickup{}`
+для подбора предмета, `s.story{}` для сюжетного gate.
+
+`hotspot_style = ...` или `action = {...}` можно предлагать только как
+низкоуровневое исключение, если пользователь явно просит code-level правку и
+дал `_shared.lua` + нужный `main/data/scenes/*.lua`.
+
+Полная спецификация рецептов и список иконок — `docs/guides/HOTSPOTS.md`.
+
+---
+
+## 3. Новая exploration-сцена (в `main/data/scenes/<file>.lua`)
+
+```lua
+local s = require "main.data.scenes._shared"
+
+return {
+    <scene_id> = {
+        bg = "<bg_atlas_name>",     -- например "bg_park_riverside_bench_day"
+        label = "<Подпись локации>",
+        on_enter = {                 -- опционально — авто-knot при входе
+            knot = "<intro_knot>",
+            condition = function(gs)
+                return not gs.get_flag("<scene_intro_seen>")
+            end,
+        },
+        hotspots = {
+            s.inspect{
+                id = "<hotspot1_id>",
+                rect = { x = ..., y = ..., w = ..., h = ... },
+                label = "...",
+                knot = "...",
+            },
+            s.leave{
+                id = "leave_<scene_id>",
+                rect = { x = 0, y = 0, w = 170, h = 220 },
+                knot = "leave_<scene_id>",
+            },
+            -- ещё хотспоты ...
+        },
+        objects = {                  -- опционально — overlay-спрайты на фоне
+            {
+                id = "<object_id>",
+                image = "<sprite_id>",
+                pos = { x = ..., y = ... },
+                size = { w = ..., h = ... },
+                visible_when = function(gs) return ... end,
+            },
+        },
+    },
+}
+```
+
+Зарегистрировать в `main/scripts/scenes.lua` если файл новый.
+
+---
+
+## 4. Новая CHARS-запись (диалоговый портрет)
+
+В `main/gui/components_v2/dialogue_v2.gui_script` таблица `CHARS`:
+
+```lua
+<char_id> = {
+    color = vmath.vector4(<R>, <G>, <B>, 1.0),    -- 0..1, акцент nameplate
+    icon = string.char(0xEE, 0x9F, 0xBB),         -- fallback Material Icon
+    atlas = "<char_id>",                            -- texture binding из .gui
+    portrait = "<char_id>_idle",                    -- default static frame
+    portrait_idle  = "<char_id>_idle",              -- если анимированный
+    portrait_blink = "<char_id>_blink",
+    portrait_talk  = "<char_id>_talk",
+},
+
+-- Кириллический алиас для использования в # speaker:Имя
+["<имя_кириллицей>"] = {
+    color = vmath.vector4(<R>, <G>, <B>, 1.0),
+    icon = string.char(0xEE, 0x9F, 0xBB),
+    atlas = "<char_id>",
+    portrait = "<char_id>_idle",
+    portrait_idle  = "<char_id>_idle",
+    portrait_blink = "<char_id>_blink",
+    portrait_talk  = "<char_id>_talk",
+},
+```
+
+Плюс — texture binding в `dialogue_v2.gui` (это GUI-редактор, не код):
+```
+textures {
+  name: "<char_id>"
+  texture: "/main/images/portraits/<char_id>/<char_id>.atlas"
+}
+```
+
+Полный pipeline (генерация спрайтов, атлас, нейронка) — `HOW_TO_ADD_PORTRAITS.md` / `HOW_TO_ANIMATE_PORTRAITS.md`.
+
+---
+
+## 5. Scene character (full-figure на фоне)
+
+В `main/scripts/scene_characters.lua`:
+
+```lua
+-- В SCENE_GROUPS (если новая локация-группа):
+SCENE_GROUPS = {
+    <scene_id> = "<group>",
+    -- если в группе несколько sub-сцен:
+    <scene_id_2> = "<group>",
+}
+
+-- В SCENES:
+SCENES = {
+    <group> = {
+        <char>_<pose> = {
+            atlas  = "char_<char>",
+            sprite = "<pose>",                 -- image id в атласе
+            x = 820, y = 340, w = 95, h = 340, -- top-left + size в game coords 1280×720
+            -- Опционально — клик запускает knot:
+            action = { type = "ink_knot", knot = "<knot_name>" },
+            -- Опционально — после события клик отключается:
+            clickable_when = function(gs)
+                return not gs.get_flag("<event_done_flag>")
+            end,
+        },
+    },
+}
+```
+
+В ink:
+```ink
+# scene_char:show:<group>:<char>_<pose>
+# scene_char:hide:<group>:<char>_<pose>
+# scene_char:hide_all
+```
+
+Auto-hide при выходе из группы — встроенное поведение, явный hide не нужен при travel'е.
+
+Полный pipeline — `HOW_TO_ADD_SCENE_CHARACTERS.md`.
+
+---
+
+## 6. SMS / Messenger переписка
+
+### Простое SMS
+
+```ink
+# sms:add:<contact_id>:Текст входящего SMS
+```
+
+### Игрок отвечает (ставит auto-flag `sms_<contact>_replied`)
+
+```ink
+# sms:reply:<contact_id>:Текст ответа от игрока
+```
+
+### Телефонное событие через централизованный файл
+
+Канон: сценовые `.ink` не хранят тексты SMS/Messenger. Сцена вызывает event-knot через tunnel, а все `# sms:*`, `# msg:*`, `# bank:*` лежат в `92_phone_sms.ink` / `93_phone_messenger.ink`.
+
+В сцене:
+
+```ink
+-> phone_sms_seed_sunday_morning ->
+-> phone_msg_seed_sunday_morning ->
+```
+
+В `92_phone_sms.ink`:
+
+```ink
+=== phone_sms_seed_sunday_morning ===
+# sms:add_old:mama:пн:Не забудь поесть.
+# sms:reply_old:mama:пн:Я поел.
+# sms:add:delivery:Курьер будет у подъезда через 12 минут.
+->->
+```
+
+В `93_phone_messenger.ink`:
+
+```ink
+=== phone_msg_seed_sunday_morning ===
+{mc_gender == "female":
+    # msg:add_old:artem:пн:Есть планы на сегодня?
+    # msg:need_reply:artem
+- else:
+    # msg:add_old:mila:пн:Есть планы на сегодня?
+    # msg:need_reply:mila
+}
+->->
+```
+
+`-> phone_sms_* ->` вызывает телефонный блок и возвращается в сцену. `->->` в конце телефонного блока возвращает управление туда, откуда его вызвали.
+
+### Read-only SMS / Messenger-лента без ответа игрока
+
+Если это банк, доставка, такси, управдом, метро, маркет, клиника, канал, бот или старая история без выбора ответа — **не создавай** `sms_thread_<contact>` / `msg_thread_<chat>`.
+
+```ink
+// Старые уже прочитанные сообщения
+# sms:add_old:bank:вчера:Карта *4821: списание 349 ₽.
+# sms:reply_old:mama:пн:Да, всё нормально. Просто устал.
+# msg:add_old:metro:пн:Синяя ветка работает с увеличенными интервалами.
+# msg:reply_old:friends:пт:Я могу отменить заранее, чтобы не рушить традицию.
+
+// Новое входящее, которое игрок только читает
+# sms:add:delivery:Курьер будет у подъезда через 12 минут.
+# msg:add:metro:Вход на станцию временно ограничен.
+```
+
+`sms:reply_old` / `msg:reply_old` нужны только для старых исходящих сообщений в seed-истории. Они не ставят `*_replied`, поэтому не блокируют будущий настоящий ответ игрока.
+
+`sms:read` / `msg:read` снимают unread, но не делают чат read-only. Read-only для автора — это отсутствие интерактивного thread-knot'а.
+
+### Полный thread c условием
+
+```ink
+=== sms_thread_<contact> ===
+{<contact>_replied:
+    Здесь обработка ПОСЛЕ ответа.
+    -> DONE
+}
+
+# sms:add:<contact>:Первое сообщение от NPC.
+# sms:add:<contact>:Второе сообщение.
+
+* [Ответ 1]
+    # sms:reply:<contact>:Текст ответа 1
+    # sms:add:<contact>:Реакция NPC на ответ 1.
+* [Ответ 2]
+    # sms:reply:<contact>:Текст ответа 2
+    # sms:add:<contact>:Реакция NPC на ответ 2.
+
+# return_to_scene
+-> DONE
+```
+
+Messenger аналогично через `# msg:add:...` / `# msg:reply:...`, но создавай `msg_thread_<chat>` только если игрок действительно должен отвечать. Для «написать первым из конкретной сцены» лучше использовать `# msg:prompt:CHAT:KNOT[:LABEL]`, а не общий `msg_thread_<chat>`.
+
+### Сообщение с hot-стилизацией (тревожный/срочный тон)
+
+```ink
+# sms:add_hot:<contact_id>:Текст — bubble нарисуется hot-стилем (red accent).
+```
+
+### Pre-existing история (seed на старте игры)
+
+«Старое» уже прочитанное сообщение с человеческим временем (`пн`, `вчера`, `03:17`).
+Не бампит unread-счётчик, попадает над day-separator'ом «сегодня».
+
+```ink
+# sms:add_old:mama:пн:Не забудь поесть.
+# sms:reply_old:mama:пн:Я поел.
+# sms:add_old:bank:вчера:Карта *4821: списание 349 ₽.
+# msg:add_old:work_team:пн:Планёрка перенесена.
+# msg:reply_old:work_team:пн:Ок, увидел.
+```
+
+### Pin-теги в списке чатов
+
+Цветная плашка с label справа от строки чата. Тон: `hot` / `amber` / `danger` / `warn`.
+
+```ink
+# sms:tag:unknown:hot:сигнал       // pin "сигнал" розовый
+# sms:tag:prod:amber:офис          // pin "офис" жёлтый
+# sms:tag:prod:clear               // снять pin
+# msg:tag:loop:hot:бот             // pin для Messenger
+```
+
+### «Ждёт ответа» — без ответа сюжет не пойдёт
+
+Pin розовый, мигающий, label `ОТВЕТЬ`. Авто-снимается при `# sms:reply` / `# msg:reply`.
+
+```ink
+# msg:add:mila:Ты сегодня живой?
+# msg:need_reply:mila              // pin "ОТВЕТЬ" на чате Милы
+# hud:hint:phone                   // мигалка на иконке телефона
+```
+
+### Открытая инициатива — игрок пишет первым (заменяет хотспот «Написать»)
+
+Главный паттерн когда нужно дать игроку «написать в мессенджере из сцены».
+Ставит pin (default label `НАПИСАТЬ`), разрешает писать в чат **игнорируя**
+`msg_<chat>_replied`, при тапе input'а в чате запускает указанный KNOT
+(вместо стандартного `msg_thread_<chat>`).
+
+```ink
+=== sunday_date_park_arrival ===
+... // описание прибытия в парк, NPC не видно
+# msg:prompt:mila:park_message_where_are_you:НАПИСАТЬ
+# hud:hint:phone
+# return_to_scene
+-> DONE
+
+=== park_message_where_are_you ===
+# speaker:mc
+«Ты где?»
+
+* [Просто спросить]
+    # msg:reply:mila:Ты где?           // pin авто-снимется здесь
+    # msg:add:mila:У воды, ближе к лавочкам. Уже там, жду.
+    # hud:hint:phone:off
+    -> DONE
+```
+
+Для **гендеро-зависимых** сцен — обернуть в `{mc_gender == "female":}` (chat_id
+меняется: `artem` для female MC, `mila` для male MC). Knot обычно один и
+тот же, текст внутри уже сам делает gender-токены.
+
+### Снять prompt вручную
+
+Если игрок ушёл из сцены не отправив сообщение, и инициатива больше не нужна:
+
+```ink
+# msg:prompt:mila:clear
+```
+
+---
+
+## 7. Открыть карту телефона + выбор POI
+
+Карта — это приложение внутри телефона. Открывается через `# phone:map`
+(или само, если игрок тапнул иконку карты). После выбора POI игрок попадает
+в нужную сцену через POI_SCENES mapping (см. блок 9). Управление доступностью
+POI — через `# map:allow:` / `# map:lock_to:` / `# map:lock_all`:
+
+```ink
+=== <knot_offering_choice> ===
+# bg:<current_bg> # speaker:none
+Описание момента, когда нужно выбрать куда идти.
+
+# map:allow:reset
+# map:allow:poi_cafe
+# map:allow:poi_park
+# phone:map
+-> DONE
+```
+
+Чтобы ограничить карту одной точкой (например, форсировать переход домой):
+```ink
+# map:lock_to:poi_home
+# phone:map
+```
+
+`# map:hub:KNOT` (standalone-карта с fallback-knot) **больше не поддерживается** —
+старая отдельная карта удалена. Если нужен общий «после-travel» knot для нескольких
+POI, заведи его как обычный narrative-knot, в который игрок попадёт через
+`on_enter` следующей сцены.
+
+---
+
+## 8. Использование предмета на хотспоте (`use X on Y`)
+
+В `91_inventory_actions.ink`:
+
+```ink
+=== inv_use_<item>_on_<hotspot_id> ===
+# bg:<current_bg> # speaker:none
+Описание реакции.
+
+# remove_item:<item>           -- если предмет одноразовый
+# set_flag:<combo_done>=true
+~ <combo_done> = true
+# return_to_scene
+-> DONE
+```
+
+Имя knot'а: **`inv_use_<item>_on_<hotspot_id>`** — это convention, по нему движок ищет реакцию автоматически когда игрок armed-with-item кликает на hotspot.
+
+---
+
+## 9. Phone Map POI (`POI_SCENES` в phone_map.gui_script)
+
+```lua
+POI_SCENES = {
+    -- ...существующие...
+    poi_<new_location> = { scene = "<scene_id>", label = "Подпись на карте" },
+}
+```
+
+Затем разрешать в ink:
+```ink
+# map:allow:poi_<new_location>
+```
+
+Если POI должен быть доступен только при условии — управлять через `map:allow:` / `map:lock_to:` в ink.
+
+---
+
+## Memo
+
+- **Всегда** проверяй существующие имена в `PROJECT_INVENTORY.md` перед добавлением нового
+- **Не** создавай новый tag type / action type без согласования (это код, не сценарий)
+- **Не** меняй структуру файлов сцены / CHARS наугад — есть конвенции, см. WRITING_RULES
+- Если нужна новая фича (новый tag, новый shape хотспота, etc.) — это **отдельная задача** на код, а не часть сценарной правки

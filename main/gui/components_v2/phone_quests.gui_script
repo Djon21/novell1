@@ -1,0 +1,544 @@
+-- phone_quests.gui_script
+-- Quest list in split-phone architecture.
+-- Accepts: open_app, close_app, refresh_app, phone_input.
+-- Data source remains game_state + main.scripts.quests catalog.
+
+local gs = require "main.scripts.game_state"
+local quests_catalog = require "main.scripts.quests"
+local drag_scroll = require "main.gui.modules.drag_scroll"
+
+local COLORS = {
+    dark      = vmath.vector4(0.031, 0.024, 0.094, 1),
+    card      = vmath.vector4(0.078, 0.071, 0.204, 1),
+    paper     = vmath.vector4(0.953, 0.925, 0.851, 1),
+    paper_dim = vmath.vector4(0.788, 0.753, 0.659, 1),
+    accent    = vmath.vector4(0.490, 0.976, 1.000, 1),
+    hot       = vmath.vector4(1.000, 0.239, 0.498, 1),
+    amber     = vmath.vector4(1.000, 0.702, 0.278, 1),
+    violet    = vmath.vector4(0.690, 0.455, 1.000, 1),
+    green     = vmath.vector4(0.290, 0.870, 0.500, 1),
+}
+
+local CONTENT_X = 524
+local ROW_W = 660
+local SCROLL_X = 1192
+local LIST_TOP = 558
+local LIST_BOTTOM = 104
+local LIST_H = LIST_TOP - LIST_BOTTOM
+local CARD_H, CARD_GAP = 210, 18
+-- В phone_quests.gui лежит только ОДНА quest-карточка (quest1_bg + дети).
+-- Остальные слоты создаются в init() через gui.clone_tree(quest1_bg).
+local QUEST_SLOTS = 2
+local VISIBLE_STEPS = 3
+
+local NODE_IDS = {
+    "quests_runtime_root", "quests_app_bg",
+    "quests_title", "quests_divider",
+    "qtab_active_bg", "qtab_active_label", "qtab_active_count",
+    "qtab_done_bg", "qtab_done_label", "qtab_done_count",
+    "quests_scrollbar_track", "quests_scrollbar_thumb",
+    "quests_footer_line", "quests_footer_left", "quests_footer_right",
+}
+
+for i = 1, QUEST_SLOTS do
+    local p = "quest" .. i
+    table.insert(NODE_IDS, p .. "_bg")
+    table.insert(NODE_IDS, p .. "_top")
+    table.insert(NODE_IDS, p .. "_bottom")
+    table.insert(NODE_IDS, p .. "_left")
+    table.insert(NODE_IDS, p .. "_right")
+    table.insert(NODE_IDS, p .. "_glyph_bg")
+    table.insert(NODE_IDS, p .. "_glyph")
+    table.insert(NODE_IDS, p .. "_name")
+    table.insert(NODE_IDS, p .. "_tag_bg")
+    table.insert(NODE_IDS, p .. "_tag")
+    table.insert(NODE_IDS, p .. "_desc")
+    for j = 1, VISIBLE_STEPS do
+        table.insert(NODE_IDS, p .. "_step" .. j .. "_box")
+        table.insert(NODE_IDS, p .. "_step" .. j .. "_top")
+        table.insert(NODE_IDS, p .. "_step" .. j .. "_bottom")
+        table.insert(NODE_IDS, p .. "_step" .. j .. "_left")
+        table.insert(NODE_IDS, p .. "_step" .. j .. "_right")
+        table.insert(NODE_IDS, p .. "_step" .. j .. "_mark")
+        table.insert(NODE_IDS, p .. "_step" .. j .. "_text")
+    end
+    table.insert(NODE_IDS, p .. "_due")
+    table.insert(NODE_IDS, p .. "_pbar_bg")
+    table.insert(NODE_IDS, p .. "_pbar_fill")
+    table.insert(NODE_IDS, p .. "_pct")
+end
+
+-- Хранит клоны quest-карточек: _card_clones[slot] = { [orig_id] = node, ... }
+-- slot 1 = оригинал из .gui (не клон).
+-- slot 2..N = клоны из gui.clone_tree(quest1_bg) созданные в init().
+local _card_clones = nil
+
+local function try_get_node(id)
+    local ok, n = pcall(gui.get_node, id)
+    if ok then return n end
+    return nil
+end
+
+-- Резолвит "questN_<suffix>" через clone-таблицу для N > 1. Все остальные id
+-- идут напрямую через gui.get_node. После init() _card_clones содержит slot 2+.
+local function get_node(id)
+    local n = try_get_node(id)
+    if n then return n end
+
+    if not _card_clones then return nil end
+    local N, suffix = id:match("^quest(%d+)(_.+)$")
+    if not N then return nil end
+    N = tonumber(N)
+    if N == 1 then return nil end  -- оригинал — уже пробовали через try_get_node
+    local clone = _card_clones[N]
+    if not clone then return nil end
+    -- Ключи в clone-таблице — оригинальные id ("quest1_top" и т.п.)
+    return clone["quest1" .. suffix]
+end
+
+local function set_node_enabled(id, enabled)
+    local n = get_node(id)
+    if n then gui.set_enabled(n, enabled) end
+end
+
+local function set_nodes_enabled(enabled)
+    for _, id in ipairs(NODE_IDS) do
+        set_node_enabled(id, enabled)
+    end
+end
+
+local function set_text(id, text)
+    local n = get_node(id)
+    if n then gui.set_text(n, text or "") end
+end
+
+local function set_pos(id, x, y, z)
+    local n = get_node(id)
+    if n then gui.set_position(n, vmath.vector3(x, y, z or 0.55)) end
+end
+
+local function set_size(id, w, h)
+    local n = get_node(id)
+    if n then gui.set_size(n, vmath.vector3(w, h, 0)) end
+end
+
+local function set_color(id, color, alpha)
+    local n = get_node(id)
+    if n then
+        gui.set_color(n, color)
+        if alpha ~= nil then gui.set_alpha(n, alpha) end
+    end
+end
+
+local function set_box(id, x, y, w, h, color, alpha, z)
+    set_pos(id, x, y, z or 0.54)
+    set_size(id, w, h)
+    set_color(id, color, alpha)
+end
+
+local function set_border_color(prefix, color, alpha)
+    set_color(prefix .. "_top", color, alpha)
+    set_color(prefix .. "_bottom", color, alpha)
+    set_color(prefix .. "_left", color, alpha)
+    set_color(prefix .. "_right", color, alpha)
+end
+
+local function utf8_len_and_cut(s, max_chars)
+    s = tostring(s or "")
+    local bytes = #s
+    local i, chars, cut = 1, 0, bytes
+    while i <= bytes do
+        if chars >= max_chars then
+            cut = i - 1
+            return chars, cut
+        end
+        local b = s:byte(i) or 0
+        local step = 1
+        if b >= 240 then step = 4
+        elseif b >= 224 then step = 3
+        elseif b >= 192 then step = 2 end
+        i = i + step
+        chars = chars + 1
+    end
+    return chars, bytes
+end
+
+local function clamp_text(s, max_len)
+    s = tostring(s or "")
+    max_len = tonumber(max_len) or 40
+    local n = utf8_len_and_cut(s, max_len)
+    if n <= max_len then return s end
+    local _, cut = utf8_len_and_cut(s, math.max(0, max_len - 3))
+    return s:sub(1, cut) .. "..."
+end
+
+local function parse_progress(progress)
+    local done, total = tostring(progress or ""):match("^(%d+)%s*/%s*(%d+)$")
+    return tonumber(done) or 0, tonumber(total) or 0
+end
+
+local MAIN_IDS = {
+    find_phone = true,
+    meet_npc = true,
+    go_to_office = true,
+    work_monday_case = true,
+}
+
+local CHAIN_IDS = {
+    reply_npc = true,
+    spend_sunday = true,
+    follow_monday_trace = true,
+}
+
+local function classify(q)
+    local id = tostring(q and q.id or "")
+    local status = q and q.status or "active"
+    if status == "done" then
+        return "done", "OK", "Завершено", COLORS.green
+    elseif status == "failed" then
+        return "urgent", "!", "Провалено", COLORS.hot
+    elseif MAIN_IDS[id] then
+        return "main", "!", "Главная", COLORS.amber
+    elseif CHAIN_IDS[id] then
+        return "secret", "?", "Цепочка", COLORS.violet
+    else
+        return "normal", "*", "Активная", COLORS.accent
+    end
+end
+
+local function style_for(kind)
+    if kind == "main" then
+        return COLORS.amber, 0.06, COLORS.amber, 0.50
+    elseif kind == "urgent" then
+        return COLORS.hot, 0.08, COLORS.hot, 0.55
+    elseif kind == "secret" then
+        return COLORS.violet, 0.08, COLORS.violet, 0.50
+    elseif kind == "done" then
+        return COLORS.green, 0.05, COLORS.green, 0.30
+    end
+    return COLORS.accent, 0.55, COLORS.accent, 0.18
+end
+
+local function quest_progress(q)
+    if q and q.id and quests_catalog.progress then
+        local done, total, steps = quests_catalog.progress(q.id, gs)
+        return done or 0, total or 0, steps or {}
+    end
+    local done, total = parse_progress(q and q.progress)
+    return done, total, {}
+end
+
+local function list_all_quests()
+    local list = gs.get_quests and gs.get_quests() or {}
+    local out = {}
+    for _, q in ipairs(list) do
+        table.insert(out, q)
+    end
+    return out
+end
+
+local function split_quests(list)
+    local active, done = {}, {}
+    for _, q in ipairs(list) do
+        if q.status == "done" then table.insert(done, q)
+        else table.insert(active, q) end
+    end
+    return active, done
+end
+
+local function get_visible_list(self)
+    local all = list_all_quests()
+    local active, done = split_quests(all)
+    return self.filter == "done" and done or active, active, done
+end
+
+local function hide_card(i)
+    local p = "quest" .. i
+    for _, suffix in ipairs({
+        "_bg", "_top", "_bottom", "_left", "_right", "_glyph_bg", "_glyph", "_name", "_tag_bg", "_tag",
+        "_desc", "_due", "_pbar_bg", "_pbar_fill", "_pct"
+    }) do
+        set_node_enabled(p .. suffix, false)
+    end
+    for j = 1, VISIBLE_STEPS do
+        set_node_enabled(p .. "_step" .. j .. "_box", false)
+        set_node_enabled(p .. "_step" .. j .. "_top", false)
+        set_node_enabled(p .. "_step" .. j .. "_bottom", false)
+        set_node_enabled(p .. "_step" .. j .. "_left", false)
+        set_node_enabled(p .. "_step" .. j .. "_right", false)
+        set_node_enabled(p .. "_step" .. j .. "_mark", false)
+        set_node_enabled(p .. "_step" .. j .. "_text", false)
+    end
+end
+
+local function show_card(i)
+    local p = "quest" .. i
+    for _, suffix in ipairs({
+        "_bg", "_top", "_bottom", "_left", "_right", "_glyph_bg", "_glyph", "_name", "_tag_bg", "_tag",
+        "_desc", "_due", "_pbar_bg", "_pbar_fill", "_pct"
+    }) do
+        set_node_enabled(p .. suffix, true)
+    end
+    for j = 1, VISIBLE_STEPS do
+        set_node_enabled(p .. "_step" .. j .. "_box", true)
+        set_node_enabled(p .. "_step" .. j .. "_top", true)
+        set_node_enabled(p .. "_step" .. j .. "_bottom", true)
+        set_node_enabled(p .. "_step" .. j .. "_left", true)
+        set_node_enabled(p .. "_step" .. j .. "_right", true)
+        set_node_enabled(p .. "_step" .. j .. "_mark", true)
+        set_node_enabled(p .. "_step" .. j .. "_text", true)
+    end
+end
+
+local function update_scrollbar(self, total)
+    local max_offset = math.max(0, total - QUEST_SLOTS)
+    if max_offset <= 0 then
+        set_box("quests_scrollbar_thumb", SCROLL_X, LIST_TOP - LIST_H, 5, LIST_H, COLORS.accent, 0.25, 0.545)
+        return
+    end
+    local ratio = QUEST_SLOTS / math.max(QUEST_SLOTS, total)
+    local thumb_h = math.max(90, LIST_H * ratio)
+    local travel = LIST_H - thumb_h
+    local t = self.offset / max_offset
+    local y = LIST_BOTTOM + travel * (1 - t)
+    set_box("quests_scrollbar_thumb", SCROLL_X, y, 5, thumb_h, COLORS.accent, 0.70, 0.545)
+end
+
+local function render_tabs(self, active_count, done_count)
+    set_text("qtab_active_count", tostring(active_count))
+    set_text("qtab_done_count", tostring(done_count))
+    if self.filter == "done" then
+        set_color("qtab_active_bg", COLORS.card, 0.60)
+        set_color("qtab_active_label", COLORS.paper_dim, 0.75)
+        set_color("qtab_active_count", COLORS.paper, 0.85)
+        set_color("qtab_done_bg", COLORS.accent, 0.15)
+        set_color("qtab_done_label", COLORS.accent, 1.0)
+        set_color("qtab_done_count", COLORS.accent, 1.0)
+    else
+        set_color("qtab_active_bg", COLORS.accent, 0.15)
+        set_color("qtab_active_label", COLORS.accent, 1.0)
+        set_color("qtab_active_count", COLORS.accent, 1.0)
+        set_color("qtab_done_bg", COLORS.card, 0.60)
+        set_color("qtab_done_label", COLORS.paper_dim, 0.75)
+        set_color("qtab_done_count", COLORS.paper, 0.85)
+    end
+end
+
+local function render_card(i, q)
+    if not q then hide_card(i) return end
+    show_card(i)
+
+    local p = "quest" .. i
+    local kind, glyph, tag, accent = classify(q)
+    local bg_color, bg_alpha, border_color, border_alpha = style_for(kind)
+    set_color(p .. "_bg", kind == "normal" and COLORS.card or bg_color, bg_alpha)
+    set_color(p .. "_glyph_bg", accent, kind == "done" and 0.18 or 0.20)
+    set_color(p .. "_glyph", accent, 1.0)
+    set_color(p .. "_name", kind == "normal" and COLORS.paper or accent, kind == "done" and 0.62 or 1.0)
+    set_color(p .. "_tag_bg", accent, 0.15)
+    set_color(p .. "_tag", accent, 1.0)
+    set_border_color(p, border_color, border_alpha)
+
+    set_text(p .. "_glyph", glyph)
+    set_text(p .. "_name", clamp_text((q.title or q.name or q.id or "—"):upper(), 30))
+    set_text(p .. "_tag", tag:upper())
+    set_text(p .. "_desc", clamp_text(q.desc or q.description or "", 118))
+    set_color(p .. "_desc", COLORS.paper_dim, kind == "done" and 0.45 or 0.76)
+
+    local done, total, steps = quest_progress(q)
+    total = math.max(total, 0)
+    done = math.min(done, total)
+    local pct = total > 0 and math.floor((done / total) * 100 + 0.5) or 0
+    local progress_text = tostring(done) .. "/" .. tostring(total)
+    set_text(p .. "_due", "ШАГИ\n" .. progress_text)
+    set_text(p .. "_pct", tostring(pct) .. "%")
+    set_color(p .. "_due", COLORS.paper_dim, 0.80)
+    set_color(p .. "_pct", COLORS.paper_dim, 0.92)
+    set_color(p .. "_pbar_fill", accent, kind == "done" and 0.75 or 1.0)
+    local fill_w = math.max(2, math.floor(136 * math.max(0, math.min(1, pct / 100))))
+    set_size(p .. "_pbar_fill", fill_w, 7)
+
+    for j = 1, VISIBLE_STEPS do
+        local step = steps[j]
+        local text = ""
+        local checked = false
+        if step then
+            text = tostring(step.text or "")
+            checked = step.checked == true
+            if j == VISIBLE_STEPS and #steps > VISIBLE_STEPS then
+                local left = #steps - VISIBLE_STEPS + 1
+                text = "+" .. tostring(left) .. " шагов в цепочке"
+                checked = false
+            end
+        end
+        local box = p .. "_step" .. j .. "_box"
+        local mark = p .. "_step" .. j .. "_mark"
+        local txt = p .. "_step" .. j .. "_text"
+        if text == "" then
+            set_node_enabled(box, false)
+            set_node_enabled(mark, false)
+            set_node_enabled(txt, false)
+        else
+            set_node_enabled(box, true)
+            set_node_enabled(mark, true)
+            set_node_enabled(txt, true)
+            set_text(mark, checked and "x" or "")
+            set_text(txt, clamp_text(text, 48))
+            set_color(box, checked and accent or COLORS.dark, checked and 1.0 or 0.0)
+            set_color(mark, checked and COLORS.dark or accent, checked and 0.95 or 0.0)
+            set_color(txt, checked and COLORS.paper or COLORS.paper_dim, kind == "done" and 0.45 or 0.86)
+            set_border_color(p .. "_step" .. j, checked and accent or COLORS.paper_dim, checked and 1.0 or 0.40)
+        end
+    end
+end
+
+local function refresh(self)
+    local list, active, done = get_visible_list(self)
+    local total = #list
+    local max_offset = math.max(0, total - QUEST_SLOTS)
+    self.offset = math.max(0, math.min(self.offset or 0, max_offset))
+
+    render_tabs(self, #active, #done)
+
+    for i = 1, QUEST_SLOTS do
+        render_card(i, list[self.offset + i])
+    end
+
+    if total == 0 then
+        set_text("quests_footer_left", self.filter == "done" and "завершённых задач нет" or "активных задач нет")
+        set_text("quests_footer_right", "")
+    else
+        local first = self.offset + 1
+        local last = math.min(total, self.offset + QUEST_SLOTS)
+        set_text("quests_footer_left", "активных: " .. tostring(#active) .. " · завершено: " .. tostring(#done))
+        set_text("quests_footer_right", "показаны: " .. tostring(first) .. "-" .. tostring(last) .. " / " .. tostring(total))
+    end
+    set_color("quests_footer_left", COLORS.paper_dim, 0.82)
+    set_color("quests_footer_right", COLORS.paper_dim, 0.82)
+    update_scrollbar(self, total)
+end
+
+local function set_filter(self, filter)
+    if self.filter ~= filter then
+        self.filter = filter
+        self.offset = 0
+        refresh(self)
+    end
+end
+
+local function point_in(x, y, rx, ry, rw, rh)
+    return x >= rx and x <= rx + rw and y >= ry and y <= ry + rh
+end
+
+local function node_bounds(id)
+    local n = get_node(id)
+    if not n then return nil end
+    local pos = gui.get_position(n)
+    local size = gui.get_size(n)
+    -- All interactive boxes in this file use PIVOT_SW.
+    return pos.x, pos.y, size.x, size.y
+end
+
+local function point_in_node(id, x, y)
+    local rx, ry, rw, rh = node_bounds(id)
+    if not rx then return false end
+    return point_in(x, y, rx, ry, rw, rh)
+end
+
+local function handle_tab_press(self, x, y)
+    -- Тапы по табам срабатывают на pressed (мгновенный отклик). Drag-scroll
+    -- ниже их не задевает: is_inside ограничен областью списка.
+    if point_in_node("qtab_active_bg", x, y) then
+        set_filter(self, "active")
+        return true
+    elseif point_in_node("qtab_done_bg", x, y) then
+        set_filter(self, "done")
+        return true
+    end
+    return false
+end
+
+local function scroll_by(self, delta)
+    local list = get_visible_list(self)
+    local max_offset = math.max(0, #list - QUEST_SLOTS)
+    local next_offset = math.max(0, math.min(max_offset, (self.offset or 0) + delta))
+    if next_offset ~= self.offset then
+        self.offset = next_offset
+        refresh(self)
+    end
+end
+
+function init(self)
+    self.visible = false
+    self.filter = "active"
+    self.offset = 0
+
+    -- В .gui лежит ОДНА quest-карточка (quest1_bg + дети). Клонируем её для
+    -- слотов 2..QUEST_SLOTS через gui.clone_tree. Клоны позиционируются ниже
+    -- оригинала с шагом CARD_H + CARD_GAP. Должно выполняться ДО первого
+    -- set_nodes_enabled, иначе wrapper get_node не сможет найти quest2_*.
+    _card_clones = {}
+    local proto = gui.get_node("quest1_bg")
+    if proto then
+        local proto_pos = gui.get_position(proto)
+        for slot = 2, QUEST_SLOTS do
+            local clone = gui.clone_tree(proto)
+            _card_clones[slot] = clone
+            local clone_root = clone["quest1_bg"]
+            local y_offset = -(slot - 1) * (CARD_H + CARD_GAP)
+            gui.set_position(clone_root, vmath.vector3(
+                proto_pos.x, proto_pos.y + y_offset, proto_pos.z))
+        end
+    end
+
+    self.list_drag = drag_scroll.new({
+        step_px      = 32,
+        threshold_px = 8,
+        owner        = self,
+        is_inside    = function(x, y)
+            return point_in(x, y, CONTENT_X, LIST_BOTTOM, ROW_W, LIST_H)
+        end,
+        on_step      = function(owner, delta) scroll_by(owner, delta) end,
+    })
+    set_nodes_enabled(false)
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash("open_app") then
+        self.visible = true
+        set_nodes_enabled(true)
+        refresh(self)
+    elseif message_id == hash("close_app") then
+        self.visible = false
+        drag_scroll.reset(self.list_drag)
+        set_nodes_enabled(false)
+    elseif message_id == hash("refresh_app") then
+        if self.visible then refresh(self) end
+    elseif message_id == hash("phone_input") then
+        if not self.visible then return end
+        local aid = message and message.action_id
+        local x = message and message.x or 0
+        local y = message and message.y or 0
+        if aid == hash("touch") then
+            -- 1) Табы фильтра — мгновенно на pressed.
+            if message.pressed and handle_tab_press(self, x, y) then
+                return
+            end
+            -- 2) Drag-scroll списка через общий модуль drag_scroll.
+            drag_scroll.handle(self.list_drag, {
+                x = x, y = y,
+                pressed = message.pressed,
+                released = message.released,
+            })
+        elseif aid == hash("wheel_down") then
+            scroll_by(self, 1)
+        elseif aid == hash("wheel_up") then
+            scroll_by(self, -1)
+        end
+    end
+end
+
+function on_input(self, action_id, action)
+    -- Root owns input focus and forwards phone_input. This app never acquires focus.
+    return false
+end

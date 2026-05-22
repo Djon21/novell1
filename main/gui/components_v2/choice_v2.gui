@@ -1,0 +1,1593 @@
+script: "/main/gui/components_v2/choice_v2.gui_script"
+fonts {
+  name: "manrope_medium_24"
+  font: "/main/fonts/manrope_medium_24.font"
+}
+fonts {
+  name: "unbounded_bold_32"
+  font: "/main/fonts/unbounded_bold_32.font"
+}
+fonts {
+  name: "jb_mono_16"
+  font: "/main/fonts/jb_mono_16.font"
+}
+textures {
+  name: "ui_common"
+  texture: "/main/images/ui_common.atlas"
+}
+nodes {
+  position {
+    z: 0.5
+  }
+  size {
+    x: 1280.0
+    y: 720.0
+  }
+  color {
+    x: 0.02
+    y: 0.012
+    z: 0.102
+  }
+  type: TYPE_BOX
+  id: "backdrop"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 280.0
+    y: 90.0
+    z: 0.6
+  }
+  size {
+    x: 720.0
+    y: 540.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "modal"
+  pivot: PIVOT_SW
+  inherit_alpha: true
+  alpha: 0.92
+}
+nodes {
+  position {
+    x: 828.0
+    y: 578.0
+    z: 0.62
+  }
+  size {
+    x: 142.0
+    y: 22.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "meta_loop_bg"
+  pivot: PIVOT_SW
+  inherit_alpha: true
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 828.0
+    y: 599.0
+    z: 0.63
+  }
+  size {
+    x: 142.0
+    y: 1.0
+  }
+  color {
+    x: 0.784
+    y: 0.078
+    z: 0.165
+  }
+  type: TYPE_BOX
+  id: "meta_loop_border_top"
+  pivot: PIVOT_SW
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 828.0
+    y: 578.0
+    z: 0.63
+  }
+  size {
+    x: 142.0
+    y: 1.0
+  }
+  color {
+    x: 0.784
+    y: 0.078
+    z: 0.165
+  }
+  type: TYPE_BOX
+  id: "meta_loop_border_bottom"
+  pivot: PIVOT_SW
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 828.0
+    y: 578.0
+    z: 0.63
+  }
+  size {
+    x: 1.0
+    y: 22.0
+  }
+  color {
+    x: 0.784
+    y: 0.078
+    z: 0.165
+  }
+  type: TYPE_BOX
+  id: "meta_loop_border_left"
+  pivot: PIVOT_SW
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 969.0
+    y: 578.0
+    z: 0.63
+  }
+  size {
+    x: 1.0
+    y: 22.0
+  }
+  color {
+    x: 0.784
+    y: 0.078
+    z: 0.165
+  }
+  type: TYPE_BOX
+  id: "meta_loop_border_right"
+  pivot: PIVOT_SW
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 899.0
+    y: 590.0
+    z: 0.64
+  }
+  size {
+    x: 142.0
+    y: 21.0
+  }
+  color {
+    x: 0.784
+    y: 0.078
+    z: 0.165
+  }
+  type: TYPE_TEXT
+  text: "\320\237\320\225\320\242\320\233\320\257 \302\267 #017"
+  font: "jb_mono_16"
+  id: "meta_loop"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 310.0
+    y: 545.0
+    z: 0.62
+  }
+  size {
+    x: 660.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "head_divider"
+  pivot: PIVOT_SW
+  inherit_alpha: true
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 310.0
+    y: 523.0
+    z: 0.63
+  }
+  size {
+    x: 660.0
+    y: 56.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\240\320\260\320\261\320\276\321\202\320\260 \321\201\321\202\320\270\321\200\320\260\320\265\321\202 \320\264\320\275\320\270. \320\236\321\201\321\202\320\260\320\262\320\273\321\217\320\265\321\202 \321\202\320\276\320\273\321\214\320\272\320\276 \321\202\320\270\320\272\320\265\321\202\321\213 \320\270 \320\274\320\265\321\200\321\206\320\260\320\275\320\270\320\265 \320\274\320\276\320\275\320\270\321\202\320\276\321\200\320\260."
+  font: "manrope_medium_24"
+  id: "prompt"
+  pivot: PIVOT_NW
+  line_break: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 310.0
+    y: 468.0
+    z: 0.63
+  }
+  size {
+    x: 660.0
+    y: 38.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
+  type: TYPE_TEXT
+  text: "\342\200\224 \321\202\320\265\320\273\320\265\321\204\320\276\320\275 \320\264\321\221\321\200\320\263\320\260\320\265\321\202\321\201\321\217 \320\262\320\276 \320\262\320\275\321\203\321\202\321\200\320\265\320\275\320\275\320\265\320\274 \320\272\320\260\321\200\320\274\320\260\320\275\320\265. \321\202\321\200\320\265\321\202\320\270\320\271 \321\200\320\260\320\267 \320\267\320\260 \320\274\320\270\320\275\321\203\321\202\321\203."
+  font: "manrope_medium_24"
+  id: "caveat"
+  pivot: PIVOT_NW
+  line_break: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 310.0
+    y: 184.0
+    z: 0.62
+  }
+  size {
+    x: 660.0
+    y: 260.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "opts_panel"
+  pivot: PIVOT_SW
+  inherit_alpha: true
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 310.0
+    y: 170.0
+    z: 0.62
+  }
+  size {
+    x: 660.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "foot_divider"
+  pivot: PIVOT_SW
+  inherit_alpha: true
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 310.0
+    y: 590.0
+    z: 0.63
+  }
+  size {
+    x: 400.0
+    y: 50.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\320\222\320\253\320\221\320\225\320\240\320\230 \320\222\320\220\320\240\320\230\320\220\320\235\320\242"
+  font: "unbounded_bold_32"
+  id: "foot_label"
+  pivot: PIVOT_W
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 279.0
+    y: 89.0
+  }
+  size {
+    x: 720.0
+    y: 540.0
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "modal_border"
+  pivot: PIVOT_SW
+  inherit_alpha: true
+  slice9 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+}
+nodes {
+  position {
+    x: 310.0
+    y: 440.0
+  }
+  size {
+    x: 660.0
+    y: 70.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "opt1_root"
+  pivot: PIVOT_SW
+  alpha: 0.0
+}
+nodes {
+  position {
+    z: 0.7
+  }
+  size {
+    x: 660.0
+    y: 70.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
+  type: TYPE_BOX
+  id: "opt1_bg"
+  pivot: PIVOT_SW
+  parent: "opt1_root"
+  alpha: 0.72
+}
+nodes {
+  position {
+    z: 0.71
+  }
+  size {
+    x: 660.0
+    y: 70.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "opt1_border"
+  pivot: PIVOT_SW
+  parent: "opt1_root"
+  slice9 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+}
+nodes {
+  position {
+    x: 14.0
+    y: 18.0
+    z: 0.72
+  }
+  size {
+    x: 34.0
+    y: 34.0
+  }
+  color {
+    x: 0.02
+    y: 0.012
+    z: 0.102
+  }
+  type: TYPE_BOX
+  id: "opt1_num_bg"
+  pivot: PIVOT_SW
+  parent: "opt1_root"
+}
+nodes {
+  position {
+    x: 14.0
+    y: 18.0
+    z: 0.73
+  }
+  size {
+    x: 34.0
+    y: 34.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "opt1_num_border"
+  pivot: PIVOT_SW
+  parent: "opt1_root"
+  slice9 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+}
+nodes {
+  position {
+    x: 31.0
+    y: 35.0
+    z: 0.74
+  }
+  size {
+    x: 30.0
+    y: 12.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "01"
+  font: "jb_mono_16"
+  id: "opt1_num_text"
+  parent: "opt1_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 556.0
+    y: 22.0
+    z: 0.73
+  }
+  size {
+    x: 90.0
+    y: 26.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "opt1_hint_border"
+  pivot: PIVOT_SW
+  parent: "opt1_root"
+  slice9 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+}
+nodes {
+  position {
+    x: 601.0
+    y: 35.0
+    z: 0.74
+  }
+  size {
+    x: 80.0
+    y: 12.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_16"
+  id: "opt1_hint_text"
+  parent: "opt1_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 68.0
+    y: 35.0
+    z: 0.74
+  }
+  size {
+    x: 520.0
+    y: 54.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  font: "manrope_medium_24"
+  id: "opt1_text"
+  pivot: PIVOT_W
+  line_break: true
+  parent: "opt1_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 310.0
+    y: 358.0
+  }
+  size {
+    x: 660.0
+    y: 70.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "opt2_root"
+  pivot: PIVOT_SW
+  alpha: 0.0
+}
+nodes {
+  position {
+    z: 0.7
+  }
+  size {
+    x: 660.0
+    y: 70.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
+  type: TYPE_BOX
+  id: "opt2_bg"
+  pivot: PIVOT_SW
+  parent: "opt2_root"
+  alpha: 0.72
+}
+nodes {
+  position {
+    z: 0.71
+  }
+  size {
+    x: 660.0
+    y: 70.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "opt2_border"
+  pivot: PIVOT_SW
+  parent: "opt2_root"
+  slice9 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+}
+nodes {
+  position {
+    x: 14.0
+    y: 18.0
+    z: 0.72
+  }
+  size {
+    x: 34.0
+    y: 34.0
+  }
+  color {
+    x: 0.02
+    y: 0.012
+    z: 0.102
+  }
+  type: TYPE_BOX
+  id: "opt2_num_bg"
+  pivot: PIVOT_SW
+  parent: "opt2_root"
+}
+nodes {
+  position {
+    x: 14.0
+    y: 18.0
+    z: 0.73
+  }
+  size {
+    x: 34.0
+    y: 34.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "opt2_num_border"
+  pivot: PIVOT_SW
+  parent: "opt2_root"
+  slice9 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+}
+nodes {
+  position {
+    x: 31.0
+    y: 35.0
+    z: 0.74
+  }
+  size {
+    x: 30.0
+    y: 12.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "02"
+  font: "jb_mono_16"
+  id: "opt2_num_text"
+  parent: "opt2_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 556.0
+    y: 22.0
+    z: 0.73
+  }
+  size {
+    x: 90.0
+    y: 26.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "opt2_hint_border"
+  pivot: PIVOT_SW
+  parent: "opt2_root"
+  slice9 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+}
+nodes {
+  position {
+    x: 601.0
+    y: 35.0
+    z: 0.74
+  }
+  size {
+    x: 80.0
+    y: 12.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_16"
+  id: "opt2_hint_text"
+  parent: "opt2_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 68.0
+    y: 35.0
+    z: 0.74
+  }
+  size {
+    x: 520.0
+    y: 54.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  font: "manrope_medium_24"
+  id: "opt2_text"
+  pivot: PIVOT_W
+  line_break: true
+  parent: "opt2_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 310.0
+    y: 276.0
+  }
+  size {
+    x: 660.0
+    y: 70.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "opt3_root"
+  pivot: PIVOT_SW
+  alpha: 0.0
+}
+nodes {
+  position {
+    z: 0.7
+  }
+  size {
+    x: 660.0
+    y: 70.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
+  type: TYPE_BOX
+  id: "opt3_bg"
+  pivot: PIVOT_SW
+  parent: "opt3_root"
+  alpha: 0.72
+}
+nodes {
+  position {
+    z: 0.71
+  }
+  size {
+    x: 660.0
+    y: 70.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "opt3_border"
+  pivot: PIVOT_SW
+  parent: "opt3_root"
+  slice9 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+}
+nodes {
+  position {
+    x: 14.0
+    y: 18.0
+    z: 0.72
+  }
+  size {
+    x: 34.0
+    y: 34.0
+  }
+  color {
+    x: 0.02
+    y: 0.012
+    z: 0.102
+  }
+  type: TYPE_BOX
+  id: "opt3_num_bg"
+  pivot: PIVOT_SW
+  parent: "opt3_root"
+}
+nodes {
+  position {
+    x: 14.0
+    y: 18.0
+    z: 0.73
+  }
+  size {
+    x: 34.0
+    y: 34.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "opt3_num_border"
+  pivot: PIVOT_SW
+  parent: "opt3_root"
+  slice9 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+}
+nodes {
+  position {
+    x: 31.0
+    y: 35.0
+    z: 0.74
+  }
+  size {
+    x: 30.0
+    y: 12.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "03"
+  font: "jb_mono_16"
+  id: "opt3_num_text"
+  parent: "opt3_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 556.0
+    y: 22.0
+    z: 0.73
+  }
+  size {
+    x: 90.0
+    y: 26.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "opt3_hint_border"
+  pivot: PIVOT_SW
+  parent: "opt3_root"
+  slice9 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+}
+nodes {
+  position {
+    x: 601.0
+    y: 35.0
+    z: 0.74
+  }
+  size {
+    x: 80.0
+    y: 12.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_16"
+  id: "opt3_hint_text"
+  parent: "opt3_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 68.0
+    y: 35.0
+    z: 0.74
+  }
+  size {
+    x: 520.0
+    y: 54.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  font: "manrope_medium_24"
+  id: "opt3_text"
+  pivot: PIVOT_W
+  line_break: true
+  parent: "opt3_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 310.0
+    y: 194.0
+  }
+  size {
+    x: 660.0
+    y: 70.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "opt4_root"
+  pivot: PIVOT_SW
+  alpha: 0.0
+}
+nodes {
+  position {
+    z: 0.7
+  }
+  size {
+    x: 660.0
+    y: 70.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
+  type: TYPE_BOX
+  id: "opt4_bg"
+  pivot: PIVOT_SW
+  parent: "opt4_root"
+  alpha: 0.72
+}
+nodes {
+  position {
+    z: 0.71
+  }
+  size {
+    x: 660.0
+    y: 70.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "opt4_border"
+  pivot: PIVOT_SW
+  parent: "opt4_root"
+  slice9 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+}
+nodes {
+  position {
+    x: 14.0
+    y: 18.0
+    z: 0.72
+  }
+  size {
+    x: 34.0
+    y: 34.0
+  }
+  color {
+    x: 0.02
+    y: 0.012
+    z: 0.102
+  }
+  type: TYPE_BOX
+  id: "opt4_num_bg"
+  pivot: PIVOT_SW
+  parent: "opt4_root"
+}
+nodes {
+  position {
+    x: 14.0
+    y: 18.0
+    z: 0.73
+  }
+  size {
+    x: 34.0
+    y: 34.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "opt4_num_border"
+  pivot: PIVOT_SW
+  parent: "opt4_root"
+  slice9 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+}
+nodes {
+  position {
+    x: 31.0
+    y: 35.0
+    z: 0.74
+  }
+  size {
+    x: 30.0
+    y: 12.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "04"
+  font: "jb_mono_16"
+  id: "opt4_num_text"
+  parent: "opt4_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 556.0
+    y: 22.0
+    z: 0.73
+  }
+  size {
+    x: 90.0
+    y: 26.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "opt4_hint_border"
+  pivot: PIVOT_SW
+  parent: "opt4_root"
+  slice9 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+}
+nodes {
+  position {
+    x: 601.0
+    y: 35.0
+    z: 0.74
+  }
+  size {
+    x: 80.0
+    y: 12.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_16"
+  id: "opt4_hint_text"
+  parent: "opt4_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 68.0
+    y: 35.0
+    z: 0.74
+  }
+  size {
+    x: 520.0
+    y: 54.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  font: "manrope_medium_24"
+  id: "opt4_text"
+  pivot: PIVOT_W
+  line_break: true
+  parent: "opt4_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 310.0
+    y: 114.0
+  }
+  size {
+    x: 660.0
+    y: 70.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "opt5_root"
+  pivot: PIVOT_SW
+  alpha: 0.0
+}
+nodes {
+  position {
+    z: 0.7
+  }
+  size {
+    x: 660.0
+    y: 70.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
+  type: TYPE_BOX
+  id: "opt5_bg"
+  pivot: PIVOT_SW
+  parent: "opt5_root"
+  alpha: 0.72
+}
+nodes {
+  position {
+    z: 0.71
+  }
+  size {
+    x: 660.0
+    y: 70.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "opt5_border"
+  pivot: PIVOT_SW
+  parent: "opt5_root"
+  slice9 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+}
+nodes {
+  position {
+    x: 14.0
+    y: 18.0
+    z: 0.72
+  }
+  size {
+    x: 34.0
+    y: 34.0
+  }
+  color {
+    x: 0.02
+    y: 0.012
+    z: 0.102
+  }
+  type: TYPE_BOX
+  id: "opt5_num_bg"
+  pivot: PIVOT_SW
+  parent: "opt5_root"
+}
+nodes {
+  position {
+    x: 14.0
+    y: 18.0
+    z: 0.73
+  }
+  size {
+    x: 34.0
+    y: 34.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "opt5_num_border"
+  pivot: PIVOT_SW
+  parent: "opt5_root"
+  slice9 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+}
+nodes {
+  position {
+    x: 31.0
+    y: 35.0
+    z: 0.74
+  }
+  size {
+    x: 30.0
+    y: 12.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "05"
+  font: "jb_mono_16"
+  id: "opt5_num_text"
+  parent: "opt5_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 556.0
+    y: 22.0
+    z: 0.73
+  }
+  size {
+    x: 90.0
+    y: 26.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "opt5_hint_border"
+  pivot: PIVOT_SW
+  parent: "opt5_root"
+  slice9 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+}
+nodes {
+  position {
+    x: 601.0
+    y: 35.0
+    z: 0.74
+  }
+  size {
+    x: 80.0
+    y: 12.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_16"
+  id: "opt5_hint_text"
+  parent: "opt5_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 68.0
+    y: 35.0
+    z: 0.74
+  }
+  size {
+    x: 520.0
+    y: 54.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  font: "manrope_medium_24"
+  id: "opt5_text"
+  pivot: PIVOT_W
+  line_break: true
+  parent: "opt5_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 310.0
+    y: 34.0
+  }
+  size {
+    x: 660.0
+    y: 70.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "opt6_root"
+  pivot: PIVOT_SW
+  alpha: 0.0
+}
+nodes {
+  position {
+    z: 0.7
+  }
+  size {
+    x: 660.0
+    y: 70.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
+  type: TYPE_BOX
+  id: "opt6_bg"
+  pivot: PIVOT_SW
+  parent: "opt6_root"
+  alpha: 0.72
+}
+nodes {
+  position {
+    z: 0.71
+  }
+  size {
+    x: 660.0
+    y: 70.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "opt6_border"
+  pivot: PIVOT_SW
+  parent: "opt6_root"
+  slice9 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+}
+nodes {
+  position {
+    x: 14.0
+    y: 18.0
+    z: 0.72
+  }
+  size {
+    x: 34.0
+    y: 34.0
+  }
+  color {
+    x: 0.02
+    y: 0.012
+    z: 0.102
+  }
+  type: TYPE_BOX
+  id: "opt6_num_bg"
+  pivot: PIVOT_SW
+  parent: "opt6_root"
+}
+nodes {
+  position {
+    x: 14.0
+    y: 18.0
+    z: 0.73
+  }
+  size {
+    x: 34.0
+    y: 34.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "opt6_num_border"
+  pivot: PIVOT_SW
+  parent: "opt6_root"
+  slice9 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+}
+nodes {
+  position {
+    x: 31.0
+    y: 35.0
+    z: 0.74
+  }
+  size {
+    x: 30.0
+    y: 12.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "06"
+  font: "jb_mono_16"
+  id: "opt6_num_text"
+  parent: "opt6_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 556.0
+    y: 22.0
+    z: 0.73
+  }
+  size {
+    x: 90.0
+    y: 26.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "opt6_hint_border"
+  pivot: PIVOT_SW
+  parent: "opt6_root"
+  slice9 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+}
+nodes {
+  position {
+    x: 601.0
+    y: 35.0
+    z: 0.74
+  }
+  size {
+    x: 80.0
+    y: 12.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_16"
+  id: "opt6_hint_text"
+  parent: "opt6_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 68.0
+    y: 35.0
+    z: 0.74
+  }
+  size {
+    x: 520.0
+    y: 54.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  font: "manrope_medium_24"
+  id: "opt6_text"
+  pivot: PIVOT_W
+  line_break: true
+  parent: "opt6_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 980.0
+    y: 36.0
+    z: 0.62
+  }
+  size {
+    x: 6.0
+    y: 360.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "opts_scroll_track"
+  pivot: PIVOT_SW
+  alpha: 0.08
+}
+nodes {
+  position {
+    x: 980.0
+    y: 36.0
+    z: 0.63
+  }
+  size {
+    x: 6.0
+    y: 80.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "opts_scroll_thumb"
+  pivot: PIVOT_SW
+  alpha: 0.7
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT

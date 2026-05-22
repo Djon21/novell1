@@ -1,0 +1,2796 @@
+script: "/main/gui/components_v2/inventory_v2.gui_script"
+fonts {
+  name: "unbounded_bold_20"
+  font: "/main/fonts/unbounded_bold_20.font"
+}
+fonts {
+  name: "icons"
+  font: "/main/fonts/icons.font"
+}
+fonts {
+  name: "manrope_16"
+  font: "/main/fonts/manrope_16.font"
+}
+fonts {
+  name: "unbounded_bold_32"
+  font: "/main/fonts/unbounded_bold_32.font"
+}
+fonts {
+  name: "Manrope-Medium_16"
+  font: "/main/fonts/Manrope-Medium_16.font"
+}
+fonts {
+  name: "jb_mono_bold_16"
+  font: "/main/fonts/jb_mono_bold_16.font"
+}
+fonts {
+  name: "unbounded_bold_64"
+  font: "/main/fonts/unbounded_bold_64.font"
+}
+textures {
+  name: "ui_common"
+  texture: "/main/images/ui_common.atlas"
+}
+nodes {
+  position {
+    z: 0.4
+  }
+  size {
+    x: 1280.0
+    y: 720.0
+  }
+  color {
+    x: 0.02
+    y: 0.012
+    z: 0.102
+  }
+  type: TYPE_BOX
+  id: "backdrop"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.65
+}
+nodes {
+  position {
+    x: 20.0
+    y: 20.0
+    z: 0.5
+  }
+  size {
+    x: 1240.0
+    y: 680.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "modal"
+  pivot: PIVOT_SW
+  alpha: 0.94
+}
+nodes {
+  position {
+    z: 0.001
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "decor_group"
+  pivot: PIVOT_SW
+  parent: "modal"
+}
+nodes {
+  size {
+    x: 1240.0
+    y: 680.0
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "border_modal"
+  pivot: PIVOT_SW
+  parent: "decor_group"
+  inherit_alpha: true
+  slice9 {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+    w: 2.0
+  }
+}
+nodes {
+  position {
+    z: 0.003
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "header_group"
+  pivot: PIVOT_SW
+  parent: "modal"
+}
+nodes {
+  position {
+    x: 38.0
+    y: 628.0
+  }
+  size {
+    x: 520.0
+    y: 38.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\230\320\235\320\222\320\225\320\235\320\242\320\220\320\240\320\254"
+  font: "unbounded_bold_32"
+  id: "title_main"
+  pivot: PIVOT_W
+  parent: "header_group"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 780.0
+    y: 650.0
+  }
+  size {
+    x: 140.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\321\201\320\273\320\276\321\202\320\276\320\262: 0/12"
+  font: "jb_mono_bold_16"
+  id: "stats_slots"
+  pivot: PIVOT_W
+  parent: "header_group"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 930.0
+    y: 650.0
+  }
+  size {
+    x: 110.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\320\262\320\265\321\201: \342\200\224"
+  font: "jb_mono_bold_16"
+  id: "stats_weight"
+  pivot: PIVOT_W
+  parent: "header_group"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1045.0
+    y: 650.0
+  }
+  size {
+    x: 120.0
+    y: 14.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
+  type: TYPE_TEXT
+  text: "\320\277\320\265\321\202\320\273\321\217: #001"
+  font: "jb_mono_bold_16"
+  id: "stats_loop"
+  pivot: PIVOT_W
+  parent: "header_group"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1176.0
+    y: 620.0
+  }
+  size {
+    x: 48.0
+    y: 48.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "close_btn_bg"
+  pivot: PIVOT_SW
+  parent: "header_group"
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 1200.0
+    y: 644.0
+    z: 0.1
+  }
+  size {
+    x: 28.0
+    y: 28.0
+  }
+  color {
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_TEXT
+  text: "\303\227"
+  font: "unbounded_bold_64"
+  id: "close_btn"
+  parent: "header_group"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 38.0
+    y: 598.0
+  }
+  size {
+    x: 1164.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "head_divider"
+  pivot: PIVOT_SW
+  parent: "header_group"
+  alpha: 0.15
+}
+nodes {
+  position {
+    z: 0.004
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "slots_group"
+  pivot: PIVOT_SW
+  parent: "header_group"
+}
+nodes {
+  position {
+    x: 38.0
+    y: 438.0
+  }
+  size {
+    x: 178.0
+    y: 142.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "slot1_border"
+  pivot: PIVOT_SW
+  parent: "slots_group"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1.0
+    y: 1.0
+    z: 0.01
+  }
+  size {
+    x: 176.0
+    y: 140.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
+  type: TYPE_BOX
+  id: "slot1_bg"
+  pivot: PIVOT_SW
+  parent: "slot1_border"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 12.0
+    y: 131.0
+    z: 0.01
+  }
+  size {
+    x: 64.0
+    y: 14.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "A1"
+  font: "jb_mono_bold_16"
+  id: "slot1_coord"
+  pivot: PIVOT_W
+  parent: "slot1_border"
+  alpha: 0.45
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 89.0
+    y: 82.0
+    z: 0.01
+  }
+  size {
+    x: 68.0
+    y: 60.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  font: "icons"
+  id: "slot1_icon"
+  parent: "slot1_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 89.0
+    y: 31.0
+    z: 0.01
+  }
+  size {
+    x: 156.0
+    y: 28.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\342\200\224"
+  font: "jb_mono_bold_16"
+  id: "slot1_name"
+  line_break: true
+  parent: "slot1_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 166.0
+    y: 13.0
+    z: 0.01
+  }
+  size {
+    x: 56.0
+    y: 14.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_bold_16"
+  id: "slot1_qty"
+  pivot: PIVOT_E
+  parent: "slot1_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 236.0
+    y: 438.0
+  }
+  size {
+    x: 178.0
+    y: 142.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "slot2_border"
+  pivot: PIVOT_SW
+  parent: "slots_group"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1.0
+    y: 1.0
+    z: 0.01
+  }
+  size {
+    x: 176.0
+    y: 140.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
+  type: TYPE_BOX
+  id: "slot2_bg"
+  pivot: PIVOT_SW
+  parent: "slot2_border"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 12.0
+    y: 131.0
+    z: 0.02
+  }
+  size {
+    x: 64.0
+    y: 14.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "A2"
+  font: "jb_mono_bold_16"
+  id: "slot2_coord"
+  pivot: PIVOT_W
+  parent: "slot2_border"
+  alpha: 0.45
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 89.0
+    y: 82.0
+    z: 0.02
+  }
+  size {
+    x: 68.0
+    y: 60.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  font: "icons"
+  id: "slot2_icon"
+  parent: "slot2_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 89.0
+    y: 31.0
+    z: 0.02
+  }
+  size {
+    x: 156.0
+    y: 28.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\342\200\224"
+  font: "jb_mono_bold_16"
+  id: "slot2_name"
+  line_break: true
+  parent: "slot2_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 166.0
+    y: 13.0
+    z: 0.02
+  }
+  size {
+    x: 56.0
+    y: 14.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_bold_16"
+  id: "slot2_qty"
+  pivot: PIVOT_E
+  parent: "slot2_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 434.0
+    y: 438.0
+  }
+  size {
+    x: 178.0
+    y: 142.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "slot3_border"
+  pivot: PIVOT_SW
+  parent: "slots_group"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1.0
+    y: 1.0
+    z: 0.01
+  }
+  size {
+    x: 176.0
+    y: 140.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
+  type: TYPE_BOX
+  id: "slot3_bg"
+  pivot: PIVOT_SW
+  parent: "slot3_border"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 12.0
+    y: 131.0
+    z: 0.02
+  }
+  size {
+    x: 64.0
+    y: 14.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "A3"
+  font: "jb_mono_bold_16"
+  id: "slot3_coord"
+  pivot: PIVOT_W
+  parent: "slot3_border"
+  alpha: 0.45
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 89.0
+    y: 82.0
+    z: 0.02
+  }
+  size {
+    x: 68.0
+    y: 60.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  font: "icons"
+  id: "slot3_icon"
+  parent: "slot3_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 89.0
+    y: 31.0
+    z: 0.02
+  }
+  size {
+    x: 156.0
+    y: 28.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\342\200\224"
+  font: "jb_mono_bold_16"
+  id: "slot3_name"
+  line_break: true
+  parent: "slot3_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 166.0
+    y: 13.0
+    z: 0.02
+  }
+  size {
+    x: 56.0
+    y: 14.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_bold_16"
+  id: "slot3_qty"
+  pivot: PIVOT_E
+  parent: "slot3_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 632.0
+    y: 438.0
+  }
+  size {
+    x: 178.0
+    y: 142.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "slot4_border"
+  pivot: PIVOT_SW
+  parent: "slots_group"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1.0
+    y: 1.0
+    z: 0.01
+  }
+  size {
+    x: 176.0
+    y: 140.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
+  type: TYPE_BOX
+  id: "slot4_bg"
+  pivot: PIVOT_SW
+  parent: "slot4_border"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 12.0
+    y: 131.0
+    z: 0.02
+  }
+  size {
+    x: 64.0
+    y: 14.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "A4"
+  font: "jb_mono_bold_16"
+  id: "slot4_coord"
+  pivot: PIVOT_W
+  parent: "slot4_border"
+  alpha: 0.45
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 89.0
+    y: 82.0
+    z: 0.02
+  }
+  size {
+    x: 68.0
+    y: 60.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  font: "icons"
+  id: "slot4_icon"
+  parent: "slot4_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 89.0
+    y: 31.0
+    z: 0.02
+  }
+  size {
+    x: 156.0
+    y: 28.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\342\200\224"
+  font: "jb_mono_bold_16"
+  id: "slot4_name"
+  line_break: true
+  parent: "slot4_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 166.0
+    y: 13.0
+    z: 0.02
+  }
+  size {
+    x: 56.0
+    y: 14.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_bold_16"
+  id: "slot4_qty"
+  pivot: PIVOT_E
+  parent: "slot4_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 830.0
+    y: 438.0
+  }
+  size {
+    x: 178.0
+    y: 142.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "slot5_border"
+  pivot: PIVOT_SW
+  parent: "slots_group"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1.0
+    y: 1.0
+    z: 0.01
+  }
+  size {
+    x: 176.0
+    y: 140.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
+  type: TYPE_BOX
+  id: "slot5_bg"
+  pivot: PIVOT_SW
+  parent: "slot5_border"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 12.0
+    y: 131.0
+    z: 0.02
+  }
+  size {
+    x: 64.0
+    y: 14.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "A5"
+  font: "jb_mono_bold_16"
+  id: "slot5_coord"
+  pivot: PIVOT_W
+  parent: "slot5_border"
+  alpha: 0.45
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 89.0
+    y: 82.0
+    z: 0.02
+  }
+  size {
+    x: 68.0
+    y: 60.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  font: "icons"
+  id: "slot5_icon"
+  parent: "slot5_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 89.0
+    y: 31.0
+    z: 0.02
+  }
+  size {
+    x: 156.0
+    y: 28.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\342\200\224"
+  font: "jb_mono_bold_16"
+  id: "slot5_name"
+  line_break: true
+  parent: "slot5_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 166.0
+    y: 13.0
+    z: 0.02
+  }
+  size {
+    x: 56.0
+    y: 14.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_bold_16"
+  id: "slot5_qty"
+  pivot: PIVOT_E
+  parent: "slot5_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1028.0
+    y: 438.0
+  }
+  size {
+    x: 178.0
+    y: 142.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "slot6_border"
+  pivot: PIVOT_SW
+  parent: "slots_group"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1.0
+    y: 1.0
+    z: 0.01
+  }
+  size {
+    x: 176.0
+    y: 140.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
+  type: TYPE_BOX
+  id: "slot6_bg"
+  pivot: PIVOT_SW
+  parent: "slot6_border"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 12.0
+    y: 131.0
+    z: 0.02
+  }
+  size {
+    x: 64.0
+    y: 14.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "A6"
+  font: "jb_mono_bold_16"
+  id: "slot6_coord"
+  pivot: PIVOT_W
+  parent: "slot6_border"
+  alpha: 0.45
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 89.0
+    y: 82.0
+    z: 0.02
+  }
+  size {
+    x: 68.0
+    y: 60.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  font: "icons"
+  id: "slot6_icon"
+  parent: "slot6_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 89.0
+    y: 31.0
+    z: 0.02
+  }
+  size {
+    x: 156.0
+    y: 28.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\342\200\224"
+  font: "jb_mono_bold_16"
+  id: "slot6_name"
+  line_break: true
+  parent: "slot6_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 166.0
+    y: 13.0
+    z: 0.02
+  }
+  size {
+    x: 56.0
+    y: 14.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_bold_16"
+  id: "slot6_qty"
+  pivot: PIVOT_E
+  parent: "slot6_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 38.0
+    y: 278.0
+  }
+  size {
+    x: 178.0
+    y: 142.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "slot7_border"
+  pivot: PIVOT_SW
+  parent: "slots_group"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1.0
+    y: 1.0
+    z: 0.01
+  }
+  size {
+    x: 176.0
+    y: 140.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
+  type: TYPE_BOX
+  id: "slot7_bg"
+  pivot: PIVOT_SW
+  parent: "slot7_border"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 12.0
+    y: 131.0
+    z: 0.02
+  }
+  size {
+    x: 64.0
+    y: 14.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "B1"
+  font: "jb_mono_bold_16"
+  id: "slot7_coord"
+  pivot: PIVOT_W
+  parent: "slot7_border"
+  alpha: 0.45
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 89.0
+    y: 82.0
+    z: 0.02
+  }
+  size {
+    x: 68.0
+    y: 60.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  font: "icons"
+  id: "slot7_icon"
+  parent: "slot7_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 89.0
+    y: 31.0
+    z: 0.02
+  }
+  size {
+    x: 156.0
+    y: 28.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\342\200\224"
+  font: "jb_mono_bold_16"
+  id: "slot7_name"
+  line_break: true
+  parent: "slot7_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 166.0
+    y: 13.0
+    z: 0.02
+  }
+  size {
+    x: 56.0
+    y: 14.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_bold_16"
+  id: "slot7_qty"
+  pivot: PIVOT_E
+  parent: "slot7_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 236.0
+    y: 278.0
+  }
+  size {
+    x: 178.0
+    y: 142.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "slot8_border"
+  pivot: PIVOT_SW
+  parent: "slots_group"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1.0
+    y: 1.0
+    z: 0.01
+  }
+  size {
+    x: 176.0
+    y: 140.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
+  type: TYPE_BOX
+  id: "slot8_bg"
+  pivot: PIVOT_SW
+  parent: "slot8_border"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 12.0
+    y: 131.0
+    z: 0.02
+  }
+  size {
+    x: 64.0
+    y: 14.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "B2"
+  font: "jb_mono_bold_16"
+  id: "slot8_coord"
+  pivot: PIVOT_W
+  parent: "slot8_border"
+  alpha: 0.45
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 89.0
+    y: 82.0
+    z: 0.02
+  }
+  size {
+    x: 68.0
+    y: 60.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  font: "icons"
+  id: "slot8_icon"
+  parent: "slot8_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 89.0
+    y: 31.0
+    z: 0.02
+  }
+  size {
+    x: 156.0
+    y: 28.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\342\200\224"
+  font: "jb_mono_bold_16"
+  id: "slot8_name"
+  line_break: true
+  parent: "slot8_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 166.0
+    y: 13.0
+    z: 0.02
+  }
+  size {
+    x: 56.0
+    y: 14.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_bold_16"
+  id: "slot8_qty"
+  pivot: PIVOT_E
+  parent: "slot8_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 434.0
+    y: 278.0
+  }
+  size {
+    x: 178.0
+    y: 142.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "slot9_border"
+  pivot: PIVOT_SW
+  parent: "slots_group"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1.0
+    y: 1.0
+    z: 0.01
+  }
+  size {
+    x: 176.0
+    y: 140.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
+  type: TYPE_BOX
+  id: "slot9_bg"
+  pivot: PIVOT_SW
+  parent: "slot9_border"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 12.0
+    y: 131.0
+    z: 0.02
+  }
+  size {
+    x: 64.0
+    y: 14.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "B3"
+  font: "jb_mono_bold_16"
+  id: "slot9_coord"
+  pivot: PIVOT_W
+  parent: "slot9_border"
+  alpha: 0.45
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 89.0
+    y: 82.0
+    z: 0.02
+  }
+  size {
+    x: 68.0
+    y: 60.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  font: "icons"
+  id: "slot9_icon"
+  parent: "slot9_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 89.0
+    y: 31.0
+    z: 0.02
+  }
+  size {
+    x: 156.0
+    y: 28.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\342\200\224"
+  font: "jb_mono_bold_16"
+  id: "slot9_name"
+  line_break: true
+  parent: "slot9_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 166.0
+    y: 13.0
+    z: 0.02
+  }
+  size {
+    x: 56.0
+    y: 14.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_bold_16"
+  id: "slot9_qty"
+  pivot: PIVOT_E
+  parent: "slot9_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 632.0
+    y: 278.0
+  }
+  size {
+    x: 178.0
+    y: 142.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "slot10_border"
+  pivot: PIVOT_SW
+  parent: "slots_group"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1.0
+    y: 1.0
+    z: 0.01
+  }
+  size {
+    x: 176.0
+    y: 140.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
+  type: TYPE_BOX
+  id: "slot10_bg"
+  pivot: PIVOT_SW
+  parent: "slot10_border"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 12.0
+    y: 131.0
+    z: 0.02
+  }
+  size {
+    x: 64.0
+    y: 14.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "B4"
+  font: "jb_mono_bold_16"
+  id: "slot10_coord"
+  pivot: PIVOT_W
+  parent: "slot10_border"
+  alpha: 0.45
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 89.0
+    y: 82.0
+    z: 0.02
+  }
+  size {
+    x: 68.0
+    y: 60.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  font: "icons"
+  id: "slot10_icon"
+  parent: "slot10_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 89.0
+    y: 31.0
+    z: 0.02
+  }
+  size {
+    x: 156.0
+    y: 28.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\342\200\224"
+  font: "jb_mono_bold_16"
+  id: "slot10_name"
+  line_break: true
+  parent: "slot10_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 166.0
+    y: 13.0
+    z: 0.02
+  }
+  size {
+    x: 56.0
+    y: 14.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_bold_16"
+  id: "slot10_qty"
+  pivot: PIVOT_E
+  parent: "slot10_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 830.0
+    y: 278.0
+  }
+  size {
+    x: 178.0
+    y: 142.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "slot11_border"
+  pivot: PIVOT_SW
+  parent: "slots_group"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1.0
+    y: 1.0
+    z: 0.01
+  }
+  size {
+    x: 176.0
+    y: 140.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
+  type: TYPE_BOX
+  id: "slot11_bg"
+  pivot: PIVOT_SW
+  parent: "slot11_border"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 12.0
+    y: 131.0
+    z: 0.02
+  }
+  size {
+    x: 64.0
+    y: 14.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "B5"
+  font: "jb_mono_bold_16"
+  id: "slot11_coord"
+  pivot: PIVOT_W
+  parent: "slot11_border"
+  alpha: 0.45
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 89.0
+    y: 82.0
+    z: 0.02
+  }
+  size {
+    x: 68.0
+    y: 60.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  font: "icons"
+  id: "slot11_icon"
+  parent: "slot11_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 89.0
+    y: 31.0
+    z: 0.02
+  }
+  size {
+    x: 156.0
+    y: 28.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\342\200\224"
+  font: "jb_mono_bold_16"
+  id: "slot11_name"
+  line_break: true
+  parent: "slot11_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 166.0
+    y: 13.0
+    z: 0.02
+  }
+  size {
+    x: 56.0
+    y: 14.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_bold_16"
+  id: "slot11_qty"
+  pivot: PIVOT_E
+  parent: "slot11_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1028.0
+    y: 278.0
+  }
+  size {
+    x: 178.0
+    y: 142.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "slot12_border"
+  pivot: PIVOT_SW
+  parent: "slots_group"
+  alpha: 0.18
+}
+nodes {
+  position {
+    x: 1.0
+    y: 1.0
+    z: 0.01
+  }
+  size {
+    x: 176.0
+    y: 140.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
+  type: TYPE_BOX
+  id: "slot12_bg"
+  pivot: PIVOT_SW
+  parent: "slot12_border"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 12.0
+    y: 131.0
+    z: 0.02
+  }
+  size {
+    x: 64.0
+    y: 14.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "B6"
+  font: "jb_mono_bold_16"
+  id: "slot12_coord"
+  pivot: PIVOT_W
+  parent: "slot12_border"
+  alpha: 0.45
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 89.0
+    y: 82.0
+    z: 0.02
+  }
+  size {
+    x: 68.0
+    y: 60.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  font: "icons"
+  id: "slot12_icon"
+  parent: "slot12_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 89.0
+    y: 31.0
+    z: 0.02
+  }
+  size {
+    x: 156.0
+    y: 28.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\342\200\224"
+  font: "jb_mono_bold_16"
+  id: "slot12_name"
+  line_break: true
+  parent: "slot12_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 166.0
+    y: 13.0
+    z: 0.02
+  }
+  size {
+    x: 56.0
+    y: 14.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_bold_16"
+  id: "slot12_qty"
+  pivot: PIVOT_E
+  parent: "slot12_border"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    z: 0.005
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "details_group"
+  pivot: PIVOT_SW
+  parent: "modal"
+}
+nodes {
+  position {
+    x: 38.0
+    y: 146.0
+  }
+  size {
+    x: 1168.0
+    y: 108.0
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "border_details"
+  pivot: PIVOT_SW
+  parent: "details_group"
+  inherit_alpha: true
+  slice9 {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+    w: 2.0
+  }
+}
+nodes {
+  position {
+    x: 40.0
+    y: 148.0
+  }
+  size {
+    x: 1164.0
+    y: 104.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
+  type: TYPE_BOX
+  id: "details_bg"
+  pivot: PIVOT_SW
+  parent: "details_group"
+  alpha: 0.55
+}
+nodes {
+  position {
+    x: 160.0
+    y: 232.0
+  }
+  size {
+    x: 320.0
+    y: 14.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "details \302\267 \320\277\321\200\320\265\320\264\320\274\320\265\321\202"
+  font: "jb_mono_bold_16"
+  id: "details_cap"
+  pivot: PIVOT_W
+  parent: "details_group"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 160.0
+    y: 207.0
+  }
+  size {
+    x: 600.0
+    y: 26.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\222\321\213\320\261\320\265\321\200\320\270\321\202\320\265 \320\277\321\200\320\265\320\264\320\274\320\265\321\202"
+  font: "unbounded_bold_20"
+  id: "details_name"
+  pivot: PIVOT_W
+  parent: "details_group"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 160.0
+    y: 181.0
+  }
+  size {
+    x: 200.0
+    y: 14.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_bold_16"
+  id: "details_iter"
+  pivot: PIVOT_W
+  parent: "details_group"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 370.0
+    y: 181.0
+  }
+  size {
+    x: 90.0
+    y: 14.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_bold_16"
+  id: "details_clue"
+  pivot: PIVOT_E
+  parent: "details_group"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 58.0
+    y: 166.0
+  }
+  size {
+    x: 84.0
+    y: 70.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "details_preview_bg"
+  pivot: PIVOT_SW
+  parent: "details_group"
+  alpha: 0.06
+}
+nodes {
+  position {
+    x: 58.0
+    y: 166.0
+  }
+  size {
+    x: 84.0
+    y: 70.0
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "border_preview"
+  pivot: PIVOT_SW
+  parent: "details_group"
+  inherit_alpha: true
+  slice9 {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+    w: 2.0
+  }
+}
+nodes {
+  position {
+    x: 100.0
+    y: 201.0
+    z: 0.1
+  }
+  size {
+    x: 76.0
+    y: 76.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  font: "icons"
+  id: "details_icon"
+  parent: "details_group"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -2000.0
+    y: -2000.0
+    z: 0.1
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "preview_stamp_bg"
+  pivot: PIVOT_SW
+  parent: "details_group"
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: -2000.0
+    y: -2000.0
+    z: 0.1
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    x: 0.784
+    y: 0.078
+    z: 0.165
+  }
+  type: TYPE_TEXT
+  text: "\320\237\320\243\320\241\320\242\320\236"
+  font: "jb_mono_bold_16"
+  id: "preview_stamp_label"
+  parent: "details_group"
+  alpha: 0.0
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 500.0
+    y: 230.0
+  }
+  size {
+    x: 670.0
+    y: 74.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\320\222\321\213\320\261\320\265\321\200\320\270 \320\277\321\200\320\265\320\264\320\274\320\265\321\202 \320\262 \321\201\320\265\321\202\320\272\320\265 \321\201\320\273\320\265\320\262\320\260."
+  font: "Manrope-Medium_16"
+  id: "details_desc"
+  pivot: PIVOT_NW
+  line_break: true
+  parent: "details_group"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -2000.0
+    y: -2000.0
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "details_stats_divider"
+  pivot: PIVOT_SW
+  parent: "details_group"
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: -2000.0
+    y: -2000.0
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\320\270\321\201\321\202\320\276\321\207\320\275\320\270\320\272"
+  font: "jb_mono_bold_16"
+  id: "stat_src_k"
+  pivot: PIVOT_W
+  parent: "details_group"
+  alpha: 0.0
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -2000.0
+    y: -2000.0
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\342\200\224"
+  font: "jb_mono_bold_16"
+  id: "stat_src_v"
+  pivot: PIVOT_W
+  parent: "details_group"
+  alpha: 0.0
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -2000.0
+    y: -2000.0
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\320\270\321\202\320\265\321\200\320\260\321\206\320\270\321\217"
+  font: "jb_mono_bold_16"
+  id: "stat_iter_k"
+  pivot: PIVOT_W
+  parent: "details_group"
+  alpha: 0.0
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -2000.0
+    y: -2000.0
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "\342\200\224"
+  font: "jb_mono_bold_16"
+  id: "stat_iter_v"
+  pivot: PIVOT_W
+  parent: "details_group"
+  alpha: 0.0
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -2000.0
+    y: -2000.0
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\321\202\320\270\320\277"
+  font: "jb_mono_bold_16"
+  id: "stat_type_k"
+  pivot: PIVOT_W
+  parent: "details_group"
+  alpha: 0.0
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -2000.0
+    y: -2000.0
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\342\200\224"
+  font: "jb_mono_bold_16"
+  id: "stat_type_v"
+  pivot: PIVOT_W
+  parent: "details_group"
+  alpha: 0.0
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -2000.0
+    y: -2000.0
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\321\203\320\273\320\270\320\272\320\260"
+  font: "jb_mono_bold_16"
+  id: "stat_clue_k"
+  pivot: PIVOT_W
+  parent: "details_group"
+  alpha: 0.0
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -2000.0
+    y: -2000.0
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
+  type: TYPE_TEXT
+  text: "\342\200\224"
+  font: "jb_mono_bold_16"
+  id: "stat_clue_v"
+  pivot: PIVOT_W
+  parent: "details_group"
+  alpha: 0.0
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    z: 0.006
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "verbs_group"
+  pivot: PIVOT_SW
+  parent: "modal"
+}
+nodes {
+  position {
+    x: 38.0
+    y: 136.0
+  }
+  size {
+    x: 1168.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "details_verbs_divider"
+  pivot: PIVOT_SW
+  parent: "verbs_group"
+  alpha: 0.15
+}
+nodes {
+  position {
+    x: 212.0
+    y: 82.0
+  }
+  size {
+    x: 260.0
+    y: 46.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "verb1_border"
+  pivot: PIVOT_SW
+  parent: "verbs_group"
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 213.0
+    y: 83.0
+    z: 0.1
+  }
+  size {
+    x: 258.0
+    y: 44.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
+  type: TYPE_BOX
+  id: "verb1_bg"
+  pivot: PIVOT_SW
+  parent: "verbs_group"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 342.0
+    y: 105.0
+    z: 0.1
+  }
+  size {
+    x: 246.0
+    y: 18.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\230\320\241\320\237\320\236\320\233\320\254\320\227\320\236\320\222\320\220\320\242\320\254"
+  font: "unbounded_bold_20"
+  id: "verb1_label"
+  parent: "verbs_group"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 492.0
+    y: 82.0
+  }
+  size {
+    x: 260.0
+    y: 46.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "verb2_border"
+  pivot: PIVOT_SW
+  parent: "verbs_group"
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 493.0
+    y: 83.0
+    z: 0.1
+  }
+  size {
+    x: 258.0
+    y: 44.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
+  type: TYPE_BOX
+  id: "verb2_bg"
+  pivot: PIVOT_SW
+  parent: "verbs_group"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 622.0
+    y: 105.0
+    z: 0.1
+  }
+  size {
+    x: 246.0
+    y: 18.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\236\320\241\320\234\320\236\320\242\320\240\320\225\320\242\320\254"
+  font: "unbounded_bold_20"
+  id: "verb2_label"
+  parent: "verbs_group"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 352.0
+    y: 30.0
+  }
+  size {
+    x: 260.0
+    y: 46.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "verb3_border"
+  pivot: PIVOT_SW
+  parent: "verbs_group"
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 353.0
+    y: 31.0
+    z: 0.1
+  }
+  size {
+    x: 258.0
+    y: 44.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
+  type: TYPE_BOX
+  id: "verb3_bg"
+  pivot: PIVOT_SW
+  parent: "verbs_group"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 482.0
+    y: 53.0
+    z: 0.1
+  }
+  size {
+    x: 246.0
+    y: 18.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\241\320\236\320\225\320\224\320\230\320\235\320\230\320\242\320\254"
+  font: "unbounded_bold_20"
+  id: "verb3_label"
+  parent: "verbs_group"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 772.0
+    y: 82.0
+  }
+  size {
+    x: 260.0
+    y: 46.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "verb4_border"
+  pivot: PIVOT_SW
+  parent: "verbs_group"
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 773.0
+    y: 83.0
+    z: 0.1
+  }
+  size {
+    x: 258.0
+    y: 44.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
+  type: TYPE_BOX
+  id: "verb4_bg"
+  pivot: PIVOT_SW
+  parent: "verbs_group"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 902.0
+    y: 105.0
+    z: 0.1
+  }
+  size {
+    x: 246.0
+    y: 18.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\237\320\240\320\236\320\247\320\230\320\242\320\220\320\242\320\254"
+  font: "unbounded_bold_20"
+  id: "verb4_label"
+  parent: "verbs_group"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 632.0
+    y: 30.0
+  }
+  size {
+    x: 260.0
+    y: 46.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "verb5_border"
+  pivot: PIVOT_SW
+  parent: "verbs_group"
+  alpha: 0.4
+}
+nodes {
+  position {
+    x: 633.0
+    y: 31.0
+    z: 0.1
+  }
+  size {
+    x: 258.0
+    y: 44.0
+  }
+  color {
+    x: 0.047
+    y: 0.039
+    z: 0.141
+  }
+  type: TYPE_BOX
+  id: "verb5_bg"
+  pivot: PIVOT_SW
+  parent: "verbs_group"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 762.0
+    y: 53.0
+    z: 0.1
+  }
+  size {
+    x: 246.0
+    y: 18.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\236\320\242\320\224\320\220\320\242\320\254"
+  font: "unbounded_bold_20"
+  id: "verb5_label"
+  parent: "verbs_group"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    z: 0.007
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "footer_group"
+  pivot: PIVOT_SW
+  parent: "modal"
+}
+nodes {
+  position {
+    x: 38.0
+    y: 20.0
+  }
+  size {
+    x: 1164.0
+    y: 1.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "foot_divider"
+  pivot: PIVOT_SW
+  parent: "footer_group"
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 38.0
+    y: 10.0
+  }
+  size {
+    x: 620.0
+    y: 12.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_bold_16"
+  id: "foot_left"
+  pivot: PIVOT_W
+  parent: "footer_group"
+  alpha: 0.0
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1168.0
+    y: 10.0
+  }
+  size {
+    x: 80.0
+    y: 12.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_bold_16"
+  id: "foot_right"
+  pivot: PIVOT_E
+  parent: "footer_group"
+  alpha: 0.0
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT

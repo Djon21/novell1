@@ -1,0 +1,1366 @@
+script: "/main/gui/components_v2/hud_v2.gui_script"
+fonts {
+  name: "unbounded_bold_32"
+  font: "/main/fonts/unbounded_bold_32.font"
+}
+fonts {
+  name: "icons"
+  font: "/main/fonts/icons.font"
+}
+fonts {
+  name: "jb_mono_16"
+  font: "/main/fonts/jb_mono_16.font"
+}
+fonts {
+  name: "unbounded_bold_20"
+  font: "/main/fonts/unbounded_bold_20.font"
+}
+textures {
+  name: "ui_common"
+  texture: "/main/images/ui_common.atlas"
+}
+nodes {
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "hud_root"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 50.0
+    y: 650.0
+  }
+  size {
+    x: 400.0
+    y: 60.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "box"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
+  pivot: PIVOT_W
+  parent: "hud_root"
+  inherit_alpha: true
+  alpha: 0.5
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 7.0
+    y: 9.0
+    z: 0.1
+  }
+  size {
+    x: 600.0
+    y: 32.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "\320\237\320\240\320\230\320\245\320\236\320\226\320\220\320\257"
+  font: "unbounded_bold_32"
+  id: "scene_name"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
+  pivot: PIVOT_W
+  parent: "box"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 7.0
+    y: -17.0
+    z: 0.1
+  }
+  size {
+    x: 500.0
+    y: 14.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "07:12 \302\267 \320\277\320\265\321\202\320\273\321\217 #017 \302\267 \321\201\320\276\321\201\321\202. \321\201\321\202\320\260\320\261\320\270\320\273\321\214\320\275\320\260"
+  font: "jb_mono_16"
+  id: "scene_meta"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
+  pivot: PIVOT_W
+  parent: "box"
+  alpha: 0.5
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1195.0
+    y: 645.0
+    z: 0.1
+  }
+  size {
+    x: 70.0
+    y: 70.0
+  }
+  color {
+    x: 0.031
+    y: 0.023
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "bag_ring"
+  xanchor: XANCHOR_RIGHT
+  yanchor: YANCHOR_TOP
+  parent: "hud_root"
+  inherit_alpha: true
+  alpha: 0.85
+}
+nodes {
+  position {
+    x: -3.0
+    y: -1.0
+    z: 0.12
+  }
+  size {
+    x: 40.0
+    y: 40.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "\356\224\263"
+  font: "icons"
+  id: "bag_icon"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "bag_ring"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    z: 0.11
+  }
+  size {
+    x: 56.0
+    y: 56.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "bag_ring_inner"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "bag_ring"
+  inherit_alpha: true
+  alpha: 0.0
+  visible: false
+}
+nodes {
+  position {
+    x: 30.0
+    y: 30.0
+    z: 0.13
+  }
+  size {
+    x: 20.0
+    y: 20.0
+  }
+  color {
+    y: 0.23921569
+    z: 0.49803922
+  }
+  type: TYPE_BOX
+  id: "bag_badge"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "bag_ring"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    z: 0.14
+  }
+  size {
+    x: 18.0
+    y: 14.0
+  }
+  type: TYPE_TEXT
+  text: "7"
+  font: "jb_mono_16"
+  id: "bag_badge_text"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "bag_badge"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1115.0
+    y: 645.0
+    z: 0.1
+  }
+  size {
+    x: 70.0
+    y: 70.0
+  }
+  color {
+    x: 0.031
+    y: 0.023
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "phn_ring"
+  xanchor: XANCHOR_RIGHT
+  yanchor: YANCHOR_TOP
+  parent: "hud_root"
+  inherit_alpha: true
+  alpha: 0.85
+}
+nodes {
+  position {
+    x: -5.0
+    z: 0.12
+  }
+  size {
+    x: 40.0
+    y: 40.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
+  type: TYPE_TEXT
+  text: "\356\214\254"
+  font: "icons"
+  id: "phn_icon"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "phn_ring"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 30.0
+    y: 30.0
+    z: 0.13
+  }
+  size {
+    x: 20.0
+    y: 20.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
+  type: TYPE_BOX
+  id: "phn_badge"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "phn_ring"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    z: 0.14
+  }
+  size {
+    x: 18.0
+    y: 14.0
+  }
+  type: TYPE_TEXT
+  text: "3"
+  font: "jb_mono_16"
+  id: "phn_badge_text"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "phn_badge"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1035.0
+    y: 645.0
+    z: 0.1
+  }
+  size {
+    x: 70.0
+    y: 70.0
+  }
+  color {
+    x: 0.031
+    y: 0.023
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "log_ring"
+  xanchor: XANCHOR_RIGHT
+  yanchor: YANCHOR_TOP
+  parent: "hud_root"
+  inherit_alpha: true
+  alpha: 0.85
+}
+nodes {
+  position {
+    y: 1.0
+    z: 0.12
+  }
+  scale {
+    x: 0.7
+    y: 0.7
+  }
+  size {
+    x: 85.0
+    y: 40.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "LOG"
+  font: "unbounded_bold_32"
+  id: "log_label"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "log_ring"
+  alpha: 0.9
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 955.0
+    y: 645.0
+    z: 0.1
+  }
+  size {
+    x: 70.0
+    y: 70.0
+  }
+  color {
+    x: 0.031
+    y: 0.023
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "sound_ring"
+  xanchor: XANCHOR_RIGHT
+  yanchor: YANCHOR_TOP
+  parent: "hud_root"
+  inherit_alpha: true
+  alpha: 0.85
+}
+nodes {
+  position {
+    x: -1.0
+    y: -1.0
+    z: 0.12
+  }
+  size {
+    x: 40.0
+    y: 40.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "\356\201\220"
+  font: "icons"
+  id: "sound_label"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "sound_ring"
+  alpha: 0.9
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 875.0
+    y: 645.0
+    z: 0.1
+  }
+  size {
+    x: 70.0
+    y: 70.0
+  }
+  color {
+    x: 0.031
+    y: 0.023
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "menu_ring"
+  xanchor: XANCHOR_RIGHT
+  yanchor: YANCHOR_TOP
+  parent: "hud_root"
+  inherit_alpha: true
+  alpha: 0.85
+}
+nodes {
+  position {
+    y: 1.0
+    z: 0.12
+  }
+  scale {
+    x: 0.48
+    y: 0.48
+  }
+  size {
+    x: 120.0
+    y: 40.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "MENU"
+  font: "unbounded_bold_32"
+  id: "menu_label"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "menu_ring"
+  alpha: 0.9
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 340.0
+    y: 617.0
+    z: 0.2
+  }
+  size {
+    x: 600.0
+    y: 56.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "armed_banner_root"
+  pivot: PIVOT_SW
+  parent: "hud_root"
+  inherit_alpha: true
+  alpha: 0.0
+}
+nodes {
+  position {
+    z: 0.2
+  }
+  size {
+    x: 600.0
+    y: 56.0
+  }
+  color {
+    x: 0.031
+    y: 0.023
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "armed_banner_bg"
+  pivot: PIVOT_SW
+  parent: "armed_banner_root"
+  alpha: 0.92
+}
+nodes {
+  position {
+    y: 54.0
+    z: 0.21
+  }
+  size {
+    x: 600.0
+    y: 2.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "armed_banner_border"
+  pivot: PIVOT_SW
+  parent: "armed_banner_root"
+}
+nodes {
+  position {
+    x: 16.0
+    y: 29.0
+    z: 0.22
+  }
+  size {
+    x: 512.0
+    y: 24.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_16"
+  id: "armed_banner_text"
+  pivot: PIVOT_W
+  parent: "armed_banner_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 534.0
+    y: 8.0
+    z: 0.22
+  }
+  size {
+    x: 60.0
+    y: 40.0
+  }
+  color {
+    x: 0.06
+    y: 0.06
+    z: 0.1
+  }
+  type: TYPE_BOX
+  id: "armed_banner_cancel_bg"
+  pivot: PIVOT_SW
+  parent: "armed_banner_root"
+}
+nodes {
+  position {
+    x: 564.0
+    y: 28.0
+    z: 0.23
+  }
+  size {
+    x: 60.0
+    y: 40.0
+  }
+  color {
+    y: 0.23921569
+    z: 0.49803922
+  }
+  type: TYPE_TEXT
+  text: "\320\236\320\242\320\234\320\225\320\235\320\220"
+  font: "jb_mono_16"
+  id: "armed_banner_cancel_label"
+  parent: "armed_banner_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 640.0
+    y: 360.0
+    z: 0.06
+  }
+  size {
+    x: 1280.0
+    y: 720.0
+  }
+  color {
+    x: 0.02
+    y: 0.012
+    z: 0.102
+  }
+  type: TYPE_BOX
+  id: "backlog_shade"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  inherit_alpha: true
+  alpha: 0.82
+}
+nodes {
+  position {
+    z: 0.77
+  }
+  size {
+    x: 900.0
+    y: 500.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "backlog_panel"
+  parent: "backlog_shade"
+  inherit_alpha: true
+  alpha: 0.96
+}
+nodes {
+  position {
+    x: -410.0
+    y: 206.0
+    z: 0.79
+  }
+  size {
+    x: 500.0
+    y: 24.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "DIALOG LOG"
+  font: "unbounded_bold_32"
+  id: "backlog_title"
+  pivot: PIVOT_W
+  parent: "backlog_shade"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -408.0
+    y: 162.0
+    z: 0.79
+  }
+  size {
+    x: 820.0
+    y: 18.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_16"
+  id: "backlog_speaker"
+  pivot: PIVOT_W
+  parent: "backlog_shade"
+  inherit_alpha: true
+  alpha: 0.55
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -407.0
+    y: 132.0
+    z: 0.79
+  }
+  size {
+    x: 820.0
+    y: 250.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_16"
+  id: "backlog_text"
+  pivot: PIVOT_NW
+  line_break: true
+  parent: "backlog_shade"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -408.0
+    y: -210.0
+    z: 0.79
+  }
+  size {
+    x: 820.0
+    y: 30.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "LOG IS READ-ONLY: CHOICES CANNOT BE REPLAYED."
+  font: "jb_mono_16"
+  id: "backlog_hint"
+  pivot: PIVOT_W
+  parent: "backlog_shade"
+  inherit_alpha: true
+  alpha: 0.8
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 410.0
+    y: 207.0
+    z: 0.79
+  }
+  size {
+    x: 160.0
+    y: 14.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "0 / 0"
+  font: "jb_mono_16"
+  id: "backlog_counter"
+  pivot: PIVOT_E
+  parent: "backlog_shade"
+  inherit_alpha: true
+  alpha: 0.8
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -403.0
+    y: -171.0
+    z: 0.09
+  }
+  size {
+    x: 120.0
+    y: 30.0
+  }
+  color {
+    x: 0.067
+    y: 0.055
+    z: 0.173
+  }
+  type: TYPE_BOX
+  id: "backlog_btn_prev"
+  pivot: PIVOT_SW
+  parent: "backlog_shade"
+  inherit_alpha: true
+  alpha: 0.85
+}
+nodes {
+  position {
+    x: 59.0
+    y: 15.0
+    z: 0.8
+  }
+  size {
+    x: 120.0
+    y: 14.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "< BACK"
+  font: "jb_mono_16"
+  id: "backlog_btn_prev_label"
+  parent: "backlog_btn_prev"
+  inherit_alpha: true
+  alpha: 0.8
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -262.0
+    y: -171.0
+    z: 0.09
+  }
+  size {
+    x: 120.0
+    y: 30.0
+  }
+  color {
+    x: 0.067
+    y: 0.055
+    z: 0.173
+  }
+  type: TYPE_BOX
+  id: "backlog_btn_next"
+  pivot: PIVOT_SW
+  parent: "backlog_shade"
+  inherit_alpha: true
+  alpha: 0.85
+}
+nodes {
+  position {
+    x: 60.0
+    y: 15.0
+    z: 0.8
+  }
+  size {
+    x: 120.0
+    y: 14.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "NEXT >"
+  font: "jb_mono_16"
+  id: "backlog_btn_next_label"
+  parent: "backlog_btn_next"
+  inherit_alpha: true
+  alpha: 0.8
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 285.0
+    y: -171.0
+    z: 0.09
+  }
+  size {
+    x: 120.0
+    y: 30.0
+  }
+  color {
+    x: 0.067
+    y: 0.055
+    z: 0.173
+  }
+  type: TYPE_BOX
+  id: "backlog_btn_close"
+  pivot: PIVOT_SW
+  parent: "backlog_shade"
+  inherit_alpha: true
+  alpha: 0.85
+}
+nodes {
+  position {
+    x: 59.0
+    y: 16.0
+    z: 0.8
+  }
+  size {
+    x: 120.0
+    y: 14.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "CLOSE"
+  font: "jb_mono_16"
+  id: "backlog_btn_close_label"
+  parent: "backlog_btn_close"
+  inherit_alpha: true
+  alpha: 0.8
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  size {
+    x: 900.0
+    y: 500.0
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "backlog_border"
+  parent: "backlog_shade"
+  inherit_alpha: true
+  slice9 {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+    w: 2.0
+  }
+}
+nodes {
+  position {
+    x: 800.0
+    y: 645.0
+    z: 0.1
+  }
+  size {
+    x: 70.0
+    y: 70.0
+  }
+  color {
+    x: 0.031
+    y: 0.023
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "save_ring"
+  xanchor: XANCHOR_RIGHT
+  yanchor: YANCHOR_TOP
+  parent: "hud_root"
+  inherit_alpha: true
+  alpha: 0.85
+}
+nodes {
+  position {
+    y: 1.0
+    z: 0.12
+  }
+  scale {
+    x: 0.48
+    y: 0.48
+  }
+  size {
+    x: 120.0
+    y: 40.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "SAVE"
+  font: "unbounded_bold_32"
+  id: "save_label"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "save_ring"
+  alpha: 0.9
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    z: 0.7
+  }
+  size {
+    x: 1280.0
+    y: 720.0
+  }
+  color {
+    x: 0.019607844
+    y: 0.011764706
+    z: 0.101960786
+  }
+  type: TYPE_BOX
+  id: "slots_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  alpha: 0.86
+}
+nodes {
+  position {
+    x: 640.0
+    y: 360.0
+    z: 0.71
+  }
+  size {
+    x: 880.0
+    y: 420.0
+  }
+  color {
+    x: 0.06
+    y: 0.06
+    z: 0.1
+  }
+  type: TYPE_BOX
+  id: "slots_box"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+}
+nodes {
+  position {
+    x: 640.0
+    y: 530.0
+    z: 0.72
+  }
+  size {
+    x: 800.0
+    y: 36.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "\320\241\320\233\320\236\320\242\320\253"
+  font: "unbounded_bold_20"
+  id: "slots_title"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 246.0
+    y: 450.0
+    z: 0.73
+  }
+  size {
+    x: 520.0
+    y: 30.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "\320\241\320\273\320\276\321\202 1"
+  font: "unbounded_bold_20"
+  id: "slot_1_label"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 806.0
+    y: 450.0
+    z: 0.72
+  }
+  size {
+    x: 140.0
+    y: 50.0
+  }
+  type: TYPE_BOX
+  id: "slot_1_save_hit"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 806.0
+    y: 450.0
+    z: 0.73
+  }
+  size {
+    x: 140.0
+    y: 30.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "\320\241\320\236\320\245\320\240"
+  font: "unbounded_bold_20"
+  id: "slot_1_save_btn"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 966.0
+    y: 450.0
+    z: 0.72
+  }
+  size {
+    x: 140.0
+    y: 50.0
+  }
+  type: TYPE_BOX
+  id: "slot_1_load_hit"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 966.0
+    y: 450.0
+    z: 0.73
+  }
+  size {
+    x: 140.0
+    y: 30.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "\320\227\320\220\320\223\320\240"
+  font: "unbounded_bold_20"
+  id: "slot_1_load_btn"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 246.0
+    y: 380.0
+    z: 0.73
+  }
+  size {
+    x: 520.0
+    y: 30.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "\320\241\320\273\320\276\321\202 2"
+  font: "unbounded_bold_20"
+  id: "slot_2_label"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 806.0
+    y: 380.0
+    z: 0.72
+  }
+  size {
+    x: 140.0
+    y: 50.0
+  }
+  type: TYPE_BOX
+  id: "slot_2_save_hit"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 806.0
+    y: 380.0
+    z: 0.73
+  }
+  size {
+    x: 140.0
+    y: 30.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "\320\241\320\236\320\245\320\240"
+  font: "unbounded_bold_20"
+  id: "slot_2_save_btn"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 966.0
+    y: 380.0
+    z: 0.72
+  }
+  size {
+    x: 140.0
+    y: 50.0
+  }
+  type: TYPE_BOX
+  id: "slot_2_load_hit"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 966.0
+    y: 380.0
+    z: 0.73
+  }
+  size {
+    x: 140.0
+    y: 30.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "\320\227\320\220\320\223\320\240"
+  font: "unbounded_bold_20"
+  id: "slot_2_load_btn"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 246.0
+    y: 310.0
+    z: 0.73
+  }
+  size {
+    x: 520.0
+    y: 30.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "\320\241\320\273\320\276\321\202 3"
+  font: "unbounded_bold_20"
+  id: "slot_3_label"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 806.0
+    y: 310.0
+    z: 0.72
+  }
+  size {
+    x: 140.0
+    y: 50.0
+  }
+  type: TYPE_BOX
+  id: "slot_3_save_hit"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 806.0
+    y: 310.0
+    z: 0.73
+  }
+  size {
+    x: 140.0
+    y: 30.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "\320\241\320\236\320\245\320\240"
+  font: "unbounded_bold_20"
+  id: "slot_3_save_btn"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 966.0
+    y: 310.0
+    z: 0.72
+  }
+  size {
+    x: 140.0
+    y: 50.0
+  }
+  type: TYPE_BOX
+  id: "slot_3_load_hit"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 966.0
+    y: 310.0
+    z: 0.73
+  }
+  size {
+    x: 140.0
+    y: 30.0
+  }
+  color {
+    x: 0.952
+    y: 0.925
+    z: 0.85
+  }
+  type: TYPE_TEXT
+  text: "\320\227\320\220\320\223\320\240"
+  font: "unbounded_bold_20"
+  id: "slot_3_load_btn"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 640.0
+    y: 210.0
+    z: 0.72
+  }
+  size {
+    x: 200.0
+    y: 56.0
+  }
+  type: TYPE_BOX
+  id: "slots_back_hit"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 640.0
+    y: 210.0
+    z: 0.73
+  }
+  size {
+    x: 200.0
+    y: 32.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "\320\235\320\220\320\227\320\220\320\224"
+  font: "unbounded_bold_20"
+  id: "slots_back"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "hud_root"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT

@@ -1,0 +1,58 @@
+images {
+  image: "/main/images/portraits/mila/mila_base.png"
+}
+images {
+  image: "/main/images/portraits/mila/mila_blink_1.png"
+}
+images {
+  image: "/main/images/portraits/mila/mila_blink_2.png"
+}
+images {
+  image: "/main/images/portraits/mila/mila_mouth_1.png"
+}
+images {
+  image: "/main/images/portraits/mila/mila_mouth_2.png"
+}
+images {
+  image: "/main/images/portraits/mila/mila_mouth_3.png"
+}
+animations {
+  id: "mila_idle"
+  images {
+    image: "/main/images/portraits/mila/mila_base.png"
+  }
+  playback: PLAYBACK_NONE
+  fps: 1
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "mila_blink"
+  images {
+    image: "/main/images/portraits/mila/mila_blink_1.png"
+  }
+  images {
+    image: "/main/images/portraits/mila/mila_blink_2.png"
+  }
+  playback: PLAYBACK_ONCE_PINGPONG
+  fps: 8
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "mila_talk"
+  images {
+    image: "/main/images/portraits/mila/mila_mouth_1.png"
+  }
+  images {
+    image: "/main/images/portraits/mila/mila_mouth_2.png"
+  }
+  images {
+    image: "/main/images/portraits/mila/mila_mouth_3.png"
+  }
+  playback: PLAYBACK_LOOP_PINGPONG
+  fps: 8
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+extrude_borders: 2

@@ -1,0 +1,7 @@
+images {
+  image: "/main/images/teat_fon/fon.png"
+}
+images {
+  image: "/main/images/teat_fon/table.png"
+}
+extrude_borders: 2

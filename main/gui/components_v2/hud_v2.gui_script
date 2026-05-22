@@ -1,0 +1,589 @@
+-- hud_v2.gui_script
+-- Верхний HUD: локация, BAG/PHN/LOG/SND/MENU, read-only backlog overlay
+-- и armed-banner для inventory use-on-target.
+--
+-- Принимает сообщения:
+--   "set_location"       {name, time, loop}     — обновляет заголовок
+--   "set_inventory_count"{n}                    — бейдж BAG
+--   "set_phone_notif"    {n}                    — бейдж PHN
+--   "set_hud_hint"       {target = "phone"|"bag"|"phone:off"|"bag:off"|"reset"}
+--                                                — устойчивая подсказка-пульс
+--   "set_overlay_state"  {target = "phone"|"bag", open = bool}
+--                                                — приостанавливает pulse пока overlay открыт
+--   "set_mute_state"     {muted = bool}          — обновить подпись SND/OFF
+--   "open_backlog" / "close_backlog" / "clear_backlog"
+--   "show_armed_banner" / "hide_armed_banner"
+--   "show_hud" / "hide_hud"
+--
+-- Шлёт в ui_manager_v2:
+--   "open_inventory"          — при клике на BAG
+--   "open_phone"              — при клике на PHN
+--   "open_backlog"            — при клике на LOG
+--   "toggle_mute"             — при клике на SND
+--   "return_to_menu"          — при клике на MENU
+--   "close_backlog"           — при закрытии backlog
+--   "cancel_armed_inventory"  — при отмене armed-use
+
+local ui_state = require "main.scripts.ui_state"
+local backlog = require "main.scripts.dialogue_backlog"
+local sm = require "main.scripts.save_manager"
+local MSG = require "main.gui.modules.messages"
+
+-- Запоминаем что modal_open было ДО открытия slots-панели (чтобы при
+-- закрытии не разблокировать сцену если поверх неё ещё висит phone/inv).
+local _prev_modal = nil
+
+local UI_MGR = "#ui_manager_v2"
+local ICON_VOLUME_UP = string.char(0xEE, 0x81, 0x90)  -- Material Icons: volume_up
+local ICON_VOLUME_OFF = string.char(0xEE, 0x81, 0x8F) -- Material Icons: volume_off
+
+
+local function set_text(id, s)
+    gui.set_text(gui.get_node(id), s or "")
+end
+
+local function set_visible(id, v)
+    gui.set_enabled(gui.get_node(id), v)
+end
+
+local function point_in_node(node, action)
+    return gui.pick_node(node, action.x, action.y)
+end
+
+local function click_scale(node)
+    if not node then return end
+    gui.cancel_animation(node, "scale")
+    gui.animate(node, "scale", vmath.vector3(0.94, 0.94, 1), gui.EASING_OUTQUAD, 0.08, 0, function()
+        gui.animate(node, "scale", vmath.vector3(1, 1, 1), gui.EASING_OUTQUAD, 0.15)
+    end)
+end
+
+local BACKLOG_NODE_IDS = {
+    "backlog_shade",
+    "backlog_panel",
+    "backlog_border",
+    "backlog_title",
+    "backlog_counter",
+    "backlog_speaker",
+    "backlog_text",
+    "backlog_hint",
+    "backlog_btn_prev",
+    "backlog_btn_prev_label",
+    "backlog_btn_next",
+    "backlog_btn_next_label",
+    "backlog_btn_close",
+    "backlog_btn_close_label",
+}
+
+
+local function ensure_log_button(self)
+    if self.log_button then return end
+    self.log_button = gui.get_node("log_ring")
+    self.sound_button = gui.get_node("sound_ring")
+    self.menu_button = gui.get_node("menu_ring")
+    self.save_button = gui.get_node("save_ring")
+end
+
+-- ─── Save/Load slots panel (in-game) ────────────────────────────────────
+-- Step 3: панель со слотами, открывается из HUD-кнопки SAVE. 3 ручных
+-- слота (autosave недоступен для ручной записи — он пишется автоматически).
+-- На каждой строке: лейбл + 2 кнопки Сохр/Загр.
+local HUD_SLOTS = { 1, 2, 3 }
+local HUD_SLOT_PANEL_KEYS = { "bg", "box", "title", "back", "back_hit" }
+
+local function format_hud_slot_label(info, slot)
+    if not info or not info.exists or not info.has_run then
+        return "Слот " .. slot .. " · пусто"
+    end
+    local chap = info.chapter or 1
+    local who  = info.mc_gender == "female" and "Мила"
+              or info.mc_gender == "male"   and "Артём"
+              or "—"
+    local when = os.date("%d.%m %H:%M", info.save_time or 0)
+    return string.format("Слот %d · Глава %d · %s · %s", slot, chap, who, when)
+end
+
+local function ensure_slots_nodes(self)
+    if self.slots_nodes then return end
+    self.slots_nodes = {
+        bg       = gui.get_node("slots_bg"),
+        box      = gui.get_node("slots_box"),
+        title    = gui.get_node("slots_title"),
+        back     = gui.get_node("slots_back"),
+        back_hit = gui.get_node("slots_back_hit"),
+    }
+    self.slots_rows = {}
+    for _, slot in ipairs(HUD_SLOTS) do
+        self.slots_rows[slot] = {
+            label    = gui.get_node("slot_" .. slot .. "_label"),
+            save_hit = gui.get_node("slot_" .. slot .. "_save_hit"),
+            load_hit = gui.get_node("slot_" .. slot .. "_load_hit"),
+            save_btn = gui.get_node("slot_" .. slot .. "_save_btn"),
+            load_btn = gui.get_node("slot_" .. slot .. "_load_btn"),
+        }
+    end
+end
+
+local function set_slots_panel_enabled(self, enabled)
+    if not self.slots_nodes then return end
+    for _, k in ipairs(HUD_SLOT_PANEL_KEYS) do
+        gui.set_enabled(self.slots_nodes[k], enabled)
+    end
+    for _, slot in ipairs(HUD_SLOTS) do
+        local row = self.slots_rows[slot]
+        gui.set_enabled(row.label,    enabled)
+        gui.set_enabled(row.save_hit, enabled)
+        gui.set_enabled(row.load_hit, enabled)
+        gui.set_enabled(row.save_btn, enabled)
+        gui.set_enabled(row.load_btn, enabled)
+    end
+end
+
+local function refresh_slots_panel(self)
+    ensure_slots_nodes(self)
+    gui.set_text(self.slots_nodes.title, "СЛОТЫ")
+    gui.set_text(self.slots_nodes.back,  "НАЗАД")
+    for _, slot in ipairs(HUD_SLOTS) do
+        local row = self.slots_rows[slot]
+        local info = sm.get_slot_info and sm.get_slot_info(slot) or nil
+        gui.set_text(row.label, format_hud_slot_label(info, slot))
+        gui.set_text(row.save_btn, "СОХР")
+        gui.set_text(row.load_btn, "ЗАГР")
+        -- Загрузка возможна только если слот непустой
+        local can_load = info and info.exists and info.has_run
+        local lc = gui.get_color(row.load_btn)
+        lc.w = can_load and 0.88 or 0.30
+        gui.set_color(row.load_btn, lc)
+    end
+end
+
+local function show_slots_panel(self)
+    ensure_slots_nodes(self)
+    refresh_slots_panel(self)
+    set_slots_panel_enabled(self, true)
+    self.slots_panel_visible = true
+    -- Блокируем клики сквозь панель в сцену/хотспоты. См. hotspots_v2.gui_script:
+    -- if ui_state.modal_open then return false end.
+    _prev_modal = ui_state.modal_open
+    ui_state.modal_open = true
+end
+
+local function hide_slots_panel(self)
+    set_slots_panel_enabled(self, false)
+    self.slots_panel_visible = false
+    if _prev_modal ~= nil then
+        ui_state.modal_open = _prev_modal
+        _prev_modal = nil
+    end
+end
+
+local function set_mute_label(muted)
+    local label = gui.get_node("sound_label")
+    gui.set_text(label, muted and ICON_VOLUME_OFF or ICON_VOLUME_UP)
+    local color = gui.get_color(label)
+    if muted then
+        color.x, color.y, color.z = 1.0, 0.239, 0.498
+    else
+        color.x, color.y, color.z = 0.952, 0.925, 0.85
+    end
+    gui.set_color(label, color)
+end
+
+local function set_backlog_nodes_enabled(enabled)
+    for _, id in ipairs(BACKLOG_NODE_IDS) do
+        set_visible(id, enabled)
+    end
+end
+
+local function refresh_backlog_view(self)
+    local entries = backlog.get_all()
+    local total = #entries
+    if total == 0 then
+        self.backlog_index = 0
+        set_text("backlog_counter", "0 / 0")
+        set_text("backlog_speaker", "ЖУРНАЛ ПУСТ")
+        set_text("backlog_text", "Здесь появятся уже прочитанные реплики.")
+        return
+    end
+
+    if not self.backlog_index or self.backlog_index < 1 then self.backlog_index = total end
+    if self.backlog_index > total then self.backlog_index = total end
+
+    local entry = entries[self.backlog_index] or {}
+    set_text("backlog_counter", tostring(self.backlog_index) .. " / " .. tostring(total))
+    set_text("backlog_speaker", tostring(entry.speaker or "НАРРАТОР"))
+    set_text("backlog_text", tostring(entry.text or ""))
+end
+
+local function set_backlog_open(self, open)
+    self.backlog_open = open and true or false
+    set_backlog_nodes_enabled(self.backlog_open)
+    if self.backlog_open then
+        self.backlog_index = backlog.size()
+        refresh_backlog_view(self)
+    end
+end
+
+-- Armed-banner: «Используй <предмет> на цели» + кнопка отмены.
+-- Ноды живут в hud_v2.gui, чтобы баннер можно было редактировать в Defold Editor.
+local function ensure_armed_banner(self)
+    if self.armed_banner then return end
+    self.armed_banner = {
+        root = gui.get_node("armed_banner_root"),
+        bg = gui.get_node("armed_banner_bg"),
+        text = gui.get_node("armed_banner_text"),
+        cancel_bg = gui.get_node("armed_banner_cancel_bg"),
+        cancel_label = gui.get_node("armed_banner_cancel_label"),
+    }
+end
+
+local function set_armed_banner_enabled(self, enabled)
+    ensure_armed_banner(self)
+    gui.set_enabled(self.armed_banner.root, enabled)
+end
+
+local function show_armed_banner(self, item_name, verb)
+    ensure_armed_banner(self)
+    local label
+    if verb == "use" then
+        label = "Использовать «" .. tostring(item_name or "") .. "» — выбери цель"
+    else
+        label = tostring(item_name or "") .. " — выбери цель"
+    end
+    gui.set_text(self.armed_banner.text, label)
+    set_armed_banner_enabled(self, true)
+end
+
+local function hide_armed_banner(self)
+    set_armed_banner_enabled(self, false)
+end
+
+local function handle_armed_banner_input(self, action)
+    if not self.armed_banner or not gui.is_enabled(self.armed_banner.root) then
+        return false
+    end
+
+    if point_in_node(self.armed_banner.cancel_bg, action)
+       or point_in_node(self.armed_banner.cancel_label, action) then
+        msg.post(UI_MGR, "cancel_armed_inventory")
+        click_scale(self.armed_banner.cancel_bg)
+        return true
+    end
+
+    -- Это отдельный input-слой. Клик по телу баннера не должен проваливаться
+    -- в HUD-кнопки под ним, даже если GUI-ноды пересеклись на другом масштабе.
+    if point_in_node(self.armed_banner.root, action)
+       or point_in_node(self.armed_banner.bg, action)
+       or point_in_node(self.armed_banner.text, action) then
+        return true
+    end
+
+    return false
+end
+
+local function set_phone_slot_visible(enabled, notif_count)
+    set_visible("phn_ring", enabled)
+    set_visible("phn_icon", enabled)
+
+    local show_badge = enabled and (notif_count or 0) > 0
+    set_visible("phn_badge", show_badge)
+    set_visible("phn_badge_text", show_badge)
+end
+
+-- ─── HUD-hint pulse ───────────────────────────────────────────────────
+-- Когда сюжет требует чтобы игрок открыл телефон (отвечать на SMS) или
+-- инвентарь (применить предмет), ink-тег # hud:hint:phone | bag запускает
+-- циклическую пульсацию соответствующей кнопки.
+--
+-- Hint = устойчивый флаг (self.hint_phone / self.hint_bag).
+-- Pulse визуально активен только когда hint=true И соответствующий overlay
+-- закрыт. Открытие телефона/инвентаря приостанавливает анимацию (флаг
+-- сохраняется), при закрытии анимация возобновляется. Так автор может
+-- держать пульс «до выполнения условия»: ставит # hud:hint:phone один раз,
+-- снимает # hud:hint:phone:off в knot'е ответа на SMS.
+local PULSE_DURATION = 0.7
+local PULSE_SCALE    = 1.12
+
+local function start_pulse(node)
+    if not node then return end
+    gui.cancel_animation(node, gui.PROP_SCALE)
+    gui.set_scale(node, vmath.vector3(1, 1, 1))
+    gui.animate(node, gui.PROP_SCALE,
+        vmath.vector3(PULSE_SCALE, PULSE_SCALE, 1),
+        gui.EASING_INOUTSINE, PULSE_DURATION, 0,
+        nil, gui.PLAYBACK_LOOP_PINGPONG)
+end
+
+local function stop_pulse(node)
+    if not node then return end
+    gui.cancel_animation(node, gui.PROP_SCALE)
+    gui.set_scale(node, vmath.vector3(1, 1, 1))
+end
+
+-- Решает должна ли pulse-анимация играть прямо сейчас, исходя из hint-флага
+-- и состояния overlay'а. Вызывается при любом изменении состояния.
+local function reconcile_pulse(self)
+    local phn = gui.get_node("phn_ring")
+    local bag = gui.get_node("bag_ring")
+    if self.hint_phone and not self.phone_overlay_open and self.visible then
+        start_pulse(phn)
+    else
+        stop_pulse(phn)
+    end
+    if self.hint_bag and not self.bag_overlay_open and self.visible then
+        start_pulse(bag)
+    else
+        stop_pulse(bag)
+    end
+end
+
+local function apply_hud_hint(self, target)
+    if not target or target == "" or target == "reset" then
+        self.hint_phone = false
+        self.hint_bag   = false
+    elseif target == "phone" then
+        self.hint_phone = true
+    elseif target == "phone:off" then
+        self.hint_phone = false
+    elseif target == "bag" then
+        self.hint_bag = true
+    elseif target == "bag:off" then
+        self.hint_bag = false
+    end
+    reconcile_pulse(self)
+end
+
+local function apply_overlay_state(self, target, open)
+    if target == "phone" then
+        self.phone_overlay_open = open and true or false
+    elseif target == "bag" then
+        self.bag_overlay_open = open and true or false
+    end
+    reconcile_pulse(self)
+end
+
+function init(self)
+    msg.post(".", "acquire_input_focus")
+    self.visible = true
+    self.bag_count  = 0
+    self.phn_notif  = 0
+    self.phone_enabled = false
+    self.backlog_open = false
+    self.backlog_index = 0
+    self.hint_phone = false
+    self.hint_bag = false
+    self.phone_overlay_open = false
+    self.bag_overlay_open = false
+    self.muted = false
+    ensure_log_button(self)
+    ensure_armed_banner(self)
+    ensure_slots_nodes(self)
+    set_slots_panel_enabled(self, false)
+    self.slots_panel_visible = false
+    set_mute_label(false)
+    set_backlog_nodes_enabled(false)
+    hide_armed_banner(self)
+    -- базовые тексты уже стоят в .gui, но занулим бейджи пока нет данных
+    set_text("bag_badge_text", "")
+    set_visible("bag_badge", false)
+    set_visible("bag_badge_text", false)
+    set_text("phn_badge_text", "")
+    set_phone_slot_visible(false, 0)
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash("set_location") then
+        set_text("scene_name", (message.name or ""):upper())
+        local meta = ""
+        if message.time then meta = message.time end
+        if message.loop then
+            meta = meta .. (meta ~= "" and " · " or "") .. "петля #" .. tostring(message.loop)
+        end
+        if meta ~= "" then meta = meta .. " · сост. стабильна" end
+        set_text("scene_meta", meta)
+
+    elseif message_id == hash("set_inventory_count") then
+        local n = tonumber(message.n) or 0
+        self.bag_count = n
+        if n > 0 then
+            set_text("bag_badge_text", tostring(n))
+            set_visible("bag_badge", true)
+            set_visible("bag_badge_text", true)
+        else
+            set_visible("bag_badge", false)
+            set_visible("bag_badge_text", false)
+        end
+
+    elseif message_id == hash("set_phone_notif") then
+        local n = tonumber(message.n) or 0
+        self.phn_notif = n
+        if n > 0 then
+            set_text("phn_badge_text", tostring(n))
+        end
+        set_phone_slot_visible(self.phone_enabled, n)
+
+    elseif message_id == hash("set_phone_enabled") then
+        self.phone_enabled = message.enabled and true or false
+        set_phone_slot_visible(self.phone_enabled, self.phn_notif)
+
+    elseif message_id == hash("show_hud") then
+        self.visible = true
+        gui.set_enabled(gui.get_node("hud_root"), true)
+        ensure_log_button(self)
+        reconcile_pulse(self)
+
+    elseif message_id == hash("hide_hud") then
+        self.visible = false
+        set_backlog_open(self, false)
+        hide_slots_panel(self)
+        gui.set_enabled(gui.get_node("hud_root"), false)
+        -- Анимации останавливаем чтобы не тратить CPU на невидимые узлы;
+        -- self.hint_* остаётся true, при show_hud reconcile_pulse оживит.
+        stop_pulse(gui.get_node("bag_ring"))
+        stop_pulse(gui.get_node("phn_ring"))
+
+    elseif message_id == hash("set_hud_hint") then
+        apply_hud_hint(self, message and message.target)
+
+    elseif message_id == hash("set_overlay_state") then
+        apply_overlay_state(self, message and message.target, message and message.open)
+
+    elseif message_id == MSG.set_mute_state then
+        self.muted = message and message.muted == true
+        set_mute_label(self.muted)
+
+    elseif message_id == hash("show_armed_banner") then
+        -- Игрок взял предмет в инвентаре с verb=use или give. Показываем
+        -- инструкцию + ✕ для отмены.
+        show_armed_banner(self, message and message.item_name, message and message.verb)
+
+    elseif message_id == hash("hide_armed_banner") then
+        hide_armed_banner(self)
+
+    elseif message_id == hash("open_backlog") then
+        set_backlog_open(self, true)
+
+    elseif message_id == hash("close_backlog") then
+        set_backlog_open(self, false)
+
+    elseif message_id == hash("clear_backlog") then
+        backlog.clear()
+        self.backlog_index = 0
+        if self.backlog_open then
+            refresh_backlog_view(self)
+        end
+    end
+end
+
+function on_input(self, action_id, action)
+    if not self.visible then return false end
+    if action_id ~= hash("touch") or not action.pressed then return false end
+
+    -- Slots-панель забирает весь ввод пока открыта (выше всех остальных слоёв).
+    if self.slots_panel_visible and self.slots_nodes then
+        if gui.pick_node(self.slots_nodes.back_hit, action.x, action.y) then
+            click_scale(self.slots_nodes.back)
+            hide_slots_panel(self)
+            return true
+        end
+        for _, slot in ipairs(HUD_SLOTS) do
+            local row = self.slots_rows[slot]
+            if gui.pick_node(row.save_hit, action.x, action.y) then
+                click_scale(row.save_btn)
+                if sm.save_to_slot then sm.save_to_slot(slot) end
+                refresh_slots_panel(self)
+                return true
+            end
+            if gui.pick_node(row.load_hit, action.x, action.y) then
+                local info = sm.get_slot_info and sm.get_slot_info(slot) or nil
+                if info and info.exists and info.has_run then
+                    click_scale(row.load_btn)
+                    hide_slots_panel(self)
+                    msg.post(UI_MGR, "load_slot", { slot = slot })
+                end
+                return true
+            end
+        end
+        -- Клик мимо — игнорируем, остаёмся открытыми.
+        return true
+    end
+
+    if self.backlog_open then
+        local btn_close = gui.get_node("backlog_btn_close")
+        local btn_prev = gui.get_node("backlog_btn_prev")
+        local btn_next = gui.get_node("backlog_btn_next")
+        if point_in_node(btn_close, action) then
+            msg.post(UI_MGR, "close_backlog")
+            click_scale(btn_close)
+            return true
+        end
+        if point_in_node(btn_prev, action) then
+            click_scale(btn_prev)
+            if backlog.size() > 0 and self.backlog_index > 1 then
+                self.backlog_index = self.backlog_index - 1
+                refresh_backlog_view(self)
+            end
+            return true
+        end
+        if point_in_node(btn_next, action) then
+            click_scale(btn_next)
+            if self.backlog_index < backlog.size() then
+                self.backlog_index = self.backlog_index + 1
+                refresh_backlog_view(self)
+            end
+            return true
+        end
+        return true
+    end
+
+    local bag_ring = gui.get_node("bag_ring")
+    local phn_ring = gui.get_node("phn_ring")
+    ensure_log_button(self)
+
+    if handle_armed_banner_input(self, action) then return true end
+
+    -- Обычный HUD-слой. Сюда клик доходит только если armed/backlog слои
+    -- не забрали его выше.
+    if point_in_node(self.log_button, action) then
+        msg.post(UI_MGR, "open_backlog")
+        click_scale(self.log_button)
+        return true
+    end
+
+    if point_in_node(self.sound_button, action) then
+        msg.post(UI_MGR, MSG.toggle_mute)
+        click_scale(self.sound_button)
+        return true
+    end
+
+    if point_in_node(self.menu_button, action) then
+        msg.post(UI_MGR, MSG.return_to_menu)
+        click_scale(self.menu_button)
+        return true
+    end
+
+    if self.save_button and point_in_node(self.save_button, action) then
+        click_scale(self.save_button)
+        show_slots_panel(self)
+        return true
+    end
+
+    -- Не открываем новый оверлей поверх уже открытого. SND/MENU выше — это
+    -- системные кнопки, им можно работать даже поверх телефона/инвентаря.
+    if ui_state.modal_open then return false end
+
+    if point_in_node(bag_ring, action) then
+        msg.post(UI_MGR, "open_inventory")
+        -- визуальный фидбек
+        click_scale(bag_ring)
+        return true
+    end
+
+    if self.phone_enabled and point_in_node(phn_ring, action) then
+        msg.post(UI_MGR, "open_phone")
+        click_scale(phn_ring)
+        return true
+    end
+
+    return false
+end

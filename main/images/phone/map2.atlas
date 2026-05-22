@@ -1,0 +1,37 @@
+images {
+  image: "/main/images/phone/map2/poi_center_dark.png"
+}
+images {
+  image: "/main/images/phone/map2/poi_circle.png"
+}
+images {
+  image: "/main/images/phone/map2/poi_icon_archive.png"
+}
+images {
+  image: "/main/images/phone/map2/poi_icon_bar.png"
+}
+images {
+  image: "/main/images/phone/map2/poi_icon_cafe.png"
+}
+images {
+  image: "/main/images/phone/map2/poi_icon_home.png"
+}
+images {
+  image: "/main/images/phone/map2/poi_icon_park.png"
+}
+images {
+  image: "/main/images/phone/map2/poi_icon_shop.png"
+}
+images {
+  image: "/main/images/phone/map2/poi_icon_view.png"
+}
+images {
+  image: "/main/images/phone/map2/poi_icon_work.png"
+}
+images {
+  image: "/main/images/phone/map2/poi_stem.png"
+}
+images {
+  image: "/main/images/phone/map2/mapa.png"
+}
+extrude_borders: 2

@@ -2,9 +2,33 @@ mouse_trigger {
   input: MOUSE_BUTTON_1
   action: "touch"
 }
+mouse_trigger {
+  input: MOUSE_WHEEL_UP
+  action: "wheel_up"
+}
+mouse_trigger {
+  input: MOUSE_WHEEL_DOWN
+  action: "wheel_down"
+}
 key_trigger {
   input: KEY_F1
   action: "edit_toggle"
+}
+key_trigger {
+  input: KEY_F3
+  action: "dev_jump_next"
+}
+key_trigger {
+  input: KEY_F4
+  action: "dev_jump_apply"
+}
+key_trigger {
+  input: KEY_F5
+  action: "dev_jump_toggle_gender"
+}
+key_trigger {
+  input: KEY_F6
+  action: "dev_jump_record"
 }
 key_trigger {
   input: KEY_ESC
@@ -49,6 +73,14 @@ key_trigger {
 key_trigger {
   input: KEY_P
   action: "edit_print"
+}
+key_trigger {
+  input: KEY_COMMA
+  action: "edit_style_prev"
+}
+key_trigger {
+  input: KEY_PERIOD
+  action: "edit_style_next"
 }
 key_trigger {
   input: KEY_LSHIFT

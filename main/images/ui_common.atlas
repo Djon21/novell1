@@ -1,0 +1,7 @@
+images {
+  image: "/main/images/border.png"
+}
+images {
+  image: "/main/images/border2.png"
+}
+extrude_borders: 2

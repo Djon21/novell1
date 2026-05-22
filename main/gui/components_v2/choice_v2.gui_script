@@ -1,0 +1,627 @@
+-- choice_v2.gui_script
+-- Модалка выбора 2-4 опций.
+-- Визуал перенесён из choice_defold.html: центральная панель, header/meta,
+-- prompt/caveat, карточки вариантов с номером и hint, footer label.
+--
+-- Сообщения:
+--   "show_choice" {opts = {…}, title/prompt/caveat/name/tag/meta?}
+--   "hide_choice"
+--
+-- В ui_manager_v2 шлёт:
+--   "choice_picked" {index}
+
+local UI_MGR = "#ui_manager_v2"
+local ui_state = require "main.scripts.ui_state"
+local drag_scroll = require "main.gui.modules.drag_scroll"
+
+local DRAG_THRESHOLD_PX = 8
+
+-- HUD uses set_location { name, time, loop }. choice_v2 is a separate GUI
+-- component, so it must receive the same message or explicit location fields
+-- inside show_choice. We keep the last HUD-style value here.
+local current_location_name = nil
+local current_location_time = nil
+local current_location_loop = nil
+
+local STATIC_NODES = {
+    "backdrop", "modal", "modal_border",
+    "meta_loop_bg", "meta_loop_border_top", "meta_loop_border_bottom",
+    "meta_loop_border_left", "meta_loop_border_right", "meta_loop",
+    "head_divider",
+    "prompt", "caveat", "opts_panel",
+    "foot_label",  -- foot_divider убран из модалки (освободил место под 5-й вариант)
+    "opts_scroll_track", "opts_scroll_thumb",  -- иначе после scroll-choice (>=7 опций)
+                                               -- thumb остаётся висеть на экране при hide
+}
+
+local function get_node(id)
+    local ok, n = pcall(gui.get_node, id)
+    if ok then return n end
+    return nil
+end
+
+local function set_node_enabled(id, enabled)
+    local n = get_node(id)
+    if n then gui.set_enabled(n, enabled) end
+end
+
+local function set_all_enabled(enabled)
+    for _, id in ipairs(STATIC_NODES) do
+        set_node_enabled(id, enabled)
+    end
+end
+
+local function set_text(id, s)
+    local n = get_node(id)
+    if n then gui.set_text(n, s or "") end
+end
+
+
+local function set_pos(id, x, y, z)
+    local n = get_node(id)
+    if n then gui.set_position(n, vmath.vector3(x, y, z or gui.get_position(n).z)) end
+end
+
+local function set_size(id, w, h)
+    local n = get_node(id)
+    if n then gui.set_size(n, vmath.vector3(w, h, 0)) end
+end
+
+local function set_pos_size(id, x, y, z, w, h)
+    set_pos(id, x, y, z)
+    set_size(id, w, h)
+end
+
+local function clamp(v, lo, hi)
+    if v < lo then return lo end
+    if v > hi then return hi end
+    return v
+end
+
+local function coalesce(...)
+    for i = 1, select("#", ...) do
+        local v = select(i, ...)
+        if v ~= nil and tostring(v) ~= "" then return v end
+    end
+    return nil
+end
+
+local COLORS = {
+    paper      = vmath.vector4(0.953, 0.925, 0.851, 1.0),
+    paper_dim  = vmath.vector4(0.788, 0.753, 0.659, 1.0),
+    opt_bg     = vmath.vector4(0.047, 0.039, 0.141, 0.72),
+    num_bg     = vmath.vector4(0.020, 0.012, 0.102, 1.0),
+    accent     = vmath.vector4(0.490, 0.976, 1.000, 1.0),
+    accent_dim = vmath.vector4(0.490, 0.976, 1.000, 0.35),
+    hot        = vmath.vector4(1.000, 0.239, 0.498, 1.0),
+    hot_dim    = vmath.vector4(1.000, 0.239, 0.498, 0.55),
+    amber      = vmath.vector4(1.000, 0.702, 0.278, 1.0),
+    amber_dim  = vmath.vector4(1.000, 0.702, 0.278, 0.55),
+    violet     = vmath.vector4(0.478, 0.361, 1.000, 1.0),
+    violet_dim = vmath.vector4(0.478, 0.361, 1.000, 0.55),
+}
+
+local function color_for_class(cls)
+    if cls == "key" then return COLORS.amber, COLORS.amber_dim end
+    if cls == "danger" then return COLORS.hot, COLORS.hot_dim end
+    return COLORS.accent, COLORS.accent_dim
+end
+
+local function hint_color(hint_cls)
+    if hint_cls == "hot" then return COLORS.hot, COLORS.hot_dim end
+    if hint_cls == "amber" then return COLORS.amber, COLORS.amber_dim end
+    if hint_cls == "violet" then return COLORS.violet, COLORS.violet_dim end
+    return COLORS.paper_dim, vmath.vector4(0.953, 0.925, 0.851, 0.35)
+end
+
+local function utf8_len(s)
+    local count = 0
+    for _ in string.gmatch(tostring(s or ""), "([%z\1-\127\194-\244][\128-\191]*)") do
+        count = count + 1
+    end
+    return count
+end
+
+
+-- 6 видимых слотов одновременно. Когда вариантов 1..5 — рисуем с обычными
+-- размерами. 6 — слоты слегка ужимаются. 7+ — режим прокрутки: видимы те же
+-- 6 слотов, но через offset показываем разную «страницу». Колесо мыши /
+-- стрелки ↑↓ листают по одной опции.
+local MAX_OPT_SLOTS = 6
+local SCROLL_THRESHOLD = 7   -- >= этому числу включается scroll-режим
+
+local function cache_opt_slots(self)
+    if self.opt_slots then return end
+    self.opt_slots = {}
+    for i = 1, MAX_OPT_SLOTS do
+        local prefix = "opt" .. i
+        local slot = {
+            root = gui.get_node(prefix .. "_root"),
+            bg = gui.get_node(prefix .. "_bg"),
+            border = gui.get_node(prefix .. "_border"),
+            num_bg = gui.get_node(prefix .. "_num_bg"),
+            num_border = gui.get_node(prefix .. "_num_border"),
+            num_text = gui.get_node(prefix .. "_num_text"),
+            hint_border = gui.get_node(prefix .. "_hint_border"),
+            hint_text = gui.get_node(prefix .. "_hint_text"),
+            text = gui.get_node(prefix .. "_text"),
+        }
+        pcall(gui.set_line_break, slot.text, true)
+        self.opt_slots[i] = slot
+    end
+end
+
+local DEFAULT_LAYOUT = {
+    modal_x = 120,
+    modal_y = 46,
+    modal_w = 1040,
+    modal_h = 628,
+    pad_x = 34,
+    opt_gap = 12,
+    opt_min_h = 70,
+    opt_max_h = 124,
+    -- Compressed-режим для 6+ вариантов: меньше минимум и шаг.
+    opt_min_h_compressed = 54,
+    opt_gap_compressed = 8,
+}
+
+local function set_slot_enabled(slot, enabled)
+    if not slot then return end
+    gui.set_enabled(slot.root, enabled)
+    -- Hint nodes are controlled separately when the slot is visible.
+    if not enabled then
+        gui.set_enabled(slot.hint_border, false)
+        gui.set_enabled(slot.hint_text, false)
+    end
+end
+
+local function clear_opts(self)
+    cache_opt_slots(self)
+    for i = 1, MAX_OPT_SLOTS do
+        set_slot_enabled(self.opt_slots[i], false)
+    end
+    self.opt_nodes = {}
+    self.opts = {}
+end
+
+-- slot_idx: позиция 1..visible сверху вниз (визуальная).
+-- real_idx: реальный индекс в self.opts (для номера «01»/«02» и для
+--           возврата choice_picked.index = real_idx).
+local function fill_opt_slot(self, slot_idx, real_idx, opt)
+    cache_opt_slots(self)
+    local layout = self.choice_layout or {}
+    local opt_x = layout.opt_x or 310
+    local opt_w = layout.opt_w or 660
+    local opt_h = layout.opt_h or 62
+    local opt_gap = layout.opt_gap or 10
+    local opt_top = layout.opt_top or 444
+    local y = opt_top - slot_idx * opt_h - (slot_idx - 1) * opt_gap
+    local accent, border = color_for_class(opt.cls)
+    local slot = self.opt_slots[slot_idx]
+    if not slot then return nil end
+
+    set_slot_enabled(slot, true)
+    gui.set_position(slot.root, vmath.vector3(opt_x, y, 0))
+    gui.set_size(slot.root, vmath.vector3(opt_w, opt_h, 0))
+
+    gui.set_position(slot.bg, vmath.vector3(0, 0, 0.70))
+    gui.set_size(slot.bg, vmath.vector3(opt_w, opt_h, 0))
+    gui.set_color(slot.bg, COLORS.opt_bg)
+
+    gui.set_position(slot.border, vmath.vector3(0, 0, 0.71))
+    gui.set_size(slot.border, vmath.vector3(opt_w, opt_h, 0))
+    gui.set_color(slot.border, border)
+
+    -- Номер слева, как .opt .num в HTML.
+    local num_size = clamp(math.floor(opt_h * 0.42), 30, 38)
+    local num_x = 14
+    local num_y = math.floor((opt_h - num_size) * 0.5)
+    gui.set_position(slot.num_bg, vmath.vector3(num_x, num_y, 0.72))
+    gui.set_size(slot.num_bg, vmath.vector3(num_size, num_size, 0))
+    gui.set_color(slot.num_bg, COLORS.num_bg)
+
+    gui.set_position(slot.num_border, vmath.vector3(num_x, num_y, 0.73))
+    gui.set_size(slot.num_border, vmath.vector3(num_size, num_size, 0))
+    gui.set_color(slot.num_border, accent)
+
+    gui.set_position(slot.num_text, vmath.vector3(num_x + num_size * 0.5, num_y + num_size * 0.5, 0.74))
+    gui.set_size(slot.num_text, vmath.vector3(num_size - 4, 12, 0))
+    gui.set_text(slot.num_text, string.format("%02d", real_idx))
+    gui.set_color(slot.num_text, accent)
+
+    local hint = opt.hint or opt.hint_text or ""
+    local hint_w = 0
+    local has_hint = hint ~= ""
+    gui.set_enabled(slot.hint_border, has_hint)
+    gui.set_enabled(slot.hint_text, has_hint)
+    if has_hint then
+        hint_w = math.max(70, math.min(190, 34 + utf8_len(hint) * 8))
+        local hc, hb = hint_color(opt.hintCls or opt.hint_cls)
+        local hx = opt_w - 14 - hint_w
+        local hy = math.floor((opt_h - 26) * 0.5)
+        gui.set_position(slot.hint_border, vmath.vector3(hx, hy, 0.73))
+        gui.set_size(slot.hint_border, vmath.vector3(hint_w, 26, 0))
+        gui.set_color(slot.hint_border, hb)
+        gui.set_position(slot.hint_text, vmath.vector3(hx + hint_w * 0.5, hy + 13, 0.74))
+        gui.set_size(slot.hint_text, vmath.vector3(hint_w - 10, 12, 0))
+        gui.set_text(slot.hint_text, tostring(hint):upper())
+        gui.set_color(slot.hint_text, hc)
+    end
+
+    local text_x = num_size + 34
+    local text_w = opt_w - text_x - (hint_w > 0 and (hint_w + 30) or 24)
+    local text_h = opt_h - 16
+    gui.set_position(slot.text, vmath.vector3(text_x, opt_h * 0.5, 0.74))
+    gui.set_size(slot.text, vmath.vector3(text_w, text_h, 0))
+    gui.set_text(slot.text, opt.text or "—")
+    gui.set_color(slot.text, COLORS.paper)
+
+    return { bg = slot.bg, nodes = slot, cls = opt.cls, real_idx = real_idx }
+end
+
+-- Рендер видимого окна опций. Должен вызываться ПОСЛЕ layout_choice
+-- (читает self.choice_layout и self.opt_offset).
+local function render_visible_opts(self)
+    cache_opt_slots(self)
+    for i = 1, MAX_OPT_SLOTS do
+        set_slot_enabled(self.opt_slots[i], false)
+    end
+    self.opt_nodes = {}
+    local layout = self.choice_layout or {}
+    local visible = layout.visible or math.min(MAX_OPT_SLOTS, #self.opts)
+    local offset = math.max(0, self.opt_offset or 0)
+    for slot_idx = 1, visible do
+        local real_idx = offset + slot_idx
+        local opt = self.opts[real_idx]
+        if opt then
+            self.opt_nodes[slot_idx] = fill_opt_slot(self, slot_idx, real_idx, opt)
+        end
+    end
+end
+
+local function estimate_text_height(text, width, min_h, max_h, line_h)
+    text = tostring(text or "")
+    if text == "" then
+        return 0
+    end
+    -- Грубая оценка для Manrope 24: средний кириллический символ занимает 12-14 px.
+    local chars_per_line = math.max(18, math.floor((width or 660) / 13))
+    local lines = math.max(1, math.ceil(utf8_len(text) / chars_per_line))
+    return clamp(lines * (line_h or 32), min_h or 34, max_h or 96)
+end
+
+local function layout_choice(self, message, opt_count)
+    message = message or {}
+    local L = DEFAULT_LAYOUT
+    local mx, my, mw, mh = L.modal_x, L.modal_y, L.modal_w, L.modal_h
+    local left = mx + L.pad_x
+    local right = mx + mw - L.pad_x
+    local content_w = right - left
+    local top = my + mh
+
+    -- Растягиваем саму модалку: на мобильном landscape это заметно лучше,
+    -- а на desktop не ломает композицию.
+    set_pos_size("modal", mx, my, 0.60, mw, mh)
+    set_pos_size("modal_border", mx, my, 0.61, mw, mh)
+
+    local header_y = top - 44
+
+    local meta_w = 180
+    local meta_x = right - meta_w
+    set_pos_size("meta_loop_bg", meta_x, header_y - 14, 0.62, meta_w, 24)
+    set_pos_size("meta_loop_border_top", meta_x, header_y + 9, 0.63, meta_w, 1)
+    set_pos_size("meta_loop_border_bottom", meta_x, header_y - 14, 0.63, meta_w, 1)
+    set_pos_size("meta_loop_border_left", meta_x, header_y - 14, 0.63, 1, 24)
+    set_pos_size("meta_loop_border_right", meta_x + meta_w - 1, header_y - 14, 0.63, 1, 24)
+    set_pos("meta_loop", meta_x + meta_w * 0.5, header_y - 2, 0.64)
+    set_size("meta_loop", meta_w - 12, 12)
+
+    -- foot_label («ВЫБЕРИ ВАРИАНТ») сидит на той же горизонтали что и
+    -- бейдж meta_loop справа, но выровнен по левому краю контента (PIVOT_W).
+    set_pos("foot_label", left, header_y - 2, 0.63)
+    set_size("foot_label", content_w - meta_w - 24, 30)
+
+    local head_div_y = top - 76
+    set_pos_size("head_divider", left, head_div_y, 0.62, content_w, 1)
+
+    local prompt = coalesce(message.prompt, message.title, "Выбери вариант.") or ""
+    local caveat = coalesce(message.caveat, message.subtitle, message.note, "") or ""
+    local prompt_h = estimate_text_height(prompt, content_w, 38, 118, 34)
+    local caveat_h = caveat ~= "" and estimate_text_height(caveat, content_w, 32, 86, 30) or 0
+
+    local prompt_top = head_div_y - 24
+    set_pos("prompt", left, prompt_top, 0.63)
+    set_size("prompt", content_w, prompt_h)
+
+    local next_y = prompt_top - prompt_h - 12
+    if caveat_h > 0 then
+        set_pos("caveat", left, next_y, 0.63)
+        set_size("caveat", content_w, caveat_h)
+        next_y = next_y - caveat_h - 18
+    else
+        set_pos("caveat", left, next_y, 0.63)
+        set_size("caveat", content_w, 0)
+        next_y = next_y - 8
+    end
+
+    -- foot_divider убран: освободили нижний край модалки под 5-й вариант.
+    -- opts_bottom теперь почти у нижнего края (с небольшим запасом для дыхания).
+    local opts_top = next_y
+    local opts_bottom = my + 36
+    local available = math.max(180, opts_top - opts_bottom)
+
+    local total = math.max(1, tonumber(opt_count) or 1)
+    local is_scroll = total >= SCROLL_THRESHOLD
+    local visible = math.min(MAX_OPT_SLOTS, total)
+
+    -- Compressed = когда вариантов больше 5: сжимаем по высоте и шагу, чтобы
+    -- всё умещалось в available без наложений (или чтобы 6 видимых слотов
+    -- влезали в scroll-режиме).
+    local compressed = visible >= 6
+    local opt_gap = compressed and L.opt_gap_compressed or L.opt_gap
+    local min_h   = compressed and L.opt_min_h_compressed or L.opt_min_h
+
+    local opt_h = math.floor((available - opt_gap * (visible - 1)) / visible)
+    opt_h = clamp(opt_h, min_h, L.opt_max_h)
+
+    -- Защита от наложения на footer-зону при длинном prompt'е.
+    local total_opts_h = visible * opt_h + (visible - 1) * opt_gap
+    if opts_top - total_opts_h < opts_bottom then
+        local floor_h = compressed and 50 or 62
+        opt_h = math.max(floor_h, math.floor((opts_top - opts_bottom - opt_gap * (visible - 1)) / visible))
+        total_opts_h = visible * opt_h + (visible - 1) * opt_gap
+    end
+
+    set_pos_size("opts_panel", left, opts_top - total_opts_h, 0.62, content_w, total_opts_h)
+
+    -- Scrollbar: видим только в scroll-режиме. Track занимает всю высоту
+    -- opts-зоны, thumb пропорционален visible/total и сдвигается по offset.
+    set_node_enabled("opts_scroll_track", is_scroll)
+    set_node_enabled("opts_scroll_thumb", is_scroll)
+    if is_scroll then
+        local track_x = left + content_w - 12
+        local track_y = opts_top - total_opts_h
+        local track_h = total_opts_h
+        set_pos_size("opts_scroll_track", track_x, track_y, 0.62, 6, track_h)
+        local thumb_h = math.max(40, math.floor(track_h * (visible / total)))
+        local max_offset = math.max(1, total - visible)
+        local cur_offset = math.max(0, math.min(self.opt_offset or 0, max_offset))
+        local travel = track_h - thumb_h
+        local thumb_y = track_y + travel * (1 - cur_offset / max_offset)
+        set_pos_size("opts_scroll_thumb", track_x, thumb_y, 0.63, 6, thumb_h)
+        self.opt_offset = cur_offset
+    else
+        self.opt_offset = 0
+    end
+
+    -- Слегка ужимаем text-зону справа, чтобы не залезать под scrollbar.
+    local visible_opt_w = is_scroll and (content_w - 16) or content_w
+
+    self.choice_layout = {
+        opt_x = left,
+        opt_w = visible_opt_w,
+        opt_top = opts_top,
+        opt_h = opt_h,
+        opt_gap = opt_gap,
+        visible = visible,
+        total = total,
+        is_scroll = is_scroll,
+        opts_bottom = opts_top - total_opts_h,
+    }
+
+    -- Подстраиваем drag step под актуальную высоту опции (если выбраны
+    -- compressed-размеры — шаг тоже меньше). drag_scroll читает step_px
+    -- на каждый touch-event, так что это работает на лету.
+    if self.opt_drag then
+        self.opt_drag.step_px = math.max(40, opt_h + opt_gap)
+    end
+end
+
+local function normalize_loop_label(v)
+    v = coalesce(v)
+    if not v then return "ПЕТЛЯ · #001" end
+
+    local text = tostring(v)
+    local n = tonumber(text)
+    if n then
+        return string.format("ПЕТЛЯ · #%03d", n)
+    end
+
+    if string.find(text, "#") or string.find(string.lower(text), "пет") then
+        return string.upper(text)
+    end
+
+    if string.match(text, "^%d+$") then
+        return "ПЕТЛЯ · #" .. text
+    end
+
+    return string.upper(text)
+end
+
+local function remember_location(message)
+    message = message or {}
+
+    -- Do not use message.name here: in show_choice it is speaker/who_name,
+    -- not a location label. Location must arrive through explicit location fields.
+    local loc = coalesce(
+        message.location_label,
+        message.current_location_label,
+        message.location_name,
+        message.scene_label,
+        message.location,
+        message.current_location
+    )
+    if loc then
+        current_location_name = tostring(loc)
+        ui_state.current_location_name = current_location_name
+        ui_state.location_name = current_location_name
+    end
+
+    if message.time ~= nil then
+        current_location_time = message.time
+        ui_state.current_location_time = message.time
+        ui_state.location_time = message.time
+    end
+    if message.loop ~= nil then
+        current_location_loop = message.loop
+        ui_state.current_location_loop = message.loop
+        ui_state.location_loop = message.loop
+    end
+end
+
+local function apply_copy(message)
+    local prompt = coalesce(message.prompt, message.title, "Выбери вариант.")
+    local caveat = coalesce(message.caveat, message.subtitle, message.note, "")
+    local loop = normalize_loop_label(coalesce(
+        message.loop_label,
+        message.iteration_label,
+        message.loop,
+        message.iteration_number,
+        current_location_loop
+    ))
+
+    set_text("prompt", tostring(prompt))
+    set_text("caveat", tostring(caveat))
+    set_text("meta_loop", loop)
+
+    local has_caveat = caveat ~= nil and tostring(caveat) ~= ""
+    set_node_enabled("caveat", has_caveat)
+end
+
+local function scroll_opts(self, delta)
+    local layout = self.choice_layout or {}
+    if not layout.is_scroll then return end
+    local total = layout.total or #self.opts
+    local visible = layout.visible or MAX_OPT_SLOTS
+    local max_offset = math.max(0, total - visible)
+    local new_off = math.max(0, math.min(max_offset, (self.opt_offset or 0) + delta))
+    if new_off == self.opt_offset then return end
+    self.opt_offset = new_off
+    -- Перерисовываем thumb scrollbar'а и видимое окно опций.
+    layout_choice(self, self._last_message or {}, total)
+    render_visible_opts(self)
+end
+
+function init(self)
+    msg.post(".", "acquire_input_focus")
+    self.visible = false
+    self.opts = {}
+    self.opt_nodes = {}
+    cache_opt_slots(self)
+    -- Drag-to-scroll: тот же модуль что в phone_sms / phone_messenger.
+    -- step_px (= высота одной опции с gap'ом) выставляется в layout_choice.
+    -- delta>0 (палец вверх) листает к концу списка → совпадает с wheel_down.
+    self.opt_drag = drag_scroll.new({
+        step_px      = 82,
+        threshold_px = DRAG_THRESHOLD_PX,
+        owner        = self,
+        invert       = true,
+        on_step      = function(owner, delta) scroll_opts(owner, delta) end,
+    })
+    set_all_enabled(false)
+    -- foot_divider больше не используется: явно прячем, чтобы ноды,
+    -- оставшиеся в .gui-файле, не показывались.
+    set_node_enabled("foot_divider", false)
+    -- Scrollbar появляется только в scroll-режиме (≥ SCROLL_THRESHOLD опций).
+    set_node_enabled("opts_scroll_track", false)
+    set_node_enabled("opts_scroll_thumb", false)
+    clear_opts(self)
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash("show_choice") then
+        message = message or {}
+        self.visible = true
+        set_all_enabled(true)
+        clear_opts(self)
+
+        local opts = message.opts or {}
+        layout_choice(self, message or {}, #opts)
+        apply_copy(message or {})
+
+        self.opts = opts
+        self.opt_offset = 0
+        self._last_message = message
+        render_visible_opts(self)
+
+        -- Input gate: после быстрого прокликивания диалога игрок не успевает
+        -- остановиться, и mouse-down в момент показа choice'ов попадает в
+        -- опцию. Глотаем все клики первые 300мс. socket.gettime() — стандарт
+        -- Defold (lua-socket).
+        self.input_unlock_at = (socket and socket.gettime and socket.gettime() or 0) + 0.30
+
+    elseif message_id == hash("set_location") then
+        remember_location(message or {})
+        if self.visible then
+            if current_location_loop ~= nil then
+                set_text("meta_loop", normalize_loop_label(current_location_loop))
+            end
+        end
+
+    elseif message_id == hash("hide_choice") then
+        self.visible = false
+        set_all_enabled(false)
+        clear_opts(self)
+        drag_scroll.reset(self.opt_drag)
+    end
+end
+
+function on_input(self, action_id, action)
+    if not self.visible then return false end
+
+    -- Колесо мыши в scroll-режиме: -1 = листать к началу, +1 = к концу.
+    -- (Стрелки ↑↓ уже забраны под hotspot-editor — не дёргаем.)
+    if action.pressed then
+        if action_id == hash("wheel_up") then
+            scroll_opts(self, -1)
+            return true
+        elseif action_id == hash("wheel_down") then
+            scroll_opts(self, 1)
+            return true
+        end
+    end
+
+    if action_id ~= hash("touch") then return true end
+
+    -- Drag-to-scroll через общий модуль (тот же что в phone_sms / messenger).
+    -- handle() возвращает "swallow" (драг идёт), "tap" (release без движения
+    -- — обрабатываем как клик СЕЙЧАС) или "ignore" (не наша область).
+    -- Активен только в scroll-режиме, иначе листать нечего.
+    local layout = self.choice_layout or {}
+    local is_tap = action.pressed   -- по умолчанию клик ловим на press
+    if layout.is_scroll and self.opt_drag then
+        local result = drag_scroll.handle(self.opt_drag, action)
+        if result == "swallow" then
+            -- Драг в процессе. press / movement / release-after-drag — глотаем.
+            return true
+        elseif result == "tap" then
+            -- Release без движения — это клик, обрабатываем ниже.
+            is_tap = true
+        else
+            -- "ignore" — fall through к click-логике если это press.
+        end
+    end
+
+    if not is_tap then return true end
+
+    -- Защита от случайного клика на opt'е сразу после появления choice'ов
+    -- (когда игрок мэшил-кликал диалог). Первые 300мс после show_choice
+    -- глотаем все клики не передавая в опции.
+    if self.input_unlock_at and socket and socket.gettime
+       and socket.gettime() < self.input_unlock_at then
+        return true
+    end
+
+    for i = 1, #self.opt_nodes do
+        local o = self.opt_nodes[i]
+        if o and o.bg and gui.pick_node(o.bg, action.x, action.y) then
+            -- В scroll-режиме slot_idx ≠ real_idx (visible window сдвинут).
+            -- Шлём наверх настоящий индекс в self.opts.
+            msg.post(UI_MGR, "choice_picked", { index = o.real_idx or i })
+            return true
+        end
+    end
+
+    -- Модалка блокирует клик по сцене под ней.
+    return true
+end

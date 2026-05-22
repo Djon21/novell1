@@ -1,36 +1,42 @@
 -- hotspot_editor.lua
--- Дев-инструмент: редактор координат hotspot'ов И спрайтов-объектов
+-- Дев-инструмент: редактор координат hotspot'ов и спрайтов-объектов
 -- прямо в игре. Включается клавишей F1 (когда scene_controller активен).
 --
 -- Управление:
 --   F1      — вкл/выкл режим редактирования
 --   Esc     — выйти из режима
---   Tab     — следующий элемент (циклит hotspot'ы → objects → hotspot'ы)
---   Клик    — выбрать hotspot (по объектам клик пока не ловится)
+--   Tab     — следующий ВИДИМЫЙ элемент (циклит hotspot'ы → objects → hotspot'ы)
+--   Клик    — выбрать видимый hotspot
 --   ← → ↑ ↓ — двигать (5 px, Shift = 20 px)
 --   [  ]    — ширина −/+
 --   ;  '    — высота −/+
---   P       — напечатать координаты в консоль Defold
+--   ,  .    — предыдущий / следующий стиль (только для hotspot'ов)
+--   P       — напечатать координаты + стиль в консоль Defold
 --
--- Изменения в памяти — scenes.lua на диск НЕ пишется,
+-- Изменения в памяти — scene-файлы на диск НЕ пишутся,
 -- копируй строки из консоли через P.
+--
+-- Скрытые хотспоты (`visible_when` → false) в редакторе НЕ выбираются
+-- ни кликом, ни Tab — иначе игрок не понимает что выбрано. Чтобы
+-- отредактировать скрытый — временно убери visible_when в коде.
 
 local scene_controller = require "main.scripts.scene_controller"
+local shared = require "main.data.scenes._shared"
+local log = require "main.scripts.log"
 
 local M = {}
 
-local _active   = false
+local _active = false
 
 -- Единый указатель «что редактируем».
---   kind = "hotspot" | "object"
---   index = номер в массиве scene_data.hotspots / scene_data.objects
-local _sel = { kind = "hotspot", index = 1 }
-
-local STEP_SMALL = 5
-local STEP_LARGE = 20
+--   kind       = "hotspot" | "object"
+--   full_index = индекс в _scene_data.hotspots / _scene_data.objects
+-- Для hotspot'ов используется ПОЛНЫЙ индекс, не slot. Маппинг slot↔full
+-- делается через scene_controller.get_visible_hotspot_indices().
+local _sel = { kind = "hotspot", full_index = 1 }
 
 -- ------------------------------------------------------------
--- Внутреннее
+-- Внутреннее: доступ к данным сцены
 -- ------------------------------------------------------------
 
 local function data()
@@ -40,42 +46,100 @@ end
 local function hotspots() local d = data(); return d and d.hotspots or {} end
 local function objects()  local d = data(); return d and d.objects  or {} end
 
+local function visible_hotspot_indices()
+    return scene_controller.get_visible_hotspot_indices and
+           scene_controller.get_visible_hotspot_indices() or {}
+end
+
+-- ------------------------------------------------------------
+-- slot ↔ full-index маппинг
+-- ------------------------------------------------------------
+
+-- Найти slot для текущего выделения. -1 если выбран object или скрытый
+-- hotspot (для UI highlight это значит «не подсвечивать ни один слот»).
+local function current_slot()
+    if _sel.kind ~= "hotspot" then return -1 end
+    local visible = visible_hotspot_indices()
+    for slot, full_i in ipairs(visible) do
+        if full_i == _sel.full_index then return slot end
+    end
+    return -1
+end
+
 local function current_item()
     if _sel.kind == "hotspot" then
-        return hotspots()[_sel.index]
+        return hotspots()[_sel.full_index]
     else
-        return objects()[_sel.index]
+        return objects()[_sel.full_index]
     end
 end
 
--- Переход к следующему элементу: сначала крутим hotspot'ы, потом objects,
--- потом обратно к hotspot'ам. Пропускаем пустые массивы.
+-- ------------------------------------------------------------
+-- Переход к следующему элементу
+-- ------------------------------------------------------------
+
+-- Tab крутит ТОЛЬКО видимые hotspot'ы + объекты. Скрытые игнорируются.
 local function advance_selection()
-    local hs = hotspots()
+    local visible = visible_hotspot_indices()
     local os = objects()
+
     if _sel.kind == "hotspot" then
-        if _sel.index < #hs then
-            _sel.index = _sel.index + 1
+        -- Найти текущую позицию в видимом списке
+        local cur_pos = 0
+        for i, full_i in ipairs(visible) do
+            if full_i == _sel.full_index then cur_pos = i; break end
+        end
+        if cur_pos == 0 then
+            -- Текущий выбор не в visible (например, был скрыт после правки
+            -- visible_when) — начнём с первого видимого.
+            if #visible > 0 then
+                _sel.full_index = visible[1]
+                return
+            end
+            -- видимых нет, переходим к объектам если они есть
+            if #os > 0 then _sel.kind, _sel.full_index = "object", 1; return end
+            return
+        end
+        if cur_pos < #visible then
+            _sel.full_index = visible[cur_pos + 1]
         elseif #os > 0 then
-            _sel.kind, _sel.index = "object", 1
+            _sel.kind, _sel.full_index = "object", 1
         else
-            _sel.index = 1  -- только hotspot'ы, начинаем сначала
+            _sel.full_index = visible[1]  -- цикл по видимым
         end
     else  -- _sel.kind == "object"
-        if _sel.index < #os then
-            _sel.index = _sel.index + 1
-        elseif #hs > 0 then
-            _sel.kind, _sel.index = "hotspot", 1
+        if _sel.full_index < #os then
+            _sel.full_index = _sel.full_index + 1
+        elseif #visible > 0 then
+            _sel.kind, _sel.full_index = "hotspot", visible[1]
         else
-            _sel.index = 1
+            _sel.full_index = 1
         end
     end
 end
+
+-- ------------------------------------------------------------
+-- Описание текущего выбора
+-- ------------------------------------------------------------
 
 local function describe()
     local it = current_item()
     local name = it and it.id or "—"
-    return ("%s #%d (%s)"):format(_sel.kind, _sel.index, name)
+    if _sel.kind == "hotspot" then
+        local slot = current_slot()
+        local slot_str = slot > 0 and ("slot " .. slot) or "hidden"
+        return ("hotspot #%d %s (%s)"):format(_sel.full_index, slot_str, name)
+    else
+        return ("object #%d (%s)"):format(_sel.full_index, name)
+    end
+end
+
+local function find_style_index(style_tbl)
+    if not style_tbl then return 0 end
+    for i, s in ipairs(shared.STYLES) do
+        if s.style == style_tbl then return i end
+    end
+    return 0
 end
 
 -- ------------------------------------------------------------
@@ -84,29 +148,34 @@ end
 
 function M.is_active() return _active end
 
--- Для подсветки бокса в gui_script (работает только для hotspot'ов)
-function M.selected_index()
-    if _sel.kind == "hotspot" then return _sel.index end
-    return -1
+-- Slot для подсветки в gui_script. -1 если object / скрытый / неактивен.
+function M.selected_slot()
+    if not _active then return -1 end
+    return current_slot()
 end
+
+-- Старое имя — оставляем для совместимости, отдаём slot.
+M.selected_index = M.selected_slot
 
 function M.toggle()
     if not scene_controller.is_active() then
-        print("[hotspot_editor] scene_controller не активен — нечего редактировать")
+        log.info("hotspot_editor", "scene_controller не активен — нечего редактировать")
         return
     end
     _active = not _active
-    _sel.kind, _sel.index = "hotspot", 1
-    if not current_item() then
-        -- нет hotspot'ов, но есть объекты — начнём с них
-        if #objects() > 0 then _sel.kind, _sel.index = "object", 1 end
+    -- При входе ставим выбор на первый видимый hotspot (или object).
+    local visible = visible_hotspot_indices()
+    if #visible > 0 then
+        _sel.kind, _sel.full_index = "hotspot", visible[1]
+    elseif #objects() > 0 then
+        _sel.kind, _sel.full_index = "object", 1
     end
     if _active then
         print(("[hotspot_editor] ВКЛЮЧЁН. Сцена: %s. Выбран %s")
             :format(tostring(scene_controller.get_current_scene_id()), describe()))
-        print("  F1/Esc=выйти  Tab=след  стрелки=двигать  []=ширина  ;'=высота  P=напечатать  Shift=×4")
+        print("  F1/Esc=выйти  Tab=след  стрелки=двигать  []=ширина  ;'=высота  ,.=стиль  P=напечатать  Shift=×4")
     else
-        print("[hotspot_editor] ВЫКЛЮЧЕН.")
+        log.info("hotspot_editor", "ВЫКЛЮЧЕН.")
     end
     scene_controller.render_now()
 end
@@ -114,16 +183,17 @@ end
 function M.exit_mode()
     if not _active then return end
     _active = false
-    print("[hotspot_editor] ВЫКЛЮЧЕН.")
+    log.info("hotspot_editor", "ВЫКЛЮЧЕН.")
     scene_controller.render_now()
 end
 
--- Клик по hotspot'у #i в режиме редактирования → выбираем его
-function M.select(i)
+-- Клик по СЛОТУ #slot_i (1..N visible) → выбрать соответствующий hotspot.
+function M.select(slot_i)
     if not _active then return end
-    local hs = hotspots()
-    if i < 1 or i > #hs then return end
-    _sel.kind, _sel.index = "hotspot", i
+    local visible = visible_hotspot_indices()
+    local full_i = visible[slot_i]
+    if not full_i then return end
+    _sel.kind, _sel.full_index = "hotspot", full_i
     print(("[hotspot_editor] выбран %s"):format(describe()))
     scene_controller.render_now()
 end
@@ -159,6 +229,25 @@ function M.nudge(dx, dy, dw, dh)
     scene_controller.render_now()
 end
 
+-- Цикл по стилям из shared.STYLES. direction = -1 или +1.
+-- Для object'ов ничего не делает.
+function M.cycle_style(direction)
+    if not _active then return end
+    if _sel.kind ~= "hotspot" then return end
+    local it = current_item()
+    if not it then return end
+
+    local n = #shared.STYLES
+    if n == 0 then return end
+    local cur = find_style_index(it.hotspot_style)
+    -- Если стиль не найден среди известных — стартуем с 1, иначе сдвигаемся.
+    local nxt = cur == 0 and 1 or ((cur - 1 + direction) % n + 1)
+    local picked = shared.STYLES[nxt]
+    it.hotspot_style = picked.style
+    print(("[hotspot_editor] %s → %s"):format(it.id, picked.name))
+    scene_controller.render_now()
+end
+
 function M.print_current()
     if not _active then return end
     local it = current_item()
@@ -167,9 +256,15 @@ function M.print_current()
     local scene_id = tostring(scene_controller.get_current_scene_id())
     if _sel.kind == "hotspot" then
         local r = it.rect
+        local style_idx = find_style_index(it.hotspot_style)
+        local style_name = style_idx > 0 and shared.STYLES[style_idx].name or "—"
         print(("[hotspot_editor] %s / hotspot %s →"):format(scene_id, it.id))
         print(("    rect = { x = %d, y = %d, w = %d, h = %d },")
             :format(r.x, r.y, r.w, r.h))
+        if style_idx > 0 then
+            print(("    -- стиль: %s (если рецепт не совпадает — добавь hotspot_style = s.%s,)")
+                :format(style_name, style_name))
+        end
     else
         local p, s = it.pos, it.size
         print(("[hotspot_editor] %s / object %s →"):format(scene_id, it.id))

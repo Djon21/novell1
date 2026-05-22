@@ -1,0 +1,5 @@
+images {
+  image: "/main/images/bg_image/bg_shop_front_day.jpg"
+}
+extrude_borders: 2
+rename_patterns: "bg_shop_front_day=scene_bg"

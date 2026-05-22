@@ -1,0 +1,374 @@
+script: "/main/gui/components_v2/phone_sms.gui_script"
+fonts {
+  name: "jb_mono_10"
+  font: "/main/fonts/jb_mono_10.font"
+}
+fonts {
+  name: "jb_mono_12"
+  font: "/main/fonts/jb_mono_12.font"
+}
+fonts {
+  name: "jb_mono_bold_14"
+  font: "/main/fonts/jb_mono_bold_14.font"
+}
+fonts {
+  name: "unbounded_bold_20"
+  font: "/main/fonts/unbounded_bold_20.font"
+}
+fonts {
+  name: "unbounded_bold_32"
+  font: "/main/fonts/unbounded_bold_32.font"
+}
+fonts {
+  name: "icons"
+  font: "/main/fonts/icons.font"
+}
+fonts {
+  name: "manrope_14"
+  font: "/main/fonts/manrope_14.font"
+}
+fonts {
+  name: "manrope_16"
+  font: "/main/fonts/manrope_16.font"
+}
+textures {
+  name: "icon_phone"
+  texture: "/main/images/phone/icon_phone.atlas"
+}
+textures {
+  name: "map2"
+  texture: "/main/images/phone/map2.atlas"
+}
+nodes {
+  position {
+    z: 0.052
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "sms_runtime_root"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.0
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "sms_list"
+  parent: "sms_runtime_root"
+  template: "/main/gui/components_v2/phone_sms_list_template.gui"
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/list_root"
+  parent: "sms_list"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/side_title"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/sms_header_line"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/sms_scrollbar_track"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/sms_scrollbar_thumb"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg1_bg"
+  parent: "sms_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg1_dot"
+  parent: "sms_list/msg1_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg1_name"
+  parent: "sms_list/msg1_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg1_time"
+  parent: "sms_list/msg1_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg1_body"
+  parent: "sms_list/msg1_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg1_pin_bg"
+  parent: "sms_list/msg1_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg1_pin_border_t"
+  parent: "sms_list/msg1_pin_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg1_pin_border_b"
+  parent: "sms_list/msg1_pin_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg1_pin_border_l"
+  parent: "sms_list/msg1_pin_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg1_pin_border_r"
+  parent: "sms_list/msg1_pin_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg1_pin"
+  parent: "sms_list/msg1_pin_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/border_msg1"
+  parent: "sms_list/msg1_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg1_av_bg"
+  parent: "sms_list/msg1_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg1_av_b_t"
+  parent: "sms_list/msg1_av_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg1_av_b_b"
+  parent: "sms_list/msg1_av_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg1_av_b_l"
+  parent: "sms_list/msg1_av_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_list/msg1_av_b_r"
+  parent: "sms_list/msg1_av_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_list/msg1_av"
+  parent: "sms_list/msg1_av_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "sms_thread"
+  parent: "sms_runtime_root"
+  template: "/main/gui/components_v2/phone_sms_thread_template.gui"
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/thread_root"
+  parent: "sms_thread"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_back_bg"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/border_back"
+  parent: "sms_thread/th_back_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/th_back_label"
+  parent: "sms_thread/th_back_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/th_name"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/th_num"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_call_bg"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/border_call"
+  parent: "sms_thread/th_call_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/th_call_label"
+  parent: "sms_thread/th_call_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_info_bg"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/border_info"
+  parent: "sms_thread/th_info_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/th_info_label"
+  parent: "sms_thread/th_info_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_menu_bg"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/border_menu"
+  parent: "sms_thread/th_menu_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/th_menu_label"
+  parent: "sms_thread/th_menu_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_header_line"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/th_empty"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub1_bg"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/bub1_text"
+  parent: "sms_thread/bub1_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/border_bub1"
+  parent: "sms_thread/bub1_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/bub1_stamp"
+  parent: "sms_thread/bub1_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_input_line"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_scrollbar_track"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_scrollbar_thumb"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_send_bg"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/border_send"
+  parent: "sms_thread/th_send_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "sms_thread/th_send_label"
+  parent: "sms_thread/th_send_bg"
+  template_node_child: true
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT

@@ -1,0 +1,1263 @@
+script: "/main/gui/components_v2/phone_term.gui_script"
+fonts {
+  name: "jb_mono_10"
+  font: "/main/fonts/jb_mono_10.font"
+}
+fonts {
+  name: "jb_mono_12"
+  font: "/main/fonts/jb_mono_12.font"
+}
+fonts {
+  name: "jb_mono_bold_14"
+  font: "/main/fonts/jb_mono_bold_14.font"
+}
+fonts {
+  name: "unbounded_bold_20"
+  font: "/main/fonts/unbounded_bold_20.font"
+}
+fonts {
+  name: "unbounded_bold_32"
+  font: "/main/fonts/unbounded_bold_32.font"
+}
+fonts {
+  name: "icons"
+  font: "/main/fonts/icons.font"
+}
+fonts {
+  name: "manrope_14"
+  font: "/main/fonts/manrope_14.font"
+}
+fonts {
+  name: "manrope_16"
+  font: "/main/fonts/manrope_16.font"
+}
+nodes {
+  type: TYPE_BOX
+  id: "term_runtime_root"
+  pivot: PIVOT_SW
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 500.000
+    y: 40.000
+    z: 0.522
+  }
+  size {
+    x: 728.000
+    y: 640.000
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "v_term_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.880
+}
+nodes {
+  position {
+    x: 500.000
+    y: 612.000
+    z: 0.523
+  }
+  size {
+    x: 728.000
+    y: 68.000
+  }
+  color {
+    x: 0.047
+    y: 0.041
+    z: 0.120
+  }
+  type: TYPE_BOX
+  id: "v_term_head_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.720
+}
+nodes {
+  position {
+    x: 500.000
+    y: 40.000
+    z: 0.524
+  }
+  size {
+    x: 728.000
+    y: 640.000
+  }
+  color {
+    x: 0.040
+    y: 0.120
+    z: 0.140
+  }
+  type: TYPE_BOX
+  id: "v_term_crt_scan"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.100
+}
+nodes {
+  position {
+    x: 524.000
+    y: 650.000
+    z: 0.560
+  }
+  size {
+    x: 520.000
+    y: 12.000
+  }
+  color {
+    x: 0.490
+    y: 0.976
+    z: 1.000
+  }
+  type: TYPE_TEXT
+  text: "avos-shell \302\267 ssh prod-eu-1 \302\267 p1 active"
+  font: "jb_mono_10"
+  id: "v_term_eyebrow"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.950
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 524.000
+    y: 626.000
+    z: 0.561
+  }
+  size {
+    x: 260.000
+    y: 24.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\242\320\225\320\240\320\234\320\230\320\235\320\220\320\233"
+  font: "unbounded_bold_20"
+  id: "v_term_title"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 900.000
+    y: 624.000
+    z: 0.540
+  }
+  size {
+    x: 110.000
+    y: 24.000
+  }
+  color {
+    x: 0.090
+    y: 0.085
+    z: 0.200
+  }
+  type: TYPE_BOX
+  id: "v_term_tab1"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.750
+}
+nodes {
+  position {
+    x: 1012.000
+    y: 624.000
+    z: 0.540
+  }
+  size {
+    x: 72.000
+    y: 24.000
+  }
+  color {
+    x: 0.060
+    y: 0.055
+    z: 0.135
+  }
+  type: TYPE_BOX
+  id: "v_term_tab2"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.660
+}
+nodes {
+  position {
+    x: 1086.000
+    y: 624.000
+    z: 0.540
+  }
+  size {
+    x: 116.000
+    y: 24.000
+  }
+  color {
+    x: 0.060
+    y: 0.055
+    z: 0.135
+  }
+  type: TYPE_BOX
+  id: "v_term_tab3"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.660
+}
+nodes {
+  position {
+    x: 1204.000
+    y: 624.000
+    z: 0.540
+  }
+  size {
+    x: 24.000
+    y: 24.000
+  }
+  color {
+    x: 0.060
+    y: 0.055
+    z: 0.135
+  }
+  type: TYPE_BOX
+  id: "v_term_tab_plus"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.660
+}
+nodes {
+  position {
+    x: 908.000
+    y: 636.000
+    z: 0.562
+  }
+  size {
+    x: 94.000
+    y: 14.000
+  }
+  color {
+    x: 0.490
+    y: 0.976
+    z: 1.000
+  }
+  type: TYPE_TEXT
+  text: "prod-eu-1 \303\227"
+  font: "jb_mono_10"
+  id: "v_term_tab1_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.950
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1020.000
+    y: 636.000
+    z: 0.562
+  }
+  size {
+    x: 60.000
+    y: 14.000
+  }
+  color {
+    x: 0.790
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "local \303\227"
+  font: "jb_mono_10"
+  id: "v_term_tab2_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.920
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1094.000
+    y: 636.000
+    z: 0.562
+  }
+  size {
+    x: 106.000
+    y: 14.000
+  }
+  color {
+    x: 0.790
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "db-replica \303\227"
+  font: "jb_mono_10"
+  id: "v_term_tab3_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.920
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1212.000
+    y: 636.000
+    z: 0.562
+  }
+  size {
+    x: 12.000
+    y: 14.000
+  }
+  color {
+    x: 0.790
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "+"
+  font: "jb_mono_bold_14"
+  id: "v_term_tab_plus_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.920
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 524.000
+    y: 116.000
+    z: 0.526
+  }
+  size {
+    x: 660.000
+    y: 486.000
+  }
+  color {
+    x: 0.016
+    y: 0.008
+    z: 0.055
+  }
+  type: TYPE_BOX
+  id: "v_term_shell"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.820
+}
+nodes {
+  position {
+    x: 536.000
+    y: 158.000
+    z: 0.527
+  }
+  size {
+    x: 628.000
+    y: 400.000
+  }
+  color {
+    x: 0.000
+    y: 0.000
+    z: 0.000
+  }
+  type: TYPE_BOX
+  id: "v_term_shell_clip"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.001
+}
+nodes {
+  position {
+    x: 542.000
+    y: 542.000
+    z: 0.564
+  }
+  size {
+    x: 600.000
+    y: 18.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_12"
+  id: "v_term_l1"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 542.000
+    y: 521.000
+    z: 0.564
+  }
+  size {
+    x: 600.000
+    y: 18.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_12"
+  id: "v_term_l2"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 542.000
+    y: 500.000
+    z: 0.564
+  }
+  size {
+    x: 600.000
+    y: 18.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_12"
+  id: "v_term_l3"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 542.000
+    y: 479.000
+    z: 0.564
+  }
+  size {
+    x: 600.000
+    y: 18.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_12"
+  id: "v_term_l4"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 542.000
+    y: 458.000
+    z: 0.564
+  }
+  size {
+    x: 600.000
+    y: 18.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_12"
+  id: "v_term_l5"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 542.000
+    y: 437.000
+    z: 0.564
+  }
+  size {
+    x: 600.000
+    y: 18.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_12"
+  id: "v_term_l6"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 542.000
+    y: 416.000
+    z: 0.564
+  }
+  size {
+    x: 600.000
+    y: 18.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_12"
+  id: "v_term_l7"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 542.000
+    y: 395.000
+    z: 0.564
+  }
+  size {
+    x: 600.000
+    y: 18.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_12"
+  id: "v_term_l8"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 542.000
+    y: 374.000
+    z: 0.564
+  }
+  size {
+    x: 600.000
+    y: 18.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_12"
+  id: "v_term_l9"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 542.000
+    y: 353.000
+    z: 0.564
+  }
+  size {
+    x: 600.000
+    y: 18.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_12"
+  id: "v_term_l10"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 542.000
+    y: 332.000
+    z: 0.564
+  }
+  size {
+    x: 600.000
+    y: 18.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_12"
+  id: "v_term_l11"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 542.000
+    y: 311.000
+    z: 0.564
+  }
+  size {
+    x: 600.000
+    y: 18.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_12"
+  id: "v_term_l12"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 542.000
+    y: 290.000
+    z: 0.564
+  }
+  size {
+    x: 600.000
+    y: 18.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_12"
+  id: "v_term_l13"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 542.000
+    y: 269.000
+    z: 0.564
+  }
+  size {
+    x: 600.000
+    y: 18.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_12"
+  id: "v_term_l14"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 542.000
+    y: 248.000
+    z: 0.564
+  }
+  size {
+    x: 600.000
+    y: 18.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_12"
+  id: "v_term_l15"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 542.000
+    y: 227.000
+    z: 0.564
+  }
+  size {
+    x: 600.000
+    y: 18.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_12"
+  id: "v_term_l16"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 542.000
+    y: 206.000
+    z: 0.564
+  }
+  size {
+    x: 600.000
+    y: 18.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_12"
+  id: "v_term_l17"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 542.000
+    y: 185.000
+    z: 0.564
+  }
+  size {
+    x: 600.000
+    y: 18.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: ""
+  font: "jb_mono_12"
+  id: "v_term_l18"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.980
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1172.000
+    y: 160.000
+    z: 0.545
+  }
+  size {
+    x: 3.000
+    y: 396.000
+  }
+  color {
+    x: 0.490
+    y: 0.976
+    z: 1.000
+  }
+  type: TYPE_BOX
+  id: "v_term_scroll_track"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.160
+}
+nodes {
+  position {
+    x: 1170.000
+    y: 460.000
+    z: 0.566
+  }
+  size {
+    x: 7.000
+    y: 64.000
+  }
+  color {
+    x: 0.490
+    y: 0.976
+    z: 1.000
+  }
+  type: TYPE_BOX
+  id: "v_term_scroll_thumb"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.600
+}
+nodes {
+  position {
+    x: 524.000
+    y: 116.000
+    z: 0.525
+  }
+  size {
+    x: 660.000
+    y: 486.000
+  }
+  color {
+    x: 0.016
+    y: 0.008
+    z: 0.055
+  }
+  type: TYPE_BOX
+  id: "v_term_screen"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.001
+}
+nodes {
+  position {
+    x: 536.000
+    y: 124.000
+    z: 0.545
+  }
+  size {
+    x: 628.000
+    y: 28.000
+  }
+  color {
+    x: 0.040
+    y: 0.035
+    z: 0.100
+  }
+  type: TYPE_BOX
+  id: "v_term_input_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.900
+}
+nodes {
+  position {
+    x: 546.000
+    y: 138.000
+    z: 0.566
+  }
+  size {
+    x: 230.000
+    y: 16.000
+  }
+  color {
+    x: 0.490
+    y: 0.976
+    z: 1.000
+  }
+  type: TYPE_TEXT
+  text: "\320\275\320\270\320\272@prod-eu-1 /srv/loop $"
+  font: "jb_mono_10"
+  id: "v_term_input_prompt"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.950
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 780.000
+    y: 138.000
+    z: 0.566
+  }
+  size {
+    x: 250.000
+    y: 16.000
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "tail -f frame.log"
+  font: "jb_mono_10"
+  id: "v_term_input_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.950
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1035.000
+    y: 130.000
+    z: 0.567
+  }
+  size {
+    x: 7.000
+    y: 17.000
+  }
+  color {
+    x: 0.490
+    y: 0.976
+    z: 1.000
+  }
+  type: TYPE_BOX
+  id: "v_term_caret"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.850
+}
+nodes {
+  position {
+    x: 524.000
+    y: 64.000
+    z: 0.540
+  }
+  size {
+    x: 70.000
+    y: 22.000
+  }
+  color {
+    x: 0.953
+    y: 0.239
+    z: 0.498
+  }
+  type: TYPE_BOX
+  id: "v_term_status_mode"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.980
+}
+nodes {
+  position {
+    x: 532.000
+    y: 75.000
+    z: 0.566
+  }
+  size {
+    x: 58.000
+    y: 12.000
+  }
+  color {
+    x: 0.100
+    y: 0.024
+    z: 0.063
+  }
+  type: TYPE_TEXT
+  text: "P1 ACTIVE"
+  font: "jb_mono_10"
+  id: "v_term_status_mode_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.950
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 598.000
+    y: 64.000
+    z: 0.540
+  }
+  size {
+    x: 100.000
+    y: 22.000
+  }
+  color {
+    x: 0.080
+    y: 0.160
+    z: 0.220
+  }
+  type: TYPE_BOX
+  id: "v_term_status_host"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.880
+}
+nodes {
+  position {
+    x: 606.000
+    y: 75.000
+    z: 0.566
+  }
+  size {
+    x: 88.000
+    y: 12.000
+  }
+  color {
+    x: 0.490
+    y: 0.976
+    z: 1.000
+  }
+  type: TYPE_TEXT
+  text: "PROD-EU-1"
+  font: "jb_mono_10"
+  id: "v_term_status_host_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.950
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 702.000
+    y: 64.000
+    z: 0.540
+  }
+  size {
+    x: 250.000
+    y: 22.000
+  }
+  color {
+    x: 0.060
+    y: 0.055
+    z: 0.135
+  }
+  type: TYPE_BOX
+  id: "v_term_status_path"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.820
+}
+nodes {
+  position {
+    x: 710.000
+    y: 75.000
+    z: 0.566
+  }
+  size {
+    x: 238.000
+    y: 12.000
+  }
+  color {
+    x: 0.790
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "/SRV/LOOP"
+  font: "jb_mono_10"
+  id: "v_term_status_path_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.950
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 956.000
+    y: 64.000
+    z: 0.540
+  }
+  size {
+    x: 92.000
+    y: 22.000
+  }
+  color {
+    x: 0.060
+    y: 0.055
+    z: 0.135
+  }
+  type: TYPE_BOX
+  id: "v_term_status_git"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.820
+}
+nodes {
+  position {
+    x: 964.000
+    y: 75.000
+    z: 0.566
+  }
+  size {
+    x: 80.000
+    y: 12.000
+  }
+  color {
+    x: 0.690
+    y: 0.455
+    z: 1.000
+  }
+  type: TYPE_TEXT
+  text: "MAIN"
+  font: "jb_mono_10"
+  id: "v_term_status_git_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.950
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1052.000
+    y: 64.000
+    z: 0.540
+  }
+  size {
+    x: 68.000
+    y: 22.000
+  }
+  color {
+    x: 0.060
+    y: 0.055
+    z: 0.135
+  }
+  type: TYPE_BOX
+  id: "v_term_status_batt"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.820
+}
+nodes {
+  position {
+    x: 1060.000
+    y: 75.000
+    z: 0.566
+  }
+  size {
+    x: 56.000
+    y: 12.000
+  }
+  color {
+    x: 0.790
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "74%"
+  font: "jb_mono_10"
+  id: "v_term_status_batt_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.950
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}

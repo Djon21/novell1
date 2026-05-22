@@ -1,0 +1,37 @@
+images {
+  image: "/main/images/phone/phone_icons_mask_64/icon_call.png"
+}
+images {
+  image: "/main/images/phone/phone_icons_mask_64/icon_camera.png"
+}
+images {
+  image: "/main/images/phone/phone_icons_mask_64/icon_mail.png"
+}
+images {
+  image: "/main/images/phone/phone_icons_mask_64/icon_map.png"
+}
+images {
+  image: "/main/images/phone/phone_icons_mask_64/icon_notes.png"
+}
+images {
+  image: "/main/images/phone/phone_icons_mask_64/icon_quests.png"
+}
+images {
+  image: "/main/images/phone/phone_icons_mask_64/icon_sms.png"
+}
+images {
+  image: "/main/images/phone/phone_icons_mask_64/icon_terminal.png"
+}
+images {
+  image: "/main/images/phone/rounded_base_256.png"
+}
+images {
+  image: "/main/images/phone/phone_screen_rounded_128.png"
+}
+images {
+  image: "/main/images/phone/ico_fon.png"
+}
+images {
+  image: "/main/images/phone/phone2.png"
+}
+extrude_borders: 2

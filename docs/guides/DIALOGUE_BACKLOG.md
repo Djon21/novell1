@@ -1,0 +1,135 @@
+# Dialogue backlog
+
+В игре есть безопасная перемотка текста назад в стиле визуальных новелл. Это не откат Ink-состояния, а read-only журнал уже показанных реплик.
+
+## Главное правило
+
+Backlog показывает прошлый текст, но не меняет:
+
+- текущий Ink pointer;
+- выбранные варианты ответа;
+- флаги;
+- инвентарь;
+- квесты;
+- сцену;
+- сохранение.
+
+То есть игрок может перечитать то, что случайно прокликал, но не может вернуться до выбора и выбрать другой вариант.
+
+## Где хранится история
+
+История текущей игровой сессии хранится в shared-модуле `main/scripts/dialogue_backlog.lua`.
+
+`main/gui/modules/ui_manager_v2/dialogue_flow.lua` добавляет записи через `backlog.add(entry)`, а `main/gui/components_v2/dialogue_v2.gui_script` читает их через `backlog.get_all()`.
+
+В журнал попадают:
+
+- обычные реплики `node.type == "dialogue"`;
+- экран конца `node.type == "end"`;
+- сделанный выбор после `choice_picked`;
+- автоматический выбор после `choice_timeout`.
+
+Лимит истории задаётся в `dialogue_backlog.lua`:
+
+```lua
+local LIMIT = 80
+```
+
+Если реплик становится больше, старые записи удаляются с начала списка.
+
+## Где рисуется окно
+
+Окно журнала создаётся динамически в `main/gui/components_v2/dialogue_v2.gui_script`.
+
+Отдельный `.gui`-файл не нужен: скрипт сам создаёт overlay, панель, текст и кнопки:
+
+```text
+< НАЗАД  -- предыдущая запись
+ВПЕРЕД > -- следующая запись
+ЗАКРЫТЬ  -- закрыть журнал
+```
+
+Кнопки открытия две:
+
+- в `dialogue_v2.gui_script` есть `LOG` рядом с `SKIP/AUTO/NEXT`, когда открыта диалоговая плашка;
+- в `hud_v2.gui_script` есть отдельный `LOG` в верхнем HUD, когда игра находится в exploration-режиме.
+
+HUD-кнопка не рисует своё окно. Она отправляет в `ui_manager_v2.script` сообщение:
+
+```lua
+msg.post("#ui_manager_v2", "open_backlog")
+```
+
+Дальше цепочка такая:
+
+```text
+ui_manager_v2.script
+  -> message_flow.lua
+  -> dialogue_flow.lua
+  -> dialogue_v2.gui_script
+```
+
+`dialogue_flow.lua` открывает общий backlog overlay:
+
+```lua
+msg.post(M.components.dialogue, "open_backlog")
+```
+
+Открытый backlog считается modal overlay:
+
+```lua
+M.overlays.backlog = true
+ui_state.modal_open = true
+```
+
+Это важно для exploration-режима: `hotspots_v2.gui_script` видит `ui_state.modal_open` и перестаёт обрабатывать клики по хотспотам. Дополнительно `dialogue_flow.lua` на время журнала отправляет:
+
+```lua
+msg.post(M.components.hotspots, "hide_all")
+```
+
+Так хотспоты не перекрывают окно визуально. После закрытия журнала, если активна exploration-сцена, вызывается:
+
+```lua
+scene_controller.render_now()
+```
+
+и хотспоты возвращаются.
+
+Открытый backlog перехватывает touch-ввод и не пропускает клики в `NEXT`, `AUTO`, `SKIP` или dialogue box.
+
+## Почему это безопасно для выборов
+
+Выбор записывается в журнал только после того, как игрок нажал вариант:
+
+```lua
+choice_picked -> append_dialogue_backlog(...) -> dm.choose(...)
+```
+
+В журнале он выглядит как текст:
+
+```text
+ВЫБОР
+Вопрос
+> выбранный вариант
+```
+
+Это просто запись. В ней нет кнопок вариантов и нет вызова `dm.choose()`.
+
+## Если нужно изменить внешний вид
+
+Смотри `ensure_backlog_nodes(self)` в `dialogue_v2.gui_script`.
+
+Там задаются:
+
+- позиция кнопки `LOG`;
+- размер panel;
+- цвета overlay;
+- размер текстового поля;
+- подписи кнопок.
+
+## Если нужно сделать историю сохраняемой
+
+Сейчас backlog живёт только в runtime-сессии. После выхода и загрузки сейва журнал начнётся заново.
+
+Если нужен persistent backlog, его лучше сохранять отдельно в `save_manager`, но не смешивать с `ink_state`. Это важно, потому что `ink_state` отвечает за прохождение, а backlog отвечает только за UI-чтение.

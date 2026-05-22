@@ -1,0 +1,579 @@
+script: "/main/gui/components_v2/phone_messenger.gui_script"
+fonts {
+  name: "jb_mono_10"
+  font: "/main/fonts/jb_mono_10.font"
+}
+fonts {
+  name: "jb_mono_12"
+  font: "/main/fonts/jb_mono_12.font"
+}
+fonts {
+  name: "jb_mono_bold_14"
+  font: "/main/fonts/jb_mono_bold_14.font"
+}
+fonts {
+  name: "unbounded_bold_20"
+  font: "/main/fonts/unbounded_bold_20.font"
+}
+fonts {
+  name: "unbounded_bold_32"
+  font: "/main/fonts/unbounded_bold_32.font"
+}
+fonts {
+  name: "icons"
+  font: "/main/fonts/icons.font"
+}
+fonts {
+  name: "manrope_14"
+  font: "/main/fonts/manrope_14.font"
+}
+fonts {
+  name: "manrope_16"
+  font: "/main/fonts/manrope_16.font"
+}
+textures {
+  name: "icon_phone"
+  texture: "/main/images/phone/icon_phone.atlas"
+}
+nodes {
+  position {
+    z: 0.052
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "messenger_runtime_root"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.0
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "messenger_list"
+  parent: "messenger_runtime_root"
+  template: "/main/gui/components_v2/phone_messenger_list_template.gui"
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_list/list_root"
+  parent: "messenger_list"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "messenger_list/msgr_title"
+  parent: "messenger_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_list/search_bg"
+  parent: "messenger_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_list/border_search"
+  parent: "messenger_list/search_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "messenger_list/search_icon"
+  parent: "messenger_list/search_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "messenger_list/search_text"
+  parent: "messenger_list/search_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_list/tab_all_bg"
+  parent: "messenger_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_list/tab_all_bt"
+  parent: "messenger_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_list/tab_all_bb"
+  parent: "messenger_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_list/tab_all_bl"
+  parent: "messenger_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_list/tab_all_br"
+  parent: "messenger_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "messenger_list/tab_all_text"
+  parent: "messenger_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "messenger_list/tab_all_count"
+  parent: "messenger_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_list/tab_unread_bg"
+  parent: "messenger_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "messenger_list/tab_unread_text"
+  parent: "messenger_list/tab_unread_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "messenger_list/tab_unread_count"
+  parent: "messenger_list/tab_unread_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_list/border_unread"
+  parent: "messenger_list/tab_unread_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_list/list_divider"
+  parent: "messenger_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_list/chat1_bg"
+  parent: "messenger_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_list/chat1_av_bg"
+  parent: "messenger_list/chat1_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "messenger_list/chat1_av"
+  parent: "messenger_list/chat1_av_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "messenger_list/chat1_name"
+  parent: "messenger_list/chat1_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "messenger_list/chat1_icons"
+  parent: "messenger_list/chat1_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "messenger_list/chat1_preview"
+  parent: "messenger_list/chat1_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "messenger_list/chat1_time"
+  parent: "messenger_list/chat1_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_list/chat1_badge_bg"
+  parent: "messenger_list/chat1_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "messenger_list/chat1_badge"
+  parent: "messenger_list/chat1_badge_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_list/border_chat"
+  parent: "messenger_list/chat1_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_list/list_scrollbar_track"
+  parent: "messenger_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_list/list_scrollbar_thumb"
+  parent: "messenger_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_list/list_footer_line"
+  parent: "messenger_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "messenger_list/list_footer_left"
+  parent: "messenger_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "messenger_list/list_footer_right"
+  parent: "messenger_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "messenger_chat"
+  parent: "messenger_runtime_root"
+  template: "/main/gui/components_v2/phone_messenger_chat_template.gui"
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/chat_root"
+  parent: "messenger_chat"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/back_bg"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/back_bt"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/back_bb"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/back_bl"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/back_br"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "messenger_chat/back_text"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/head_av_bg"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "messenger_chat/head_av"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "messenger_chat/head_name"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "messenger_chat/head_status"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/head_call_bg"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/head_call_bt"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/head_call_bb"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/head_call_bl"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/head_call_br"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "messenger_chat/head_call_text"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/head_find_bg"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/head_find_bt"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/head_find_bb"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/head_find_bl"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/head_find_br"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "messenger_chat/head_find_text"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/head_menu_bg"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/head_menu_bt"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/head_menu_bb"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/head_menu_bl"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/head_menu_br"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "messenger_chat/head_menu_text"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/chat_header_line"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  position {
+    x: 540.0
+    y: 528.0
+    z: 0.05
+  }
+  type: TYPE_BOX
+  id: "messenger_chat/bub1_bg"
+  parent: "messenger_chat/chat_root"
+  overridden_fields: 1
+  template_node_child: true
+}
+nodes {
+  position {
+    x: 6.0
+    y: 33.0
+    z: 0.056
+  }
+  type: TYPE_TEXT
+  id: "messenger_chat/bub1_text"
+  parent: "messenger_chat/bub1_bg"
+  overridden_fields: 1
+  template_node_child: true
+}
+nodes {
+  position {
+    x: 490.0
+    y: 12.0
+    z: 0.056
+  }
+  type: TYPE_TEXT
+  id: "messenger_chat/bub1_stamp"
+  parent: "messenger_chat/bub1_bg"
+  overridden_fields: 1
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/border_bub"
+  parent: "messenger_chat/bub1_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/chat_scrollbar_track"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/chat_scrollbar_thumb"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/input_line"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/attach_bg"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "messenger_chat/attach_text"
+  parent: "messenger_chat/attach_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/border_attach"
+  parent: "messenger_chat/attach_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/input_bg"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "messenger_chat/input_text"
+  parent: "messenger_chat/input_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/border_input"
+  parent: "messenger_chat/input_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/send_bg"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "messenger_chat/send_text"
+  parent: "messenger_chat/send_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/border_send"
+  parent: "messenger_chat/send_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_chat/chat_footer_line"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "messenger_chat/chat_footer_left"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "messenger_chat/chat_footer_right"
+  parent: "messenger_chat/chat_root"
+  template_node_child: true
+}
+material: "/builtins/materials/gui.material"

@@ -1,0 +1,663 @@
+script: "/main/gui/components_v2/hotspots_v2.gui_script"
+fonts {
+  name: "material_icons"
+  font: "/main/fonts/material_icons.font"
+}
+fonts {
+  name: "main"
+  font: "/main/fonts/main.font"
+}
+fonts {
+  name: "Manrope-Medium_16"
+  font: "/main/fonts/Manrope-Medium_16.font"
+}
+textures {
+  name: "hotspots"
+  texture: "/main/images/hotspots.atlas"
+}
+textures {
+  name: "scene_objects"
+  texture: "/main/images/scene_objects.atlas"
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.08
+  }
+  size {
+    x: 200.0
+    y: 200.0
+  }
+  color {
+    x: 0.5019608
+    y: 0.0
+    z: 0.5019608
+  }
+  type: TYPE_BOX
+  id: "hotspot_1"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.15
+  enabled: false
+}
+nodes {
+  position {
+    y: -92.0
+    z: 0.09
+  }
+  size {
+    x: 180.0
+    y: 40.0
+  }
+  type: TYPE_TEXT
+  text: "label"
+  font: "Manrope-Medium_16"
+  id: "hotspot_label_1"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "hotspot_1"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.067
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  type: TYPE_BOX
+  texture: "hotspots/hotspot_ring"
+  id: "hotspot_ring_1"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.9
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.068
+  }
+  size {
+    x: 96.0
+    y: 96.0
+  }
+  color {
+    x: 0.06
+    y: 0.06
+    z: 0.1
+  }
+  type: TYPE_BOX
+  texture: "hotspots/hotspot_circle"
+  id: "hotspot_circle_1"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.35
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.07
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  type: TYPE_TEXT
+  font: "material_icons"
+  id: "hotspot_icon_1"
+  adjust_mode: ADJUST_MODE_ZOOM
+  shadow_alpha: 0.9
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.08
+  }
+  size {
+    x: 200.0
+    y: 200.0
+  }
+  color {
+    x: 0.5019608
+    y: 0.0
+    z: 0.5019608
+  }
+  type: TYPE_BOX
+  id: "hotspot_2"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.15
+  enabled: false
+}
+nodes {
+  position {
+    y: -92.0
+    z: 0.09
+  }
+  size {
+    x: 180.0
+    y: 40.0
+  }
+  type: TYPE_TEXT
+  text: "label"
+  font: "Manrope-Medium_16"
+  id: "hotspot_label_2"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "hotspot_2"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.067
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  type: TYPE_BOX
+  texture: "hotspots/hotspot_ring"
+  id: "hotspot_ring_2"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.9
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.068
+  }
+  size {
+    x: 96.0
+    y: 96.0
+  }
+  color {
+    x: 0.06
+    y: 0.06
+    z: 0.1
+  }
+  type: TYPE_BOX
+  texture: "hotspots/hotspot_circle"
+  id: "hotspot_circle_2"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.35
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.07
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  type: TYPE_TEXT
+  font: "material_icons"
+  id: "hotspot_icon_2"
+  adjust_mode: ADJUST_MODE_ZOOM
+  shadow_alpha: 0.9
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.08
+  }
+  size {
+    x: 200.0
+    y: 200.0
+  }
+  color {
+    x: 0.5019608
+    y: 0.0
+    z: 0.5019608
+  }
+  type: TYPE_BOX
+  id: "hotspot_3"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.15
+  enabled: false
+}
+nodes {
+  position {
+    y: -92.0
+    z: 0.09
+  }
+  size {
+    x: 180.0
+    y: 40.0
+  }
+  type: TYPE_TEXT
+  text: "label"
+  font: "Manrope-Medium_16"
+  id: "hotspot_label_3"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "hotspot_3"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.067
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  type: TYPE_BOX
+  texture: "hotspots/hotspot_ring"
+  id: "hotspot_ring_3"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.9
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.068
+  }
+  size {
+    x: 96.0
+    y: 96.0
+  }
+  color {
+    x: 0.06
+    y: 0.06
+    z: 0.1
+  }
+  type: TYPE_BOX
+  texture: "hotspots/hotspot_circle"
+  id: "hotspot_circle_3"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.35
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.07
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  type: TYPE_TEXT
+  font: "material_icons"
+  id: "hotspot_icon_3"
+  adjust_mode: ADJUST_MODE_ZOOM
+  shadow_alpha: 0.9
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.08
+  }
+  size {
+    x: 200.0
+    y: 200.0
+  }
+  color {
+    x: 0.5019608
+    y: 0.0
+    z: 0.5019608
+  }
+  type: TYPE_BOX
+  id: "hotspot_4"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.15
+  enabled: false
+}
+nodes {
+  position {
+    y: -92.0
+    z: 0.09
+  }
+  size {
+    x: 180.0
+    y: 40.0
+  }
+  type: TYPE_TEXT
+  text: "label"
+  font: "Manrope-Medium_16"
+  id: "hotspot_label_4"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "hotspot_4"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.067
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  type: TYPE_BOX
+  texture: "hotspots/hotspot_ring"
+  id: "hotspot_ring_4"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.9
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.068
+  }
+  size {
+    x: 96.0
+    y: 96.0
+  }
+  color {
+    x: 0.06
+    y: 0.06
+    z: 0.1
+  }
+  type: TYPE_BOX
+  texture: "hotspots/hotspot_circle"
+  id: "hotspot_circle_4"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.35
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.07
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  type: TYPE_TEXT
+  font: "material_icons"
+  id: "hotspot_icon_4"
+  adjust_mode: ADJUST_MODE_ZOOM
+  shadow_alpha: 0.9
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.08
+  }
+  size {
+    x: 200.0
+    y: 200.0
+  }
+  color {
+    x: 0.5019608
+    y: 0.0
+    z: 0.5019608
+  }
+  type: TYPE_BOX
+  id: "hotspot_5"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.15
+  enabled: false
+}
+nodes {
+  position {
+    y: -92.0
+    z: 0.09
+  }
+  size {
+    x: 180.0
+    y: 40.0
+  }
+  type: TYPE_TEXT
+  text: "label"
+  font: "Manrope-Medium_16"
+  id: "hotspot_label_5"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "hotspot_5"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.067
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  type: TYPE_BOX
+  texture: "hotspots/hotspot_ring"
+  id: "hotspot_ring_5"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.9
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.068
+  }
+  size {
+    x: 96.0
+    y: 96.0
+  }
+  color {
+    x: 0.06
+    y: 0.06
+    z: 0.1
+  }
+  type: TYPE_BOX
+  texture: "hotspots/hotspot_circle"
+  id: "hotspot_circle_5"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.35
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.07
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  type: TYPE_TEXT
+  font: "material_icons"
+  id: "hotspot_icon_5"
+  adjust_mode: ADJUST_MODE_ZOOM
+  shadow_alpha: 0.9
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.08
+  }
+  size {
+    x: 200.0
+    y: 200.0
+  }
+  color {
+    x: 0.5019608
+    y: 0.0
+    z: 0.5019608
+  }
+  type: TYPE_BOX
+  id: "hotspot_6"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.15
+  enabled: false
+}
+nodes {
+  position {
+    y: -92.0
+    z: 0.09
+  }
+  size {
+    x: 180.0
+    y: 40.0
+  }
+  type: TYPE_TEXT
+  text: "label"
+  font: "Manrope-Medium_16"
+  id: "hotspot_label_6"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "hotspot_6"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.067
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  type: TYPE_BOX
+  texture: "hotspots/hotspot_ring"
+  id: "hotspot_ring_6"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.9
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.068
+  }
+  size {
+    x: 96.0
+    y: 96.0
+  }
+  color {
+    x: 0.06
+    y: 0.06
+    z: 0.1
+  }
+  type: TYPE_BOX
+  texture: "hotspots/hotspot_circle"
+  id: "hotspot_circle_6"
+  adjust_mode: ADJUST_MODE_ZOOM
+  alpha: 0.35
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.07
+  }
+  size {
+    x: 120.0
+    y: 120.0
+  }
+  type: TYPE_TEXT
+  font: "material_icons"
+  id: "hotspot_icon_6"
+  adjust_mode: ADJUST_MODE_ZOOM
+  shadow_alpha: 0.9
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.05
+  }
+  size {
+    x: 100.0
+    y: 100.0
+  }
+  type: TYPE_BOX
+  texture: "scene_objects/mobile"
+  id: "scene_obj_1"
+  adjust_mode: ADJUST_MODE_ZOOM
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.05
+  }
+  size {
+    x: 100.0
+    y: 100.0
+  }
+  type: TYPE_BOX
+  texture: "scene_objects/mobile"
+  id: "scene_obj_2"
+  adjust_mode: ADJUST_MODE_ZOOM
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.05
+  }
+  size {
+    x: 100.0
+    y: 100.0
+  }
+  type: TYPE_BOX
+  texture: "scene_objects/mobile"
+  id: "scene_obj_3"
+  adjust_mode: ADJUST_MODE_ZOOM
+  enabled: false
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.05
+  }
+  size {
+    x: 100.0
+    y: 100.0
+  }
+  type: TYPE_BOX
+  texture: "scene_objects/mobile"
+  id: "scene_obj_4"
+  adjust_mode: ADJUST_MODE_ZOOM
+  enabled: false
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT

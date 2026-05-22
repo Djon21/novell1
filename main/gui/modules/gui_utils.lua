@@ -1,176 +1,236 @@
 -- gui_utils.lua
--- Базовые утилиты для работы с GUI нодами
+-- Общие хелперы для gui_script'ов проекта. Раньше каждый gui_script держал
+-- свои локальные копии get_node/set_text/set_node_enabled/set_color/...
+-- (~30-40 строк дубликата ×10 файлов). Теперь — один модуль.
+--
+-- Использование:
+--
+--   local U = require "main.gui.modules.gui_utils"
+--
+--   U.set_text("title", "Привет")
+--   U.set_node_enabled("badge", true)
+--   U.set_color("bg", COLORS.accent, 0.8)
+--   local clamped = U.clamp_text(long_string, 32)
+--
+-- Все id-based функции pcall-safe: если node по id не существует, тихо
+-- игнорируют. Удобно для шаблонных gui где набор нод варьируется.
+--
+-- См. также docs/guides/GUI_UTILS.md для подробного руководства.
 
 local M = {}
 
--- Проверяет, существует ли нода
-function M.node_exists(node_id)
-    local ok, node = pcall(gui.get_node, node_id)
-    return ok and node ~= nil
-end
+-- ===========================================================================
+-- Node lookup
+-- ===========================================================================
 
--- Безопасное получение ноды (возвращает nil если не найдена)
-function M.get_node_safe(node_id)
-    local ok, node = pcall(gui.get_node, node_id)
-    if ok then
-        return node
-    end
+-- Безопасный gui.get_node. Возвращает nil если ноды нет — обычная
+-- gui.get_node кидает ошибку. Используем pcall чтобы gui_script не падал
+-- когда обращаемся к ноде из шаблона которого может не быть в layout'е.
+function M.get_node(id)
+    if type(id) ~= "string" then return id end  -- уже нода
+    local ok, n = pcall(gui.get_node, id)
+    if ok then return n end
     return nil
 end
 
--- Устанавливает видимость ноды безопасно
-function M.set_enabled_safe(node, enabled)
-    if node then
-        gui.set_enabled(node, enabled)
-        return true
-    end
-    return false
+-- Алиас для совместимости с прошлой версией модуля.
+M.get_node_safe = M.get_node
+
+-- ===========================================================================
+-- Enable / visibility
+-- ===========================================================================
+
+function M.set_node_enabled(id, enabled)
+    local n = M.get_node(id)
+    if n then gui.set_enabled(n, enabled and true or false) end
 end
 
--- Устанавливает текст ноды безопасно
-function M.set_text_safe(node, text)
-    if node then
-        gui.set_text(node, text or "")
-        return true
-    end
-    return false
-end
-
--- Устанавливает цвет ноды безопасно
-function M.set_color_safe(node, color)
-    if node and color then
-        gui.set_color(node, color)
-        return true
-    end
-    return false
-end
-
--- Устанавливает позицию ноды безопасно
-function M.set_position_safe(node, position)
-    if node and position then
-        gui.set_position(node, position)
-        return true
-    end
-    return false
-end
-
--- Получает позицию ноды безопасно
-function M.get_position_safe(node)
-    if node then
-        return gui.get_position(node)
-    end
-    return nil
-end
-
--- Скрывает группу нод
-function M.hide_nodes(nodes)
-    for _, node in ipairs(nodes) do
-        if node then
-            gui.set_enabled(node, false)
-        end
+-- ids = массив строк-id или нод. enabled = bool.
+function M.set_nodes_enabled(ids, enabled)
+    if type(ids) ~= "table" then return end
+    for _, id in ipairs(ids) do
+        M.set_node_enabled(id, enabled)
     end
 end
 
--- Показывает группу нод
-function M.show_nodes(nodes)
-    for _, node in ipairs(nodes) do
-        if node then
-            gui.set_enabled(node, true)
-        end
-    end
+-- ===========================================================================
+-- Text
+-- ===========================================================================
+
+function M.set_text(id, value)
+    local n = M.get_node(id)
+    if n then gui.set_text(n, value ~= nil and tostring(value) or "") end
 end
 
--- Отменяет все анимации на ноде
-function M.cancel_animations(node)
-    if node then
-        gui.cancel_animation(node, "position")
-        gui.cancel_animation(node, "position.x")
-        gui.cancel_animation(node, "position.y")
-        gui.cancel_animation(node, "position.z")
-        gui.cancel_animation(node, "color")
-        gui.cancel_animation(node, "color.w")
-        gui.cancel_animation(node, "scale")
-        gui.cancel_animation(node, "rotation")
+-- UTF-8-aware truncation. "Привет!" — 7 codepoints, но 13 байт. Обрезает
+-- по кодпойнтам, добавляет ellipsis если длиннее лимита.
+-- ellipsis по умолчанию — "…" (1 codepoint).
+function M.clamp_text(s, max_len, ellipsis)
+    if s == nil then return "" end
+    s = tostring(s)
+    max_len = tonumber(max_len) or 32
+    if max_len <= 0 then return "" end
+    ellipsis = ellipsis ~= nil and tostring(ellipsis) or "…"
+
+    if utf8 and utf8.len then
+        local len = utf8.len(s)
+        if not len or len <= max_len then return s end
+        local ell_len = utf8.len(ellipsis) or #ellipsis
+        local keep = math.max(0, max_len - ell_len)
+        local cut_byte = utf8.offset(s, keep + 1)
+        if not cut_byte then return s end
+        return s:sub(1, cut_byte - 1) .. ellipsis
     end
+
+    -- Fallback (только ASCII).
+    if #s <= max_len then return s end
+    return s:sub(1, math.max(1, max_len - #ellipsis)) .. ellipsis
 end
 
--- Проверяет, находится ли точка внутри ноды
-function M.is_point_inside(node, x, y)
-    if not node then return false end
-    
-    local pos = gui.get_position(node)
-    local size = gui.get_size(node)
-    
-    local left = pos.x - size.x * 0.5
-    local right = pos.x + size.x * 0.5
-    local bottom = pos.y - size.y * 0.5
-    local top = pos.y + size.y * 0.5
-    
-    return x >= left and x <= right and y >= bottom and y <= top
+-- ===========================================================================
+-- Color / alpha
+-- ===========================================================================
+
+-- color = vmath.vector3/vector4 ИЛИ таблица { x, y, z [, w] }.
+-- alpha опц.: задано — перебивает color.w, иначе берётся color.w или 1.
+function M.set_color(id, color, alpha)
+    local n = M.get_node(id)
+    if not n or not color then return end
+    local cw = alpha or color.w or 1
+    gui.set_color(n, vmath.vector4(color.x or 0, color.y or 0, color.z or 0, cw))
 end
 
--- Клонирует дерево нод (для templates)
-function M.clone_tree_safe(node_id)
-    if type(node_id) == "string" then
-        node_id = M.get_node_safe(node_id)
-    end
-    
-    if node_id then
-        return gui.clone_tree(node_id)
-    end
-    return nil
+-- Меняет только rgb, оставляет текущую альфу.
+function M.set_color_keep_alpha(id, color)
+    local n = M.get_node(id)
+    if not n or not color then return end
+    local cur = gui.get_color(n)
+    gui.set_color(n, vmath.vector4(color.x or 0, color.y or 0, color.z or 0, cur.w))
 end
 
--- Удаляет дерево нод
-function M.delete_tree_safe(node)
-    if node then
-        gui.delete_node(node)
-        return true
-    end
-    return false
+-- Меняет только альфу.
+function M.set_alpha(id, alpha)
+    local n = M.get_node(id)
+    if not n or alpha == nil then return end
+    local c = gui.get_color(n)
+    gui.set_color(n, vmath.vector4(c.x, c.y, c.z, alpha))
 end
 
--- Устанавливает альфа-канал цвета ноды
-function M.set_alpha(node, alpha)
-    if node then
-        local color = gui.get_color(node)
-        color.w = alpha
-        gui.set_color(node, color)
-        return true
-    end
-    return false
+function M.get_alpha(id)
+    local n = M.get_node(id)
+    if not n then return 0 end
+    return gui.get_color(n).w
 end
 
--- Получает альфа-канал цвета ноды
-function M.get_alpha(node)
-    if node then
-        local color = gui.get_color(node)
-        return color.w
-    end
-    return 0
+-- ===========================================================================
+-- Position / size
+-- ===========================================================================
+
+function M.set_pos(id, x, y, z)
+    local n = M.get_node(id)
+    if n then gui.set_position(n, vmath.vector3(x or 0, y or 0, z or 0)) end
 end
 
--- Создает вектор цвета из RGB (0-1) и альфы
-function M.color(r, g, b, a)
+function M.set_size(id, w, h)
+    local n = M.get_node(id)
+    if n then gui.set_size(n, vmath.vector3(w or 0, h or 0, 0)) end
+end
+
+function M.set_pos_size(id, x, y, z, w, h)
+    M.set_pos(id, x, y, z)
+    M.set_size(id, w, h)
+end
+
+-- Удобный комбайн для box-нод: позиция + размер + (опц.) цвет с альфой.
+function M.set_box(id, x, y, w, h, color, alpha, z)
+    M.set_pos(id, x, y, z or 0)
+    M.set_size(id, w, h)
+    if color then M.set_color(id, color, alpha) end
+end
+
+-- ===========================================================================
+-- Hit testing
+-- ===========================================================================
+
+-- Точечная проверка по rect-параметрам (без gui.pick_node — если ноды нет
+-- или нужно проверить произвольную область).
+function M.point_in_rect(x, y, rx, ry, rw, rh)
+    return x >= rx and x <= rx + rw and y >= ry and y <= ry + rh
+end
+
+-- Удобная проверка попадания в ноду по её id (через gui.pick_node).
+function M.pick_node(id, x, y)
+    local n = M.get_node(id)
+    if not n or not gui.is_enabled(n) then return false end
+    return gui.pick_node(n, x, y) and true or false
+end
+
+-- ===========================================================================
+-- Animations / feedback
+-- ===========================================================================
+
+-- Короткий flash через color.w. Стандартный визуальный feedback на тап
+-- по UI-элементу. Принимает либо строку-id, либо саму ноду.
+-- opts = { low = 0.3, dur_down = 0.08, dur_up = 0.18 }
+function M.flash_node(id_or_node, opts)
+    local n = id_or_node
+    if type(n) == "string" then n = M.get_node(n) end
+    if not n then return end
+    opts = opts or {}
+    local low      = opts.low or 0.3
+    local dur_down = opts.dur_down or 0.08
+    local dur_up   = opts.dur_up or 0.18
+    local c        = gui.get_color(n)
+    local c0w      = c.w
+    gui.animate(n, "color.w",
+        math.max(0.25, c0w * low),
+        gui.EASING_OUTQUAD, dur_down, 0,
+        function()
+            gui.animate(n, "color.w", c0w, gui.EASING_OUTQUAD, dur_up)
+        end)
+end
+
+-- Отменяет основные анимации на ноде. Полезно перед перезапуском
+-- собственной анимации, чтобы старая не конкурировала с новой.
+function M.cancel_animations(id_or_node)
+    local n = id_or_node
+    if type(n) == "string" then n = M.get_node(n) end
+    if not n then return end
+    gui.cancel_animation(n, "position")
+    gui.cancel_animation(n, "position.x")
+    gui.cancel_animation(n, "position.y")
+    gui.cancel_animation(n, "position.z")
+    gui.cancel_animation(n, "color")
+    gui.cancel_animation(n, "color.w")
+    gui.cancel_animation(n, "scale")
+    gui.cancel_animation(n, "rotation")
+end
+
+-- ===========================================================================
+-- Tree (clone / delete)
+-- ===========================================================================
+
+function M.clone_tree(id_or_node)
+    local n = id_or_node
+    if type(n) == "string" then n = M.get_node(n) end
+    if not n then return nil end
+    return gui.clone_tree(n)
+end
+
+function M.delete_tree(node)
+    if node then gui.delete_node(node) end
+end
+
+-- ===========================================================================
+-- Vector shortcuts
+-- ===========================================================================
+
+function M.color4(r, g, b, a)
     return vmath.vector4(r or 0, g or 0, b or 0, a or 1)
 end
 
--- Создает вектор позиции
 function M.vec3(x, y, z)
     return vmath.vector3(x or 0, y or 0, z or 0)
-end
-
--- Логирование с префиксом
-function M.log(system, message)
-    print("[" .. system .. "] " .. tostring(message))
-end
-
-function M.warn(system, message)
-    print("[" .. system .. "] ⚠️ " .. tostring(message))
-end
-
-function M.error(system, message)
-    print("[" .. system .. "] ❌ " .. tostring(message))
 end
 
 return M

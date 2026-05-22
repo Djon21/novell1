@@ -1,0 +1,544 @@
+fonts {
+  name: "jb_mono_10"
+  font: "/main/fonts/jb_mono_10.font"
+}
+fonts {
+  name: "jb_mono_12"
+  font: "/main/fonts/jb_mono_12.font"
+}
+fonts {
+  name: "jb_mono_bold_14"
+  font: "/main/fonts/jb_mono_bold_14.font"
+}
+fonts {
+  name: "jb_mono_bold_16"
+  font: "/main/fonts/jb_mono_bold_16.font"
+}
+fonts {
+  name: "jb_mono_bold_20"
+  font: "/main/fonts/jb_mono_bold_20.font"
+}
+fonts {
+  name: "arial_bold_20"
+  font: "/main/fonts/arial_bold_20.font"
+}
+fonts {
+  name: "unbounded_bold_20"
+  font: "/main/fonts/unbounded_bold_20.font"
+}
+fonts {
+  name: "unbounded_bold_32"
+  font: "/main/fonts/unbounded_bold_32.font"
+}
+fonts {
+  name: "icons"
+  font: "/main/fonts/icons.font"
+}
+fonts {
+  name: "manrope_14"
+  font: "/main/fonts/manrope_14.font"
+}
+fonts {
+  name: "manrope_16"
+  font: "/main/fonts/manrope_16.font"
+}
+fonts {
+  name: "Manrope-Medium_16"
+  font: "/main/fonts/Manrope-Medium_16.font"
+}
+textures {
+  name: "icon_phone"
+  texture: "/main/images/phone/icon_phone.atlas"
+}
+textures {
+  name: "map2"
+  texture: "/main/images/phone/map2.atlas"
+}
+textures {
+  name: "ui_common"
+  texture: "/main/images/ui_common.atlas"
+}
+nodes {
+  position {
+    z: 0.03
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "list_root"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 528.0
+    y: 662.0
+    z: 0.556
+  }
+  size {
+    x: 366.0
+    y: 34.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\320\241\320\236\320\236\320\221\320\251\320\225\320\235\320\230\320\257"
+  font: "unbounded_bold_32"
+  id: "side_title"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "list_root"
+  alpha: 0.97
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 524.0
+    y: 586.0
+    z: 0.544
+  }
+  size {
+    x: 660.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "sms_header_line"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "list_root"
+  alpha: 0.15
+}
+nodes {
+  position {
+    x: 1188.0
+    y: 112.0
+    z: 0.54
+  }
+  size {
+    x: 4.0
+    y: 458.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "sms_scrollbar_track"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "list_root"
+  alpha: 0.08
+}
+nodes {
+  position {
+    x: 1188.0
+    y: 428.0
+    z: 0.545
+  }
+  size {
+    x: 4.0
+    y: 142.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "sms_scrollbar_thumb"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "list_root"
+  alpha: 0.7
+}
+nodes {
+  position {
+    x: 524.0
+    y: 518.0
+    z: 0.032
+  }
+  size {
+    x: 660.0
+    y: 56.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "msg1_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "list_root"
+  alpha: 0.6
+}
+nodes {
+  position {
+    x: -3.0
+    y: 30.0
+    z: 0.055
+  }
+  size {
+    x: 6.0
+    y: 18.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
+  type: TYPE_BOX
+  id: "msg1_dot"
+  pivot: PIVOT_SW
+  parent: "msg1_bg"
+}
+nodes {
+  position {
+    x: 16.0
+    y: 41.0
+    z: 0.056
+  }
+  size {
+    x: 360.0
+    y: 18.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_TEXT
+  text: "\342\200\224"
+  font: "unbounded_bold_20"
+  id: "msg1_name"
+  pivot: PIVOT_W
+  parent: "msg1_bg"
+  alpha: 0.95
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 648.0
+    y: 37.0
+    z: 0.056
+  }
+  size {
+    x: 92.0
+    y: 10.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  text: "\342\200\224"
+  font: "jb_mono_10"
+  id: "msg1_time"
+  pivot: PIVOT_E
+  parent: "msg1_bg"
+  alpha: 0.72
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 16.0
+    y: 18.0
+    z: 0.056
+  }
+  size {
+    x: 500.0
+    y: 14.0
+  }
+  color {
+    x: 0.788
+    y: 0.753
+    z: 0.659
+  }
+  type: TYPE_TEXT
+  font: "Manrope-Medium_16"
+  id: "msg1_body"
+  pivot: PIVOT_W
+  parent: "msg1_bg"
+  alpha: 0.86
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 564.0
+    y: 7.0
+    z: 0.052
+  }
+  size {
+    x: 86.0
+    y: 16.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
+  type: TYPE_BOX
+  id: "msg1_pin_bg"
+  pivot: PIVOT_SW
+  parent: "msg1_bg"
+  alpha: 0.15
+}
+nodes {
+  position {
+    x: 4.0
+    y: 13.0
+    z: 0.055
+  }
+  size {
+    x: 70.0
+    y: 1.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
+  type: TYPE_BOX
+  id: "msg1_pin_border_t"
+  pivot: PIVOT_SW
+  parent: "msg1_pin_bg"
+  alpha: 0.5
+}
+nodes {
+  position {
+    x: 4.0
+    y: 1.0
+    z: 0.055
+  }
+  size {
+    x: 70.0
+    y: 1.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
+  type: TYPE_BOX
+  id: "msg1_pin_border_b"
+  pivot: PIVOT_SW
+  parent: "msg1_pin_bg"
+  alpha: 0.5
+}
+nodes {
+  position {
+    x: 4.0
+    y: 1.0
+    z: 0.055
+  }
+  size {
+    x: 1.0
+    y: 13.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
+  type: TYPE_BOX
+  id: "msg1_pin_border_l"
+  pivot: PIVOT_SW
+  parent: "msg1_pin_bg"
+  alpha: 0.5
+}
+nodes {
+  position {
+    x: 73.0
+    y: 1.0
+    z: 0.055
+  }
+  size {
+    x: 1.0
+    y: 13.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
+  type: TYPE_BOX
+  id: "msg1_pin_border_r"
+  pivot: PIVOT_SW
+  parent: "msg1_pin_bg"
+  alpha: 0.5
+}
+nodes {
+  position {
+    x: 43.0
+    y: 8.0
+    z: 0.062
+  }
+  size {
+    x: 76.0
+    y: 10.0
+  }
+  color {
+    y: 0.702
+    z: 0.278
+  }
+  type: TYPE_TEXT
+  font: "jb_mono_10"
+  id: "msg1_pin"
+  parent: "msg1_pin_bg"
+  alpha: 0.95
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  size {
+    x: 660.0
+    y: 56.0
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "border_msg1"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "msg1_bg"
+  slice9 {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+    w: 2.0
+  }
+}
+nodes {
+  position {
+    x: 6.0
+    y: 2.0
+    z: 0.053
+  }
+  size {
+    x: 50.0
+    y: 50.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "msg1_av_bg"
+  pivot: PIVOT_SW
+  parent: "msg1_bg"
+  alpha: 0.15
+}
+nodes {
+  position {
+    y: 49.0
+    z: 0.054
+  }
+  size {
+    x: 50.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "msg1_av_b_t"
+  pivot: PIVOT_SW
+  parent: "msg1_av_bg"
+  alpha: 0.55
+}
+nodes {
+  position {
+    z: 0.054
+  }
+  size {
+    x: 50.0
+    y: 1.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "msg1_av_b_b"
+  pivot: PIVOT_SW
+  parent: "msg1_av_bg"
+  alpha: 0.55
+}
+nodes {
+  position {
+    z: 0.054
+  }
+  size {
+    x: 1.0
+    y: 50.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "msg1_av_b_l"
+  pivot: PIVOT_SW
+  parent: "msg1_av_bg"
+  alpha: 0.55
+}
+nodes {
+  position {
+    x: 49.0
+    z: 0.054
+  }
+  size {
+    x: 1.0
+    y: 50.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "msg1_av_b_r"
+  pivot: PIVOT_SW
+  parent: "msg1_av_bg"
+  alpha: 0.55
+}
+nodes {
+  position {
+    x: 25.0
+    y: 27.0
+    z: 0.056
+  }
+  size {
+    x: 48.0
+    y: 18.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "??"
+  font: "unbounded_bold_20"
+  id: "msg1_av"
+  parent: "msg1_av_bg"
+  alpha: 0.95
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT

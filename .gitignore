@@ -1,13 +1,14 @@
-```
-# Godot-specific ignores
-*.import
-*.pid
-.project
-.user
-.godot/
+# Local project/worktree files
+/.editor_settings
+/.internal
+/build
+.externalToolBuilders
+builtins
 
-# Compiled and build artifacts
+# Defold / build artifacts
+.lock-wscript
 *.pyc
+*.pyo
 __pycache__/
 *.o
 *.obj
@@ -17,25 +18,58 @@ __pycache__/
 *.a
 *.out
 
-# Dependencies
-node_modules/
-venv/
-.venv/
+# Ink compiler binaries (download locally into tools/)
+tools/inklecate.exe
+tools/ink-engine-runtime.dll
+tools/ink_compiler.dll
+
+# GUI/generated backups
+*.bak_menu
+*.bak
+*.tmp
+*.orig
+*.rej
+*.log
+
+# Claude / design handoff
+.claude/settings.local.json
+.claude/worktrees/
+.design_*.html
+
+# Secrets / signing keys
+manifest.private.der
+manifest.public.der
+*.keystore
+*.jks
+*.p12
+*.pfx
+*.pem
+*.key
+*.pass.txt
+*password*
+secrets.json
+credentials.json
+
+# Environment
 .env
 .env.local
 .env.*
+!.env.example
 
-# Logs and temp files
-*.log
-*.tmp
-*.swp
-*.swo
+# Dependencies
+node_modules/
+npm-debug.log*
+venv/
+.venv/
 
-# Editors
+# Editors / OS
 .vscode/
 .idea/
-
-# System files
+*.iml
+*.swp
+*.swo
+*~
+desktop.ini
 .DS_Store
 Thumbs.db
 
@@ -67,4 +101,3 @@ htmlcov/
 *.tar.bz2
 *.tar.xz
 *.tar.zst
-```

@@ -1,9 +1,13 @@
 @echo off
-REM compile_ink.bat — Windows-версия компилятора .ink в .json
-REM Использование:
-REM   tools\compile_ink.bat          — все .ink
-REM   tools\compile_ink.bat hello    — только hello.ink
-REM Запускать из корня проекта (папка с game.project).
+REM compile_ink.bat -- compile Ink sources in main/story into JSON.
+REM Usage:
+REM   tools\compile_ink.bat             -- compile active .ink files
+REM   tools\compile_ink.bat chapter_01  -- compile only chapter_01.ink
+REM
+REM Notes:
+REM - Run from the project root (where game.project lives).
+REM - Files ending with _old.ink are treated as archive sources and are
+REM   skipped during bulk compilation. They can still be compiled explicitly.
 
 setlocal enabledelayedexpansion
 
@@ -21,7 +25,14 @@ set OK=0
 set FAIL=0
 
 if "%~1"=="" (
-    for %%F in ("%STORY_DIR%\*.ink") do call :compile "%%F"
+    for %%F in ("%STORY_DIR%\*.ink") do (
+        set "NAME=%%~nF"
+        if /I not "!NAME:~-4!"=="_old" (
+            call :compile "%%F"
+        ) else (
+            echo - skip archive %%~nxF
+        )
+    )
 ) else (
     call :compile "%STORY_DIR%\%~1.ink"
 )
@@ -37,6 +48,7 @@ if not exist "%INK%" (
     set /a FAIL+=1
     goto :eof
 )
+
 set "NAME=%~n1"
 set "JSON=%STORY_DIR%\%NAME%.json"
 echo - %NAME%.ink
