@@ -67,13 +67,13 @@ nodes {
 }
 nodes {
   position {
-    x: 524.0
-    y: 678.0
-    z: 0.052
+    x: 540.0
+    y: 56.0
+    z: 0.552
   }
   size {
-    x: 110.0
-    y: 30.0
+    x: 150.0
+    y: 34.0
   }
   color {
     x: 0.078
@@ -87,12 +87,17 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "thread_root"
-  alpha: 0.6
+  alpha: 0.36
 }
 nodes {
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.054
+  }
   size {
-    x: 110.0
-    y: 30.0
+    x: 150.0
+    y: 34.0
   }
   type: TYPE_BOX
   texture: "ui_common/border"
@@ -109,12 +114,12 @@ nodes {
 }
 nodes {
   position {
-    x: 72.0
-    y: 16.0
+    x: 75.0
+    y: 17.0
     z: 0.059
   }
   size {
-    x: 124.0
+    x: 130.0
     y: 18.0
   }
   color {
@@ -130,19 +135,19 @@ nodes {
   pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "th_back_bg"
-  alpha: 0.95
+  alpha: 0.92
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 660.0
-    y: 651.0
+    x: 540.0
+    y: 650.0
     z: 0.559
   }
   size {
-    x: 340.0
-    y: 36.0
+    x: 610.0
+    y: 30.0
   }
   color {
     x: 0.953
@@ -163,13 +168,13 @@ nodes {
 }
 nodes {
   position {
-    x: 524.0
-    y: 604.0
+    x: 540.0
+    y: 622.0
     z: 0.559
   }
   size {
-    x: 370.0
-    y: 36.0
+    x: 610.0
+    y: 18.0
   }
   color {
     x: 0.788
@@ -210,7 +215,7 @@ nodes {
   yanchor: YANCHOR_TOP
   pivot: PIVOT_SW
   parent: "thread_root"
-  alpha: 0.6
+  alpha: 0.00
 }
 nodes {
   size {
@@ -229,6 +234,7 @@ nodes {
     z: 2.0
     w: 2.0
   }
+  alpha: 0.00
 }
 nodes {
   position {
@@ -250,7 +256,7 @@ nodes {
   font: "jb_mono_bold_14"
   id: "th_call_label"
   parent: "th_call_bg"
-  alpha: 0.78
+  alpha: 0.00
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
@@ -275,7 +281,7 @@ nodes {
   yanchor: YANCHOR_TOP
   pivot: PIVOT_SW
   parent: "thread_root"
-  alpha: 0.6
+  alpha: 0.00
 }
 nodes {
   size {
@@ -294,6 +300,7 @@ nodes {
     z: 2.0
     w: 2.0
   }
+  alpha: 0.00
 }
 nodes {
   position {
@@ -315,7 +322,7 @@ nodes {
   font: "jb_mono_bold_14"
   id: "th_info_label"
   parent: "th_info_bg"
-  alpha: 0.78
+  alpha: 0.00
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
@@ -340,7 +347,7 @@ nodes {
   yanchor: YANCHOR_TOP
   pivot: PIVOT_SW
   parent: "thread_root"
-  alpha: 0.6
+  alpha: 0.00
 }
 nodes {
   size {
@@ -359,6 +366,7 @@ nodes {
     z: 2.0
     w: 2.0
   }
+  alpha: 0.00
 }
 nodes {
   position {
@@ -380,18 +388,18 @@ nodes {
   font: "jb_mono_bold_14"
   id: "th_menu_label"
   parent: "th_menu_bg"
-  alpha: 0.78
+  alpha: 0.00
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 524.0
-    y: 586.0
-    z: 0.544
+    x: 540.0
+    y: 600.0
+    z: 0.552
   }
   size {
-    x: 660.0
+    x: 630.0
     y: 1.0
   }
   color {
@@ -408,13 +416,13 @@ nodes {
 }
 nodes {
   position {
-    x: 854.0
-    y: 382.0
+    x: 855.0
+    y: 357.0
     z: 0.559
   }
   size {
-    x: 420.0
-    y: 16.0
+    x: 550.0
+    y: 22.0
   }
   color {
     x: 0.788
@@ -427,19 +435,19 @@ nodes {
   id: "th_empty"
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "thread_root"
-  alpha: 0.72
+  alpha: 0.75
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
     x: 540.0
-    y: 520.0
-    z: 0.048
+    y: 500.0
+    z: 0.052
   }
   size {
-    x: 420.0
-    y: 40.0
+    x: 260.0
+    y: 46.0
   }
   color {
     x: 0.078
@@ -451,17 +459,17 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "thread_root"
-  alpha: 0.7
+  alpha: 0.22
 }
 nodes {
   position {
-    x: 12.0
-    y: 21.0
+    x: 16.0
+    y: 34.0
     z: 0.059
   }
   size {
-    x: 396.0
-    y: 28.0
+    x: 228.0
+    y: 20.0
   }
   color {
     x: 0.953
@@ -477,14 +485,19 @@ nodes {
   adjust_mode: ADJUST_MODE_STRETCH
   line_break: true
   parent: "bub1_bg"
-  alpha: 0.95
+  alpha: 0.92
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.054
+  }
   size {
-    x: 420.0
-    y: 40.0
+    x: 260.0
+    y: 46.0
   }
   type: TYPE_BOX
   texture: "ui_common/border"
@@ -498,15 +511,16 @@ nodes {
     z: 2.0
     w: 2.0
   }
+  alpha: 0.12
 }
 nodes {
   position {
-    x: 408.0
+    x: 248.0
     y: 8.0
     z: 0.059
   }
   size {
-    x: 50.0
+    x: 236.0
     y: 10.0
   }
   color {
@@ -519,18 +533,18 @@ nodes {
   id: "bub1_stamp"
   pivot: PIVOT_E
   parent: "bub1_bg"
-  alpha: 0.74
+  alpha: 0.52
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 524.0
-    y: 109.0
-    z: 0.544
+    x: 540.0
+    y: 110.0
+    z: 0.552
   }
   size {
-    x: 660.0
+    x: 630.0
     y: 1.0
   }
   color {
@@ -543,17 +557,17 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "thread_root"
-  alpha: 0.15
+  alpha: 0.10
 }
 nodes {
   position {
-    x: 1188.0
-    y: 154.0
-    z: 0.544
+    x: 1194.0
+    y: 134.0
+    z: 0.552
   }
   size {
     x: 4.0
-    y: 426.0
+    y: 446.0
   }
   color {
     x: 0.953
@@ -568,9 +582,9 @@ nodes {
 }
 nodes {
   position {
-    x: 1188.0
+    x: 1194.0
     y: 500.0
-    z: 0.545
+    z: 0.553
   }
   size {
     x: 4.0
@@ -584,17 +598,17 @@ nodes {
   id: "th_scrollbar_thumb"
   pivot: PIVOT_SW
   parent: "thread_root"
-  alpha: 0.18
+  alpha: 0.70
 }
 nodes {
   position {
-    x: 524.0
-    y: 61.0
-    z: 0.052
+    x: 1002.0
+    y: 56.0
+    z: 0.552
   }
   size {
-    x: 660.0
-    y: 38.0
+    x: 168.0
+    y: 34.0
   }
   color {
     x: 0.49
@@ -605,11 +619,17 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "thread_root"
+  alpha: 0.36
 }
 nodes {
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.054
+  }
   size {
-    x: 660.0
-    y: 38.0
+    x: 168.0
+    y: 34.0
   }
   type: TYPE_BOX
   texture: "ui_common/border"
@@ -626,13 +646,13 @@ nodes {
 }
 nodes {
   position {
-    x: 317.0
-    y: 19.0
+    x: 84.0
+    y: 17.0
     z: 0.059
   }
   size {
-    x: 120.0
-    y: 20.0
+    x: 148.0
+    y: 18.0
   }
   color {
     x: 0.031
@@ -645,7 +665,7 @@ nodes {
   id: "th_send_label"
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "th_send_bg"
-  alpha: 0.95
+  alpha: 0.92
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }

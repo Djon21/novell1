@@ -1,18 +1,4 @@
--- LAYOUT_FIX_V8_SYMMETRIC_GUTTERS: thread uses real panel gutters; scrollbar is near the right frame, no fake right dead zone.
--- LAYOUT_FIX_V9_HEADER_TIDY: lowered back button, rebuilt thread header into a cleaner two-row block.
--- LAYOUT_FIX_V10_FOOTER_BACK_CLEAN_HEADER: moved inbox/back action into footer row and simplified header alignment.
--- LAYOUT_FIX_V11_HEADER_FIX_NO_SIDE_ICONS: footer buttons lifted, header title brought inside frame, th_call/th_info/th_menu hidden.
--- LAYOUT_FIX_V12_NO_HEADER_GARBAGE: hard-disables header side icons after view toggles and removes their hit tests.
--- LAYOUT_FIX_V16_COMPACT_HEADER_REAL: actually compresses the thread header and gives the saved height back to the bubble viewport.
--- LAYOUT_FIX_V17_NO_HEADER_OVERLAP: fixes thread virtualization so partially visible top bubbles cannot draw into the compact header.
--- LAYOUT_FIX_V18_VISUAL_POLISH: calmer bubble surfaces, fewer debug-like outlines, wider breathing gaps.
--- LAYOUT_FIX_V14_FOOTER_INBOX_BUTTON: fixes footer inbox button pivots/child layout to match reply action.
--- LAYOUT_FIX_V13_COMPACT_HEADER_FOOTER: compacts header/footer, enlarges bubble viewport, and restyles inbox button to match reply action.
 -- phone_sms.gui_script
--- LAYOUT_FIX_V3: right SMS thread geometry was normalized after screenshot review.
--- LAYOUT_FIX_V4_ADULT: compact composer, balanced chat margins, tighter message viewport.
--- LAYOUT_FIX_V5_MESSENGER: adds real input field nodes, dynamic bubble widths, calmer borders.
--- LAYOUT_FIX_V6_NO_INPUT: no input field; single compact reply action and tighter footer rhythm.
 -- SMS app v2 with GUI Templates:
 --   phone_sms.gui = host/root only
 --   phone_sms_list_template.gui = inbox list
@@ -21,8 +7,8 @@
 -- Runtime rules:
 --   - app scripts do not acquire input focus; phone_v2_root forwards input.
 --   - SMS is hidden in init/close_app by disabling sms_runtime_root.
---   - list rows support drag/wheel scrolling when more than 7 threads exist.
---   - input/SEND in thread calls the old sms_open_contact flow through ui_manager.
+--   - inbox rows use drag_scroll; thread messages use direct pixel scrolling.
+--   - reply action in thread calls the old sms_open_contact flow through ui_manager.
 
 local drag_scroll = require "main.gui.modules.drag_scroll"
 local MSG = require "main.gui.modules.messages"
@@ -33,7 +19,7 @@ local UI_MGR = "#ui_manager_v2"
 local PHONE_ROOT = "#phone_v2"
 
 local MAX_ROWS = 6
-local MAX_BUBBLES = 8
+local MAX_BUBBLES = 10
 local LIST_SCROLL_STEP_PX = 64
 local LIST_DRAG_THRESHOLD_PX = 8
 local function dbg(...) log.debug("phone_sms", ...) end
@@ -52,7 +38,6 @@ local point_in_rect = U.point_in_rect
 local PANEL_X, PANEL_Y = 500, 40
 local PANEL_W, PANEL_H = 728, 640
 local CONTENT_X = 524
-local CONTENT_R = 1154
 local SCROLL_X = 1188
 local SCROLL_W = 4
 local LIST_TOP = 594
@@ -60,40 +45,33 @@ local LIST_BOTTOM = 112
 local LIST_H = LIST_TOP - LIST_BOTTOM
 local ROW_W, ROW_H, ROW_GAP = 660, 72, 10
 
--- Thread layout is intentionally separate from inbox ROW_W. The old script
--- mixed list-row geometry with message-thread geometry, which made the chat
--- look like a table. Keep the thread on its own grid:
---   THREAD_X..THREAD_R: message column
---   THREAD_SCROLL_X: scrollbar just outside the message column
---   THREAD_SAFE_BOTTOM..THREAD_TOP: bubble viewport
---   THREAD_DIVIDER_Y / THREAD_ACTION_*: footer action area, no input field
-local THREAD_X = 524
-local THREAD_R = 1184
+-- Thread layout is separate from inbox row geometry.
+local THREAD_X = 540
+local THREAD_R = 1170
 local THREAD_W = THREAD_R - THREAD_X
-local THREAD_TOP = 568
-local THREAD_DIVIDER_Y = 102
-local THREAD_SAFE_BOTTOM = 132
-local THREAD_ACTION_Y = 50
-local THREAD_ACTION_H = 32
-local THREAD_ACTION_W = 170
+local THREAD_TOP = 580
+local THREAD_DIVIDER_Y = 110
+local THREAD_SAFE_BOTTOM = 134
+local THREAD_ACTION_Y = 56
+local THREAD_ACTION_H = 34
+local THREAD_ACTION_W = 168
 local THREAD_SEND_X, THREAD_SEND_Y = THREAD_R - THREAD_ACTION_W, THREAD_ACTION_Y
 local THREAD_SEND_W, THREAD_SEND_H = THREAD_ACTION_W, THREAD_ACTION_H
-local THREAD_SCROLL_X = 1200
+local THREAD_SCROLL_X = 1194
 local THREAD_SCROLL_W = 4
 local THREAD_SCROLL_H = THREAD_TOP - THREAD_SAFE_BOTTOM
-local BUBBLE_GAP = 16
-local BUBBLE_H = 42
-local BUBBLE_SYS_H = 20
-local BUBBLE_LINE_H = 20
-local BUBBLE_PAD_X = 18
+local BUBBLE_GAP = 12
+local BUBBLE_H = 46
+local BUBBLE_SYS_H = 22
+local BUBBLE_LINE_H = 19
+local BUBBLE_PAD_X = 16
 local BUBBLE_PAD_TOP = 12
-local BUBBLE_STAMP_AREA_H = 18
-local BUBBLE_IN_MIN_W, BUBBLE_OUT_MIN_W = 220, 190
-local BUBBLE_IN_MAX_W, BUBBLE_OUT_MAX_W = 520, 410
-local BUBBLE_AVG_GLYPH_W = 8.6
-local THREAD_WHEEL_STEP_PX = 72
-local THREAD_DRAG_STEP_PX = 12
-local THREAD_DRAG_THRESHOLD_PX = 8
+local BUBBLE_STAMP_AREA_H = 17
+local BUBBLE_IN_MIN_W, BUBBLE_OUT_MIN_W = 176, 164
+local BUBBLE_IN_MAX_W, BUBBLE_OUT_MAX_W = 438, 438
+local BUBBLE_AVG_GLYPH_W = 8.3
+local THREAD_WHEEL_STEP_PX = 14
+local THREAD_DRAG_THRESHOLD_PX = 5
 
 local gs_cache = nil
 local dm_cache = nil
@@ -306,9 +284,7 @@ local function set_many_enabled(ids, enabled)
 end
 
 local function hide_thread_side_actions()
-    -- These nodes still exist in the .gui template, but this SMS thread design
-    -- no longer uses call/info/menu buttons. Hide both the virtual ids and the
-    -- real template border ids so set_view() cannot accidentally re-enable them.
+    -- Thread template keeps legacy call/info/menu nodes for compatibility only.
     for _, id in ipairs({
         "th_call_bg", "th_call_border", "th_call_label",
         "th_info_bg", "th_info_border", "th_info_label",
@@ -932,10 +908,10 @@ local function apply_static_layout()
     -- Thread header and input bar. Bubble positions are data-driven in render_bubble.
     -- In v10 the inbox/back action is moved out of the header into the footer,
     -- so the top area becomes a simpler title + meta block with a neat action cluster.
-    local HEADER_TITLE_Y = 652
-    local HEADER_META_Y = 620
-    local HEADER_LINE_Y = 604
-    local FOOTER_BACK_W, FOOTER_BACK_H = 144, THREAD_ACTION_H
+    local HEADER_TITLE_Y = 650
+    local HEADER_META_Y = 622
+    local HEADER_LINE_Y = 600
+    local FOOTER_BACK_W, FOOTER_BACK_H = 150, THREAD_ACTION_H
     local FOOTER_BACK_X, FOOTER_BACK_Y = THREAD_X, THREAD_ACTION_Y
 
     set_box("th_header_line", THREAD_X, HEADER_LINE_Y, THREAD_W, 1, COLORS.paper, 0.15)
@@ -959,15 +935,16 @@ local function apply_static_layout()
     set_color("th_back_label", COLORS.accent, 0.92)
 
     set_pos("th_name", THREAD_X, HEADER_TITLE_Y, 0.559)
-    set_size("th_name", 360, 34)
+    set_size("th_name", THREAD_W - 20, 30)
     set_color("th_name", COLORS.paper, 0.95)
 
     set_pos("th_num", THREAD_X, HEADER_META_Y, 0.559)
-    set_size("th_num", 420, 20)
+    set_size("th_num", THREAD_W - 20, 18)
     set_color("th_num", COLORS.paper_dim, 0.78)
 
     hide_thread_side_actions()
     set_pos("th_empty", THREAD_X + THREAD_W / 2, (THREAD_SAFE_BOTTOM + THREAD_TOP) / 2, 0.559)
+    set_size("th_empty", THREAD_W - 80, 22)
 
     -- Message viewport. The scrollbar stops above the composer, so it does
     -- not visually collide with the divider or SEND button.
@@ -1130,7 +1107,7 @@ local function render_bubble(slot, sms, y)
         local w, h = layout.w, layout.h
         local x = THREAD_X + (THREAD_W - w) / 2
         set_box(p .. "_bg", x, y, w, h, COLORS.dark, typ == "daysep" and 0.40 or 0.22)
-        set_border(p, x, y, w, h, COLORS.paper_dim, 0.08)
+        set_border(p, x, y, w, h, COLORS.paper_dim, 0.05)
         set_local_pos(p .. "_text", w / 2, h / 2, 0.059)
         set_size(p .. "_text", w - 20, h - 8)
         set_text(p .. "_text", layout.text)
@@ -1151,8 +1128,8 @@ local function render_bubble(slot, sms, y)
     local x = is_out and (THREAD_R - w) or THREAD_X
     local bg = is_out and COLORS.accent or (is_hot and COLORS.card_hot or COLORS.card)
     local border = is_out and COLORS.accent or (is_hot and COLORS.hot or COLORS.accent)
-    local bg_alpha = is_out and 0.16 or 0.18
-    local border_alpha = is_out and 0.34 or (is_hot and 0.30 or 0.09)
+    local bg_alpha = is_out and 0.20 or 0.22
+    local border_alpha = is_out and 0.28 or (is_hot and 0.26 or 0.12)
 
     set_box(p .. "_bg", x, y, w, h, bg, bg_alpha)
     set_border(p, x, y, w, h, border, border_alpha)
@@ -1168,7 +1145,7 @@ local function render_bubble(slot, sms, y)
     set_local_pos(p .. "_text", BUBBLE_PAD_X, h - BUBBLE_PAD_TOP, 0.059)
     set_size(p .. "_text", w - BUBBLE_PAD_X * 2, math.max(BUBBLE_LINE_H, layout.lines * BUBBLE_LINE_H))
     set_text(p .. "_text", raw_text)
-    set_color(p .. "_text", COLORS.paper, is_out and 0.94 or 0.90)
+    set_color(p .. "_text", COLORS.paper, is_out and 0.96 or 0.92)
 
     local status = sms.status or (is_out and "delivered" or nil)
     local stamp = tostring(sms.time or "")
@@ -1180,6 +1157,8 @@ local function render_bubble(slot, sms, y)
         elseif status == "sending" then stamp = stamp .. " · ОТПР..."
         elseif status == "failed" then stamp = stamp .. " · ОШИБКА" end
     end
+    local snode = get_node(p .. "_stamp")
+    if snode then gui.set_pivot(snode, gui.PIVOT_E) end
     set_local_pos(p .. "_stamp", w - 12, 8, 0.059)
     set_size(p .. "_stamp", w - 24, 10)
     set_text(p .. "_stamp", stamp)
@@ -1343,28 +1322,20 @@ render_thread = function(self)
         return
     end
 
-    -- Pixel-based virtualization: oldest messages are at the top of the
-    -- virtual column, newest at the bottom, like a normal chat.
+    -- Oldest messages are at the top of the virtual column; newest at the bottom.
     local layout, content_h = build_thread_layout(chat)
     clamp_thread_offset(self, content_h)
     local view_top = self.thread_offset or 0
     local view_bottom = view_top + THREAD_SCROLL_H
-    -- If the thread fits in the viewport, anchor it to the bottom like a real
-    -- messenger. The previous top-anchored layout left a large dead zone above
-    -- the reply button and made the screen feel unfinished.
     local bottom_anchor_shift = math.max(0, THREAD_SCROLL_H - content_h)
     local slot = 1
 
     for idx = 1, #chat do
         local item = layout[idx]
-        -- Only draw bubbles that are fully inside the virtual viewport.
-        -- The old condition allowed a partially visible top bubble to extend
-        -- above THREAD_TOP and visually collide with the compact header line.
-        -- Without a real clipping node, hiding partial bubbles is safer than
-        -- letting them bleed into the header.
+        -- No clipping node is used here, so partially visible bubbles are hidden.
         if item and item.bottom >= view_top and item.top <= view_bottom then
             local y = THREAD_TOP - (item.top - view_top) - bottom_anchor_shift
-            if y >= THREAD_SAFE_BOTTOM and (y + item.height) <= THREAD_TOP then
+            if y >= THREAD_SAFE_BOTTOM - 2 and (y + item.height) <= THREAD_TOP + 2 then
                 render_bubble(slot, chat[idx], y)
                 slot = slot + 1
             end
@@ -1372,6 +1343,13 @@ render_thread = function(self)
         end
     end
     update_thread_scrollbar(self, content_h)
+end
+
+local function reset_thread_drag(self)
+    self.thread_dragging = false
+    self.thread_drag_started = false
+    self.thread_drag_last_y = nil
+    self.thread_drag_total = 0
 end
 
 local function set_view(self, view)
@@ -1397,9 +1375,8 @@ local function set_view(self, view)
     set_many_enabled(LIST_NODE_IDS, show_list)
     set_many_enabled(THREAD_NODE_IDS, show_thread)
     hide_thread_side_actions()
-    if show_list and self.thread_drag then drag_scroll.reset(self.thread_drag) end
+    if show_list then reset_thread_drag(self) end
     if show_thread and self.list_drag then drag_scroll.reset(self.list_drag) end
-    -- Pulse только в thread-режиме. List-режим — гарантированный stop.
     if not show_thread and self.sms_pulse_active then
         stop_sms_send_pulse()
         self.sms_pulse_active = false
@@ -1483,17 +1460,14 @@ local function wheel_rows_from_action(action_id, action)
 
     local v = 0
     if action then
-        -- Depending on input binding/platform, wheel data can arrive as value,
-        -- dy, or even y. Root forwards all of these fields through phone_input.
+        -- Wheel data can arrive as value, dy, or y depending on binding/platform.
         v = tonumber(action.value) or 0
         if v == 0 then v = tonumber(action.dy) or 0 end
         if v == 0 and action_id ~= MSG.touch then v = tonumber(action.y) or 0 end
     end
     if v == 0 then return 0 end
 
-    -- Defold/custom bindings differ in sign. Common convention:
-    -- positive = wheel up, negative = wheel down. If the project uses explicit
-    -- *_down action ids, the branch above handles that before this sign rule.
+    -- Common convention: positive = wheel up, negative = wheel down.
     if v > 0 then return -1 end
     return 1
 end
@@ -1518,6 +1492,11 @@ local function is_inside_list(x, y)
     return point_in_rect(x, y, CONTENT_X, LIST_BOTTOM, ROW_W, LIST_H)
 end
 
+local function is_inside_thread_messages(x, y)
+    return point_in_rect(x, y, THREAD_X, THREAD_SAFE_BOTTOM, THREAD_W, THREAD_SCROLL_H)
+end
+
+
 local function trigger_reply_choices(self)
     if not self.active_contact_id then return false end
     -- Защита: тап на input/send когда отвечать нельзя (нет knot, уже
@@ -1528,21 +1507,49 @@ local function trigger_reply_choices(self)
     return true
 end
 
-local function handle_thread_touch(self, action_id, action)
+local function handle_thread_input(self, action_id, action)
     action = action or {}
     local x = action.x or 0
     local y = action.y or 0
 
+    -- Thread uses direct pixel scrolling; inbox/list still uses drag_scroll.
     local wheel_rows = wheel_rows_from_action(action_id, action)
-    if wheel_rows ~= 0 then return step_thread(self, wheel_rows * THREAD_WHEEL_STEP_PX) end
+    if wheel_rows ~= 0 then
+        step_thread(self, wheel_rows * THREAD_WHEEL_STEP_PX)
+        return true
+    end
     if action_id ~= MSG.touch then return true end
 
-    local result = drag_scroll.handle(self.thread_drag, action)
-    if result == "swallow" then
+    if action.pressed then
+        reset_thread_drag(self)
+        if is_inside_thread_messages(x, y) then
+            self.thread_dragging = true
+            self.thread_drag_last_y = y
+            self.thread_drag_total = 0
+        end
         return true
     end
 
-    if result == "tap" then
+    if self.thread_dragging and not action.released then
+        local last_y = self.thread_drag_last_y or y
+        local dy = y - last_y
+        self.thread_drag_last_y = y
+        self.thread_drag_total = (self.thread_drag_total or 0) + math.abs(dy)
+
+        if self.thread_drag_started or self.thread_drag_total >= THREAD_DRAG_THRESHOLD_PX then
+            self.thread_drag_started = true
+            if dy ~= 0 then
+                step_thread(self, -dy)
+            end
+        end
+        return true
+    end
+
+    if action.released then
+        local was_drag = self.thread_drag_started == true
+        reset_thread_drag(self)
+        if was_drag then return true end
+
         local back = get_node("th_back_bg")
         if back and gui.is_enabled(back) and gui.pick_node(back, x, y) then
             flash_node("th_back_bg")
@@ -1571,13 +1578,11 @@ local function handle_list_touch(self, action_id, action)
     if wheel_rows ~= 0 then return scroll_list(self, wheel_rows) end
     if action_id ~= MSG.touch then return false end
 
-    -- Drag-scroll через общий модуль drag_scroll (см. main/gui/modules).
     local result = drag_scroll.handle(self.list_drag, action)
     if result == "swallow" then
         return true
     end
     if result == "tap" then
-        -- Released без движения внутри list area → открываем тред строки.
         local contact_id, id = pick_row(self, x, y)
         if contact_id then
             flash_node(id)
@@ -1585,17 +1590,15 @@ local function handle_list_touch(self, action_id, action)
             open_thread(self, contact_id)
             return true
         end
-        return true  -- tap внутри списка, но не на строке (gap) — поглощаем
+        return true
     end
-    return false  -- "ignore" — press вне list area, пусть прокинется дальше
+    return false
 end
 
 local function handle_phone_input(self, action_id, action)
     if not self.visible then return false end
-    local x = action and action.x or 0
-    local y = action and action.y or 0
     if self.view == "thread" then
-        return handle_thread_touch(self, action_id, action or {})
+        return handle_thread_input(self, action_id, action or {})
     end
     return handle_list_touch(self, action_id, action or {})
 end
@@ -1617,12 +1620,7 @@ function init(self)
         is_inside    = is_inside_list,
         on_step      = function(owner, delta) scroll_list(owner, delta) end,
     })
-    self.thread_drag = drag_scroll.new({
-        step_px      = THREAD_DRAG_STEP_PX,
-        threshold_px = THREAD_DRAG_THRESHOLD_PX,
-        owner        = self,
-        on_step      = function(owner, delta) step_thread(owner, delta * THREAD_DRAG_STEP_PX) end,
-    })
+    reset_thread_drag(self)
     clone_rows()
     clone_bubbles()
     apply_static_layout()
@@ -1654,10 +1652,10 @@ function on_message(self, message_id, message, sender)
         self.active_contact_id = nil
         self.thread_offset = 0
         if self.list_drag then drag_scroll.reset(self.list_drag) end
-        if self.thread_drag then drag_scroll.reset(self.thread_drag) end
+        reset_thread_drag(self)
         self.view = "list"
         if self.sms_pulse_active then
-            stop_sms_send_pulse()  -- не крутим анимации в скрытом app
+            stop_sms_send_pulse()
             self.sms_pulse_active = false
         end
         set_all_enabled(false)
