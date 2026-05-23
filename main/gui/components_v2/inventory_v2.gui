@@ -16,10 +16,6 @@ fonts {
   font: "/main/fonts/unbounded_bold_32.font"
 }
 fonts {
-  name: "manrope_16"
-  font: "/main/fonts/manrope_16.font"
-}
-fonts {
   name: "jb_mono_bold_16"
   font: "/main/fonts/jb_mono_bold_16.font"
 }

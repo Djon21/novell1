@@ -38,10 +38,6 @@ fonts {
   name: "manrope_16"
   font: "/main/fonts/manrope_16.font"
 }
-fonts {
-  name: "manrope_16"
-  font: "/main/fonts/manrope_16.font"
-}
 textures {
   name: "icon_phone"
   texture: "/main/images/phone/icon_phone.atlas"
