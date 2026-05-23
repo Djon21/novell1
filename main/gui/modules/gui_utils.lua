@@ -256,4 +256,37 @@ function M.vec3(x, y, z)
     return vmath.vector3(x or 0, y or 0, z or 0)
 end
 
+-- ===========================================================================
+-- Shared color palette
+-- ===========================================================================
+--
+-- Единая палитра для всех phone GUI-компонентов. Раньше каждый gui_script
+-- определял свою копию — это приводило к дрифту значений (violet, card_hot).
+-- Теперь все берут цвета отсюда. Если нужно перебить цвет для конкретного
+-- экрана, делайте локальный key в своём скрипте.
+--
+-- Использование в gui_script:
+--   local COLORS = U.COLORS
+--   U.set_color("title", COLORS.paper)
+--   U.set_color("bg", COLORS.accent, 0.8)
+
+M.COLORS = {
+    -- Основной текст / фон
+    paper     = vmath.vector4(0.953, 0.925, 0.851, 1.0),
+    paper_dim = vmath.vector4(0.788, 0.753, 0.659, 1.0),
+    dim       = vmath.vector4(0.788, 0.753, 0.659, 1.0),  -- alias для paper_dim
+
+    -- Тёмные фоны
+    dark      = vmath.vector4(0.031, 0.024, 0.094, 1.0),
+    card      = vmath.vector4(0.078, 0.071, 0.204, 1.0),
+    card_hot  = vmath.vector4(0.140, 0.034, 0.115, 1.0),
+
+    -- Акценты
+    accent    = vmath.vector4(0.490, 0.976, 1.000, 1.0),
+    hot       = vmath.vector4(1.000, 0.239, 0.498, 1.0),
+    amber     = vmath.vector4(1.000, 0.702, 0.278, 1.0),
+    violet    = vmath.vector4(0.690, 0.455, 1.000, 1.0),
+    green     = vmath.vector4(0.290, 0.870, 0.500, 1.0),
+}
+
 return M

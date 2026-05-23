@@ -151,17 +151,7 @@ for i = 1, MAX_BUBBLES do
     end
 end
 
-local COLORS = {
-    paper     = vmath.vector4(0.953, 0.925, 0.851, 1),
-    paper_dim = vmath.vector4(0.788, 0.753, 0.659, 1),
-    accent    = vmath.vector4(0.490, 0.976, 1.000, 1),
-    hot       = vmath.vector4(1.000, 0.239, 0.498, 1),
-    amber     = vmath.vector4(1.000, 0.702, 0.278, 1),
-    green     = vmath.vector4(0.290, 0.870, 0.500, 1),
-    card      = vmath.vector4(0.078, 0.071, 0.204, 1),
-    card_hot  = vmath.vector4(0.140, 0.034, 0.115, 1),
-    dark      = vmath.vector4(0.031, 0.024, 0.094, 1),
-}
+local COLORS = U.COLORS
 
 local function try_get_node(id)
     local ok, n = pcall(gui.get_node, id)

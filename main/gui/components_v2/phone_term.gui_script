@@ -6,21 +6,12 @@
 local gs = require "main.scripts.game_state"
 local drag_scroll = require "main.gui.modules.drag_scroll"
 local U = require "main.gui.modules.gui_utils"
+local COLORS = U.COLORS
 
 local MAX_TERM_SLOTS = 18
 local SCROLL_STEP_ROWS = 3
 local DRAG_STEP_PX = 28
 local DRAG_THRESHOLD_PX = 8
-
-local COLORS = {
-    accent    = vmath.vector4(0.490, 0.976, 1.000, 1),
-    paper     = vmath.vector4(0.953, 0.925, 0.851, 1),
-    paper_dim = vmath.vector4(0.788, 0.753, 0.659, 1),
-    green     = vmath.vector4(0.290, 0.870, 0.500, 1),
-    amber     = vmath.vector4(1.000, 0.702, 0.278, 1),
-    hot       = vmath.vector4(1.000, 0.239, 0.498, 1),
-    violet    = vmath.vector4(0.690, 0.455, 1.000, 1),
-}
 
 local TERM_COLORS = {
     ok     = COLORS.green,
