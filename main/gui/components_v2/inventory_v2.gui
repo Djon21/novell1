@@ -16,8 +16,8 @@ fonts {
   font: "/main/fonts/unbounded_bold_32.font"
 }
 fonts {
-  name: "Manrope-Medium_16"
-  font: "/main/fonts/Manrope-Medium_16.font"
+  name: "manrope_16"
+  font: "/main/fonts/manrope_16.font"
 }
 fonts {
   name: "jb_mono_bold_16"
@@ -2145,7 +2145,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\320\222\321\213\320\261\320\265\321\200\320\270 \320\277\321\200\320\265\320\264\320\274\320\265\321\202 \320\262 \321\201\320\265\321\202\320\272\320\265 \321\201\320\273\320\265\320\262\320\260."
-  font: "Manrope-Medium_16"
+  font: "manrope_16"
   id: "details_desc"
   pivot: PIVOT_NW
   line_break: true

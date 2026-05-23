@@ -43,8 +43,8 @@ fonts {
   font: "/main/fonts/manrope_16.font"
 }
 fonts {
-  name: "Manrope-Medium_16"
-  font: "/main/fonts/Manrope-Medium_16.font"
+  name: "manrope_16"
+  font: "/main/fonts/manrope_16.font"
 }
 textures {
   name: "icon_phone"
@@ -275,7 +275,7 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  font: "Manrope-Medium_16"
+  font: "manrope_16"
   id: "msg1_body"
   pivot: PIVOT_W
   parent: "msg1_bg"

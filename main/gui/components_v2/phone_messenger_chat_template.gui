@@ -31,8 +31,8 @@ fonts {
   font: "/main/fonts/manrope_16.font"
 }
 fonts {
-  name: "Manrope-Medium_16"
-  font: "/main/fonts/Manrope-Medium_16.font"
+  name: "manrope_16"
+  font: "/main/fonts/manrope_16.font"
 }
 textures {
   name: "icon_phone"
@@ -749,7 +749,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\321\201\320\276\320\276\320\261\321\211\320\265\320\275\320\270\320\265"
-  font: "Manrope-Medium_16"
+  font: "manrope_16"
   id: "bub1_text"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH

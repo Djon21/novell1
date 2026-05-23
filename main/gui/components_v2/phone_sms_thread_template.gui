@@ -31,8 +31,8 @@ fonts {
   font: "/main/fonts/manrope_16.font"
 }
 fonts {
-  name: "Manrope-Medium_16"
-  font: "/main/fonts/Manrope-Medium_16.font"
+  name: "manrope_16"
+  font: "/main/fonts/manrope_16.font"
 }
 textures {
   name: "icon_phone"
@@ -183,7 +183,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "SIM 1 \302\267 \342\200\224"
-  font: "Manrope-Medium_16"
+  font: "manrope_16"
   id: "th_num"
   xanchor: XANCHOR_RIGHT
   yanchor: YANCHOR_TOP
@@ -477,7 +477,7 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  font: "Manrope-Medium_16"
+  font: "manrope_16"
   id: "bub1_text"
   xanchor: XANCHOR_LEFT
   yanchor: YANCHOR_TOP
