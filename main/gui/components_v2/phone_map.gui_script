@@ -1,14 +1,3 @@
--- phone_map.gui_script
--- Карта внутри телефона (split-модуль).
--- Принимает: open_app, close_app
---
--- Флоу: клик по POI → диалог подтверждения → ДА → map_travel → ui_manager
--- ui_manager закрывает телефон и вызывает scene_controller.enter(scene_id).
---
--- POI lock: если ink-сценарий ограничил доступные POI через теги
--- # map:allow:poi_X / # map:lock_to:poi_X, то клик по запрещённому POI
--- покажет «отказной» диалог вместо confirm. См. game_state.map_is_poi_allowed.
-
 local gs = require "main.scripts.game_state"
 local U = require "main.gui.modules.gui_utils"
 
@@ -16,82 +5,104 @@ local UI_MGR = "#ui_manager_v2"
 
 local BLOCKED_LABEL = "Сейчас не время. Мне туда не надо."
 
--- Маппинг poi_NAME → { scene, label }
--- label — строка в диалоге "Перейти в [label]?"
-local POI_SCENES = {
-    poi_home    = { scene = "apartment_hub", label = "Домой"       },
-    poi_work    = { scene = "work_hub",      label = "На работу"   },
-    poi_cafe    = { scene = "cafe_hub",      label = "Кафе"        },
-    poi_park    = { scene = "park_hub",      label = "Парк у реки" },
-    poi_shop    = { scene = "shop_hub",      label = "Магазин 24/7"},
-    poi_bar     = { scene = "bar_hub",       label = "Бар Maybe"   },
-    poi_view    = { scene = "view_hub",      label = "Смотровая"   },
-    poi_archive = { scene = "archive_hub",   label = "Архив"       },
+local POI_ORDER = {
+    "poi_home", "poi_work", "poi_cafe", "poi_park",
+    "poi_shop", "poi_bar", "poi_view", "poi_archive",
 }
 
--- -----------------------------------------------------------------------
+local POI_DATA = {
+    poi_home    = { x = 642, y = 412, cx = 0.714, cy = 0.361, cz = 0,    tex = "map2/poi_icon_home",    scene = "apartment_hub", label = "Домой",        cy_off = { _circle = 8, _center = 8, _icon = 12 } },
+    poi_work    = { x = 703, y = 314, cx = 0.282, cy = 0.961, cz = 0,    tex = "map2/poi_icon_work",    scene = "work_hub",      label = "На работу",   cy_off = { _hitbox = -21, _circle = -21, _center = -21, _icon = -21 } },
+    poi_cafe    = { x = 1075, y = 228, cx = 0, cy = 0.71, cz = 0.275,    tex = "map2/poi_icon_cafe",    scene = "cafe_hub",      label = "Кафе" },
+    poi_park    = { x = 906, y = 383, cx = 0.412, cy = 0.961, cz = 0.529, tex = "map2/poi_icon_park",    scene = "park_hub",      label = "Парк у реки" },
+    poi_shop    = { x = 797, y = 499, cx = 0, cy = 0.282, cz = 0.569,    tex = "map2/poi_icon_shop",    scene = "shop_hub",      label = "Магазин 24/7" },
+    poi_bar     = { x = 836, y = 152, cx = 0, cy = 0.282, cz = 0.569,    tex = "map2/poi_icon_bar",     scene = "bar_hub",       label = "Бар Maybe" },
+    poi_view    = { x = 1105, y = 568, cx = 0, cy = 0.71, cz = 0.275,    tex = "map2/poi_icon_view",    scene = "view_hub",      label = "Смотровая" },
+    poi_archive = { x = 1070, y = 379, cx = 0.714, cy = 0.361, cz = 0,    tex = "map2/poi_icon_archive", scene = "archive_hub",   label = "Архив" },
+}
 
-local function get_node(id)
-    local ok, n = pcall(gui.get_node, id)
-    if ok then return n end
-    return nil
+local POI_SUFFIXES = { "_hitbox", "_stem", "_circle", "_center", "_icon" }
+
+local _poi_clones = {}
+
+local function get_poi_node(poi_id, suffix)
+    local clones = _poi_clones[poi_id]
+    if not clones then return nil end
+    return clones["poi_proto" .. suffix]
+end
+
+local function init_poi_clones()
+    local proto = gui.get_node("poi_proto")
+    if not proto then return end
+    for _, poi_id in ipairs(POI_ORDER) do
+        local data = POI_DATA[poi_id]
+        if data then
+            local clone_map = gui.clone_tree(proto)
+            _poi_clones[poi_id] = clone_map
+            local parent = clone_map["poi_proto"]
+            if parent then
+                gui.set_position(parent, vmath.vector3(data.x, data.y, 0))
+            end
+            for _, suf in ipairs(POI_SUFFIXES) do
+                local node = clone_map["poi_proto" .. suf]
+                if node then
+                    local off = data.cy_off and data.cy_off[suf]
+                    if off then
+                        local p = gui.get_position(node)
+                        gui.set_position(node, vmath.vector3(p.x, off, p.z))
+                    end
+                    gui.set_color(node, vmath.vector4(data.cx, data.cy, data.cz, gui.get_color(node).w))
+                end
+            end
+            local icon = clone_map["poi_proto_icon"]
+            if icon then
+                gui.set_texture(icon, data.tex)
+            end
+        end
+    end
 end
 
 local function set_root_enabled(enabled)
-    local root = get_node("grp_panel")
+    local root = U.get_node("grp_panel")
     if root then gui.set_enabled(root, enabled) end
 end
 
 local function hide_confirm(self)
     self.confirm_target = nil
     self.confirm_blocked = false
-    local n = get_node("grp_confirm")
+    local n = U.get_node("grp_confirm")
     if n then gui.set_enabled(n, false) end
 end
 
 local function show_confirm(self, info)
     self.confirm_target = info
     self.confirm_blocked = false
-    local n = get_node("confirm_location_name")
+    local n = U.get_node("confirm_location_name")
     if n then gui.set_text(n, info.label) end
-    local g = get_node("grp_confirm")
+    local g = U.get_node("grp_confirm")
     if g then gui.set_enabled(g, true) end
 end
 
--- Заблокированный POI: показать тот же диалог с «отказным» текстом.
--- ДА/НЕТ обе закрывают без map_travel — это просто info-overlay.
 local function show_blocked(self, info)
     self.confirm_target = info
     self.confirm_blocked = true
-    local n = get_node("confirm_location_name")
+    local n = U.get_node("confirm_location_name")
     if n then gui.set_text(n, BLOCKED_LABEL) end
-    local g = get_node("grp_confirm")
+    local g = U.get_node("grp_confirm")
     if g then gui.set_enabled(g, true) end
 end
 
--- ─── POI pulse: разблокированные POI пульсируют alpha + scale ─────────
--- PINGPONG между 1.0 и PULSE_ALPHA_LO (яркость) и между 1.0 и PULSE_SCALE_HI
--- (размер) за PULSE_DURATION (на цикл вниз). Анимации синхронизированы:
--- POI одновременно «дышит» яркостью И размером — глаз цепляется заметно
--- сильнее чем только alpha-пульс.
---
--- Пульс идёт на трёх нодах: _circle, _center, _icon. Scale пульсирует
--- ТОЛЬКО на _circle (родитель остальных, чтобы они увеличивались тоже без
--- двойного scale), alpha — на всех трёх.
 local PULSE_DURATION = 0.9
 local PULSE_ALPHA_LO = 0.65
 local PULSE_SCALE_HI = 1.18
 local PULSE_SUFFIXES = { "_circle", "_center", "_icon" }
-local SCALE_TARGET_SUFFIX = "_circle"   -- родительская нода для scale-anim
+local SCALE_TARGET_SUFFIX = "_circle"
 
 local function start_poi_pulse(poi_id)
     for _, suf in ipairs(PULSE_SUFFIXES) do
-        local node = get_node(poi_id .. suf)
+        local node = get_poi_node(poi_id, suf)
         if node then
             gui.cancel_animation(node, "color.w")
-            -- Прежний spin мог оставить rotation ≠ 0 на _circle. Сбросим
-            -- на всякий случай, чтобы при миграции старых сейвов не было
-            -- косых иконок.
             gui.set_rotation(node, vmath.vector3(0, 0, 0))
             local c = gui.get_color(node)
             gui.set_color(node, vmath.vector4(c.x, c.y, c.z, 1))
@@ -99,10 +110,7 @@ local function start_poi_pulse(poi_id)
                 PULSE_DURATION, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
         end
     end
-    -- Scale-pulse на _circle. Дети (_center, _icon) parent'ятся к _circle —
-    -- увеличиваются автоматически. Если parent'инга нет — увеличится только круг,
-    -- что тоже OK для читаемости.
-    local scale_node = get_node(poi_id .. SCALE_TARGET_SUFFIX)
+    local scale_node = get_poi_node(poi_id, SCALE_TARGET_SUFFIX)
     if scale_node then
         gui.cancel_animation(scale_node, gui.PROP_SCALE)
         gui.set_scale(scale_node, vmath.vector3(1, 1, 1))
@@ -115,30 +123,24 @@ end
 
 local function stop_poi_pulse(poi_id)
     for _, suf in ipairs(PULSE_SUFFIXES) do
-        local node = get_node(poi_id .. suf)
+        local node = get_poi_node(poi_id, suf)
         if node then
             gui.cancel_animation(node, "color.w")
             local c = gui.get_color(node)
             gui.set_color(node, vmath.vector4(c.x, c.y, c.z, 1))
         end
     end
-    local scale_node = get_node(poi_id .. SCALE_TARGET_SUFFIX)
+    local scale_node = get_poi_node(poi_id, SCALE_TARGET_SUFFIX)
     if scale_node then
         gui.cancel_animation(scale_node, gui.PROP_SCALE)
         gui.set_scale(scale_node, vmath.vector3(1, 1, 1))
     end
 end
 
--- Перерисовать состояние всех POI-кружков. Вызывается при open_app,
--- refresh_app и любом изменении allowed-set из ink-тегов
--- # map:allow:poi_X / # map:lock_to:poi_X.
---
--- Использует self.pulsing_pois для трекинга: если POI УЖЕ пульсирует —
--- не перезапускаем, иначе будет визуальный «прыжок» alpha на каждый refresh.
 local function refresh_pois(self)
     self.pulsing_pois = self.pulsing_pois or {}
-    for poi_id, _ in pairs(POI_SCENES) do
-        local circle = get_node(poi_id .. "_circle")
+    for _, poi_id in ipairs(POI_ORDER) do
+        local circle = get_poi_node(poi_id, "_circle")
         if circle then
             local allowed = (not gs.map_is_poi_allowed) or gs.map_is_poi_allowed(poi_id)
             if allowed and not self.pulsing_pois[poi_id] then
@@ -152,27 +154,24 @@ local function refresh_pois(self)
     end
 end
 
--- Полный стоп — экономит CPU когда карта закрыта.
 local function stop_all_pois(self)
-    for poi_id, _ in pairs(POI_SCENES) do
+    for _, poi_id in ipairs(POI_ORDER) do
         stop_poi_pulse(poi_id)
     end
     if self then self.pulsing_pois = {} end
 end
 
--- -----------------------------------------------------------------------
-
 function init(self)
-    self.visible         = false
-    self.confirm_target  = nil
+    self.visible = false
+    self.confirm_target = nil
     self.confirm_blocked = false
+
+    init_poi_clones()
 
     U.apply_adaptive_layout("map_runtime_root")
 
     set_root_enabled(false)
-    -- явно прячем grp_confirm: его own enabled = false,
-    -- чтобы не всплыл когда set_root_enabled(true) включит родителя
-    local c = get_node("grp_confirm")
+    local c = U.get_node("grp_confirm")
     if c then gui.set_enabled(c, false) end
 end
 
@@ -180,14 +179,14 @@ function on_message(self, message_id, message, sender)
     if message_id == hash("open_app") then
         self.visible = true
         set_root_enabled(true)
-        hide_confirm(self)          -- сбрасываем возможный старый диалог
-        refresh_pois(self)          -- запустить spin для разблокированных POI
+        hide_confirm(self)
+        refresh_pois(self)
     elseif message_id == hash("refresh_app") then
         if self.visible then refresh_pois(self) end
     elseif message_id == hash("close_app") then
         self.visible = false
         hide_confirm(self)
-        stop_all_pois(self)         -- не крутим в скрытом app — экономия CPU
+        stop_all_pois(self)
         set_root_enabled(false)
     end
 end
@@ -196,11 +195,9 @@ function on_input(self, action_id, action)
     if not self.visible then return false end
     if action_id ~= hash("touch") or not action.pressed then return false end
 
-    -- ── Диалог подтверждения открыт ──────────────────────────────────────
     if self.confirm_target then
-        local yes = get_node("confirm_yes_btn")
+        local yes = U.get_node("confirm_yes_btn")
         if yes and gui.pick_node(yes, action.x, action.y) then
-            -- Заблокированный POI: ДА работает как ОК — закрываем без перехода.
             if self.confirm_blocked then
                 hide_confirm(self)
                 return true
@@ -210,22 +207,20 @@ function on_input(self, action_id, action)
             msg.post(UI_MGR, "map_travel", { scene = scene_id })
             return true
         end
-        local no = get_node("confirm_no_btn")
+        local no = U.get_node("confirm_no_btn")
         if no and gui.pick_node(no, action.x, action.y) then
             hide_confirm(self)
             return true
         end
-        -- клик мимо кнопок — закрываем без перехода
         hide_confirm(self)
         return true
     end
 
-    -- ── Клик по POI ──────────────────────────────────────────────────────
-    for poi_id, info in pairs(POI_SCENES) do
-        local hitbox = get_node(poi_id .. "_hitbox")
+    for _, poi_id in ipairs(POI_ORDER) do
+        local hitbox = get_poi_node(poi_id, "_hitbox")
         if hitbox and gui.pick_node(hitbox, action.x, action.y) then
-            local allowed = (not gs.map_is_poi_allowed)
-                            or gs.map_is_poi_allowed(poi_id)
+            local info = POI_DATA[poi_id]
+            local allowed = (not gs.map_is_poi_allowed) or gs.map_is_poi_allowed(poi_id)
             if allowed then
                 show_confirm(self, info)
             else
