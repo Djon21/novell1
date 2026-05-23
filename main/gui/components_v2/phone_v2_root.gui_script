@@ -81,19 +81,6 @@ local APP_TITLES = {
 }
 
 
-local _card_clones = {}
-
-local APP_CARD_DATA = {
-    { key = "app1", id = "sms",    x = 143, y = 422, bg_r = 0.0,    bg_g = 0.239, bg_b = 0.498, icon = "icon_sms",     label = "СМС" },
-    { key = "app2", id = "call",   x = 245, y = 422, bg_r = 0.490,  bg_g = 0.976, bg_b = 0.0,   icon = "icon_call",    label = "Звонки" },
-    { key = "app3", id = "map",    x = 347, y = 422, bg_r = 0.0,    bg_g = 0.702, bg_b = 0.278, icon = "icon_map",     label = "Карта" },
-    { key = "app4", id = "notes",  x = 348, y = 303, bg_r = 0.953,  bg_g = 0.925, bg_b = 0.851, icon = "icon_notes",   label = "Улики" },
-    { key = "app5", id = "quests", x = 245, y = 303, bg_r = 0.478,  bg_g = 0.361, bg_b = 0.0,   icon = "icon_quests",  label = "Квесты" },
-    { key = "app6", id = "mail",   x = 142, y = 183, bg_r = 0.0,    bg_g = 0.239, bg_b = 0.498, icon = "icon_mail",    label = "Почта" },
-    { key = "app7", id = "messenger", x = 141, y = 303, bg_r = 0.282, bg_g = 0.961, bg_b = 0.0, icon = "icon_sms",   label = "Чаты" },
-    { key = "app8", id = "term",   x = 247, y = 183, bg_r = 0.0,    bg_g = 0.702, bg_b = 0.278, icon = "icon_terminal", label = "Терминал" },
-}
-
 local CHROME_NODES = {
     "phone_bg",
     "phone_case", "phone_case_top", "phone_screen", "phone_notch", "phone_side_btn",
@@ -114,6 +101,7 @@ local CHROME_NODES = {
     "app_slot_hline_5", "app_slot_hline_6", "app_slot_hline_7", "app_slot_hline_8",
     "app_slot_hline_9", "app_slot_hline_10", "app_slot_hline_11", "app_slot_hline_12",
     "app_slot_hline_13", "app_slot_hline_14",
+
 }
 
 local APPS = {
@@ -167,6 +155,74 @@ local function update_wall_calendar()
     update_wall_date()
 end
 
+local flash_node = U.flash_node
+
+local function set_card_badge(key, n)
+    local c = _card_clones[key]
+    if not c then return end
+    local show = n > 0
+    if c.badge_bg then gui.set_enabled(c.badge_bg, show) end
+    if c.badge_text then
+        gui.set_enabled(c.badge_text, show)
+        gui.set_text(c.badge_text, tostring(n))
+    end
+end
+
+local function set_badge(self, key, value)
+    if not _card_clones[key] then return end
+    local n = tonumber(value) or 0
+    if (not self.visible) and n > 0 then n = 1 end
+    set_card_badge(key, n)
+end
+
+local function update_notif(self)
+    -- Общий счётчик (sms + msg) — для статус-бара «сообщений: N».
+    local total = gs.get_phone_unread_total and gs.get_phone_unread_total() or 0
+    set_text("stats_msg", "сообщений: " .. tostring(total))
+
+    -- Бейджи приложений разделены по каналам.
+    -- app1 показывает только SMS, app7 — только Messenger.
+    local sms_unread = gs.get_sms_unread_total and gs.get_sms_unread_total() or 0
+    local msg_unread = gs.get_msg_unread_total and gs.get_msg_unread_total() or 0
+    set_badge(self, "app1", sms_unread)
+    set_badge(self, "app7", msg_unread)
+end
+
+-- Закрыть текущее активное приложение (если есть)
+local function close_active_app(self)
+    if self.active_app then
+        local comp = APP_COMPONENT[self.active_app]
+        if comp then
+            msg.post(comp, MSG.close_app)
+        end
+        dbg("[phone_v2_root] closed app:", self.active_app)
+        self.active_app = nil
+    end
+end
+
+-- Переключиться на приложение (закрыть предыдущее, открыть новое)
+local function switch_app(self, id)
+    if self.active_app == id then
+        -- тап на активное → вернуться в SMS
+        close_active_app(self)
+        local comp = APP_COMPONENT["sms"]
+        if comp then msg.post(comp, MSG.open_app) end
+        self.active_app = "sms"
+        update_app_title("sms")
+        dbg("[phone_v2_root] toggled back to sms")
+        return
+    end
+    close_active_app(self)
+    local comp = APP_COMPONENT[id]
+    if comp then
+        msg.post(comp, MSG.open_app)
+        self.active_app = id
+        update_app_title(id)
+        dbg("[phone_v2_root] switched to app:", id)
+    end
+end
+
+
 local function init_app_card_clones()
     local proto = U.get_node("app_card_proto")
     local root = gui.get_node("phone_root")
@@ -191,7 +247,6 @@ local function init_app_card_clones()
             gui.set_enabled(badge_bg, false)
             gui.set_enabled(badge_text, false)
 
-            -- Reparent static icon under this card
             local icon = U.get_node(app.key .. "_icon")
             if icon then gui.set_parent(icon, card) end
 
@@ -208,6 +263,25 @@ local function set_card_clones_enabled(enabled)
     end
 end
 
+local function forward_active_app_input(self, action_id, action)
+    if not self.active_app then return end
+    local comp = APP_COMPONENT[self.active_app]
+    if not comp then return end
+    msg.post(comp, MSG.phone_input, {
+        action_id = action_id,
+        x = action and action.x or 0,
+        y = action and action.y or 0,
+        dx = action and action.dx or 0,
+        dy = action and action.dy or 0,
+        value = action and action.value or 0,
+        pressed = action and action.pressed or false,
+        released = action and action.released or false,
+        repeated = action and action.repeated or false,
+    })
+end
+
+-- -----------------------------------------------------------------------
+
 function init(self)
     self.visible    = false
     self.active_app = nil
@@ -223,10 +297,11 @@ function init(self)
     end
 
     set_nodes_enabled(CHROME_NODES, false)
-    init_app_card_clones()
-    set_card_clones_enabled(false)
     update_app_title("sms")
     update_wall_calendar()
+    -- Берём фокус сразу и держим всегда (как исходный phone_v2.gui_script).
+    -- Когда телефон закрыт — on_input возвращает false, инпут проходит дальше.
+    -- Это сохраняет правильный порядок стека acquire_input_focus.
     msg.post(".", "acquire_input_focus")
 end
 
@@ -234,14 +309,14 @@ function on_message(self, message_id, message, sender)
     if message_id == MSG.open_phone then
         self.visible = true
         set_nodes_enabled(CHROME_NODES, true)
-        set_card_clones_enabled(true)
         update_notif(self)
         update_wall_calendar()
+        -- Открыть SMS по умолчанию
         local comp = APP_COMPONENT["sms"]
         if comp then msg.post(comp, MSG.open_app) end
         self.active_app = "sms"
         update_app_title("sms")
-        dbg("[phone_v2_root] open_phone -> sms")
+        dbg("[phone_v2_root] open_phone → sms")
 
     elseif message_id == MSG.close_phone then
         close_active_app(self)
