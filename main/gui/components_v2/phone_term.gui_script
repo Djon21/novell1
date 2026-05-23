@@ -9,6 +9,10 @@ local U = require "main.gui.modules.gui_utils"
 local COLORS = U.COLORS
 
 local MAX_TERM_SLOTS = 18
+local TERM_LINE_Y_BASE = 563   -- topmost line y (l1)
+local TERM_LINE_GAP = 21       -- spacing between lines
+local TERM_LINE_X = 542
+local TERM_LINE_Z = 0.564
 local SCROLL_STEP_ROWS = 3
 local DRAG_STEP_PX = 28
 local DRAG_THRESHOLD_PX = 8
@@ -43,9 +47,11 @@ local STATIC_NODE_IDS = {
     "v_term_screen",
 }
 
+local _line_clones = {}
+
 local NODE_IDS = {}
 for _, id in ipairs(STATIC_NODE_IDS) do NODE_IDS[#NODE_IDS + 1] = id end
-for i = 1, MAX_TERM_SLOTS do NODE_IDS[#NODE_IDS + 1] = "v_term_l" .. i end
+NODE_IDS[#NODE_IDS + 1] = "v_term_l1"
 
 local FALLBACK_LINES = {
     { level = "debug", text = "avos-shell 0.17.3 · connected to prod-eu-1.avos.cloud" },
@@ -68,10 +74,38 @@ local FALLBACK_LINES = {
     { level = "info", text = "HINT recovery: locate anchor & meet subj NM with clear memory" },
 }
 
-local get_node             = U.get_node
 local set_node_enabled     = U.set_node_enabled
 local set_text             = U.set_text
 local set_color_keep_alpha = U.set_color_keep_alpha
+
+local function get_node(id)
+    if type(id) == "string" then
+        local slot = id:match("^v_term_l(%d+)$")
+        if slot then
+            local s = tonumber(slot)
+            if s == 1 then return U.get_node(id) end
+            local c = _line_clones[s]
+            if c then return c end
+            return nil
+        end
+    end
+    return U.get_node(id)
+end
+
+local function init_line_clones()
+    local proto = U.get_node("v_term_l1")
+    if not proto then return end
+    local pp = gui.get_position(proto)
+    for i = 2, MAX_TERM_SLOTS do
+        local cmap = gui.clone_tree(proto)
+        local c = cmap and cmap["v_term_l1"]
+        if c then
+            local y = TERM_LINE_Y_BASE - 42 - (i - 2) * TERM_LINE_GAP
+            gui.set_position(c, vmath.vector3(pp.x, y, pp.z))
+            _line_clones[i] = c
+        end
+    end
+end
 
 local function set_nodes_enabled(enabled)
     U.set_nodes_enabled(NODE_IDS, enabled)
@@ -257,6 +291,7 @@ function init(self)
     self.follow_bottom = true
 
     U.apply_adaptive_layout("term_runtime_root")
+    init_line_clones()
     self.term_drag = drag_scroll.new({
         step_px      = DRAG_STEP_PX,
         threshold_px = DRAG_THRESHOLD_PX,
