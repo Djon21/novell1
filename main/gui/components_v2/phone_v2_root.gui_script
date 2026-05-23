@@ -45,8 +45,7 @@ local ROOT_CHROME = {
     "app_slot_hline_5", "app_slot_hline_6", "app_slot_hline_7", "app_slot_hline_8",
     "app_slot_hline_9", "app_slot_hline_10", "app_slot_hline_11", "app_slot_hline_12",
     "app_slot_hline_13", "app_slot_hline_14",
-    "app1_card", "app2_card", "app3_card", "app4_card",
-    "app5_card", "app6_card", "app7_card", "app8_card",
+    "app_card_proto",
 }
 
 local function apply_adaptive_layout()
@@ -82,6 +81,19 @@ local APP_TITLES = {
 }
 
 
+local _card_clones = {}
+
+local APP_CARD_DATA = {
+    { key = "app1", id = "sms",    x = 143, y = 422, bg_r = 0.0,    bg_g = 0.239, bg_b = 0.498, icon = "icon_sms",     label = "\320\241\320\234\320\241" },
+    { key = "app2", id = "call",   x = 245, y = 422, bg_r = 0.490,  bg_g = 0.976, bg_b = 0.0,   icon = "icon_call",    label = "\320\227\320\262\320\276\320\275\320\272\320\270" },
+    { key = "app3", id = "map",    x = 347, y = 422, bg_r = 0.0,    bg_g = 0.702, bg_b = 0.278, icon = "icon_map",     label = "\320\232\320\260\321\200\321\202\320\260" },
+    { key = "app4", id = "notes",  x = 348, y = 303, bg_r = 0.953,  bg_g = 0.925, bg_b = 0.851, icon = "icon_notes",   label = "\320\243\320\273\320\270\320\272\320\270" },
+    { key = "app5", id = "quests", x = 245, y = 303, bg_r = 0.478,  bg_g = 0.361, bg_b = 0.0,   icon = "icon_quests",  label = "\320\232\320\262\320\265\321\201\321\202\321\213" },
+    { key = "app6", id = "mail",   x = 142, y = 183, bg_r = 0.0,    bg_g = 0.239, bg_b = 0.498, icon = "icon_mail",    label = "\320\237\320\276\321\207\321\202\320\260" },
+    { key = "app7", id = "messenger", x = 141, y = 303, bg_r = 0.282, bg_g = 0.961, bg_b = 0.0, icon = "icon_sms",   label = "\320\247\320\260\321\202\321\213" },
+    { key = "app8", id = "term",   x = 247, y = 183, bg_r = 0.0,    bg_g = 0.702, bg_b = 0.278, icon = "icon_terminal", label = "\320\242\320\265\321\200\320\274\320\270\320\275\320\260\320\273" },
+}
+
 local CHROME_NODES = {
     "phone_bg",
     "phone_case", "phone_case_top", "phone_screen", "phone_notch", "phone_side_btn",
@@ -94,8 +106,6 @@ local CHROME_NODES = {
     "title_eyebrow", "title_main",
     "close_btn", "close_x",
     "close_btn_border_t", "close_btn_border_b", "close_btn_border_l", "close_btn_border_r",
-    "app1_badge_bg", "app1_badge_text",
-    "app7_badge_bg", "app7_badge_text",
     "app_slot_vline_1", "app_slot_vline_2", "app_slot_vline_3", "app_slot_vline_4",
     "app_slot_vline_5", "app_slot_vline_6", "app_slot_vline_7", "app_slot_vline_8",
     "app_slot_vline_9", "app_slot_vline_10", "app_slot_vline_11", "app_slot_vline_12",
@@ -104,14 +114,6 @@ local CHROME_NODES = {
     "app_slot_hline_5", "app_slot_hline_6", "app_slot_hline_7", "app_slot_hline_8",
     "app_slot_hline_9", "app_slot_hline_10", "app_slot_hline_11", "app_slot_hline_12",
     "app_slot_hline_13", "app_slot_hline_14",
-    "app1_bg", "app1_bg1", "app1_icon", "app1_label",
-    "app2_bg", "app2_bg1", "app2_icon", "app2_label",
-    "app3_bg", "app3_bg1", "app3_icon", "app3_label",
-    "app4_bg", "app4_bg1", "app4_icon", "app4_label",
-    "app5_bg", "app5_bg1", "app5_icon", "app5_label",
-    "app6_bg", "app6_bg1", "app6_icon", "app6_label",
-    "app7_bg", "app7_bg1", "app7_icon", "app7_label",
-    "app8_bg", "app8_bg1", "app8_icon", "app8_label",
 }
 
 local APPS = {
@@ -165,101 +167,46 @@ local function update_wall_calendar()
     update_wall_date()
 end
 
-local function set_badge(self_or_prefix, prefix_or_value, maybe_value)
-    -- Backward-compatible signature:
-    --   set_badge("app1", n)
-    -- Preferred signature:
-    --   set_badge(self, "app1", n)
-    local ctx, prefix, value
-    if type(self_or_prefix) == "string" then
-        ctx = nil
-        prefix = self_or_prefix
-        value = prefix_or_value
-    else
-        ctx = self_or_prefix
-        prefix = prefix_or_value
-        value = maybe_value
-    end
+local function init_app_card_clones()
+    local proto = U.get_node("app_card_proto")
+    local root = gui.get_node("phone_root")
+    if not proto then return end
 
-    if type(prefix) ~= "string" then return end
+    for _, app in ipairs(APP_CARD_DATA) do
+        local cmap = gui.clone_tree(proto)
+        if cmap then
+            local card = cmap["app_card_proto"]
+            local bg   = cmap["app_bg"]
+            local bg1  = cmap["app_bg1"]
+            local label = cmap["app_label"]
+            local badge_bg   = cmap["app_badge_bg"]
+            local badge_text = cmap["app_badge_text"]
 
-    local n = tonumber(value) or 0
-    local phone_visible = (not ctx) or ctx.visible == true
-    local show = phone_visible and n > 0
+            gui.set_position(card, vmath.vector3(app.x, app.y, 0))
+            if root then gui.set_parent(card, root) end
 
-    set_text(prefix .. "_badge_text", tostring(n))
-    set_node_enabled(prefix .. "_badge_bg", show)
-    set_node_enabled(prefix .. "_badge_text", show)
-end
+            gui.set_color(bg, vmath.vector4(app.bg_r, app.bg_g, app.bg_b, 1))
+            gui.set_text(label, app.label)
 
-local flash_node = U.flash_node
+            gui.set_enabled(badge_bg, false)
+            gui.set_enabled(badge_text, false)
 
-local function update_notif(self)
-    -- Общий счётчик (sms + msg) — для статус-бара «сообщений: N».
-    local total = gs.get_phone_unread_total and gs.get_phone_unread_total() or 0
-    set_text("stats_msg", "сообщений: " .. tostring(total))
+            -- Reparent static icon under this card
+            local icon = U.get_node(app.key .. "_icon")
+            if icon then gui.set_parent(icon, card) end
 
-    -- Бейджи приложений разделены по каналам.
-    -- app1 показывает только SMS, app7 — только Messenger.
-    local sms_unread = gs.get_sms_unread_total and gs.get_sms_unread_total() or 0
-    local msg_unread = gs.get_msg_unread_total and gs.get_msg_unread_total() or 0
-    set_badge(self, "app1", sms_unread)
-    set_badge(self, "app7", msg_unread)
-end
-
--- Закрыть текущее активное приложение (если есть)
-local function close_active_app(self)
-    if self.active_app then
-        local comp = APP_COMPONENT[self.active_app]
-        if comp then
-            msg.post(comp, MSG.close_app)
+            _card_clones[app.key] = {
+                card = card, bg = bg, badge_bg = badge_bg, badge_text = badge_text,
+            }
         end
-        dbg("[phone_v2_root] closed app:", self.active_app)
-        self.active_app = nil
     end
 end
 
--- Переключиться на приложение (закрыть предыдущее, открыть новое)
-local function switch_app(self, id)
-    if self.active_app == id then
-        -- тап на активное → вернуться в SMS
-        close_active_app(self)
-        local comp = APP_COMPONENT["sms"]
-        if comp then msg.post(comp, MSG.open_app) end
-        self.active_app = "sms"
-        update_app_title("sms")
-        dbg("[phone_v2_root] toggled back to sms")
-        return
-    end
-    close_active_app(self)
-    local comp = APP_COMPONENT[id]
-    if comp then
-        msg.post(comp, MSG.open_app)
-        self.active_app = id
-        update_app_title(id)
-        dbg("[phone_v2_root] switched to app:", id)
+local function set_card_clones_enabled(enabled)
+    for _, c in pairs(_card_clones) do
+        gui.set_enabled(c.card, enabled)
     end
 end
-
-
-local function forward_active_app_input(self, action_id, action)
-    if not self.active_app then return end
-    local comp = APP_COMPONENT[self.active_app]
-    if not comp then return end
-    msg.post(comp, MSG.phone_input, {
-        action_id = action_id,
-        x = action and action.x or 0,
-        y = action and action.y or 0,
-        dx = action and action.dx or 0,
-        dy = action and action.dy or 0,
-        value = action and action.value or 0,
-        pressed = action and action.pressed or false,
-        released = action and action.released or false,
-        repeated = action and action.repeated or false,
-    })
-end
-
--- -----------------------------------------------------------------------
 
 function init(self)
     self.visible    = false
@@ -276,11 +223,10 @@ function init(self)
     end
 
     set_nodes_enabled(CHROME_NODES, false)
+    init_app_card_clones()
+    set_card_clones_enabled(false)
     update_app_title("sms")
     update_wall_calendar()
-    -- Берём фокус сразу и держим всегда (как исходный phone_v2.gui_script).
-    -- Когда телефон закрыт — on_input возвращает false, инпут проходит дальше.
-    -- Это сохраняет правильный порядок стека acquire_input_focus.
     msg.post(".", "acquire_input_focus")
 end
 
@@ -288,19 +234,18 @@ function on_message(self, message_id, message, sender)
     if message_id == MSG.open_phone then
         self.visible = true
         set_nodes_enabled(CHROME_NODES, true)
+        set_card_clones_enabled(true)
         update_notif(self)
         update_wall_calendar()
-        -- Открыть SMS по умолчанию
         local comp = APP_COMPONENT["sms"]
         if comp then msg.post(comp, MSG.open_app) end
         self.active_app = "sms"
         update_app_title("sms")
-        dbg("[phone_v2_root] open_phone → sms")
+        dbg("[phone_v2_root] open_phone -> sms")
 
     elseif message_id == MSG.close_phone then
-        -- Просто скрыть — НЕ постить обратно в UI_MGR (иначе loop),
-        -- НЕ release_input_focus (держим фокус постоянно как phone_v2.gui_script)
         close_active_app(self)
+        set_card_clones_enabled(false)
         set_nodes_enabled(CHROME_NODES, false)
         self.visible = false
         dbg("[phone_v2_root] close_phone")
@@ -368,7 +313,8 @@ function on_input(self, action_id, action)
 
         -- Тайлы приложений
         for _, app in ipairs(APPS) do
-            local n = get_node(app.key .. "_bg")
+            local c = _card_clones[app.key]
+            local n = c and c.bg
             if n and gui.is_enabled(n) and gui.pick_node(n, action.x, action.y) then
                 dbg("[phone_v2_root] tile clicked:", app.id)
                 flash_node(n)
