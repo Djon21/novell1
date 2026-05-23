@@ -55,7 +55,6 @@ TAG_SPEC: dict[str, str | None] = {
     "return_to_scene":  None,
     "splash":           None,
     "scene_char":       None,
-    "scene_bg":         None,
     "map":              None,
     "phone":            None,
     "sms":              None,
