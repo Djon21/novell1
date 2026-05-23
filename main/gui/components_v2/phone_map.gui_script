@@ -11,21 +11,24 @@ local POI_ORDER = {
 }
 
 local POI_DATA = {
-    poi_home    = { x = 642, y = 412, cx = 0.714, cy = 0.361, cz = 0,    tex = "map2/poi_icon_home",    scene = "apartment_hub", label = "Домой",        cy_off = { _circle = 8, _center = 8, _icon = 12 } },
-    poi_work    = { x = 703, y = 314, cx = 0.282, cy = 0.961, cz = 0,    tex = "map2/poi_icon_work",    scene = "work_hub",      label = "На работу",   cy_off = { _hitbox = -21, _circle = -21, _center = -21, _icon = -21 } },
-    poi_cafe    = { x = 1075, y = 228, cx = 0, cy = 0.71, cz = 0.275,    tex = "map2/poi_icon_cafe",    scene = "cafe_hub",      label = "Кафе" },
-    poi_park    = { x = 906, y = 383, cx = 0.412, cy = 0.961, cz = 0.529, tex = "map2/poi_icon_park",    scene = "park_hub",      label = "Парк у реки" },
-    poi_shop    = { x = 797, y = 499, cx = 0, cy = 0.282, cz = 0.569,    tex = "map2/poi_icon_shop",    scene = "shop_hub",      label = "Магазин 24/7" },
-    poi_bar     = { x = 836, y = 152, cx = 0, cy = 0.282, cz = 0.569,    tex = "map2/poi_icon_bar",     scene = "bar_hub",       label = "Бар Maybe" },
-    poi_view    = { x = 1105, y = 568, cx = 0, cy = 0.71, cz = 0.275,    tex = "map2/poi_icon_view",    scene = "view_hub",      label = "Смотровая" },
-    poi_archive = { x = 1070, y = 379, cx = 0.714, cy = 0.361, cz = 0,    tex = "map2/poi_icon_archive", scene = "archive_hub",   label = "Архив" },
+    poi_home    = { x = 642, y = 412, cx = 0.714, cy = 0.361, cz = 0,    scene = "apartment_hub", label = "Домой",        cy_off = { _circle = 8, _center = 8 } },
+    poi_work    = { x = 703, y = 314, cx = 0.282, cy = 0.961, cz = 0,    scene = "work_hub",      label = "На работу",   cy_off = { _hitbox = -21, _circle = -21, _center = -21 } },
+    poi_cafe    = { x = 1075, y = 228, cx = 0, cy = 0.71, cz = 0.275,    scene = "cafe_hub",      label = "Кафе" },
+    poi_park    = { x = 906, y = 383, cx = 0.412, cy = 0.961, cz = 0.529, scene = "park_hub",      label = "Парк у реки" },
+    poi_shop    = { x = 797, y = 499, cx = 0, cy = 0.282, cz = 0.569,    scene = "shop_hub",      label = "Магазин 24/7" },
+    poi_bar     = { x = 836, y = 152, cx = 0, cy = 0.282, cz = 0.569,    scene = "bar_hub",       label = "Бар Maybe" },
+    poi_view    = { x = 1105, y = 568, cx = 0, cy = 0.71, cz = 0.275,    scene = "view_hub",      label = "Смотровая" },
+    poi_archive = { x = 1070, y = 379, cx = 0.714, cy = 0.361, cz = 0,    scene = "archive_hub",   label = "Архив" },
 }
 
-local POI_SUFFIXES = { "_hitbox", "_stem", "_circle", "_center", "_icon" }
+local POI_SUFFIXES = { "_hitbox", "_stem", "_circle", "_center" }
 
 local _poi_clones = {}
 
 local function get_poi_node(poi_id, suffix)
+    if suffix == "_icon" then
+        return gui.get_node(poi_id .. "_icon")
+    end
     local clones = _poi_clones[poi_id]
     if not clones then return nil end
     return clones["poi_proto" .. suffix]
@@ -54,9 +57,9 @@ local function init_poi_clones()
                     gui.set_color(node, vmath.vector4(data.cx, data.cy, data.cz, gui.get_color(node).w))
                 end
             end
-            local icon = clone_map["poi_proto_icon"]
+            local icon = gui.get_node(poi_id .. "_icon")
             if icon then
-                gui.play_flipbook(icon, data.tex)
+                gui.set_color(icon, vmath.vector4(data.cx, data.cy, data.cz, 1))
             end
         end
     end
@@ -95,7 +98,7 @@ end
 local PULSE_DURATION = 0.9
 local PULSE_ALPHA_LO = 0.65
 local PULSE_SCALE_HI = 1.18
-local PULSE_SUFFIXES = { "_circle", "_center", "_icon" }
+local PULSE_SUFFIXES = { "_circle", "_center" }
 local SCALE_TARGET_SUFFIX = "_circle"
 
 local function start_poi_pulse(poi_id)
