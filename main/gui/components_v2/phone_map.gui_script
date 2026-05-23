@@ -56,7 +56,7 @@ local function init_poi_clones()
             end
             local icon = clone_map["poi_proto_icon"]
             if icon then
-                gui.set_texture(icon, data.tex)
+                gui.play_flipbook(icon, data.tex)
             end
         end
     end
