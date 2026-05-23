@@ -19,10 +19,6 @@ fonts {
   font: "/main/fonts/jb_mono_bold_20.font"
 }
 fonts {
-  name: "arial_bold_20"
-  font: "/main/fonts/arial_bold_20.font"
-}
-fonts {
   name: "unbounded_bold_20"
   font: "/main/fonts/unbounded_bold_20.font"
 }
