@@ -37,10 +37,13 @@ local STATIC_NODE_IDS = {
     "term_runtime_root",
     "v_term_bg", "v_term_crt_scan", "v_term_head_bg",
     "v_term_eyebrow", "v_term_title",
-    "v_term_tab1", "v_term_tab1_text", "v_term_tab2", "v_term_tab2_text",
-    "v_term_tab3", "v_term_tab3_text", "v_term_tab_plus", "v_term_tab_plus_text",
+    "v_term_tab1_card", "v_term_tab1", "v_term_tab1_text",
+    "v_term_tab2_card", "v_term_tab2", "v_term_tab2_text",
+    "v_term_tab3_card", "v_term_tab3", "v_term_tab3_text",
+    "v_term_tab_plus_card", "v_term_tab_plus", "v_term_tab_plus_text",
     "v_term_shell", "v_term_shell_clip",
     "v_term_input_bg", "v_term_input_prompt", "v_term_input_text", "v_term_caret",
+    "v_term_status_mode_card", "v_term_status_host_card", "v_term_status_path_card", "v_term_status_git_card", "v_term_status_batt_card",
     "v_term_status_mode", "v_term_status_host", "v_term_status_path", "v_term_status_git", "v_term_status_batt",
     "v_term_status_mode_text", "v_term_status_host_text", "v_term_status_path_text", "v_term_status_git_text", "v_term_status_batt_text",
     "v_term_scroll_track", "v_term_scroll_thumb",
@@ -261,6 +264,8 @@ function init(self)
     self.visible = false
     self.term_offset = 0
     self.follow_bottom = true
+
+    U.apply_adaptive_layout("term_runtime_root")
     self.term_drag = drag_scroll.new({
         step_px      = DRAG_STEP_PX,
         threshold_px = DRAG_THRESHOLD_PX,

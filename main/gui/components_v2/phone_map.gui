@@ -40,9 +40,24 @@ textures {
   texture: "/main/images/phone/map2.atlas"
 }
 nodes {
+  position {
+    z: 0.0
+  }
+  size {
+    x: 1280.0
+    y: 720.0
+  }
+  type: TYPE_BOX
+  id: "map_runtime_root"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.0
+}
+nodes {
   type: TYPE_BOX
   id: "grp_panel"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "map_runtime_root"
   layer: "ui"
 }
 nodes {

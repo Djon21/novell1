@@ -5,6 +5,7 @@
 -- This GUI keeps only presentation metadata for known chat ids.
 
 local gs = require "main.scripts.game_state"
+local U = require "main.gui.modules.gui_utils"
 local log = require "main.scripts.log"
 local dm = require "main.scripts.dialogue_manager_ink"
 local contacts = require "main.scripts.phone_contacts"
@@ -1257,6 +1258,9 @@ function init(self)
     self.list_offset = 0
     self.chat_offset = 0
     self.reply_tap_armed = false
+
+    U.apply_adaptive_layout("messenger_runtime_root")
+
     self.list_drag = drag_scroll.new({
         step_px      = LIST_DRAG_STEP_PX,
         threshold_px = DRAG_THRESHOLD_PX,

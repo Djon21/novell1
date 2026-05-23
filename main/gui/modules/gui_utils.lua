@@ -149,6 +149,29 @@ function M.set_box(id, x, y, w, h, color, alpha, z)
 end
 
 -- ===========================================================================
+-- Adaptive layout
+-- ===========================================================================
+
+-- Центрирует canvas (base_w x base_h) в viewport с равномерным scale.
+-- Для компонентов v2-телефона: все ноды должны быть потомками root-ноды.
+-- root_id = id ноды-контейнера (ставится ADJUST_FIT).
+-- base_w / base_h = базовое разрешение (default 1280x720).
+function M.apply_adaptive_layout(root_id, base_w, base_h)
+    local root = M.get_node(root_id)
+    if not root then return end
+    base_w = base_w or 1280
+    base_h = base_h or 720
+    local screen_w, screen_h = gui.get_width() or base_w, gui.get_height() or base_h
+    local scale = math.min(screen_w / base_w, screen_h / base_h)
+    if scale <= 0 then scale = 1 end
+    local pos = gui.get_position(root)
+    pos.x = math.floor(((screen_w - base_w * scale) * 0.5) + 0.5)
+    pos.y = math.floor(((screen_h - base_h * scale) * 0.5) + 0.5)
+    gui.set_position(root, pos)
+    gui.set_scale(root, vmath.vector3(scale, scale, 1))
+end
+
+-- ===========================================================================
 -- Hit testing
 -- ===========================================================================
 

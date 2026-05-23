@@ -1,0 +1,24 @@
+#!/bin/sh
+# Pre-commit hook: run ink_lint.py on staged .ink files
+
+set -e
+
+STAGED=$(git diff --cached --name-only --diff-filter=ACM -- "main/story/chapters/**/*.ink" "*.ink" 2>/dev/null || true)
+
+if [ -z "$STAGED" ]; then
+    exit 0
+fi
+
+echo "Running ink linter on staged files..."
+
+python tools/ink_lint.py --ci
+
+RESULT=$?
+
+if [ $RESULT -ne 0 ]; then
+    echo "ERROR: Ink linter found issues. Fix them before committing."
+    echo "To skip this check: git commit --no-verify"
+    exit 1
+fi
+
+exit 0

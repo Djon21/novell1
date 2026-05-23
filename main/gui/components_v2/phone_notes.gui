@@ -33,6 +33,20 @@ fonts {
 }
 nodes {
   position {
+    z: 0.0
+  }
+  size {
+    x: 1280.0
+    y: 720.0
+  }
+  type: TYPE_BOX
+  id: "notes_runtime_root"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.0
+}
+nodes {
+  position {
     x: 524.0
     y: 116.0
     z: 0.521
@@ -50,6 +64,7 @@ nodes {
   id: "clues_screen_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "notes_runtime_root"
   alpha: 0.62
   enabled: false
 }
@@ -72,6 +87,7 @@ nodes {
   id: "clues_header_line"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "notes_runtime_root"
   alpha: 0.14
   enabled: false
 }
@@ -79,6 +95,22 @@ nodes {
   position {
     x: 548.0
     y: 404.0
+    z: 0.532
+  }
+  size {
+    x: 635.0
+    y: 96.0
+  }
+  type: TYPE_BOX
+  id: "clues_card1_card"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "notes_runtime_root"
+  alpha: 0.0
+  enabled: false
+}
+nodes {
+  position {
     z: 0.548
   }
   size {
@@ -94,6 +126,7 @@ nodes {
   id: "clues_card1_accent"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "clues_card1_card"
   alpha: 0.5
   enabled: false
 }
@@ -101,6 +134,22 @@ nodes {
   position {
     x: 548.0
     y: 282.0
+    z: 0.532
+  }
+  size {
+    x: 635.0
+    y: 96.0
+  }
+  type: TYPE_BOX
+  id: "clues_card2_card"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "notes_runtime_root"
+  alpha: 0.0
+  enabled: false
+}
+nodes {
+  position {
     z: 0.548
   }
   size {
@@ -115,6 +164,7 @@ nodes {
   id: "clues_card2_accent"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "clues_card2_card"
   alpha: 0.46
   enabled: false
 }
@@ -136,6 +186,7 @@ nodes {
   id: "clues_footer_line"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "notes_runtime_root"
   alpha: 0.16
   enabled: false
 }
@@ -159,6 +210,7 @@ nodes {
   id: "v_clues_eyebrow"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "notes_runtime_root"
   alpha: 0.92
   outline_alpha: 0.0
   shadow_alpha: 0.0
@@ -184,14 +236,13 @@ nodes {
   id: "v_clues_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "notes_runtime_root"
   alpha: 0.97
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 548.0
-    y: 404.0
     z: 0.532
   }
   size {
@@ -207,12 +258,13 @@ nodes {
   id: "v_clues_card1_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "clues_card1_card"
   alpha: 0.085
 }
 nodes {
   position {
-    x: 572.0
-    y: 474.0
+    x: 24.0
+    y: 70.0
     z: 0.555
   }
   size {
@@ -229,14 +281,15 @@ nodes {
   id: "v_clues_card1_tag"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "clues_card1_card"
   alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 572.0
-    y: 448.0
+    x: 24.0
+    y: 44.0
     z: 0.555
   }
   size {
@@ -255,14 +308,13 @@ nodes {
   pivot: PIVOT_NW
   adjust_mode: ADJUST_MODE_STRETCH
   line_break: true
+  parent: "clues_card1_card"
   alpha: 0.68
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 548.0
-    y: 282.0
     z: 0.532
   }
   size {
@@ -277,12 +329,13 @@ nodes {
   id: "v_clues_card2_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "clues_card2_card"
   alpha: 0.075
 }
 nodes {
   position {
-    x: 572.0
-    y: 352.0
+    x: 24.0
+    y: 70.0
     z: 0.555
   }
   size {
@@ -299,14 +352,15 @@ nodes {
   id: "v_clues_card2_tag"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "clues_card2_card"
   alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 572.0
-    y: 326.0
+    x: 24.0
+    y: 44.0
     z: 0.555
   }
   size {
@@ -325,6 +379,7 @@ nodes {
   pivot: PIVOT_NW
   adjust_mode: ADJUST_MODE_STRETCH
   line_break: true
+  parent: "clues_card2_card"
   alpha: 0.68
   outline_alpha: 0.0
   shadow_alpha: 0.0

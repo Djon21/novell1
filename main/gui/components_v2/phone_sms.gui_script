@@ -1613,6 +1613,9 @@ function init(self)
     self.active_contact_id = nil
     self.thread_offset = 0
     self.sms_pulse_active = false
+
+    U.apply_adaptive_layout("sms_runtime_root")
+
     self.list_drag = drag_scroll.new({
         step_px      = LIST_SCROLL_STEP_PX,
         threshold_px = LIST_DRAG_THRESHOLD_PX,

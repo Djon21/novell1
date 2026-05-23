@@ -52,6 +52,17 @@ textures {
   texture: "/main/images/ui_common.atlas"
 }
 nodes {
+  size {
+    x: 1280.0
+    y: 720.0
+  }
+  type: TYPE_BOX
+  id: "phone_root"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.0
+}
+nodes {
   position {
     z: 0.5
   }
@@ -68,7 +79,24 @@ nodes {
   id: "phone_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "phone_root"
   alpha: 0.55
+}
+nodes {
+  position {
+    x: 28.0
+    y: 33.0
+    z: 0.52
+  }
+  size {
+    x: 435.0
+    y: 660.0
+  }
+  type: TYPE_BOX
+  texture: "icon_phone/phone2"
+  id: "phone_case"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
 }
 nodes {
   position {
@@ -97,22 +125,6 @@ nodes {
     w: 32.0
   }
   alpha: 0.96
-}
-nodes {
-  position {
-    x: 28.0
-    y: 33.0
-    z: 0.52
-  }
-  size {
-    x: 435.0
-    y: 660.0
-  }
-  type: TYPE_BOX
-  texture: "icon_phone/phone2"
-  id: "phone_case"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
 }
 nodes {
   position {
@@ -235,6 +247,19 @@ nodes {
   position {
     x: 143.0
     y: 422.0
+  }
+  size {
+    x: 82.0
+    y: 76.0
+  }
+  type: TYPE_BOX
+  id: "app1_card"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.0
+}
+nodes {
+  position {
     z: 0.55
   }
   size {
@@ -249,6 +274,7 @@ nodes {
   texture: "icon_phone/ico_fon"
   id: "app1_bg"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app1_card"
   slice9 {
     x: 0.1
     y: 0.1
@@ -258,8 +284,6 @@ nodes {
 }
 nodes {
   position {
-    x: 143.0
-    y: 422.0
     z: 0.55
   }
   size {
@@ -275,6 +299,7 @@ nodes {
   texture: "icon_phone/ico_fon"
   id: "app1_bg1"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app1_card"
   slice9 {
     x: 0.1
     y: 0.1
@@ -285,8 +310,6 @@ nodes {
 }
 nodes {
   position {
-    x: 143.0
-    y: 422.0
     z: 0.568
   }
   size {
@@ -301,11 +324,11 @@ nodes {
   texture: "icon_phone/icon_sms"
   id: "app1_icon"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app1_card"
 }
 nodes {
   position {
-    x: 143.0
-    y: 378.0
+    y: -44.0
     z: 0.574
   }
   size {
@@ -322,7 +345,59 @@ nodes {
   font: "jb_mono_bold_14"
   id: "app1_label"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app1_card"
   alpha: 0.82
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 30.0
+    y: 30.0
+    z: 0.585
+  }
+  size {
+    x: 18.0
+    y: 18.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
+  type: TYPE_BOX
+  texture: "icon_phone/ico_fon"
+  id: "app1_badge_bg"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app1_card"
+  slice9 {
+    x: 0.1
+    y: 0.1
+    z: 0.1
+    w: 0.1
+  }
+  alpha: 0.98
+}
+nodes {
+  position {
+    x: 30.0
+    y: 30.0
+    z: 0.59
+  }
+  size {
+    x: 18.0
+    y: 11.0
+  }
+  color {
+    x: 0.102
+    y: 0.024
+    z: 0.063
+  }
+  type: TYPE_TEXT
+  text: "0"
+  font: "jb_mono_10"
+  id: "app1_badge_text"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app1_card"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
@@ -330,6 +405,19 @@ nodes {
   position {
     x: 245.0
     y: 422.0
+  }
+  size {
+    x: 82.0
+    y: 76.0
+  }
+  type: TYPE_BOX
+  id: "app2_card"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.0
+}
+nodes {
+  position {
     z: 0.55
   }
   size {
@@ -344,6 +432,7 @@ nodes {
   texture: "icon_phone/ico_fon"
   id: "app2_bg"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app2_card"
   slice9 {
     x: 0.1
     y: 0.1
@@ -353,8 +442,6 @@ nodes {
 }
 nodes {
   position {
-    x: 245.0
-    y: 422.0
     z: 0.55
   }
   scale {
@@ -374,6 +461,7 @@ nodes {
   texture: "icon_phone/ico_fon"
   id: "app2_bg1"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app2_card"
   slice9 {
     x: 0.1
     y: 0.1
@@ -384,8 +472,6 @@ nodes {
 }
 nodes {
   position {
-    x: 245.0
-    y: 422.0
     z: 0.568
   }
   size {
@@ -400,11 +486,11 @@ nodes {
   texture: "icon_phone/icon_call"
   id: "app2_icon"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app2_card"
 }
 nodes {
   position {
-    x: 245.0
-    y: 378.0
+    y: -44.0
     z: 0.574
   }
   size {
@@ -421,6 +507,7 @@ nodes {
   font: "jb_mono_bold_14"
   id: "app2_label"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app2_card"
   alpha: 0.82
   outline_alpha: 0.0
   shadow_alpha: 0.0
@@ -429,6 +516,19 @@ nodes {
   position {
     x: 347.0
     y: 422.0
+  }
+  size {
+    x: 82.0
+    y: 76.0
+  }
+  type: TYPE_BOX
+  id: "app3_card"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.0
+}
+nodes {
+  position {
     z: 0.55
   }
   size {
@@ -443,11 +543,10 @@ nodes {
   texture: "icon_phone/ico_fon"
   id: "app3_bg"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app3_card"
 }
 nodes {
   position {
-    x: 347.0
-    y: 422.0
     z: 0.55
   }
   scale {
@@ -467,12 +566,11 @@ nodes {
   texture: "icon_phone/ico_fon"
   id: "app3_bg1"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app3_card"
   alpha: 0.75
 }
 nodes {
   position {
-    x: 347.0
-    y: 422.0
     z: 0.568
   }
   size {
@@ -487,11 +585,11 @@ nodes {
   texture: "icon_phone/icon_map"
   id: "app3_icon"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app3_card"
 }
 nodes {
   position {
-    x: 347.0
-    y: 378.0
+    y: -44.0
     z: 0.574
   }
   size {
@@ -508,6 +606,7 @@ nodes {
   font: "jb_mono_bold_14"
   id: "app3_label"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app3_card"
   alpha: 0.82
   outline_alpha: 0.0
   shadow_alpha: 0.0
@@ -516,6 +615,19 @@ nodes {
   position {
     x: 348.0
     y: 303.0
+  }
+  size {
+    x: 82.0
+    y: 76.0
+  }
+  type: TYPE_BOX
+  id: "app4_card"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.0
+}
+nodes {
+  position {
     z: 0.55
   }
   size {
@@ -531,11 +643,10 @@ nodes {
   texture: "icon_phone/ico_fon"
   id: "app4_bg"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app4_card"
 }
 nodes {
   position {
-    x: 348.0
-    y: 303.0
     z: 0.55
   }
   scale {
@@ -555,12 +666,11 @@ nodes {
   texture: "icon_phone/ico_fon"
   id: "app4_bg1"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app4_card"
   alpha: 0.75
 }
 nodes {
   position {
-    x: 348.0
-    y: 303.0
     z: 0.568
   }
   size {
@@ -576,11 +686,11 @@ nodes {
   texture: "icon_phone/icon_notes"
   id: "app4_icon"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app4_card"
 }
 nodes {
   position {
-    x: 348.0
-    y: 259.0
+    y: -44.0
     z: 0.574
   }
   size {
@@ -597,6 +707,7 @@ nodes {
   font: "jb_mono_bold_14"
   id: "app4_label"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app4_card"
   alpha: 0.82
   outline_alpha: 0.0
   shadow_alpha: 0.0
@@ -605,6 +716,19 @@ nodes {
   position {
     x: 245.0
     y: 303.0
+  }
+  size {
+    x: 82.0
+    y: 76.0
+  }
+  type: TYPE_BOX
+  id: "app5_card"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.0
+}
+nodes {
+  position {
     z: 0.55
   }
   size {
@@ -619,11 +743,10 @@ nodes {
   texture: "icon_phone/ico_fon"
   id: "app5_bg"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app5_card"
 }
 nodes {
   position {
-    x: 245.0
-    y: 303.0
     z: 0.55
   }
   scale {
@@ -643,12 +766,11 @@ nodes {
   texture: "icon_phone/ico_fon"
   id: "app5_bg1"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app5_card"
   alpha: 0.75
 }
 nodes {
   position {
-    x: 245.0
-    y: 303.0
     z: 0.568
   }
   size {
@@ -663,11 +785,11 @@ nodes {
   texture: "icon_phone/icon_quests"
   id: "app5_icon"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app5_card"
 }
 nodes {
   position {
-    x: 245.0
-    y: 259.0
+    y: -44.0
     z: 0.574
   }
   size {
@@ -684,6 +806,7 @@ nodes {
   font: "jb_mono_bold_14"
   id: "app5_label"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app5_card"
   alpha: 0.82
   outline_alpha: 0.0
   shadow_alpha: 0.0
@@ -692,6 +815,19 @@ nodes {
   position {
     x: 142.0
     y: 183.0
+  }
+  size {
+    x: 82.0
+    y: 76.0
+  }
+  type: TYPE_BOX
+  id: "app6_card"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.0
+}
+nodes {
+  position {
     z: 0.55
   }
   size {
@@ -706,12 +842,11 @@ nodes {
   texture: "icon_phone/ico_fon"
   id: "app6_bg"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app6_card"
   alpha: 0.75
 }
 nodes {
   position {
-    x: 142.0
-    y: 183.0
     z: 0.55
   }
   scale {
@@ -731,12 +866,11 @@ nodes {
   texture: "icon_phone/ico_fon"
   id: "app6_bg1"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app6_card"
   alpha: 0.75
 }
 nodes {
   position {
-    x: 142.0
-    y: 183.0
     z: 0.568
   }
   size {
@@ -751,11 +885,11 @@ nodes {
   texture: "icon_phone/icon_mail"
   id: "app6_icon"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app6_card"
 }
 nodes {
   position {
-    x: 142.0
-    y: 139.0
+    y: -44.0
     z: 0.574
   }
   size {
@@ -772,6 +906,7 @@ nodes {
   font: "jb_mono_bold_14"
   id: "app6_label"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app6_card"
   alpha: 0.82
   outline_alpha: 0.0
   shadow_alpha: 0.0
@@ -780,6 +915,19 @@ nodes {
   position {
     x: 141.0
     y: 303.0
+  }
+  size {
+    x: 82.0
+    y: 76.0
+  }
+  type: TYPE_BOX
+  id: "app7_card"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.0
+}
+nodes {
+  position {
     z: 0.55
   }
   size {
@@ -794,12 +942,11 @@ nodes {
   texture: "icon_phone/ico_fon"
   id: "app7_bg"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app7_card"
   alpha: 0.75
 }
 nodes {
   position {
-    x: 141.0
-    y: 303.0
     z: 0.55
   }
   scale {
@@ -819,12 +966,11 @@ nodes {
   texture: "icon_phone/ico_fon"
   id: "app7_bg1"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app7_card"
   alpha: 0.75
 }
 nodes {
   position {
-    x: 141.0
-    y: 303.0
     z: 0.568
   }
   size {
@@ -839,11 +985,11 @@ nodes {
   texture: "icon_phone/icon_sms"
   id: "app7_icon"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app7_card"
 }
 nodes {
   position {
-    x: 141.0
-    y: 259.0
+    y: -44.0
     z: 0.574
   }
   size {
@@ -860,7 +1006,59 @@ nodes {
   font: "jb_mono_bold_14"
   id: "app7_label"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app7_card"
   alpha: 0.82
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 30.0
+    y: 30.0
+    z: 0.585
+  }
+  size {
+    x: 18.0
+    y: 18.0
+  }
+  color {
+    x: 0.282
+    y: 0.961
+  }
+  type: TYPE_BOX
+  texture: "icon_phone/ico_fon"
+  id: "app7_badge_bg"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app7_card"
+  slice9 {
+    x: 0.1
+    y: 0.1
+    z: 0.1
+    w: 0.1
+  }
+  alpha: 0.98
+}
+nodes {
+  position {
+    x: 30.0
+    y: 30.0
+    z: 0.59
+  }
+  size {
+    x: 18.0
+    y: 11.0
+  }
+  color {
+    x: 0.102
+    y: 0.024
+    z: 0.063
+  }
+  type: TYPE_TEXT
+  text: "0"
+  font: "jb_mono_10"
+  id: "app7_badge_text"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app7_card"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
@@ -868,6 +1066,19 @@ nodes {
   position {
     x: 247.0
     y: 183.0
+  }
+  size {
+    x: 82.0
+    y: 76.0
+  }
+  type: TYPE_BOX
+  id: "app8_card"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  alpha: 0.0
+}
+nodes {
+  position {
     z: 0.55
   }
   size {
@@ -882,12 +1093,11 @@ nodes {
   texture: "icon_phone/ico_fon"
   id: "app8_bg"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app8_card"
   alpha: 0.75
 }
 nodes {
   position {
-    x: 247.0
-    y: 183.0
     z: 0.55
   }
   scale {
@@ -907,12 +1117,11 @@ nodes {
   texture: "icon_phone/ico_fon"
   id: "app8_bg1"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app8_card"
   alpha: 0.75
 }
 nodes {
   position {
-    x: 247.0
-    y: 183.0
     z: 0.568
   }
   size {
@@ -927,11 +1136,11 @@ nodes {
   texture: "icon_phone/icon_terminal"
   id: "app8_icon"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app8_card"
 }
 nodes {
   position {
-    x: 247.0
-    y: 139.0
+    y: -44.0
     z: 0.574
   }
   size {
@@ -948,105 +1157,8 @@ nodes {
   font: "jb_mono_bold_14"
   id: "app8_label"
   adjust_mode: ADJUST_MODE_STRETCH
+  parent: "app8_card"
   alpha: 0.82
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 173.0
-    y: 452.0
-    z: 0.585
-  }
-  size {
-    x: 18.0
-    y: 18.0
-  }
-  color {
-    y: 0.239
-    z: 0.498
-  }
-  type: TYPE_BOX
-  texture: "icon_phone/ico_fon"
-  id: "app1_badge_bg"
-  adjust_mode: ADJUST_MODE_STRETCH
-  slice9 {
-    x: 0.1
-    y: 0.1
-    z: 0.1
-    w: 0.1
-  }
-  alpha: 0.98
-}
-nodes {
-  position {
-    x: 173.0
-    y: 452.0
-    z: 0.59
-  }
-  size {
-    x: 18.0
-    y: 11.0
-  }
-  color {
-    x: 0.102
-    y: 0.024
-    z: 0.063
-  }
-  type: TYPE_TEXT
-  text: "0"
-  font: "jb_mono_10"
-  id: "app1_badge_text"
-  adjust_mode: ADJUST_MODE_STRETCH
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 171.0
-    y: 333.0
-    z: 0.585
-  }
-  size {
-    x: 18.0
-    y: 18.0
-  }
-  color {
-    x: 0.282
-    y: 0.961
-  }
-  type: TYPE_BOX
-  texture: "icon_phone/ico_fon"
-  id: "app7_badge_bg"
-  adjust_mode: ADJUST_MODE_STRETCH
-  slice9 {
-    x: 0.1
-    y: 0.1
-    z: 0.1
-    w: 0.1
-  }
-  alpha: 0.98
-}
-nodes {
-  position {
-    x: 171.0
-    y: 333.0
-    z: 0.59
-  }
-  size {
-    x: 18.0
-    y: 11.0
-  }
-  color {
-    x: 0.102
-    y: 0.024
-    z: 0.063
-  }
-  type: TYPE_TEXT
-  text: "0"
-  font: "jb_mono_10"
-  id: "app7_badge_text"
-  adjust_mode: ADJUST_MODE_STRETCH
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
@@ -1259,8 +1371,8 @@ nodes {
     z: 0.0
   }
   type: TYPE_TEXT
-  text: "\303\227"
-  font: "unbounded_bold_64"
+  text: "x"
+  font: "unbounded_bold_32"
   id: "close_x"
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "close_btn"

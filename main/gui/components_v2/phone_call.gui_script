@@ -14,6 +14,8 @@ local MAX_CALL_SLOTS = 8
 local SCROLL_STEP_ROWS = 3
 local DRAG_THRESHOLD_PX = 8
 local DRAG_STEP_PX = 34
+local ROW_H = 56
+local ROW_GAP = 0
 
 local COLORS = {
     paper     = vmath.vector4(0.953, 0.925, 0.851, 1),
@@ -38,12 +40,16 @@ local NODE_IDS = {
     "v_call_foot_line", "v_call_footer_left", "v_call_dial_bg", "v_call_dial_text",
 }
 
+local ROW_SUFFIXES = {
+    "_bg", "_accent", "_av_bg", "_av_text", "_name", "_dir_box",
+    "_meta", "_time", "_badge_bg", "_badge_text"
+}
+
+local _row_clones = nil
+
 for i = 1, MAX_CALL_SLOTS do
     local p = "v_call_c" .. i
-    for _, suffix in ipairs({
-        "_bg", "_accent", "_av_bg", "_av_text", "_name", "_dir_box",
-        "_meta", "_time", "_badge_bg", "_badge_text"
-    }) do
+    for _, suffix in ipairs(ROW_SUFFIXES) do
         NODE_IDS[#NODE_IDS + 1] = p .. suffix
     end
 end
@@ -73,6 +79,60 @@ local clamp_text           = U.clamp_text
 
 local function set_nodes_enabled(enabled)
     U.set_nodes_enabled(NODE_IDS, enabled)
+end
+
+local function try_get_node(id)
+    local ok, n = pcall(gui.get_node, id)
+    if ok then return n end
+    return nil
+end
+
+local function get_row_node(id)
+    local n = try_get_node(id)
+    if n then return n end
+    if not _row_clones then return nil end
+    local N, suffix = id:match("^v_call_c(%d+)(_.+)$")
+    if not N then return nil end
+    N = tonumber(N)
+    if N == 1 then return nil end
+    local clone = _row_clones[N]
+    if not clone then return nil end
+    return clone["v_call_c1" .. suffix]
+end
+
+local function set_row_enabled(slot, enabled)
+    for _, suffix in ipairs(ROW_SUFFIXES) do
+        local n = get_row_node("v_call_c" .. slot .. suffix)
+        if n then gui.set_enabled(n, enabled) end
+    end
+end
+
+local function row_set_text(slot, suffix, text)
+    local n = get_row_node("v_call_c" .. slot .. suffix)
+    if n then gui.set_text(n, text or "") end
+end
+
+local function row_set_color(slot, suffix, color, alpha)
+    local n = get_row_node("v_call_c" .. slot .. suffix)
+    if n then
+        gui.set_color(n, color)
+        if alpha ~= nil then gui.set_alpha(n, alpha) end
+    end
+end
+
+local function row_set_color_keep_alpha(slot, suffix, color)
+    local n = get_row_node("v_call_c" .. slot .. suffix)
+    if n then gui.set_color(n, color) end
+end
+
+local function row_set_alpha(slot, suffix, alpha)
+    local n = get_row_node("v_call_c" .. slot .. suffix)
+    if n then gui.set_alpha(n, alpha) end
+end
+
+local function row_set_node_enabled(slot, suffix, enabled)
+    local n = get_row_node("v_call_c" .. slot .. suffix)
+    if n then gui.set_enabled(n, enabled) end
 end
 
 local function truthy(v)
@@ -135,11 +195,7 @@ local function call_duration(c)
 end
 
 local function row_count()
-    local count = 0
-    for i = 1, MAX_CALL_SLOTS do
-        if get_node("v_call_c" .. i .. "_bg") then count = count + 1 end
-    end
-    return count
+    return MAX_CALL_SLOTS
 end
 
 local function clamp_offset(self, total)
@@ -223,11 +279,8 @@ local function initials(name)
 end
 
 local function render_row(slot, call)
-    local p = "v_call_c" .. slot
     local has = type(call) == "table"
-    for _, suffix in ipairs({"_bg", "_accent", "_av_bg", "_av_text", "_name", "_dir_box", "_meta", "_time", "_badge_bg", "_badge_text"}) do
-        set_node_enabled(p .. suffix, has)
-    end
+    set_row_enabled(slot, has)
     if not has then return end
 
     local kind = call_kind(call)
@@ -237,40 +290,40 @@ local function render_row(slot, call)
     local count = call_count(call)
     if missed and count <= 0 then count = truthy(call.missed) and 1 or 0 end
 
-    set_color(p .. "_bg", missed and COLORS.card_hot or COLORS.card, missed and 0.76 or 0.58)
-    set_alpha(p .. "_accent", missed and 0.85 or 0.0)
-    set_color(p .. "_accent", missed and COLORS.hot or COLORS.accent, missed and 0.85 or 0.0)
+    row_set_color(slot, "_bg", missed and COLORS.card_hot or COLORS.card, missed and 0.76 or 0.58)
+    row_set_alpha(slot, "_accent", missed and 0.85 or 0.0)
+    row_set_color(slot, "_accent", missed and COLORS.hot or COLORS.accent, missed and 0.85 or 0.0)
 
     local av_color, av_alpha = avatar_color(call, kind)
-    set_color(p .. "_av_bg", av_color, av_alpha)
-    set_text(p .. "_av_text", clamp_text(call.initials or initials(who), 2))
-    set_color_keep_alpha(p .. "_av_text", av_color)
+    row_set_color(slot, "_av_bg", av_color, av_alpha)
+    row_set_text(slot, "_av_text", clamp_text(call.initials or initials(who), 2))
+    row_set_color_keep_alpha(slot, "_av_text", av_color)
 
-    set_text(p .. "_name", clamp_text(who, 28))
-    set_color_keep_alpha(p .. "_name", missed and COLORS.hot or COLORS.paper)
+    row_set_text(slot, "_name", clamp_text(who, 28))
+    row_set_color_keep_alpha(slot, "_name", missed and COLORS.hot or COLORS.paper)
 
     local dir_color = direction_color(kind)
-    set_color(p .. "_dir_box", dir_color, 0.85)
+    row_set_color(slot, "_dir_box", dir_color, 0.85)
     local meta = direction_text(kind, duration)
     local number = call_number(call)
     if number ~= "" then meta = meta .. "    " .. number end
-    set_text(p .. "_meta", clamp_text(meta, 52))
-    set_color_keep_alpha(p .. "_meta", missed and COLORS.hot or COLORS.paper_dim)
+    row_set_text(slot, "_meta", clamp_text(meta, 52))
+    row_set_color_keep_alpha(slot, "_meta", missed and COLORS.hot or COLORS.paper_dim)
 
-    set_text(p .. "_time", clamp_text(call_time(call), 8))
-    set_color_keep_alpha(p .. "_time", COLORS.paper_dim)
+    row_set_text(slot, "_time", clamp_text(call_time(call), 8))
+    row_set_color_keep_alpha(slot, "_time", COLORS.paper_dim)
 
     if count > 1 then
-        set_node_enabled(p .. "_badge_bg", true)
-        set_node_enabled(p .. "_badge_text", true)
-        set_alpha(p .. "_badge_bg", 1.0)
-        set_alpha(p .. "_badge_text", 1.0)
-        set_text(p .. "_badge_text", tostring(count))
+        row_set_node_enabled(slot, "_badge_bg", true)
+        row_set_node_enabled(slot, "_badge_text", true)
+        row_set_alpha(slot, "_badge_bg", 1.0)
+        row_set_alpha(slot, "_badge_text", 1.0)
+        row_set_text(slot, "_badge_text", tostring(count))
     else
-        set_alpha(p .. "_badge_bg", 0.0)
-        set_alpha(p .. "_badge_text", 0.0)
-        set_node_enabled(p .. "_badge_bg", false)
-        set_node_enabled(p .. "_badge_text", false)
+        row_set_alpha(slot, "_badge_bg", 0.0)
+        row_set_alpha(slot, "_badge_text", 0.0)
+        row_set_node_enabled(slot, "_badge_bg", false)
+        row_set_node_enabled(slot, "_badge_text", false)
     end
 end
 
@@ -377,11 +430,28 @@ end
 function init(self)
     self.visible = false
     self.call_offset = 0
+
+    U.apply_adaptive_layout("call_runtime_root")
+
+    _row_clones = {}
+    local proto = gui.get_node("v_call_c1_bg")
+    if proto then
+        local proto_pos = gui.get_position(proto)
+        for slot = 2, MAX_CALL_SLOTS do
+            local clone = gui.clone_tree(proto)
+            _row_clones[slot] = clone
+            local clone_root = clone["v_call_c1_bg"]
+            local y_offset = -(slot - 1) * (ROW_H + ROW_GAP)
+            gui.set_position(clone_root, vmath.vector3(
+                proto_pos.x, proto_pos.y + y_offset, proto_pos.z))
+        end
+    end
+
     self.call_drag = drag_scroll.new({
         step_px      = DRAG_STEP_PX,
         threshold_px = DRAG_THRESHOLD_PX,
         owner        = self,
-        invert       = true,  -- drag вверх → старые звонки
+        invert       = true,
         is_inside    = inside_list,
         on_step      = function(owner, delta) scroll_calls(owner, delta) end,
     })

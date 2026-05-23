@@ -18,7 +18,40 @@ local log     = require "main.scripts.log"
 local MSG     = require "main.gui.modules.messages"
 local UI_MGR  = "#ui_manager_v2"
 
+local BASE_W  = 1280
+local BASE_H  = 720
+
 local function dbg(...) log.debug("phone_root", ...) end
+
+-- Root-level chrome nodes (no parent in .gui) — reparented under phone_root
+-- at init for uniform adaptive scaling.
+local ROOT_CHROME = {
+    "phone_bg",
+    "phone_case", "phone_case_top", "phone_screen", "phone_notch", "phone_side_btn",
+    "stats_msg", "status_meta",
+    "wall_time", "wall_date", "wall_glitch",
+    "home_indicator", "home_btn",
+    "side_panel1", "side_panel", "head_divider",
+    "corner_tl_v", "corner_tl_h", "corner_tr_v", "corner_tr_h",
+    "corner_bl_v", "corner_bl_h", "corner_br_v", "corner_br_h",
+    "title_eyebrow", "title_main",
+    "close_btn",
+    "close_btn_border_t", "close_btn_border_b", "close_btn_border_l", "close_btn_border_r",
+    "app_slot_vline_1", "app_slot_vline_2", "app_slot_vline_3", "app_slot_vline_4",
+    "app_slot_vline_5", "app_slot_vline_6", "app_slot_vline_7", "app_slot_vline_8",
+    "app_slot_vline_9", "app_slot_vline_10", "app_slot_vline_11", "app_slot_vline_12",
+    "app_slot_vline_13", "app_slot_vline_14", "app_slot_vline_15", "app_slot_vline_16", "app_slot_vline_17",
+    "app_slot_hline_1", "app_slot_hline_2", "app_slot_hline_3", "app_slot_hline_4",
+    "app_slot_hline_5", "app_slot_hline_6", "app_slot_hline_7", "app_slot_hline_8",
+    "app_slot_hline_9", "app_slot_hline_10", "app_slot_hline_11", "app_slot_hline_12",
+    "app_slot_hline_13", "app_slot_hline_14",
+    "app1_card", "app2_card", "app3_card", "app4_card",
+    "app5_card", "app6_card", "app7_card", "app8_card",
+}
+
+local function apply_adaptive_layout()
+    U.apply_adaptive_layout("phone_root", BASE_W, BASE_H)
+end
 
 -- Карта app-id → component-id (все на одном game object-е → "#" prefix)
 local APP_COMPONENT = {
@@ -51,7 +84,7 @@ local APP_TITLES = {
 
 local CHROME_NODES = {
     "phone_bg",
-    "phone_case", "phone_case_top", "phone_screen1", "phone_screen", "phone_notch", "phone_side_btn",
+    "phone_case", "phone_case_top", "phone_screen", "phone_notch", "phone_side_btn",
     "stats_msg", "status_meta",
     "wall_time", "wall_date", "wall_glitch",
     "home_indicator", "home_btn",
@@ -231,6 +264,17 @@ end
 function init(self)
     self.visible    = false
     self.active_app = nil
+
+    -- Reparent all root-level chrome nodes under phone_root for adaptive scaling
+    local root = gui.get_node("phone_root")
+    if root then
+        for _, id in ipairs(ROOT_CHROME) do
+            local n = U.get_node(id)
+            if n then gui.set_parent(n, root) end
+        end
+        apply_adaptive_layout()
+    end
+
     set_nodes_enabled(CHROME_NODES, false)
     update_app_title("sms")
     update_wall_calendar()

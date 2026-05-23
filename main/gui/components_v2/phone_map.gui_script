@@ -10,6 +10,7 @@
 -- покажет «отказной» диалог вместо confirm. См. game_state.map_is_poi_allowed.
 
 local gs = require "main.scripts.game_state"
+local U = require "main.gui.modules.gui_utils"
 
 local UI_MGR = "#ui_manager_v2"
 
@@ -165,6 +166,9 @@ function init(self)
     self.visible         = false
     self.confirm_target  = nil
     self.confirm_blocked = false
+
+    U.apply_adaptive_layout("map_runtime_root")
+
     set_root_enabled(false)
     -- явно прячем grp_confirm: его own enabled = false,
     -- чтобы не всплыл когда set_root_enabled(true) включит родителя

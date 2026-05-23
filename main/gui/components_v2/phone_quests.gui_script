@@ -6,6 +6,7 @@
 local gs = require "main.scripts.game_state"
 local quests_catalog = require "main.scripts.quests"
 local drag_scroll = require "main.gui.modules.drag_scroll"
+local U = require "main.gui.modules.gui_utils"
 
 local COLORS = {
     dark      = vmath.vector4(0.031, 0.024, 0.094, 1),
@@ -472,6 +473,8 @@ function init(self)
     self.visible = false
     self.filter = "active"
     self.offset = 0
+
+    U.apply_adaptive_layout("quests_runtime_root")
 
     -- В .gui лежит ОДНА quest-карточка (quest1_bg + дети). Клонируем её для
     -- слотов 2..QUEST_SLOTS через gui.clone_tree. Клоны позиционируются ниже

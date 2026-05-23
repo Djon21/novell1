@@ -9,8 +9,11 @@ local COLOR_CYAN      = vmath.vector4(0.47, 0.94, 1.00, 1.0)
 local COLOR_PAPER_DIM = vmath.vector4(0.80, 0.80, 0.78, 0.7)
 
 local NODE_IDS = {
+    "notes_runtime_root",
     "clues_screen_bg", "clues_header_line",
-    "clues_card1_accent", "clues_card2_accent", "clues_footer_line",
+    "clues_card1_card", "clues_card1_accent",
+    "clues_card2_card", "clues_card2_accent",
+    "clues_footer_line",
     "v_clues_eyebrow", "v_clues_title",
     "v_clues_card1_bg", "v_clues_card1_tag", "v_clues_card1_body",
     "v_clues_card2_bg", "v_clues_card2_tag", "v_clues_card2_body",
@@ -58,6 +61,9 @@ end
 
 function init(self)
     self.visible = false
+
+    U.apply_adaptive_layout("notes_runtime_root")
+
     set_nodes_enabled(false)
 end
 

@@ -23,6 +23,7 @@ local sm  = require "main.scripts.save_manager"
 local meta = require "main.scripts.meta_state"
 
 local M = {}
+local _tag_handlers = {}
 local set_story_value
 
 -- -------------------------------------------------------
@@ -900,6 +901,16 @@ local function apply_tags(tags, trailing)
             -- Обычно висит в конце knot'а → попадает в deferred и срабатывает
             -- когда игрок прочитает все параграфы монолога.
             table.insert(scene_bucket, { type = "return_to_scene" })
+        else
+            local h = _tag_handlers[key]
+            if h then
+                h(value, trailing, {
+                    pending_commands = pending_commands,
+                    pending_effects  = pending_effects,
+                    scene_bucket     = scene_bucket,
+                    deferred_commands = deferred_commands,
+                })
+            end
         end
     end
 end
@@ -1300,6 +1311,22 @@ end
 
 function M.has_knot(knot_name)
     return story_knot_index[knot_name] == true
+end
+
+-- Регистрирует кастомный обработчик Ink-тега.
+-- handler(value, trailing, ctx) где ctx = {
+--   pending_commands, pending_effects, scene_bucket, deferred_commands
+-- }
+function M.register_tag(key, handler)
+    if type(key) ~= "string" or key == "" then
+        log.warn("dm", "register_tag: invalid key", tostring(key))
+        return
+    end
+    if type(handler) ~= "function" then
+        log.warn("dm", "register_tag: handler must be a function for key", key)
+        return
+    end
+    _tag_handlers[key] = handler
 end
 
 -- Dev/testing helper: принудительно выставить Ink-переменную перед прыжком
