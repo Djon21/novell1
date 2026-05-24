@@ -80,6 +80,18 @@ local APP_TITLES = {
     term   = "ТЕРМИНАЛ",
 }
 
+local _card_clones = {}
+
+local APP_CARD_DATA = {
+    { key = "app1", id = "sms",    x = 143, y = 422, bg_r = 0.0,    bg_g = 0.239, bg_b = 0.498, icon = "icon_sms",     label = "СМС" },
+    { key = "app2", id = "call",   x = 245, y = 422, bg_r = 0.490,  bg_g = 0.976, bg_b = 0.0,   icon = "icon_call",    label = "Звонки" },
+    { key = "app3", id = "map",    x = 347, y = 422, bg_r = 0.0,    bg_g = 0.702, bg_b = 0.278, icon = "icon_map",     label = "Карта" },
+    { key = "app4", id = "notes",  x = 348, y = 303, bg_r = 0.953,  bg_g = 0.925, bg_b = 0.851, icon = "icon_notes",   label = "Улики" },
+    { key = "app5", id = "quests", x = 245, y = 303, bg_r = 0.478,  bg_g = 0.361, bg_b = 0.0,   icon = "icon_quests",  label = "Квесты" },
+    { key = "app6", id = "mail",   x = 142, y = 183, bg_r = 0.0,    bg_g = 0.239, bg_b = 0.498, icon = "icon_mail",    label = "Почта" },
+    { key = "app7", id = "messenger", x = 141, y = 303, bg_r = 0.282, bg_g = 0.961, bg_b = 0.0, icon = "icon_sms",   label = "Чаты" },
+    { key = "app8", id = "term",   x = 247, y = 183, bg_r = 0.0,    bg_g = 0.702, bg_b = 0.278, icon = "icon_terminal", label = "Терминал" },
+}
 
 local CHROME_NODES = {
     "phone_bg",
