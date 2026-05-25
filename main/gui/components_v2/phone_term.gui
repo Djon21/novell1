@@ -32,9 +32,6 @@ fonts {
   font: "/main/fonts/manrope_16.font"
 }
 nodes {
-  position {
-    z: 0.0
-  }
   size {
     x: 1280.0
     y: 720.0
@@ -47,13 +44,13 @@ nodes {
 }
 nodes {
   position {
-    x: 500.000
-    y: 40.000
+    x: 500.0
+    y: 40.0
     z: 0.522
   }
   size {
-    x: 728.000
-    y: 640.000
+    x: 728.0
+    y: 640.0
   }
   color {
     x: 0.031
@@ -65,66 +62,65 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "term_runtime_root"
-  alpha: 0.880
+  alpha: 0.88
 }
 nodes {
   position {
-    x: 500.000
-    y: 612.000
+    x: 500.0
+    y: 612.0
     z: 0.523
   }
   size {
-    x: 728.000
-    y: 68.000
+    x: 728.0
+    y: 68.0
   }
   color {
     x: 0.047
     y: 0.041
-    z: 0.120
+    z: 0.12
   }
   type: TYPE_BOX
   id: "v_term_head_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "term_runtime_root"
-  alpha: 0.720
+  alpha: 0.72
 }
 nodes {
   position {
-    x: 500.000
-    y: 40.000
+    x: 500.0
+    y: 40.0
     z: 0.524
   }
   size {
-    x: 728.000
-    y: 640.000
+    x: 728.0
+    y: 640.0
   }
   color {
-    x: 0.040
-    y: 0.120
-    z: 0.140
+    x: 0.04
+    y: 0.12
+    z: 0.14
   }
   type: TYPE_BOX
   id: "v_term_crt_scan"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "term_runtime_root"
-  alpha: 0.100
+  alpha: 0.1
 }
 nodes {
   position {
-    x: 524.000
-    y: 650.000
-    z: 0.560
+    x: 524.0
+    y: 650.0
+    z: 0.56
   }
   size {
-    x: 520.000
-    y: 12.000
+    x: 520.0
+    y: 12.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_TEXT
   text: "avos-shell \302\267 ssh prod-eu-1 \302\267 p1 active"
@@ -133,19 +129,19 @@ nodes {
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "term_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 524.000
-    y: 626.000
+    x: 524.0
+    y: 626.0
     z: 0.561
   }
   size {
-    x: 260.000
-    y: 24.000
+    x: 260.0
+    y: 24.0
   }
   color {
     x: 0.953
@@ -159,19 +155,19 @@ nodes {
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "term_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 900.000
-    y: 624.000
-    z: 0.540
+    x: 900.0
+    y: 624.0
+    z: 0.54
   }
   size {
-    x: 110.000
-    y: 24.000
+    x: 110.0
+    y: 24.0
   }
   type: TYPE_BOX
   id: "v_term_tab1_card"
@@ -182,33 +178,58 @@ nodes {
 }
 nodes {
   position {
-    z: 0.540
+    z: 0.54
   }
   size {
-    x: 110.000
-    y: 24.000
+    x: 110.0
+    y: 24.0
   }
   color {
-    x: 0.090
+    x: 0.09
     y: 0.085
-    z: 0.200
+    z: 0.2
   }
   type: TYPE_BOX
   id: "v_term_tab1"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "v_term_tab1_card"
-  alpha: 0.750
+  alpha: 0.75
 }
 nodes {
   position {
-    x: 1012.000
-    y: 624.000
-    z: 0.540
+    x: 8.0
+    y: 12.0
+    z: 0.562
   }
   size {
-    x: 72.000
-    y: 24.000
+    x: 94.0
+    y: 14.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "prod-eu-1 \303\227"
+  font: "jb_mono_10"
+  id: "v_term_tab1_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "v_term_tab1_card"
+  alpha: 0.95
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 1012.0
+    y: 624.0
+    z: 0.54
+  }
+  size {
+    x: 72.0
+    y: 24.0
   }
   type: TYPE_BOX
   id: "v_term_tab2_card"
@@ -219,14 +240,14 @@ nodes {
 }
 nodes {
   position {
-    z: 0.540
+    z: 0.54
   }
   size {
-    x: 72.000
-    y: 24.000
+    x: 72.0
+    y: 24.0
   }
   color {
-    x: 0.060
+    x: 0.06
     y: 0.055
     z: 0.135
   }
@@ -235,120 +256,20 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "v_term_tab2_card"
-  alpha: 0.660
+  alpha: 0.66
 }
 nodes {
   position {
-    x: 1086.000
-    y: 624.000
-    z: 0.540
-  }
-  size {
-    x: 116.000
-    y: 24.000
-  }
-  type: TYPE_BOX
-  id: "v_term_tab3_card"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "term_runtime_root"
-  alpha: 0.0
-}
-nodes {
-  position {
-    z: 0.540
-  }
-  size {
-    x: 116.000
-    y: 24.000
-  }
-  color {
-    x: 0.060
-    y: 0.055
-    z: 0.135
-  }
-  type: TYPE_BOX
-  id: "v_term_tab3"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "v_term_tab3_card"
-  alpha: 0.660
-}
-nodes {
-  position {
-    x: 1204.000
-    y: 624.000
-    z: 0.540
-  }
-  size {
-    x: 24.000
-    y: 24.000
-  }
-  type: TYPE_BOX
-  id: "v_term_tab_plus_card"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "term_runtime_root"
-  alpha: 0.0
-}
-nodes {
-  position {
-    z: 0.540
-  }
-  size {
-    x: 24.000
-    y: 24.000
-  }
-  color {
-    x: 0.060
-    y: 0.055
-    z: 0.135
-  }
-  type: TYPE_BOX
-  id: "v_term_tab_plus"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "v_term_tab_plus_card"
-  alpha: 0.660
-}
-nodes {
-  position {
-    x: 8.000
-    y: 12.000
+    x: 8.0
+    y: 12.0
     z: 0.562
   }
   size {
-    x: 94.000
-    y: 14.000
+    x: 60.0
+    y: 14.0
   }
   color {
-    x: 0.490
-    y: 0.976
-    z: 1.000
-  }
-  type: TYPE_TEXT
-  text: "prod-eu-1 \303\227"
-  font: "jb_mono_10"
-  id: "v_term_tab1_text"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "v_term_tab1_card"
-  alpha: 0.950
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 8.000
-    y: 12.000
-    z: 0.562
-  }
-  size {
-    x: 60.000
-    y: 14.000
-  }
-  color {
-    x: 0.790
+    x: 0.79
     y: 0.753
     z: 0.659
   }
@@ -359,22 +280,59 @@ nodes {
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "v_term_tab2_card"
-  alpha: 0.920
+  alpha: 0.92
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 8.000
-    y: 12.000
+    x: 1086.0
+    y: 624.0
+    z: 0.54
+  }
+  size {
+    x: 116.0
+    y: 24.0
+  }
+  type: TYPE_BOX
+  id: "v_term_tab3_card"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.0
+}
+nodes {
+  position {
+    z: 0.54
+  }
+  size {
+    x: 116.0
+    y: 24.0
+  }
+  color {
+    x: 0.06
+    y: 0.055
+    z: 0.135
+  }
+  type: TYPE_BOX
+  id: "v_term_tab3"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "v_term_tab3_card"
+  alpha: 0.66
+}
+nodes {
+  position {
+    x: 8.0
+    y: 12.0
     z: 0.562
   }
   size {
-    x: 106.000
-    y: 14.000
+    x: 106.0
+    y: 14.0
   }
   color {
-    x: 0.790
+    x: 0.79
     y: 0.753
     z: 0.659
   }
@@ -385,22 +343,59 @@ nodes {
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "v_term_tab3_card"
-  alpha: 0.920
+  alpha: 0.92
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 8.000
-    y: 12.000
+    x: 1204.0
+    y: 624.0
+    z: 0.54
+  }
+  size {
+    x: 24.0
+    y: 24.0
+  }
+  type: TYPE_BOX
+  id: "v_term_tab_plus_card"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "term_runtime_root"
+  alpha: 0.0
+}
+nodes {
+  position {
+    z: 0.54
+  }
+  size {
+    x: 24.0
+    y: 24.0
+  }
+  color {
+    x: 0.06
+    y: 0.055
+    z: 0.135
+  }
+  type: TYPE_BOX
+  id: "v_term_tab_plus"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "v_term_tab_plus_card"
+  alpha: 0.66
+}
+nodes {
+  position {
+    x: 8.0
+    y: 12.0
     z: 0.562
   }
   size {
-    x: 12.000
-    y: 14.000
+    x: 12.0
+    y: 14.0
   }
   color {
-    x: 0.790
+    x: 0.79
     y: 0.753
     z: 0.659
   }
@@ -411,19 +406,19 @@ nodes {
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "v_term_tab_plus_card"
-  alpha: 0.920
+  alpha: 0.92
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 524.000
-    y: 116.000
+    x: 524.0
+    y: 116.0
     z: 0.526
   }
   size {
-    x: 660.000
-    y: 486.000
+    x: 660.0
+    y: 486.0
   }
   color {
     x: 0.016
@@ -435,22 +430,22 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "term_runtime_root"
-  alpha: 0.820
+  alpha: 0.82
 }
 nodes {
   position {
-    x: 536.000
-    y: 158.000
+    x: 536.0
+    y: 158.0
     z: 0.527
   }
   size {
-    x: 628.000
-    y: 400.000
+    x: 628.0
+    y: 400.0
   }
   color {
-    x: 0.000
-    y: 0.000
-    z: 0.000
+    x: 0.0
+    y: 0.0
+    z: 0.0
   }
   type: TYPE_BOX
   id: "v_term_shell_clip"
@@ -461,13 +456,13 @@ nodes {
 }
 nodes {
   position {
-    x: 542.000
-    y: 542.000
+    x: 542.0
+    y: 542.0
     z: 0.564
   }
   size {
-    x: 600.000
-    y: 18.000
+    x: 600.0
+    y: 18.0
   }
   color {
     x: 0.953
@@ -475,70 +470,66 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: ""
   font: "jb_mono_12"
   id: "v_term_l1"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "term_runtime_root"
-  alpha: 0.980
+  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
-
 nodes {
   position {
-    x: 1172.000
-    y: 160.000
+    x: 1172.0
+    y: 160.0
     z: 0.545
   }
   size {
-    x: 3.000
-    y: 396.000
+    x: 3.0
+    y: 396.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_BOX
   id: "v_term_scroll_track"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "term_runtime_root"
-  alpha: 0.160
+  alpha: 0.16
 }
 nodes {
   position {
-    x: 1170.000
-    y: 460.000
+    x: 1170.0
+    y: 460.0
     z: 0.566
   }
   size {
-    x: 7.000
-    y: 64.000
+    x: 7.0
+    y: 64.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_BOX
   id: "v_term_scroll_thumb"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "term_runtime_root"
-  alpha: 0.600
+  alpha: 0.6
 }
 nodes {
   position {
-    x: 524.000
-    y: 116.000
+    x: 524.0
+    y: 116.0
     z: 0.525
   }
   size {
-    x: 660.000
-    y: 486.000
+    x: 660.0
+    y: 486.0
   }
   color {
     x: 0.016
@@ -554,40 +545,39 @@ nodes {
 }
 nodes {
   position {
-    x: 536.000
-    y: 124.000
+    x: 536.0
+    y: 124.0
     z: 0.545
   }
   size {
-    x: 628.000
-    y: 28.000
+    x: 628.0
+    y: 28.0
   }
   color {
-    x: 0.040
+    x: 0.04
     y: 0.035
-    z: 0.100
+    z: 0.1
   }
   type: TYPE_BOX
   id: "v_term_input_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "term_runtime_root"
-  alpha: 0.900
+  alpha: 0.9
 }
 nodes {
   position {
-    x: 546.000
-    y: 138.000
+    x: 546.0
+    y: 138.0
     z: 0.566
   }
   size {
-    x: 230.000
-    y: 16.000
+    x: 230.0
+    y: 16.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_TEXT
   text: "\320\275\320\270\320\272@prod-eu-1 /srv/loop $"
@@ -596,19 +586,19 @@ nodes {
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "term_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 780.000
-    y: 138.000
+    x: 780.0
+    y: 138.0
     z: 0.566
   }
   size {
-    x: 250.000
-    y: 16.000
+    x: 250.0
+    y: 16.0
   }
   color {
     x: 0.953
@@ -622,41 +612,40 @@ nodes {
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "term_runtime_root"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1035.000
-    y: 130.000
+    x: 1035.0
+    y: 130.0
     z: 0.567
   }
   size {
-    x: 7.000
-    y: 17.000
+    x: 7.0
+    y: 17.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_BOX
   id: "v_term_caret"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "term_runtime_root"
-  alpha: 0.850
+  alpha: 0.85
 }
 nodes {
   position {
-    x: 524.000
-    y: 64.000
-    z: 0.540
+    x: 524.0
+    y: 64.0
+    z: 0.54
   }
   size {
-    x: 70.000
-    y: 22.000
+    x: 70.0
+    y: 22.0
   }
   type: TYPE_BOX
   id: "v_term_status_mode_card"
@@ -667,11 +656,11 @@ nodes {
 }
 nodes {
   position {
-    z: 0.540
+    z: 0.54
   }
   size {
-    x: 70.000
-    y: 22.000
+    x: 70.0
+    y: 22.0
   }
   color {
     x: 0.953
@@ -683,20 +672,20 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "v_term_status_mode_card"
-  alpha: 0.980
+  alpha: 0.98
 }
 nodes {
   position {
-    x: 8.000
-    y: 11.000
+    x: 8.0
+    y: 11.0
     z: 0.566
   }
   size {
-    x: 58.000
-    y: 12.000
+    x: 58.0
+    y: 12.0
   }
   color {
-    x: 0.100
+    x: 0.1
     y: 0.024
     z: 0.063
   }
@@ -707,19 +696,19 @@ nodes {
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "v_term_status_mode_card"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 598.000
-    y: 64.000
-    z: 0.540
+    x: 598.0
+    y: 64.0
+    z: 0.54
   }
   size {
-    x: 100.000
-    y: 22.000
+    x: 100.0
+    y: 22.0
   }
   type: TYPE_BOX
   id: "v_term_status_host_card"
@@ -730,38 +719,37 @@ nodes {
 }
 nodes {
   position {
-    z: 0.540
+    z: 0.54
   }
   size {
-    x: 100.000
-    y: 22.000
+    x: 100.0
+    y: 22.0
   }
   color {
-    x: 0.080
-    y: 0.160
-    z: 0.220
+    x: 0.08
+    y: 0.16
+    z: 0.22
   }
   type: TYPE_BOX
   id: "v_term_status_host"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "v_term_status_host_card"
-  alpha: 0.880
+  alpha: 0.88
 }
 nodes {
   position {
-    x: 8.000
-    y: 11.000
+    x: 8.0
+    y: 11.0
     z: 0.566
   }
   size {
-    x: 88.000
-    y: 12.000
+    x: 88.0
+    y: 12.0
   }
   color {
-    x: 0.490
+    x: 0.49
     y: 0.976
-    z: 1.000
   }
   type: TYPE_TEXT
   text: "PROD-EU-1"
@@ -770,19 +758,19 @@ nodes {
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "v_term_status_host_card"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 702.000
-    y: 64.000
-    z: 0.540
+    x: 702.0
+    y: 64.0
+    z: 0.54
   }
   size {
-    x: 250.000
-    y: 22.000
+    x: 250.0
+    y: 22.0
   }
   type: TYPE_BOX
   id: "v_term_status_path_card"
@@ -793,14 +781,14 @@ nodes {
 }
 nodes {
   position {
-    z: 0.540
+    z: 0.54
   }
   size {
-    x: 250.000
-    y: 22.000
+    x: 250.0
+    y: 22.0
   }
   color {
-    x: 0.060
+    x: 0.06
     y: 0.055
     z: 0.135
   }
@@ -809,20 +797,20 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "v_term_status_path_card"
-  alpha: 0.820
+  alpha: 0.82
 }
 nodes {
   position {
-    x: 8.000
-    y: 11.000
+    x: 8.0
+    y: 11.0
     z: 0.566
   }
   size {
-    x: 238.000
-    y: 12.000
+    x: 238.0
+    y: 12.0
   }
   color {
-    x: 0.790
+    x: 0.79
     y: 0.753
     z: 0.659
   }
@@ -833,19 +821,19 @@ nodes {
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "v_term_status_path_card"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 956.000
-    y: 64.000
-    z: 0.540
+    x: 956.0
+    y: 64.0
+    z: 0.54
   }
   size {
-    x: 92.000
-    y: 22.000
+    x: 92.0
+    y: 22.0
   }
   type: TYPE_BOX
   id: "v_term_status_git_card"
@@ -856,14 +844,14 @@ nodes {
 }
 nodes {
   position {
-    z: 0.540
+    z: 0.54
   }
   size {
-    x: 92.000
-    y: 22.000
+    x: 92.0
+    y: 22.0
   }
   color {
-    x: 0.060
+    x: 0.06
     y: 0.055
     z: 0.135
   }
@@ -872,22 +860,21 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "v_term_status_git_card"
-  alpha: 0.820
+  alpha: 0.82
 }
 nodes {
   position {
-    x: 8.000
-    y: 11.000
+    x: 8.0
+    y: 11.0
     z: 0.566
   }
   size {
-    x: 80.000
-    y: 12.000
+    x: 80.0
+    y: 12.0
   }
   color {
-    x: 0.690
+    x: 0.69
     y: 0.455
-    z: 1.000
   }
   type: TYPE_TEXT
   text: "MAIN"
@@ -896,19 +883,19 @@ nodes {
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "v_term_status_git_card"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 1052.000
-    y: 64.000
-    z: 0.540
+    x: 1052.0
+    y: 64.0
+    z: 0.54
   }
   size {
-    x: 68.000
-    y: 22.000
+    x: 68.0
+    y: 22.0
   }
   type: TYPE_BOX
   id: "v_term_status_batt_card"
@@ -919,14 +906,14 @@ nodes {
 }
 nodes {
   position {
-    z: 0.540
+    z: 0.54
   }
   size {
-    x: 68.000
-    y: 22.000
+    x: 68.0
+    y: 22.0
   }
   color {
-    x: 0.060
+    x: 0.06
     y: 0.055
     z: 0.135
   }
@@ -935,20 +922,20 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "v_term_status_batt_card"
-  alpha: 0.820
+  alpha: 0.82
 }
 nodes {
   position {
-    x: 8.000
-    y: 11.000
+    x: 8.0
+    y: 11.0
     z: 0.566
   }
   size {
-    x: 56.000
-    y: 12.000
+    x: 56.0
+    y: 12.0
   }
   color {
-    x: 0.790
+    x: 0.79
     y: 0.753
     z: 0.659
   }
@@ -959,7 +946,8 @@ nodes {
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "v_term_status_batt_card"
-  alpha: 0.950
+  alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
+material: "/builtins/materials/gui.material"

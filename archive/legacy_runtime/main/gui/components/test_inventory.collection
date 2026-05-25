@@ -1,4 +1,4 @@
-﻿name: "test_inventory"
+name: "test_inventory"
 scale_along_z: 0
 embedded_instances {
   id: "inventory"
