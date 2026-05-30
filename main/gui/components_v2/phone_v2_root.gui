@@ -1185,41 +1185,25 @@ nodes {
 }
 nodes {
   position {
-    x: 499.0
-    y: 663.0
-    z: 0.586
+    x: 10.0
+    y: 630.0
   }
   size {
+    x: 22.0
+    y: 22.0
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border2"
+  id: "corner_tl"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "side_panel"
+  inherit_alpha: true
+  slice9 {
     x: 2.0
-    y: 18.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "corner_tl_v"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-}
-nodes {
-  position {
-    x: 499.0
-    y: 679.0
-    z: 0.586
-  }
-  size {
-    x: 18.0
     y: 2.0
+    z: 2.0
+    w: 2.0
   }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "corner_tl_h"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
 }
 nodes {
   position {
