@@ -40,8 +40,8 @@ nodes {
     z: 0.052
   }
   size {
-    x: 1.0
-    y: 1.0
+    x: 1280.0
+    y: 720.0
   }
   color {
     x: 0.031
@@ -52,10 +52,6 @@ nodes {
   id: "messenger_runtime_root"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  size {
-    x: 1280.0
-    y: 720.0
-  }
   alpha: 0.0
 }
 nodes {
@@ -78,68 +74,26 @@ nodes {
 }
 nodes {
   type: TYPE_BOX
-  id: "messenger_list/search_bg"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/border_search"
-  parent: "messenger_list/search_bg"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/search_icon"
-  parent: "messenger_list/search_bg"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/search_text"
-  parent: "messenger_list/search_bg"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
   id: "messenger_list/tab_all_bg"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/tab_all_bt"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/tab_all_bb"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/tab_all_bl"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/tab_all_br"
   parent: "messenger_list/list_root"
   template_node_child: true
 }
 nodes {
   type: TYPE_TEXT
   id: "messenger_list/tab_all_text"
-  parent: "messenger_list/list_root"
+  parent: "messenger_list/tab_all_bg"
   template_node_child: true
 }
 nodes {
   type: TYPE_TEXT
   id: "messenger_list/tab_all_count"
-  parent: "messenger_list/list_root"
+  parent: "messenger_list/tab_all_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "messenger_list/border_all"
+  parent: "messenger_list/tab_all_bg"
   template_node_child: true
 }
 nodes {
@@ -241,24 +195,6 @@ nodes {
 nodes {
   type: TYPE_BOX
   id: "messenger_list/list_scrollbar_thumb"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_list/list_footer_line"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/list_footer_left"
-  parent: "messenger_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_list/list_footer_right"
   parent: "messenger_list/list_root"
   template_node_child: true
 }

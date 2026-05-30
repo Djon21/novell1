@@ -59,12 +59,12 @@ nodes {
 }
 nodes {
   position {
-    x: 528.0
-    y: 662.0
-    z: 0.06
+    x: 525.0
+    y: 666.0
+    z: 0.556
   }
   size {
-    x: 360.0
+    x: 366.0
     y: 34.0
   }
   color {
@@ -76,7 +76,8 @@ nodes {
   text: "\320\234\320\225\320\241\320\241\320\225\320\235\320\224\320\226\320\225\320\240"
   font: "unbounded_bold_32"
   id: "msgr_title"
-  pivot: PIVOT_W
+  yanchor: YANCHOR_TOP
+  pivot: PIVOT_NW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "list_root"
   outline_alpha: 0.0
@@ -84,97 +85,8 @@ nodes {
 }
 nodes {
   position {
-    x: 936.0
-    y: 575.0
-    z: 0.05
-  }
-  size {
-    x: 260.0
-    y: 34.0
-  }
-  color {
-    x: 0.078
-    y: 0.071
-    z: 0.204
-  }
-  type: TYPE_BOX
-  id: "search_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.6
-}
-nodes {
-  size {
-    x: 260.0
-    y: 34.0
-  }
-  type: TYPE_BOX
-  texture: "ui_common/border"
-  id: "border_search"
-  pivot: PIVOT_SW
-  parent: "search_bg"
-  slice9 {
-    x: 2.0
-    y: 2.0
-    z: 2.0
-    w: 2.0
-  }
-}
-nodes {
-  position {
-    x: 8.0
-    y: 16.0
-    z: 0.056
-  }
-  size {
-    x: 20.0
-    y: 14.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_TEXT
-  text: "\342\214\225"
-  font: "jb_mono_bold_14"
-  id: "search_icon"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "search_bg"
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 42.0
-    y: 16.0
-    z: 0.56
-  }
-  size {
-    x: 200.0
-    y: 14.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  text: "\320\277\320\276\320\270\321\201\320\272 \320\277\320\276 \321\207\320\260\321\202\320\260\320\274..."
-  font: "jb_mono_12"
-  id: "search_text"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "search_bg"
-  alpha: 0.75
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 528.0
-    y: 575.0
+    x: 524.0
+    y: 590.0
     z: 0.55
   }
   size {
@@ -194,93 +106,9 @@ nodes {
 }
 nodes {
   position {
-    x: 528.0
-    y: 575.0
-    z: 0.552
-  }
-  size {
-    x: 128.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "tab_all_bt"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.55
-}
-nodes {
-  position {
-    x: 528.0
-    y: 602.0
-    z: 0.552
-  }
-  size {
-    x: 128.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "tab_all_bb"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.55
-}
-nodes {
-  position {
-    x: 528.0
-    y: 575.0
-    z: 0.552
-  }
-  size {
-    x: 1.0
-    y: 28.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "tab_all_bl"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.55
-}
-nodes {
-  position {
-    x: 655.0
-    y: 575.0
-    z: 0.552
-  }
-  size {
-    x: 1.0
-    y: 28.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "tab_all_br"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.55
-}
-nodes {
-  position {
-    x: 548.0
-    y: 589.0
-    z: 0.56
+    x: 21.0
+    y: 14.0
+    z: 0.056
   }
   size {
     x: 70.0
@@ -296,15 +124,15 @@ nodes {
   id: "tab_all_text"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
+  parent: "tab_all_bg"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 635.0
-    y: 589.0
-    z: 0.56
+    x: 108.0
+    y: 14.0
+    z: 0.056
   }
   size {
     x: 28.0
@@ -320,14 +148,34 @@ nodes {
   id: "tab_all_count"
   pivot: PIVOT_E
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
+  parent: "tab_all_bg"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 664.0
-    y: 575.0
+    z: 0.056
+  }
+  size {
+    x: 128.0
+    y: 28.0
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "border_all"
+  pivot: PIVOT_SW
+  parent: "tab_all_bg"
+  slice9 {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+    w: 2.0
+  }
+}
+nodes {
+  position {
+    x: 660.0
+    y: 590.0
     z: 0.055
   }
   size {
@@ -416,12 +264,12 @@ nodes {
 }
 nodes {
   position {
-    x: 528.0
-    y: 558.0
-    z: 0.55
+    x: 524.0
+    y: 580.0
+    z: 0.544
   }
   size {
-    x: 668.0
+    x: 680.0
     y: 1.0
   }
   color {
@@ -438,13 +286,13 @@ nodes {
 }
 nodes {
   position {
-    x: 528.0
-    y: 492.0
+    x: 524.0
+    y: 490.0
     z: 0.055
   }
   size {
-    x: 656.0
-    y: 68.0
+    x: 680.0
+    y: 80.0
   }
   color {
     x: 0.078
@@ -647,8 +495,8 @@ nodes {
 }
 nodes {
   size {
-    x: 656.0
-    y: 68.0
+    x: 680.0
+    y: 80.0
   }
   type: TYPE_BOX
   texture: "ui_common/border"
@@ -664,13 +512,13 @@ nodes {
 }
 nodes {
   position {
-    x: 1196.0
-    y: 92.0
-    z: 0.55
+    x: 1204.0
+    y: 65.0
+    z: 0.54
   }
   size {
     x: 4.0
-    y: 450.0
+    y: 505.0
   }
   color {
     x: 0.953
@@ -686,13 +534,13 @@ nodes {
 }
 nodes {
   position {
-    x: 1196.0
-    y: 442.0
-    z: 0.56
+    x: 1203.0
+    y: 428.0
+    z: 0.545
   }
   size {
     x: 4.0
-    y: 100.0
+    y: 142.0
   }
   color {
     x: 0.49
@@ -704,79 +552,5 @@ nodes {
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "list_root"
   alpha: 0.7
-}
-nodes {
-  position {
-    x: 528.0
-    y: 80.0
-    z: 0.55
-  }
-  size {
-    x: 668.0
-    y: 1.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_BOX
-  id: "list_footer_line"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.12
-}
-nodes {
-  position {
-    x: 528.0
-    y: 58.0
-    z: 0.56
-  }
-  size {
-    x: 300.0
-    y: 12.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  text: "\320\276\320\275\320\273\320\260\320\271\320\275: 4 \302\267 e2e ok"
-  font: "jb_mono_10"
-  id: "list_footer_left"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.82
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 1196.0
-    y: 58.0
-    z: 0.56
-  }
-  size {
-    x: 260.0
-    y: 12.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  text: "\320\277\320\276\320\272\320\260\320\267\320\260\320\275\321\213: 1-7 / 14"
-  font: "jb_mono_10"
-  id: "list_footer_right"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
-  alpha: 0.82
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
 }
 material: "/builtins/materials/gui.material"

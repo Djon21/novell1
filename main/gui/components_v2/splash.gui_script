@@ -49,9 +49,9 @@ local DAY_DISPLAY = {
 }
 
 local DAY_TERMINAL = {
-    sunday    = "sunday",
-    monday    = "monday",
-    tuesday   = "tuesday",
+    sunday    = "воскресенье",
+    monday    = "понедельник",
+    tuesday   = "вторник",
     wednesday = "???",
 }
 
@@ -180,12 +180,12 @@ local function build_config(message)
             show_title = true,
             show_subtitle = false,
             line_texts = {
-                "> closing cycle: " .. from_t,
-                "> sleep state: complete",
-                "> opening cycle: " .. to_t,
+                "> завершение цикла: " .. from_t,
+                "> состояние сна: завершено",
+                "> начало цикла: " .. to_t,
                 (to_day == "wednesday")
-                    and "> iteration: ???"
-                    or string.format("> iteration: %03d", iteration),
+                    and "> итерация: ???"
+                    or string.format("> итерация: %03d", iteration),
             },
             title_text = DAY_DISPLAY[to_day] or string.upper(to_day),
         }

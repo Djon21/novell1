@@ -11,23 +11,18 @@ local drag_scroll = require "main.gui.modules.drag_scroll"
 local U = require "main.gui.modules.gui_utils"
 local COLORS = U.COLORS
 
-local MAX_MAIL_SLOTS = 7
+local MAX_MAIL_SLOTS = 6
 local SCROLL_STEP_ROWS = 3
 local DRAG_THRESHOLD_PX = 8
-local DRAG_STEP_PX = 34
-local ROW_H = 63
-local ROW_GAP = 0
+local DRAG_STEP_PX = 64
+local ROW_H = 80
+local ROW_GAP = 5
 
 local NODE_IDS = {
-    "mail_runtime_root", "v_mail_bg", "v_mail_head_bg",
-    "v_mail_eyebrow", "v_mail_title", "v_mail_compose_bg", "v_mail_compose_text",
-    "v_mail_tab_inbox_bg", "v_mail_tab_inbox_text",
-    "v_mail_tab_important_bg", "v_mail_tab_important_text",
-    "v_mail_tab_promo_bg", "v_mail_tab_promo_text",
-    "v_mail_tab_spam_bg", "v_mail_tab_spam_text",
-    "v_mail_tab_sent_bg", "v_mail_tab_sent_text",
-    "v_mail_divider", "v_mail_list_clip", "v_mail_scroll_track", "v_mail_scroll_thumb",
-    "v_mail_foot_line", "v_mail_footer_left", "v_mail_footer_right",
+    "mail_runtime_root", "v_mail_title",
+    "v_mail_tab_all_bg", "v_mail_tab_all_text", "v_mail_tab_all_count", "v_mail_border_all",
+    "v_mail_tab_unread_bg", "v_mail_tab_unread_text", "v_mail_tab_unread_count", "v_mail_border_unread",
+    "v_mail_divider", "v_mail_scroll_track", "v_mail_scroll_thumb",
 }
 
 local ROW_SUFFIXES = {
@@ -125,16 +120,47 @@ local FALLBACK_MAILS = {
 }
 
 local get_node             = U.get_node
-local set_node_enabled     = U.set_node_enabled
 local set_text             = U.set_text
 local set_color            = U.set_color
-local set_color_keep_alpha = U.set_color_keep_alpha
-local set_alpha            = U.set_alpha
-local set_size             = U.set_size
-local clamp_text           = U.clamp_text
 
 local function set_nodes_enabled(enabled)
     U.set_nodes_enabled(NODE_IDS, enabled)
+end
+
+local function utf8_char_width(byte)
+    byte = tonumber(byte) or 0
+    if byte < 0x80 then return 1 end
+    if byte >= 0xC2 and byte < 0xE0 then return 2 end
+    if byte >= 0xE0 and byte < 0xF0 then return 3 end
+    if byte >= 0xF0 and byte < 0xF5 then return 4 end
+    return 1
+end
+
+local function utf8_prefix(s, max_chars)
+    s = tostring(s or "")
+    max_chars = math.max(0, tonumber(max_chars) or 0)
+    if max_chars <= 0 or s == "" then return "", 0, 0 end
+    local i, chars, cut, bytes = 1, 0, 0, #s
+    while i <= bytes do
+        local w = utf8_char_width(s:byte(i))
+        if i + w - 1 > bytes then w = 1 end
+        chars = chars + 1
+        if chars <= max_chars then cut = i + w - 1 end
+        i = i + w
+    end
+    if chars <= max_chars then return s, chars, chars end
+    return s:sub(1, cut), max_chars, chars
+end
+
+local function clamp_text(s, limit)
+    s = tostring(s or ""):gsub("\r", " "):gsub("\n", " ")
+    limit = tonumber(limit) or 80
+    if limit <= 0 then return "" end
+    local ellipsis = "..."
+    local keep = math.max(1, limit - #ellipsis)
+    local prefix, _, total = utf8_prefix(s, keep)
+    if total > keep then return prefix .. ellipsis end
+    return s
 end
 
 local function get_row_node(id)
@@ -183,14 +209,6 @@ end
 local function row_set_node_enabled(slot, suffix, enabled)
     local n = get_row_node("v_mail_m" .. slot .. suffix)
     if n then gui.set_enabled(n, enabled) end
-end
-
--- set_pos_y — специфичный для mail (двигает только Y, остальное оставляет).
-local function set_pos_y(id, y)
-    local n = get_node(id)
-    if not n then return end
-    local p = gui.get_position(n)
-    gui.set_position(n, vmath.vector3(p.x, y, p.z))
 end
 
 local function truthy(v)
@@ -292,28 +310,19 @@ end
 
 local function update_scrollbar(self, total)
     local thumb = get_node("v_mail_scroll_thumb")
-    local track = get_node("v_mail_scroll_track")
-    if not thumb or not track then return end
+    if not thumb then return end
 
-    local slots = math.max(1, row_count())
-    local max_offset = clamp_offset(self, total)
-    local track_size = gui.get_size(track)
-    local track_pos = gui.get_position(track)
-    local track_h = math.max(1, track_size.y)
+    local track_h = 505
+    local top_y = 65 + track_h
+    local max_offset = math.max(0, (tonumber(total) or 0) - MAX_MAIL_SLOTS)
+    self.mail_offset = math.max(0, math.min(tonumber(self.mail_offset) or 0, max_offset))
+    local ratio = math.min(1, MAX_MAIL_SLOTS / math.max(1, total))
+    local h = math.max(46, track_h * ratio)
+    local t = max_offset > 0 and (self.mail_offset / max_offset) or 0
+    local y = (top_y - h) - ((track_h - h) * t)
 
-    if total <= slots then
-        gui.set_enabled(thumb, false)
-        return
-    end
-
-    gui.set_enabled(thumb, true)
-    local ratio = math.min(1, slots / math.max(1, total))
-    local h = math.max(28, track_h * ratio)
-    local t = max_offset > 0 and ((tonumber(self.mail_offset) or 0) / max_offset) or 0
-    local y_top = track_pos.y + (track_h * 0.5)
-    local y = (y_top - h * 0.5) - ((track_h - h) * t)
-    gui.set_size(thumb, vmath.vector3(track_size.x, h, 0))
-    gui.set_position(thumb, vmath.vector3(track_pos.x, y, gui.get_position(thumb).z))
+    gui.set_size(thumb, vmath.vector3(4, h, 0))
+    gui.set_position(thumb, vmath.vector3(1204, y, 0.545))
 end
 
 local function label_color(label)
@@ -341,10 +350,10 @@ local function render_row(slot, mail)
     row_set_alpha(slot, "_accent", unread and 0.85 or 0.0)
     row_set_color(slot, "_accent", urgent and COLORS.hot or COLORS.accent, unread and 0.85 or 0.0)
 
-    row_set_text(slot, "_star", important and "★" or "☆")
+    row_set_text(slot, "_star", important and string.char(0xEE, 0xA0, 0xB8) or string.char(0xEE, 0xA0, 0xB9))
     row_set_color_keep_alpha(slot, "_star", important and COLORS.amber or COLORS.paper_dim)
 
-    row_set_text(slot, "_from", clamp_text(mail_from(mail), 22))
+    row_set_text(slot, "_from", clamp_text(mail_from(mail), 12))
     row_set_text(slot, "_addr", clamp_text(mail_addr(mail), 26))
     row_set_text(slot, "_subj", clamp_text(mail_subject(mail), 48))
     row_set_text(slot, "_body", clamp_text(mail_body(mail), 62))
@@ -380,29 +389,48 @@ local function render_row(slot, mail)
     end
 end
 
+local function is_inside_rect(id, x, y)
+    local n = get_node(id)
+    if not n or not gui.is_enabled(n) then return false end
+    return gui.pick_node(n, x, y)
+end
+
+local function build_mail_list(self)
+    local all = mail_list()
+    if self.filter == "unread" then
+        local out = {}
+        for _, m in ipairs(all) do
+            if is_unread(m) then out[#out + 1] = m end
+        end
+        return out
+    end
+    return all
+end
+
+local function render_tab(self)
+    local all = mail_list()
+    local total = #all
+    local unread = 0
+    for _, m in ipairs(all) do
+        if is_unread(m) then unread = unread + 1 end
+    end
+    set_text("v_mail_tab_all_count", tostring(total))
+    set_text("v_mail_tab_unread_count", tostring(unread))
+    local all_active = self.filter ~= "unread"
+    set_color("v_mail_tab_all_bg", all_active and COLORS.accent or COLORS.card, all_active and 0.15 or 0.60)
+    set_color("v_mail_tab_unread_bg", (not all_active) and COLORS.accent or COLORS.card, (not all_active) and 0.15 or 0.60)
+    set_color("v_mail_border_all", COLORS.accent, all_active and 0.55 or 0.25)
+    set_color("v_mail_border_unread", COLORS.accent, (not all_active) and 0.55 or 0.25)
+end
+
 local function render(self)
-    local list = mail_list()
+    local list = build_mail_list(self)
     local total = #list
     local slots = math.max(1, row_count())
     clamp_offset(self, total)
 
-    local unread = 0
-    local important = 0
-    for _, m in ipairs(list) do
-        if is_unread(m) then unread = unread + 1 end
-        if mail_urgent(m) or mail_important(m) then important = important + 1 end
-    end
-
-    set_text("v_mail_eyebrow", "почта · " .. tostring(unread) .. " непрочитанных · " .. tostring(math.min(1, important)) .. " счёт просрочен")
     set_text("v_mail_title", "ПОЧТА")
-    set_text("v_mail_compose_text", "+ написать")
-    set_text("v_mail_tab_inbox_text", "Входящие " .. tostring(total))
-    set_text("v_mail_tab_important_text", "Важное " .. tostring(important))
-    set_text("v_mail_tab_promo_text", "Промо 128")
-    set_text("v_mail_tab_spam_text", "Спам 42")
-    set_text("v_mail_tab_sent_text", "Отправл. 9")
-    set_text("v_mail_footer_left", "IMAP CONNECTED · SYNC OK")
-    set_text("v_mail_footer_right", "непрочитано: " .. tostring(unread) .. " · всего: " .. tostring(total))
+    render_tab(self)
 
     for i = 1, slots do
         render_row(i, list[(tonumber(self.mail_offset) or 0) + i])
@@ -417,7 +445,7 @@ local function refresh(self)
 end
 
 local function scroll_mail(self, delta_rows)
-    local list = mail_list()
+    local list = build_mail_list(self)
     local total = #list
     local max_offset = clamp_offset(self, total)
     if max_offset <= 0 then return false end
@@ -459,7 +487,7 @@ local function wheel_rows_from_action(action_id, action)
 end
 
 local function inside_list(x, y)
-    local n = get_node("v_mail_list_clip")
+    local n = get_node("mail_runtime_root")
     return n and gui.is_enabled(n) and gui.pick_node(n, x, y) == true
 end
 
@@ -472,8 +500,21 @@ local function handle_phone_input(self, action_id, action)
 
     if action_id ~= hash("touch") then return false end
 
-    -- Drag-scroll через общий модуль drag_scroll. Направление инвертировано:
-    -- drag вверх → старые письма снизу → scroll_mail(-1).
+    if action.released then
+        local x, y = action.x or 0, action.y or 0
+        if is_inside_rect("v_mail_tab_all_bg", x, y) then
+            self.filter = "all"
+            self.mail_offset = 0
+            render(self)
+            return true
+        elseif is_inside_rect("v_mail_tab_unread_bg", x, y) then
+            self.filter = "unread"
+            self.mail_offset = 0
+            render(self)
+            return true
+        end
+    end
+
     local result = drag_scroll.handle(self.mail_drag, action)
     return result == "swallow" or result == "tap"
 end
@@ -481,6 +522,7 @@ end
 function init(self)
     self.visible = false
     self.mail_offset = 0
+    self.filter = "all"
 
     U.apply_adaptive_layout("mail_runtime_root")
 
@@ -522,6 +564,7 @@ function on_message(self, message_id, message, sender)
 
     elseif message_id == hash("close_app") then
         self.visible = false
+        self.filter = "all"
         drag_scroll.reset(self.mail_drag)
         set_nodes_enabled(false)
 

@@ -80,7 +80,7 @@ nodes {
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "phone_root"
-  alpha: 0.55
+  alpha: 0.9
 }
 nodes {
   position {
@@ -134,7 +134,7 @@ nodes {
   }
   size {
     x: 344.0
-    y: 1.5
+    y: 2.0
   }
   color {
     x: 0.953
@@ -145,7 +145,6 @@ nodes {
   id: "phone_case_top"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.1
 }
 nodes {
   position {
@@ -1185,8 +1184,8 @@ nodes {
 }
 nodes {
   position {
-    x: 9.0
-    y: 631.0
+    x: 11.0
+    y: 629.0
     z: 0.1
   }
   size {
@@ -1196,6 +1195,8 @@ nodes {
   type: TYPE_BOX
   texture: "ui_common/border2"
   id: "corner_tl"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "side_panel"
   slice9 {
@@ -1207,8 +1208,8 @@ nodes {
 }
 nodes {
   position {
-    x: 718.0
-    y: 630.0
+    x: 717.0
+    y: 629.0
   }
   rotation {
     z: -90.0
@@ -1224,6 +1225,8 @@ nodes {
   type: TYPE_BOX
   texture: "ui_common/border2"
   id: "corner_tr"
+  xanchor: XANCHOR_RIGHT
+  yanchor: YANCHOR_TOP
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "side_panel"
   inherit_alpha: true
@@ -1236,8 +1239,8 @@ nodes {
 }
 nodes {
   position {
-    x: 10.0
-    y: 10.0
+    x: 11.0
+    y: 11.0
   }
   rotation {
     z: 90.0
@@ -1253,6 +1256,8 @@ nodes {
   type: TYPE_BOX
   texture: "ui_common/border2"
   id: "corner_bl"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_BOTTOM
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "side_panel"
   inherit_alpha: true
@@ -1265,8 +1270,8 @@ nodes {
 }
 nodes {
   position {
-    x: 718.0
-    y: 10.0
+    x: 717.0
+    y: 11.0
   }
   rotation {
     z: 180.0
@@ -1282,6 +1287,8 @@ nodes {
   type: TYPE_BOX
   texture: "ui_common/border2"
   id: "corner_br"
+  xanchor: XANCHOR_RIGHT
+  yanchor: YANCHOR_BOTTOM
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "side_panel"
   inherit_alpha: true

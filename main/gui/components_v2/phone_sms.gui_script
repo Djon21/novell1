@@ -35,22 +35,19 @@ local point_in_rect = U.point_in_rect
 -- Right-side SMS application panel. These numbers match the current phone
 -- overlay slot from phone_sms.gui and are intentionally NOT the raw HTML
 -- 878x642 canvas. HTML visual tokens are adapted to this Defold panel.
-local PANEL_X, PANEL_Y = 500, 40
-local PANEL_W, PANEL_H = 728, 640
-local CONTENT_X = 524
+local CONTENT_X = 520
 local SCROLL_X = 1204
 local SCROLL_W = 4
-local LIST_TOP = 594
-local LIST_BOTTOM = 112
+local LIST_TOP = 570
+local LIST_BOTTOM = 65
 local LIST_H = LIST_TOP - LIST_BOTTOM
-local ROW_W, ROW_H, ROW_GAP = 680, 84, 10
+local ROW_W, ROW_H, ROW_GAP = 680, 80, 5
 
 -- Thread layout is separate from inbox row geometry.
 local THREAD_X = 540
 local THREAD_R = 1170
 local THREAD_W = THREAD_R - THREAD_X
 local THREAD_TOP = 580
-local THREAD_DIVIDER_Y = 110
 local THREAD_SAFE_BOTTOM = 134
 local THREAD_ACTION_Y = 56
 local THREAD_ACTION_H = 34
@@ -117,6 +114,8 @@ end
 local LIST_NODE_IDS = {
     "list_root",
     "side_title", "sms_header_line",
+    "tab_all_bg", "tab_all_text", "tab_all_count", "border_all",
+    "tab_unread_bg", "tab_unread_text", "tab_unread_count", "border_unread",
     "sms_scrollbar_track", "sms_scrollbar_thumb",
 }
 
@@ -135,9 +134,6 @@ local THREAD_NODE_IDS = {
     "thread_root",
     "th_back_bg", "th_back_border", "th_back_label",
     "th_name", "th_num",
-    "th_call_bg", "th_call_border", "th_call_label",
-    "th_info_bg", "th_info_border", "th_info_label",
-    "th_menu_bg", "th_menu_border", "th_menu_label",
     "th_header_line", "th_empty",
     "th_scrollbar_track", "th_scrollbar_thumb",
     "th_input_line",
@@ -218,9 +214,6 @@ end
 
 local THREAD_BORDER_IDS = {
     th_back_border  = "border_back",
-    th_call_border  = "border_call",
-    th_info_border  = "border_info",
-    th_menu_border  = "border_menu",
 }
 
 local function resolve_thread_border(id)
@@ -273,22 +266,9 @@ local function set_many_enabled(ids, enabled)
     for _, id in ipairs(ids) do set_node_enabled(id, enabled) end
 end
 
-local function hide_thread_side_actions()
-    -- Thread template keeps legacy call/info/menu nodes for compatibility only.
-    for _, id in ipairs({
-        "th_call_bg", "th_call_border", "th_call_label",
-        "th_info_bg", "th_info_border", "th_info_label",
-        "th_menu_bg", "th_menu_border", "th_menu_label",
-        "border_call", "border_info", "border_menu",
-    }) do
-        set_node_enabled(id, false)
-    end
-end
-
 local function set_host_visible(enabled)
     -- A single runtime root is the main guard against SMS leaking into menu.
     set_node_enabled("sms_runtime_root", enabled)
-    set_node_enabled("sms_app_bg", enabled)
     set_node_enabled("sms_list", enabled)
     set_node_enabled("sms_thread", enabled)
 end
@@ -416,13 +396,6 @@ local function set_local_box(id, x, y, w, h, color, alpha, z)
     set_local_pos(id, x, y, z)
     set_size(id, w, h)
     if color then set_color(id, color, alpha) end
-end
-
-local function set_pin_border_local(prefix, w, h, color, alpha)
-    set_local_box(prefix .. "_pin_border_t", 0, h - 1, w, 1, color, alpha)
-    set_local_box(prefix .. "_pin_border_b", 0, 0,     w, 1, color, alpha)
-    set_local_box(prefix .. "_pin_border_l", 0, 0,     1, h, color, alpha)
-    set_local_box(prefix .. "_pin_border_r", w - 1, 0, 1, h, color, alpha)
 end
 
 local function clamp_text(s, max_len)
@@ -651,20 +624,7 @@ end
 
 -- Аватар: квадратный блок слева от имени/превью.
 -- 50×50 (под высоту строки 52), с 4-сторонней рамкой и инициалами в центре.
-local AV_W, AV_H, AV_PAD_X, AV_GAP = 50, 50, 6, 12
-
-local function layout_avatar_local(p)
-    -- positions inside row (parent: msgN_bg). y-pivot = SW, row = 52 tall.
-    set_local_box(p .. "_av_bg", AV_PAD_X, 11, AV_W, AV_H, nil, nil, 0.053)
-    set_local_box(p .. "_av_b_t", 0, AV_H - 1, AV_W, 1, nil, nil, 0.054)
-    set_local_box(p .. "_av_b_b", 0, 0,        AV_W, 1, nil, nil, 0.054)
-    set_local_box(p .. "_av_b_l", 0, 0,        1, AV_H, nil, nil, 0.054)
-    set_local_box(p .. "_av_b_r", AV_W - 1, 0, 1, AV_H, nil, nil, 0.054)
-    set_local_pos(p .. "_av",     AV_W / 2, AV_H / 2, 0.056)
-    set_size(p .. "_av", AV_W - 4, 18)
-    local av_node = get_node(p .. "_av")
-    if av_node then gui.set_pivot(av_node, gui.PIVOT_CENTER) end
-end
+local AV_W, AV_H, AV_PAD_X = 50, 50, 6
 
 local function layout_row_slot(i)
     local p = "msg" .. i
@@ -826,7 +786,6 @@ local function apply_static_layout()
     -- Positions and sizes are defined in the .gui editor file.
     -- This function only applies runtime-only styling (colors, text, pivots).
 
-    set_color("sms_app_bg", COLORS.dark, 0.84)
     set_color("sms_header_line", COLORS.paper, 0.15)
     set_color("sms_scrollbar_track", COLORS.paper, 0.08)
 
@@ -867,8 +826,6 @@ local function apply_static_layout()
     set_color("th_name", COLORS.paper, 0.95)
     set_color("th_num", COLORS.paper_dim, 0.78)
 
-    hide_thread_side_actions()
-
     set_color("th_scrollbar_track", COLORS.paper, 0.08)
     set_color("th_scrollbar_thumb", COLORS.accent, 0.18)
     set_color("th_input_line", COLORS.paper, 0.10)
@@ -876,19 +833,40 @@ local function apply_static_layout()
     set_color("th_send_bg", COLORS.dark, 0.36)
     set_text("th_send_label", "ОТВЕТИТЬ")
     set_color("th_send_label", COLORS.accent, 0.92)
-    for _, id in ipairs({ "th_call_label", "th_info_label", "th_menu_label" }) do
-        local n = get_node(id)
-        if n then gui.set_pivot(n, gui.PIVOT_CENTER) end
+end
+
+local function render_tab(self)
+    local all_messages = self.all_messages or {}
+    local all_count = #all_messages
+    local unread = 0
+    for _, m in ipairs(all_messages) do
+        if msg_unread(m) then unread = unread + 1 end
     end
+    set_text("tab_all_count", tostring(all_count))
+    set_text("tab_unread_count", tostring(unread))
+    local all_active = self.filter ~= "unread"
+    set_color("tab_all_bg", all_active and COLORS.accent or COLORS.card, all_active and 0.15 or 0.60)
+    set_color("tab_unread_bg", (not all_active) and COLORS.accent or COLORS.card, (not all_active) and 0.15 or 0.60)
+    set_color("border_all", COLORS.accent, all_active and 0.55 or 0.25)
+    set_color("border_unread", COLORS.accent, (not all_active) and 0.55 or 0.25)
 end
 
 local function refresh_list(self)
-    local messages = self.list_messages or list_messages()
+    local all_messages = self.all_messages or list_messages()
+    self.all_messages = all_messages
+
+    local messages = {}
+    for _, m in ipairs(all_messages) do
+        if self.filter ~= "unread" or msg_unread(m) then
+            messages[#messages + 1] = m
+        end
+    end
+
     self.list_messages = messages
     self.rows = {}
-
     local total = #messages
     clamp_list_offset(self, total)
+    render_tab(self)
 
     if total == 0 then
         for i = 1, MAX_ROWS do hide_row(i) end
@@ -911,7 +889,6 @@ end
 
 local function scroll_list(self, delta_rows)
     local messages = self.list_messages or list_messages()
-    self.list_messages = messages
     local total = #messages
     local max_offset = clamp_list_offset(self, total)
     if max_offset <= 0 then return false end
@@ -1279,7 +1256,6 @@ local function set_view(self, view)
     end
 
     set_host_visible(true)
-    set_node_enabled("sms_app_bg", true)
 
     local show_list = view == "list"
     local show_thread = view == "thread"
@@ -1289,7 +1265,6 @@ local function set_view(self, view)
     set_node_enabled("sms_thread/thread_root", show_thread)
     set_many_enabled(LIST_NODE_IDS, show_list)
     set_many_enabled(THREAD_NODE_IDS, show_thread)
-    hide_thread_side_actions()
     if show_list then reset_thread_drag(self) end
     if show_thread and self.list_drag then drag_scroll.reset(self.list_drag) end
     if not show_thread and self.sms_pulse_active then
@@ -1305,7 +1280,7 @@ local function refresh(self)
         self.thread_messages = sms_storage_messages(self.active_contact_id)
         render_thread(self)
     else
-        self.list_messages = list_messages()
+        self.all_messages = list_messages()
         refresh_list(self)
     end
 end
@@ -1313,7 +1288,7 @@ end
 local function open_list(self)
     self.active_contact_id = nil
     self.thread_messages = nil
-    self.list_messages = list_messages()
+    self.all_messages = list_messages()
     apply_static_layout()
     set_view(self, "list")
     refresh_list(self)
@@ -1399,6 +1374,12 @@ local function pick_row(self, x, y)
         end
     end
     return nil, nil
+end
+
+local function is_inside_rect(id, x, y)
+    local n = get_node(id)
+    if not n or not gui.is_enabled(n) then return false end
+    return gui.pick_node(n, x, y)
 end
 
 local function is_inside_list(x, y)
@@ -1493,6 +1474,21 @@ local function handle_list_touch(self, action_id, action)
     if wheel_rows ~= 0 then return scroll_list(self, wheel_rows) end
     if action_id ~= MSG.touch then return false end
 
+    -- Табы обрабатываются на released чтобы не конфликтовать с drag-init.
+    if action and action.released then
+        if is_inside_rect("tab_all_bg", x, y) then
+            self.filter = "all"
+            self.list_offset = 0
+            refresh_list(self)
+            return true
+        elseif is_inside_rect("tab_unread_bg", x, y) then
+            self.filter = "unread"
+            self.list_offset = 0
+            refresh_list(self)
+            return true
+        end
+    end
+
     local result = drag_scroll.handle(self.list_drag, action)
     if result == "swallow" then
         return true
@@ -1523,7 +1519,9 @@ function init(self)
     self.view = "list"
     self.rows = {}
     self.list_messages = nil
+    self.all_messages = nil
     self.thread_messages = nil
+    self.filter = "all"
     self.list_offset = 0
     self.active_contact_id = nil
     self.thread_offset = 0
@@ -1566,8 +1564,10 @@ function on_message(self, message_id, message, sender)
         self.visible = false
         self.rows = {}
         self.list_messages = nil
+        self.all_messages = nil
         self.thread_messages = nil
         self.active_contact_id = nil
+        self.filter = "all"
         self.thread_offset = 0
         if self.list_drag then drag_scroll.reset(self.list_drag) end
         reset_thread_drag(self)

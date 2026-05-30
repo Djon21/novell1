@@ -27,7 +27,7 @@ local BUBBLE_PAD_TOP = 12
 local BUBBLE_STAMP_AREA_H = 22
 local CHAT_AREA_TOP = 578
 local CHAT_AREA_BOTTOM = 148
-local LIST_ROW_SLOT_GAP_Y = 76
+local LIST_ROW_SLOT_GAP_Y = 85
 
 -- Drag-scroll параметры (как в phone_sms): pixel-сдвиг при котором делаем
 -- ровно 1 step (одна строка чата / один bubble), и порог в пикселях, после
@@ -38,10 +38,10 @@ local DRAG_THRESHOLD_PX = 8
 
 local NODE_IDS = {
     "messenger_runtime_root",
-    "list_root", "msgr_title", "search_bg", "border_search", "search_icon", "search_text",
-    "tab_all_bg", "tab_all_bt", "tab_all_bb", "tab_all_bl", "tab_all_br", "tab_all_text", "tab_all_count",
+    "list_root", "msgr_title",
+    "tab_all_bg", "tab_all_text", "tab_all_count", "border_all",
     "tab_unread_bg", "border_unread", "tab_unread_text", "tab_unread_count",
-    "list_divider", "list_scrollbar_track", "list_scrollbar_thumb", "list_footer_line", "list_footer_left", "list_footer_right",
+    "list_divider", "list_scrollbar_track", "list_scrollbar_thumb",
     "chat_root", "back_bg", "back_bt", "back_bb", "back_bl", "back_br", "back_text",
     "head_av_bg", "head_av", "head_name", "head_status",
     "head_call_bg", "head_call_bt", "head_call_bb", "head_call_bl", "head_call_br", "head_call_text",
@@ -485,7 +485,6 @@ local function preview_from_message(m)
 end
 
 local BORDER_NODE_BY_PREFIX = {
-    search = "border_search",
     tab_unread = "border_unread",
     attach = "border_attach",
     input = "border_input",
@@ -565,28 +564,21 @@ local function render_tab(self)
 end
 
 local function update_list_scrollbar(self, total)
-    local track_h = 450
-    local visible = MAX_LIST_ROWS
-    if total <= visible then
-        set_alpha("list_scrollbar_thumb", 0.18)
-        set_size_x("list_scrollbar_thumb", 4)
-        set_pos_y("list_scrollbar_thumb", 442)
-        return
-    end
-    local ratio = visible / total
-    local h = math.max(80, track_h * ratio)
-    local max_off = math.max(1, total - visible)
-    local travel = track_h - h
-    local top_y = 92 + track_h - h
-    local y = top_y - travel * ((self.list_offset or 0) / max_off)
     local n = get_node("list_scrollbar_thumb")
-    if n then
-        local s = gui.get_size(n)
-        gui.set_size(n, vmath.vector3(s.x, h, s.z))
-        local p = gui.get_position(n)
-        gui.set_position(n, vmath.vector3(p.x, y, p.z))
-        gui.set_alpha(n, 0.70)
-    end
+    if not n then return end
+
+    local track_h = 505
+    local top_y = 65 + track_h
+    local max_off = math.max(0, (tonumber(total) or 0) - MAX_LIST_ROWS)
+    self.list_offset = math.max(0, math.min(tonumber(self.list_offset) or 0, max_off))
+    local ratio = math.min(1, MAX_LIST_ROWS / math.max(1, total))
+    local h = math.max(46, track_h * ratio)
+    local t = max_off > 0 and (self.list_offset / max_off) or 0
+    local y = (top_y - h) - ((track_h - h) * t)
+
+    gui.set_size(n, vmath.vector3(4, h, 0))
+    gui.set_position(n, vmath.vector3(1204, y, 0.545))
+    gui.set_alpha(n, total > MAX_LIST_ROWS and 0.70 or 0.18)
 end
 
 local function render_list(self)
@@ -657,18 +649,6 @@ local function render_list(self)
             end
             update_badge_pulse(self, slot, pulse_key)
         end
-    end
-    set_text("list_footer_left", "messenger · runtime channel")
-    if total == 0 then
-        if self.filter == "unread" then
-            set_text("list_footer_right", "нет непрочитанных")
-        else
-            set_text("list_footer_right", "нет сообщений · # msg:add")
-        end
-    else
-        local first = math.min(total, (self.list_offset or 0) + 1)
-        local last = math.min(total, (self.list_offset or 0) + MAX_LIST_ROWS)
-        set_text("list_footer_right", "показаны: " .. tostring(first) .. "-" .. tostring(last) .. " / " .. tostring(total))
     end
     update_list_scrollbar(self, total)
 end

@@ -71,8 +71,8 @@ nodes {
 }
 nodes {
   position {
-    x: 528.0
-    y: 640.0
+    x: 525.0
+    y: 666.0
     z: 0.556
   }
   size {
@@ -88,7 +88,8 @@ nodes {
   text: "\320\241\320\236\320\236\320\221\320\251\320\225\320\235\320\230\320\257"
   font: "unbounded_bold_32"
   id: "side_title"
-  pivot: PIVOT_W
+  yanchor: YANCHOR_TOP
+  pivot: PIVOT_NW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "list_root"
   alpha: 0.97
@@ -98,7 +99,7 @@ nodes {
 nodes {
   position {
     x: 524.0
-    y: 610.0
+    y: 580.0
     z: 0.544
   }
   size {
@@ -119,13 +120,192 @@ nodes {
 }
 nodes {
   position {
+    x: 524.0
+    y: 590.0
+    z: 0.55
+  }
+  size {
+    x: 128.0
+    y: 28.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_BOX
+  id: "tab_all_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "list_root"
+  alpha: 0.15
+}
+nodes {
+  position {
+    x: 21.0
+    y: 14.0
+    z: 0.056
+  }
+  size {
+    x: 70.0
+    y: 12.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "\320\222\320\241\320\225"
+  font: "jb_mono_bold_14"
+  id: "tab_all_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "tab_all_bg"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 108.0
+    y: 14.0
+    z: 0.056
+  }
+  size {
+    x: 28.0
+    y: 12.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "0"
+  font: "jb_mono_bold_14"
+  id: "tab_all_count"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "tab_all_bg"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    z: 0.056
+  }
+  size {
+    x: 128.0
+    y: 28.0
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "border_all"
+  pivot: PIVOT_SW
+  parent: "tab_all_bg"
+  slice9 {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+    w: 2.0
+  }
+}
+nodes {
+  position {
+    x: 660.0
+    y: 590.0
+    z: 0.055
+  }
+  size {
+    x: 168.0
+    y: 28.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "tab_unread_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "list_root"
+  alpha: 0.6
+}
+nodes {
+  position {
+    x: 12.0
+    y: 14.0
+    z: 0.056
+  }
+  size {
+    x: 100.0
+    y: 12.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
+  type: TYPE_TEXT
+  text: "\320\235\320\225\320\237\320\240\320\236\320\247\320\230\320\242."
+  font: "jb_mono_bold_14"
+  id: "tab_unread_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "tab_unread_bg"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 158.0
+    y: 14.0
+    z: 0.056
+  }
+  size {
+    x: 26.0
+    y: 12.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
+  type: TYPE_TEXT
+  text: "0"
+  font: "jb_mono_bold_14"
+  id: "tab_unread_count"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "tab_unread_bg"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    z: 0.056
+  }
+  size {
+    x: 168.0
+    y: 28.0
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "border_unread"
+  pivot: PIVOT_SW
+  parent: "tab_unread_bg"
+  slice9 {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+    w: 2.0
+  }
+}
+nodes {
+  position {
     x: 1204.0
-    y: 112.0
+    y: 65.0
     z: 0.54
   }
   size {
     x: 4.0
-    y: 482.0
+    y: 505.0
   }
   color {
     x: 0.953
@@ -141,7 +321,7 @@ nodes {
 }
 nodes {
   position {
-    x: 1188.0
+    x: 1203.0
     y: 428.0
     z: 0.545
   }
@@ -163,12 +343,12 @@ nodes {
 nodes {
   position {
     x: 524.0
-    y: 522.0
+    y: 490.0
     z: 0.032
   }
   size {
     x: 680.0
-    y: 84.0
+    y: 80.0
   }
   color {
     x: 0.078
@@ -245,6 +425,7 @@ nodes {
   text: "\342\200\224"
   font: "jb_mono_10"
   id: "msg1_time"
+  xanchor: XANCHOR_RIGHT
   pivot: PIVOT_E
   parent: "msg1_bg"
   alpha: 0.72
@@ -291,18 +472,18 @@ nodes {
   }
   type: TYPE_BOX
   id: "msg1_pin_bg"
+  xanchor: XANCHOR_RIGHT
   pivot: PIVOT_SW
   parent: "msg1_bg"
   alpha: 0.15
 }
 nodes {
   position {
-    x: 4.0
     y: 15.0
     z: 0.055
   }
   size {
-    x: 102.0
+    x: 110.0
     y: 1.0
   }
   color {
@@ -317,12 +498,10 @@ nodes {
 }
 nodes {
   position {
-    x: 4.0
-    y: 1.0
     z: 0.055
   }
   size {
-    x: 102.0
+    x: 110.0
     y: 1.0
   }
   color {
@@ -337,13 +516,11 @@ nodes {
 }
 nodes {
   position {
-    x: 4.0
-    y: 1.0
     z: 0.055
   }
   size {
     x: 1.0
-    y: 13.0
+    y: 16.0
   }
   color {
     y: 0.702
@@ -357,13 +534,12 @@ nodes {
 }
 nodes {
   position {
-    x: 105.0
-    y: 1.0
+    x: 109.0
     z: 0.055
   }
   size {
     x: 1.0
-    y: 13.0
+    y: 16.0
   }
   color {
     y: 0.702
@@ -400,7 +576,7 @@ nodes {
 nodes {
   size {
     x: 680.0
-    y: 84.0
+    y: 80.0
   }
   type: TYPE_BOX
   texture: "ui_common/border"
@@ -418,7 +594,7 @@ nodes {
 nodes {
   position {
     x: 6.0
-    y: 11.0
+    y: 18.0
     z: 0.053
   }
   size {

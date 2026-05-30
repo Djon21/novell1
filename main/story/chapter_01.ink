@@ -27,3 +27,4 @@ INCLUDE chapters/91_inventory_actions.ink
 INCLUDE chapters/92_phone_sms.ink
 INCLUDE chapters/93_phone_messenger.ink
 INCLUDE chapters/94_phone_mail.ink
+INCLUDE chapters/95_phone_calls.ink

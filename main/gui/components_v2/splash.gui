@@ -50,7 +50,7 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: "> closing cycle: ..."
+  text: "> завершение цикла: ..."
   font: "jb_mono_bold_16"
   id: "dt_line1"
   adjust_mode: ADJUST_MODE_STRETCH
@@ -74,7 +74,7 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: "> sleep state: complete"
+  text: "> состояние сна: завершено"
   font: "jb_mono_bold_16"
   id: "dt_line2"
   adjust_mode: ADJUST_MODE_STRETCH
@@ -97,7 +97,7 @@ nodes {
     y: 0.976
   }
   type: TYPE_TEXT
-  text: "> opening cycle: ..."
+  text: "> начало цикла: ..."
   font: "jb_mono_bold_16"
   id: "dt_line3"
   adjust_mode: ADJUST_MODE_STRETCH
@@ -121,7 +121,7 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: "> iteration: 001"
+  text: "> итерация: 001"
   font: "jb_mono_bold_16"
   id: "dt_line4"
   adjust_mode: ADJUST_MODE_STRETCH
@@ -165,7 +165,7 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  text: "DAY"
+  text: "ДЕНЬ"
   font: "unbounded_bold_64"
   id: "dt_day"
   adjust_mode: ADJUST_MODE_STRETCH
@@ -212,7 +212,7 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: "subtitle"
+  text: "подзаголовок"
   font: "unbounded_bold_32"
   id: "dt_subtitle"
   adjust_mode: ADJUST_MODE_STRETCH

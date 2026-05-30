@@ -31,10 +31,11 @@ fonts {
   name: "manrope_16"
   font: "/main/fonts/manrope_16.font"
 }
+textures {
+  name: "ui_common"
+  texture: "/main/images/ui_common.atlas"
+}
 nodes {
-  position {
-    z: 0.0
-  }
   size {
     x: 1280.0
     y: 720.0
@@ -47,37 +48,13 @@ nodes {
 }
 nodes {
   position {
-    x: 524.0
-    y: 650.0
-    z: 0.56
+    x: 525.0
+    y: 666.0
+    z: 0.556
   }
   size {
-    x: 520.0
-    y: 12.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "v_call_eyebrow"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "call_runtime_root"
-  alpha: 0.95
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 524.0
-    y: 625.0
-    z: 0.561
-  }
-  size {
-    x: 260.0
-    y: 24.0
+    x: 366.0
+    y: 34.0
   }
   color {
     x: 0.953
@@ -85,9 +62,10 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  font: "unbounded_bold_20"
+  text: "\320\227\320\222\320\236\320\235\320\232\320\230"
+  font: "unbounded_bold_32"
   id: "v_call_title"
-  pivot: PIVOT_W
+  pivot: PIVOT_NW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
   alpha: 0.98
@@ -97,152 +75,11 @@ nodes {
 nodes {
   position {
     x: 524.0
-    y: 586.0
-    z: 0.538
+    y: 580.0
+    z: 0.544
   }
   size {
-    x: 88.0
-    y: 24.0
-  }
-  color {
-    x: 0.078
-    y: 0.071
-    z: 0.204
-  }
-  type: TYPE_BOX
-  id: "v_call_tab_all_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "call_runtime_root"
-  alpha: 0.66
-}
-nodes {
-  position {
-    x: 534.0
-    y: 598.0
-    z: 0.562
-  }
-  size {
-    x: 72.0
-    y: 12.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "v_call_tab_all_text"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "call_runtime_root"
-  alpha: 0.96
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 620.0
-    y: 586.0
-    z: 0.538
-  }
-  size {
-    x: 150.0
-    y: 24.0
-  }
-  color {
-    x: 0.078
-    y: 0.071
-    z: 0.204
-  }
-  type: TYPE_BOX
-  id: "v_call_tab_missed_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "call_runtime_root"
-  alpha: 0.66
-}
-nodes {
-  position {
-    x: 630.0
-    y: 598.0
-    z: 0.562
-  }
-  size {
-    x: 134.0
-    y: 12.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "v_call_tab_missed_text"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "call_runtime_root"
-  alpha: 0.96
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 778.0
-    y: 586.0
-    z: 0.538
-  }
-  size {
-    x: 118.0
-    y: 24.0
-  }
-  color {
-    x: 0.078
-    y: 0.071
-    z: 0.204
-  }
-  type: TYPE_BOX
-  id: "v_call_tab_contacts_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "call_runtime_root"
-  alpha: 0.66
-}
-nodes {
-  position {
-    x: 788.0
-    y: 598.0
-    z: 0.562
-  }
-  size {
-    x: 102.0
-    y: 12.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "v_call_tab_contacts_text"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "call_runtime_root"
-  alpha: 0.96
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 520.0
-    y: 572.0
-    z: 0.539
-  }
-  size {
-    x: 690.0
+    x: 680.0
     y: 1.0
   }
   color {
@@ -259,35 +96,192 @@ nodes {
 }
 nodes {
   position {
-    x: 520.0
-    y: 104.0
-    z: 0.524
+    x: 524.0
+    y: 590.0
+    z: 0.55
   }
   size {
-    x: 676.0
-    y: 456.0
+    x: 128.0
+    y: 28.0
   }
   color {
-    x: 0.031
-    y: 0.024
-    z: 0.094
+    x: 0.49
+    y: 0.976
   }
   type: TYPE_BOX
-  id: "v_call_list_clip"
+  id: "v_call_tab_all_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "call_runtime_root"
-  alpha: 0.0
+  alpha: 0.15
 }
 nodes {
   position {
-    x: 1205.0
-    y: 104.0
+    x: 21.0
+    y: 14.0
+    z: 0.056
+  }
+  size {
+    x: 70.0
+    y: 12.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "\320\222\320\241\320\225"
+  font: "jb_mono_bold_14"
+  id: "v_call_tab_all_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "v_call_tab_all_bg"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 108.0
+    y: 14.0
+    z: 0.056
+  }
+  size {
+    x: 28.0
+    y: 12.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "0"
+  font: "jb_mono_bold_14"
+  id: "v_call_tab_all_count"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "v_call_tab_all_bg"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    z: 0.056
+  }
+  size {
+    x: 128.0
+    y: 28.0
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "v_call_border_all"
+  pivot: PIVOT_SW
+  parent: "v_call_tab_all_bg"
+  slice9 {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+    w: 2.0
+  }
+}
+nodes {
+  position {
+    x: 660.0
+    y: 590.0
+    z: 0.055
+  }
+  size {
+    x: 168.0
+    y: 28.0
+  }
+  color {
+    x: 0.078
+    y: 0.071
+    z: 0.204
+  }
+  type: TYPE_BOX
+  id: "v_call_tab_missed_bg"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "call_runtime_root"
+  alpha: 0.6
+}
+nodes {
+  position {
+    x: 12.0
+    y: 14.0
+    z: 0.056
+  }
+  size {
+    x: 130.0
+    y: 12.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
+  type: TYPE_TEXT
+  text: "\320\237\320\240\320\236\320\237\320\243\320\251\320\225\320\235\320\235\320\253\320\225"
+  font: "jb_mono_bold_14"
+  id: "v_call_tab_missed_text"
+  pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "v_call_tab_missed_bg"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: 158.0
+    y: 14.0
+    z: 0.056
+  }
+  size {
+    x: 26.0
+    y: 12.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
+  type: TYPE_TEXT
+  text: "0"
+  font: "jb_mono_bold_14"
+  id: "v_call_tab_missed_count"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "v_call_tab_missed_bg"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    z: 0.056
+  }
+  size {
+    x: 168.0
+    y: 28.0
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "v_call_border_missed"
+  pivot: PIVOT_SW
+  parent: "v_call_tab_missed_bg"
+  slice9 {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+    w: 2.0
+  }
+}
+nodes {
+  position {
+    x: 1204.0
+    y: 65.0
     z: 0.54
   }
   size {
     x: 4.0
-    y: 456.0
+    y: 505.0
   }
   color {
     x: 0.953
@@ -303,13 +297,13 @@ nodes {
 }
 nodes {
   position {
-    x: 1205.0
-    y: 382.0
-    z: 0.565
+    x: 1204.0
+    y: 428.0
+    z: 0.545
   }
   size {
     x: 4.0
-    y: 170.0
+    y: 142.0
   }
   color {
     x: 0.49
@@ -325,12 +319,12 @@ nodes {
 nodes {
   position {
     x: 524.0
-    y: 508.0
-    z: 0.53
+    y: 490.0
+    z: 0.032
   }
   size {
-    x: 662.0
-    y: 50.0
+    x: 680.0
+    y: 80.0
   }
   color {
     x: 0.078
@@ -346,13 +340,11 @@ nodes {
 }
 nodes {
   position {
-    x: 0.0
-    y: 0.0
     z: 0.022
   }
   size {
     x: 3.0
-    y: 50.0
+    y: 80.0
   }
   color {
     x: 0.49
@@ -368,12 +360,12 @@ nodes {
 nodes {
   position {
     x: 14.0
-    y: 6.0
+    y: 15.0
     z: 0.015
   }
   size {
-    x: 38.0
-    y: 38.0
+    x: 50.0
+    y: 50.0
   }
   color {
     x: 0.1
@@ -389,31 +381,30 @@ nodes {
 }
 nodes {
   position {
-    x: 33.0
-    y: 25.0
+    x: 25.0
+    y: 27.0
     z: 0.036
   }
   size {
-    x: 36.0
-    y: 16.0
+    x: 48.0
+    y: 18.0
   }
   color {
     x: 0.49
     y: 0.976
   }
   type: TYPE_TEXT
-  font: "jb_mono_bold_14"
+  font: "unbounded_bold_20"
   id: "v_call_c1_av_text"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "v_call_c1_bg"
+  parent: "v_call_c1_av_bg"
   alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 64.0
-    y: 32.0
+    x: 68.0
+    y: 60.0
     z: 0.036
   }
   size {
@@ -426,7 +417,7 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  font: "jb_mono_bold_14"
+  font: "unbounded_bold_20"
   id: "v_call_c1_name"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
@@ -437,8 +428,8 @@ nodes {
 }
 nodes {
   position {
-    x: 66.0
-    y: 12.0
+    x: 68.0
+    y: 40.0
     z: 0.026
   }
   size {
@@ -460,7 +451,7 @@ nodes {
 nodes {
   position {
     x: 82.0
-    y: 16.0
+    y: 44.0
     z: 0.036
   }
   size {
@@ -484,8 +475,8 @@ nodes {
 }
 nodes {
   position {
-    x: 600.0
-    y: 32.0
+    x: 668.0
+    y: 57.0
     z: 0.036
   }
   size {
@@ -509,8 +500,8 @@ nodes {
 }
 nodes {
   position {
-    x: 626.0
-    y: 10.0
+    x: 560.0
+    y: 28.0
     z: 0.026
   }
   size {
@@ -530,8 +521,8 @@ nodes {
 }
 nodes {
   position {
-    x: 639.0
-    y: 18.0
+    x: 13.0
+    y: 8.0
     z: 0.038
   }
   size {
@@ -547,101 +538,8 @@ nodes {
   font: "jb_mono_10"
   id: "v_call_c1_badge_text"
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "v_call_c1_bg"
+  parent: "v_call_c1_badge_bg"
   alpha: 0.0
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 520.0
-    y: 84.0
-    z: 0.54
-  }
-  size {
-    x: 690.0
-    y: 1.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_BOX
-  id: "v_call_foot_line"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "call_runtime_root"
-  alpha: 0.12
-}
-nodes {
-  position {
-    x: 524.0
-    y: 62.0
-    z: 0.562
-  }
-  size {
-    x: 420.0
-    y: 14.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "v_call_footer_left"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "call_runtime_root"
-  alpha: 0.95
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 1080.0
-    y: 50.0
-    z: 0.545
-  }
-  size {
-    x: 126.0
-    y: 26.0
-  }
-  color {
-    x: 0.29
-    y: 0.87
-    z: 0.5
-  }
-  type: TYPE_BOX
-  id: "v_call_dial_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "call_runtime_root"
-  alpha: 0.15
-}
-nodes {
-  position {
-    x: 1143.0
-    y: 63.0
-    z: 0.566
-  }
-  size {
-    x: 118.0
-    y: 12.0
-  }
-  color {
-    x: 0.29
-    y: 0.87
-    z: 0.5
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "v_call_dial_text"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "call_runtime_root"
-  alpha: 0.98
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }

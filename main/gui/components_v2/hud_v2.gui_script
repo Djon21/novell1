@@ -542,6 +542,8 @@ function on_input(self, action_id, action)
 
     if handle_armed_banner_input(self, action) then return true end
 
+    if ui_state.modal_open then return false end
+
     -- Обычный HUD-слой. Сюда клик доходит только если armed/backlog слои
     -- не забрали его выше.
     if point_in_node(self.log_button, action) then
@@ -567,10 +569,6 @@ function on_input(self, action_id, action)
         show_slots_panel(self)
         return true
     end
-
-    -- Не открываем новый оверлей поверх уже открытого. SND/MENU выше — это
-    -- системные кнопки, им можно работать даже поверх телефона/инвентаря.
-    if ui_state.modal_open then return false end
 
     if point_in_node(bag_ring, action) then
         msg.post(UI_MGR, "open_inventory")

@@ -107,6 +107,7 @@ end
 
 -- dbg → log.debug("dialogue"). Включить через log.set_level("debug").
 local log = require "main.scripts.log"
+local ui_state = require "main.scripts.ui_state"
 local function dbg(...) log.debug("dialogue", ...) end
 
 -- dialogue_manager_ink в старой архитектуре — адрес может отличаться.
@@ -797,7 +798,7 @@ end
 function on_input(self, action_id, action)
     -- Scene characters: только в exploration (диалог скрыт). Во время разговора
     -- они декоративные — клик по Миле не должен прерывать реплику.
-    if not self.visible and action and action.x then
+    if not self.visible and action and action.x and not ui_state.modal_open then
         -- Hover (mouse moved): action_id == nil + не pressed/released
         if action_id == nil and not action.pressed and not action.released then
             local hovered_slot = scene_char_pick(action)

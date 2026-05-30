@@ -31,10 +31,15 @@ fonts {
   name: "manrope_16"
   font: "/main/fonts/manrope_16.font"
 }
+fonts {
+  name: "icon_14"
+  font: "/main/fonts/icon_14.font"
+}
+textures {
+  name: "ui_common"
+  texture: "/main/images/ui_common.atlas"
+}
 nodes {
-  position {
-    z: 0.0
-  }
   size {
     x: 1280.0
     y: 720.0
@@ -47,37 +52,13 @@ nodes {
 }
 nodes {
   position {
-    x: 524.0
-    y: 650.0
-    z: 0.56
+    x: 525.0
+    y: 666.0
+    z: 0.556
   }
   size {
-    x: 440.0
-    y: 12.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "v_mail_eyebrow"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mail_runtime_root"
-  alpha: 0.95
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 524.0
-    y: 625.0
-    z: 0.561
-  }
-  size {
-    x: 240.0
-    y: 24.0
+    x: 366.0
+    y: 34.0
   }
   color {
     x: 0.953
@@ -85,7 +66,7 @@ nodes {
     z: 0.851
   }
   type: TYPE_TEXT
-  font: "unbounded_bold_20"
+  font: "unbounded_bold_32"
   id: "v_mail_title"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
@@ -96,245 +77,102 @@ nodes {
 }
 nodes {
   position {
-    x: 1086.0
-    y: 591.0
-    z: 0.54
-  }
-  size {
-    x: 118.0
-    y: 25.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "v_mail_compose_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mail_runtime_root"
-  alpha: 0.95
-}
-nodes {
-  position {
-    x: 8.0
-    y: 13.0
-    z: 0.062
-  }
-  size {
-    x: 96.0
-    y: 12.0
-  }
-  color {
-    x: 0.02
-    y: 0.012
-    z: 0.1
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_bold_14"
-  id: "v_mail_compose_text"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "v_mail_compose_bg"
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
     x: 524.0
     y: 590.0
-    z: 0.535
+    z: 0.55
   }
   size {
-    x: 112.0
-    y: 25.0
-  }
-  color {
-    x: 0.06
-    y: 0.125
-    z: 0.185
-  }
-  type: TYPE_BOX
-  id: "v_mail_tab_inbox_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mail_runtime_root"
-  alpha: 0.75
-}
-nodes {
-  position {
-    x: 532.0
-    y: 603.0
-    z: 0.562
-  }
-  size {
-    x: 96.0
-    y: 12.0
+    x: 128.0
+    y: 28.0
   }
   color {
     x: 0.49
     y: 0.976
   }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "v_mail_tab_inbox_text"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mail_runtime_root"
-  alpha: 0.95
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 642.0
-    y: 590.0
-    z: 0.535
-  }
-  size {
-    x: 106.0
-    y: 25.0
-  }
-  color {
-    x: 0.078
-    y: 0.071
-    z: 0.204
-  }
   type: TYPE_BOX
-  id: "v_mail_tab_important_bg"
+  id: "v_mail_tab_all_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.75
+  alpha: 0.15
 }
 nodes {
   position {
-    x: 650.0
-    y: 603.0
-    z: 0.562
-  }
-  size {
-    x: 90.0
-    y: 12.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "v_mail_tab_important_text"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mail_runtime_root"
-  alpha: 0.95
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 754.0
-    y: 590.0
-    z: 0.535
-  }
-  size {
-    x: 94.0
-    y: 25.0
-  }
-  color {
-    x: 0.078
-    y: 0.071
-    z: 0.204
-  }
-  type: TYPE_BOX
-  id: "v_mail_tab_promo_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mail_runtime_root"
-  alpha: 0.75
-}
-nodes {
-  position {
-    x: 762.0
-    y: 603.0
-    z: 0.562
-  }
-  size {
-    x: 78.0
-    y: 12.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "v_mail_tab_promo_text"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mail_runtime_root"
-  alpha: 0.95
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 854.0
-    y: 590.0
-    z: 0.535
-  }
-  size {
-    x: 86.0
-    y: 25.0
-  }
-  color {
-    x: 0.078
-    y: 0.071
-    z: 0.204
-  }
-  type: TYPE_BOX
-  id: "v_mail_tab_spam_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mail_runtime_root"
-  alpha: 0.75
-}
-nodes {
-  position {
-    x: 862.0
-    y: 603.0
-    z: 0.562
+    x: 21.0
+    y: 14.0
+    z: 0.056
   }
   size {
     x: 70.0
     y: 12.0
   }
   color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
+    x: 0.49
+    y: 0.976
   }
   type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "v_mail_tab_spam_text"
+  text: "\320\222\320\241\320\225"
+  font: "jb_mono_bold_14"
+  id: "v_mail_tab_all_text"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mail_runtime_root"
-  alpha: 0.95
+  parent: "v_mail_tab_all_bg"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 946.0
-    y: 590.0
-    z: 0.535
+    x: 108.0
+    y: 14.0
+    z: 0.056
   }
   size {
-    x: 98.0
-    y: 25.0
+    x: 28.0
+    y: 12.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
+  }
+  type: TYPE_TEXT
+  text: "0"
+  font: "jb_mono_bold_14"
+  id: "v_mail_tab_all_count"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "v_mail_tab_all_bg"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    z: 0.056
+  }
+  size {
+    x: 128.0
+    y: 28.0
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "v_mail_border_all"
+  pivot: PIVOT_SW
+  parent: "v_mail_tab_all_bg"
+  slice9 {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+    w: 2.0
+  }
+}
+nodes {
+  position {
+    x: 660.0
+    y: 590.0
+    z: 0.055
+  }
+  size {
+    x: 168.0
+    y: 28.0
   }
   color {
     x: 0.078
@@ -342,42 +180,85 @@ nodes {
     z: 0.204
   }
   type: TYPE_BOX
-  id: "v_mail_tab_sent_bg"
+  id: "v_mail_tab_unread_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "mail_runtime_root"
-  alpha: 0.75
+  alpha: 0.6
 }
 nodes {
   position {
-    x: 954.0
-    y: 603.0
-    z: 0.562
+    x: 12.0
+    y: 14.0
+    z: 0.056
   }
   size {
-    x: 82.0
+    x: 100.0
     y: 12.0
   }
   color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
+    y: 0.239
+    z: 0.498
   }
   type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "v_mail_tab_sent_text"
+  text: "\320\235\320\225\320\237\320\240\320\236\320\247\320\230\320\242."
+  font: "jb_mono_bold_14"
+  id: "v_mail_tab_unread_text"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mail_runtime_root"
-  alpha: 0.95
+  parent: "v_mail_tab_unread_bg"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
+    x: 158.0
+    y: 14.0
+    z: 0.056
+  }
+  size {
+    x: 26.0
+    y: 12.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
+  type: TYPE_TEXT
+  text: "0"
+  font: "jb_mono_bold_14"
+  id: "v_mail_tab_unread_count"
+  pivot: PIVOT_E
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "v_mail_tab_unread_bg"
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    z: 0.056
+  }
+  size {
+    x: 168.0
+    y: 28.0
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "v_mail_border_unread"
+  pivot: PIVOT_SW
+  parent: "v_mail_tab_unread_bg"
+  slice9 {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+    w: 2.0
+  }
+}
+nodes {
+  position {
     x: 524.0
-    y: 568.0
-    z: 0.538
+    y: 580.0
+    z: 0.544
   }
   size {
     x: 680.0
@@ -397,35 +278,13 @@ nodes {
 }
 nodes {
   position {
-    x: 524.0
-    y: 116.0
-    z: 0.526
-  }
-  size {
-    x: 664.0
-    y: 444.0
-  }
-  color {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  type: TYPE_BOX
-  id: "v_mail_list_clip"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mail_runtime_root"
-  alpha: 0.001
-}
-nodes {
-  position {
-    x: 1194.0
-    y: 116.0
+    x: 1203.0
+    y: 65.0
     z: 0.54
   }
   size {
     x: 4.0
-    y: 444.0
+    y: 505.0
   }
   color {
     x: 0.953
@@ -441,13 +300,13 @@ nodes {
 }
 nodes {
   position {
-    x: 1194.0
-    y: 446.0
-    z: 0.565
+    x: 1204.0
+    y: 428.0
+    z: 0.545
   }
   size {
     x: 4.0
-    y: 110.0
+    y: 142.0
   }
   color {
     x: 0.49
@@ -463,12 +322,12 @@ nodes {
 nodes {
   position {
     x: 524.0
-    y: 496.0
-    z: 0.532
+    y: 490.0
+    z: 0.032
   }
   size {
-    x: 664.0
-    y: 56.0
+    x: 680.0
+    y: 80.0
   }
   color {
     x: 0.078
@@ -484,13 +343,11 @@ nodes {
 }
 nodes {
   position {
-    x: 0.0
-    y: 0.0
     z: 0.032
   }
   size {
     x: 3.0
-    y: 56.0
+    y: 80.0
   }
   color {
     x: 0.49
@@ -518,7 +375,7 @@ nodes {
     z: 0.278
   }
   type: TYPE_TEXT
-  font: "jb_mono_bold_14"
+  font: "icon_14"
   id: "v_mail_m1_star"
   pivot: PIVOT_W
   adjust_mode: ADJUST_MODE_STRETCH
@@ -739,78 +596,6 @@ nodes {
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "v_mail_m1_bg"
   alpha: 0.95
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 524.0
-    y: 96.0
-    z: 0.538
-  }
-  size {
-    x: 680.0
-    y: 1.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_BOX
-  id: "v_mail_foot_line"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mail_runtime_root"
-  alpha: 0.12
-}
-nodes {
-  position {
-    x: 524.0
-    y: 76.0
-    z: 0.56
-  }
-  size {
-    x: 330.0
-    y: 12.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "v_mail_footer_left"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mail_runtime_root"
-  alpha: 0.9
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 980.0
-    y: 76.0
-    z: 0.56
-  }
-  size {
-    x: 224.0
-    y: 12.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "v_mail_footer_right"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mail_runtime_root"
-  alpha: 0.9
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }

@@ -11,21 +11,18 @@ local drag_scroll = require "main.gui.modules.drag_scroll"
 local U = require "main.gui.modules.gui_utils"
 local COLORS = U.COLORS
 
-local MAX_CALL_SLOTS = 8
+local MAX_CALL_SLOTS = 6
 local SCROLL_STEP_ROWS = 3
 local DRAG_THRESHOLD_PX = 8
-local DRAG_STEP_PX = 34
-local ROW_H = 56
-local ROW_GAP = 0
+local DRAG_STEP_PX = 64
+local ROW_H = 80
+local ROW_GAP = 5
 
 local NODE_IDS = {
-    "call_runtime_root", "v_call_bg", "v_call_head_bg",
-    "v_call_eyebrow", "v_call_title",
-    "v_call_tab_all_bg", "v_call_tab_all_text",
-    "v_call_tab_missed_bg", "v_call_tab_missed_text",
-    "v_call_tab_contacts_bg", "v_call_tab_contacts_text",
-    "v_call_divider", "v_call_list_clip", "v_call_scroll_track", "v_call_scroll_thumb",
-    "v_call_foot_line", "v_call_footer_left", "v_call_dial_bg", "v_call_dial_text",
+    "call_runtime_root", "v_call_title",
+    "v_call_tab_all_bg", "v_call_tab_all_text", "v_call_tab_all_count", "v_call_border_all",
+    "v_call_tab_missed_bg", "v_call_tab_missed_text", "v_call_tab_missed_count", "v_call_border_missed",
+    "v_call_divider", "v_call_scroll_track", "v_call_scroll_thumb",
 }
 
 local ROW_SUFFIXES = {
@@ -58,11 +55,8 @@ local FALLBACK_CALLS = {
 -- Локальные алиасы хелперов из gui_utils — короткие имена, чтобы не править
 -- все вызовы в файле. Реализация общая.
 local get_node             = U.get_node
-local set_node_enabled     = U.set_node_enabled
 local set_text             = U.set_text
 local set_color            = U.set_color
-local set_color_keep_alpha = U.set_color_keep_alpha
-local set_alpha            = U.set_alpha
 local clamp_text           = U.clamp_text
 
 local function set_nodes_enabled(enabled)
@@ -189,28 +183,19 @@ end
 
 local function update_scrollbar(self, total)
     local thumb = get_node("v_call_scroll_thumb")
-    local track = get_node("v_call_scroll_track")
-    if not thumb or not track then return end
+    if not thumb then return end
 
-    local slots = math.max(1, row_count())
-    local max_offset = clamp_offset(self, total)
-    local track_size = gui.get_size(track)
-    local track_pos = gui.get_position(track)
-    local track_h = math.max(1, track_size.y)
+    local track_h = 505
+    local top_y = 65 + track_h
+    local max_offset = math.max(0, (tonumber(total) or 0) - MAX_CALL_SLOTS)
+    self.call_offset = math.max(0, math.min(tonumber(self.call_offset) or 0, max_offset))
+    local ratio = math.min(1, MAX_CALL_SLOTS / math.max(1, total))
+    local h = math.max(46, track_h * ratio)
+    local t = max_offset > 0 and (self.call_offset / max_offset) or 0
+    local y = (top_y - h) - ((track_h - h) * t)
 
-    if total <= slots then
-        gui.set_enabled(thumb, false)
-        return
-    end
-
-    gui.set_enabled(thumb, true)
-    local ratio = math.min(1, slots / math.max(1, total))
-    local h = math.max(28, track_h * ratio)
-    local t = max_offset > 0 and ((tonumber(self.call_offset) or 0) / max_offset) or 0
-    local y_top = track_pos.y + (track_h * 0.5)
-    local y = (y_top - h * 0.5) - ((track_h - h) * t)
-    gui.set_size(thumb, vmath.vector3(track_size.x, h, 0))
-    gui.set_position(thumb, vmath.vector3(track_pos.x, y, gui.get_position(thumb).z))
+    gui.set_size(thumb, vmath.vector3(4, h, 0))
+    gui.set_position(thumb, vmath.vector3(1204, y, 0.545))
 end
 
 local function avatar_color(c, kind)
@@ -238,26 +223,83 @@ local function direction_color(kind)
     return COLORS.green
 end
 
-local function initials(name)
-    name = tostring(name or "")
-    if name == "" then return "?" end
-    local letters = {}
-    if utf8 and utf8.codes and utf8.char then
-        for _, code in utf8.codes(name) do
-            local ch = utf8.char(code)
-            if ch:match("[%wА-Яа-яЁё]") then
-                letters[#letters + 1] = ch
-                if #letters >= 2 then break end
-            end
-        end
-    else
-        for ch in name:gmatch("[%w]") do
-            letters[#letters + 1] = ch
-            if #letters >= 2 then break end
-        end
+local function utf8_first_chars(s, n)
+    local out, i, count = {}, 1, 0
+    while i <= #s and count < n do
+        local byte = string.byte(s, i)
+        local size = 1
+        if byte >= 0xF0 then size = 4
+        elseif byte >= 0xE0 then size = 3
+        elseif byte >= 0xC0 then size = 2 end
+        table.insert(out, s:sub(i, i + size - 1))
+        i = i + size
+        count = count + 1
     end
-    if #letters == 0 then return "?" end
-    return string.upper(table.concat(letters))
+    return table.concat(out)
+end
+
+local CYR_LOWER_TO_UPPER = {
+    ["а"] = "А", ["б"] = "Б", ["в"] = "В", ["г"] = "Г", ["д"] = "Д",
+    ["е"] = "Е", ["ё"] = "Ё", ["ж"] = "Ж", ["з"] = "З", ["и"] = "И",
+    ["й"] = "Й", ["к"] = "К", ["л"] = "Л", ["м"] = "М", ["н"] = "Н",
+    ["о"] = "О", ["п"] = "П", ["р"] = "Р", ["с"] = "С", ["т"] = "Т",
+    ["у"] = "У", ["ф"] = "Ф", ["х"] = "Х", ["ц"] = "Ц", ["ч"] = "Ч",
+    ["ш"] = "Ш", ["щ"] = "Щ", ["ъ"] = "Ъ", ["ы"] = "Ы", ["ь"] = "Ь",
+    ["э"] = "Э", ["ю"] = "Ю", ["я"] = "Я",
+}
+
+local function utf8_upper(s)
+    if not s or s == "" then return "" end
+    s = (s:gsub("[a-z]", function(c) return string.char(string.byte(c) - 0x20) end))
+    s = (s:gsub("[\208-\209][\128-\191]", function(c)
+        return CYR_LOWER_TO_UPPER[c] or c
+    end))
+    return s
+end
+
+local function initials(name)
+    if not name or name == "" then return "?" end
+    local clean = name:gsub("[%+%(%)%-%d]", " ")
+    clean = clean:gsub("·", " "):gsub("—", " ")
+                 :gsub("%s+", " "):gsub("^%s+", ""):gsub("%s+$", "")
+    if clean == "" then return "?" end
+    local parts = {}
+    for word in clean:gmatch("%S+") do parts[#parts + 1] = word end
+    local result
+    if #parts >= 2 then
+        result = utf8_first_chars(parts[1], 1) .. utf8_first_chars(parts[2], 1)
+    else
+        result = utf8_first_chars(parts[1], 2)
+    end
+    return utf8_upper(result)
+end
+
+local function build_call_list(self)
+    local all = call_list()
+    if self.filter == "missed" then
+        local out = {}
+        for _, c in ipairs(all) do
+            if call_kind(c) == "missed" then out[#out + 1] = c end
+        end
+        return out
+    end
+    return all
+end
+
+local function render_tab(self)
+    local all = call_list()
+    local total = #all
+    local missed = 0
+    for _, c in ipairs(all) do
+        if call_kind(c) == "missed" then missed = missed + math.max(1, call_count(c)) end
+    end
+    set_text("v_call_tab_all_count", tostring(total))
+    set_text("v_call_tab_missed_count", tostring(missed))
+    local all_active = self.filter ~= "missed"
+    set_color("v_call_tab_all_bg", all_active and COLORS.accent or COLORS.card, all_active and 0.15 or 0.60)
+    set_color("v_call_tab_missed_bg", (not all_active) and COLORS.accent or COLORS.card, (not all_active) and 0.15 or 0.60)
+    set_color("v_call_border_all", COLORS.accent, all_active and 0.55 or 0.25)
+    set_color("v_call_border_missed", COLORS.accent, (not all_active) and 0.55 or 0.25)
 end
 
 local function render_row(slot, call)
@@ -278,7 +320,7 @@ local function render_row(slot, call)
 
     local av_color, av_alpha = avatar_color(call, kind)
     row_set_color(slot, "_av_bg", av_color, av_alpha)
-    row_set_text(slot, "_av_text", clamp_text(call.initials or initials(who), 2))
+    row_set_text(slot, "_av_text", initials(who))
     row_set_color_keep_alpha(slot, "_av_text", av_color)
 
     row_set_text(slot, "_name", clamp_text(who, 28))
@@ -310,32 +352,13 @@ local function render_row(slot, call)
 end
 
 local function render(self)
-    local list = call_list()
+    local list = build_call_list(self)
     local total = #list
     local slots = math.max(1, row_count())
     clamp_offset(self, total)
 
-    local missed = 0
-    local contacts = {}
-    for _, c in ipairs(list) do
-        if call_kind(c) == "missed" then missed = missed + math.max(1, call_count(c)) end
-        contacts[tostring(call_who(c))] = true
-    end
-    local contact_count = 0
-    for _ in pairs(contacts) do contact_count = contact_count + 1 end
-
-    set_text("v_call_eyebrow", "журнал звонков · " .. tostring(missed) .. " пропущенных · сегодня")
     set_text("v_call_title", "ЗВОНКИ")
-    set_text("v_call_tab_all_text", "Все " .. tostring(total))
-    set_text("v_call_tab_missed_text", "Пропущенные " .. tostring(missed))
-    set_text("v_call_tab_contacts_text", "Контакты " .. tostring(contact_count))
-    set_text("v_call_footer_left", "CALL LOG · пропущено: " .. tostring(missed) .. " · всего: " .. tostring(total))
-    set_text("v_call_dial_text", "НАБРАТЬ")
-
-    set_color("v_call_tab_all_bg", COLORS.accent, 0.15)
-    set_color("v_call_tab_all_text", COLORS.accent, 1.0)
-    set_color("v_call_tab_missed_bg", COLORS.card, 0.66)
-    set_color("v_call_tab_contacts_bg", COLORS.card, 0.66)
+    render_tab(self)
 
     for i = 1, slots do
         render_row(i, list[(tonumber(self.call_offset) or 0) + i])
@@ -350,7 +373,7 @@ local function refresh(self)
 end
 
 local function scroll_calls(self, delta_rows)
-    local list = call_list()
+    local list = build_call_list(self)
     local total = #list
     local max_offset = clamp_offset(self, total)
     if max_offset <= 0 then return false end
@@ -392,8 +415,14 @@ local function wheel_rows_from_action(action_id, action)
 end
 
 local function inside_list(x, y)
-    local n = get_node("v_call_list_clip")
+    local n = get_node("call_runtime_root")
     return n and gui.is_enabled(n) and gui.pick_node(n, x, y) == true
+end
+
+local function is_inside_rect(id, x, y)
+    local n = get_node(id)
+    if not n or not gui.is_enabled(n) then return false end
+    return gui.pick_node(n, x, y)
 end
 
 local function handle_phone_input(self, action_id, action)
@@ -405,6 +434,21 @@ local function handle_phone_input(self, action_id, action)
 
     if action_id ~= hash("touch") then return false end
 
+    if action.released then
+        local x, y = action.x or 0, action.y or 0
+        if is_inside_rect("v_call_tab_all_bg", x, y) then
+            self.filter = "all"
+            self.call_offset = 0
+            render(self)
+            return true
+        elseif is_inside_rect("v_call_tab_missed_bg", x, y) then
+            self.filter = "missed"
+            self.call_offset = 0
+            render(self)
+            return true
+        end
+    end
+
     local result = drag_scroll.handle(self.call_drag, action)
     return result == "swallow" or result == "tap"
 end
@@ -412,6 +456,7 @@ end
 function init(self)
     self.visible = false
     self.call_offset = 0
+    self.filter = "all"
 
     U.apply_adaptive_layout("call_runtime_root")
 
@@ -455,6 +500,7 @@ function on_message(self, message_id, message, sender)
 
     elseif message_id == hash("close_app") then
         self.visible = false
+        self.filter = "all"
         drag_scroll.reset(self.call_drag)
         set_nodes_enabled(false)
 
