@@ -43,7 +43,7 @@ local SCROLL_W = 4
 local LIST_TOP = 594
 local LIST_BOTTOM = 112
 local LIST_H = LIST_TOP - LIST_BOTTOM
-local ROW_W, ROW_H, ROW_GAP = 680, 72, 10
+local ROW_W, ROW_H, ROW_GAP = 680, 84, 10
 
 -- Thread layout is separate from inbox row geometry.
 local THREAD_X = 540
