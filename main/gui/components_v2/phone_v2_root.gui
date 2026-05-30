@@ -1185,8 +1185,9 @@ nodes {
 }
 nodes {
   position {
-    x: 10.0
-    y: 630.0
+    x: 9.0
+    y: 631.0
+    z: 0.1
   }
   size {
     x: 22.0
@@ -1197,7 +1198,6 @@ nodes {
   id: "corner_tl"
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "side_panel"
-  inherit_alpha: true
   slice9 {
     x: 2.0
     y: 2.0
@@ -1207,12 +1207,19 @@ nodes {
 }
 nodes {
   position {
-    x: 696.0
+    x: 718.0
     y: 630.0
+  }
+  rotation {
+    z: -90.0
   }
   size {
     x: 22.0
     y: 22.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
   }
   type: TYPE_BOX
   texture: "ui_common/border2"
@@ -1232,9 +1239,16 @@ nodes {
     x: 10.0
     y: 10.0
   }
+  rotation {
+    z: 90.0
+  }
   size {
     x: 22.0
     y: 22.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
   }
   type: TYPE_BOX
   texture: "ui_common/border2"
@@ -1251,12 +1265,19 @@ nodes {
 }
 nodes {
   position {
-    x: 696.0
+    x: 718.0
     y: 10.0
+  }
+  rotation {
+    z: 180.0
   }
   size {
     x: 22.0
     y: 22.0
+  }
+  color {
+    x: 0.49
+    y: 0.976
   }
   type: TYPE_BOX
   texture: "ui_common/border2"
