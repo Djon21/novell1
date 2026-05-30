@@ -73,3 +73,9 @@ venv/
 # Node (если появится package.json для тулинга)
 node_modules/
 npm-debug.log*
+
+# Defold bob.jar (~182 MB) — не храним в git
+scripts/bob.jar
+
+# GigaIDE
+.gigaide/
