@@ -189,10 +189,10 @@
             - else:
                 {sunday_current_gift == "energy_drink":
                     # speaker:mc
-                    Я взял{mc_gender == "female":а|} энергетик.
+                    Я взял{mc_gender == "female":а|} печенье.
 
                     # speaker:npc
-                    Ого. Это на случай, если свидание перейдёт в ночную смену?
+                    Ого. Это на случай, если свидание перейдёт в дегустацию?
                 - else:
                     {sunday_current_gift == "iced_tea":
                         # speaker:mc
@@ -346,7 +346,7 @@
             - else:
                 {sunday_current_gift == "energy_drink":
                     # speaker:mc
-                    Я взял{mc_gender == "female":а|} энергетик.
+                    Я взял{mc_gender == "female":а|} печенье.
 
                     # speaker:npc
                     Ого. Это если кафе окажется слишком спокойным?

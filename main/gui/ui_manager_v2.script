@@ -809,6 +809,14 @@ function init(self)
             dbg("[ui_manager_v2] cloud_init done - save in sync")
         end
         show_menu(self)
+        -- Подтверждаем язык через SDK API (п.2.14 Требований Yandex Games)
+        local ok_l10n, l10n = pcall(require, "main.scripts.l10n")
+        if ok_l10n and l10n and l10n.sync_sdk then pcall(l10n.sync_sdk) end
+        -- Signal Yandex that the game is now playable (GRA / LoadingAPI.ready)
+        local ok_ya, ya = pcall(require, "yagames.yagames")
+        if ok_ya and ya and ya.features_loadingapi_ready then
+            pcall(ya.features_loadingapi_ready)
+        end
         dbg("[ui_manager_v2] init done")
     end)
 

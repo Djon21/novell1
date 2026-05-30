@@ -32,4 +32,4 @@ dependencies#0 = https://github.com/indiesoftby/defold-yagames/archive/master.zi
 dependencies#1 = https://github.com/abadonna/defold-ink/archive/master.zip
 
 [yagames]
-sdk_init_snippet = try { window.__gameLang = ysdk.environment.i18n.lang; console.log("YaGames lang:", window.__gameLang); } catch (e) { console.warn("Cannot read environment.i18n.lang:", e); } try { ysdk.features.LoadingAPI.ready(); } catch (e) { console.warn("LoadingAPI.ready failed:", e); }
+sdk_init_snippet = try { window.__gameLang = ysdk.environment.i18n.lang; console.log("YaGames lang:", window.__gameLang); } catch (e) { console.warn("Cannot read environment.i18n.lang:", e); }

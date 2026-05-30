@@ -53,6 +53,22 @@ function M.detect()
     return M.lang
 end
 
+-- Вызывать после yagames.init() для подтверждения языка через SDK API.
+-- Требование Yandex Games п.2.14.
+function M.sync_sdk()
+    local ok_ya, ya = pcall(require, "yagames.yagames")
+    if not ok_ya or not ya then return end
+    local ok_env, env = pcall(ya.environment)
+    if not ok_env or type(env) ~= "table" then return end
+    local i18n = env.i18n
+    if type(i18n) ~= "table" then return end
+    local lang = i18n.lang
+    if lang and SUPPORTED[lang] and lang ~= M.lang then
+        log.info("l10n", "SDK lang=" .. lang .. " (was " .. M.lang .. ")")
+        M.set_lang(lang)
+    end
+end
+
 function M.init()
     if M.initialized then return end
     M.detect()
