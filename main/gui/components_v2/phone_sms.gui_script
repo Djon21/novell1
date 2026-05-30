@@ -38,12 +38,12 @@ local point_in_rect = U.point_in_rect
 local PANEL_X, PANEL_Y = 500, 40
 local PANEL_W, PANEL_H = 728, 640
 local CONTENT_X = 524
-local SCROLL_X = 1188
+local SCROLL_X = 1204
 local SCROLL_W = 4
 local LIST_TOP = 594
 local LIST_BOTTOM = 112
 local LIST_H = LIST_TOP - LIST_BOTTOM
-local ROW_W, ROW_H, ROW_GAP = 660, 72, 10
+local ROW_W, ROW_H, ROW_GAP = 680, 72, 10
 
 -- Thread layout is separate from inbox row geometry.
 local THREAD_X = 540
