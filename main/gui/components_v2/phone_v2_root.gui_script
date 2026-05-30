@@ -31,8 +31,6 @@ local ROOT_CHROME = {
     "stats_msg", "status_meta",
     "wall_time", "wall_date",
     "side_panel",
-    "corner_tl", "corner_tr",
-    "corner_bl", "corner_br",
     "close_btn",
     "app1_card", "app2_card", "app3_card", "app4_card",
     "app5_card", "app6_card", "app7_card", "app8_card",
