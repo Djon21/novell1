@@ -668,24 +668,9 @@ end
 
 local function layout_row_slot(i)
     local p = "msg" .. i
-    local y = LIST_TOP - (i - 1) * (ROW_H + ROW_GAP) - ROW_H
 
-    -- Root row is placed in list coordinates; children stay in msgN_bg-local space.
-    -- This is repeated during render, not only in init, because template nodes can
-    -- be re-enabled after close/open and cloned handles should be normalized each refresh.
-    set_box(p .. "_bg", CONTENT_X, y, ROW_W, ROW_H, nil, nil)
-    set_local_box(p .. "_border", 0, 0, ROW_W, ROW_H, nil, nil, 0.054)
-    set_local_box(p .. "_dot", -3, ROW_H - 24, 6, 18, nil, nil, 0.055)
-
-    layout_avatar_local(p)
-
-    local text_x = AV_PAD_X + AV_W + AV_GAP   -- 6 + 50 + 12 = 68
-    set_local_pos(p .. "_name", text_x, 60, 0.056)
-    set_local_pos(p .. "_time", ROW_W - 12, 57, 0.056)
-    set_local_pos(p .. "_body", text_x, 38, 0.056)
-    set_size(p .. "_name", 320, 14)
-    set_size(p .. "_time", 92, 10)
-    set_size(p .. "_body", 420, 14)
+    -- Positions and sizes are defined in the .gui editor file.
+    -- This function only sets pivots needed for text alignment.
 
     local name_node = get_node(p .. "_name")
     if name_node then gui.set_pivot(name_node, gui.PIVOT_W) end
@@ -694,12 +679,6 @@ local function layout_row_slot(i)
     local body_node = get_node(p .. "_body")
     if body_node then gui.set_pivot(body_node, gui.PIVOT_W) end
 
-    local pin_w, pin_h = 110, 16
-    local pin_x, pin_y = ROW_W - pin_w - 10, 28
-    set_local_box(p .. "_pin_bg", pin_x, pin_y, pin_w, pin_h, nil, nil, 0.052)
-    set_pin_border_local(p, pin_w, pin_h, nil, nil)
-    set_local_pos(p .. "_pin", pin_w / 2, 8, 0.056)
-    set_size(p .. "_pin", pin_w - 10, 10)
     local pin_node = get_node(p .. "_pin")
     if pin_node then gui.set_pivot(pin_node, gui.PIVOT_CENTER) end
 end
@@ -844,72 +823,36 @@ end
 local set_border
 
 local function apply_static_layout()
-    -- Host panel and shared list geometry. This makes template overrides
-    -- deterministic even if the editor file still contains older coordinates.
-    set_box("sms_app_bg", PANEL_X, PANEL_Y, PANEL_W, PANEL_H, COLORS.dark, 0.84)
-    -- side_title is positioned/sized in phone_sms_list_template.gui,
-    -- same as msgr_title in Messenger. Keep script responsible only for
-    -- enabling/text/style, not for editor layout.
-    set_box("sms_header_line", CONTENT_X, 610, ROW_W, 1, COLORS.paper, 0.15)
-    set_box("sms_scrollbar_track", SCROLL_X, LIST_BOTTOM, SCROLL_W, LIST_H, COLORS.paper, 0.08)
+    -- Positions and sizes are defined in the .gui editor file.
+    -- This function only applies runtime-only styling (colors, text, pivots).
+
+    set_color("sms_app_bg", COLORS.dark, 0.84)
+    set_color("sms_header_line", COLORS.paper, 0.15)
+    set_color("sms_scrollbar_track", COLORS.paper, 0.08)
 
     for i = 1, MAX_ROWS do
         local p = "msg" .. i
-        local y = LIST_TOP - (i - 1) * (ROW_H + ROW_GAP) - ROW_H
 
-        -- msgN_bg lives in absolute list_root coordinates. Everything inside
-        -- it is now child-local. Keep this explicit instead of passing absolute
-        -- coordinates into child nodes.
-        set_box(p .. "_bg", CONTENT_X, y, ROW_W, ROW_H, COLORS.card, 0.60)
-        set_local_box(p .. "_border", 0, 0, ROW_W, ROW_H, COLORS.accent, 0.18, 0.054)
-        set_local_box(p .. "_dot", -3, ROW_H - 24, 6, 18, COLORS.hot, 1.0)
+        set_color(p .. "_bg", COLORS.card, 0.60)
+        set_color(p .. "_border", COLORS.accent, 0.18)
+        set_color(p .. "_dot", COLORS.hot, 1.0)
 
-        -- Avatar baseline layout. Цвет/инициалы переписываются в show_row().
-        set_local_box(p .. "_av_bg", AV_PAD_X, 11, AV_W, AV_H, COLORS.accent, 0.15, 0.053)
-        set_local_box(p .. "_av_b_t", 0, AV_H - 1, AV_W, 1, COLORS.accent, 0.55, 0.054)
-        set_local_box(p .. "_av_b_b", 0, 0,        AV_W, 1, COLORS.accent, 0.55, 0.054)
-        set_local_box(p .. "_av_b_l", 0, 0,        1, AV_H, COLORS.accent, 0.55, 0.054)
-        set_local_box(p .. "_av_b_r", AV_W - 1, 0, 1, AV_H, COLORS.accent, 0.55, 0.054)
-        set_local_pos(p .. "_av",     AV_W / 2, AV_H / 2, 0.056)
-        set_size(p .. "_av", AV_W - 4, 18)
+        set_color(p .. "_av_bg", COLORS.accent, 0.15)
+        set_color(p .. "_av_b_t", COLORS.accent, 0.55)
+        set_color(p .. "_av_b_b", COLORS.accent, 0.55)
+        set_color(p .. "_av_b_l", COLORS.accent, 0.55)
+        set_color(p .. "_av_b_r", COLORS.accent, 0.55)
         local av_node_static = get_node(p .. "_av")
         if av_node_static then gui.set_pivot(av_node_static, gui.PIVOT_CENTER) end
 
-        local text_x = AV_PAD_X + AV_W + AV_GAP
-        set_local_pos(p .. "_name", text_x, 60, 0.056)
-        set_local_pos(p .. "_time", ROW_W - 12, 57, 0.056)
-        set_local_pos(p .. "_body", text_x, 38, 0.056)
-        set_size(p .. "_name", 320, 14)
-        set_size(p .. "_time", 92, 10)
-        set_size(p .. "_body", 420, 14)
         local time_node = get_node(p .. "_time")
         if time_node then gui.set_pivot(time_node, gui.PIVOT_E) end
 
-        local pin_w, pin_h = 110, 16
-        local pin_x, pin_y = ROW_W - pin_w - 10, 28
-        set_local_box(p .. "_pin_bg", pin_x, pin_y, pin_w, pin_h, COLORS.amber, 0.15)
-        set_pin_border_local(p, pin_w, pin_h, COLORS.amber, 0.50)
-        set_local_pos(p .. "_pin", pin_w / 2, 8, 0.056)
-        set_size(p .. "_pin", pin_w - 10, 10)
+        set_color(p .. "_pin_bg", COLORS.amber, 0.15)
         local pin_node = get_node(p .. "_pin")
         if pin_node then gui.set_pivot(pin_node, gui.PIVOT_CENTER) end
     end
 
-    -- Thread header and input bar. Bubble positions are data-driven in render_bubble.
-    -- In v10 the inbox/back action is moved out of the header into the footer,
-    -- so the top area becomes a simpler title + meta block with a neat action cluster.
-    local HEADER_TITLE_Y = 650
-    local HEADER_META_Y = 622
-    local HEADER_LINE_Y = 600
-    local FOOTER_BACK_W, FOOTER_BACK_H = 150, THREAD_ACTION_H
-    local FOOTER_BACK_X, FOOTER_BACK_Y = THREAD_X, THREAD_ACTION_Y
-
-    set_box("th_header_line", THREAD_X, HEADER_LINE_Y, THREAD_W, 1, COLORS.paper, 0.15)
-
-    -- Match the reply button architecture exactly: bg and border use SW pivot,
-    -- label is centered as a child of th_back_bg. The template used to keep
-    -- th_back_bg/border_back as NW-pivot nodes, which made the footer label and
-    -- frame drift apart after script-driven repositioning.
     local back_bg = get_node("th_back_bg")
     if back_bg then gui.set_pivot(back_bg, gui.PIVOT_SW) end
     local back_border = get_node("th_back_border")
@@ -917,38 +860,20 @@ local function apply_static_layout()
     local back_label = get_node("th_back_label")
     if back_label then gui.set_pivot(back_label, gui.PIVOT_CENTER) end
 
-    set_box("th_back_bg", FOOTER_BACK_X, FOOTER_BACK_Y, FOOTER_BACK_W, FOOTER_BACK_H, COLORS.dark, 0.36)
-    set_local_box("th_back_border", 0, 0, FOOTER_BACK_W, FOOTER_BACK_H, COLORS.accent, 0.50, 0.054)
-    set_local_pos("th_back_label", FOOTER_BACK_W / 2, FOOTER_BACK_H / 2, 0.059)
-    set_size("th_back_label", FOOTER_BACK_W - 20, 18)
+    set_color("th_back_bg", COLORS.dark, 0.36)
     set_text("th_back_label", "ВХОДЯЩИЕ")
     set_color("th_back_label", COLORS.accent, 0.92)
 
-    set_pos("th_name", THREAD_X, HEADER_TITLE_Y, 0.559)
-    set_size("th_name", THREAD_W - 20, 30)
     set_color("th_name", COLORS.paper, 0.95)
-
-    set_pos("th_num", THREAD_X, HEADER_META_Y, 0.559)
-    set_size("th_num", THREAD_W - 20, 18)
     set_color("th_num", COLORS.paper_dim, 0.78)
 
     hide_thread_side_actions()
-    set_pos("th_empty", THREAD_X + THREAD_W / 2, (THREAD_SAFE_BOTTOM + THREAD_TOP) / 2, 0.559)
-    set_size("th_empty", THREAD_W - 80, 22)
 
-    -- Message viewport. The scrollbar stops above the composer, so it does
-    -- not visually collide with the divider or SEND button.
-    set_box("th_scrollbar_track", THREAD_SCROLL_X, THREAD_SAFE_BOTTOM, THREAD_SCROLL_W, THREAD_SCROLL_H, COLORS.paper, 0.08)
-    set_box("th_scrollbar_thumb", THREAD_SCROLL_X, THREAD_TOP - 80, THREAD_SCROLL_W, 80, COLORS.accent, 0.18)
+    set_color("th_scrollbar_track", COLORS.paper, 0.08)
+    set_color("th_scrollbar_thumb", COLORS.accent, 0.18)
+    set_color("th_input_line", COLORS.paper, 0.10)
 
-    -- Footer/action. No input field exists by design: the footer has one
-    -- compact reply action aligned to the same right edge as outgoing bubbles.
-    set_box("th_input_line", THREAD_X, THREAD_DIVIDER_Y, THREAD_W, 1, COLORS.paper, 0.10)
-
-    set_box("th_send_bg", THREAD_SEND_X, THREAD_SEND_Y, THREAD_SEND_W, THREAD_SEND_H, COLORS.dark, 0.36)
-    set_local_box("border_send", 0, 0, THREAD_SEND_W, THREAD_SEND_H, COLORS.accent, 0.50, 0.054)
-    set_local_pos("th_send_label", THREAD_SEND_W / 2, THREAD_SEND_H / 2, 0.059)
-    set_size("th_send_label", THREAD_SEND_W - 20, 18)
+    set_color("th_send_bg", COLORS.dark, 0.36)
     set_text("th_send_label", "ОТВЕТИТЬ")
     set_color("th_send_label", COLORS.accent, 0.92)
     for _, id in ipairs({ "th_call_label", "th_info_label", "th_menu_label" }) do

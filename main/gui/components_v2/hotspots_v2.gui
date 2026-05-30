@@ -11,6 +11,10 @@ fonts {
   name: "manrope_16"
   font: "/main/fonts/manrope_16.font"
 }
+fonts {
+  name: "Manrope-Medium_16"
+  font: "/main/fonts/Manrope-Medium_16.font"
+}
 textures {
   name: "hotspots"
   texture: "/main/images/hotspots.atlas"
@@ -38,11 +42,29 @@ nodes {
   id: "hotspot_1"
   adjust_mode: ADJUST_MODE_ZOOM
   alpha: 0.15
-  enabled: false
 }
 nodes {
   position {
-    y: -92.0
+    y: -61.0
+  }
+  size {
+    x: 96.0
+    y: 20.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "box"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "hotspot_1"
+  alpha: 0.42
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
     z: 0.09
   }
   size {
@@ -51,13 +73,12 @@ nodes {
   }
   type: TYPE_TEXT
   text: "label"
-  font: "manrope_16"
+  font: "Manrope-Medium_16"
   id: "hotspot_label_1"
   adjust_mode: ADJUST_MODE_ZOOM
-  parent: "hotspot_1"
+  parent: "box"
   outline_alpha: 0.0
   shadow_alpha: 0.0
-  enabled: false
 }
 nodes {
   position {
@@ -74,7 +95,6 @@ nodes {
   id: "hotspot_ring_1"
   adjust_mode: ADJUST_MODE_ZOOM
   alpha: 0.9
-  enabled: false
 }
 nodes {
   position {
@@ -96,7 +116,6 @@ nodes {
   id: "hotspot_circle_1"
   adjust_mode: ADJUST_MODE_ZOOM
   alpha: 0.35
-  enabled: false
 }
 nodes {
   position {
@@ -138,7 +157,27 @@ nodes {
 }
 nodes {
   position {
-    y: -92.0
+    y: -61.0
+  }
+  size {
+    x: 96.0
+    y: 20.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "box1"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "hotspot_2"
+  alpha: 0.42
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    y: -60.0
     z: 0.09
   }
   size {
@@ -147,7 +186,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "label"
-  font: "manrope_16"
+  font: "Manrope-Medium_16"
   id: "hotspot_label_2"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_2"
@@ -234,7 +273,27 @@ nodes {
 }
 nodes {
   position {
-    y: -92.0
+    y: -61.0
+  }
+  size {
+    x: 96.0
+    y: 20.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "box2"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "hotspot_3"
+  alpha: 0.42
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    y: -60.0
     z: 0.09
   }
   size {
@@ -243,7 +302,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "label"
-  font: "manrope_16"
+  font: "Manrope-Medium_16"
   id: "hotspot_label_3"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_3"
@@ -330,7 +389,27 @@ nodes {
 }
 nodes {
   position {
-    y: -92.0
+    y: -61.0
+  }
+  size {
+    x: 96.0
+    y: 20.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "box3"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "hotspot_4"
+  alpha: 0.42
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    y: -60.0
     z: 0.09
   }
   size {
@@ -339,7 +418,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "label"
-  font: "manrope_16"
+  font: "Manrope-Medium_16"
   id: "hotspot_label_4"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_4"
@@ -426,7 +505,27 @@ nodes {
 }
 nodes {
   position {
-    y: -92.0
+    y: -61.0
+  }
+  size {
+    x: 96.0
+    y: 20.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "box4"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "hotspot_5"
+  alpha: 0.42
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    y: -60.0
     z: 0.09
   }
   size {
@@ -435,7 +534,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "label"
-  font: "manrope_16"
+  font: "Manrope-Medium_16"
   id: "hotspot_label_5"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_5"
@@ -522,7 +621,27 @@ nodes {
 }
 nodes {
   position {
-    y: -92.0
+    y: -61.0
+  }
+  size {
+    x: 96.0
+    y: 20.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "box5"
+  adjust_mode: ADJUST_MODE_ZOOM
+  parent: "hotspot_6"
+  alpha: 0.42
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    y: -60.0
     z: 0.09
   }
   size {
@@ -531,7 +650,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "label"
-  font: "manrope_16"
+  font: "Manrope-Medium_16"
   id: "hotspot_label_6"
   adjust_mode: ADJUST_MODE_ZOOM
   parent: "hotspot_6"
