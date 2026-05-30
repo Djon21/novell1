@@ -41,15 +41,17 @@ local function apply_adaptive_layout()
 end
 
 -- Карта app-id → component-id (все на одном game object-е → "#" prefix)
+-- Приложения notes (УЛИКИ) и term (ТЕРМИНАЛ) отключены — не реализованы.
+-- Возможно будут добавлены в будущем версиях.
 local APP_COMPONENT = {
     sms    = "#phone_sms",
     call   = "#phone_call",
     map    = "#phone_map",
-    notes  = "#phone_notes",
+    -- notes  = "#phone_notes",   -- отключено: не реализовано
     quests = "#phone_quests",
     mail   = "#phone_mail",
     messenger = "#phone_messenger",
-    term   = "#phone_term",
+    -- term   = "#phone_term",   -- отключено: не реализовано
 }
 
 -- Внешние приложения (закрывают телефон и открывают оверлей через ui_manager).
@@ -61,11 +63,11 @@ local APP_TITLES = {
     sms    = "СООБЩЕНИЯ",
     call   = "ЗВОНКИ",
     map    = "КАРТА",
-    notes  = "УЛИКИ",
+    -- notes  = "УЛИКИ",        -- отключено: не реализовано
     quests = "КВЕСТЫ",
     mail   = "ПОЧТА",
     messenger = "ЧАТЫ",
-    term   = "ТЕРМИНАЛ",
+    -- term   = "ТЕРМИНАЛ",     -- отключено: не реализовано
 }
 
 
@@ -83,22 +85,22 @@ local CHROME_NODES = {
     "app1_bg", "app1_bg1", "app1_icon", "app1_label",
     "app2_bg", "app2_bg1", "app2_icon", "app2_label",
     "app3_bg", "app3_bg1", "app3_icon", "app3_label",
-    "app4_bg", "app4_bg1", "app4_icon", "app4_label",
+    -- app4 (notes/УЛИКИ) отключён: не реализовано
     "app5_bg", "app5_bg1", "app5_icon", "app5_label",
     "app6_bg", "app6_bg1", "app6_icon", "app6_label",
     "app7_bg", "app7_bg1", "app7_icon", "app7_label",
-    "app8_bg", "app8_bg1", "app8_icon", "app8_label",
+    -- app8 (term/ТЕРМИНАЛ) отключён: не реализовано
 }
 
 local APPS = {
     { key = "app1", id = "sms"    },
     { key = "app2", id = "call"   },
     { key = "app3", id = "map"    },
-    { key = "app4", id = "notes"  },
+    -- app4 (notes/УЛИКИ) отключён: не реализовано
     { key = "app5", id = "quests" },
     { key = "app6", id = "mail"   },
     { key = "app7", id = "messenger" },
-    { key = "app8", id = "term"   },
+    -- app8 (term/ТЕРМИНАЛ) отключён: не реализовано
 }
 
 local get_node          = U.get_node

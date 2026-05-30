@@ -245,7 +245,7 @@ nodes {
 nodes {
   position {
     x: 143.0
-    y: 422.0
+    y: 358.0
   }
   size {
     x: 82.0
@@ -253,7 +253,6 @@ nodes {
   }
   type: TYPE_BOX
   id: "app1_card"
-  pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   alpha: 0.0
 }
@@ -403,7 +402,7 @@ nodes {
 nodes {
   position {
     x: 245.0
-    y: 422.0
+    y: 358.0
   }
   size {
     x: 82.0
@@ -411,7 +410,6 @@ nodes {
   }
   type: TYPE_BOX
   id: "app2_card"
-  pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   alpha: 0.0
 }
@@ -514,7 +512,7 @@ nodes {
 nodes {
   position {
     x: 347.0
-    y: 422.0
+    y: 358.0
   }
   size {
     x: 82.0
@@ -522,7 +520,6 @@ nodes {
   }
   type: TYPE_BOX
   id: "app3_card"
-  pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   alpha: 0.0
 }
@@ -612,109 +609,8 @@ nodes {
 }
 nodes {
   position {
-    x: 348.0
-    y: 303.0
-  }
-  size {
-    x: 82.0
-    y: 76.0
-  }
-  type: TYPE_BOX
-  id: "app4_card"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.0
-}
-nodes {
-  position {
-    z: 0.55
-  }
-  size {
-    x: 62.0
-    y: 62.0
-  }
-  color {
-    x: 0.9529412
-    y: 0.9254902
-    z: 0.8509804
-  }
-  type: TYPE_BOX
-  texture: "icon_phone/ico_fon"
-  id: "app4_bg"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "app4_card"
-}
-nodes {
-  position {
-    z: 0.55
-  }
-  scale {
-    x: 0.97
-    y: 0.97
-  }
-  size {
-    x: 62.0
-    y: 62.0
-  }
-  color {
-    x: 0.07058824
-    y: 0.047058824
-    z: 0.15686275
-  }
-  type: TYPE_BOX
-  texture: "icon_phone/ico_fon"
-  id: "app4_bg1"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "app4_card"
-  alpha: 0.75
-}
-nodes {
-  position {
-    z: 0.568
-  }
-  size {
-    x: 36.0
-    y: 36.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_BOX
-  texture: "icon_phone/icon_notes"
-  id: "app4_icon"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "app4_card"
-}
-nodes {
-  position {
-    y: -44.0
-    z: 0.574
-  }
-  size {
-    x: 82.0
-    y: 14.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\243\320\273\320\270\320\272\320\270"
-  font: "jb_mono_bold_14"
-  id: "app4_label"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "app4_card"
-  alpha: 0.82
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
     x: 245.0
-    y: 303.0
+    y: 239.0
   }
   size {
     x: 82.0
@@ -722,7 +618,6 @@ nodes {
   }
   type: TYPE_BOX
   id: "app5_card"
-  pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   alpha: 0.0
 }
@@ -812,8 +707,8 @@ nodes {
 }
 nodes {
   position {
-    x: 142.0
-    y: 183.0
+    x: 347.0
+    y: 239.0
   }
   size {
     x: 82.0
@@ -821,7 +716,6 @@ nodes {
   }
   type: TYPE_BOX
   id: "app6_card"
-  pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   alpha: 0.0
 }
@@ -913,7 +807,7 @@ nodes {
 nodes {
   position {
     x: 141.0
-    y: 303.0
+    y: 239.0
   }
   size {
     x: 82.0
@@ -921,7 +815,6 @@ nodes {
   }
   type: TYPE_BOX
   id: "app7_card"
-  pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   alpha: 0.0
 }
@@ -1058,106 +951,6 @@ nodes {
   id: "app7_badge_text"
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "app7_card"
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 247.0
-    y: 183.0
-  }
-  size {
-    x: 82.0
-    y: 76.0
-  }
-  type: TYPE_BOX
-  id: "app8_card"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  alpha: 0.0
-}
-nodes {
-  position {
-    z: 0.55
-  }
-  size {
-    x: 62.0
-    y: 62.0
-  }
-  color {
-    y: 0.7019608
-    z: 0.2784314
-  }
-  type: TYPE_BOX
-  texture: "icon_phone/ico_fon"
-  id: "app8_bg"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "app8_card"
-  alpha: 0.75
-}
-nodes {
-  position {
-    z: 0.55
-  }
-  scale {
-    x: 0.97
-    y: 0.97
-  }
-  size {
-    x: 62.0
-    y: 62.0
-  }
-  color {
-    x: 0.07058824
-    y: 0.047058824
-    z: 0.15686275
-  }
-  type: TYPE_BOX
-  texture: "icon_phone/ico_fon"
-  id: "app8_bg1"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "app8_card"
-  alpha: 0.75
-}
-nodes {
-  position {
-    z: 0.568
-  }
-  size {
-    x: 36.0
-    y: 36.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_BOX
-  texture: "icon_phone/icon_terminal"
-  id: "app8_icon"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "app8_card"
-}
-nodes {
-  position {
-    y: -44.0
-    z: 0.574
-  }
-  size {
-    x: 82.0
-    y: 14.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  text: "\320\242\320\265\321\200\320\274\320\270\320\275\320\260\320\273"
-  font: "jb_mono_bold_14"
-  id: "app8_label"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "app8_card"
-  alpha: 0.82
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }

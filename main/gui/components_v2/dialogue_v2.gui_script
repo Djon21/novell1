@@ -592,7 +592,7 @@ end
 
 function init(self)
     msg.post(".", "acquire_input_focus")
-    self.visible = true
+    self.visible = false
     self.auto = false
     self.skip = false
     self.backlog_index = 0
@@ -609,6 +609,7 @@ function init(self)
     bind_bg_nodes_to_texture()
     gui.set_enabled(gui.get_node("scene_bg"), false)
     gui.set_enabled(gui.get_node("scene_bg_next"), false)
+    gui.set_enabled(gui.get_node("dlg_root"), false)
     apply_portrait_clip_layout()
     apply_adaptive_layout(self)
     ensure_backlog_nodes(self)
