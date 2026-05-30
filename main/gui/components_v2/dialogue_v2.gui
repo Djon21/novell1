@@ -91,7 +91,6 @@ nodes {
 }
 nodes {
   position {
-    x: 0.0
     y: 720.0
     z: 0.06
   }
@@ -102,13 +101,11 @@ nodes {
   type: TYPE_BOX
   id: "scene_character_1"
   pivot: PIVOT_NW
-  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: true
   enabled: false
 }
 nodes {
   position {
-    x: 0.0
     y: 720.0
     z: 0.07
   }
@@ -119,14 +116,11 @@ nodes {
   type: TYPE_BOX
   id: "scene_character_2"
   pivot: PIVOT_NW
-  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: true
   enabled: false
 }
 nodes {
   position {
-    x: 0.0
-    y: 0.0
     z: 0.08
   }
   size {
@@ -689,7 +683,7 @@ nodes {
 }
 nodes {
   position {
-    x: 324.0
+    x: 320.0
     y: 236.0
     z: 0.06
   }
@@ -713,12 +707,12 @@ nodes {
 }
 nodes {
   position {
-    x: 324.0
+    x: 320.0
     y: 60.0
     z: 0.05
   }
   size {
-    x: 70.0
+    x: 100.0
     y: 24.0
   }
   color {
@@ -734,12 +728,12 @@ nodes {
 }
 nodes {
   position {
-    x: 359.0
-    y: 72.0
+    x: 50.0
+    y: 12.0
     z: 0.06
   }
   size {
-    x: 70.0
+    x: 100.0
     y: 14.0
   }
   color {
@@ -748,17 +742,17 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: "SKIP"
+  text: "\320\237\320\240\320\236\320\237\320\243\320\241\320\242\320\230\320\242\320\254"
   font: "jb_mono_bold_14"
   id: "btn_skip_label"
-  parent: "dlg_root"
+  parent: "btn_skip"
   alpha: 0.8
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 415.0
+    x: 440.0
     y: 60.0
     z: 0.05
   }
@@ -779,8 +773,8 @@ nodes {
 }
 nodes {
   position {
-    x: 450.0
-    y: 72.0
+    x: 35.0
+    y: 12.0
     z: 0.06
   }
   size {
@@ -793,10 +787,10 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  text: "AUTO"
+  text: "\320\220\320\222\320\242\320\236"
   font: "jb_mono_bold_14"
   id: "btn_auto_label"
-  parent: "dlg_root"
+  parent: "btn_auto"
   alpha: 0.8
   outline_alpha: 0.0
   shadow_alpha: 0.0
@@ -846,7 +840,7 @@ nodes {
 }
 nodes {
   position {
-    x: 506.0
+    x: 530.0
     y: 60.0
     z: 0.06
   }
@@ -867,8 +861,8 @@ nodes {
 }
 nodes {
   position {
-    x: 541.0
-    y: 72.0
+    x: 35.0
+    y: 12.0
     z: 0.07
   }
   size {
@@ -881,10 +875,10 @@ nodes {
     z: 0.65882355
   }
   type: TYPE_TEXT
-  text: "LOG"
+  text: "\320\233\320\236\320\223"
   font: "jb_mono_bold_14"
   id: "btn_log_label"
-  parent: "dlg_root"
+  parent: "btn_log"
   alpha: 0.8
   outline_alpha: 0.0
   shadow_alpha: 0.0

@@ -339,7 +339,7 @@ nodes {
     z: 0.85
   }
   type: TYPE_TEXT
-  text: "LOG"
+  text: "\320\233\320\236\320\223"
   font: "unbounded_bold_32"
   id: "log_label"
   adjust_mode: ADJUST_MODE_STRETCH
@@ -438,7 +438,7 @@ nodes {
     z: 0.85
   }
   type: TYPE_TEXT
-  text: "MENU"
+  text: "\320\234\320\225\320\235\320\256"
   font: "unbounded_bold_32"
   id: "menu_label"
   adjust_mode: ADJUST_MODE_STRETCH
@@ -938,7 +938,7 @@ nodes {
     z: 0.85
   }
   type: TYPE_TEXT
-  text: "SAVE"
+  text: "\320\241\320\236\320\245\320\240"
   font: "unbounded_bold_32"
   id: "save_label"
   adjust_mode: ADJUST_MODE_STRETCH
