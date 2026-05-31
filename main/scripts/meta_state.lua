@@ -18,6 +18,13 @@ local function clone_defaults()
         -- Выбор персонажа сохраняется между итерациями. Сбрасывается только
         -- при reset_all() (кнопка "СБРОСИТЬ ИТЕРАЦИЮ").
         mc_gender            = nil,
+        -- Loop Journal — записи гипотез, переживающие итерации.
+        journal_entries      = {},
+        -- Narrative Stage — прогрессия сюжета (1-5).
+        narrative_stage      = 1,
+        npc_convinced        = false,
+        left_trace           = false,
+        trace_discovered     = false,
     }
 end
 
@@ -125,6 +132,19 @@ function M.complete_iteration()
     state.false_endings_seen   = {}
     state.false_endings_count  = 0
 
+    -- Сдвигаем narrative_stage при достижении порогов
+    local stage = tonumber(state.narrative_stage) or 1
+    local completed = tonumber(state.completed_iterations) or 0
+    if stage < 2 and completed >= 1 then
+        state.narrative_stage = 2
+    elseif stage < 3 and completed >= 3 then
+        state.narrative_stage = 3
+    elseif stage < 4 and completed >= 5 then
+        state.narrative_stage = 4
+    elseif stage < 5 and completed >= 7 then
+        state.narrative_stage = 5
+    end
+
     M.save()
     return M.snapshot()
 end
@@ -133,6 +153,42 @@ function M.reset_all()
     state = clone_defaults()
     M.save()
     return M.snapshot()
+end
+
+-- ================================================================
+-- LOOP JOURNAL
+-- ================================================================
+
+function M.has_journal_entry(entry_id)
+    ensure_loaded()
+    if not state.journal_entries then state.journal_entries = {} end
+    return state.journal_entries[entry_id] == true
+end
+
+function M.add_journal_entry(entry_id)
+    ensure_loaded()
+    if not state.journal_entries then state.journal_entries = {} end
+    if state.journal_entries[entry_id] then
+        return false
+    end
+    state.journal_entries[entry_id] = true
+    M.save()
+    return true
+end
+
+function M.get_journal_entries()
+    ensure_loaded()
+    return state.journal_entries or {}
+end
+
+function M.get_journal_count()
+    ensure_loaded()
+    if not state.journal_entries then return 0 end
+    local count = 0
+    for _ in pairs(state.journal_entries) do
+        count = count + 1
+    end
+    return count
 end
 
 return M

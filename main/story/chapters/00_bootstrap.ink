@@ -177,4 +177,22 @@ VAR inventory_scene_id = ""
 VAR inventory_target_id = ""    // hotspot_id для use-on-target или npc_id для give
 VAR inventory_target_kind = ""  // "hotspot" | "npc" | "item" | ""
 
+// Narrative Stage — прогрессия сюжета (1-5)
+VAR narrative_stage = 1
+VAR npc_convinced = false
+VAR left_trace = false
+VAR trace_discovered = false
+
+// Loop Journal
+VAR journal_entry_first_observed = false
+VAR journal_entry_error_pattern = false
+VAR journal_entry_human_voice = false
+VAR journal_entry_grey_car = false
+VAR journal_entry_npc_forget = false
+VAR journal_entry_system_deaf = false
+VAR journal_entry_comfort = false
+VAR journal_entry_distorted = false
+VAR journal_entry_synthesis = false
+VAR journal_entry_loop_exit = false
+
 -> choose_character
