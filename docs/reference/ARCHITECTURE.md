@@ -1,6 +1,6 @@
 # Архитектура AVOS_S
 
-Актуально на `2026-05-11`.
+Актуально на `2026-05-31`.
 
 ## Entry Point
 
@@ -27,6 +27,7 @@
   - background
   - commands
   - one-shot effects
+- core-теги (`bg`, `speaker`, `sfx`, `shake`, `pulse`, `flag`, `item`, `quest`, `sms`, `goto_scene`, и т.д.) обрабатываются внутри `apply_tags`. Новые/редкие теги можно подключать через `M.register_tag(key, handler)`.
 - `dialogue_v2` показывает реплики, портреты, typewriter и loop-label из `meta_state`
 - `AUTO/SKIP` реализованы в `main/gui/modules/ui_manager_v2/dialogue_flow.lua`, останавливаются на `choice`, `end` и exploration
 - бэклог реплик и выборов хранится в `main/scripts/dialogue_backlog.lua` (общий
@@ -112,12 +113,20 @@ Run-state текущего прохождения:
 
 ### `save_manager.lua`
 
-Сохраняет только run-state для `Continue`:
+Сохраняет run-state для `Continue` с версионированием и backup:
 
 - `mc_gender`
 - `chapter`
 - `ink_state`
 - `game_state`
+- `version` — номер схемы, миграции идут через `migrate_save()`
+- `save_time` — unix-время последней записи, используется для cloud-merge
+
+Слоты: автосейв + 3 ручных слота. Автосейв синкается с облаком через
+`cloud_sync`. Ручные слоты — локальные snapshot'ы без cloud-sync и backup.
+
+Backup: перед записью текущий save переименовывается в `.bak`. При пустом
+основном сейве load фоллбекается на `.bak`.
 
 ### `meta_state.lua`
 
@@ -152,6 +161,20 @@ Git Bash / Linux:
 ./tools/compile_ink.sh chapter_01
 ```
 
+## Build Flow
+
+Локальная сборка Defold-проекта через `scripts/build.ps1`:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\build.ps1 -NoDownload
+```
+
+Без `-NoDownload` скрипт скачает `bob.jar` (если его нет в `scripts/`).
+Для запуска нужна Java 17+.
+
+CI: `.github/workflows/ink_lint.yml` проверяет `.ink`-файлы через `tools/ink_lint.py`.
+Полноценный `bob build` в CI пока не настроен.
+
 ## V2 GUI Components
 
 - `main_menu_v2` — меню и состояние итерации
@@ -166,7 +189,7 @@ Git Bash / Linux:
 
 ## UI Manager V2 Modules
 
-`main/gui/ui_manager_v2.script` (~730 строк) сейчас работает как центральный Defold-адаптер, а не как монолит всей логики.
+`main/gui/ui_manager_v2.script` (~970 строк) сейчас работает как центральный Defold-адаптер, а не как монолит всей логики.
 
 Основная логика вынесена в `main/gui/modules/ui_manager_v2/`:
 
@@ -209,11 +232,12 @@ Git Bash / Linux:
 
 ## Scenes
 
-`main/scripts/scenes.lua` — фасад (~60 строк). Сцены в `main/data/scenes/`:
+`main/scripts/scenes.lua` — фасад (~75 строк). Сцены в `main/data/scenes/`:
 
 - `_shared.lua` — STYLE_* + apartment_bg/office_bg
 - `apartment.lua`, `apartment_monday.lua`, `apartment_tuesday.lua`
-- `office.lua`, `locations.lua`
+- `office_monday.lua`, `office_tuesday.lua`
+- `park.lua`, `cafe.lua`, `shop.lua`, `bar.lua`, `viewpoint.lua`, `archive.lua`
 
 См. `docs/guides/HOW_TO_ADD_SCENES.md`.
 

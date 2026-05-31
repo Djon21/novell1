@@ -71,7 +71,7 @@ nodes {
 }
 nodes {
   position {
-    x: 525.0
+    x: 520.0
     y: 666.0
     z: 0.556
   }
@@ -98,12 +98,12 @@ nodes {
 }
 nodes {
   position {
-    x: 524.0
+    x: 520.0
     y: 580.0
     z: 0.544
   }
   size {
-    x: 680.0
+    x: 690.0
     y: 1.0
   }
   color {
@@ -120,7 +120,7 @@ nodes {
 }
 nodes {
   position {
-    x: 524.0
+    x: 520.0
     y: 590.0
     z: 0.55
   }
@@ -209,7 +209,7 @@ nodes {
 }
 nodes {
   position {
-    x: 660.0
+    x: 656.0
     y: 590.0
     z: 0.055
   }
@@ -299,7 +299,7 @@ nodes {
 }
 nodes {
   position {
-    x: 1204.0
+    x: 1206.0
     y: 65.0
     z: 0.54
   }
@@ -321,7 +321,7 @@ nodes {
 }
 nodes {
   position {
-    x: 1203.0
+    x: 1206.0
     y: 428.0
     z: 0.545
   }
@@ -342,7 +342,7 @@ nodes {
 }
 nodes {
   position {
-    x: 524.0
+    x: 520.0
     y: 490.0
     z: 0.032
   }

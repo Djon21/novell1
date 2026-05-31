@@ -36,7 +36,7 @@ local point_in_rect = U.point_in_rect
 -- overlay slot from phone_sms.gui and are intentionally NOT the raw HTML
 -- 878x642 canvas. HTML visual tokens are adapted to this Defold panel.
 local CONTENT_X = 520
-local SCROLL_X = 1204
+local SCROLL_X = 1206
 local SCROLL_W = 4
 local LIST_TOP = 570
 local LIST_BOTTOM = 65

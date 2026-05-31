@@ -1,6 +1,6 @@
 # TODO — Живой Backlog `AVOS_S`
 
-Актуально на `2026-05-11`.
+Актуально на `2026-05-31`.
 
 Здесь только незакрытые задачи. История уже выполненных пунктов живёт в git
 history и commit messages.
@@ -43,10 +43,11 @@ history и commit messages.
   `phone_mail.gui` (2658), `phone_call.gui` (2389) — повторы quest/mail/call
   rows аналогично проблеме messenger. По образцу phone_sms / phone_messenger
   выделить list + detail template'ы.
-- [ ] **Save versioning.** Сейчас старые сейвы могут крашнуть после изменения
-  схемы. Добавить `save_version` поле и цепочку migrate-функций.
-- [ ] **Pluggable ink-tag handlers.** `apply_tags` в dialogue_manager_ink —
-  большой if/elseif. Разбить через `M.register_tag(key, handler)` API.
+- [ ] **Дожать ink-tag registry.** База уже есть: `M.register_tag(key, handler)`
+  реализован в `dialogue_manager_ink.lua`, но основной массив тегов всё ещё
+  живёт в большом `if/elseif` внутри `apply_tags`. Следующий шаг — вынести
+  новые и редкие теги в registry, оставив core-теги inline только там, где это
+  реально упрощает runtime.
 
 ## P3 — Cleanup
 
@@ -61,7 +62,16 @@ history и commit messages.
 
 ## Tooling
 
-- [ ] **Ink linter (pre-commit hook):** BOM-чек, undefined knot references,
-  дубликаты knot-имён. У тебя ink будет 10K+ строк к финалу — без проверок ад.
-- [ ] **CI workflow:** GitHub Actions с компиляцией ink через inklecate +
-  lua-syntax check. Сейчас `.github/` отсутствует.
+- [ ] **Ink linter: расширить проверки.** Базовые проверки уже работают в
+  `tools/ink_lint.py`, есть CI workflow и `pre-commit` hook. Следующие шаги:
+  BOM-чек, дубликаты knot-имён, проверка root-`chapter_01.ink`, сверка
+  `goto_scene/explore` со списком реальных сцен, сверка item-id с
+  `items_catalog.lua`.
+- [ ] **CI workflow: добавить реальную сборку runtime.** `Ink Lint` уже есть в
+  `.github/workflows/ink_lint.yml`. Добавить job с `bob.jar` (`resolve build`),
+  а при желании ещё и отдельную проверку Lua syntax / smoke-проход тулинга.
+- [ ] **Build automation: закрепить рабочий bob flow.** `scripts/build.ps1`
+  уже починен под PowerShell 5.1 и текущий `bob.jar`, но стоит:
+  задокументировать его как основной Windows build entrypoint, при желании
+  добавить параметры `-Platform` / `-Variant`, и зеркально проверить shell-flow
+  для `tools/compile_ink.sh` / будущего CI.

@@ -26,7 +26,7 @@
 
 ## Быстрый Старт
 
-1. Откройте проект в Defold Editor.
+1. Установите Java 17+.
 2. Если меняли `.ink`, перекомпилируйте сценарий:
 
 ```bash
@@ -39,7 +39,17 @@ tools\compile_ink.bat
 ./tools/compile_ink.sh
 ```
 
-3. Запустите `Project -> Build` или `F5`.
+3. Для локальной сборки из PowerShell:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\build.ps1 -NoDownload
+```
+
+Если `scripts/bob.jar` ещё не лежит в репозитории локально, уберите
+`-NoDownload`, и скрипт скачает подходящий `bob.jar` сам.
+
+4. Для запуска в Defold Editor откройте проект и используйте `Project -> Build`
+   или `F5`.
 
 ## Где Читать Документацию
 
