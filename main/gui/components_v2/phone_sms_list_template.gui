@@ -38,6 +38,10 @@ fonts {
   name: "manrope_16"
   font: "/main/fonts/manrope_16.font"
 }
+fonts {
+  name: "Manrope-Medium_16"
+  font: "/main/fonts/Manrope-Medium_16.font"
+}
 textures {
   name: "icon_phone"
   texture: "/main/images/phone/icon_phone.atlas"
@@ -199,6 +203,7 @@ nodes {
   texture: "ui_common/border"
   id: "border_all"
   pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
   parent: "tab_all_bg"
   slice9 {
     x: 2.0
@@ -289,6 +294,7 @@ nodes {
   texture: "ui_common/border"
   id: "border_unread"
   pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
   parent: "tab_unread_bg"
   slice9 {
     x: 2.0
@@ -364,32 +370,13 @@ nodes {
 }
 nodes {
   position {
-    x: -3.0
-    y: 60.0
-    z: 0.055
-  }
-  size {
-    x: 6.0
-    y: 18.0
-  }
-  color {
-    y: 0.239
-    z: 0.498
-  }
-  type: TYPE_BOX
-  id: "msg1_dot"
-  pivot: PIVOT_SW
-  parent: "msg1_bg"
-}
-nodes {
-  position {
-    x: 68.0
-    y: 60.0
+    x: 76.0
+    y: 55.0
     z: 0.056
   }
   size {
     x: 320.0
-    y: 14.0
+    y: 20.0
   }
   color {
     x: 0.953
@@ -400,7 +387,10 @@ nodes {
   text: "\342\200\224"
   font: "unbounded_bold_20"
   id: "msg1_name"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
   pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
   parent: "msg1_bg"
   alpha: 0.95
   outline_alpha: 0.0
@@ -408,8 +398,8 @@ nodes {
 }
 nodes {
   position {
-    x: 668.0
-    y: 57.0
+    x: 673.0
+    y: 12.0
     z: 0.056
   }
   size {
@@ -434,12 +424,12 @@ nodes {
 }
 nodes {
   position {
-    x: 68.0
-    y: 38.0
+    x: 76.0
+    y: 27.0
     z: 0.056
   }
   size {
-    x: 420.0
+    x: 440.0
     y: 14.0
   }
   color {
@@ -448,9 +438,10 @@ nodes {
     z: 0.659
   }
   type: TYPE_TEXT
-  font: "manrope_16"
+  font: "Manrope-Medium_16"
   id: "msg1_body"
   pivot: PIVOT_W
+  adjust_mode: ADJUST_MODE_STRETCH
   parent: "msg1_bg"
   alpha: 0.86
   outline_alpha: 0.0
@@ -458,8 +449,8 @@ nodes {
 }
 nodes {
   position {
-    x: 560.0
-    y: 28.0
+    x: 673.0
+    y: 57.0
     z: 0.052
   }
   size {
@@ -473,7 +464,8 @@ nodes {
   type: TYPE_BOX
   id: "msg1_pin_bg"
   xanchor: XANCHOR_RIGHT
-  pivot: PIVOT_SW
+  yanchor: YANCHOR_TOP
+  pivot: PIVOT_SE
   parent: "msg1_bg"
   alpha: 0.15
 }
@@ -492,7 +484,7 @@ nodes {
   }
   type: TYPE_BOX
   id: "msg1_pin_border_t"
-  pivot: PIVOT_SW
+  pivot: PIVOT_SE
   parent: "msg1_pin_bg"
   alpha: 0.5
 }
@@ -510,7 +502,7 @@ nodes {
   }
   type: TYPE_BOX
   id: "msg1_pin_border_b"
-  pivot: PIVOT_SW
+  pivot: PIVOT_SE
   parent: "msg1_pin_bg"
   alpha: 0.5
 }
@@ -528,13 +520,13 @@ nodes {
   }
   type: TYPE_BOX
   id: "msg1_pin_border_l"
-  pivot: PIVOT_SW
+  pivot: PIVOT_SE
   parent: "msg1_pin_bg"
   alpha: 0.5
 }
 nodes {
   position {
-    x: 109.0
+    x: -109.0
     z: 0.055
   }
   size {
@@ -547,13 +539,13 @@ nodes {
   }
   type: TYPE_BOX
   id: "msg1_pin_border_r"
-  pivot: PIVOT_SW
+  pivot: PIVOT_SE
   parent: "msg1_pin_bg"
   alpha: 0.5
 }
 nodes {
   position {
-    x: 55.0
+    x: -54.0
     y: 8.0
     z: 0.062
   }
@@ -593,8 +585,27 @@ nodes {
 }
 nodes {
   position {
+    x: -3.0
+    y: 60.0
+    z: 0.055
+  }
+  size {
     x: 6.0
     y: 18.0
+  }
+  color {
+    y: 0.239
+    z: 0.498
+  }
+  type: TYPE_BOX
+  id: "msg1_dot"
+  pivot: PIVOT_SW
+  parent: "msg1_bg"
+}
+nodes {
+  position {
+    x: 40.0
+    y: 40.0
     z: 0.053
   }
   size {
@@ -607,88 +618,13 @@ nodes {
   }
   type: TYPE_BOX
   id: "msg1_av_bg"
-  pivot: PIVOT_SW
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
   parent: "msg1_bg"
   alpha: 0.15
 }
 nodes {
   position {
-    y: 49.0
-    z: 0.054
-  }
-  size {
-    x: 50.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "msg1_av_b_t"
-  pivot: PIVOT_SW
-  parent: "msg1_av_bg"
-  alpha: 0.55
-}
-nodes {
-  position {
-    z: 0.054
-  }
-  size {
-    x: 50.0
-    y: 1.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "msg1_av_b_b"
-  pivot: PIVOT_SW
-  parent: "msg1_av_bg"
-  alpha: 0.55
-}
-nodes {
-  position {
-    z: 0.054
-  }
-  size {
-    x: 1.0
-    y: 50.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "msg1_av_b_l"
-  pivot: PIVOT_SW
-  parent: "msg1_av_bg"
-  alpha: 0.55
-}
-nodes {
-  position {
-    x: 49.0
-    z: 0.054
-  }
-  size {
-    x: 1.0
-    y: 50.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "msg1_av_b_r"
-  pivot: PIVOT_SW
-  parent: "msg1_av_bg"
-  alpha: 0.55
-}
-nodes {
-  position {
-    x: 25.0
-    y: 27.0
     z: 0.056
   }
   size {
@@ -707,6 +643,23 @@ nodes {
   alpha: 0.95
   outline_alpha: 0.0
   shadow_alpha: 0.0
+}
+nodes {
+  size {
+    x: 50.0
+    y: 50.0
+  }
+  type: TYPE_BOX
+  texture: "ui_common/border"
+  id: "av_border"
+  parent: "msg1_av_bg"
+  slice9 {
+    x: 2.0
+    y: 2.0
+    z: 2.0
+    w: 2.0
+  }
+  alpha: 0.55
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT

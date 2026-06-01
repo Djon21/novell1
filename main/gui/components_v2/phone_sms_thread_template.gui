@@ -63,12 +63,12 @@ nodes {
 }
 nodes {
   position {
-    x: 540.0
-    y: 56.0
+    x: 520.0
+    y: 65.0
     z: 0.552
   }
   size {
-    x: 150.0
+    x: 190.0
     y: 34.0
   }
   color {
@@ -90,7 +90,7 @@ nodes {
     z: 0.054
   }
   size {
-    x: 150.0
+    x: 190.0
     y: 34.0
   }
   type: TYPE_BOX
@@ -108,12 +108,12 @@ nodes {
 }
 nodes {
   position {
-    x: 75.0
+    x: 95.0
     y: 17.0
     z: 0.059
   }
   size {
-    x: 130.0
+    x: 170.0
     y: 18.0
   }
   color {
@@ -121,8 +121,8 @@ nodes {
     y: 0.976
   }
   type: TYPE_TEXT
-  text: "< \320\222\320\245\320\236\320\224\320\257\320\251\320\230\320\225"
-  font: "jb_mono_bold_14"
+  text: "\342\227\200 \320\222\320\245\320\236\320\224\320\257\320\251\320\230\320\225"
+  font: "unbounded_bold_20"
   id: "th_back_label"
   xanchor: XANCHOR_LEFT
   yanchor: YANCHOR_BOTTOM
@@ -134,7 +134,7 @@ nodes {
 }
 nodes {
   position {
-    x: 540.0
+    x: 520.0
     y: 650.0
     z: 0.559
   }
@@ -161,7 +161,7 @@ nodes {
 }
 nodes {
   position {
-    x: 540.0
+    x: 520.0
     y: 622.0
     z: 0.559
   }
@@ -189,12 +189,12 @@ nodes {
 }
 nodes {
   position {
-    x: 540.0
+    x: 520.0
     y: 600.0
     z: 0.552
   }
   size {
-    x: 630.0
+    x: 690.0
     y: 1.0
   }
   color {
@@ -332,12 +332,12 @@ nodes {
 }
 nodes {
   position {
-    x: 540.0
+    x: 520.0
     y: 110.0
     z: 0.552
   }
   size {
-    x: 630.0
+    x: 690.0
     y: 1.0
   }
   color {
@@ -354,7 +354,7 @@ nodes {
 }
 nodes {
   position {
-    x: 1194.0
+    x: 1206.0
     y: 134.0
     z: 0.552
   }
@@ -375,7 +375,7 @@ nodes {
 }
 nodes {
   position {
-    x: 1194.0
+    x: 1206.0
     y: 500.0
     z: 0.553
   }
@@ -395,12 +395,12 @@ nodes {
 }
 nodes {
   position {
-    x: 1002.0
-    y: 56.0
+    x: 1210.0
+    y: 65.0
     z: 0.552
   }
   size {
-    x: 168.0
+    x: 180.0
     y: 34.0
   }
   color {
@@ -409,7 +409,9 @@ nodes {
   }
   type: TYPE_BOX
   id: "th_send_bg"
-  pivot: PIVOT_SW
+  xanchor: XANCHOR_RIGHT
+  yanchor: YANCHOR_BOTTOM
+  pivot: PIVOT_SE
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "thread_root"
   alpha: 0.36
@@ -419,30 +421,30 @@ nodes {
     z: 0.054
   }
   size {
-    x: 168.0
+    x: 180.0
     y: 34.0
   }
   type: TYPE_BOX
   texture: "ui_common/border"
   id: "border_send"
-  pivot: PIVOT_SW
+  pivot: PIVOT_SE
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "th_send_bg"
   slice9 {
-    x: 2.0
-    y: 2.0
-    z: 2.0
-    w: 2.0
+    x: 3.0
+    y: 3.0
+    z: 3.0
+    w: 3.0
   }
 }
 nodes {
   position {
-    x: 84.0
+    x: -90.0
     y: 17.0
     z: 0.059
   }
   size {
-    x: 148.0
+    x: 170.0
     y: 18.0
   }
   color {
@@ -451,7 +453,7 @@ nodes {
     z: 0.094
   }
   type: TYPE_TEXT
-  text: "SEND \342\226\266"
+  text: "\320\236\320\242\320\222\320\225\320\242\320\230\320\242\320\254 \342\226\266"
   font: "unbounded_bold_20"
   id: "th_send_label"
   adjust_mode: ADJUST_MODE_STRETCH
