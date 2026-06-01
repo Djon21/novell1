@@ -145,9 +145,20 @@ event прокидывается дальше (другие хитбоксы м�
 Любой press начинает drag. На `"tap"` ответе caller сам решает что делать
 с координатами (обычно — fall-through к собственному hit-test'у).
 
-Так сделано в `phone_messenger`: list view + chat view целиком scrollable,
-а tap'ы по back/input/send/чат-row обрабатываются в fall-through ветке
-после `handle() == "tap"`.
+Так сделано в `phone_messenger` для **list view** — `list_drag` без
+`is_inside`, тапы по чат-строкам ловятся в fall-through после `"tap"`.
+
+Для **chat view** у `phone_messenger` другая схема: `chat_drag` создан
+**с `is_inside = is_inside_chat_messages`** (зона между header-линией и
+input-линией, y: 148-578). Press по `back_bg` / `send_bg` / пустому
+header-пространству возвращает `"ignore"`, drag не стартует, и tap
+доходит до hit-test'а `back_bg` / `send_bg`. Без `is_inside` любое
+дрожание пальца при тапе на back (>8px = `DRAG_THRESHOLD_PX`) глоталось
+бы как drag, и `back_bg` срабатывал бы только при идеально неподвижном
+тапе.
+
+`phone_sms` использует `is_inside = is_inside_thread_messages` для
+thread-drag и `is_inside = is_inside_sms_list` для list-drag.
 
 ## Порог `threshold_px`
 

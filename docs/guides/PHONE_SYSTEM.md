@@ -456,8 +456,13 @@ msg.post("/ui_manager_v2#phone_v2", "refresh_phone")
 `phone_newapp.gui` — создать в Defold Editor (File → New → GUI File),  
 указать скрипт `phone_newapp.gui_script`.
 
-Структура нод: все ноды top-level (без общего root-а) **или** один root-нод
-с детьми (тогда в скрипте скрывать только root).
+Структура нод: все ноды top-level (без общего root-а), либо один root-нод
+с детьми. **Не рассчитывай на то, что выключение root'а отключит детей для
+пикинга** — `gui.pick_node` проверяет `is_enabled` только самой ноды, не
+родителя. Если у multi-view app есть нода, которая должна ловить тапы
+только в одном view (например, `back_bg` в чате), её нужно явно
+включать/выключать в `set_view`. Подробнее — см. «Multi-view паттерн»
+ниже.
 
 ### 2. Создать скрипт
 
@@ -624,7 +629,13 @@ switch_app(self, "map")                                  -- → open_app → #ph
 
 `phone_map.gui` имеет 132+ ноды под единым корнем `grp_panel`.
 `phone_map.gui_script` скрывает/показывает только `grp_panel` (через `set_root_enabled()`) —
-Defold автоматически распространяет `enabled = false` на все дочерние узлы.
+для рендера Defold не рисует дочерние ноды выключенного root'а, и для
+пикинга `gui.pick_node` тоже не попадает в них (родитель выключен → нода
+считается недоступной). Этот трюк работает только когда root действительно
+единственная точка переключения видимости. Для multi-view apps (sms,
+messenger) недостаточно — там view переключают между двумя наборами нод,
+которые не вложены друг в друга, поэтому каждую ноду нужно явно
+включать/выключать. Подробнее — см. «Multi-view паттерн» ниже.
 
 ### Вызов карты из Ink
 
@@ -659,3 +670,104 @@ Defold автоматически распространяет `enabled = false`
 | Данные в вкладке не обновляются | Нет вызова `refresh(self)` в `open_app` | Добавить `refresh(self)` в хэндлер `open_app` |
 | `refresh_phone` не обновляет данные | Активная вкладка не совпадает с той что на экране | `refresh_phone` обновляет только `active_app` — открой нужную вкладку |
 | `gui.get_node` крашится | Нода с таким id нет в этом GUI-файле | Используй `pcall(gui.get_node, id)` — обёртка `get_node()` уже есть в каждом скрипте |
+| Клик по `back_bg` (или другой ноде chat-view) «открывает соседний чат» / «возвращает не туда» | (1) `on_input` и `on_message(phone_input)` оба зовут `handle_*` для одного события → press/release обрабатывается дважды; первый вызов меняет view, второй — попадает в ноду нового view под курсором. (2) `set_view` не отключает явно ноды предыдущего view, поэтому `gui.pick_node` всё ещё находит их (он проверяет `is_enabled` только самой ноды, не родителя). | См. секцию 14 ниже. |
+
+---
+
+## 14. Multi-view паттерн (SMS, Messenger)
+
+У `phone_sms` и `phone_messenger` внутри одной GUI-сцены два **параллельных**
+набора нод (sms_list vs sms_thread, messenger_list vs messenger_chat).
+Они **не вложены** друг в друга, поэтому выключение общего root'а
+автоматически не отключает ненужный набор. Нужно явно перечислять и
+включать/выключать каждую ноду при смене view.
+
+### Шаблон `LIST_NODE_IDS` / `<VIEW>_NODE_IDS`
+
+```lua
+-- phone_sms.gui_script
+local LIST_NODE_IDS = {
+    "list_root",
+    "tab_all_bg", "tab_all_text", "tab_all_count", "border_all",
+    "tab_unread_bg", "tab_unread_text", "tab_unread_count", "border_unread",
+    "sms_scrollbar_track", "sms_scrollbar_thumb",
+}
+for i = 1, MAX_ROWS do
+    for _, suffix in ipairs({"_bg", "_border", "_dot", "_name", "_time",
+                              "_body", "_pin_bg", "_pin_border_t", "_pin_border_b",
+                              "_pin_border_l", "_pin_border_r", "_pin"}) do
+        LIST_NODE_IDS[#LIST_NODE_IDS + 1] = "msg" .. i .. suffix
+    end
+end
+
+local THREAD_NODE_IDS = {
+    "thread_root",
+    "th_back_bg", "th_back_border", "th_back_label",
+    "th_name", "th_num", "th_header_line", "th_empty",
+    "th_scrollbar_track", "th_scrollbar_thumb",
+    "th_input_line", "th_send_bg", "border_send", "th_send_label",
+}
+for i = 1, MAX_BUBBLES do
+    for _, suffix in ipairs({"_bg", "_border", "_text", "_stamp"}) do
+        THREAD_NODE_IDS[#THREAD_NODE_IDS + 1] = "bub" .. i .. suffix
+    end
+end
+
+local function set_view(self, view)
+    self.view = view
+    local show_list = view == "list"
+    set_node_enabled("sms_list", show_list)
+    set_node_enabled("sms_thread", not show_list)
+    set_node_enabled("sms_list/list_root", show_list)
+    set_node_enabled("sms_thread/thread_root", not show_list)
+    set_many_enabled(LIST_NODE_IDS, show_list)
+    set_many_enabled(THREAD_NODE_IDS, not show_list)
+    ...
+end
+```
+
+`phone_messenger` использует тот же паттерн с `LIST_NODE_IDS` и
+`CHAT_NODE_IDS` (`phone_messenger.gui_script:54-90`).
+
+### `on_input` vs `on_message(phone_input)`
+
+Input приходит в app двумя путями:
+
+1. **`phone_v2_root.on_input`** — `phone_v2_root` держит `acquire_input_focus`
+   и форвардит input активному app через `msg.post(comp, "phone_input", ...)`.
+   Это нормальный маршрут в проде.
+2. **`app.on_input`** — Defold может диспатчить input прямо в app-скрипт
+   (например, если в editor/tests app загружен без root'а).
+
+Если в app-скрипте **оба** хука (`on_input` и `on_message(MSG.phone_input)`)
+зовут один и тот же `handle_*`, **каждое событие обрабатывается дважды**.
+
+В `phone_messenger` это проявилось так:
+
+```
+press back_bg (chat view) → open_list → view=list
+release (тот же touch)   → handle_* → list view → is_inside_rect("chat6_bg") true
+                        → open_chat(prod_bot)        ← «открывает соседний чат»
+```
+
+**Фикс в `phone_messenger`:** `on_input` сделан no-op (возвращает `true`,
+но не зовёт `handle_phone_input`). Только `on_message(phone_input)`
+обрабатывает input. Альтернатива — guard в `handle_*` (frame-counter /
+последний `(x,y,pressed,released)` хеш), но проще отключить один хук.
+
+`phone_sms` имеет тот же `on_input` fallback, но у SMS бага не видно
+потому что `THREAD_NODE_IDS` явно отключаются в `set_view` — duplicate
+release попадает в list-view, но `gui.pick_node` для sms_list-строк
+возвращает false (вне области) или для `th_back_bg` (выключен) тоже
+false. Если когда-нибудь у SMS появится баг «release после back открыл
+не тот тред» — причина та же, лечить так же.
+
+### Чек-лист при добавлении новой ноды в multi-view app
+
+1. Понять, к какому view она относится (list/chat/thread).
+2. Добавить id в `LIST_NODE_IDS` или `<OTHER>_NODE_IDS` соответственно.
+3. Если нода попадает в обе view (например, общий хром) — оставить
+   в `NODE_IDS` для `set_all_enabled`, но явно управлять в `set_view`
+   если нужно переключение.
+4. **Не** полагаться на `enabled = false` родителя для исключения
+   ноды из пикинга.

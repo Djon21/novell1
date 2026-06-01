@@ -74,7 +74,10 @@ nodes {
   }
   type: TYPE_BOX
   id: "back_bg"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_BOTTOM
   pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
   parent: "chat_root"
   alpha: 0.36
 }
@@ -117,6 +120,8 @@ nodes {
   text: "\342\227\200 \320\232 \320\247\320\220\320\242\320\220\320\234"
   font: "unbounded_bold_20"
   id: "back_text"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_BOTTOM
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "back_bg"
   alpha: 0.92
@@ -462,3 +467,4 @@ nodes {
   shadow_alpha: 0.0
 }
 material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT

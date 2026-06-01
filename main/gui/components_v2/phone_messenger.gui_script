@@ -27,6 +27,9 @@ local BUBBLE_PAD_TOP = 12
 local BUBBLE_STAMP_AREA_H = 22
 local CHAT_AREA_TOP = 578
 local CHAT_AREA_BOTTOM = 148
+local CHAT_X = 520
+local CHAT_W = 690
+local CHAT_AREA_H = CHAT_AREA_TOP - CHAT_AREA_BOTTOM
 local LIST_ROW_SLOT_GAP_Y = 85
 
 -- Drag-scroll параметры (как в phone_sms): pixel-сдвиг при котором делаем
@@ -48,26 +51,44 @@ local NODE_IDS = {
     "send_bg", "border_send", "send_text",
 }
 
+-- Разделение нод по view. Нужно для set_view: Defold gui.pick_node
+-- проверяет gui.is_enabled только самой ноды, не родителя. Если оставлять
+-- чат-строки индивидуально enabled пока list_root выключен, релиз после
+-- open_list (back-клик) попадает в чат-строку под курсором и открывает
+-- «соседний» чат. Поэтому в chat-view отключаем LIST_NODE_IDS явно,
+-- в list-view — CHAT_NODE_IDS. (Аналог LIST_NODE_IDS / THREAD_NODE_IDS
+-- в phone_sms.gui_script:114-148.)
+local LIST_NODE_IDS = {
+    "list_root", "msgr_title",
+    "tab_all_bg", "tab_all_text", "tab_all_count", "border_all",
+    "tab_unread_bg", "border_unread", "tab_unread_text", "tab_unread_count",
+    "list_divider", "list_scrollbar_track", "list_scrollbar_thumb",
+}
+
 for i = 1, MAX_LIST_ROWS do
     local p = "chat" .. i
-    table.insert(NODE_IDS, p .. "_bg")
-    table.insert(NODE_IDS, p .. "_border")
-    table.insert(NODE_IDS, p .. "_av_bg")
-    table.insert(NODE_IDS, p .. "_av")
-    table.insert(NODE_IDS, p .. "_name")
-    table.insert(NODE_IDS, p .. "_icons")
-    table.insert(NODE_IDS, p .. "_preview")
-    table.insert(NODE_IDS, p .. "_time")
-    table.insert(NODE_IDS, p .. "_badge_bg")
-    table.insert(NODE_IDS, p .. "_badge")
+    for _, suffix in ipairs({
+        "_bg", "_border",
+        "_av_bg", "_av", "_name",
+        "_icons", "_preview", "_time",
+        "_badge_bg", "_badge",
+    }) do
+        LIST_NODE_IDS[#LIST_NODE_IDS + 1] = p .. suffix
+    end
 end
+
+local CHAT_NODE_IDS = {
+    "chat_root", "back_bg", "border_back", "back_text",
+    "head_av_bg", "head_av", "head_name", "head_status",
+    "chat_header_line", "chat_scrollbar_track", "chat_scrollbar_thumb",
+    "send_bg", "border_send", "send_text",
+}
 
 for i = 1, MAX_BUBBLES do
     local p = "bub" .. i
-    table.insert(NODE_IDS, p .. "_bg")
-    table.insert(NODE_IDS, p .. "_border")
-    table.insert(NODE_IDS, p .. "_text")
-    table.insert(NODE_IDS, p .. "_stamp")
+    for _, suffix in ipairs({ "_bg", "_border", "_text", "_stamp" }) do
+        CHAT_NODE_IDS[#CHAT_NODE_IDS + 1] = p .. suffix
+    end
 end
 
 -- Legacy fallback; canonical presentation metadata lives in main/scripts/phone_contacts.lua.
@@ -849,9 +870,9 @@ local refresh_send_pulse
 local function set_view(self, view)
     self.view = view or "list"
     local show_list = self.view == "list"
-    set_node_enabled("list_root", show_list)
-    set_node_enabled("chat_root", not show_list)
     set_node_enabled("messenger_runtime_root", true)
+    set_nodes_enabled(LIST_NODE_IDS, show_list)
+    set_nodes_enabled(CHAT_NODE_IDS, not show_list)
     if show_list then render_list(self) else render_chat(self) end
     if refresh_send_pulse then refresh_send_pulse(self) end
 end
@@ -878,6 +899,16 @@ local function is_inside_rect(id, x, y)
     local n = get_node(id)
     if not n or not gui.is_enabled(n) then return false end
     return gui.pick_node(n, x, y)
+end
+
+-- Press внутри chat-view стартует drag-scroll только если палец в зоне
+-- сообщений (между input-линией и header-линией). Press по back_bg / send_bg
+-- / пустому header-пространству НЕ стартует drag → release доходит до
+-- tap-handler'а и back-кнопка срабатывает стабильно. Раньше у chat_drag
+-- не было is_inside-фильтра, и любой press глотался как "swallow" —
+-- back_bg нажимался только при идеально неподвижном тапе.
+local function is_inside_chat_messages(x, y)
+    return U.point_in_rect(x, y, CHAT_X, CHAT_AREA_BOTTOM, CHAT_W, CHAT_AREA_H)
 end
 
 -- Приоритет источников knot'а:
@@ -1094,6 +1125,7 @@ local function handle_phone_input(self, action_id, action)
         -- arm-on-press, остаётся как было.
         if is_inside_rect("back_bg", x, y) then
             if not released then return true end
+            U.flash_node("back_bg")
             disarm_all_taps(self)
             open_list(self)
             return true
@@ -1125,6 +1157,8 @@ end
 
 local function set_all_enabled(enabled)
     set_nodes_enabled(NODE_IDS, enabled)
+    set_nodes_enabled(LIST_NODE_IDS, enabled)
+    set_nodes_enabled(CHAT_NODE_IDS, enabled)
 end
 
 local function clone_rows()
@@ -1219,10 +1253,13 @@ function init(self)
     })
     -- В chat view drag вниз → старые, drag вверх → новые. Это противоположно
     -- list-view (там dy>0 опускает offset вверх по списку), поэтому invert.
+    -- is_inside ограничивает drag-scroll зоной сообщений, чтобы press по
+    -- back_bg / send_bg не превращался в drag при дрожании пальца.
     self.chat_drag = drag_scroll.new({
         step_px      = CHAT_DRAG_STEP_PX,
         threshold_px = DRAG_THRESHOLD_PX,
         owner        = self,
+        is_inside    = is_inside_chat_messages,
         invert       = true,
         on_step      = function(owner, delta) step_chat(owner, delta) end,
     })
@@ -1258,9 +1295,6 @@ function on_message(self, message_id, message, sender)
     elseif message_id == MSG.refresh_app then
         if self.visible then set_view(self, self.view or "list") end
     elseif message_id == MSG.phone_input then
-        -- Defold: on_message не должна возвращать значения. handle_phone_input
-        -- возвращает bool (consumed-флаг для on_input), но здесь на ветке
-        -- сообщения он нам не нужен — просто игнорируем результат.
         if self.visible then
             handle_phone_input(self, message and message.action_id or MSG.touch, {
                 x = message and message.x or 0,
@@ -1276,5 +1310,12 @@ function on_message(self, message_id, message, sender)
 end
 
 function on_input(self, action_id, action)
-    return handle_phone_input(self, action_id, action or {})
+    -- phone_v2_root уже акquire_input_focus и форвардит input в мессенджер
+    -- через msg.post(".", MSG.phone_input). Если дополнительно реагировать
+    -- на on_input, КАЖДОЕ событие (press/release) обрабатывается дважды:
+    -- первый раз в on_input (view ещё chat → back-ветка → open_list),
+    -- второй раз в on_message phone_input (view уже list → chat6_bg hit →
+    -- "соседний" чат открывается). Возвращаем true чтобы поглотить fallback,
+    -- но сами не зовём handle_phone_input — только on_message маршрут.
+    return true
 end

@@ -6,5 +6,20 @@
     "bash": "ask",
     "edit": "ask",
     "external_directory": "ask"
+  },
+  "mcp": {
+    "sequential-thinking": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "enabled": true
+    },
+    "defold-mcp": {
+      "type": "local",
+      "command": ["npx", "-y", "@iflow-mcp/defold-mcp"],
+      "enabled": true,
+      "environment": {
+        "BOB_PATH": "C:\\Users\\GoldiM\\novell1\\AVOS\\AVOS_G\\scripts\\bob.jar"
+      }
+    }
   }
 }
