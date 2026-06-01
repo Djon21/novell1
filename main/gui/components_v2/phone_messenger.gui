@@ -218,32 +218,14 @@ nodes {
 }
 nodes {
   type: TYPE_BOX
-  id: "messenger_chat/back_bt"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/back_bb"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/back_bl"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/back_br"
-  parent: "messenger_chat/chat_root"
+  id: "messenger_chat/border_back"
+  parent: "messenger_chat/back_bg"
   template_node_child: true
 }
 nodes {
   type: TYPE_TEXT
   id: "messenger_chat/back_text"
-  parent: "messenger_chat/chat_root"
+  parent: "messenger_chat/back_bg"
   template_node_child: true
 }
 nodes {
@@ -267,114 +249,6 @@ nodes {
 nodes {
   type: TYPE_TEXT
   id: "messenger_chat/head_status"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/head_call_bg"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/head_call_bt"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/head_call_bb"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/head_call_bl"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/head_call_br"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_chat/head_call_text"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/head_find_bg"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/head_find_bt"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/head_find_bb"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/head_find_bl"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/head_find_br"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_chat/head_find_text"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/head_menu_bg"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/head_menu_bt"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/head_menu_bb"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/head_menu_bl"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/head_menu_br"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_chat/head_menu_text"
   parent: "messenger_chat/chat_root"
   template_node_child: true
 }
@@ -446,50 +320,8 @@ nodes {
 }
 nodes {
   type: TYPE_BOX
-  id: "messenger_chat/attach_bg"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_chat/attach_text"
-  parent: "messenger_chat/attach_bg"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/border_attach"
-  parent: "messenger_chat/attach_bg"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/input_bg"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_chat/input_text"
-  parent: "messenger_chat/input_bg"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/border_input"
-  parent: "messenger_chat/input_bg"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
   id: "messenger_chat/send_bg"
   parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_chat/send_text"
-  parent: "messenger_chat/send_bg"
   template_node_child: true
 }
 nodes {
@@ -499,21 +331,9 @@ nodes {
   template_node_child: true
 }
 nodes {
-  type: TYPE_BOX
-  id: "messenger_chat/chat_footer_line"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
   type: TYPE_TEXT
-  id: "messenger_chat/chat_footer_left"
-  parent: "messenger_chat/chat_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_TEXT
-  id: "messenger_chat/chat_footer_right"
-  parent: "messenger_chat/chat_root"
+  id: "messenger_chat/send_text"
+  parent: "messenger_chat/send_bg"
   template_node_child: true
 }
 material: "/builtins/materials/gui.material"

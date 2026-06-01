@@ -42,16 +42,10 @@ local NODE_IDS = {
     "tab_all_bg", "tab_all_text", "tab_all_count", "border_all",
     "tab_unread_bg", "border_unread", "tab_unread_text", "tab_unread_count",
     "list_divider", "list_scrollbar_track", "list_scrollbar_thumb",
-    "chat_root", "back_bg", "back_bt", "back_bb", "back_bl", "back_br", "back_text",
+    "chat_root", "back_bg", "border_back", "back_text",
     "head_av_bg", "head_av", "head_name", "head_status",
-    "head_call_bg", "head_call_bt", "head_call_bb", "head_call_bl", "head_call_br", "head_call_text",
-    "head_find_bg", "head_find_bt", "head_find_bb", "head_find_bl", "head_find_br", "head_find_text",
-    "head_menu_bg", "head_menu_bt", "head_menu_bb", "head_menu_bl", "head_menu_br", "head_menu_text",
     "chat_header_line", "chat_scrollbar_track", "chat_scrollbar_thumb",
-    "input_line", "attach_bg", "border_attach", "attach_text",
-    "input_bg", "border_input", "input_text",
     "send_bg", "border_send", "send_text",
-    "chat_footer_line", "chat_footer_left", "chat_footer_right",
 }
 
 for i = 1, MAX_LIST_ROWS do
@@ -486,8 +480,6 @@ end
 
 local BORDER_NODE_BY_PREFIX = {
     tab_unread = "border_unread",
-    attach = "border_attach",
-    input = "border_input",
     send = "border_send",
 }
 
@@ -505,13 +497,6 @@ local function set_border(prefix, color, alpha)
     local id = border_node_id(prefix)
     if id and get_node(id) then
         set_color(id, color, alpha)
-        return
-    end
-
-    -- Legacy fallback for controls that still use four border segments
-    -- in the current templates: tab_all, back, head_call/find/menu.
-    for _, suffix in ipairs({ "_bt", "_bb", "_bl", "_br" }) do
-        set_color(prefix .. suffix, color, alpha)
     end
 end
 
@@ -934,7 +919,7 @@ local function can_reply(chat_id)
 end
 
 -- Пульсация поля ввода и кнопки «отправить» когда есть возможность ответа.
-local PULSE_TARGETS = { "input_text", "send_text", "send_bg" }
+local PULSE_TARGETS = { "send_text", "send_bg" }
 local PULSE_DURATION = 0.6
 local PULSE_ALPHA_LO = 0.45
 
@@ -969,7 +954,7 @@ refresh_send_pulse = function(self)
     end
 end
 
--- Тап на input_bg или send_bg в открытом чате. Если можно отвечать —
+-- Тап на send_bg в открытом чате. Если можно отвечать —
 -- просим ui_manager перейти в ink-knot msg_thread_<chat>. Если нельзя
 -- (флаг replied или нет knot'а у автора) — ничего не делаем.
 local function handle_reply_tap(self)
@@ -1046,8 +1031,7 @@ local function handle_phone_input(self, action_id, action)
     if pressed and self.view == "chat" then
         local x_pre = action.x or 0
         local y_pre = action.y or 0
-        if is_inside_rect("send_bg", x_pre, y_pre)
-           or is_inside_rect("input_bg", x_pre, y_pre) then
+        if is_inside_rect("send_bg", x_pre, y_pre) then
             self.reply_tap_armed = true
         end
     end
@@ -1113,7 +1097,7 @@ local function handle_phone_input(self, action_id, action)
             disarm_all_taps(self)
             open_list(self)
             return true
-        elseif is_inside_rect("send_bg", x, y) or is_inside_rect("input_bg", x, y) then
+        elseif is_inside_rect("send_bg", x, y) then
             -- В отличие от обычных hitbox'ов, input/send может закрыть телефон
             -- и открыть side-dialogue через messenger_open_chat. Если сделать это
             -- на pressed, последующий released уже придёт при закрытом телефоне
@@ -1130,9 +1114,6 @@ local function handle_phone_input(self, action_id, action)
                 end
                 return true
             end
-            return true
-        elseif is_inside_rect("attach_bg", x, y) then
-            log.debug("messenger", "TODO attach runtime hook")
             return true
         end
     end
