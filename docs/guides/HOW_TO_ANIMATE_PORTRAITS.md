@@ -45,10 +45,12 @@ local OVERLAY_GEOMETRY = {
 В `main/images/portraits/<char>/<char>.atlas`:
 
 | Animation ID | Кадры | FPS | Playback |
-|---|---|---|---|
+|---|---|---|---|---|
 | `<char>_idle` | base | 1 | `PLAYBACK_NONE` |
-| `<char>_blink` | blink_1, blink_2 | 8 | `PLAYBACK_ONCE_PINGPONG` |
+| `<char>_blink` | blink_1..blink_N (2–3) | 8–12 | `PLAYBACK_ONCE_PINGPONG` |
 | `<char>_talk` | mouth_1, mouth_2, mouth_3 | 8 | `PLAYBACK_LOOP_PINGPONG` |
+
+FPS blink уточняется в конкретном атласе: у Милы 8, у Артёма 12. Количество blink-кадров: у Милы 2, у Артёма 3.
 
 PINGPONG для blink даёт «закрыл → открыл» из двух кадров (играет 1→2→1→complete). Для talk — луп с плавным движением рта (1→2→3→2→1→2→3...).
 
@@ -367,7 +369,7 @@ Defold пакует спрайты в power-of-2 текстуру. Размер 
 ### Текущие размеры
 
 - `narrator.atlas`: 1 sprite 512×512, extrude 0 → **512×512** ✓
-- `artem.atlas`: 4 sprites (base + 3 blink), extrude 2 → **1024×1024**
+- `artem.atlas`: 7 sprites (base + 3 blink + 3 mouth), extrude 2 → **1024×1024**
 - `mila.atlas`: 6 sprites (base + 2 blink + 3 mouth), extrude 2 → **1024×1024**
 
 Для уменьшения mila/artem можно:
@@ -376,14 +378,12 @@ Defold пакует спрайты в power-of-2 текстуру. Размер 
 
 ---
 
-## Test mode notes
+## Анимация в простое и typewriter
 
-В коде есть две метки `TEST MODE` / `TODO`:
-
-1. `typewriter_finish` — закомментирован `stop_talk_anim(self)`. Когда раскоментируешь, рот остановится по окончании печати реплики (нормальное поведение).
-2. `render()` — есть явный вызов `start_talk_anim(self)` + `schedule_blink(self)` для теста. Когда уберёшь — talk будет стартовать только из `typewriter_start`, blink — только из `stop_talk_anim`.
-
-Сейчас оба активны для проверки анимаций. Перед релизом раскомментируй обратно.
+Анимации работают в продакшн-режиме:
+- `typewriter_start()` запускает `start_talk_anim()` — рот шевелится во время печати текста
+- `typewriter_finish()` вызывает `stop_talk_anim()` + `schedule_blink()` — рот останавливается, запускается цикл моргания
+- `render()` устанавливает `current_char_meta`, играет idle-кадр, стартует talk-loop и шедулит первый blink
 
 ---
 

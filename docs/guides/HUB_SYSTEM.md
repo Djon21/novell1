@@ -26,7 +26,7 @@ Source of truth:
 
 | Что | Где |
 |---|---|
-| POI на карте и связанный `scene_id` | `phone_map.gui_script`, таблица `POI_SCENES` |
+| POI на карте и связанный `scene_id` | `phone_map.gui_script`, таблица `POI_DATA` |
 | Сцена, фон, hotspot'ы, `on_enter`, `npc` | `main/data/scenes/<location>.lua` (через фасад `main/scripts/scenes.lua`) |
 | Ink-реакции hotspot'ов | `main/story/chapters/*.ink` |
 | Правила добавления фонов | `HOW_TO_ADD_SCENES.md` |
@@ -233,7 +233,7 @@ apartment_hub = {
 
 ## 8. Чеклист хаба
 
-- [ ] `scene_id` есть в `phone_map.gui_script → POI_SCENES`.
+- [ ] `scene_id` есть в `phone_map.gui_script → POI_DATA`.
 - [ ] `scene_id` есть в `scenes.lua → M.scenes`.
 - [ ] Все `bg_*`, которые возвращает сцена, зарегистрированы в `ui_manager_v2.script` (`go.property` + `DEDICATED_BG_ATLAS_PROPS`).
 - [ ] Все `ink_knot` из hotspot'ов существуют в подключённых `.ink`.

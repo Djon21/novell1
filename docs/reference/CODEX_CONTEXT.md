@@ -1,6 +1,6 @@
 # CODEX_CONTEXT
 
-Актуально на `2026-05-11`, ветка `AVOS_S`.
+Актуально на `2026-06-01`, ветка `AVOS_S`.
 
 Быстрый вход в проект для новой AI-сессии. Поглотил `CONTINUE_HERE.md` и
 `DOCUMENTATION_AUDIT.md` — был дубль на дубле.
@@ -16,7 +16,7 @@
 ## Активный Runtime
 
 - `game.project → /main/main_v2.collectionc`
-- главный UI: `main/gui/ui_manager_v2.script` (~730 строк, остальное в flow-модулях)
+- главный UI: `main/gui/ui_manager_v2.script` (~975 строк, остальное в flow-модулях)
 - GUI: `main/gui/components_v2/`
 - сценарий: `main/story/chapter_01.ink` + `main/story/chapters/*.ink`
 - compiled story: `main/story/chapter_01.json`
@@ -43,16 +43,17 @@
 Каналы phone-данных, выделенные из game_state.lua:
 
 - `sms.lua` / `messenger.lua` / `mail.lua` / `calls.lua` / `clues.lua` /
-  `notes.lua` — каждый держит свой state, normalize, serialize/deserialize.
+  `notes.lua` / `bank.lua` — каждый держит свой state, normalize, serialize/deserialize.
 - `_helpers.lua` — общие clone, format_clock, make_seq, make_default_time.
 
 ### Scenes (`main/data/scenes/`)
 
-`scenes.lua` стал фасадом ~60 строк. Реальные сцены:
+`scenes.lua` стал фасадом ~75 строк. Реальные сцены:
 
 - `_shared.lua` — STYLE_* + apartment_bg/office_bg helper'ы.
 - `apartment.lua`, `apartment_monday.lua`, `apartment_tuesday.lua` — квартира.
-- `office.lua`, `locations.lua` — офис, кафе/парк/магазин/бар/обзор/архив.
+- `office_monday.lua`, `office_tuesday.lua` — офис.
+- `cafe.lua`, `park.lua`, `shop.lua`, `bar.lua`, `viewpoint.lua`, `archive.lua` — город.
 
 ### UI orchestrator (`main/gui/ui_manager_v2.script` + `main/gui/modules/ui_manager_v2/`)
 
@@ -64,7 +65,7 @@
 - `lifecycle.lua` — start_new_run / reset_iteration / refresh_menu
 - `inventory_flow.lua` — verbs предметов и armed-use
 - `phone_flow.lua` — открыть/закрыть телефон и приложения
-- `map_flow.lua` — map pins, route/save/share, hub-mode
+- `dev_jump.lua` — dev-прыжки по сценам для быстрой проверки
 - `scene_flow.lua` — адаптер `scene_controller -> hotspots_v2`
 - `background_flow.lua` — fullscreen backgrounds и location label
 - `effects_flow.lua` — one-shot effects
@@ -104,12 +105,12 @@
 - **gui_utils.lua** — общие GUI-хелперы, мигрировано 5 phone-apps.
 - **drag_scroll.lua** — извлечён в общий модуль из 6 phone-apps (~330 строк
   дубликата убрано).
-- **ui_manager_v2.script**: 875 → 730 строк. Lifecycle и dialogue_orchestrator
-  вынесены в flow-модули.
-- **scenes.lua**: 1263 → 60 строк (фасад), сцены разбиты по локациям в
+- **ui_manager_v2.script**: 875 → ~975 строк. Lifecycle и dialogue_orchestrator
+  вынесены в flow-модули, но общий размер вырос за счёт новых фич.
+- **scenes.lua**: 1263 → 75 строк (фасад), сцены разбиты по локациям в
   `main/data/scenes/`.
-- **game_state.lua**: 1249 → 580 строк (фасад). Channel-домены (sms/messenger/
-  mail/calls/clues/notes) вынесены в `main/scripts/state/`.
+- **game_state.lua**: 1249 → 532 строк (фасад). Channel-домены (sms/messenger/
+  mail/calls/clues/notes/bank) вынесены в `main/scripts/state/`.
 - **phone_messenger.gui**: 5259 → 1470 строк через Defold templates (по образцу
   phone_sms).
 

@@ -37,14 +37,32 @@ main/story/
 └── chapters/
     ├── 00_bootstrap.ink
     ├── 10_apartment.ink
-    ├── 02_sunday_date.ink
-    ├── 20_monday_home.ink
-    ├── 21_monday_commute.ink
-    ├── 22_monday_office.ink
-    ├── 30_tuesday_home.ink
-    ├── 31_tuesday_investigation.ink
-    ├── 32_tuesday_rooftop.ink
-    └── 91_inventory_actions.ink
+    ├── 10_reset.ink
+    ├── 10a_sunday.ink
+    ├── 10b_monday.ink
+    ├── 10c_tuesday.ink
+    ├── 50_investigation.ink
+    ├── 51_awareness.ink
+    ├── 60_stages.ink
+    ├── 70_loop_journal.ink
+    ├── 80_endings.ink
+    ├── 91_inventory_actions.ink
+    ├── 92_phone_sms.ink
+    ├── 93_phone_messenger.ink
+    ├── 94_phone_mail.ink
+    ├── 95_phone_calls.ink
+    └── locations/
+        ├── park_sunday.ink
+        ├── cafe_sunday.ink
+        ├── shop_sunday.ink
+        ├── sunday_gift_reactions.ink
+        ├── viewpoint_sunday.ink
+        ├── bar_sunday.ink
+        ├── commute_monday.ink
+        ├── office_monday.ink
+        ├── office_tuesday.ink
+        ├── archive_tuesday.ink
+        └── rooftop_tuesday.ink
 ```
 
 `chapter_01.ink` содержит только `INCLUDE chapters/...`. Не добавлять туда текст, VAR или knot'ы.
@@ -242,7 +260,7 @@ Git Bash / Linux:
 
 | Тег | Что делает |
 |---|---|
-| `map:hub:KNOT` | Открыть карту в hub-режиме с fallback-knot. |
+| ~~`map:hub:KNOT`~~ | ~~Открыть карту в hub-режиме с fallback-knot.~~ **Удалён.** `standalone map_v2` больше не существует. Используй `# phone:map`. |
 | `map:allow:POI_ID` | Разрешить POI. |
 | `map:allow:reset` | Очистить allow-set. Если set пустой — доступны все POI. |
 | `map:lock_to:POI_ID` | Очистить allow-set и разрешить только один POI. |
@@ -596,19 +614,36 @@ True Ending доступен только при `false_endings_count >= 2`. `lo
 ## 12. Структура файлов и нейминг
 
 | Файл | Назначение |
-|---|---|
+|---|---|---|
 | `00_bootstrap.ink` | Глобальные VAR и стартовый переход. |
 | `10_apartment.ink` | Воскресное домашнее утро / onboarding. |
-| `02_sunday_date.ink` | Воскресная встреча и возвращение домой. |
-| `20_monday_home.ink` | Понедельник: дом и сборы. |
-| `21_monday_commute.ink` | Понедельник: путь до офиса. |
-| `22_monday_office.ink` | Понедельник: офис, work error, playable office task. |
-| `30_tuesday_home.ink` | Вторник: дом и последствия. |
-| `31_tuesday_investigation.ink` | Вторник: расследование. |
-| `32_tuesday_rooftop.ink` | Вторник: крыша / финал итерации. |
+| `10_reset.ink` | Сброс состояния между итерациями. |
+| `10a_sunday.ink` | Воскресная встреча и возвращение домой. |
+| `10b_monday.ink` | Понедельник: дом, сборы, путь, офис. |
+| `10c_tuesday.ink` | Вторник: дом, расследование, крыша. |
+| `locations/park_sunday.ink` | Парк (воскресная встреча). |
+| `locations/cafe_sunday.ink` | Кафе (воскресная встреча). |
+| `locations/shop_sunday.ink` | Магазин (воскресная встреча). |
+| `locations/sunday_gift_reactions.ink` | Реакции на подарок. |
+| `locations/viewpoint_sunday.ink` | Смотровая площадка. |
+| `locations/bar_sunday.ink` | Бар. |
+| `locations/commute_monday.ink` | Понедельник: путь до офиса. |
+| `locations/office_monday.ink` | Понедельник: офис, work error. |
+| `locations/office_tuesday.ink` | Вторник: офис. |
+| `locations/archive_tuesday.ink` | Вторник: архив. |
+| `locations/rooftop_tuesday.ink` | Крыша / финал итерации. |
+| `50_investigation.ink` | Расследование (вторник). |
+| `51_awareness.ink` | Loop-awareness реплики. |
+| `60_stages.ink` | Стадии петли. |
+| `70_loop_journal.ink` | Loop journal / meta. |
+| `80_endings.ink` | Ложные и истинная концовки. |
 | `91_inventory_actions.ink` | Универсальные действия предметов. |
+| `92_phone_sms.ink` | SMS-контент телефона. |
+| `93_phone_messenger.ink` | Messenger-контент. |
+| `94_phone_mail.ink` | Почта телефона. |
+| `95_phone_calls.ink` | Звонки телефона. |
 
-Префиксы knot'ов:
+Префиксы knot'ov:
 
 ```text
 sunday_*        — воскресная встреча / воскресные хабы

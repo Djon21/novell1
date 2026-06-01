@@ -7,7 +7,7 @@
 
 ```
 main/scripts/
-├── game_state.lua              ← фасад (~580 строк):
+├── game_state.lua              ← фасад (~532 строки):
 │                                  flags, inventory, quests, scene,
 │                                  terminal, map_pois,
 │                                  subscribe/_notify,
@@ -16,6 +16,7 @@ main/scripts/
 └── state/
     ├── _helpers.lua            ← clone_value/array, format_clock,
     │                             make_default_time, make_seq.
+    ├── bank.lua                ← Баланс карты (bank:*)
     ├── sms.lua                 ← SMS-канал
     ├── messenger.lua           ← Messenger (msg:*)
     ├── mail.lua                ← Почта

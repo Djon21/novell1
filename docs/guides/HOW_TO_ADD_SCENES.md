@@ -192,8 +192,8 @@ my_scene = {
 | Квартира ГГ (общий hub) | `main/data/scenes/apartment.lua` |
 | Понедельничный morning-flow в квартире | `main/data/scenes/apartment_monday.lua` |
 | Вторничный consequences-flow в квартире | `main/data/scenes/apartment_tuesday.lua` |
-| Офис (work_hub, workspace, meeting_room) | `main/data/scenes/office.lua` |
-| Кафе/парк/магазин/бар/обзорка/архив | `main/data/scenes/locations.lua` |
+| Офис (work_hub, workspace, meeting_room) | `main/data/scenes/office_monday.lua` + `main/data/scenes/office_tuesday.lua` |
+| Кафе/парк/магазин/бар/обзорка/архив | `main/data/scenes/cafe.lua`, `park.lua`, `shop.lua`, `bar.lua`, `viewpoint.lua`, `archive.lua` |
 | Совершенно новая локация | новый файл `main/data/scenes/<name>.lua` + `merge(...)` в `scenes.lua` |
 
 `STYLE_*`, `apartment_bg`, `office_bg`, `is_apartment_night` живут в

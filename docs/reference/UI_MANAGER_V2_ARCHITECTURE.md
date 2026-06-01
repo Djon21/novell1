@@ -2,7 +2,7 @@
 
 `ui_manager_v2.script` — оркестратор всех v2 GUI-компонентов: главное меню,
 HUD, инвентарь, телефон, карта, диалог, выбор. Раньше был god-object'ом на
-875 строк, постепенно разбит на flow-модули в `main/gui/modules/ui_manager_v2/`.
+975 строк, постепенно разбит на flow-модули в `main/gui/modules/ui_manager_v2/`.
 
 Этот файл — карта местности. Когда ищешь «где живёт логика X» — заглядывай
 сюда.
@@ -11,16 +11,16 @@ HUD, инвентарь, телефон, карта, диалог, выбор. �
 
 ```
 main/gui/
-├── ui_manager_v2.script         (~730 строк — оркестратор + ctx-builders)
+├── ui_manager_v2.script         (~975 строк — оркестратор + ctx-builders)
 └── modules/ui_manager_v2/
     ├── background_flow.lua       — атласы фонов, resolve location label
+    ├── dev_jump.lua              — dev-прыжки по сценам (F1 редактор)
     ├── dialogue_flow.lua         — autoplay, skip, backlog, toggle UI
     ├── dialogue_orchestrator.lua — handle_dialogue_update (главный обработчик)
     ├── dm_commands.lua           — apply ink-tag команд (#bg, #sms, #map, ...)
     ├── effects_flow.lua          — sfx/shake/pulse эффекты
     ├── inventory_flow.lua        — armed-state, use-on-target, verbs
     ├── lifecycle.lua             — start_new_run, reset_iteration, refresh_menu
-    ├── map_flow.lua              — phone-карта: pin'ы, verbs, sync
     ├── message_flow.lua          — on_message router (по типам сообщений)
     ├── overlay_flow.lua          — show_menu/exploration/dialogue, open/close оверлеев
     ├── phone_flow.lua            — open_phone, open_phone_app, close_phone
@@ -119,7 +119,7 @@ phone_v2 показывается, инпут идёт через phone_input
 | Verb-knot цепочка для use/give/combine | `inventory_flow.lua` |
 | sfx/shake/pulse | `effects_flow.lua` |
 | scene_controller callback'и | `scene_flow.lua` |
-| Phone карта: pin'ы и переходы | `map_flow.lua` |
+| Phone карта: pin'ы и переходы | `message_flow.lua` (map_travel), `phone_flow.lua` |
 
 ## Контракт ctx
 
@@ -240,13 +240,12 @@ M.SFX_URLS = {
 ## История рефакторинга
 
 - **изначально:** ui_manager_v2.script ~1100 строк, всё в одном
-- **этап 1 (предыдущая работа):** вынесены `dm_commands`, `dialogue_flow`,
-  `phone_flow`, `inventory_flow`, `map_flow`, `effects_flow`,
+- **этап 1:** вынесены `dm_commands`, `dialogue_flow`,
+  `phone_flow`, `inventory_flow`, `effects_flow`,
   `background_flow`, `scene_flow`, `overlay_flow`, `message_flow`,
   `run_state`. Скрипт ужался до ~875 строк.
-- **этап 2 (текущая работа):** `lifecycle.lua` (run-state управление,
-  -75 строк), `dialogue_orchestrator.lua` (handle_dialogue_update,
-  -100 строк). Скрипт сжался до ~730 строк.
+- **этап 2:** `lifecycle.lua`, `dialogue_orchestrator.lua`,
+  `dev_jump.lua`. Скрипт ~975 строк за счёт новых фич.
 
 ## См. также
 

@@ -99,19 +99,19 @@ sed -i -E 's/hash\("([a-z_]+)"\)/MSG.\1/g' path/to/file.script
 MSG.* константы). Остальные файлы используют `hash("foo")` напрямую —
 переключатся на `MSG.*` постепенно при следующем касании файла.
 
-Можно мигрировать по необходимости, безопасно, любой файл где много
-`hash(...)`. Кандидаты с большим выигрышем:
+Уже мигрированы (0 `hash()` вызовов):
 
-- `main/gui/modules/ui_manager_v2/dm_commands.lua` (~10 хешей)
-- `main/gui/modules/ui_manager_v2/overlay_flow.lua` (~10 хешей)
-- `main/gui/modules/ui_manager_v2/dialogue_flow.lua` (~6 хешей)
-- `main/gui/components_v2/phone_v2_root.gui_script` (~10 хешей)
-- `main/gui/components_v2/dialogue_v2.gui_script` (~15 хешей)
-- `main/gui/components_v2/hud_v2.gui_script` (~15 хешей)
+- `main/gui/modules/ui_manager_v2/dm_commands.lua`
+- `main/gui/modules/ui_manager_v2/overlay_flow.lua`
+- `main/gui/modules/ui_manager_v2/dialogue_flow.lua`
+- `main/gui/components_v2/phone_v2_root.gui_script`
 
-Не обязательно делать сразу всё. Правило: **«при следующем редактировании
-файла — заодно мигрируй на MSG.*»**. Так за пару месяцев весь код
-постепенно перейдёт без больших риск-PR'ов.
+Остались для миграции:
+
+- `main/gui/components_v2/dialogue_v2.gui_script` (~20 хешей)
+- `main/gui/components_v2/hud_v2.gui_script` (~14 хешей)
+
+Правило: **«при следующем редактировании файла — заодно мигрируй на MSG.*»**.
 
 ## Когда НЕ использовать
 

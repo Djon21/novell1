@@ -16,12 +16,14 @@
 - Игра на прототипной стадии: Ink-тексты меняются, UI ещё дорабатывается. План рассчитан на постепенное подключение.
 - **Перевод делается через нейронку (LLM).** Все размеры файлов и формат хранения подобраны так, чтобы LLM могла перевести один файл целиком за один заход без потери контекста (см. §4.2.1, §4.3.1, §4.3.2).
 
-### Что уже есть в коде (на 2026-05-01)
+### Что уже есть в коде (на 2026-06-01)
 
-- `main/engine_template.html` уже читает `ysdk.environment.i18n.lang` и кладёт в `window.__gameLang` ДО старта Defold (требование Яндекс модерации 2.14)
-- yagames присутствует как зависимость в `game.project`, но в активном Lua-runtime НЕ подключается — для L10n это и не нужно: язык достаётся через `html5.run("window.__gameLang")`, минуя SDK-обёртку
-- В `main/scripts/` нет `l10n.lua`
-- Хардкод-строки разбросаны по `*.gui_script` и `scripts/scenes.lua`
+- `main/scripts/l10n.lua` **создан**: есть `detect()`, `init()`, `t(key)`, `set_lang()`, `f()`, `sync_sdk()`; загружает `main/data/strings/{ru,en,tr}.json` через `sys.load_resource`
+- `main_menu_v2.gui_script` использует `l10n.t()` для всех строк
+- `ui_manager_v2.script` вызывает `l10n.init()` при старте
+- `main/engine_template.html` НЕ устанавливает `window.__gameLang` — детект языка всегда падает на `"ru"`. **Нужно добавить**: после `YaGames.init()` вставить `window.__gameLang = ysdk.environment.i18n.lang;`
+- Хардкод-строки остаются в phone-приложениях, инвентаре, квестах и предметах (P2)
+- Язык через `html5.run("window.__gameLang")` не работает, пока не исправлен engine_template.html
 
 ---
 
@@ -38,7 +40,7 @@
 | `main/gui/components_v2/phone_quests.gui_script` | «ЗАДАЧИ» |
 | `main/gui/components_v2/phone_notes.gui_script`, `phone_mail`, `phone_call`, `phone_messenger`, `phone_term` | заголовки и пустые состояния |
 | `main/gui/components_v2/inventory_v2.gui_script` | подписи verbs (use/inspect/read) |
-| `main/gui/modules/ui_manager_v2/map_flow.lua` + `main/scripts/l10n.lua` | ключи подписей пинов карты (`map_home`, `map_work`, …) |
+| TBD (map_flow.lua удалён) | подписи пинов карты (`map_home`, `map_work`, …) |
 | `main/scripts/scenes.lua` | поле `label` у каждого hotspot'а |
 | `main/scripts/quests.lua` | названия и описания квестов (`name`, `description`, `text` шагов) |
 | `main/scripts/items_catalog.lua` | названия и описания предметов |
@@ -47,8 +49,9 @@
 
 Весь нарратив в `main/story/chapter_01.ink` + `main/story/chapters/*.ink`:
 - `00_bootstrap.ink` (VAR-объявления, переводить не нужно)
-- `10_apartment.ink`, `02_sunday_date.ink`, `02_metro.ink`, `03_office.ink`, `04_rooftop.ink`
-- `91_inventory_actions.ink`
+- `01_loop_entry.ink`, `10_apartment.ink`, `10a_sunday.ink`, `10b_monday.ink`, `10c_tuesday.ink`, `10_reset.ink`
+- `91_inventory_actions.ink`, `92_phone_sms.ink`, `93_phone_messenger.ink`
+- подпапки `apartment/`, `office/`, `park/` — сценовые knot'ы
 
 Объём — тысячи строк. Переводить только после контентного freeze.
 
@@ -92,15 +95,16 @@
 
 ### 4.1 Детект языка
 
-Хитрый трюк: язык забирается **через JS-переменную `window.__gameLang`**, которую engine_template.html выставляет до старта Defold. Lua-стороне yagames не нужен.
+Хитрый трюк: язык забирается **через JS-переменную `window.__gameLang`**, которую engine_template.html должен выставлять до старта Defold. Lua-стороне yagames не нужен.
 
-**JS-сторона (уже работает)** — `main/engine_template.html`:
+**JS-сторона (TODO)** — `main/engine_template.html`, добавить после `YaGames.init()`:
 
 ```js
+// После ysdk.environment.i18n.lang доступен
 window.__gameLang = ysdk.environment.i18n.lang;
 ```
 
-**Lua-сторона (новое)** — `main/scripts/l10n.lua`:
+**Lua-сторона (уже реализовано)** — `main/scripts/l10n.lua`:
 
 ```lua
 local M = { lang = "ru" }
@@ -108,7 +112,6 @@ local M = { lang = "ru" }
 local SUPPORTED = { ru = true, en = true, tr = true }
 
 function M.detect()
-    -- В нативной сборке html5 модуля нет → сразу fallback на ru.
     if html5 and html5.run then
         local ok, lang = pcall(html5.run, "window.__gameLang || ''")
         if ok and lang and SUPPORTED[lang] then
@@ -116,13 +119,14 @@ function M.detect()
             return lang
         end
     end
-    -- Дев-сборка / неподдерживаемый язык → ru.
     M.lang = "ru"
     return M.lang
 end
 ```
 
-`l10n.detect()` зовём один раз в `ui_manager_v2.init()` ДО показа меню. Смена языка mid-session не нужна (Яндекс UI смены не предоставляет).
+Но пока `engine_template.html` не выставляет `window.__gameLang`, `detect()` всегда падает на `"ru"`. Нужно сначала добавить JS-код в шаблон.
+
+`l10n.detect()` зовётся один раз в `ui_manager_v2.init()` ДО показа меню. Смена языка mid-session не нужна (Яндекс UI смены не предоставляет).
 
 **Почему без yagames:** инициализация `yagames.init()` асинхронная и срабатывает позже init'а UI. Если ждать SDK — меню успеет нарисоваться на дефолтном языке. JS-шаблон же выставляет `window.__gameLang` синхронно в момент `YaGames.init().then(...)`, ДО загрузки Defold-движка → к моменту `init` всех скриптов значение уже на месте.
 
@@ -228,18 +232,22 @@ gui.set_text(node, l10n.t("menu_new"))
 
 ### 4.3.1 Размеры глав и нейронный workflow
 
-Замеры на 2026-05-01 (`wc -w`):
+Замеры на 2026-06-01 (контент изменился, нужен `wc -w`):
 
-| Файл | Слов | ≈ токенов | В один заход в LLM |
-|---|---:|---:|:---:|
-| `00_bootstrap.ink` | 213 | ~430 | ✅ (только VAR) |
-| `10_apartment.ink` | 2048 | ~4100 | ✅ |
-| `02_metro.ink` | 1316 | ~2630 | ✅ |
-| `03_office.ink` | 2341 | ~4680 | ✅ |
-| `04_rooftop.ink` | 1260 | ~2520 | ✅ |
-| `91_inventory_actions.ink` | 266 | ~530 | ✅ |
+| Файл | Примечание |
+|---|---:|
+| `00_bootstrap.ink` | Только VAR, переводить не нужно |
+| `01_loop_entry.ink` | Loop entry-point |
+| `10_apartment.ink` + `locations/office_monday.ink`, `locations/commute_monday.ink` | Понедельник |
+| `10b_monday.ink` + `locations/office_monday.ink`, `locations/commute_monday.ink` | Понедельник (основной слой) |
+| `10c_tuesday.ink` + `locations/office_tuesday.ink`, `locations/rooftop_tuesday.ink`, `locations/archive_tuesday.ink` | Вторник |
+| `10a_sunday.ink` + `locations/cafe_sunday.ink`, `locations/park_sunday.ink`, `locations/bar_sunday.ink`, `locations/shop_sunday.ink`, `locations/viewpoint_sunday.ink` | Воскресенье |
+| `50_investigation.ink`, `51_awareness.ink` | Loop progression |
+| `60_stages.ink`, `70_loop_journal.ink` | Loop stages |
+| `80_endings.ink` | Концовки |
+| `91_inventory_actions.ink`, `92_phone_sms.ink`, `93_phone_messenger.ink`, `94_phone_mail.ink`, `95_phone_calls.ink` | Телефонные файлы |
 
-> Числа на 2026-05-01. Перепроверяй `wc -w main/story/chapters/*.ink` перед заходом в LLM, если контент изменился.
+> Контент активно меняется. Перед переводом сделать `wc -w main/story/chapters/**/*.ink` и разбивать на заходы LLM по ~5k токенов за раз.
 
 Каждая глава влезает в любую современную LLM (~5k токенов). **Перевод делаем по одной главе за раз**, не отправлять всё разом.
 
@@ -327,10 +335,10 @@ gui.set_text(node, l10n.t("menu_new"))
 
 ### Этап P1 — фундамент
 
-- [ ] Создан `main/scripts/l10n.lua` с `detect()`, `t(key)`, таблицами `ru/en/tr`
-- [ ] `ui_manager_v2.init()` зовёт `l10n.detect()` до показа меню (читает `window.__gameLang` через `html5.run`)
-- [x] подписи пинов карты вынесены из `ui_manager_v2` в `map_flow.lua` + `l10n.t(...)`
-- [ ] Главное меню (`main_menu_v2.gui_script`) использует `l10n.t()` вместо хардкод-строк
+- [x] Создан `main/scripts/l10n.lua` с `detect()`, `init()`, `t(key)`, `set_lang()`, `f()`, `sync_sdk()`, таблицами `ru/en/tr`
+- [x] `ui_manager_v2.init()` зовёт `l10n.init()` ДО показа меню (НО: `window.__gameLang` не выставляется шаблоном, поэтому всегда RU)
+- [ ] подписи пинов карты (`map_flow.lua` удалён) — `phone_map.gui_script` использует хардкод
+- [x] Главное меню (`main_menu_v2.gui_script`) использует `l10n.t()` вместо хардкод-строк
 
 ### Этап P2 — расширение
 
@@ -365,7 +373,7 @@ gui.set_text(node, l10n.t("menu_new"))
 - **defold-ink replay чувствителен к структуре JSON.** При смене JSON между сессиями `Continue` может ломаться. Решение: при детекте смены языка между загрузкой save и текущей сессией — start fresh, без `Continue`.
 - **Длина строк.** Английский на 20–30% длиннее RU в среднем; турецкий ещё длиннее. Проверить, что лейблы не переполняют поля в `.gui`.
 - **Падежи в RU.** Сейчас есть токены `{MC|м|ж}` и `{NPC|м|ж}` для гендерных падежей. В EN/TR падежей нет — токены нужно резолвить заранее в L10n-логике или просто игнорировать.
-- **Yagames в Lua не нужен для L10n.** Язык приходит через `window.__gameLang`. Если в будущем понадобится подключать SDK для рекламы или других фич — делать `local yagames = require "yagames.yagames"` ТОЛЬКО top-level, не через `pcall(require, ...)` (см. `memory/defold_vn_setup.md`: pcall ломает статический анализ бандла, модуль не попадает в HTML5 build).
+- **Yagames в Lua не нужен для L10n.** Язык приходит через `window.__gameLang`. Если в будущем понадобится подключать SDK для рекламы или других фич — `require` на top-level (не через `pcall` — pcall ломает статический анализ бандла, модуль не попадает в HTML5 build). Текущий `l10n.lua` использует `pcall(require, "yagames.yagames")` для `sync_sdk()` — это временное решение, нужно заменить на top-level `local yagames = require "yagames.yagames"` когда yagames появится в бандле.
 
 ---
 

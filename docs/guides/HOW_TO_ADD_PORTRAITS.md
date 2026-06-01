@@ -13,7 +13,7 @@ main/images/portraits/
 │   └── mila_base.png        (для анимированной Милы)
 ├── artem/
 │   ├── artem.atlas
-│   └── artem.png            (статичный)
+│   └── artem_base.png       (анимированный: blink + talk)
 └── narrator/
     ├── narrator.atlas
     └── narrator.png

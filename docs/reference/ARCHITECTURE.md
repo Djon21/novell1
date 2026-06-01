@@ -189,7 +189,7 @@ CI: `.github/workflows/ink_lint.yml` проверяет `.ink`-файлы чер
 
 ## UI Manager V2 Modules
 
-`main/gui/ui_manager_v2.script` (~970 строк) сейчас работает как центральный Defold-адаптер, а не как монолит всей логики.
+`main/gui/ui_manager_v2.script` (~975 строк) сейчас работает как центральный Defold-адаптер, а не как монолит всей логики.
 
 Основная логика вынесена в `main/gui/modules/ui_manager_v2/`:
 
@@ -201,7 +201,7 @@ CI: `.github/workflows/ink_lint.yml` проверяет `.ink`-файлы чер
 - `lifecycle.lua` — start_new_run / reset_iteration / refresh_menu
 - `inventory_flow.lua` — verbs предметов и armed-use
 - `phone_flow.lua` — открыть/закрыть телефон и приложения
-- `map_flow.lua` — map pins, route/save/share, hub-mode
+- `dev_jump.lua` — dev-прыжки по сценам для быстрой проверки
 - `scene_flow.lua` — адаптер `scene_controller -> hotspots_v2`
 - `background_flow.lua` — fullscreen backgrounds и location label
 - `effects_flow.lua` — one-shot effects
@@ -225,7 +225,7 @@ CI: `.github/workflows/ink_lint.yml` проверяет `.ink`-файлы чер
 
 `game_state.lua` — фасад. Каналы телефона выделены в `main/scripts/state/`:
 
-- `sms.lua` / `messenger.lua` / `mail.lua` / `calls.lua` / `clues.lua` / `notes.lua`
+- `sms.lua` / `messenger.lua` / `mail.lua` / `calls.lua` / `clues.lua` / `notes.lua` / `bank.lua`
 - `_helpers.lua` — общие clone, format_clock, make_seq.
 
 См. `docs/reference/GAME_STATE.md` для полного API.

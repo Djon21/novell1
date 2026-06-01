@@ -4,6 +4,9 @@
 
 INCLUDE chapters/00_bootstrap.ink
 
+// Loop entry
+INCLUDE chapters/01_loop_entry.ink
+
 // Apartment: общее ядро + reset + день-специфичные модули
 INCLUDE chapters/10_apartment.ink
 INCLUDE chapters/10_reset.ink

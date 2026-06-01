@@ -68,13 +68,10 @@
 Преимущество: GUI редактор остаётся простым (один прототип строки), а runtime
 вы можете показывать столько слотов сколько влезает в видимую область.
 
-### Архив (не в коллекции)
+### Удалённые компоненты
 
-- `phone_v2.gui` + `phone_v2.gui_script` — старый монолит, остался на диске для справки,
-  в коллекцию не подключён. Можно удалить после стабилизации сплита.
-- `phone_map_beautiful.gui` — заготовка нового дизайна карты, пока не используется.
-
-Удалены в мае 2026: `phone_cam.gui`/`.gui_script` и весь camera-channel
+Удалены: `phone_v2.gui`/`.gui_script` (старый монолит), `phone_map_beautiful.gui` (заготовка карты),
+`phone_cam.gui`/`.gui_script` и весь camera-channel
 в game_state (set/get/reset_camera_feed), парсинг `# camera:` ink-тега,
 обработчик в dm_commands. Заменены полноценно на `phone_messenger`.
 
@@ -625,8 +622,8 @@ msg.post(UI_MGR, "phone_app_clicked", { id = "map" })   -- ui_manager ничег
 switch_app(self, "map")                                  -- → open_app → #phone_map
 ```
 
-`phone_map.gui` имеет 132 ноды под единым корнем `map_root`.
-`phone_map.gui_script` скрывает/показывает только `map_root` —
+`phone_map.gui` имеет 132+ ноды под единым корнем `grp_panel`.
+`phone_map.gui_script` скрывает/показывает только `grp_panel` (через `set_root_enabled()`) —
 Defold автоматически распространяет `enabled = false` на все дочерние узлы.
 
 ### Вызов карты из Ink

@@ -270,15 +270,27 @@ M.items = {
 Иконки берутся из шрифта Material Icons (те же что на хотспотах). В начале `items_catalog.lua` уже определены готовые константы:
 
 ```lua
-local ICON_MUG   = string.char(0xEE, 0x95, 0x81)  -- кружка (coffee)
-local ICON_PHONE = string.char(0xEE, 0xA4, 0x93)  -- смартфон
-local ICON_KEY   = string.char(0xEE, 0x9C, 0xBC)  -- ключ
-local ICON_CUP   = string.char(0xEE, 0xBF, 0xAF)  -- стакан
-local ICON_NOTE  = string.char(0xEE, 0x81, 0xAF)  -- записка
-local ICON_CARD  = string.char(0xEE, 0xA1, 0xB0)  -- карточка
-local ICON_USB   = string.char(0xEE, 0x87, 0xA0)  -- USB
-local ICON_CIG   = string.char(0xEE, 0x9F, 0xB5)  -- сигарета
-local ICON_CASH  = string.char(0xEE, 0xBD, 0xA3)  -- деньги
+local ICON_MUG    = string.char(0xEE, 0x95, 0x81)  -- кружка (coffee)
+local ICON_PHONE  = string.char(0xEE, 0xA4, 0x93)  -- смартфон
+local ICON_KEY    = string.char(0xEE, 0x9C, 0xBC)  -- ключ
+local ICON_CUP    = string.char(0xEE, 0xBF, 0xAF)  -- стакан
+local ICON_NOTE   = string.char(0xEE, 0x81, 0xAF)  -- записка
+local ICON_CARD   = string.char(0xEE, 0xA1, 0xB0)  -- карточка
+local ICON_USB    = string.char(0xEE, 0x87, 0xA0)  -- USB
+local ICON_CIG    = string.char(0xEE, 0x9F, 0xB5)  -- сигарета
+local ICON_CASH   = string.char(0xEE, 0xBD, 0xA3)  -- деньги
+local ICON_FOLDER = string.char(0xEE, 0x8B, 0x87)  -- папка
+local ICON_BRUSH  = string.char(0xEE, 0xA3, 0x8B)  -- щётка
+local ICON_PASTE  = string.char(0xEE, 0x90, 0xA9)  -- паста
+local ICON_WATER  = string.char(0xEE, 0x95, 0x84)  -- вода
+local ICON_TRASH  = string.char(0xEE, 0xA1, 0xB2)  -- мусор
+
+-- Алиасы для воскресных подарков:
+local ICON_GIFT   = ICON_KEY
+local ICON_DRINK  = ICON_WATER
+local ICON_SNACK  = ICON_CUP
+local ICON_BROOM  = ICON_BRUSH
+local ICON_NAPKINS = ICON_NOTE
 ```
 
 ### Как добавить новую иконку

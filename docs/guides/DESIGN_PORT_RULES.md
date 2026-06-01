@@ -64,8 +64,7 @@ local bg = gui.new_box_node(vmath.vector3(PANEL_X + 0, PANEL_Y + y_local, 0.63),
 5. choice_v2          (модальные оверлеи)
 6. inventory_v2
 7. phone_v2
-8. map_v2
-9. effects            (scan/grain/vignette, самый верх)
+8. effects            (scan/grain/vignette, самый верх)
 ```
 
 Если меняешь порядок — проверь, не перекрыл ли важный контент.
