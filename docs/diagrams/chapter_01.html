@@ -92,6 +92,8 @@ flowchart LR
     class n_accept kknot;
     n_apartment_bedroom_intro["apartment_bedroom_intro"]
     class n_apartment_bedroom_intro kknot;
+    n_apartment_start["apartment_start"]
+    class n_apartment_start kknot;
     n_archive_shelves_interact["archive_shelves_interact"]
     class n_archive_shelves_interact kknot;
     n_bar_counter_interact["bar_counter_interact"]
@@ -112,6 +114,8 @@ flowchart LR
     class n_cafe_backroom_mirror_interact kknot;
     n_cafe_bar_interact["cafe_bar_interact"]
     class n_cafe_bar_interact kknot;
+    n_cafe_bar_interact_right_place["cafe_bar_interact_right_place"]
+    class n_cafe_bar_interact_right_place kknot;
     n_cafe_corner_main_talk["cafe_corner_main_talk"]
     class n_cafe_corner_main_talk kknot;
     n_cafe_corner_shelf_interact["cafe_corner_shelf_interact"]
@@ -138,6 +142,14 @@ flowchart LR
     class n_find_clue kknot;
     n_go_back["go_back"]
     class n_go_back kknot;
+    n_inv_apartment_kitchen_morning_use_mug_on_coffee_setup["inv_apartment_kitchen_morning_use_mug_on_coffee_setup"]
+    class n_inv_apartment_kitchen_morning_use_mug_on_coffee_setup kknot;
+    n_inv_apartment_kitchen_use_mug_on_coffee_setup["inv_apartment_kitchen_use_mug_on_coffee_setup"]
+    class n_inv_apartment_kitchen_use_mug_on_coffee_setup kknot;
+    n_inv_office_workspace_give_case_file_on_npc["inv_office_workspace_give_case_file_on_npc"]
+    class n_inv_office_workspace_give_case_file_on_npc kknot;
+    n_inv_office_workspace_use_case_file_on_work_desk_submit["inv_office_workspace_use_case_file_on_work_desk_submit"]
+    class n_inv_office_workspace_use_case_file_on_work_desk_submit kknot;
     n_leave_apartment_prompt["leave_apartment_prompt"]
     class n_leave_apartment_prompt kknot;
     n_leave_archive["leave_archive"]
@@ -166,6 +178,12 @@ flowchart LR
     class n_look_kitchen_fridge kknot;
     n_look_kitchen_window["look_kitchen_window"]
     class n_look_kitchen_window kknot;
+    n_loop1_to_iter2_reset["loop1_to_iter2_reset"]
+    class n_loop1_to_iter2_reset kknot;
+    n_loop2_fake_wednesday_leave_for_work["loop2_fake_wednesday_leave_for_work"]
+    class n_loop2_fake_wednesday_leave_for_work kknot;
+    n_loop2_fake_wednesday_work_check["loop2_fake_wednesday_work_check"]
+    class n_loop2_fake_wednesday_work_check kknot;
     n_loop_entry["loop_entry"]
     class n_loop_entry kknot;
     n_meeting_room_table_after["meeting_room_table_after"]
@@ -174,12 +192,16 @@ flowchart LR
     class n_meeting_room_take_folder kknot;
     n_mon_commute_entry["mon_commute_entry"]
     class n_mon_commute_entry kknot;
+    n_mon_commute_office_approach["mon_commute_office_approach"]
+    class n_mon_commute_office_approach kknot;
     n_mon_commute_walk_auto["mon_commute_walk_auto"]
     class n_mon_commute_walk_auto kknot;
     n_mon_commute_walk_observe["mon_commute_walk_observe"]
     class n_mon_commute_walk_observe kknot;
     n_mon_commute_walk_steady["mon_commute_walk_steady"]
     class n_mon_commute_walk_steady kknot;
+    n_mon_commute_work_district["mon_commute_work_district"]
+    class n_mon_commute_work_district kknot;
     n_mon_home_bed["mon_home_bed"]
     class n_mon_home_bed kknot;
     n_mon_home_bedroom_desk["mon_home_bedroom_desk"]
@@ -214,20 +236,38 @@ flowchart LR
     class n_mon_home_take_work_card kknot;
     n_mon_home_wash_up["mon_home_wash_up"]
     class n_mon_home_wash_up kknot;
+    n_mon_office_auto_standard["mon_office_auto_standard"]
+    class n_mon_office_auto_standard kknot;
+    n_mon_office_case_router["mon_office_case_router"]
+    class n_mon_office_case_router kknot;
     n_mon_office_clarify["mon_office_clarify"]
     class n_mon_office_clarify kknot;
     n_mon_office_core_choice["mon_office_core_choice"]
     class n_mon_office_core_choice kknot;
+    n_mon_office_day_end["mon_office_day_end"]
+    class n_mon_office_day_end kknot;
+    n_mon_office_entry["mon_office_entry"]
+    class n_mon_office_entry kknot;
+    n_mon_office_evening_close["mon_office_evening_close"]
+    class n_mon_office_evening_close kknot;
     n_mon_office_manual_standard["mon_office_manual_standard"]
     class n_mon_office_manual_standard kknot;
     n_mon_office_npc_greeting["mon_office_npc_greeting"]
     class n_mon_office_npc_greeting kknot;
     n_mon_office_npc_strange["mon_office_npc_strange"]
     class n_mon_office_npc_strange kknot;
+    n_mon_office_result_system_bias["mon_office_result_system_bias"]
+    class n_mon_office_result_system_bias kknot;
+    n_mon_office_result_true_bias["mon_office_result_true_bias"]
+    class n_mon_office_result_true_bias kknot;
     n_mon_office_stop_auto["mon_office_stop_auto"]
     class n_mon_office_stop_auto kknot;
+    n_mon_office_system_warning["mon_office_system_warning"]
+    class n_mon_office_system_warning kknot;
     n_mon_office_task_intro["mon_office_task_intro"]
     class n_mon_office_task_intro kknot;
+    n_monday_morning_start["monday_morning_start"]
+    class n_monday_morning_start kknot;
     n_msg_artem_loop2_place_choice["msg_artem_loop2_place_choice"]
     class n_msg_artem_loop2_place_choice kknot;
     n_msg_artem_loop2_place_pressure["msg_artem_loop2_place_pressure"]
@@ -266,6 +306,8 @@ flowchart LR
     class n_park_entrance_view kknot;
     n_park_npc_arrives["park_npc_arrives"]
     class n_park_npc_arrives kknot;
+    n_park_npc_arrives_after_gift["park_npc_arrives_after_gift"]
+    class n_park_npc_arrives_after_gift kknot;
     n_park_offer_place["park_offer_place"]
     class n_park_offer_place kknot;
     n_park_path_main_talk["park_path_main_talk"]
@@ -284,14 +326,22 @@ flowchart LR
     class n_read_entries kknot;
     n_read_journal["read_journal"]
     class n_read_journal kknot;
+    n_seed_phone_history["seed_phone_history"]
+    class n_seed_phone_history kknot;
     n_shop_drinks_with_npc["shop_drinks_with_npc"]
     class n_shop_drinks_with_npc kknot;
     n_shop_snacks_with_npc["shop_snacks_with_npc"]
     class n_shop_snacks_with_npc kknot;
     n_sunday_date_cafe_arrival["sunday_date_cafe_arrival"]
     class n_sunday_date_cafe_arrival kknot;
+    n_sunday_date_cafe_arrival_after_gift["sunday_date_cafe_arrival_after_gift"]
+    class n_sunday_date_cafe_arrival_after_gift kknot;
     n_sunday_date_cafe_settle["sunday_date_cafe_settle"]
     class n_sunday_date_cafe_settle kknot;
+    n_sunday_date_go_cafe["sunday_date_go_cafe"]
+    class n_sunday_date_go_cafe kknot;
+    n_sunday_date_go_park["sunday_date_go_park"]
+    class n_sunday_date_go_park kknot;
     n_sunday_date_park_arrival["sunday_date_park_arrival"]
     class n_sunday_date_park_arrival kknot;
     n_sunday_date_park_settle["sunday_date_park_settle"]
@@ -302,8 +352,14 @@ flowchart LR
     class n_sunday_evening_home kknot;
     n_sunday_get_dressed["sunday_get_dressed"]
     class n_sunday_get_dressed kknot;
+    n_sunday_gift_react_cafe["sunday_gift_react_cafe"]
+    class n_sunday_gift_react_cafe kknot;
+    n_sunday_gift_react_park["sunday_gift_react_park"]
+    class n_sunday_gift_react_park kknot;
     n_sunday_home_after_date_router["sunday_home_after_date_router"]
     class n_sunday_home_after_date_router kknot;
+    n_sunday_send_messenger_invite["sunday_send_messenger_invite"]
+    class n_sunday_send_messenger_invite kknot;
     n_sunday_shop_arrival_with_npc["sunday_shop_arrival_with_npc"]
     class n_sunday_shop_arrival_with_npc kknot;
     n_sunday_shop_settle["sunday_shop_settle"]
@@ -360,20 +416,48 @@ flowchart LR
     class n_tue_home_leave_apartment_locked kknot;
     n_tue_home_wash_up["tue_home_wash_up"]
     class n_tue_home_wash_up kknot;
+    n_tue_rooftop_ending_npc["tue_rooftop_ending_npc"]
+    class n_tue_rooftop_ending_npc kknot;
+    n_tue_rooftop_ending_system["tue_rooftop_ending_system"]
+    class n_tue_rooftop_ending_system kknot;
     n_tue_rooftop_ending_true["tue_rooftop_ending_true"]
     class n_tue_rooftop_ending_true kknot;
+    n_tue_rooftop_entry["tue_rooftop_entry"]
+    class n_tue_rooftop_entry kknot;
+    n_tue_rooftop_iter001_entry["tue_rooftop_iter001_entry"]
+    class n_tue_rooftop_iter001_entry kknot;
+    n_tue_rooftop_iter001_finish["tue_rooftop_iter001_finish"]
+    class n_tue_rooftop_iter001_finish kknot;
+    n_tue_rooftop_iter001_realization["tue_rooftop_iter001_realization"]
+    class n_tue_rooftop_iter001_realization kknot;
+    n_tue_rooftop_iter001_talk["tue_rooftop_iter001_talk"]
+    class n_tue_rooftop_iter001_talk kknot;
+    n_tue_rooftop_loop_entry["tue_rooftop_loop_entry"]
+    class n_tue_rooftop_loop_entry kknot;
     n_tue_rooftop_loop_route["tue_rooftop_loop_route"]
     class n_tue_rooftop_loop_route kknot;
+    n_tue_rooftop_loop_signal["tue_rooftop_loop_signal"]
+    class n_tue_rooftop_loop_signal kknot;
     n_tue_rooftop_loop_talk["tue_rooftop_loop_talk"]
     class n_tue_rooftop_loop_talk kknot;
+    n_tue_route_after_review["tue_route_after_review"]
+    class n_tue_route_after_review kknot;
     n_tue_route_ask_npc["tue_route_ask_npc"]
     class n_tue_route_ask_npc kknot;
+    n_tue_route_entry["tue_route_entry"]
+    class n_tue_route_entry kknot;
+    n_tue_route_office_return["tue_route_office_return"]
+    class n_tue_route_office_return kknot;
     n_tue_route_read_appeal["tue_route_read_appeal"]
     class n_tue_route_read_appeal kknot;
     n_tue_route_read_log["tue_route_read_log"]
     class n_tue_route_read_log kknot;
     n_tue_route_review_options["tue_route_review_options"]
     class n_tue_route_review_options kknot;
+    n_tue_route_to_rooftop["tue_route_to_rooftop"]
+    class n_tue_route_to_rooftop kknot;
+    n_tuesday_morning_start["tuesday_morning_start"]
+    class n_tuesday_morning_start kknot;
     n_use_coffee_setup_no_mug["use_coffee_setup_no_mug"]
     class n_use_coffee_setup_no_mug kknot;
     n_view_binoculars_interact["view_binoculars_interact"]
@@ -406,17 +490,28 @@ flowchart LR
 
     n_loop_entry -->|"Начать день"| n_day_start
     n_loop_entry -->|"Посмотреть в окно"| n_window_view
+    n_window_view --> n_day_start
     n_choose_character -->|"Артём"| n_sunday_start_splash
     n_choose_character -->|"Мила"| n_sunday_start_splash
+    n_sunday_start_splash --> n_apartment_start
+    n_loop1_to_iter2_reset --> n_apartment_start
+    n_loop2_fake_wednesday_leave_for_work --> n_loop2_fake_wednesday_work_check
     n_sunday_evening_home -->|"Ответить тепло"| n_sunday_evening_finish
     n_sunday_evening_home -->|"Ответить спокойно"| n_sunday_evening_finish
     n_sunday_evening_home -->|"Не отвечать сразу"| n_sunday_evening_finish
+    n_sunday_sleep_in_bed --> n_monday_morning_start
+    n_mon_home_leave_apartment --> n_mon_commute_entry
+    n_mon_office_evening_close --> n_tuesday_morning_start
+    n_tue_home_leave_apartment --> n_tue_route_entry
+    n_park_path_walk --> n_park_path_main_talk
+    n_park_npc_arrives --> n_park_npc_arrives_after_gift
     n_park_bench_main_talk --> n_sunday_date_park_settle
     n_park_bench_main_talk -->|"Пошутить про прогулку как план"| n_sunday_date_park_settle
     n_park_bench_main_talk -->|"Признаться, что парк казался проще"| n_sunday_date_park_settle
     n_park_path_main_talk --> n_sunday_date_park_settle
     n_park_path_main_talk -->|"Подстроиться под общий темп"| n_sunday_date_park_settle
     n_park_path_main_talk -->|"Признаться, что так меньше давления"| n_sunday_date_park_settle
+    n_sunday_date_cafe_arrival --> n_sunday_date_cafe_arrival_after_gift
     n_cafe_corner_main_talk --> n_sunday_date_cafe_settle
     n_cafe_corner_main_talk -->|"Пошутить про совместимость по заказу"| n_sunday_date_cafe_settle
     n_cafe_corner_main_talk -->|"Признаться, что кафе казалось безопасны…"| n_sunday_date_cafe_settle
@@ -427,30 +522,66 @@ flowchart LR
     n_shop_drinks_with_npc -->|"Взять холодный чай"| n_sunday_shop_settle
     n_shop_snacks_with_npc -->|"Взять что-нибудь сладкое"| n_sunday_shop_settle
     n_shop_snacks_with_npc --> n_sunday_shop_settle
+    n_sunday_gift_react_park --> n_park_npc_arrives_after_gift
+    n_sunday_gift_react_cafe --> n_sunday_date_cafe_arrival_after_gift
     n_view_corner_main_talk --> n_sunday_viewpoint_settle
     n_view_corner_main_talk -->|"Пошутить про смотровую как серьёзный фи…"| n_sunday_viewpoint_settle
     n_view_corner_main_talk -->|"Признаться, что не хотелось сразу домой"| n_sunday_viewpoint_settle
     n_mon_commute_entry -->|"Идти на автомате"| n_mon_commute_walk_auto
     n_mon_commute_entry -->|"Замедлиться и заметить маршрут"| n_mon_commute_walk_observe
     n_mon_commute_entry -->|"Держать ровный темп"| n_mon_commute_walk_steady
+    n_mon_commute_walk_auto --> n_mon_commute_work_district
+    n_mon_commute_walk_observe --> n_mon_commute_work_district
+    n_mon_commute_walk_steady --> n_mon_commute_work_district
+    n_mon_commute_work_district --> n_mon_commute_office_approach
+    n_mon_commute_office_approach --> n_mon_office_entry
     n_mon_office_npc_greeting -->|"Пошутить про рабочую версию себя"| n_mon_office_task_intro
     n_mon_office_npc_greeting -->|"Сказать, что всё слишком аккуратно"| n_mon_office_npc_strange
     n_mon_office_npc_greeting -->|"Сразу открыть кейс"| n_mon_office_task_intro
+    n_mon_office_npc_strange --> n_mon_office_task_intro
+    n_mon_office_task_intro --> n_mon_office_system_warning
+    n_mon_office_system_warning --> n_mon_office_case_router
+    n_mon_office_auto_standard --> n_mon_office_result_system_bias
     n_mon_office_core_choice -->|"Согласиться со стандартным решением"| n_mon_office_manual_standard
     n_mon_office_core_choice -->|"Запросить недостающие данные"| n_mon_office_clarify
     n_mon_office_core_choice -->|"Остановить автоприменение"| n_mon_office_stop_auto
+    n_mon_office_manual_standard --> n_mon_office_result_system_bias
+    n_mon_office_clarify --> n_mon_office_result_true_bias
+    n_mon_office_stop_auto --> n_mon_office_result_true_bias
+    n_mon_office_result_system_bias --> n_mon_office_day_end
+    n_mon_office_result_true_bias --> n_mon_office_day_end
+    n_mon_office_day_end --> n_mon_office_evening_close
+    n_tue_route_entry --> n_tue_route_office_return
+    n_tue_route_office_return --> n_tue_route_review_options
     n_tue_route_review_options -->|"Посмотреть лог решения"| n_tue_route_read_log
     n_tue_route_review_options --> n_tue_route_ask_npc
     n_tue_route_review_options -->|"Открыть карточку апелляции"| n_tue_route_read_appeal
+    n_tue_route_read_log --> n_tue_route_after_review
+    n_tue_route_ask_npc --> n_tue_route_after_review
+    n_tue_route_read_appeal --> n_tue_route_after_review
+    n_tue_route_after_review --> n_tue_route_to_rooftop
+    n_tue_route_to_rooftop --> n_tue_rooftop_entry
+    n_tue_rooftop_iter001_entry --> n_tue_rooftop_iter001_talk
+    n_tue_rooftop_iter001_talk --> n_tue_rooftop_iter001_realization
+    n_tue_rooftop_iter001_realization --> n_tue_rooftop_iter001_finish
+    n_tue_rooftop_iter001_finish --> n_loop1_to_iter2_reset
+    n_tue_rooftop_loop_entry --> n_tue_rooftop_loop_talk
     n_tue_rooftop_loop_talk -->|"Держаться за человека рядом"| n_tue_rooftop_loop_route
     n_tue_rooftop_loop_talk -->|"Держаться за логику системы"| n_tue_rooftop_loop_route
     n_tue_rooftop_loop_talk --> n_tue_rooftop_ending_true
+    n_tue_rooftop_ending_npc --> n_tue_rooftop_loop_signal
+    n_tue_rooftop_ending_system --> n_tue_rooftop_loop_signal
+    n_tue_rooftop_ending_true --> n_tue_rooftop_loop_signal
     n_find_clue -->|"Осмотреться"| n_look_around
     n_find_clue -->|"Поговорить с кем-то"| n_talk_to_someone
     n_question_reality -->|"Это правда происходит?"| n_doubt
     n_question_reality -->|"Петля реальна"| n_accept
     n_read_journal -->|"Прочитать записи"| n_read_entries
     n_read_journal -->|"Вернуться"| n_go_back
+    n_inv_apartment_kitchen_use_mug_on_coffee_setup --> n_sunday_send_messenger_invite
+    n_inv_apartment_kitchen_morning_use_mug_on_coffee_setup --> n_inv_apartment_kitchen_use_mug_on_coffee_setup
+    n_inv_office_workspace_use_case_file_on_work_desk_submit --> n_mon_office_npc_greeting
+    n_inv_office_workspace_give_case_file_on_npc --> n_mon_office_npc_greeting
     n_msg_thread_mila_iter1 -->|"«А тебе куда хочется?»"| n_msg_npc_place_sent
     n_msg_thread_mila_iter1 -->|"«Давай в кафе. Спокойно посидим.»"| n_msg_npc_place_sent
     n_msg_thread_mila_iter1 -->|"«Давай в парк у реки. Хочется пройтись.»"| n_msg_npc_place_sent
@@ -471,6 +602,17 @@ flowchart LR
     n_msg_artem_loop2_place_pressure -->|"«Если это розыгрыш — я хочу увидеть лиц…"| n_msg_artem_loop2_place_choice
     n_msg_artem_loop2_place_choice -->|"«Давай в кафе. Спокойно посидим.»"| n_msg_npc_place_sent
     n_msg_artem_loop2_place_choice -->|"«Давай в парк у реки. Хочется пройтись.»"| n_msg_npc_place_sent
+    n_apartment_start -.-> s_apartment_bedroom
+    n_seed_phone_history -.-> s_apartment_bedroom
+    n_sunday_date_go_cafe -.-> s_cafe_hub
+    n_sunday_date_go_park -.-> s_park_hub
+    n_sunday_evening_finish -.-> s_apartment_hub
+    n_monday_morning_start -.-> s_monday_apartment_bedroom_morning
+    n_tuesday_morning_start -.-> s_tuesday_apartment_bedroom_morning
+    n_cafe_bar_interact_right_place -.-> s_cafe_corner
+    n_mon_office_entry -.-> s_work_hub
+    n_park_offer_place -.-> s_park_riverside_bench
+    n_park_offer_place -.-> s_park_riverside_path
     s_apartment_hub -.-> n_sunday_home_after_date_router
     s_apartment_hub ==>|"В спальню"| s_apartment_bedroom
     s_apartment_hub ==>|"На кухню"| s_apartment_kitchen

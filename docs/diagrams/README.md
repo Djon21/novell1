@@ -11,14 +11,14 @@ Ink показывает только текст, навигация между 
 
 | Файл | Узлов | Что внутри |
 |---|---|---|
-| `chapter_01.html` | **180** | **Открой это** — standalone HTML, Mermaid с CDN, зум-кнопки, dark theme. Default. |
-| `chapter_01.mmd` | 180 | Тот же граф в Mermaid |
+| `chapter_01.html` | **222** | **Открой это** — standalone HTML, Mermaid с CDN, зум-кнопки, dark theme. Default. |
+| `chapter_01.mmd` | 222 | Тот же граф в Mermaid |
 | `chapter_01_all.html` | 345 | Все 322 кнота + 23 сцены (для полной картины) |
 | `chapter_01_all.mmd` | 345 | То же в Mermaid |
 | `chapter_01_by_file.html` | 345 | Все узлы, кноты сгруппированы по .ink-файлу, сцены в отдельной подгруппе |
 | `chapter_01_by_file.mmd` | 345 | То же в Mermaid |
 
-**Зачем default = 180 узлов?** Из 322 ink-кнотов только 157 участвуют в flow (источники или цели `->`). Остальные 165 — листья, на которые Lua заходит через `goto_knot`. В граф они не нужны — 180 узлов это сцены (23) + flow-кноты (157).
+**Зачем default = 222 узла?** Из 322 ink-кнотов только 199 участвуют в flow (источники или цели divert/scene_jump). Остальные 123 — листья, на которые Lua заходит через `goto_knot`. В граф они не нужны — 222 узла это сцены (23) + flow-кноты (199).
 
 ## Как читать граф
 
@@ -29,9 +29,15 @@ Ink показывает только текст, навигация между 
 | ⬜ Прямоугольный узел `n_*` | Ink-кнот |
 | `-->` сплошная | Ink divert (knot → knot) |
 | `==>` толстая | scene navigation (scene → scene) |
-| `-.->` пунктирная | scene → knot (hotspot или on_enter) |
+| `-.->` пунктирная | scene → knot (hotspot или on_enter) **ИЛИ** knot → scene (`# goto_scene:` / `# explore:`) |
 | Подпись на ребре | Choice text / hotspot label |
 | 🟩 `DONE` | Терминатор (knot завершается) |
+
+**Полная цепочка от старта:**
+```
+▶ START → choose_character → sunday_start_splash → apartment_start ⇢ apartment_bedroom
+                                                       ⇠  (через # explore:apartment_bedroom)
+```
 
 ## Как посмотреть (локально)
 
@@ -77,8 +83,9 @@ python tools/ink_graph.py --top 40                     # → топ-40 узло�
 
 Граф показывает полную структуру сюжета:
 - **23 Lua-сцены** (point-and-click): `apartment_hub`, `apartment_bedroom`, `park_hub`, `cafe_corner`, `work_hub` и т.д. Связаны толстыми `==>` стрелками.
-- **157 flow-кнотов**: `choose_character`, `loop_entry`, `park_bench_main_talk`, `sunday_shop_arrival_with_npc`, `msg_thread_*` и т.д. Связаны `-->` стрелками.
+- **199 flow-кнотов**: `choose_character`, `loop_entry`, `park_bench_main_talk`, `sunday_shop_arrival_with_npc`, `msg_thread_*` и т.д. Связаны `-->` стрелками.
 - **108 hotspot/on_enter связей** (пунктир): сцена вызывает ink-кнот при клике.
-- **22 ink → ink diverts + 45 ink choices** (сплошные): внутри story-логики.
+- **67 ink → ink diverts + 45 ink choices** (сплошные): внутри story-логики.
 - **32 scene → scene навигаций** (толстые): пользователь ходит между сценами.
-- **Всего 207 рёбер** в default-графе.
+- **13 knot → scene scene_jump** (пунктир): ink-теги `# goto_scene:` / `# explore:` переключают сцену.
+- **Всего 267 рёбер** в default-графе.

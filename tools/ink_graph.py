@@ -89,6 +89,27 @@ INK_CHOICE = "ink_choice"
 NAV = "nav"
 HOTSPOT = "hotspot"
 ON_ENTER = "on_enter"
+SCENE_JUMP = "scene_jump"  # # goto_scene:X or # explore:X in ink → runtime switches scene
+
+
+def _extract_knot_content(payload) -> list | None:
+    """
+    A knot's payload in the compiled JSON is one of:
+
+      1. [content_list, params]            — content lives in payload[0]
+         e.g. loop_entry, choose_character
+      2. [item, item, ..., 'end'|'done', None]   — payload IS the content list
+         e.g. day_start, sunday_start_splash
+
+    Return the list to walk, or None if the payload is malformed.
+    """
+    if not isinstance(payload, list) or not payload:
+        return None
+    if isinstance(payload[0], list):
+        return payload[0]
+    # payload is the content list itself; drop trailing terminators
+    items = [x for x in payload if x is not None and x not in ("end", "done", "END", "DONE")]
+    return items or None
 
 
 def _walk(content: list, knot: str, edges: list[Edge]) -> None:
@@ -158,10 +179,18 @@ def build_graph(json_path: Path, scenes_dir: Path | None = None
     knot_names = list(knots_dict.keys())
     edges: list[Edge] = []
     for name, payload in knots_dict.items():
-        if not isinstance(payload, list) or not payload:
+        content = _extract_knot_content(payload)
+        if content is None:
             continue
-        content = payload[0]
         _walk(content, name, edges)
+
+    # scan .ink source for # goto_scene:X and # explore:X scene-jump tags.
+    # These are deferred commands interpreted by the Lua runtime
+    # (dialogue_manager_ink.lua) after the knot's paragraphs finish — so the
+    # node-level ink diverts alone don't show the next scene transition.
+    if scenes_dir is not None:
+        for sj in _parse_scene_jumps_from_ink(INK_DIR):
+            edges.append(sj)
 
     scene_ids: list[str] = []
     if scenes_dir is not None:
@@ -345,6 +374,62 @@ def parse_scenes(scenes_dir: Path) -> tuple[list[str], list[tuple[str, str, str,
         all_ids.extend(ids)
         all_edges.extend(edges)
     return all_ids, all_edges
+
+
+# ---------------------------------------------------------------------------
+# .ink source scanning for scene-jump tags
+# ---------------------------------------------------------------------------
+
+SCENE_JUMP_TAG_RE = re.compile(
+    r"^\s*#\s*(?:goto_scene|explore)\s*:\s*([a-zA-Z_][\w]*)",
+    re.MULTILINE,
+)
+KNOT_HEAD_RE = re.compile(r"^===\s*([a-zA-Z_][\w]*)\s*===", re.MULTILINE)
+
+
+def _is_active_ink(path: Path) -> bool:
+    """Same exclusion rules as tools/ink_lint.py: skip _old files and archive/."""
+    if "_old" in path.name:
+        return False
+    if "archive" in path.parts:
+        return False
+    return True
+
+
+def _parse_scene_jumps_from_ink(ink_dir: Path) -> list[Edge]:
+    """
+    Scan active .ink files for `# goto_scene:SCENE` and `# explore:SCENE` tags.
+
+    These are deferred commands consumed by the Lua runtime
+    (dialogue_manager_ink.lua -> "enter_scene" scene_bucket) after the knot
+    finishes its paragraphs. Each tag inside a knot produces an edge
+    (knot, "knot", scene_id, "scene", "scene_jump", None).
+
+    If a knot has multiple jumps (different code branches), we add one edge
+    per (knot, scene) pair. Knot is duplicated on the source side, which
+    is fine — Mermaid allows multiple outgoing edges from one node.
+    """
+    edges: list[Edge] = []
+    if not ink_dir.exists():
+        return edges
+    for f in sorted(ink_dir.rglob("*.ink")):
+        if not _is_active_ink(f):
+            continue
+        try:
+            text = f.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        # Find all knot headers and the start offset of each block
+        # so we can map each tag to its enclosing knot.
+        knot_starts = [(m.group(1), m.start()) for m in KNOT_HEAD_RE.finditer(text)]
+        # Also note the end of each block (start of next knot, or EOF)
+        for i, (knot_name, start) in enumerate(knot_starts):
+            end = knot_starts[i + 1][1] if i + 1 < len(knot_starts) else len(text)
+            body = text[start:end]
+            for tm in SCENE_JUMP_TAG_RE.finditer(body):
+                scene_id = tm.group(1)
+                edges.append((knot_name, KNOT, scene_id, SCENE, SCENE_JUMP, None))
+    return edges
 
 
 # ---------------------------------------------------------------------------
@@ -578,6 +663,8 @@ def render_mermaid(knots: list[str],
             arrow = "-.->"   # scene → knot: dashed
         elif kind == NAV:
             arrow = "==>"    # scene → scene: thick
+        elif kind == SCENE_JUMP:
+            arrow = "-.->"   # knot → scene (ink # goto_scene / # explore): dashed
         else:
             arrow = "-->"    # knot → knot (ink flow)
 
