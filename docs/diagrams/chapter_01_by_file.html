@@ -31,390 +31,764 @@
   </div>
   <pre class="mermaid">
 flowchart LR
-    classDef kstart fill:#7ab8ff,stroke:#2563eb,color:#0b1220;
-    classDef kdone  fill:#86efac,stroke:#16a34a,color:#052e16;
-    classDef kend   fill:#fca5a5,stroke:#dc2626,color:#450a0a;
+    classDef kstart fill:#7ab8ff,stroke:#2563eb,color:#0b1220,stroke-width:2px;
+    classDef kdone  fill:#86efac,stroke:#16a34a,color:#052e16,stroke-width:2px;
+    classDef kend   fill:#fca5a5,stroke:#dc2626,color:#450a0a,stroke-width:2px;
+    classDef kknot  fill:#1e293b,stroke:#64748b,color:#e2e8f0;
+    classDef kscene fill:#312e81,stroke:#a78bfa,color:#ede9fe,stroke-width:2px;
 
     n___start((("▶ START")))
-    n___start:::kstart
+    class n___start kstart;
+    subgraph sg_scenes["Lua scenes (point-and-click)"]
+    s_apartment_bathroom("apartment_bathroom")
+    class s_apartment_bathroom kscene;
+    s_apartment_bedroom("apartment_bedroom")
+    class s_apartment_bedroom kscene;
+    s_apartment_hub("apartment_hub")
+    class s_apartment_hub kscene;
+    s_apartment_kitchen("apartment_kitchen")
+    class s_apartment_kitchen kscene;
+    s_archive_hub("archive_hub")
+    class s_archive_hub kscene;
+    s_bar_hub("bar_hub")
+    class s_bar_hub kscene;
+    s_cafe_backroom("cafe_backroom")
+    class s_cafe_backroom kscene;
+    s_cafe_corner("cafe_corner")
+    class s_cafe_corner kscene;
+    s_cafe_hub("cafe_hub")
+    class s_cafe_hub kscene;
+    s_monday_apartment_bedroom_morning("monday_apartment_bedroom_morning")
+    class s_monday_apartment_bedroom_morning kscene;
+    s_monday_apartment_hall_morning("monday_apartment_hall_morning")
+    class s_monday_apartment_hall_morning kscene;
+    s_monday_apartment_kitchen_morning("monday_apartment_kitchen_morning")
+    class s_monday_apartment_kitchen_morning kscene;
+    s_office_meeting_room("office_meeting_room")
+    class s_office_meeting_room kscene;
+    s_office_workspace("office_workspace")
+    class s_office_workspace kscene;
+    s_park_hub("park_hub")
+    class s_park_hub kscene;
+    s_park_riverside_bench("park_riverside_bench")
+    class s_park_riverside_bench kscene;
+    s_park_riverside_path("park_riverside_path")
+    class s_park_riverside_path kscene;
+    s_tuesday_apartment_bedroom_morning("tuesday_apartment_bedroom_morning")
+    class s_tuesday_apartment_bedroom_morning kscene;
+    s_tuesday_apartment_hall_morning("tuesday_apartment_hall_morning")
+    class s_tuesday_apartment_hall_morning kscene;
+    s_tuesday_apartment_kitchen_morning("tuesday_apartment_kitchen_morning")
+    class s_tuesday_apartment_kitchen_morning kscene;
+    s_view_corner("view_corner")
+    class s_view_corner kscene;
+    s_view_hub("view_hub")
+    class s_view_hub kscene;
+    s_work_hub("work_hub")
+    class s_work_hub kscene;
+    end
+
     subgraph sg_01_loop_entry_ink["01_loop_entry.ink"]
     n_day_start["day_start"]
+    class n_day_start kknot;
     n_loop_entry["loop_entry"]
+    class n_loop_entry kknot;
     n_window_view["window_view"]
+    class n_window_view kknot;
     end
     subgraph sg_10_apartment_ink["10_apartment.ink"]
     n_apartment_bedroom_intro["apartment_bedroom_intro"]
+    class n_apartment_bedroom_intro kknot;
     n_apartment_start["apartment_start"]
+    class n_apartment_start kknot;
     n_choose_character["choose_character"]
+    class n_choose_character kknot;
     n_enter_kitchen_morning_first["enter_kitchen_morning_first"]
+    class n_enter_kitchen_morning_first kknot;
     n_seed_phone_history["seed_phone_history"]
+    class n_seed_phone_history kknot;
     n_sunday_start_splash["sunday_start_splash"]
+    class n_sunday_start_splash kknot;
     end
     subgraph sg_10_reset_ink["10_reset.ink"]
     n_loop1_to_iter2_reset["loop1_to_iter2_reset"]
+    class n_loop1_to_iter2_reset kknot;
     end
     subgraph sg_10a_sunday_ink["10a_sunday.ink"]
     n_bathroom_exit_locked["bathroom_exit_locked"]
+    class n_bathroom_exit_locked kknot;
     n_bathroom_not_now["bathroom_not_now"]
+    class n_bathroom_not_now kknot;
     n_bathroom_sink_prompt["bathroom_sink_prompt"]
+    class n_bathroom_sink_prompt kknot;
     n_bedroom_desk_morning["bedroom_desk_morning"]
+    class n_bedroom_desk_morning kknot;
     n_enter_bathroom_morning_first["enter_bathroom_morning_first"]
+    class n_enter_bathroom_morning_first kknot;
     n_leave_apartment["leave_apartment"]
+    class n_leave_apartment kknot;
     n_leave_apartment_prompt["leave_apartment_prompt"]
+    class n_leave_apartment_prompt kknot;
     n_look_bathroom_mirror["look_bathroom_mirror"]
+    class n_look_bathroom_mirror kknot;
     n_look_bed_morning["look_bed_morning"]
+    class n_look_bed_morning kknot;
     n_look_bedroom_window["look_bedroom_window"]
+    class n_look_bedroom_window kknot;
     n_look_hall_mirror["look_hall_mirror"]
+    class n_look_hall_mirror kknot;
     n_look_kitchen_fridge["look_kitchen_fridge"]
+    class n_look_kitchen_fridge kknot;
     n_look_kitchen_window["look_kitchen_window"]
+    class n_look_kitchen_window kknot;
     n_loop2_fake_wednesday_leave_for_work["loop2_fake_wednesday_leave_for_work"]
+    class n_loop2_fake_wednesday_leave_for_work kknot;
     n_loop2_fake_wednesday_work_check["loop2_fake_wednesday_work_check"]
+    class n_loop2_fake_wednesday_work_check kknot;
     n_sunday_date_go_cafe["sunday_date_go_cafe"]
+    class n_sunday_date_go_cafe kknot;
     n_sunday_date_go_park["sunday_date_go_park"]
+    class n_sunday_date_go_park kknot;
     n_sunday_date_map_fallback["sunday_date_map_fallback"]
+    class n_sunday_date_map_fallback kknot;
     n_sunday_evening_finish["sunday_evening_finish"]
+    class n_sunday_evening_finish kknot;
     n_sunday_evening_home["sunday_evening_home"]
+    class n_sunday_evening_home kknot;
     n_sunday_get_dressed["sunday_get_dressed"]
+    class n_sunday_get_dressed kknot;
     n_sunday_home_after_date_router["sunday_home_after_date_router"]
+    class n_sunday_home_after_date_router kknot;
     n_sunday_home_too_early["sunday_home_too_early"]
+    class n_sunday_home_too_early kknot;
     n_sunday_send_messenger_invite["sunday_send_messenger_invite"]
+    class n_sunday_send_messenger_invite kknot;
     n_sunday_sleep_in_bed["sunday_sleep_in_bed"]
+    class n_sunday_sleep_in_bed kknot;
     n_take_kitchen_apple["take_kitchen_apple"]
+    class n_take_kitchen_apple kknot;
     n_take_mug["take_mug"]
+    class n_take_mug kknot;
     n_take_phone["take_phone"]
+    class n_take_phone kknot;
     n_take_toothbrush["take_toothbrush"]
+    class n_take_toothbrush kknot;
     n_take_toothpaste["take_toothpaste"]
+    class n_take_toothpaste kknot;
     n_use_coffee_setup_no_mug["use_coffee_setup_no_mug"]
+    class n_use_coffee_setup_no_mug kknot;
     end
     subgraph sg_10b_monday_ink["10b_monday.ink"]
     n_mon_home_bed["mon_home_bed"]
+    class n_mon_home_bed kknot;
     n_mon_home_bedroom_desk["mon_home_bedroom_desk"]
+    class n_mon_home_bedroom_desk kknot;
     n_mon_home_bedroom_intro["mon_home_bedroom_intro"]
+    class n_mon_home_bedroom_intro kknot;
     n_mon_home_get_dressed["mon_home_get_dressed"]
+    class n_mon_home_get_dressed kknot;
     n_mon_home_hall_intro["mon_home_hall_intro"]
+    class n_mon_home_hall_intro kknot;
     n_mon_home_hall_mirror["mon_home_hall_mirror"]
+    class n_mon_home_hall_mirror kknot;
     n_mon_home_kitchen_breakfast["mon_home_kitchen_breakfast"]
+    class n_mon_home_kitchen_breakfast kknot;
     n_mon_home_kitchen_breakfast_after["mon_home_kitchen_breakfast_after"]
+    class n_mon_home_kitchen_breakfast_after kknot;
     n_mon_home_kitchen_coffee["mon_home_kitchen_coffee"]
+    class n_mon_home_kitchen_coffee kknot;
     n_mon_home_kitchen_coffee_after["mon_home_kitchen_coffee_after"]
+    class n_mon_home_kitchen_coffee_after kknot;
     n_mon_home_kitchen_intro["mon_home_kitchen_intro"]
+    class n_mon_home_kitchen_intro kknot;
     n_mon_home_kitchen_water["mon_home_kitchen_water"]
+    class n_mon_home_kitchen_water kknot;
     n_mon_home_kitchen_window["mon_home_kitchen_window"]
+    class n_mon_home_kitchen_window kknot;
     n_mon_home_leave_apartment["mon_home_leave_apartment"]
+    class n_mon_home_leave_apartment kknot;
     n_mon_home_leave_apartment_locked["mon_home_leave_apartment_locked"]
+    class n_mon_home_leave_apartment_locked kknot;
     n_mon_home_take_work_card["mon_home_take_work_card"]
+    class n_mon_home_take_work_card kknot;
     n_mon_home_wash_up["mon_home_wash_up"]
+    class n_mon_home_wash_up kknot;
     n_mon_office_evening_close["mon_office_evening_close"]
+    class n_mon_office_evening_close kknot;
     n_monday_morning_start["monday_morning_start"]
+    class n_monday_morning_start kknot;
     end
     subgraph sg_10c_tuesday_ink["10c_tuesday.ink"]
     n_tue_home_bed["tue_home_bed"]
+    class n_tue_home_bed kknot;
     n_tue_home_bedroom_desk["tue_home_bedroom_desk"]
+    class n_tue_home_bedroom_desk kknot;
     n_tue_home_bedroom_intro["tue_home_bedroom_intro"]
+    class n_tue_home_bedroom_intro kknot;
     n_tue_home_check_phone["tue_home_check_phone"]
+    class n_tue_home_check_phone kknot;
     n_tue_home_get_ready["tue_home_get_ready"]
+    class n_tue_home_get_ready kknot;
     n_tue_home_hall_intro["tue_home_hall_intro"]
+    class n_tue_home_hall_intro kknot;
     n_tue_home_hall_mirror["tue_home_hall_mirror"]
+    class n_tue_home_hall_mirror kknot;
     n_tue_home_kitchen_coffee["tue_home_kitchen_coffee"]
+    class n_tue_home_kitchen_coffee kknot;
     n_tue_home_kitchen_coffee_after["tue_home_kitchen_coffee_after"]
+    class n_tue_home_kitchen_coffee_after kknot;
     n_tue_home_kitchen_intro["tue_home_kitchen_intro"]
+    class n_tue_home_kitchen_intro kknot;
     n_tue_home_kitchen_water["tue_home_kitchen_water"]
+    class n_tue_home_kitchen_water kknot;
     n_tue_home_kitchen_window["tue_home_kitchen_window"]
+    class n_tue_home_kitchen_window kknot;
     n_tue_home_leave_apartment["tue_home_leave_apartment"]
+    class n_tue_home_leave_apartment kknot;
     n_tue_home_leave_apartment_locked["tue_home_leave_apartment_locked"]
+    class n_tue_home_leave_apartment_locked kknot;
     n_tue_home_wash_up["tue_home_wash_up"]
+    class n_tue_home_wash_up kknot;
     n_tuesday_morning_start["tuesday_morning_start"]
+    class n_tuesday_morning_start kknot;
     end
     subgraph sg_50_investigation_ink["50_investigation.ink"]
     n_find_clue["find_clue"]
+    class n_find_clue kknot;
     n_investigation_start["investigation_start"]
+    class n_investigation_start kknot;
     n_look_around["look_around"]
+    class n_look_around kknot;
     n_talk_to_someone["talk_to_someone"]
+    class n_talk_to_someone kknot;
     end
     subgraph sg_51_awareness_ink["51_awareness.ink"]
     n_accept["accept"]
+    class n_accept kknot;
     n_awareness_start["awareness_start"]
+    class n_awareness_start kknot;
     n_doubt["doubt"]
+    class n_doubt kknot;
     n_question_reality["question_reality"]
+    class n_question_reality kknot;
     end
     subgraph sg_60_stages_ink["60_stages.ink"]
     n_stage_1["stage_1"]
+    class n_stage_1 kknot;
     n_stage_2["stage_2"]
+    class n_stage_2 kknot;
     n_stage_3["stage_3"]
+    class n_stage_3 kknot;
     n_stages_start["stages_start"]
+    class n_stages_start kknot;
     end
     subgraph sg_70_loop_journal_ink["70_loop_journal.ink"]
     n_go_back["go_back"]
+    class n_go_back kknot;
     n_journal_start["journal_start"]
+    class n_journal_start kknot;
     n_read_entries["read_entries"]
+    class n_read_entries kknot;
     n_read_journal["read_journal"]
+    class n_read_journal kknot;
     n_write_entry["write_entry"]
+    class n_write_entry kknot;
     end
     subgraph sg_80_endings_ink["80_endings.ink"]
     n_ending_break["ending_break"]
+    class n_ending_break kknot;
     n_ending_merge["ending_merge"]
+    class n_ending_merge kknot;
     n_ending_stay["ending_stay"]
+    class n_ending_stay kknot;
     n_endings_start["endings_start"]
+    class n_endings_start kknot;
     end
     subgraph sg_91_inventory_actions_ink["91_inventory_actions.ink"]
     n_inv_apartment_bathroom_use_toothbrush_pasted_on_bathroom_sink["inv_apartment_bathroom_use_toothbrush_pasted_on_bathroom_sink"]
+    class n_inv_apartment_bathroom_use_toothbrush_pasted_on_bathroom_sink kknot;
     n_inv_apartment_kitchen_morning_use_mug_on_coffee_setup["inv_apartment_kitchen_morning_use_mug_on_coffee_setup"]
+    class n_inv_apartment_kitchen_morning_use_mug_on_coffee_setup kknot;
     n_inv_apartment_kitchen_use_mug_on_coffee_setup["inv_apartment_kitchen_use_mug_on_coffee_setup"]
+    class n_inv_apartment_kitchen_use_mug_on_coffee_setup kknot;
     n_inv_combine_fallback["inv_combine_fallback"]
+    class n_inv_combine_fallback kknot;
     n_inv_combine_folder_with_report_page["inv_combine_folder_with_report_page"]
+    class n_inv_combine_folder_with_report_page kknot;
     n_inv_combine_toothbrush_with_toothpaste["inv_combine_toothbrush_with_toothpaste"]
+    class n_inv_combine_toothbrush_with_toothpaste kknot;
     n_inv_fallback["inv_fallback"]
+    class n_inv_fallback kknot;
     n_inv_give_fallback["inv_give_fallback"]
+    class n_inv_give_fallback kknot;
     n_inv_inspect_card["inv_inspect_card"]
+    class n_inv_inspect_card kknot;
     n_inv_inspect_case_file["inv_inspect_case_file"]
+    class n_inv_inspect_case_file kknot;
     n_inv_inspect_fallback["inv_inspect_fallback"]
+    class n_inv_inspect_fallback kknot;
     n_inv_inspect_folder["inv_inspect_folder"]
+    class n_inv_inspect_folder kknot;
     n_inv_inspect_gift_berry_soda["inv_inspect_gift_berry_soda"]
+    class n_inv_inspect_gift_berry_soda kknot;
     n_inv_inspect_gift_chips["inv_inspect_gift_chips"]
+    class n_inv_inspect_gift_chips kknot;
     n_inv_inspect_gift_coffee_can["inv_inspect_gift_coffee_can"]
+    class n_inv_inspect_gift_coffee_can kknot;
     n_inv_inspect_gift_crackers["inv_inspect_gift_crackers"]
+    class n_inv_inspect_gift_crackers kknot;
     n_inv_inspect_gift_dark_chocolate["inv_inspect_gift_dark_chocolate"]
+    class n_inv_inspect_gift_dark_chocolate kknot;
     n_inv_inspect_gift_energy_drink["inv_inspect_gift_energy_drink"]
+    class n_inv_inspect_gift_energy_drink kknot;
     n_inv_inspect_gift_iced_tea["inv_inspect_gift_iced_tea"]
+    class n_inv_inspect_gift_iced_tea kknot;
     n_inv_inspect_gift_keychain_flashlight["inv_inspect_gift_keychain_flashlight"]
+    class n_inv_inspect_gift_keychain_flashlight kknot;
     n_inv_inspect_gift_milk_chocolate["inv_inspect_gift_milk_chocolate"]
+    class n_inv_inspect_gift_milk_chocolate kknot;
     n_inv_inspect_gift_nuts["inv_inspect_gift_nuts"]
+    class n_inv_inspect_gift_nuts kknot;
     n_inv_inspect_gift_paper_napkins["inv_inspect_gift_paper_napkins"]
+    class n_inv_inspect_gift_paper_napkins kknot;
     n_inv_inspect_gift_small_broom["inv_inspect_gift_small_broom"]
+    class n_inv_inspect_gift_small_broom kknot;
     n_inv_inspect_gift_waffle_bar["inv_inspect_gift_waffle_bar"]
+    class n_inv_inspect_gift_waffle_bar kknot;
     n_inv_inspect_gift_wet_wipes["inv_inspect_gift_wet_wipes"]
+    class n_inv_inspect_gift_wet_wipes kknot;
     n_inv_inspect_note["inv_inspect_note"]
+    class n_inv_inspect_note kknot;
     n_inv_inspect_park_trash_cup["inv_inspect_park_trash_cup"]
+    class n_inv_inspect_park_trash_cup kknot;
     n_inv_inspect_phone["inv_inspect_phone"]
+    class n_inv_inspect_phone kknot;
     n_inv_inspect_report_page["inv_inspect_report_page"]
+    class n_inv_inspect_report_page kknot;
     n_inv_inspect_toothbrush["inv_inspect_toothbrush"]
+    class n_inv_inspect_toothbrush kknot;
     n_inv_inspect_toothbrush_pasted["inv_inspect_toothbrush_pasted"]
+    class n_inv_inspect_toothbrush_pasted kknot;
     n_inv_inspect_toothpaste["inv_inspect_toothpaste"]
+    class n_inv_inspect_toothpaste kknot;
     n_inv_inspect_water_bottle["inv_inspect_water_bottle"]
+    class n_inv_inspect_water_bottle kknot;
     n_inv_office_workspace_give_case_file_on_npc["inv_office_workspace_give_case_file_on_npc"]
+    class n_inv_office_workspace_give_case_file_on_npc kknot;
     n_inv_office_workspace_use_case_file_on_work_desk_submit["inv_office_workspace_use_case_file_on_work_desk_submit"]
+    class n_inv_office_workspace_use_case_file_on_work_desk_submit kknot;
     n_inv_park_hub_use_park_trash_cup_on_park_bin["inv_park_hub_use_park_trash_cup_on_park_bin"]
+    class n_inv_park_hub_use_park_trash_cup_on_park_bin kknot;
     n_inv_read_case_file["inv_read_case_file"]
+    class n_inv_read_case_file kknot;
     n_inv_read_fallback["inv_read_fallback"]
+    class n_inv_read_fallback kknot;
     n_inv_read_note["inv_read_note"]
+    class n_inv_read_note kknot;
     n_inv_read_report_page["inv_read_report_page"]
+    class n_inv_read_report_page kknot;
     n_inv_use_card_on_fallback["inv_use_card_on_fallback"]
+    class n_inv_use_card_on_fallback kknot;
     n_inv_use_case_file_on_fallback["inv_use_case_file_on_fallback"]
+    class n_inv_use_case_file_on_fallback kknot;
     n_inv_use_fallback["inv_use_fallback"]
+    class n_inv_use_fallback kknot;
     n_inv_use_on_fallback["inv_use_on_fallback"]
+    class n_inv_use_on_fallback kknot;
     n_inv_use_park_trash_cup_on_fallback["inv_use_park_trash_cup_on_fallback"]
+    class n_inv_use_park_trash_cup_on_fallback kknot;
     n_inv_work_hub_use_card_on_office_turnstile["inv_work_hub_use_card_on_office_turnstile"]
+    class n_inv_work_hub_use_card_on_office_turnstile kknot;
     end
     subgraph sg_92_phone_sms_ink["92_phone_sms.ink"]
     n_phone_bank_charge_cafe_coffee_sweet["phone_bank_charge_cafe_coffee_sweet"]
+    class n_phone_bank_charge_cafe_coffee_sweet kknot;
     n_phone_bank_charge_cafe_tea_small["phone_bank_charge_cafe_tea_small"]
+    class n_phone_bank_charge_cafe_tea_small kknot;
     n_phone_bank_charge_cafe_two_coffee["phone_bank_charge_cafe_two_coffee"]
+    class n_phone_bank_charge_cafe_two_coffee kknot;
     n_phone_bank_charge_shop_120["phone_bank_charge_shop_120"]
+    class n_phone_bank_charge_shop_120 kknot;
     n_phone_bank_charge_shop_140["phone_bank_charge_shop_140"]
+    class n_phone_bank_charge_shop_140 kknot;
     n_phone_bank_charge_shop_160["phone_bank_charge_shop_160"]
+    class n_phone_bank_charge_shop_160 kknot;
     n_phone_bank_charge_shop_170["phone_bank_charge_shop_170"]
+    class n_phone_bank_charge_shop_170 kknot;
     n_phone_bank_charge_shop_180["phone_bank_charge_shop_180"]
+    class n_phone_bank_charge_shop_180 kknot;
     n_phone_bank_charge_shop_190["phone_bank_charge_shop_190"]
+    class n_phone_bank_charge_shop_190 kknot;
     n_phone_bank_charge_shop_210["phone_bank_charge_shop_210"]
+    class n_phone_bank_charge_shop_210 kknot;
     n_phone_bank_charge_shop_220["phone_bank_charge_shop_220"]
+    class n_phone_bank_charge_shop_220 kknot;
     n_phone_bank_charge_shop_230["phone_bank_charge_shop_230"]
+    class n_phone_bank_charge_shop_230 kknot;
     n_phone_bank_charge_shop_240["phone_bank_charge_shop_240"]
+    class n_phone_bank_charge_shop_240 kknot;
     n_phone_bank_charge_shop_320["phone_bank_charge_shop_320"]
+    class n_phone_bank_charge_shop_320 kknot;
     n_phone_bank_charge_shop_350["phone_bank_charge_shop_350"]
+    class n_phone_bank_charge_shop_350 kknot;
     n_phone_bank_charge_shop_360["phone_bank_charge_shop_360"]
+    class n_phone_bank_charge_shop_360 kknot;
     n_phone_bank_charge_shop_380["phone_bank_charge_shop_380"]
+    class n_phone_bank_charge_shop_380 kknot;
     n_phone_bank_charge_shop_420["phone_bank_charge_shop_420"]
+    class n_phone_bank_charge_shop_420 kknot;
     n_phone_bank_charge_shop_490["phone_bank_charge_shop_490"]
+    class n_phone_bank_charge_shop_490 kknot;
     n_phone_bank_charge_shop_95["phone_bank_charge_shop_95"]
+    class n_phone_bank_charge_shop_95 kknot;
     n_phone_sms_seed_sunday_morning["phone_sms_seed_sunday_morning"]
+    class n_phone_sms_seed_sunday_morning kknot;
     n_phone_sms_take_phone_sunday_morning["phone_sms_take_phone_sunday_morning"]
+    class n_phone_sms_take_phone_sunday_morning kknot;
     n_phone_sms_tuesday_case_followup["phone_sms_tuesday_case_followup"]
+    class n_phone_sms_tuesday_case_followup kknot;
     n_sms_service_done["sms_service_done"]
+    class n_sms_service_done kknot;
     end
     subgraph sg_93_phone_messenger_ink["93_phone_messenger.ink"]
     n_msg_artem_loop2_place_choice["msg_artem_loop2_place_choice"]
+    class n_msg_artem_loop2_place_choice kknot;
     n_msg_artem_loop2_place_pressure["msg_artem_loop2_place_pressure"]
+    class n_msg_artem_loop2_place_pressure kknot;
     n_msg_mila_loop2_place_choice["msg_mila_loop2_place_choice"]
+    class n_msg_mila_loop2_place_choice kknot;
     n_msg_mila_loop2_place_pressure["msg_mila_loop2_place_pressure"]
+    class n_msg_mila_loop2_place_pressure kknot;
     n_msg_npc_place_sent["msg_npc_place_sent"]
+    class n_msg_npc_place_sent kknot;
     n_msg_thread_artem["msg_thread_artem"]
+    class n_msg_thread_artem kknot;
     n_msg_thread_artem_iter1["msg_thread_artem_iter1"]
+    class n_msg_thread_artem_iter1 kknot;
     n_msg_thread_artem_loop2["msg_thread_artem_loop2"]
+    class n_msg_thread_artem_loop2 kknot;
     n_msg_thread_mila["msg_thread_mila"]
+    class n_msg_thread_mila kknot;
     n_msg_thread_mila_iter1["msg_thread_mila_iter1"]
+    class n_msg_thread_mila_iter1 kknot;
     n_msg_thread_mila_loop2["msg_thread_mila_loop2"]
+    class n_msg_thread_mila_loop2 kknot;
     n_msg_thread_prod_bot["msg_thread_prod_bot"]
+    class n_msg_thread_prod_bot kknot;
     n_msg_thread_unknown["msg_thread_unknown"]
+    class n_msg_thread_unknown kknot;
     n_msg_thread_work_team["msg_thread_work_team"]
+    class n_msg_thread_work_team kknot;
     n_phone_msg_park_arrival_prompt["phone_msg_park_arrival_prompt"]
+    class n_phone_msg_park_arrival_prompt kknot;
     n_phone_msg_park_where_reply_bench["phone_msg_park_where_reply_bench"]
+    class n_phone_msg_park_where_reply_bench kknot;
     n_phone_msg_park_where_reply_path["phone_msg_park_where_reply_path"]
+    class n_phone_msg_park_where_reply_path kknot;
     n_phone_msg_seed_sunday_morning["phone_msg_seed_sunday_morning"]
+    class n_phone_msg_seed_sunday_morning kknot;
     n_phone_msg_sunday_evening_home_thanks["phone_msg_sunday_evening_home_thanks"]
+    class n_phone_msg_sunday_evening_home_thanks kknot;
     n_phone_msg_sunday_evening_reply_calm["phone_msg_sunday_evening_reply_calm"]
+    class n_phone_msg_sunday_evening_reply_calm kknot;
     n_phone_msg_sunday_evening_reply_warm["phone_msg_sunday_evening_reply_warm"]
+    class n_phone_msg_sunday_evening_reply_warm kknot;
     n_phone_msg_sunday_invite_after_coffee["phone_msg_sunday_invite_after_coffee"]
+    class n_phone_msg_sunday_invite_after_coffee kknot;
     n_phone_msg_take_phone_sunday_morning["phone_msg_take_phone_sunday_morning"]
+    class n_phone_msg_take_phone_sunday_morning kknot;
     end
     subgraph sg_94_phone_mail_ink["94_phone_mail.ink"]
     n_phone_mail_seed_sunday_morning["phone_mail_seed_sunday_morning"]
+    class n_phone_mail_seed_sunday_morning kknot;
     end
     subgraph sg_95_phone_calls_ink["95_phone_calls.ink"]
     n_phone_call_seed_sunday_morning["phone_call_seed_sunday_morning"]
+    class n_phone_call_seed_sunday_morning kknot;
     end
     subgraph sg_archive_02_sunday_date_old_ink["archive/02_sunday_date_old.ink"]
     n_bar_counter_interact["bar_counter_interact"]
+    class n_bar_counter_interact kknot;
     n_cafe_bar_interact["cafe_bar_interact"]
+    class n_cafe_bar_interact kknot;
     n_cafe_bar_interact_right_place["cafe_bar_interact_right_place"]
+    class n_cafe_bar_interact_right_place kknot;
     n_cafe_bar_interact_wrong_place["cafe_bar_interact_wrong_place"]
+    class n_cafe_bar_interact_wrong_place kknot;
     n_cafe_window_table["cafe_window_table"]
+    class n_cafe_window_table kknot;
     n_leave_bar["leave_bar"]
+    class n_leave_bar kknot;
     n_leave_cafe["leave_cafe"]
+    class n_leave_cafe kknot;
     n_leave_park["leave_park"]
+    class n_leave_park kknot;
     n_leave_shop["leave_shop"]
+    class n_leave_shop kknot;
     n_leave_viewpoint["leave_viewpoint"]
+    class n_leave_viewpoint kknot;
     n_park_bench_interact["park_bench_interact"]
+    class n_park_bench_interact kknot;
     n_park_bench_main_talk["park_bench_main_talk"]
+    class n_park_bench_main_talk kknot;
     n_park_bin_prompt["park_bin_prompt"]
+    class n_park_bin_prompt kknot;
     n_park_entrance_view["park_entrance_view"]
+    class n_park_entrance_view kknot;
     n_park_message_where_are_you["park_message_where_are_you"]
+    class n_park_message_where_are_you kknot;
     n_park_npc_arrives["park_npc_arrives"]
+    class n_park_npc_arrives kknot;
     n_park_offer_place["park_offer_place"]
+    class n_park_offer_place kknot;
     n_park_path_main_talk["park_path_main_talk"]
+    class n_park_path_main_talk kknot;
     n_park_path_trees["park_path_trees"]
+    class n_park_path_trees kknot;
     n_park_path_walk["park_path_walk"]
+    class n_park_path_walk kknot;
     n_park_river_view["park_river_view"]
+    class n_park_river_view kknot;
     n_shop_counter_interact["shop_counter_interact"]
+    class n_shop_counter_interact kknot;
     n_shop_drinks_interact["shop_drinks_interact"]
+    class n_shop_drinks_interact kknot;
     n_shop_snacks_interact["shop_snacks_interact"]
+    class n_shop_snacks_interact kknot;
     n_sunday_date_cafe_arrival["sunday_date_cafe_arrival"]
+    class n_sunday_date_cafe_arrival kknot;
     n_sunday_date_cafe_settle["sunday_date_cafe_settle"]
+    class n_sunday_date_cafe_settle kknot;
     n_sunday_date_park_arrival["sunday_date_park_arrival"]
+    class n_sunday_date_park_arrival kknot;
     n_sunday_date_park_settle["sunday_date_park_settle"]
+    class n_sunday_date_park_settle kknot;
     n_sunday_shop_arrival["sunday_shop_arrival"]
+    class n_sunday_shop_arrival kknot;
     n_sunday_shop_arrival_pre_date["sunday_shop_arrival_pre_date"]
+    class n_sunday_shop_arrival_pre_date kknot;
     n_sunday_shop_arrival_with_npc["sunday_shop_arrival_with_npc"]
+    class n_sunday_shop_arrival_with_npc kknot;
     n_sunday_shop_settle["sunday_shop_settle"]
+    class n_sunday_shop_settle kknot;
     n_sunday_viewpoint_arrival["sunday_viewpoint_arrival"]
+    class n_sunday_viewpoint_arrival kknot;
     n_sunday_viewpoint_settle["sunday_viewpoint_settle"]
+    class n_sunday_viewpoint_settle kknot;
     n_take_park_trash_cup["take_park_trash_cup"]
+    class n_take_park_trash_cup kknot;
     n_view_railing_interact["view_railing_interact"]
+    class n_view_railing_interact kknot;
     end
     subgraph sg_archive_cafe_sunday_ink["archive/cafe_sunday.ink"]
     n_cafe_backroom_board_interact["cafe_backroom_board_interact"]
+    class n_cafe_backroom_board_interact kknot;
     n_cafe_backroom_books_interact["cafe_backroom_books_interact"]
+    class n_cafe_backroom_books_interact kknot;
     n_cafe_backroom_coatrack_interact["cafe_backroom_coatrack_interact"]
+    class n_cafe_backroom_coatrack_interact kknot;
     n_cafe_backroom_mirror_interact["cafe_backroom_mirror_interact"]
+    class n_cafe_backroom_mirror_interact kknot;
     n_cafe_corner_main_talk["cafe_corner_main_talk"]
+    class n_cafe_corner_main_talk kknot;
     n_cafe_corner_shelf_interact["cafe_corner_shelf_interact"]
+    class n_cafe_corner_shelf_interact kknot;
     n_cafe_corner_table_interact["cafe_corner_table_interact"]
+    class n_cafe_corner_table_interact kknot;
     n_cafe_corner_window_interact["cafe_corner_window_interact"]
+    class n_cafe_corner_window_interact kknot;
     n_cafe_hall_light_interact["cafe_hall_light_interact"]
+    class n_cafe_hall_light_interact kknot;
     n_sunday_date_cafe_arrival_after_gift["sunday_date_cafe_arrival_after_gift"]
+    class n_sunday_date_cafe_arrival_after_gift kknot;
     end
     subgraph sg_archive_shop_sunday_ink["archive/shop_sunday.ink"]
     n_shop_cleaning_supplies_interact["shop_cleaning_supplies_interact"]
+    class n_shop_cleaning_supplies_interact kknot;
     n_shop_cleaning_supplies_pre_date["shop_cleaning_supplies_pre_date"]
+    class n_shop_cleaning_supplies_pre_date kknot;
     n_shop_cleaning_supplies_with_npc["shop_cleaning_supplies_with_npc"]
+    class n_shop_cleaning_supplies_with_npc kknot;
     n_shop_drinks_pre_date["shop_drinks_pre_date"]
+    class n_shop_drinks_pre_date kknot;
     n_shop_drinks_with_npc["shop_drinks_with_npc"]
+    class n_shop_drinks_with_npc kknot;
     n_shop_household_goods_interact["shop_household_goods_interact"]
+    class n_shop_household_goods_interact kknot;
     n_shop_household_goods_pre_date["shop_household_goods_pre_date"]
+    class n_shop_household_goods_pre_date kknot;
     n_shop_household_goods_with_npc["shop_household_goods_with_npc"]
+    class n_shop_household_goods_with_npc kknot;
     n_shop_paper_goods_interact["shop_paper_goods_interact"]
+    class n_shop_paper_goods_interact kknot;
     n_shop_paper_goods_pre_date["shop_paper_goods_pre_date"]
+    class n_shop_paper_goods_pre_date kknot;
     n_shop_paper_goods_with_npc["shop_paper_goods_with_npc"]
+    class n_shop_paper_goods_with_npc kknot;
     n_shop_sign_interact["shop_sign_interact"]
+    class n_shop_sign_interact kknot;
     n_shop_snacks_pre_date["shop_snacks_pre_date"]
+    class n_shop_snacks_pre_date kknot;
     n_shop_snacks_with_npc["shop_snacks_with_npc"]
+    class n_shop_snacks_with_npc kknot;
     n_shop_window_interact["shop_window_interact"]
+    class n_shop_window_interact kknot;
     n_sunday_shop_street_arrival["sunday_shop_street_arrival"]
+    class n_sunday_shop_street_arrival kknot;
     end
     subgraph sg_locations_archive_tuesday_ink["locations/archive_tuesday.ink"]
     n_archive_shelves_interact["archive_shelves_interact"]
+    class n_archive_shelves_interact kknot;
     n_leave_archive["leave_archive"]
+    class n_leave_archive kknot;
     end
     subgraph sg_locations_commute_monday_ink["locations/commute_monday.ink"]
     n_mon_commute_entry["mon_commute_entry"]
+    class n_mon_commute_entry kknot;
     n_mon_commute_office_approach["mon_commute_office_approach"]
+    class n_mon_commute_office_approach kknot;
     n_mon_commute_walk_auto["mon_commute_walk_auto"]
+    class n_mon_commute_walk_auto kknot;
     n_mon_commute_walk_observe["mon_commute_walk_observe"]
+    class n_mon_commute_walk_observe kknot;
     n_mon_commute_walk_steady["mon_commute_walk_steady"]
+    class n_mon_commute_walk_steady kknot;
     n_mon_commute_work_district["mon_commute_work_district"]
+    class n_mon_commute_work_district kknot;
     end
     subgraph sg_locations_office_monday_ink["locations/office_monday.ink"]
     n_leave_work["leave_work"]
+    class n_leave_work kknot;
     n_meeting_room_table_after["meeting_room_table_after"]
+    class n_meeting_room_table_after kknot;
     n_meeting_room_take_folder["meeting_room_take_folder"]
+    class n_meeting_room_take_folder kknot;
     n_mon_office_auto_standard["mon_office_auto_standard"]
+    class n_mon_office_auto_standard kknot;
     n_mon_office_case_router["mon_office_case_router"]
+    class n_mon_office_case_router kknot;
     n_mon_office_clarify["mon_office_clarify"]
+    class n_mon_office_clarify kknot;
     n_mon_office_core_choice["mon_office_core_choice"]
+    class n_mon_office_core_choice kknot;
     n_mon_office_day_end["mon_office_day_end"]
+    class n_mon_office_day_end kknot;
     n_mon_office_entry["mon_office_entry"]
+    class n_mon_office_entry kknot;
     n_mon_office_manual_standard["mon_office_manual_standard"]
+    class n_mon_office_manual_standard kknot;
     n_mon_office_npc_greeting["mon_office_npc_greeting"]
+    class n_mon_office_npc_greeting kknot;
     n_mon_office_npc_strange["mon_office_npc_strange"]
+    class n_mon_office_npc_strange kknot;
     n_mon_office_result_system_bias["mon_office_result_system_bias"]
+    class n_mon_office_result_system_bias kknot;
     n_mon_office_result_true_bias["mon_office_result_true_bias"]
+    class n_mon_office_result_true_bias kknot;
     n_mon_office_stop_auto["mon_office_stop_auto"]
+    class n_mon_office_stop_auto kknot;
     n_mon_office_system_warning["mon_office_system_warning"]
+    class n_mon_office_system_warning kknot;
     n_mon_office_task_intro["mon_office_task_intro"]
+    class n_mon_office_task_intro kknot;
     n_office_to_meeting_room_locked_mail["office_to_meeting_room_locked_mail"]
+    class n_office_to_meeting_room_locked_mail kknot;
     n_office_to_meeting_room_locked_turnstile["office_to_meeting_room_locked_turnstile"]
+    class n_office_to_meeting_room_locked_turnstile kknot;
     n_office_to_workspace_locked["office_to_workspace_locked"]
+    class n_office_to_workspace_locked kknot;
     n_office_turnstile_prompt["office_turnstile_prompt"]
+    class n_office_turnstile_prompt kknot;
     n_work_desk_case_file_prompt["work_desk_case_file_prompt"]
+    class n_work_desk_case_file_prompt kknot;
     n_work_desk_done["work_desk_done"]
+    class n_work_desk_done kknot;
     n_work_desk_needs_case_file["work_desk_needs_case_file"]
+    class n_work_desk_needs_case_file kknot;
     n_work_desk_read_mail["work_desk_read_mail"]
+    class n_work_desk_read_mail kknot;
     n_workspace_to_meeting_room_locked["workspace_to_meeting_room_locked"]
+    class n_workspace_to_meeting_room_locked kknot;
     end
     subgraph sg_locations_office_tuesday_ink["locations/office_tuesday.ink"]
     n_tue_route_after_review["tue_route_after_review"]
+    class n_tue_route_after_review kknot;
     n_tue_route_ask_npc["tue_route_ask_npc"]
+    class n_tue_route_ask_npc kknot;
     n_tue_route_entry["tue_route_entry"]
+    class n_tue_route_entry kknot;
     n_tue_route_office_return["tue_route_office_return"]
+    class n_tue_route_office_return kknot;
     n_tue_route_read_appeal["tue_route_read_appeal"]
+    class n_tue_route_read_appeal kknot;
     n_tue_route_read_log["tue_route_read_log"]
+    class n_tue_route_read_log kknot;
     n_tue_route_review_options["tue_route_review_options"]
+    class n_tue_route_review_options kknot;
     n_tue_route_to_rooftop["tue_route_to_rooftop"]
+    class n_tue_route_to_rooftop kknot;
     end
     subgraph sg_locations_park_sunday_ink["locations/park_sunday.ink"]
     n_park_bench_npc_show["park_bench_npc_show"]
+    class n_park_bench_npc_show kknot;
     n_park_npc_arrives_after_gift["park_npc_arrives_after_gift"]
+    class n_park_npc_arrives_after_gift kknot;
     n_park_path_npc_show["park_path_npc_show"]
+    class n_park_path_npc_show kknot;
     end
     subgraph sg_locations_rooftop_tuesday_ink["locations/rooftop_tuesday.ink"]
     n_tue_rooftop_ending_npc["tue_rooftop_ending_npc"]
+    class n_tue_rooftop_ending_npc kknot;
     n_tue_rooftop_ending_system["tue_rooftop_ending_system"]
+    class n_tue_rooftop_ending_system kknot;
     n_tue_rooftop_ending_true["tue_rooftop_ending_true"]
+    class n_tue_rooftop_ending_true kknot;
     n_tue_rooftop_entry["tue_rooftop_entry"]
+    class n_tue_rooftop_entry kknot;
     n_tue_rooftop_iter001_entry["tue_rooftop_iter001_entry"]
+    class n_tue_rooftop_iter001_entry kknot;
     n_tue_rooftop_iter001_finish["tue_rooftop_iter001_finish"]
+    class n_tue_rooftop_iter001_finish kknot;
     n_tue_rooftop_iter001_realization["tue_rooftop_iter001_realization"]
+    class n_tue_rooftop_iter001_realization kknot;
     n_tue_rooftop_iter001_talk["tue_rooftop_iter001_talk"]
+    class n_tue_rooftop_iter001_talk kknot;
     n_tue_rooftop_loop_entry["tue_rooftop_loop_entry"]
+    class n_tue_rooftop_loop_entry kknot;
     n_tue_rooftop_loop_route["tue_rooftop_loop_route"]
+    class n_tue_rooftop_loop_route kknot;
     n_tue_rooftop_loop_signal["tue_rooftop_loop_signal"]
+    class n_tue_rooftop_loop_signal kknot;
     n_tue_rooftop_loop_talk["tue_rooftop_loop_talk"]
+    class n_tue_rooftop_loop_talk kknot;
     end
     subgraph sg_locations_sunday_gift_reactions_ink["locations/sunday_gift_reactions.ink"]
     n_sunday_gift_react["sunday_gift_react"]
+    class n_sunday_gift_react kknot;
     n_sunday_gift_react_cafe["sunday_gift_react_cafe"]
+    class n_sunday_gift_react_cafe kknot;
     n_sunday_gift_react_park["sunday_gift_react_park"]
+    class n_sunday_gift_react_park kknot;
     end
     subgraph sg_locations_viewpoint_sunday_ink["locations/viewpoint_sunday.ink"]
     n_view_binoculars_interact["view_binoculars_interact"]
+    class n_view_binoculars_interact kknot;
     n_view_city_interact["view_city_interact"]
+    class n_view_city_interact kknot;
     n_view_corner_bench_interact["view_corner_bench_interact"]
+    class n_view_corner_bench_interact kknot;
     n_view_corner_glass_interact["view_corner_glass_interact"]
+    class n_view_corner_glass_interact kknot;
     n_view_corner_main_talk["view_corner_main_talk"]
+    class n_view_corner_main_talk kknot;
     n_view_corner_planter_interact["view_corner_planter_interact"]
+    class n_view_corner_planter_interact kknot;
     end
     subgraph sg_unknown["unknown"]
     n_global_decl["global decl"]
+    class n_global_decl kknot;
     end
+
 
     n_loop_entry -->|"Начать день"| n_day_start
     n_loop_entry -->|"Посмотреть в окно"| n_window_view
@@ -483,6 +857,146 @@ flowchart LR
     n_msg_artem_loop2_place_pressure -->|"«Если это розыгрыш — я хочу увидеть лиц…"| n_msg_artem_loop2_place_choice
     n_msg_artem_loop2_place_choice -->|"«Давай в кафе. Спокойно посидим.»"| n_msg_npc_place_sent
     n_msg_artem_loop2_place_choice -->|"«Давай в парк у реки. Хочется пройтись.»"| n_msg_npc_place_sent
+    s_apartment_hub -.-> n_sunday_home_after_date_router
+    s_apartment_hub ==>|"В спальню"| s_apartment_bedroom
+    s_apartment_hub ==>|"На кухню"| s_apartment_kitchen
+    s_apartment_hub -.->|"Выйти"| n_leave_apartment_prompt
+    s_apartment_hub -.->|"Зеркало"| n_look_hall_mirror
+    s_apartment_hub -.->|"Куртка и обувь"| n_sunday_get_dressed
+    s_apartment_bedroom -.-> n_apartment_bedroom_intro
+    s_apartment_bedroom -.->|"Телефон"| n_take_phone
+    s_apartment_bedroom -.->|"Рабочий стол"| n_bedroom_desk_morning
+    s_apartment_bedroom -.->|"Встать"| n_look_bed_morning
+    s_apartment_bedroom -.->|"Лечь спать"| n_sunday_sleep_in_bed
+    s_apartment_bedroom ==>|"В ванную"| s_apartment_bathroom
+    s_apartment_bedroom -.->|"Окно"| n_look_bedroom_window
+    s_apartment_bedroom ==>|"В коридор"| s_apartment_hub
+    s_apartment_bathroom -.-> n_enter_bathroom_morning_first
+    s_apartment_bathroom -.->|"Зеркало"| n_look_bathroom_mirror
+    s_apartment_bathroom -.->|"Щётка"| n_take_toothbrush
+    s_apartment_bathroom -.->|"Паста"| n_take_toothpaste
+    s_apartment_bathroom -.->|"Раковина"| n_bathroom_sink_prompt
+    s_apartment_bathroom -.->|"В спальню"| n_bathroom_exit_locked
+    s_apartment_bathroom ==>|"В спальню"| s_apartment_bedroom
+    s_apartment_kitchen -.-> n_enter_kitchen_morning_first
+    s_apartment_kitchen -.->|"Кофе"| n_use_coffee_setup_no_mug
+    s_apartment_kitchen -.->|"Кружка"| n_take_mug
+    s_apartment_kitchen -.->|"Яблоко"| n_take_kitchen_apple
+    s_apartment_kitchen -.->|"Холодильник"| n_look_kitchen_fridge
+    s_apartment_kitchen -.->|"Окно"| n_look_kitchen_window
+    s_apartment_kitchen ==>|"В коридор"| s_apartment_hub
+    s_monday_apartment_bedroom_morning -.-> n_mon_home_bedroom_intro
+    s_monday_apartment_bedroom_morning -.->|"Кровать"| n_mon_home_bed
+    s_monday_apartment_bedroom_morning -.->|"Рабочий стол"| n_mon_home_bedroom_desk
+    s_monday_apartment_bedroom_morning -.->|"Умыться"| n_mon_home_wash_up
+    s_monday_apartment_bedroom_morning ==>|"В коридор"| s_monday_apartment_hall_morning
+    s_monday_apartment_hall_morning -.-> n_mon_home_hall_intro
+    s_monday_apartment_hall_morning ==>|"В спальню"| s_monday_apartment_bedroom_morning
+    s_monday_apartment_hall_morning ==>|"На кухню"| s_monday_apartment_kitchen_morning
+    s_monday_apartment_hall_morning -.->|"Зеркало"| n_mon_home_hall_mirror
+    s_monday_apartment_hall_morning -.->|"Пропуск"| n_mon_home_take_work_card
+    s_monday_apartment_hall_morning -.->|"Обувь и куртка"| n_mon_home_get_dressed
+    s_monday_apartment_hall_morning -.->|"Выйти"| n_mon_home_leave_apartment_locked
+    s_monday_apartment_hall_morning -.->|"Выйти"| n_mon_home_leave_apartment
+    s_monday_apartment_kitchen_morning -.-> n_mon_home_kitchen_intro
+    s_monday_apartment_kitchen_morning -.->|"Кофе"| n_mon_home_kitchen_coffee
+    s_monday_apartment_kitchen_morning -.->|"Кружка"| n_mon_home_kitchen_coffee_after
+    s_monday_apartment_kitchen_morning -.->|"Вода"| n_mon_home_kitchen_water
+    s_monday_apartment_kitchen_morning -.->|"Завтрак"| n_mon_home_kitchen_breakfast
+    s_monday_apartment_kitchen_morning -.->|"Стол"| n_mon_home_kitchen_breakfast_after
+    s_monday_apartment_kitchen_morning -.->|"Окно"| n_mon_home_kitchen_window
+    s_monday_apartment_kitchen_morning ==>|"В коридор"| s_monday_apartment_hall_morning
+    s_tuesday_apartment_bedroom_morning -.-> n_tue_home_bedroom_intro
+    s_tuesday_apartment_bedroom_morning -.->|"Кровать"| n_tue_home_bed
+    s_tuesday_apartment_bedroom_morning -.->|"Телефон"| n_tue_home_check_phone
+    s_tuesday_apartment_bedroom_morning -.->|"Рабочий стол"| n_tue_home_bedroom_desk
+    s_tuesday_apartment_bedroom_morning -.->|"Умыться"| n_tue_home_wash_up
+    s_tuesday_apartment_bedroom_morning ==>|"В коридор"| s_tuesday_apartment_hall_morning
+    s_tuesday_apartment_hall_morning -.-> n_tue_home_hall_intro
+    s_tuesday_apartment_hall_morning ==>|"В спальню"| s_tuesday_apartment_bedroom_morning
+    s_tuesday_apartment_hall_morning ==>|"На кухню"| s_tuesday_apartment_kitchen_morning
+    s_tuesday_apartment_hall_morning -.->|"Зеркало"| n_tue_home_hall_mirror
+    s_tuesday_apartment_hall_morning -.->|"Обувь и куртка"| n_tue_home_get_ready
+    s_tuesday_apartment_hall_morning -.->|"Выйти"| n_tue_home_leave_apartment_locked
+    s_tuesday_apartment_hall_morning -.->|"Выйти"| n_tue_home_leave_apartment
+    s_tuesday_apartment_kitchen_morning -.-> n_tue_home_kitchen_intro
+    s_tuesday_apartment_kitchen_morning -.->|"Кофе"| n_tue_home_kitchen_coffee
+    s_tuesday_apartment_kitchen_morning -.->|"Кружка"| n_tue_home_kitchen_coffee_after
+    s_tuesday_apartment_kitchen_morning -.->|"Вода"| n_tue_home_kitchen_water
+    s_tuesday_apartment_kitchen_morning -.->|"Окно"| n_tue_home_kitchen_window
+    s_tuesday_apartment_kitchen_morning ==>|"В коридор"| s_tuesday_apartment_hall_morning
+    s_archive_hub -.->|"Стеллажи"| n_archive_shelves_interact
+    s_archive_hub -.-> n_leave_archive
+    s_bar_hub -.->|"Стойка бара"| n_bar_counter_interact
+    s_bar_hub -.-> n_leave_bar
+    s_cafe_hub -.-> n_sunday_date_cafe_arrival
+    s_cafe_hub -.->|"Заказ"| n_cafe_bar_interact
+    s_cafe_hub -.->|"Столик у окна"| n_cafe_window_table
+    s_cafe_hub -.->|"Зал"| n_cafe_hall_light_interact
+    s_cafe_hub ==>|"В уголок"| s_cafe_corner
+    s_cafe_hub ==>|"К проходу"| s_cafe_backroom
+    s_cafe_hub -.->|"Уйти"| n_leave_cafe
+    s_cafe_corner -.->|"Разговор"| n_cafe_corner_main_talk
+    s_cafe_corner -.->|"Столик"| n_cafe_corner_table_interact
+    s_cafe_corner -.->|"Окно"| n_cafe_corner_window_interact
+    s_cafe_corner -.->|"Полка"| n_cafe_corner_shelf_interact
+    s_cafe_corner ==>|"В зал"| s_cafe_hub
+    s_cafe_backroom -.->|"Зеркало"| n_cafe_backroom_mirror_interact
+    s_cafe_backroom -.->|"Объявления"| n_cafe_backroom_board_interact
+    s_cafe_backroom -.->|"Вешалка"| n_cafe_backroom_coatrack_interact
+    s_cafe_backroom -.->|"Книги"| n_cafe_backroom_books_interact
+    s_cafe_backroom ==>|"В зал"| s_cafe_hub
+    s_work_hub -.->|"Турникет"| n_office_turnstile_prompt
+    s_work_hub -.->|"К рабочему месту"| n_office_to_workspace_locked
+    s_work_hub ==>|"К рабочему месту"| s_office_workspace
+    s_work_hub -.->|"В переговорку"| n_office_to_meeting_room_locked_turnstile
+    s_work_hub -.->|"В переговорку"| n_office_to_meeting_room_locked_mail
+    s_work_hub ==>|"В переговорку"| s_office_meeting_room
+    s_work_hub -.-> n_leave_work
+    s_office_workspace -.->|"Почта"| n_work_desk_read_mail
+    s_office_workspace -.->|"Рабочий стол"| n_work_desk_needs_case_file
+    s_office_workspace -.->|"Передать кейс"| n_work_desk_case_file_prompt
+    s_office_workspace -.->|"Рабочий стол"| n_work_desk_done
+    s_office_workspace -.->|"В переговорку"| n_workspace_to_meeting_room_locked
+    s_office_workspace ==>|"В переговорку"| s_office_meeting_room
+    s_office_workspace ==>|"В лобби"| s_work_hub
+    s_office_meeting_room -.->|"Папки"| n_meeting_room_take_folder
+    s_office_meeting_room -.->|"Пустой стол"| n_meeting_room_table_after
+    s_office_meeting_room ==>|"К рабочему месту"| s_office_workspace
+    s_office_meeting_room ==>|"В лобби"| s_work_hub
+    s_park_hub -.-> n_sunday_date_park_arrival
+    s_park_hub -.->|"Осмотреться"| n_park_entrance_view
+    s_park_hub -.->|"Урна"| n_park_bin_prompt
+    s_park_hub -.->|"Предложить"| n_park_offer_place
+    s_park_hub ==>|"К скамейке"| s_park_riverside_bench
+    s_park_hub ==>|"По аллее"| s_park_riverside_path
+    s_park_hub -.->|"Уйти"| n_leave_park
+    s_park_riverside_bench -.-> n_park_bench_npc_show
+    s_park_riverside_bench -.->|"Скамейка"| n_park_bench_interact
+    s_park_riverside_bench -.->|"Стаканчик"| n_take_park_trash_cup
+    s_park_riverside_bench -.->|"Поздороваться"| n_park_npc_arrives
+    s_park_riverside_bench -.->|"Река"| n_park_river_view
+    s_park_riverside_bench -.->|"Предложить"| n_park_offer_place
+    s_park_riverside_bench ==>|"Пройтись"| s_park_riverside_path
+    s_park_riverside_bench ==>|"К входу"| s_park_hub
+    s_park_riverside_path -.-> n_park_path_npc_show
+    s_park_riverside_path -.->|"Пройтись"| n_park_path_walk
+    s_park_riverside_path -.->|"Тень деревьев"| n_park_path_trees
+    s_park_riverside_path -.->|"Поздороваться"| n_park_npc_arrives
+    s_park_riverside_path -.->|"Предложить"| n_park_offer_place
+    s_park_riverside_path ==>|"К скамейке"| s_park_riverside_bench
+    s_park_riverside_path ==>|"К входу"| s_park_hub
+    s_view_hub -.-> n_sunday_viewpoint_arrival
+    s_view_hub -.->|"Поручни"| n_view_railing_interact
+    s_view_hub -.->|"Город"| n_view_city_interact
+    s_view_hub -.->|"Бинокль"| n_view_binoculars_interact
+    s_view_hub ==>|"К лавочке"| s_view_corner
+    s_view_hub -.->|"Уйти"| n_leave_viewpoint
+    s_view_corner -.->|"Сесть рядом"| n_view_corner_main_talk
+    s_view_corner -.->|"Скамейка"| n_view_corner_bench_interact
+    s_view_corner -.->|"Стекло"| n_view_corner_glass_interact
+    s_view_corner -.->|"Зелень"| n_view_corner_planter_interact
+    s_view_corner ==>|"К перилам"| s_view_hub
     n___start --> n_choose_character
   </pre>
   <script type="module">
