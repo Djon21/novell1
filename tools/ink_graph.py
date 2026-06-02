@@ -5,9 +5,15 @@ ink_graph.py — генератор Mermaid-карты Ink-истории.
 и строит flowchart в формате Mermaid: кноты как узлы, diverts (->)
 и choices как рёбра. Опционально кластеризует по .ink файлу.
 
+По умолчанию выводит только узлы, реально участвующие в потоке
+(источники или цели diverts). Это ~54 узла вместо 322 и нормально
+рендерится на GitHub. Листья (которые просто показывают текст и
+завершаются) — это entry-точки из Lua, на flow-карте они шум.
+
 Использование:
-    python tools/ink_graph.py
-    python tools/ink_graph.py --by-file          # группировать по файлу
+    python tools/ink_graph.py                    # flow-узлы (default, GitHub-friendly)
+    python tools/ink_graph.py --all              # ВСЕ 322 кнота (для mermaid.live)
+    python tools/ink_graph.py --by-file          # группировать по .ink файлу
     python tools/ink_graph.py --from choose_character
     python tools/ink_graph.py --top 60           # только топ-60 по рёбрам
     python tools/ink_graph.py --out docs/diagrams/chapter_01.mmd
@@ -309,6 +315,9 @@ def main() -> int:
     p.add_argument("--by-file", action="store_true", help="Cluster knots by source .ink file")
     p.add_argument("--from", dest="src", help="Filter: keep only knots reachable from this one (BFS)")
     p.add_argument("--top", type=int, help="Keep top-N knots by outgoing edge count")
+    p.add_argument("--all", action="store_true",
+                   help="Include all knots (default: only those involved in flow). "
+                        "Full graph is too large for GitHub Mermaid renderer.")
     p.add_argument("--print", action="store_true", help="Print to stdout instead of file")
     args = p.parse_args()
 
@@ -318,6 +327,20 @@ def main() -> int:
 
     knots, edges, entry = build_graph(args.json)
     print(f"Loaded {len(knots)} knots, {len(edges)} edges (entry: {entry})", file=sys.stderr)
+
+    # Default: only knots involved in actual flow (source or target of a divert).
+    # Other ~268 are leaf "show text and end" knots driven by Lua entry points.
+    if not args.all and not args.top:
+        involved: set[str] = set()
+        for s, t, _ in edges:
+            involved.add(s)
+            involved.add(t)
+        if entry:
+            involved.add(entry)
+        if involved:
+            knots = [k for k in knots if k in involved]
+            edges = [(s, t, x) for s, t, x in edges if s in involved and t in involved]
+            print(f"Filtered to {len(knots)} flow knots (use --all for all 322)", file=sys.stderr)
 
     if args.src:
         reachable = bfs_reachable(args.src, edges, set(knots))
