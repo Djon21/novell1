@@ -27,6 +27,12 @@ npm i -g @mermaid-js/mermaid-cli
 mmdc -i docs/diagrams/chapter_01.mmd -o docs/diagrams/chapter_01.svg
 ```
 
+> **Примечание:** `mmdc` v11+ не понимает ` ```mermaid ` fence (ожидает raw). Перед `mmdc` убери fence:
+> ```bash
+> Get-Content docs\diagrams\chapter_01.mmd | Where-Object { $_ -ne '```mermaid' -and $_ -ne '```' } | Set-Content $env:TEMP\chapter_01_raw.mmd
+> mmdc -i $env:TEMP\chapter_01_raw.mmd -o chapter_01.svg
+> ```
+
 ## Как читать
 
 - 🟦 `▶ START` (синий) — точка входа из `chapter_01.json` → обычно `choose_character`

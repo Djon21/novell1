@@ -177,7 +177,16 @@ def safe_id(name: str) -> str:
 
 
 def truncate(text: str, n: int = 40) -> str:
-    text = text.replace("\n", " ").replace('"', "'").strip()
+    # Mermaid treats some chars as syntax inside labels:
+    #   " quotes open/close label, < > render as HTML, | ends the edge label,
+    #   # starts a comment, [ ] { } ( ) open node shapes. Strip them all.
+    text = (text.replace("\n", " ")
+                .replace('"', "'")
+                .replace("|", "/")
+                .replace("<", "")
+                .replace(">", ""))
+    # collapse runs of whitespace
+    text = " ".join(text.split()).strip()
     return text if len(text) <= n else text[: n - 1] + "…"
 
 
@@ -216,9 +225,11 @@ def render_mermaid(knots: list[str],
         return keep is None or k in keep
 
     lines: list[str] = ["```mermaid", "flowchart LR"]
-    lines.append("    classDef start fill:#7ab8ff,stroke:#2563eb,color:#0b1220;")
-    lines.append("    classDef done  fill:#86efac,stroke:#16a34a,color:#052e16;")
-    lines.append("    classDef end   fill:#fca5a5,stroke:#dc2626,color:#450a0a;")
+    # NOTE: 'end' is a reserved keyword in Mermaid flowchart syntax.
+    # Use prefixed class names to avoid the parse error.
+    lines.append("    classDef kstart fill:#7ab8ff,stroke:#2563eb,color:#0b1220;")
+    lines.append("    classDef kdone  fill:#86efac,stroke:#16a34a,color:#052e16;")
+    lines.append("    classDef kend   fill:#fca5a5,stroke:#dc2626,color:#450a0a;")
     lines.append("")
 
     def emit_node(node_id: str, label: str, kind: str) -> None:
@@ -228,7 +239,7 @@ def render_mermaid(knots: list[str],
     # entry pseudo-node
     if entry and keep_k(entry):
         emit_node("n___start", "▶ START", "entry")
-        lines.append("    n___start:::start")
+        lines.append("    n___start:::kstart")
 
     # group by file
     for file_label in sorted(by_file.keys()):
@@ -280,7 +291,7 @@ def render_mermaid(knots: list[str],
                     lines.append(f'    {s} -->|"{truncate(text)}"| {node_id}')
                 else:
                     lines.append(f"    {s} --> {node_id}")
-        lines.append(f"    class {node_id} {kind};")
+        lines.append(f"    class {node_id} k{kind};")
 
     lines.append("```")
     lines.append("")
