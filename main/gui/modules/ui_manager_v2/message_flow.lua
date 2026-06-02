@@ -124,6 +124,12 @@ local function handle_ending(ctx, message_id, message, sender)
               .. " awareness=" .. tostring(meta.get("loop_awareness"))
               .. " false_count=" .. tostring(meta.get_false_endings_count()))
 
+        if id == "ending_npc" then
+            meta.add_journal_entry("npc_path")
+        elseif id == "ending_system" then
+            meta.add_journal_entry("system_path")
+        end
+
         reset_run_and_return_to_menu(ctx)
         return true
     elseif message_id == MSG.true_ending then
@@ -141,6 +147,8 @@ local function handle_ending(ctx, message_id, message, sender)
             return true
         end
 
+        meta.set("game_completed", true)
+        meta.add_journal_entry("synthesis")
         finish_chapter_and_return_to_menu(ctx, "[ui_manager_v2] true_ending -> iteration")
         return true
     end

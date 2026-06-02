@@ -944,20 +944,7 @@ local function push_vars_to_ink(track_in_state)
     set_story_value("loop_awareness",      meta.get("loop_awareness", 0),       track_in_state)
     set_story_value("completed_iterations",meta.get("completed_iterations", 0), track_in_state)
     set_story_value("false_endings_count", meta.get_false_endings_count(),      track_in_state)
-    set_story_value("narrative_stage",     meta.get("narrative_stage", 1),      track_in_state)
-    set_story_value("npc_convinced",       meta.get("npc_convinced", false),    track_in_state)
-    set_story_value("left_trace",          meta.get("left_trace", false),       track_in_state)
-    set_story_value("trace_discovered",    meta.get("trace_discovered", false), track_in_state)
-    -- Loop Journal — синхронизация записей из meta_state в Ink
-    local journal = meta.get_journal_entries and meta.get_journal_entries() or {}
-    local journal_ids = {
-        "first_observed", "error_pattern", "human_voice", "grey_car",
-        "npc_forget", "system_deaf", "comfort", "distorted",
-        "synthesis", "loop_exit"
-    }
-    for _, id in ipairs(journal_ids) do
-        set_story_value("journal_entry_" .. id, journal[id] == true, track_in_state)
-    end
+
 end
 
 local function set_inventory_story_context(ctx)
@@ -991,21 +978,7 @@ local function build_restore_history(saved_state)
         { name = "loop_awareness",      value = meta.get("loop_awareness", 0) },
         { name = "completed_iterations",value = meta.get("completed_iterations", 0) },
         { name = "false_endings_count", value = meta.get_false_endings_count() },
-        { name = "narrative_stage",     value = meta.get("narrative_stage", 1) },
-        { name = "npc_convinced",       value = meta.get("npc_convinced", false) },
-        { name = "left_trace",          value = meta.get("left_trace", false) },
-        { name = "trace_discovered",    value = meta.get("trace_discovered", false) },
     }
-    -- Loop Journal
-    local journal = meta.get_journal_entries and meta.get_journal_entries() or {}
-    local journal_ids = {
-        "first_observed", "error_pattern", "human_voice", "grey_car",
-        "npc_forget", "system_deaf", "comfort", "distorted",
-        "synthesis", "loop_exit"
-    }
-    for _, id in ipairs(journal_ids) do
-        table.insert(injected, { name = "journal_entry_" .. id, value = journal[id] == true })
-    end
 
     local form_values = name_case_forms_for_gender(sm.get_gender() or "male")
     for key, value in pairs(form_values) do

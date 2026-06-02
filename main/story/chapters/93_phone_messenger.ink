@@ -40,6 +40,20 @@
 # msg:add:calendar_bot:Сегодня: встреча без названия. Место: не указано.
 ->->
 
+=== phone_msg_sunday_invite_second ===
+{mc_gender == "female":
+    # msg:add:artem:Эй, ты там?
+    # msg:add:artem:Я так и не получил ответа.
+    # msg:add:artem:Всё в порядке?
+    # msg:need_reply:artem
+- else:
+    # msg:add:mila:Эй, ты там?
+    # msg:add:mila:Я так и не получила ответа.
+    # msg:add:mila:Всё в порядке?
+    # msg:need_reply:mila
+}
+->->
+
 === phone_msg_sunday_invite_after_coffee ===
 {mc_gender == "female":
     # msg:add:artem:Ты сегодня вообще живая?
@@ -115,8 +129,12 @@
 // -----------------------------------------------------------------------------
 
 === msg_thread_mila ===
-{iteration_number > 1 and loop2_work_check_done:
-    -> msg_thread_mila_loop2
+{iteration_number > 1:
+    {loop2_work_check_done:
+        -> msg_thread_mila_loop2
+    - else:
+        -> msg_thread_mila_loop2_reject
+    }
 - else:
     -> msg_thread_mila_iter1
 }
@@ -191,8 +209,12 @@
 
 
 === msg_thread_artem ===
-{iteration_number > 1 and loop2_work_check_done:
-    -> msg_thread_artem_loop2
+{iteration_number > 1:
+    {loop2_work_check_done:
+        -> msg_thread_artem_loop2
+    - else:
+        -> msg_thread_artem_loop2_reject
+    }
 - else:
     -> msg_thread_artem_iter1
 }
@@ -266,6 +288,104 @@
     -> DONE
 
 
+// -----------------------------------------------------------------------------
+// LOOP 2 PRE-OFFICE REJECT
+// ГГ видит то же сообщение, считает злой шуткой, отказывается.
+// После этого идёт проверять офис (думает что среда).
+// -----------------------------------------------------------------------------
+
+=== msg_thread_mila_loop2_reject ===
+# speaker:none
+Открываешь Messenger.
+
+Мила:
+«Ты сегодня вообще живой?»
+«Я уже второй кофе пью.»
+«Выберемся куда-нибудь, пока день не стал совсем домашним?»
+
+# speaker:mc
+Слово в слово.
+
+Не "похоже". Не "почти". Ровно те же три сообщения, в том же порядке.
+
+# speaker:none
+Если сегодня среда — это не может быть воскресное приглашение. Это либо злая шутка, либо что-то, на что не хочется отвечать прямо сейчас.
+
+* [«Очень смешно. Не сегодня.»]
+    # msg:reply:mila:Очень смешно. Не сегодня.
+    # msg:add:mila:Что смешно?
+    # msg:add:mila:Я просто спросила.
+    ~ INSIGHT = INSIGHT + 1
+    -> msg_loop2_reject_done
+
+* [«Это какой-то розыгрыш?»]
+    # msg:reply:mila:Это какой-то розыгрыш?
+    # msg:add:mila:Какой розыгрыш?
+    # msg:add:mila:Ты чего?
+    ~ INSIGHT = INSIGHT + 1
+    -> msg_loop2_reject_done
+
+* [Закрыть чат]
+    # msg:read:mila
+    -> msg_loop2_reject_done
+
+
+=== msg_thread_artem_loop2_reject ===
+# speaker:none
+Открываешь Messenger.
+
+Артём:
+«Ты сегодня вообще живая?»
+«Я уже второй кофе пью.»
+«Выберемся куда-нибудь, пока день не стал совсем домашним?»
+
+# speaker:mc
+Слово в слово.
+
+Не "похоже". Не "почти". Ровно те же три сообщения, в том же порядке.
+
+# speaker:none
+Если сегодня среда — это не может быть воскресное приглашение. Это либо злая шутка, либо что-то, на что не хочется отвечать прямо сейчас.
+
+* [«Очень смешно. Не сегодня.»]
+    # msg:reply:artem:Очень смешно. Не сегодня.
+    # msg:add:artem:Что смешно?
+    # msg:add:artem:Я просто спросил.
+    ~ INSIGHT = INSIGHT + 1
+    -> msg_loop2_reject_done
+
+* [«Это какой-то розыгрыш?»]
+    # msg:reply:artem:Это какой-то розыгрыш?
+    # msg:add:artem:Какой розыгрыш?
+    # msg:add:artem:Ты чего?
+    ~ INSIGHT = INSIGHT + 1
+    -> msg_loop2_reject_done
+
+* [Закрыть чат]
+    # msg:read:artem
+    -> msg_loop2_reject_done
+
+
+=== msg_loop2_reject_done ===
+# speaker:none
+Телефон ложится на стол. Сообщение остаётся без ответа.
+
+# speaker:mc
+Сначала офис. Если сегодня среда — город должен вести себя как среда.
+
+# set_flag:loop2_first_invite_rejected=true
+~ loop2_first_invite_rejected = true
+# quest:done:reply_npc
+# hud:hint:phone:off
+# return_to_scene
+-> DONE
+
+
+// -----------------------------------------------------------------------------
+// LOOP 2 POST-OFFICE ACCEPT
+// После проверки офиса ГГ принимает приглашение.
+// -----------------------------------------------------------------------------
+
 === msg_thread_mila_loop2 ===
 # speaker:none
 Открываешь Messenger.
@@ -278,7 +398,7 @@
 # speaker:mc
 Слово в слово.
 
-Не “похоже”. Не “почти”. Ровно так же.
+Не "похоже". Не "почти". Ровно так же.
 
 * [«Очень смешно.»]
     # msg:reply:mila:Очень смешно.

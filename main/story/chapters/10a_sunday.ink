@@ -567,16 +567,38 @@
 
 ~ loop2_work_check_done = true
 ~ loop2_invite_after_office_sent = true
-~ sunday_messenger_invite_sent = true
 ~ anomaly_noticed = true
 ~ INSIGHT = INSIGHT + 1
 # set_flag:loop2_work_check_done=true
 # set_flag:loop2_invite_after_office_sent=true
-# set_flag:sunday_messenger_invite_sent=true
--> phone_msg_sunday_invite_after_coffee ->
+{mc_gender == "female":
+    # msg:add:artem:Эй, ты там?
+    # msg:add:artem:Я так и не получил ответа.
+    # msg:add:artem:Всё в порядке?
+    # msg:need_reply:artem
+    # msg:prompt:artem:msg_thread_artem:ОТВЕТИТЬ
+- else:
+    # msg:add:mila:Эй, ты там?
+    # msg:add:mila:Я так и не получила ответа.
+    # msg:add:mila:Всё в порядке?
+    # msg:need_reply:mila
+    # msg:prompt:mila:msg_thread_mila:ОТВЕТИТЬ
+}
 # quest:start:reply_npc
 # hud:hint:phone
-# phone:app:messenger
+-> loop2_return_home_after_office
+
+=== loop2_return_home_after_office ===
+# speaker:none
+Обратная дорога занимает меньше времени, чем путь сюда. Может, потому что теперь не нужно никуда торопиться. Может, потому что тело уже знает маршрут.
+
+Двор встречает тем же светом, что и утром. Серая машина всё ещё стоит у подъезда — или это другая серая машина. Разница сейчас не имеет значения.
+
+Замок щёлкает. Квартира принимает обратно без вопросов: тот же коридор, то же зеркало, та же тишина, которая не спрашивает, зачем ты уходил{mc_gender == "female":а|}.
+
+# bg:bg_apartment_hall_day
+# set_flag:loop2_returned_home=true
+# goto_scene:apartment_hub
 -> DONE
 
 // ================================================================

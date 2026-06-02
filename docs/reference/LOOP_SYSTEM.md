@@ -127,41 +127,44 @@ Ink-история запускается заново и всегда дохо�
 
 ## 4. Концовки и переход итераций
 
-### Итерация 001 vs 002+: разная логика
+### Петля 1 vs Петля 2: разная логика
 
-- **Итерация 001** — **линейная**. Петля ещё не запущена, ложных концовок нет, true ending недоступен. Концовка одна — переход в следующую итерацию через `# chapter_finished`.
-- **Итерация 002+** — петля активна. Появляются ложные концовки `# loop:end:false:*` и истинная `# loop:end:true` (после двух уникальных ложных).
+- **Петля 1 (итерация 001)** — **линейная**. Ложных концовок нет, true ending недоступен. Концовка одна — переход в петлю 2 через `loop1_to_iter2_reset`.
+- **Петля 2 (итерация 002)** — петля активна. Появляются ложные концовки `# loop:end:false:*` и истинная `# loop:end:true` (после двух уникальных ложных). После true ending — эпилог и `game_completed = true`.
 
-Runtime-страховка: если на итерации 001 встречается `# loop:end:false:*` или `# loop:end:true` (например, из-за промаха в авторинге), они трактуются как `# chapter_finished` — игрок не «застрянет» в искусственной петле.
+Runtime-страховка: если в петле 1 встречается `# loop:end:false:*` или `# loop:end:true` (например, из-за промаха в авторинге), они трактуются как `# chapter_finished` — игрок не «застрянет» в искусственной петле.
 
 ### Теги ink
 
-| Тег | Итерация 001 | Итерация 002+ |
+| Тег | Петля 1 | Петля 2 |
 |---|---|---|
 | `# chapter_finished` | → `meta.complete_iteration()` → меню | то же |
-| `# loop:end:false:ID` | трактуется как `chapter_finished` (warn) | `meta.record_false_ending(ID)` → restart той же итерации |
-| `# loop:end:true` | трактуется как `chapter_finished` (warn) | требует `false_endings_count >= 2`; иначе runtime не должен засчитывать True Ending |
+| `# loop:end:false:ID` | трактуется как `chapter_finished` (warn) | `meta.record_false_ending(ID)` → restart петли 2 |
+| `# loop:end:true` | трактуется как `chapter_finished` (warn) | требует `false_endings_count >= 2`; → эпилог → `game_completed = true` → меню |
 
 ### Ложная концовка (`# loop:end:false:ID`)
 
 - Вызывает `meta.record_false_ending(ID)`
 - Повышает `loop_awareness` **только если такой ID ещё не встречался**
+- Добавляет journal entry (`npc_path` или `system_path`)
 - Очищает run-state
-- **Перезапускает текущую итерацию БЕЗ увеличения** `iteration_number`
+- **Перезапускает петлю 2 БЕЗ увеличения** `iteration_number`
 
 ### Истинная концовка (`# loop:end:true`)
 
 - Доступна, когда `false_endings_count >= 2` (две уникальные ложные)
+- Добавляет journal entry `synthesis`
+- Ставит `game_completed = true`
 - Завершает главу через `meta.complete_iteration()`
 - Очищает список ложных концовок
-- Переводит игрока в следующую итерацию
+- Возвращает в меню — игра пройдена
 
 ### `meta.complete_iteration()` делает:
 
 - `iteration_number += 1`
 - `completed_iterations += 1`
 - Сбрасывает `false_endings_seen` и `false_endings_count`
-- **НЕ трогает** `mc_gender`, `loop_awareness`
+- **НЕ трогает** `mc_gender`, `loop_awareness`, `game_completed`
 
 ---
 

@@ -63,6 +63,7 @@ return {
                 visible_when = function(gs)
                     return not is_apartment_night(gs)
                        and (gs.get_flag("date_agreed")
+                            or gs.get_flag("loop2_first_invite_rejected")
                             or (gs.get_flag("loop2_fake_wednesday_started")
                                 and not gs.get_flag("loop2_work_check_done")))
                        and not gs.get_flag("sunday_dressed")

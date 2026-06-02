@@ -29,12 +29,7 @@ INCLUDE chapters/locations/office_tuesday.ink
 INCLUDE chapters/locations/archive_tuesday.ink
 INCLUDE chapters/locations/rooftop_tuesday.ink
 
-// Расследование
-INCLUDE chapters/50_investigation.ink
-INCLUDE chapters/51_awareness.ink
-INCLUDE chapters/60_stages.ink
-INCLUDE chapters/70_loop_journal.ink
-INCLUDE chapters/80_endings.ink
+// Расследование и концовки живут в locations/rooftop_tuesday.ink
 
 // Сервисные модули
 INCLUDE chapters/91_inventory_actions.ink

@@ -19,6 +19,8 @@
 ~ loop2_fake_wednesday_started = false
 ~ loop2_work_check_done = false
 ~ loop2_invite_after_office_sent = false
+~ loop2_first_invite_rejected = false
+~ loop2_returned_home = false
 
 // Сброс sunday-world state.
 ~ coffee_drunk = false
@@ -140,6 +142,8 @@
 # set_flag:loop2_fake_wednesday_started=false
 # set_flag:loop2_work_check_done=false
 # set_flag:loop2_invite_after_office_sent=false
+# set_flag:loop2_first_invite_rejected=false
+# set_flag:loop2_returned_home=false
 # set_flag:phone_active=false
 # set_flag:phone_taken=false
 # set_flag:got_out_of_bed=false
