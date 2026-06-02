@@ -491,9 +491,10 @@ def wrap_html(mmd: str, title: str = "Ink graph") -> str:
           font: 14px/1.4 -apple-system, "Segoe UI", system-ui, sans-serif; }}
   h1 {{ font-size: 18px; margin: 0 0 12px; }}
   .legend {{ color: #94a3b8; margin-bottom: 16px; }}
-  .mermaid {{ background: #1e293b; border-radius: 8px; padding: 16px;
-              overflow: auto; max-height: 90vh; }}
-  .controls {{ position: fixed; top: 12px; right: 12px; display: flex; gap: 8px; }}
+  .mermaid-wrapper {{ overflow: auto; max-height: 90vh;
+                      background: #1e293b; border-radius: 8px; }}
+  .mermaid {{ padding: 16px; }}
+  .controls {{ position: fixed; top: 12px; right: 12px; display: flex; gap: 8px; z-index: 1000; }}
   .controls button {{ background: #1e293b; color: #e2e8f0; border: 1px solid #334155;
                        border-radius: 4px; padding: 4px 10px; cursor: pointer; }}
   .controls button:hover {{ background: #334155; }}
@@ -506,23 +507,45 @@ def wrap_html(mmd: str, title: str = "Ink graph") -> str:
     &middot; <strong>Source:</strong> <code>main/story/chapter_01.json</code>
   </div>
   <div class="controls">
-    <button onclick="document.querySelector('.mermaid').style.zoom =
-      (parseFloat(document.querySelector('.mermaid').style.zoom || 1) * 0.9).toString()">−</button>
-    <button onclick="document.querySelector('.mermaid').style.zoom =
-      (parseFloat(document.querySelector('.mermaid').style.zoom || 1) * 1.1).toString()">+</button>
-    <button onclick="document.querySelector('.mermaid').style.zoom = '1'">100%</button>
+    <button id="zoom-out">−</button>
+    <button id="zoom-in">+</button>
+    <button id="zoom-reset">100%</button>
   </div>
-  <pre class="mermaid">
+  <div class="mermaid-wrapper">
+    <pre class="mermaid">
 {body}
-  </pre>
+    </pre>
+  </div>
   <script type="module">
     import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
     mermaid.initialize({{
-      startOnLoad: true,
       theme: "dark",
       flowchart: {{ htmlLabels: true, curve: "basis" }},
       securityLevel: "loose",
     }});
+    await mermaid.run({{ nodes: [document.querySelector(".mermaid")] }});
+    const svg = document.querySelector(".mermaid svg");
+    svg.removeAttribute("width");
+    svg.removeAttribute("height");
+    svg.style.width = "";
+    svg.style.height = "";
+    await new Promise(r => requestAnimationFrame(r));
+    const rc = svg.getBoundingClientRect();
+    let baseW = rc.width, baseH = rc.height, zoom = 1;
+    function update() {{
+      svg.style.width = (baseW * zoom) + "px";
+      svg.style.height = (baseH * zoom) + "px";
+    }}
+    document.getElementById("zoom-in").onclick = () => {{ zoom *= 1.1; update(); }};
+    document.getElementById("zoom-out").onclick = () => {{ zoom *= 0.9; update(); }};
+    document.getElementById("zoom-reset").onclick = () => {{ zoom = 1; update(); }};
+    // Also zoom on Ctrl+wheel / Cmd+wheel
+    document.querySelector(".mermaid-wrapper").addEventListener("wheel", e => {{
+      if (!e.ctrlKey && !e.metaKey) return;
+      e.preventDefault();
+      zoom *= e.deltaY < 0 ? 1.08 : 0.925;
+      update();
+    }}, {{ passive: false }});
   </script>
 </body>
 </html>
