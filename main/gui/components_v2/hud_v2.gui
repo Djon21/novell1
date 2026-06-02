@@ -449,8 +449,8 @@ nodes {
 }
 nodes {
   position {
-    x: 340.0
-    y: 617.0
+    x: 351.0
+    y: 540.0
     z: 0.2
   }
   size {
@@ -513,7 +513,7 @@ nodes {
     z: 0.22
   }
   size {
-    x: 512.0
+    x: 500.0
     y: 24.0
   }
   color {
@@ -531,12 +531,12 @@ nodes {
 }
 nodes {
   position {
-    x: 534.0
-    y: 8.0
+    x: 558.0
+    y: 27.0
     z: 0.22
   }
   size {
-    x: 60.0
+    x: 70.0
     y: 40.0
   }
   color {
@@ -546,13 +546,10 @@ nodes {
   }
   type: TYPE_BOX
   id: "armed_banner_cancel_bg"
-  pivot: PIVOT_SW
   parent: "armed_banner_root"
 }
 nodes {
   position {
-    x: 564.0
-    y: 28.0
     z: 0.23
   }
   size {
@@ -567,7 +564,7 @@ nodes {
   text: "\320\236\320\242\320\234\320\225\320\235\320\220"
   font: "jb_mono_16"
   id: "armed_banner_cancel_label"
-  parent: "armed_banner_root"
+  parent: "armed_banner_cancel_bg"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
@@ -898,7 +895,7 @@ nodes {
 }
 nodes {
   position {
-    x: 800.0
+    x: 795.0
     y: 645.0
     z: 0.1
   }

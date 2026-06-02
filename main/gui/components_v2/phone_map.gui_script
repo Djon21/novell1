@@ -63,6 +63,7 @@ local function init_poi_clones()
             end
         end
     end
+    gui.set_enabled(proto, false)
 end
 
 local function set_root_enabled(enabled)

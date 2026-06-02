@@ -40,9 +40,6 @@ textures {
   texture: "/main/images/phone/map2.atlas"
 }
 nodes {
-  position {
-    z: 0.0
-  }
   size {
     x: 1280.0
     y: 720.0
@@ -62,13 +59,13 @@ nodes {
 }
 nodes {
   position {
-    x: 505.0
-    y: 664.0
+    x: 520.0
+    y: 666.0
     z: 0.7
   }
   size {
-    x: 220.0
-    y: 36.0
+    x: 366.0
+    y: 34.0
   }
   color {
     x: 0.952
@@ -77,9 +74,9 @@ nodes {
   }
   type: TYPE_TEXT
   text: "\320\232\320\220\320\240\320\242\320\220"
-  font: "unbounded_bold_20"
+  font: "unbounded_bold_32"
   id: "map_head_title"
-  pivot: PIVOT_W
+  pivot: PIVOT_NW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "grp_panel"
   layer: "text"
@@ -151,13 +148,13 @@ nodes {
 }
 nodes {
   position {
-    x: 500.0
-    y: 40.0
+    x: 501.0
+    y: 41.0
     z: 0.32
   }
   size {
-    x: 727.0
-    y: 604.0
+    x: 726.0
+    y: 580.0
   }
   type: TYPE_BOX
   texture: "map2/mapa"
@@ -392,11 +389,6 @@ nodes {
     x: 50.0
     y: 50.0
   }
-  color {
-    x: 1
-    y: 1
-    z: 1
-  }
   type: TYPE_BOX
   texture: "map2/poi_icon_home"
   id: "poi_home_icon"
@@ -591,11 +583,6 @@ nodes {
     x: 20.0
     y: 60.3
   }
-  color {
-    x: 1
-    y: 1
-    z: 1
-  }
   type: TYPE_BOX
   texture: "map2/poi_stem"
   id: "poi_proto_stem"
@@ -612,11 +599,6 @@ nodes {
     x: 100.0
     y: 100.0
   }
-  color {
-    x: 1
-    y: 1
-    z: 1
-  }
   type: TYPE_BOX
   texture: "map2/poi_circle"
   id: "poi_proto_circle"
@@ -632,11 +614,6 @@ nodes {
   size {
     x: 110.0
     y: 110.0
-  }
-  color {
-    x: 1
-    y: 1
-    z: 1
   }
   type: TYPE_BOX
   texture: "map2/poi_center_dark"

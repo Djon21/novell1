@@ -500,8 +500,10 @@ local function handle_phone_input(self, action_id, action)
 
     if action_id ~= hash("touch") then return false end
 
-    if action.released then
-        local x, y = action.x or 0, action.y or 0
+    local x, y = action.x or 0, action.y or 0
+    local result = drag_scroll.handle(self.mail_drag, action)
+
+    if result == "tap" and action.released then
         if is_inside_rect("v_mail_tab_all_bg", x, y) then
             self.filter = "all"
             self.mail_offset = 0
@@ -515,7 +517,6 @@ local function handle_phone_input(self, action_id, action)
         end
     end
 
-    local result = drag_scroll.handle(self.mail_drag, action)
     return result == "swallow" or result == "tap"
 end
 

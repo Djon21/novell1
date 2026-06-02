@@ -63,7 +63,7 @@ nodes {
 }
 nodes {
   position {
-    x: 525.0
+    x: 520.0
     y: 666.0
     z: 0.556
   }
@@ -89,7 +89,7 @@ nodes {
 }
 nodes {
   position {
-    x: 524.0
+    x: 520.0
     y: 590.0
     z: 0.55
   }
@@ -178,7 +178,7 @@ nodes {
 }
 nodes {
   position {
-    x: 660.0
+    x: 657.0
     y: 590.0
     z: 0.055
   }
@@ -268,12 +268,12 @@ nodes {
 }
 nodes {
   position {
-    x: 524.0
+    x: 520.0
     y: 580.0
     z: 0.544
   }
   size {
-    x: 680.0
+    x: 690.0
     y: 1.0
   }
   color {
@@ -290,7 +290,7 @@ nodes {
 }
 nodes {
   position {
-    x: 524.0
+    x: 520.0
     y: 490.0
     z: 0.055
   }
@@ -312,13 +312,13 @@ nodes {
 }
 nodes {
   position {
-    x: 13.0
-    y: 12.0
+    x: 40.0
+    y: 40.0
     z: 0.053
   }
   size {
-    x: 44.0
-    y: 44.0
+    x: 50.0
+    y: 50.0
   }
   color {
     x: 0.49
@@ -326,19 +326,16 @@ nodes {
   }
   type: TYPE_BOX
   id: "chat1_av_bg"
-  pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
   parent: "chat1_bg"
   alpha: 0.2
 }
 nodes {
   position {
-    x: 22.0
-    y: 22.0
     z: 0.056
   }
   size {
-    x: 44.0
+    x: 48.0
     y: 18.0
   }
   color {
@@ -349,15 +346,14 @@ nodes {
   text: "\320\235\320\234"
   font: "jb_mono_bold_14"
   id: "chat1_av"
-  adjust_mode: ADJUST_MODE_STRETCH
   parent: "chat1_av_bg"
   outline_alpha: 0.0
   shadow_alpha: 0.0
 }
 nodes {
   position {
-    x: 70.0
-    y: 53.0
+    x: 76.0
+    y: 55.0
     z: 0.056
   }
   size {
@@ -404,7 +400,7 @@ nodes {
 }
 nodes {
   position {
-    x: 70.0
+    x: 76.0
     y: 31.0
     z: 0.056
   }
@@ -516,7 +512,7 @@ nodes {
 }
 nodes {
   position {
-    x: 1204.0
+    x: 1206.0
     y: 65.0
     z: 0.54
   }
@@ -538,7 +534,7 @@ nodes {
 }
 nodes {
   position {
-    x: 1203.0
+    x: 1206.0
     y: 428.0
     z: 0.545
   }
