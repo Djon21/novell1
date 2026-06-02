@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>chapter_01</title>
+<style>
+  body { margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0;
+          font: 14px/1.4 -apple-system, "Segoe UI", system-ui, sans-serif; }
+  h1 { font-size: 18px; margin: 0 0 12px; }
+  .legend { color: #94a3b8; margin-bottom: 16px; }
+  .mermaid { background: #1e293b; border-radius: 8px; padding: 16px;
+              overflow: auto; max-height: 90vh; }
+  .controls { position: fixed; top: 12px; right: 12px; display: flex; gap: 8px; }
+  .controls button { background: #1e293b; color: #e2e8f0; border: 1px solid #334155;
+                       border-radius: 4px; padding: 4px 10px; cursor: pointer; }
+  .controls button:hover { background: #334155; }
+</style>
+</head>
+<body>
+  <h1>chapter_01</h1>
+  <div class="legend">
+    <strong>Upstream:</strong> <code>tools/ink_graph.py</code>
+    &middot; <strong>Source:</strong> <code>main/story/chapter_01.json</code>
+  </div>
+  <div class="controls">
+    <button onclick="document.querySelector('.mermaid').style.zoom =
+      (parseFloat(document.querySelector('.mermaid').style.zoom || 1) * 0.9).toString()">−</button>
+    <button onclick="document.querySelector('.mermaid').style.zoom =
+      (parseFloat(document.querySelector('.mermaid').style.zoom || 1) * 1.1).toString()">+</button>
+    <button onclick="document.querySelector('.mermaid').style.zoom = '1'">100%</button>
+  </div>
+  <pre class="mermaid">
+flowchart LR
+    classDef kstart fill:#7ab8ff,stroke:#2563eb,color:#0b1220;
+    classDef kdone  fill:#86efac,stroke:#16a34a,color:#052e16;
+    classDef kend   fill:#fca5a5,stroke:#dc2626,color:#450a0a;
+
+    n___start((("▶ START")))
+    n___start:::kstart
+    subgraph sg_all["all"]
+    n_accept["accept"]
+    n_cafe_corner_main_talk["cafe_corner_main_talk"]
+    n_choose_character["choose_character"]
+    n_day_start["day_start"]
+    n_doubt["doubt"]
+    n_find_clue["find_clue"]
+    n_go_back["go_back"]
+    n_look_around["look_around"]
+    n_loop_entry["loop_entry"]
+    n_mon_commute_entry["mon_commute_entry"]
+    n_mon_commute_walk_auto["mon_commute_walk_auto"]
+    n_mon_commute_walk_observe["mon_commute_walk_observe"]
+    n_mon_commute_walk_steady["mon_commute_walk_steady"]
+    n_mon_office_clarify["mon_office_clarify"]
+    n_mon_office_core_choice["mon_office_core_choice"]
+    n_mon_office_manual_standard["mon_office_manual_standard"]
+    n_mon_office_npc_greeting["mon_office_npc_greeting"]
+    n_mon_office_npc_strange["mon_office_npc_strange"]
+    n_mon_office_stop_auto["mon_office_stop_auto"]
+    n_mon_office_task_intro["mon_office_task_intro"]
+    n_msg_artem_loop2_place_choice["msg_artem_loop2_place_choice"]
+    n_msg_artem_loop2_place_pressure["msg_artem_loop2_place_pressure"]
+    n_msg_mila_loop2_place_choice["msg_mila_loop2_place_choice"]
+    n_msg_mila_loop2_place_pressure["msg_mila_loop2_place_pressure"]
+    n_msg_npc_place_sent["msg_npc_place_sent"]
+    n_msg_thread_artem_iter1["msg_thread_artem_iter1"]
+    n_msg_thread_artem_loop2["msg_thread_artem_loop2"]
+    n_msg_thread_mila_iter1["msg_thread_mila_iter1"]
+    n_msg_thread_mila_loop2["msg_thread_mila_loop2"]
+    n_park_bench_main_talk["park_bench_main_talk"]
+    n_park_path_main_talk["park_path_main_talk"]
+    n_question_reality["question_reality"]
+    n_read_entries["read_entries"]
+    n_read_journal["read_journal"]
+    n_shop_drinks_with_npc["shop_drinks_with_npc"]
+    n_shop_snacks_with_npc["shop_snacks_with_npc"]
+    n_sunday_date_cafe_settle["sunday_date_cafe_settle"]
+    n_sunday_date_park_settle["sunday_date_park_settle"]
+    n_sunday_evening_finish["sunday_evening_finish"]
+    n_sunday_evening_home["sunday_evening_home"]
+    n_sunday_shop_arrival_with_npc["sunday_shop_arrival_with_npc"]
+    n_sunday_shop_settle["sunday_shop_settle"]
+    n_sunday_start_splash["sunday_start_splash"]
+    n_sunday_viewpoint_settle["sunday_viewpoint_settle"]
+    n_talk_to_someone["talk_to_someone"]
+    n_tue_rooftop_ending_true["tue_rooftop_ending_true"]
+    n_tue_rooftop_loop_route["tue_rooftop_loop_route"]
+    n_tue_rooftop_loop_talk["tue_rooftop_loop_talk"]
+    n_tue_route_ask_npc["tue_route_ask_npc"]
+    n_tue_route_read_appeal["tue_route_read_appeal"]
+    n_tue_route_read_log["tue_route_read_log"]
+    n_tue_route_review_options["tue_route_review_options"]
+    n_view_corner_main_talk["view_corner_main_talk"]
+    n_window_view["window_view"]
+    end
+
+    n_loop_entry -->|"Начать день"| n_day_start
+    n_loop_entry -->|"Посмотреть в окно"| n_window_view
+    n_choose_character -->|"Артём"| n_sunday_start_splash
+    n_choose_character -->|"Мила"| n_sunday_start_splash
+    n_sunday_evening_home -->|"Ответить тепло"| n_sunday_evening_finish
+    n_sunday_evening_home -->|"Ответить спокойно"| n_sunday_evening_finish
+    n_sunday_evening_home -->|"Не отвечать сразу"| n_sunday_evening_finish
+    n_park_bench_main_talk --> n_sunday_date_park_settle
+    n_park_bench_main_talk -->|"Пошутить про прогулку как план"| n_sunday_date_park_settle
+    n_park_bench_main_talk -->|"Признаться, что парк казался проще"| n_sunday_date_park_settle
+    n_park_path_main_talk --> n_sunday_date_park_settle
+    n_park_path_main_talk -->|"Подстроиться под общий темп"| n_sunday_date_park_settle
+    n_park_path_main_talk -->|"Признаться, что так меньше давления"| n_sunday_date_park_settle
+    n_cafe_corner_main_talk --> n_sunday_date_cafe_settle
+    n_cafe_corner_main_talk -->|"Пошутить про совместимость по заказу"| n_sunday_date_cafe_settle
+    n_cafe_corner_main_talk -->|"Признаться, что кафе казалось безопасны…"| n_sunday_date_cafe_settle
+    n_sunday_shop_arrival_with_npc -->|"Взять воду на двоих"| n_sunday_shop_settle
+    n_sunday_shop_arrival_with_npc -->|"Взять что-нибудь сладкое"| n_sunday_shop_settle
+    n_sunday_shop_arrival_with_npc --> n_sunday_shop_settle
+    n_shop_drinks_with_npc -->|"Взять воду на двоих"| n_sunday_shop_settle
+    n_shop_drinks_with_npc -->|"Взять холодный чай"| n_sunday_shop_settle
+    n_shop_snacks_with_npc -->|"Взять что-нибудь сладкое"| n_sunday_shop_settle
+    n_shop_snacks_with_npc --> n_sunday_shop_settle
+    n_view_corner_main_talk --> n_sunday_viewpoint_settle
+    n_view_corner_main_talk -->|"Пошутить про смотровую как серьёзный фи…"| n_sunday_viewpoint_settle
+    n_view_corner_main_talk -->|"Признаться, что не хотелось сразу домой"| n_sunday_viewpoint_settle
+    n_mon_commute_entry -->|"Идти на автомате"| n_mon_commute_walk_auto
+    n_mon_commute_entry -->|"Замедлиться и заметить маршрут"| n_mon_commute_walk_observe
+    n_mon_commute_entry -->|"Держать ровный темп"| n_mon_commute_walk_steady
+    n_mon_office_npc_greeting -->|"Пошутить про рабочую версию себя"| n_mon_office_task_intro
+    n_mon_office_npc_greeting -->|"Сказать, что всё слишком аккуратно"| n_mon_office_npc_strange
+    n_mon_office_npc_greeting -->|"Сразу открыть кейс"| n_mon_office_task_intro
+    n_mon_office_core_choice -->|"Согласиться со стандартным решением"| n_mon_office_manual_standard
+    n_mon_office_core_choice -->|"Запросить недостающие данные"| n_mon_office_clarify
+    n_mon_office_core_choice -->|"Остановить автоприменение"| n_mon_office_stop_auto
+    n_tue_route_review_options -->|"Посмотреть лог решения"| n_tue_route_read_log
+    n_tue_route_review_options --> n_tue_route_ask_npc
+    n_tue_route_review_options -->|"Открыть карточку апелляции"| n_tue_route_read_appeal
+    n_tue_rooftop_loop_talk -->|"Держаться за человека рядом"| n_tue_rooftop_loop_route
+    n_tue_rooftop_loop_talk -->|"Держаться за логику системы"| n_tue_rooftop_loop_route
+    n_tue_rooftop_loop_talk --> n_tue_rooftop_ending_true
+    n_find_clue -->|"Осмотреться"| n_look_around
+    n_find_clue -->|"Поговорить с кем-то"| n_talk_to_someone
+    n_question_reality -->|"Это правда происходит?"| n_doubt
+    n_question_reality -->|"Петля реальна"| n_accept
+    n_read_journal -->|"Прочитать записи"| n_read_entries
+    n_read_journal -->|"Вернуться"| n_go_back
+    n_msg_thread_mila_iter1 -->|"«А тебе куда хочется?»"| n_msg_npc_place_sent
+    n_msg_thread_mila_iter1 -->|"«Давай в кафе. Спокойно посидим.»"| n_msg_npc_place_sent
+    n_msg_thread_mila_iter1 -->|"«Давай в парк у реки. Хочется пройтись.»"| n_msg_npc_place_sent
+    n_msg_thread_artem_iter1 -->|"«А тебе куда хочется?»"| n_msg_npc_place_sent
+    n_msg_thread_artem_iter1 -->|"«Давай в кафе. Спокойно посидим.»"| n_msg_npc_place_sent
+    n_msg_thread_artem_iter1 -->|"«Давай в парк у реки. Хочется пройтись.»"| n_msg_npc_place_sent
+    n_msg_thread_mila_loop2 -->|"«Очень смешно.»"| n_msg_mila_loop2_place_pressure
+    n_msg_thread_mila_loop2 -->|"«Ты уже писала это.»"| n_msg_mila_loop2_place_pressure
+    n_msg_thread_mila_loop2 -->|"«Ок. Давай встретимся.»"| n_msg_mila_loop2_place_choice
+    n_msg_mila_loop2_place_pressure -->|"«Нет. Но давай всё равно встретимся.»"| n_msg_mila_loop2_place_choice
+    n_msg_mila_loop2_place_pressure -->|"«Если это розыгрыш — я хочу увидеть лиц…"| n_msg_mila_loop2_place_choice
+    n_msg_mila_loop2_place_choice -->|"«Давай в кафе. Спокойно посидим.»"| n_msg_npc_place_sent
+    n_msg_mila_loop2_place_choice -->|"«Давай в парк у реки. Хочется пройтись.»"| n_msg_npc_place_sent
+    n_msg_thread_artem_loop2 -->|"«Очень смешно.»"| n_msg_artem_loop2_place_pressure
+    n_msg_thread_artem_loop2 -->|"«Ты уже писал это.»"| n_msg_artem_loop2_place_pressure
+    n_msg_thread_artem_loop2 -->|"«Ок. Давай встретимся.»"| n_msg_artem_loop2_place_choice
+    n_msg_artem_loop2_place_pressure -->|"«Нет. Но давай всё равно встретимся.»"| n_msg_artem_loop2_place_choice
+    n_msg_artem_loop2_place_pressure -->|"«Если это розыгрыш — я хочу увидеть лиц…"| n_msg_artem_loop2_place_choice
+    n_msg_artem_loop2_place_choice -->|"«Давай в кафе. Спокойно посидим.»"| n_msg_npc_place_sent
+    n_msg_artem_loop2_place_choice -->|"«Давай в парк у реки. Хочется пройтись.»"| n_msg_npc_place_sent
+    n___start --> n_choose_character
+  </pre>
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: "dark",
+      flowchart: { htmlLabels: true, curve: "basis" },
+      securityLevel: "loose",
+    });
+  </script>
+</body>
+</html>

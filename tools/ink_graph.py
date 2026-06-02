@@ -204,6 +204,69 @@ NODE_STYLE = {
 }
 
 
+def wrap_html(mmd: str, title: str = "Ink graph") -> str:
+    """Wrap a ```mermaid ...``` block in a standalone HTML file.
+
+    Uses mermaid.js from a CDN; the user just double-clicks the .html to view.
+    No build step, no npm, no server.
+    """
+    # Strip outer fence; we'll re-embed inside a <pre class="mermaid"> which
+    # the Mermaid library will pick up and render in place.
+    body = mmd
+    if body.startswith("```mermaid"):
+        body = body[len("```mermaid"):]
+    if body.rstrip().endswith("```"):
+        body = body.rstrip()[:-3]
+    body = body.strip()
+
+    return f"""<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>{title}</title>
+<style>
+  body {{ margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0;
+          font: 14px/1.4 -apple-system, "Segoe UI", system-ui, sans-serif; }}
+  h1 {{ font-size: 18px; margin: 0 0 12px; }}
+  .legend {{ color: #94a3b8; margin-bottom: 16px; }}
+  .mermaid {{ background: #1e293b; border-radius: 8px; padding: 16px;
+              overflow: auto; max-height: 90vh; }}
+  .controls {{ position: fixed; top: 12px; right: 12px; display: flex; gap: 8px; }}
+  .controls button {{ background: #1e293b; color: #e2e8f0; border: 1px solid #334155;
+                       border-radius: 4px; padding: 4px 10px; cursor: pointer; }}
+  .controls button:hover {{ background: #334155; }}
+</style>
+</head>
+<body>
+  <h1>{title}</h1>
+  <div class="legend">
+    <strong>Upstream:</strong> <code>tools/ink_graph.py</code>
+    &middot; <strong>Source:</strong> <code>main/story/chapter_01.json</code>
+  </div>
+  <div class="controls">
+    <button onclick="document.querySelector('.mermaid').style.zoom =
+      (parseFloat(document.querySelector('.mermaid').style.zoom || 1) * 0.9).toString()">−</button>
+    <button onclick="document.querySelector('.mermaid').style.zoom =
+      (parseFloat(document.querySelector('.mermaid').style.zoom || 1) * 1.1).toString()">+</button>
+    <button onclick="document.querySelector('.mermaid').style.zoom = '1'">100%</button>
+  </div>
+  <pre class="mermaid">
+{body}
+  </pre>
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({{
+      startOnLoad: true,
+      theme: "dark",
+      flowchart: {{ htmlLabels: true, curve: "basis" }},
+      securityLevel: "loose",
+    }});
+  </script>
+</body>
+</html>
+"""
+
+
 def render_mermaid(knots: list[str],
                    edges: list[tuple[str, str, str | None]],
                    entry: str | None,
@@ -319,6 +382,9 @@ def main() -> int:
                    help="Include all knots (default: only those involved in flow). "
                         "Full graph is too large for GitHub Mermaid renderer.")
     p.add_argument("--print", action="store_true", help="Print to stdout instead of file")
+    p.add_argument("--html", action="store_true",
+                   help="Wrap the diagram in a standalone HTML file (Mermaid from CDN, "
+                        "no npm, no internet beyond loading the library).")
     args = p.parse_args()
 
     if not args.json.exists():
@@ -357,8 +423,14 @@ def main() -> int:
         sys.stdout.write(mmd)
         return 0
 
+    if args.html:
+        html = wrap_html(mmd, title=args.out.stem)
+        args.out = args.out.with_suffix(".html")
+    else:
+        html = mmd
+
     args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(mmd, encoding="utf-8")
+    args.out.write_text(html, encoding="utf-8")
     print(f"Wrote {args.out}", file=sys.stderr)
     return 0
 

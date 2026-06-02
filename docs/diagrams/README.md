@@ -7,32 +7,37 @@
 
 | Файл | Узлов | Что внутри |
 |---|---|---|
-| `chapter_01.mmd` | **54** | **Default** — только узлы, участвующие в потоке (хабы + их цели). GitHub-friendly. |
-| `chapter_01_all.mmd` | 322 | Все кноты включая листья. Слишком большой для GitHub — открывать через mermaid.live / mmdc. |
-| `chapter_01_by_file.mmd` | 322 | То же что `chapter_01_all.mmd`, с группировкой по .ink-файлу (28 subgraph'ов). |
+| `chapter_01.html` | **54** | **Открой это** — standalone HTML, Mermaid с CDN, зум-кнопки, dark theme |
+| `chapter_01.mmd` | 54 | Тот же граф в формате Mermaid (для встраивания в .md) |
+| `chapter_01_all.html` | 322 | Все 322 кнота в HTML (для полной картины) |
+| `chapter_01_all.mmd` | 322 | Полный граф в Mermaid |
+| `chapter_01_by_file.html` | 322 | Полный граф с группировкой по .ink-файлу |
+| `chapter_01_by_file.mmd` | 322 | То же в Mermaid |
 
 **Зачем default = 54 узла?** Из 322 кнотов только ~54 реально участвуют в flow (источники или цели `->`). Остальные 268 — это «листья»: показывают текст и завершаются, навигация между ними идёт через Lua (`ui_manager_v2`). На карте истории это шум, а не сигнал.
 
-## Как посмотреть
+## Как посмотреть (с рабочего стола)
 
-### 1. GitHub / GitLab (рекомендую, 0 установки)
-Закоммить и открой `.md` файл с блоком ``` ```mermaid ``` в репо — рендерится нативно в Preview.
+### 1. Standalone HTML — рекомендую, один клик
+Двойной клик по `chapter_01.html` (или `chapter_01_all.html`) → открывается в браузере. Mermaid подгружается с CDN один раз при первом открытии. Зум-кнопки `−` / `+` / `100%` справа сверху.
 
-### 2. VS Code (если используешь)
-Поставь расширение **Markdown Preview Mermaid Support** (ext:bierner.markdown-mermaid), открой этот `README.md` — `Ctrl+Shift+V`.
+Требуется интернет при первом открытии (Mermaid.js с jsdelivr). После этого страница закеширована.
 
-### 3. Mermaid Live Editor (мгновенно, без установки)
+### 2. Mermaid Live Editor
 Открой https://mermaid.live → вставь содержимое `.mmd` (без обрамляющих ` ``` `) → рендер. Можно экспортнуть в PNG/SVG.
 
-### 4. CLI в PNG/SVG (для дизайн-доков)
+### 3. VS Code
+Расширение **Markdown Preview Mermaid Support** (ext:bierner.markdown-mermaid), открой `README.md` (этот файл) — `Ctrl+Shift+V`.
+
+### 4. CLI в PNG/SVG
 ```bash
 npm i -g @mermaid-js/mermaid-cli
 mmdc -i docs/diagrams/chapter_01.mmd -o chapter_01.svg
 ```
 
-> **Примечание:** `mmdc` v11+ не понимает ` ```mermaid ` fence (ожидает raw). Перед `mmdc` убери fence:
+> `mmdc` v11+ не понимает ` ```mermaid ` fence (ожидает raw). Перед `mmdc` убери fence:
 > ```bash
-> (Get-Content docs\diagrams\chapter_01.mmd) -notmatch '^\`\`\`' | Set-Content $env:TEMP\chapter_01_raw.mmd
+> (Get-Content docs\diagrams\chapter_01.mmd) -notmatch '^```' | Set-Content $env:TEMP\chapter_01_raw.mmd
 > mmdc -i $env:TEMP\chapter_01_raw.mmd -o chapter_01.svg
 > ```
 
@@ -51,9 +56,9 @@ mmdc -i docs/diagrams/chapter_01.mmd -o chapter_01.svg
 tools\compile_ink.bat chapter_01
 
 # 2. Перегенерировать граф:
-python tools/ink_graph.py                          # → chapter_01.mmd (54 узла, default)
-python tools/ink_graph.py --all                    # → chapter_01.mmd (все 322)
-python tools/ink_graph.py --by-file                # → chapter_01_by_file.mmd (с группировкой)
+python tools/ink_graph.py                          # → chapter_01.{html,mmd} (54 узла, default)
+python tools/ink_graph.py --all                    # → все 322 кнота
+python tools/ink_graph.py --by-file                # → с группировкой по .ink-файлу
 python tools/ink_graph.py --from choose_character  # → только достижимые из choose_character
 ```
 
