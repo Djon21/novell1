@@ -305,6 +305,16 @@
 # speaker:npc
 Почти — это мило.
 
+{iteration_number > 1 and not loop2_revealed_to_npc:
+    # speaker:mc
+    И в прошлый раз было «почти». И в прошлый раз она/он улыбнулась так же.
+
+    # speaker:none
+    Улыбка совпадает до градуса. Как будто день перемотали на тот же кадр.
+    ~ INSIGHT = INSIGHT + 1
+    ~ anomaly_noticed = true
+}
+
 {sunday_gift_bought and not sunday_gift_given:
     -> sunday_gift_react
 }
@@ -321,6 +331,13 @@
 
 # speaker:mc
 Сначала пройдёмся: посмотрю и лавочку у воды, и аллею. Потом уже решим, где сесть.
+
+{iteration_number > 1 and not loop2_revealed_to_npc:
+    # speaker:none
+    Те же слова. Тот же план. Она/Он ещё не знает, что этот выбор уже был.
+    ~ INSIGHT = INSIGHT + 1
+    ~ anomaly_noticed = true
+}
 
 # set_flag:park_npc_greeted=true
 ~ park_npc_greeted = true
@@ -343,6 +360,13 @@
 
     # speaker:none
     Вы двигаетесь к лавочке почти одновременно. Это маленькое совпадение почему-то запоминается.
+
+    {iteration_number > 1 and not loop2_revealed_to_npc:
+    И в прошлый раз вы двинулись одновременно.
+    ~ INSIGHT = INSIGHT + 1
+    ~ anomaly_noticed = true
+    }
+
     # set_flag:park_place_chosen=true
     # set_flag:park_talk_place_bench=true
     ~ park_place_chosen = true
@@ -360,6 +384,13 @@
 
     # speaker:none
     Вы уходите в тень аллеи. Шаги сразу берут на себя часть неловкости.
+
+    {iteration_number > 1 and not loop2_revealed_to_npc:
+    И в прошлый раз аллея встретила той же тенью.
+    ~ INSIGHT = INSIGHT + 1
+    ~ anomaly_noticed = true
+    }
+
     # set_flag:park_place_chosen=true
     # set_flag:park_talk_place_path=true
     ~ park_place_chosen = true
@@ -423,6 +454,13 @@
 
     # speaker:none
     {npc_name} отвечает не сразу. Сначала улыбается — маленько, благодарно, будто вопрос оказался важнее любого готового плана.
+
+    {iteration_number > 1 and not loop2_revealed_to_npc:
+    Тот же ответ. Та же пауза перед ним.
+    ~ INSIGHT = INSIGHT + 1
+    ~ anomaly_noticed = true
+    }
+
     ~ TRUST = TRUST + 1
     -> sunday_date_park_settle
 
@@ -435,6 +473,13 @@
 
     # speaker:none
     Воздуха становится больше не только вокруг, но и между словами.
+
+    {iteration_number > 1 and not loop2_revealed_to_npc:
+    И в прошлый раз его было столько же.
+    ~ INSIGHT = INSIGHT + 1
+    ~ anomaly_noticed = true
+    }
+
     ~ SYNC = SYNC + 1
     -> sunday_date_park_settle
 
@@ -447,8 +492,20 @@
 
     # speaker:none
     Сказано мягко, но точно. Ты киваешь и впервые за утро не спешишь защищать свой выбор.
+
+    {iteration_number > 1 and not loop2_revealed_to_npc:
+    И в прошлый раз ты кивнул{mc_gender == "female":а|} так же.
+    ~ INSIGHT = INSIGHT + 1
+    ~ anomaly_noticed = true
+    }
+
     ~ INSIGHT = INSIGHT + 1
     -> sunday_date_park_settle
+
+{iteration_number > 1 and not loop2_revealed_to_npc:
+* [«Слушай... я уже жил этот день.»]
+    -> park_loop_reveal
+}
 
 === park_path_main_talk ===
 # speaker:none
@@ -508,6 +565,13 @@
 
     # speaker:none
     Ответ звучит легко. Ты не споришь и не отшучиваешься — просто подстраиваешь шаг.
+
+    {iteration_number > 1 and not loop2_revealed_to_npc:
+    И в прошлый раз шаг нашёлся сам.
+    ~ INSIGHT = INSIGHT + 1
+    ~ anomaly_noticed = true
+    }
+
     ~ TRUST = TRUST + 1
     -> sunday_date_park_settle
 
@@ -520,6 +584,13 @@
 
     # speaker:none
     Через несколько шагов общий темп находится сам. Внимательность оказывается не жестом, а скоростью.
+
+    {iteration_number > 1 and not loop2_revealed_to_npc:
+    Те же шаги. Тот же темп. Та же внимательность, которая уже была.
+    ~ INSIGHT = INSIGHT + 1
+    ~ anomaly_noticed = true
+    }
+
     ~ SYNC = SYNC + 1
     -> sunday_date_park_settle
 
@@ -532,13 +603,111 @@
 
     # speaker:none
     Фраза остаётся между вами на несколько шагов дольше обычной шутки.
+
+    {iteration_number > 1 and not loop2_revealed_to_npc:
+    И в прошлый раз она осталась на столько же.
+    ~ INSIGHT = INSIGHT + 1
+    ~ anomaly_noticed = true
+    }
+
     ~ INSIGHT = INSIGHT + 1
     -> sunday_date_park_settle
 
+{iteration_number > 1 and not loop2_revealed_to_npc:
+* [«Слушай... я уже жил этот день.»]
+    -> park_loop_reveal
+}
+
+=== park_loop_reveal ===
+# speaker:none
+{npc_name} ждёт. Ты делаешь вдох — и говоришь прежде, чем успеваешь испугаться.
+
+# speaker:mc
+Я знаю, что ты сейчас скажешь. Ты скажешь: «Хорошо, что мы выбрались именно в парк».
+
+# speaker:none
+{npc_name} замирает на секунду. Потом осторожно улыбается.
+
+# speaker:npc
+Хорошо, что мы выбрались именно в парк.
+
+# speaker:none
+Пауза.
+
+# speaker:npc
+{mc_gender == "female":
+    Откуда ты знаешь? Я собиралась это сказать.
+- else:
+    Откуда ты знаешь? Я собирался это сказать.
+}
+
+# speaker:mc
+Потому что я уже слышал{mc_gender == "female":а|} эти слова. Сегодня — во второй раз. Весь день — второй раз.
+
+# speaker:npc
+{mc_gender == "female":
+    Ты серьёзно?
+- else:
+    Ты серьёзно?
+}
+
+# speaker:mc
+Я проснулся{mc_gender == "female":а|} утром. Думал{mc_gender == "female":а|}, что среда. Оказалось — снова воскресенье. Я уже прожил{mc_gender == "female":а|} этот день: воскресенье, понедельник, вторник. А потом открыл{mc_gender == "female":а|} глаза — и снова здесь.
+
+# speaker:none
+{npc_name} молчит. Не отмахивается — просто переваривает.
+
+# speaker:npc
+{mc_gender == "female":
+    То есть... ты хочешь сказать, что мы уже стояли здесь и говорили об этом?
+- else:
+    То есть... ты хочешь сказать, что мы уже стояли здесь и говорили об этом?
+}
+
+# speaker:mc
+Да. И ты сказал{mc_gender == "female":а|}, что у тебя ещё есть время. Мы выбрали, куда пойти дальше. А на следующий день...
+
+# speaker:none
+Ты замолкаешь.
+
+# speaker:npc
+{mc_gender == "female":
+    Допустим, я верю. Зачем ты говоришь мне сейчас?
+- else:
+    Допустим, я верю. Зачем ты говоришь мне сейчас?
+}
+
+# speaker:mc
+Потому что в прошлый раз я прошёл{mc_gender == "female":а|} этот день {mc_gender == "female":одна|один}. А в этот раз... не хочу.
+
+# speaker:none
+{npc_name} смотрит на тебя. Ветер двигает ветки. {npc_name} делает шаг ближе.
+
+# speaker:npc
+{mc_gender == "female":
+    Хорошо. Я не знаю, правда это или нет. Но если ты решил{mc_gender == "female":а|} сказать мне — я хочу знать, что будет дальше.
+- else:
+    Хорошо. Я не знаю, правда это или нет. Но если ты решил{mc_gender == "female":а|} сказать мне — я хочу знать, что будет дальше.
+}
+
+~ loop2_revealed_to_npc = true
+~ anomaly_interpreted = true
+~ TRUST = TRUST + 2
+-> sunday_date_park_settle
+
+
 === sunday_date_park_settle ===
 # speaker:none
-Разговор начинается с простого: погода, дорога, смешная неловкость первых минут, кто сколько кофе уже успел выпить. Но рядом с {npc_name_ins} простые темы не кажутся пустыми.
+{loop2_revealed_to_npc:
+Разговор не становится тише. Наоборот — теперь, когда самое странное уже сказано, всё остальное звучит проще. {npc_name} иногда замолкает и смотрит на тебя так, будто проверяет, не исчезнешь ли ты из кадра.
 
+Но не уходит. И не просит остановиться.
+
+- else:
+Разговор начинается с простого: погода, дорога, смешная неловкость первых минут, кто сколько кофе уже успел выпить. Но рядом с {npc_name_ins} простые темы не кажутся пустыми.
+}
+
+{not loop2_revealed_to_npc:
 # speaker:npc
 Хорошо, что мы выбрались именно в парк.
 
@@ -553,6 +722,7 @@
 
 # speaker:mc
 Тогда выберем, куда пойти дальше.
+}
 
 # speaker:none
 Встреча не заканчивается на первом разговоре. Теперь это уже не просто договорённость, а настоящий воскресный день.
@@ -563,13 +733,32 @@
 # quest:done:meet_npc
 # quest:start:spend_sunday
 # map:lock_all
-# map:allow:poi_shop
-# map:allow:poi_view
+{loop2_revealed_to_npc:
+    # map:allow:poi_bar
+- else:
+    # map:allow:poi_shop
+    # map:allow:poi_view
+}
 ~ date_route_chosen = true
 ~ met_npc_sunday = true
 ~ sunday_after_date_active = true
 # speaker:none
-Система делает паузу. На экране появится короткая реклама, потом всё продолжится с того же места.
+{loop2_revealed_to_npc:
+    {npc_name} смотрит на тебя ещё раз — будто проверяет, не изменился ли ты за секунду. Не изменился. И это, кажется, самый убедительный аргумент.
+
+    # speaker:npc
+    {mc_gender == "female":
+        Знаешь... если это правда, нам стоит поговорить там, где никто не будет ждать, что мы будем милыми.
+    - else:
+        Знаешь... если это правда, нам стоит поговорить там, где никто не будет ждать, что мы будем милыми.
+    }
+
+    # speaker:mc
+    {npc_name_gen} права/прав.
+
+    # speaker:none
+    Вы выходите из парка вместе. {npc_name} идёт чуть ближе, чем обычно. Не за руку — просто рядом.
+}
 
 # adv:fullscreen
 # phone:map

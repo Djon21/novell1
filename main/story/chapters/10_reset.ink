@@ -10,9 +10,11 @@
 === loop1_to_iter2_reset ===
 // Сюжетный переход в новую петлю. Это не ручной reset_iteration:
 // meta-состояние и выбор персонажа сохраняются, мир возвращается в воскресенье.
-# meta:set:completed_iterations:1
+# meta:add:completed_iterations:1
 # meta:set:iteration_number:2
 # meta:add:loop_awareness:1
+~ iteration_number = iteration_number + 1
+~ loop_awareness = loop_awareness + 1
 ~ current_iteration_end = ""
 ~ anomaly_noticed = false
 ~ anomaly_interpreted = false
@@ -21,6 +23,9 @@
 ~ loop2_invite_after_office_sent = false
 ~ loop2_first_invite_rejected = false
 ~ loop2_returned_home = false
+~ loop2_revealed_to_npc = false
+~ loop2_monday_aware = false
+~ loop2_office_mentioned = false
 
 // Сброс sunday-world state.
 ~ coffee_drunk = false
@@ -36,6 +41,8 @@
 ~ sunday_second_stop_done = false
 ~ sunday_went_to_shop = false
 ~ sunday_went_to_viewpoint = false
+~ sunday_went_to_bar = false
+~ bar_discussion_done = false
 ~ sunday_evening_started = false
 ~ sunday_finished = false
 ~ sunday_dressed = false
@@ -144,6 +151,7 @@
 # set_flag:loop2_invite_after_office_sent=false
 # set_flag:loop2_first_invite_rejected=false
 # set_flag:loop2_returned_home=false
+# set_flag:loop2_revealed_to_npc=false
 # set_flag:phone_active=false
 # set_flag:phone_taken=false
 # set_flag:got_out_of_bed=false
@@ -222,6 +230,17 @@
 # set_flag:work_card_taken=false
 # set_flag:monday_ready_for_work=false
 # set_flag:monday_left_home=false
+# set_flag:monday_folder_taken=false
+# set_flag:monday_report_page_taken=false
+# set_flag:mon_office_error_seen=false
+# set_flag:reached_office=false
+# set_flag:reached_work_district=false
+# set_flag:kitchen_morning_seen=false
+# set_flag:sunday_viewpoint_seen=false
+# set_flag:park_npc_at_bench=false
+# set_flag:park_npc_at_path=false
+# set_flag:park_npc_bench_shown=false
+# set_flag:park_npc_path_shown=false
 
 // Предметы мира возвращаются на места.
 # remove_item:phone

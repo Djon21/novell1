@@ -78,6 +78,16 @@
 }
 ->->
 
+=== phone_msg_sunday_evening_home_loop_revealed ===
+{mc_gender == "female":
+    # msg:add:artem:Я всё думаю о том, что ты сказала. Не знаю, правильно ли я сделала, что поверила. Но перестать уже не могу.
+    # msg:read:artem
+- else:
+    # msg:add:mila:Я всё думаю о том, что ты сказал. Не знаю, правильно ли я сделал, что поверил. Но перестать уже не могу.
+    # msg:read:mila
+}
+->->
+
 === phone_msg_sunday_evening_reply_warm ===
 {mc_gender == "female":
     # msg:reply:artem:Спасибо, что продолжили день. Я рада, что мы встретились.

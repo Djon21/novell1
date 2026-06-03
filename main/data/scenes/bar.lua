@@ -4,12 +4,19 @@
 
 local s = require "main.data.scenes._shared"
 
+local function can_discuss_loop(gs)
+    return gs.get_flag("loop2_revealed_to_npc") and not gs.get_flag("bar_discussion_done")
+end
+
 return {
 
-    -- Минимальный хаб бара: один фон, осмотр стойки, выход через карту.
     bar_hub = {
         bg = "bg_bar_maybe_night",
         label = "Бар Maybe",
+        on_enter = {
+            knot = "bar_loop_discuss",
+            condition = can_discuss_loop,
+        },
         hotspots = {
             s.inspect{
                 id = "bar_counter",
