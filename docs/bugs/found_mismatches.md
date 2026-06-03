@@ -60,10 +60,7 @@ _Исправлено:_ добавлены `# set_flag:...=false` в `10_reset.i
 | 9 | `cafe_backroom_books_seen` | `locations/cafe_sunday.ink:505` |
 | 10 | `cafe_backroom_mirror_seen` | `locations/cafe_sunday.ink:479` |
 | 11 | `bar_counter_seen_after_reveal` | `locations/bar_sunday.ink:206` |
-| 12 | `messenger_prod_bot_questioned` | `93_phone_messenger.ink:578` |
-| 13 | `messenger_unknown_asked_synthesis` | `93_phone_messenger.ink:613` |
-| 14 | `messenger_unknown_asked_who` | `93_phone_messenger.ink:605` |
-| 15 | `messenger_work_team_ack` | `93_phone_messenger.ink:552` |
+| 12 | `messenger_work_team_ack` | `93_phone_messenger.ink:552` |
 
 ---
 
