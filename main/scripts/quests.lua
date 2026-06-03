@@ -23,12 +23,15 @@ local M = {}
 M.phone_order = {
     "find_phone",
     "make_coffee",
+    "check_the_loop",
     "reply_npc",
     "meet_npc",
+    "reveal_the_loop",
     "spend_sunday",
     "go_to_office",
     "work_monday_case",
     "follow_monday_trace",
+    "break_the_loop",
 }
 
 local ORDER_INDEX = {}
@@ -139,6 +142,41 @@ M.quests = {
             { text = "Увидеть последствие кейса",  done_when = "tuesday_consequence_seen" },
             { text = "Разобрать след",             done_when = "tuesday_investigation_done" },
             { text = "Подняться на крышу",         done_when = "tuesday_rooftop_reached" },
+        },
+    },
+
+    -- iteration 2+ квесты
+    -- Запускаются только при второй и последующих итерациях.
+
+    check_the_loop = {
+        name = "Проверить день",
+        description = "Сегодня не понедельник, а странная среда. Офис закрыт, всё не на своих местах. Нужно проверить, осознать и принять реальность.",
+        steps = {
+            { text = "Проснуться в среду",   done_when = "loop2_fake_wednesday_started" },
+            { text = "Проверить офис",       done_when = "loop2_work_check_done" },
+            { text = "Вернуться домой",      done_when = "loop2_returned_home" },
+            { text = "Принять реальность",   done_when = "anomaly_interpreted" },
+        },
+    },
+
+    reveal_the_loop = {
+        name = "Довериться",
+        description = "Во второй раз всё иначе. Можно рассказать спутнику о петле времени. Это рискованно, но может всё изменить.",
+        steps = {
+            { text = "Рассказать о петле",           done_when = "loop2_revealed_to_npc" },
+            { text = "Обсудить в баре",              done_when = "bar_discussion_done" },
+            { text = "Договориться о понедельнике",  done_when = "loop2_office_mentioned" },
+            { text = "Проснуться с планом",          done_when = "loop2_monday_aware" },
+        },
+    },
+
+    break_the_loop = {
+        name = "Разорвать петлю",
+        description = "Крыша — место истины. Пора собрать всё, что стало известно за три дня, и решить, как разорвать этот круг.",
+        steps = {
+            { text = "Осознать корень петли",  done_when = "tuesday_investigation_done" },
+            { text = "Подняться на крышу",     done_when = "tuesday_rooftop_reached" },
+            { text = "Выбрать исход",           done_when = "current_iteration_end" },
         },
     },
 }
