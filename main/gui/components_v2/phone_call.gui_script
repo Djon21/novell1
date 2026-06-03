@@ -130,9 +130,25 @@ local function normalize_calls(raw)
     return out
 end
 
+local _fb_calls = nil
+
 local function call_list()
     local list = normalize_calls(gs.get_call_log and gs.get_call_log() or {})
-    if #list == 0 then return FALLBACK_CALLS end
+    if #list == 0 then
+        if not _fb_calls then
+            _fb_calls = {}
+            local seen = gs.get_flag and gs.get_flag("calls_fb_seen")
+            for i, c in ipairs(FALLBACK_CALLS) do
+                local copy = {}
+                for k, v in pairs(c) do copy[k] = v end
+                if seen then
+                    copy.count = 0
+                end
+                _fb_calls[i] = copy
+            end
+        end
+        return _fb_calls
+    end
     return list
 end
 
@@ -434,23 +450,28 @@ local function handle_phone_input(self, action_id, action)
 
     if action_id ~= hash("touch") then return false end
 
-    if action.released then
+    local result = drag_scroll.handle(self.call_drag, action)
+
+    if result == "tap" and action.released then
         local x, y = action.x or 0, action.y or 0
         if is_inside_rect("v_call_tab_all_bg", x, y) then
             self.filter = "all"
             self.call_offset = 0
             render(self)
+            drag_scroll.reset(self.call_drag)
             return true
         elseif is_inside_rect("v_call_tab_missed_bg", x, y) then
             self.filter = "missed"
             self.call_offset = 0
             render(self)
+            drag_scroll.reset(self.call_drag)
             return true
         end
     end
 
-    local result = drag_scroll.handle(self.call_drag, action)
-    return result == "swallow" or result == "tap"
+    if result == "swallow" then return true end
+    if result == "tap" then return true end
+    return false
 end
 
 function init(self)
@@ -496,6 +517,7 @@ function on_message(self, message_id, message, sender)
         drag_scroll.reset(self.call_drag)
         set_nodes_enabled(true)
         if gs.mark_all_calls_seen then gs.mark_all_calls_seen() end
+        if gs.set_flag then gs.set_flag("calls_fb_seen", true) end
         refresh(self)
 
     elseif message_id == hash("close_app") then

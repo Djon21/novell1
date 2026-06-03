@@ -40,9 +40,17 @@ textures {
   texture: "/main/images/ui_common.atlas"
 }
 nodes {
+  position {
+    z: 0.052
+  }
   size {
     x: 1280.0
     y: 720.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
   }
   type: TYPE_BOX
   id: "mail_runtime_root"
@@ -51,552 +59,245 @@ nodes {
   alpha: 0.0
 }
 nodes {
-  position {
-    x: 525.0
-    y: 666.0
-    z: 0.556
-  }
-  size {
-    x: 366.0
-    y: 34.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  font: "unbounded_bold_32"
-  id: "v_mail_title"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
+  type: TYPE_TEMPLATE
+  id: "mail_list"
   parent: "mail_runtime_root"
-  alpha: 0.98
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
+  template: "/main/gui/components_v2/phone_mail_list_template.gui"
 }
 nodes {
-  position {
-    x: 524.0
-    y: 590.0
-    z: 0.55
-  }
-  size {
-    x: 128.0
-    y: 28.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
   type: TYPE_BOX
-  id: "v_mail_tab_all_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
+  id: "mail_list/list_root"
+  parent: "mail_list"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "mail_list/side_title"
+  parent: "mail_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "mail_list/tab_all_bg"
+  parent: "mail_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "mail_list/tab_all_text"
+  parent: "mail_list/tab_all_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "mail_list/tab_all_count"
+  parent: "mail_list/tab_all_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "mail_list/border_all"
+  parent: "mail_list/tab_all_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "mail_list/tab_unread_bg"
+  parent: "mail_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "mail_list/tab_unread_text"
+  parent: "mail_list/tab_unread_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "mail_list/tab_unread_count"
+  parent: "mail_list/tab_unread_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "mail_list/border_unread"
+  parent: "mail_list/tab_unread_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "mail_list/header_divider"
+  parent: "mail_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "mail_list/scrollbar_track"
+  parent: "mail_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "mail_list/scrollbar_thumb"
+  parent: "mail_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "mail_list/msg1_bg"
+  parent: "mail_list/list_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "mail_list/msg1_accent"
+  parent: "mail_list/msg1_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "mail_list/msg1_star"
+  parent: "mail_list/msg1_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "mail_list/msg1_from"
+  parent: "mail_list/msg1_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "mail_list/msg1_addr"
+  parent: "mail_list/msg1_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "mail_list/msg1_subj"
+  parent: "mail_list/msg1_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "mail_list/msg1_body"
+  parent: "mail_list/msg1_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "mail_list/msg1_tag1_bg"
+  parent: "mail_list/msg1_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "mail_list/msg1_tag1_text"
+  parent: "mail_list/msg1_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "mail_list/msg1_tag2_bg"
+  parent: "mail_list/msg1_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "mail_list/msg1_tag2_text"
+  parent: "mail_list/msg1_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "mail_list/msg1_time"
+  parent: "mail_list/msg1_bg"
+  template_node_child: true
+}
+
+nodes {
+  type: TYPE_TEMPLATE
+  id: "mail_detail"
   parent: "mail_runtime_root"
-  alpha: 0.15
+  template: "/main/gui/components_v2/phone_mail_detail_template.gui"
 }
 nodes {
-  position {
-    x: 21.0
-    y: 14.0
-    z: 0.056
-  }
-  size {
-    x: 70.0
-    y: 12.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_TEXT
-  text: "\320\222\320\241\320\225"
-  font: "jb_mono_bold_14"
-  id: "v_mail_tab_all_text"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "v_mail_tab_all_bg"
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 108.0
-    y: 14.0
-    z: 0.056
-  }
-  size {
-    x: 28.0
-    y: 12.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_TEXT
-  text: "0"
-  font: "jb_mono_bold_14"
-  id: "v_mail_tab_all_count"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "v_mail_tab_all_bg"
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    z: 0.056
-  }
-  size {
-    x: 128.0
-    y: 28.0
-  }
   type: TYPE_BOX
-  texture: "ui_common/border"
-  id: "v_mail_border_all"
-  pivot: PIVOT_SW
-  parent: "v_mail_tab_all_bg"
-  slice9 {
-    x: 2.0
-    y: 2.0
-    z: 2.0
-    w: 2.0
-  }
+  id: "mail_detail/detail_root"
+  parent: "mail_detail"
+  template_node_child: true
 }
 nodes {
-  position {
-    x: 660.0
-    y: 590.0
-    z: 0.055
-  }
-  size {
-    x: 168.0
-    y: 28.0
-  }
-  color {
-    x: 0.078
-    y: 0.071
-    z: 0.204
-  }
   type: TYPE_BOX
-  id: "v_mail_tab_unread_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mail_runtime_root"
-  alpha: 0.6
+  id: "mail_detail/det_back_bg"
+  parent: "mail_detail/detail_root"
+  template_node_child: true
 }
 nodes {
-  position {
-    x: 12.0
-    y: 14.0
-    z: 0.056
-  }
-  size {
-    x: 100.0
-    y: 12.0
-  }
-  color {
-    y: 0.239
-    z: 0.498
-  }
-  type: TYPE_TEXT
-  text: "\320\235\320\225\320\237\320\240\320\236\320\247\320\230\320\242."
-  font: "jb_mono_bold_14"
-  id: "v_mail_tab_unread_text"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "v_mail_tab_unread_bg"
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 158.0
-    y: 14.0
-    z: 0.056
-  }
-  size {
-    x: 26.0
-    y: 12.0
-  }
-  color {
-    y: 0.239
-    z: 0.498
-  }
-  type: TYPE_TEXT
-  text: "0"
-  font: "jb_mono_bold_14"
-  id: "v_mail_tab_unread_count"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "v_mail_tab_unread_bg"
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    z: 0.056
-  }
-  size {
-    x: 168.0
-    y: 28.0
-  }
   type: TYPE_BOX
-  texture: "ui_common/border"
-  id: "v_mail_border_unread"
-  pivot: PIVOT_SW
-  parent: "v_mail_tab_unread_bg"
-  slice9 {
-    x: 2.0
-    y: 2.0
-    z: 2.0
-    w: 2.0
-  }
+  id: "mail_detail/det_border_back"
+  parent: "mail_detail/det_back_bg"
+  template_node_child: true
 }
 nodes {
-  position {
-    x: 524.0
-    y: 580.0
-    z: 0.544
-  }
-  size {
-    x: 680.0
-    y: 1.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
+  type: TYPE_TEXT
+  id: "mail_detail/det_back_label"
+  parent: "mail_detail/det_back_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "mail_detail/det_from"
+  parent: "mail_detail/detail_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "mail_detail/det_addr"
+  parent: "mail_detail/detail_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "mail_detail/det_subj"
+  parent: "mail_detail/detail_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "mail_detail/det_time"
+  parent: "mail_detail/detail_root"
+  template_node_child: true
+}
+nodes {
   type: TYPE_BOX
-  id: "v_mail_divider"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mail_runtime_root"
-  alpha: 0.16
+  id: "mail_detail/det_header_line"
+  parent: "mail_detail/detail_root"
+  template_node_child: true
 }
 nodes {
-  position {
-    x: 1203.0
-    y: 65.0
-    z: 0.54
-  }
-  size {
-    x: 4.0
-    y: 505.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
   type: TYPE_BOX
-  id: "v_mail_scroll_track"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mail_runtime_root"
-  alpha: 0.08
+  id: "mail_detail/det_body_bg"
+  parent: "mail_detail/detail_root"
+  template_node_child: true
 }
 nodes {
-  position {
-    x: 1204.0
-    y: 428.0
-    z: 0.545
-  }
-  size {
-    x: 4.0
-    y: 142.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
+  type: TYPE_TEXT
+  id: "mail_detail/det_body"
+  parent: "mail_detail/detail_root"
+  template_node_child: true
+}
+nodes {
   type: TYPE_BOX
-  id: "v_mail_scroll_thumb"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mail_runtime_root"
-  alpha: 0.7
+  id: "mail_detail/det_scrollbar_track"
+  parent: "mail_detail/detail_root"
+  template_node_child: true
 }
 nodes {
-  position {
-    x: 524.0
-    y: 490.0
-    z: 0.032
-  }
-  size {
-    x: 680.0
-    y: 80.0
-  }
-  color {
-    x: 0.078
-    y: 0.071
-    z: 0.204
-  }
   type: TYPE_BOX
-  id: "v_mail_m1_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "mail_runtime_root"
-  alpha: 0.72
-}
-nodes {
-  position {
-    z: 0.032
-  }
-  size {
-    x: 3.0
-    y: 80.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "v_mail_m1_accent"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "v_mail_m1_bg"
-  alpha: 0.0
-}
-nodes {
-  position {
-    x: 12.0
-    y: 37.0
-    z: 0.033
-  }
-  size {
-    x: 18.0
-    y: 14.0
-  }
-  color {
-    y: 0.702
-    z: 0.278
-  }
-  type: TYPE_TEXT
-  font: "icon_14"
-  id: "v_mail_m1_star"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "v_mail_m1_bg"
-  alpha: 0.95
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 38.0
-    y: 40.0
-    z: 0.033
-  }
-  size {
-    x: 148.0
-    y: 12.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_bold_14"
-  id: "v_mail_m1_from"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "v_mail_m1_bg"
-  alpha: 0.98
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 38.0
-    y: 24.0
-    z: 0.033
-  }
-  size {
-    x: 148.0
-    y: 10.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "v_mail_m1_addr"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "v_mail_m1_bg"
-  alpha: 0.85
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 196.0
-    y: 39.0
-    z: 0.033
-  }
-  size {
-    x: 360.0
-    y: 13.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_bold_14"
-  id: "v_mail_m1_subj"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "v_mail_m1_bg"
-  alpha: 0.98
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 196.0
-    y: 20.0
-    z: 0.033
-  }
-  size {
-    x: 400.0
-    y: 12.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_12"
-  id: "v_mail_m1_body"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "v_mail_m1_bg"
-  alpha: 0.92
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 548.0
-    y: 34.0
-    z: 0.008
-  }
-  size {
-    x: 54.0
-    y: 18.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_BOX
-  id: "v_mail_m1_tag1_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "v_mail_m1_bg"
-  alpha: 0.14
-}
-nodes {
-  position {
-    x: 554.0
-    y: 43.0
-    z: 0.034
-  }
-  size {
-    x: 42.0
-    y: 9.0
-  }
-  color {
-    x: 0.49
-    y: 0.976
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "v_mail_m1_tag1_text"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "v_mail_m1_bg"
-  alpha: 0.95
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 606.0
-    y: 34.0
-    z: 0.008
-  }
-  size {
-    x: 46.0
-    y: 18.0
-  }
-  color {
-    y: 0.239
-    z: 0.498
-  }
-  type: TYPE_BOX
-  id: "v_mail_m1_tag2_bg"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "v_mail_m1_bg"
-  alpha: 0.14
-}
-nodes {
-  position {
-    x: 612.0
-    y: 43.0
-    z: 0.034
-  }
-  size {
-    x: 34.0
-    y: 9.0
-  }
-  color {
-    y: 0.239
-    z: 0.498
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "v_mail_m1_tag2_text"
-  pivot: PIVOT_W
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "v_mail_m1_bg"
-  alpha: 0.95
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
-}
-nodes {
-  position {
-    x: 608.0
-    y: 15.0
-    z: 0.033
-  }
-  size {
-    x: 50.0
-    y: 11.0
-  }
-  color {
-    x: 0.788
-    y: 0.753
-    z: 0.659
-  }
-  type: TYPE_TEXT
-  font: "jb_mono_10"
-  id: "v_mail_m1_time"
-  pivot: PIVOT_E
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "v_mail_m1_bg"
-  alpha: 0.95
-  outline_alpha: 0.0
-  shadow_alpha: 0.0
+  id: "mail_detail/det_scrollbar_thumb"
+  parent: "mail_detail/detail_root"
+  template_node_child: true
 }
 material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT
