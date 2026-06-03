@@ -649,7 +649,7 @@
 
 # quest:start:reply_npc
 # hud:hint:phone
-# return_to_scene
+# goto_scene:apartment_hub
 -> DONE
 
 // ================================================================
