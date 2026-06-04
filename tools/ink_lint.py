@@ -65,6 +65,16 @@ BUILTIN_KNOTS: set[str] = {"DONE", "END", "START"}  # Ink built-in divert target
 
 CUSTOM_PREFIXES = ["flag_"]
 
+# Глаголы прошедшего времени мужского рода, требующие гендерной альтернации.
+# Если слово из этого списка встречается в реплике без {mc_gender}/{npc_gender} — warning.
+GENDERED_VERBS = [
+    "сказал", "пошёл", "вышел", "пришёл", "вошёл", "нашёл", "прошёл",
+    "сделал", "увидел", "понял", "взял", "начал", "узнал", "подумал",
+    "оказал", "написал", "услышал", "решил", "ответил", "спросил",
+    "встал", "надел", "сел", "открыл", "закрыл", "посмотрел", "обратил",
+    "успел", "выпил", "попил",
+]
+
 # ---------------------------------------------------------------------------
 
 _error_count = 0
@@ -161,15 +171,29 @@ def scan_all() -> int:
             all_knots.add(m.group(1))
 
     # Pass 2: lint
+    _current_speaker = None
+    _knot_has_gender_check = False
+
     for f in active:
         text = f.read_text(encoding="utf-8", errors="replace")
         lines = text.split("\n")
         for i, raw in enumerate(lines, 1):
             stripped = raw.strip()
 
-            # Knot definition
+            # Knot definition — сброс
             if re.match(r"^===\s*[a-zA-Z_][\w]*\s*===", stripped):
+                _current_speaker = None
+                _knot_has_gender_check = False
                 continue
+
+            # Если в knot уже есть {mc_gender}/{npc_gender} — не варним
+            if "{mc_gender" in stripped or "{npc_gender" in stripped:
+                _knot_has_gender_check = True
+
+            # Track speaker
+            if re.match(r"^\s*#\s*speaker\s*:", stripped, re.IGNORECASE):
+                m = re.search(r"speaker\s*:\s*(\w+)", stripped, re.IGNORECASE)
+                _current_speaker = m.group(1).lower() if m else None
 
             # INCLUDE
             im = re.match(r"^INCLUDE\s+(.+)$", stripped)
@@ -197,11 +221,20 @@ def scan_all() -> int:
                     error(f, i, f"reference to unknown knot '{knot_part}'")
 
             # Block-form conditional choice: {condition:\n* [choice]
-            # — warn, inline form * {condition} [choice] preferred
             if stripped.startswith("{") and ":" in stripped and not stripped.startswith("{-"):
                 next_line = lines[i] if i < len(lines) else ""
                 if next_line.strip().startswith("* ["):
-                    warn(f, i, f"block-form conditional '{{...:}}' followed by '* [choice]' on next line — use inline '* {{condition}} [choice]' instead")
+                    warn(f, i, f"block-form conditional '{{...:}}' followed by '* [choice]' — use inline '* {{condition}} [choice]' instead")
+
+            # Gendered verb check: реплики с глаголами прошедшего времени без {mc_gender}/{npc_gender}
+            if _current_speaker in ("mc", "npc", "none") and not raw.strip().startswith("*") and not _knot_has_gender_check:
+                has_gender = "{mc_gender" in raw or "{npc_gender" in raw
+                if not has_gender:
+                    for verb in GENDERED_VERBS:
+                        # Ищем слово целиком (не часть другого слова)
+                        if re.search(r"(?<!\w)" + re.escape(verb) + r"(?!\w)", raw):
+                            warn(f, i, f"gendered verb '{verb}' found without {{{{mc_gender}}}}/{{{{npc_gender}}}} alternation")
+                            break
 
     eprint(f"\n{len(active)} files scanned, {_error_count} errors, {_warning_count} warnings")
     if "--ci" in sys.argv:
