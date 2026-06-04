@@ -141,12 +141,24 @@ local function park_state()
     state.flags.park_arrived = true
     state.flags.park_entrance_seen = true
     state.flags.park_where_message_sent = true
+    state.flags.park_npc_at_bench = true
+    state.flags.park_npc_bench_shown = true
     state.flags.park_npc_greeted = true
+    state.flags.park_place_chosen = true
+    state.flags.park_talk_place_bench = true
+    state.flags.park_bench_trash_seen = true
+    state.flags.park_bench_cleared = true
+    state.flags.park_path_seen = true
 
     state.vars.park_arrived = true
     state.vars.park_entrance_seen = true
     state.vars.park_where_message_sent = true
     state.vars.park_npc_greeted = true
+    state.vars.park_place_chosen = true
+    state.vars.park_talk_place_bench = true
+    state.vars.park_bench_trash_seen = true
+    state.vars.park_bench_cleared = true
+    state.vars.park_path_seen = true
     return state
 end
 
@@ -216,11 +228,20 @@ local function monday_office_state()
     local state = monday_state()
     state.flags.monday_dressed = true
     state.flags.work_card_taken = true
+    state.flags.monday_checked_in_office = true
+    state.flags.monday_mail_read = true
+    state.flags.monday_report_page_taken = true
+    state.flags.monday_folder_taken = true
+    state.flags.monday_case_file_assembled = true
+    state.flags.monday_case_file_submitted = true
     state.flags.mon_office_started = true
+    state.flags.reached_office = true
 
     table.insert(state.items, "card")
+    table.insert(state.items, "report_page")
+    table.insert(state.items, "folder")
     state.quests.go_to_office = "done"
-    state.quests.work_monday_case = "active"
+    state.quests.work_monday_case = "done"
     return state
 end
 
@@ -230,13 +251,17 @@ local function tuesday_state()
     state.flags.monday_started = true
     state.flags.tuesday_started = true
     state.flags.tuesday_morning_started = true
+    state.flags.tuesday_phone_checked = true
+    state.flags.tuesday_left_home = true
+    state.flags.tuesday_consequence_seen = true
+    state.flags.tuesday_investigation_done = true
 
     state.vars.sunday_finished = true
     state.vars.monday_started = true
     state.vars.iteration_number = 1
 
     state.quests = {
-        follow_monday_trace = "active",
+        follow_monday_trace = "done",
     }
     return state
 end
