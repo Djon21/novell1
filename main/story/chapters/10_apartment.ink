@@ -67,7 +67,11 @@
 Телефон дрожит на тумбочке. Я не проверяю число. Я знаю, что там — воскресенье.
 
 # sfx:phone_notify
+{iteration_number > 3:
+«Опять воскресенье. Я уже был{mc_gender == "female":а|} здесь. Сколько можно?»
+- else:
 «Опять воскресенье. Я уже был{mc_gender == "female":а|} здесь. Дважды.»
+}
 
 ~ anomaly_noticed = true
 ~ INSIGHT = INSIGHT + 1
