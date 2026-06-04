@@ -511,14 +511,13 @@ function init(self)
     end
 
     -- Две колонки шагов (1-7 умещаются в 4 ряда по 18px).
-    -- Левая колонка: step 1,3,5,7 (x=50, текст 210px → до x=282).
-    -- Правая колонка: step 2,4,6 (x=340, текст 170px → до x=532).
-    -- Pbar смещён на x=540, чтобы не наезжать на правую колонку.
+    -- Левая колонка: step 1,3,5,7 (x=50, текст 180px → до x=252).
+    -- Правая колонка: step 2,4,6 (x=290, текст 150px → до x=462).
     local STEP_PITCH = 18
     local LEFT_X = 50
-    local RIGHT_X = 340
-    local TEXT_W_L = 210
-    local TEXT_W_R = 170
+    local RIGHT_X = 290
+    local TEXT_W_L = 180
+    local TEXT_W_R = 150
     -- Step 1 из .gui (оригинал) — позиционируем + resize текста.
     -- Steps 2-7 клонируем из step1 (c texture border).
     local STEP_NAMES = {"box", "border", "mark", "text"}
