@@ -98,8 +98,7 @@ M.quests = {
         description = "На рабочем этаже нужно пройти турникет, собрать материалы по кейсу, подготовить папку и передать её в систему.",
         steps = {
             { text = "Пройти турникет",          done_when = "monday_checked_in_office" },
-            { text = "Проверить рабочую почту",  done_when = "monday_mail_read" },
-            { text = "Взять распечатку",         done_when = "monday_report_page_taken" },
+            { text = "Проверить почту и взять распечатку", done_when = "monday_mail_read" },
             { text = "Найти папку",              done_when = "monday_folder_taken" },
             { text = "Собрать папку по кейсу",   done_when = "monday_case_file_assembled" },
             { text = "Передать кейс в работу",   done_when = "monday_case_file_submitted" },
