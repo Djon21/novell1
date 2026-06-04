@@ -205,9 +205,43 @@ def scan_all() -> int:
         for m in re.finditer(r'#\s*set_flag:\s*([a-zA-Z_][\w]*)\s*=\s*true', text):
             all_set_flags.add(m.group(1))
 
+    # Pass 1.5c: collect all quest:start:ID and quest:done:ID tags
+    quest_starts: dict[str, list[tuple[Path, int]]] = {}
+    quest_dones: dict[str, list[tuple[Path, int]]] = {}
+    quest_invalid: list[tuple[Path, int, str]] = []
+    for f in active:
+        raw_text = f.read_text(encoding="utf-8", errors="replace")
+        for i, ln in enumerate(raw_text.split("\n"), 1):
+            # quest:complete — invalid tag
+            if re.search(r'#\s*quest\s*:\s*complete', ln):
+                quest_invalid.append((f, i, "quest:complete is invalid — use quest:done"))
+                continue
+            # quest:start:ID
+            sm = re.match(r"^.*#\s*quest\s*:\s*start\s*:\s*([a-zA-Z_][\w]*)\s*", ln)
+            if sm:
+                qid = sm.group(1)
+                quest_starts.setdefault(qid, []).append((f, i))
+                continue
+            # quest:done:ID
+            dm = re.match(r"^.*#\s*quest\s*:\s*done\s*:\s*([a-zA-Z_][\w]*)\s*", ln)
+            if dm:
+                qid = dm.group(1)
+                quest_dones.setdefault(qid, []).append((f, i))
+
+    # Читаем quests.lua для проверки существования квестов
+    quest_catalog: set[str] = set()
+    quests_lua_path = ROOT / "main" / "scripts" / "quests.lua"
+    if quests_lua_path.exists():
+        qlua = quests_lua_path.read_text(encoding="utf-8", errors="replace")
+        for km in re.finditer(r"^\s*(\w+)\s*=\s*\{", qlua, re.MULTILINE):
+            name = km.group(1)
+            if name not in ("M", "ORDER_INDEX"):
+                quest_catalog.add(name)
+
     # Pass 2: lint
     _current_speaker = None
     _knot_has_gender_check = False
+    _speaker_tag_line = None  # для проверки пустых реплик
 
     for f in active:
         text = f.read_text(encoding="utf-8", errors="replace")
@@ -343,6 +377,32 @@ def scan_all() -> int:
                 continue
             if count <= 1:  # only found in bootstrap itself (declaration)
                 warn(bootstrap_path, 0, f"dead VAR '{varname}' — declared but never referenced in any active .ink file")
+
+    # Quest tag checks
+    # 1. invalid quest:complete tag
+    for f, ln, msg in quest_invalid:
+        error(f, ln, msg)
+    # 2. quest:start without quest:done
+    for qid in sorted(quest_starts):
+        if qid not in quest_dones:
+            # Skip if quest isn't in catalog (might be removed)
+            if qid in quest_catalog:
+                for f, ln in quest_starts[qid][:1]:
+                    warn(f, ln, f"quest '{qid}' has # quest:start: but NO # quest:done: found")
+    # 3. quest:done without quest:start (might be from previous iteration or external)
+    for qid in sorted(quest_dones):
+        if qid not in quest_starts and qid in quest_catalog:
+            for f, ln in quest_dones[qid][:1]:
+                warn(f, ln, f"quest '{qid}' has # quest:done: but NO # quest:start: found")
+
+    # 4. # return_to_scene not last tag before -> DONE
+    # The `_last_tag_was_return_to_scene` check is done inline during Pass 2
+
+    # 5. Files in New/ directory
+    new_dir = INK_DIR / "New"
+    if new_dir.exists():
+        for nf in sorted(new_dir.rglob("*.ink")):
+            warn(nf, 0, f"file in chapters/New/ — not compiled into chapter_01.json (inactive)")
 
     # Dead knot check: defined but never referenced by -> or Lua scene
     skip_knot_prefixes = ("inv_", "phone_", "msg_", "sms_", "tue_", "mon_", "cafe_", "park_", "shop_", "bar_", "view_")
