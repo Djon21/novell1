@@ -196,6 +196,13 @@ def scan_all() -> int:
                 if knot_part not in all_knots:
                     error(f, i, f"reference to unknown knot '{knot_part}'")
 
+            # Block-form conditional choice: {condition:\n* [choice]
+            # — warn, inline form * {condition} [choice] preferred
+            if stripped.startswith("{") and ":" in stripped and not stripped.startswith("{-"):
+                next_line = lines[i] if i < len(lines) else ""
+                if next_line.strip().startswith("* ["):
+                    warn(f, i, f"block-form conditional '{{...:}}' followed by '* [choice]' on next line — use inline '* {{condition}} [choice]' instead")
+
     eprint(f"\n{len(active)} files scanned, {_error_count} errors, {_warning_count} warnings")
     if "--ci" in sys.argv:
         return 1 if _error_count > 0 else 0
