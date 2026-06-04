@@ -5,7 +5,6 @@
 
 local gs = require "main.scripts.game_state"
 local quests_catalog = require "main.scripts.quests"
-local meta_state = require "main.scripts.meta_state"
 local drag_scroll = require "main.gui.modules.drag_scroll"
 local U = require "main.gui.modules.gui_utils"
 local COLORS = U.COLORS
@@ -226,14 +225,9 @@ end
 
 local function list_all_quests()
     local list = gs.get_quests and gs.get_quests() or {}
-    local iter = tonumber(meta_state and meta_state.get and meta_state.get("iteration_number")) or 1
     local out = {}
     for _, q in ipairs(list) do
-        local cat = quests_catalog.get(q.id)
-        local min_iter = cat and cat.min_iteration or 1
-        if iter >= min_iter then
-            table.insert(out, q)
-        end
+        table.insert(out, q)
     end
     return out
 end
