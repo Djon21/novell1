@@ -257,14 +257,27 @@ def scan_all() -> int:
             if vm:
                 varname = vm.group(1)
                 if varname not in SKIP_SYNC_VARS and varname not in all_set_flags and varname[:1].islower():
-                    warn(f, i, f"'~ {varname} = true' never '# set_flag:{varname}=true' anywhere — flag won't sync to game_state")
-                    has_set_flag = False
-                    for lb in range(max(0, i - 4), min(len(lines), i + 4)):
-                        if lb != i - 1 and lines[lb].strip() == "# set_flag:" + varname + "=true":
-                            has_set_flag = True
-                            break
-                    if not has_set_flag:
-                        warn(f, i, f"'~ {varname} = true' without '# set_flag:{varname}=true' nearby — flag won't sync to game_state")
+                        warn(f, i, f"'~ {varname} = true' never '# set_flag:{varname}=true' anywhere — flag won't sync to game_state")
+
+            # Pronoun-gender mismatch: "я" с {mc_gender} в speaker:npc или "ты" с {mc_gender} в speaker:mc
+            if _current_speaker in ("mc", "npc") and not raw.strip().startswith("*"):
+                # Ищем использование {mc_gender} или {npc_gender} на строке
+                for gtype, expected_speaker, is_ya in (
+                    ("mc_gender", "mc", True),   # "я" + {mc_gender} → должен быть speaker:mc
+                    ("mc_gender", "npc", False),  # "ты" + {mc_gender} → должен быть speaker:npc
+                    ("npc_gender", "npc", True),   # "я" + {npc_gender} → должен быть speaker:npc
+                    ("npc_gender", "mc", False),   # "ты" + {npc_gender} → должен быть speaker:mc
+                ):
+                    if gtype in raw:
+                        pron = "я " if is_ya else "ты "
+                        # Проверяем, что перед alternation есть нужный pronoun в пределах строки
+                        idx = raw.find("{" + gtype)
+                        if idx >= 0:
+                            context = raw[max(0, idx - 25):idx]
+                            if pron in context and _current_speaker != expected_speaker:
+                                tag_name = "{mc_gender}" if gtype == "mc_gender" else "{npc_gender}"
+                                expected = "speaker:mc" if expected_speaker == "mc" else "speaker:npc"
+                                warn(f, i, f"'{pron}...{tag_name}' in {_current_speaker} — should be in {expected} (the pronoun refers to {'speaker' if is_ya else 'listener'})")
 
             # Gendered verb check: реплики с глаголами прошедшего времени без {mc_gender}/{npc_gender}
             if _current_speaker in ("mc", "npc", "none") and not raw.strip().startswith("*") and not _knot_has_gender_check:
