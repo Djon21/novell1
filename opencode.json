@@ -3,9 +3,15 @@
   "instructions": ["AGENTS.md"],
   "permission": {
     "*": "allow",
-    "bash": "ask",
-    "edit": "ask",
-    "external_directory": "ask"
+    "bash": "allow",
+    "edit": "allow",
+    "write": "allow",
+    "read": "allow",
+    "external_directory": "allow",
+    "task": "allow",
+    "question": "allow",
+    "todowrite": "allow",
+    "webfetch": "allow"
   },
   "mcp": {
     "sequential-thinking": {
@@ -17,7 +23,7 @@
       "type": "local",
       "command": ["npx", "-y", "@iflow-mcp/defold-mcp"],
       "enabled": true,
-      "environment": {
+      "env": {
         "BOB_PATH": "C:\\Users\\GoldiM\\novell1\\AVOS\\AVOS_G\\scripts\\bob.jar"
       }
     }
