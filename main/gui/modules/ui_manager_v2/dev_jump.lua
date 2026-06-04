@@ -273,6 +273,7 @@ local function loop2_wednesday_state()
     state.vars.iteration_number = 2
 
     state.items = { "phone" }
+    state.meta = { iteration_number = 2 }
     state.quests = {
         check_the_loop = "active",
     }
@@ -454,6 +455,13 @@ local function apply_state(state)
 
     for name, value in pairs(state.vars or {}) do
         set_story_var(name, value)
+    end
+
+    if state.meta then
+        local ms = require "main.scripts.meta_state"
+        for k, v in pairs(state.meta) do
+            ms.set(k, v)
+        end
     end
 
     for _, item_id in ipairs(state.items or {}) do
