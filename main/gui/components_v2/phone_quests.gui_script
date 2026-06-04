@@ -546,10 +546,13 @@ function init(self)
             elseif src and card_node then
                 local ct = gui.clone_tree(src)
                 if ct then
-                    for _, nm in ipairs(STEP_NAMES) do
+                    for _, nm in ipairs({"box", "mark", "text"}) do
                         local n = ct["quest1_step1_" .. nm]
                         if n then _card_clones[slot]["quest1_step" .. s .. "_" .. nm] = n end
                     end
+                    -- border имеет ID "border" в .gui (не "quest1_step1_border")
+                    local bn = ct["border"]
+                    if bn then _card_clones[slot]["quest1_step" .. s .. "_border"] = bn end
                     local box = _card_clones[slot]["quest1_step" .. s .. "_box"]
                     if box then
                         gui.set_parent(box, card_node)
