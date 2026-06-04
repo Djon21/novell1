@@ -124,7 +124,6 @@ local function sunday_ready_state(place)
     table.insert(state.items, "toothbrush_pasted")
 
     state.quests = {
-        find_phone = "done",
         make_coffee = "done",
         reply_npc = "done",
         meet_npc = "active",

@@ -509,7 +509,6 @@ function M.deserialize(data)
     _flags          = data.flags      or {}
     _inventory      = sanitize_inventory(data.inventory)
     _quests         = data.quests     or {}
-    _quests["find_phone"] = nil
     _terminal_lines = data.terminal_lines or nil
     _map_allowed_pois = data.map_allowed_pois or {}
     _map_all_pois_locked = data.map_all_pois_locked == true

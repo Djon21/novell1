@@ -236,7 +236,6 @@
 // Свежие в Messenger (пара штук, не лавина) живут в 93_phone_messenger.ink.
 -> phone_msg_take_phone_sunday_morning ->
 
-# quest:done:find_phone
 # quest:start:make_coffee
 # map:lock_all
 # phone:app:sms

@@ -99,7 +99,6 @@
 {not phone_history_seeded:
     -> seed_phone_history
 - else:
-    # quest:start:find_phone
     # explore:apartment_bedroom
     -> DONE
 }
@@ -118,7 +117,6 @@
 -> phone_sms_seed_sunday_morning ->
 -> phone_msg_seed_sunday_morning ->
 
-# quest:start:find_phone
 # explore:apartment_bedroom
 -> DONE
 
