@@ -28,7 +28,6 @@ local NODE_IDS = {
     "qtab_done_bg", "qtab_done_label", "qtab_done_count",
     "quests_scrollbar_track", "quests_scrollbar_thumb",
     "quests_footer_line", "quests_footer_left", "quests_footer_right",
-    "border_bg",
 }
 
 for i = 1, QUEST_SLOTS do
@@ -43,10 +42,6 @@ for i = 1, QUEST_SLOTS do
     for j = 1, VISIBLE_STEPS do
         table.insert(NODE_IDS, p .. "_step" .. j .. "_box")
         table.insert(NODE_IDS, p .. "_step" .. j .. "_border")
-        table.insert(NODE_IDS, p .. "_step" .. j .. "_top")
-        table.insert(NODE_IDS, p .. "_step" .. j .. "_bottom")
-        table.insert(NODE_IDS, p .. "_step" .. j .. "_left")
-        table.insert(NODE_IDS, p .. "_step" .. j .. "_right")
         table.insert(NODE_IDS, p .. "_step" .. j .. "_mark")
         table.insert(NODE_IDS, p .. "_step" .. j .. "_text")
     end
@@ -104,6 +99,11 @@ local function set_nodes_enabled(enabled)
     for _, id in ipairs(NODE_IDS) do
         set_node_enabled(id, enabled)
     end
+    -- border_bg: per-slot, идёт вне NODE_IDS
+    for slot = 1, QUEST_SLOTS do
+        local bn = slot == 1 and gui.get_node("border_bg") or (_card_clones and _card_clones[slot] and _card_clones[slot]["border_bg"])
+        if bn then gui.set_enabled(bn, enabled) end
+    end
 end
 
 local function set_text(id, text)
@@ -135,22 +135,8 @@ local function set_box(id, x, y, w, h, color, alpha, z)
     set_color(id, color, alpha)
 end
 
-local function set_border_color(prefix, color, alpha)
-    set_color(prefix .. "_top", color, alpha)
-    set_color(prefix .. "_bottom", color, alpha)
-    set_color(prefix .. "_left", color, alpha)
-    set_color(prefix .. "_right", color, alpha)
-end
-
--- Для шагов: если есть texture border (_border) — красим его,
--- иначе используем старый 4-нодный border (_top/bottom/left/right).
-local function set_step_border(prefix, color, alpha)
-    if get_node(prefix .. "_border") then
-        set_color(prefix .. "_border", color, alpha)
-        return
-    end
-    set_border_color(prefix, color, alpha)
-end
+-- Шаги используют единый texture border (_border).
+-- Card border: border_bg (текстура).
 
 local function utf8_len_and_cut(s, max_chars)
     s = tostring(s or "")
@@ -273,10 +259,24 @@ local function hide_card(i)
     for j = 1, VISIBLE_STEPS do
         set_node_enabled(p .. "_step" .. j .. "_box", false)
         set_node_enabled(p .. "_step" .. j .. "_border", false)
-        set_node_enabled(p .. "_step" .. j .. "_top", false)
-        set_node_enabled(p .. "_step" .. j .. "_bottom", false)
-        set_node_enabled(p .. "_step" .. j .. "_left", false)
-        set_node_enabled(p .. "_step" .. j .. "_right", false)
+        set_node_enabled(p .. "_step" .. j .. "_mark", false)
+        set_node_enabled(p .. "_step" .. j .. "_text", false)
+    end
+end
+
+local function hide_card(i)
+    local p = "quest" .. i
+    for _, suffix in ipairs({
+        "_bg", "_glyph_bg", "_glyph", "_name", "_tag_bg", "_tag",
+        "_desc", "_due", "_pbar_bg", "_pbar_fill", "_pct"
+    }) do
+        set_node_enabled(p .. suffix, false)
+    end
+    local bn = i == 1 and gui.get_node("border_bg") or (_card_clones[i] and _card_clones[i]["border_bg"])
+    if bn then gui.set_enabled(bn, false) end
+    for j = 1, VISIBLE_STEPS do
+        set_node_enabled(p .. "_step" .. j .. "_box", false)
+        set_node_enabled(p .. "_step" .. j .. "_border", false)
         set_node_enabled(p .. "_step" .. j .. "_mark", false)
         set_node_enabled(p .. "_step" .. j .. "_text", false)
     end
@@ -290,33 +290,11 @@ local function show_card(i)
     }) do
         set_node_enabled(p .. suffix, true)
     end
-    set_node_enabled("border_bg", true)
+    local bn = i == 1 and gui.get_node("border_bg") or (_card_clones[i] and _card_clones[i]["border_bg"])
+    if bn then gui.set_enabled(bn, true) end
     for j = 1, VISIBLE_STEPS do
         set_node_enabled(p .. "_step" .. j .. "_box", true)
         set_node_enabled(p .. "_step" .. j .. "_border", true)
-        set_node_enabled(p .. "_step" .. j .. "_top", true)
-        set_node_enabled(p .. "_step" .. j .. "_bottom", true)
-        set_node_enabled(p .. "_step" .. j .. "_left", true)
-        set_node_enabled(p .. "_step" .. j .. "_right", true)
-        set_node_enabled(p .. "_step" .. j .. "_mark", true)
-        set_node_enabled(p .. "_step" .. j .. "_text", true)
-    end
-end
-
-local function show_card(i)
-    local p = "quest" .. i
-    for _, suffix in ipairs({
-        "_bg", "_top", "_bottom", "_left", "_right", "_glyph_bg", "_glyph", "_name", "_tag_bg", "_tag",
-        "_desc", "_due", "_pbar_bg", "_pbar_fill", "_pct"
-    }) do
-        set_node_enabled(p .. suffix, true)
-    end
-    for j = 1, VISIBLE_STEPS do
-        set_node_enabled(p .. "_step" .. j .. "_box", true)
-        set_node_enabled(p .. "_step" .. j .. "_top", true)
-        set_node_enabled(p .. "_step" .. j .. "_bottom", true)
-        set_node_enabled(p .. "_step" .. j .. "_left", true)
-        set_node_enabled(p .. "_step" .. j .. "_right", true)
         set_node_enabled(p .. "_step" .. j .. "_mark", true)
         set_node_enabled(p .. "_step" .. j .. "_text", true)
     end
@@ -364,7 +342,11 @@ local function render_card(i, q)
     local kind, glyph, tag, accent = classify(q)
     local bg_color, bg_alpha, border_color, border_alpha = style_for(kind)
     set_color(p .. "_bg", kind == "normal" and COLORS.card or bg_color, bg_alpha)
-    set_color("border_bg", border_color, border_alpha)
+    local bn = i == 1 and gui.get_node("border_bg") or (_card_clones[i] and _card_clones[i]["border_bg"])
+    if bn then
+        gui.set_color(bn, border_color)
+        if border_alpha ~= nil then gui.set_alpha(bn, border_alpha) end
+    end
     set_color(p .. "_glyph_bg", accent, kind == "done" and 0.18 or 0.20)
     set_color(p .. "_glyph", accent, 1.0)
     set_color(p .. "_name", kind == "normal" and COLORS.paper or accent, kind == "done" and 0.62 or 1.0)
@@ -420,7 +402,7 @@ local function render_card(i, q)
             set_color(box, checked and accent or COLORS.dark, checked and 1.0 or 0.0)
             set_color(mark, checked and COLORS.dark or accent, checked and 0.95 or 0.0)
             set_color(txt, checked and COLORS.paper or COLORS.paper_dim, kind == "done" and 0.45 or 0.86)
-            set_step_border(p .. "_step" .. j, checked and accent or COLORS.paper_dim, checked and 1.0 or 0.40)
+            set_color(p .. "_step" .. j .. "_border", checked and accent or COLORS.paper_dim, checked and 1.0 or 0.40)
         end
     end
 end
@@ -537,39 +519,31 @@ function init(self)
     local RIGHT_X = 340
     local TEXT_W_L = 210
     local TEXT_W_R = 170
+    -- Step 1 из .gui (оригинал) — позиционируем + resize текста.
+    -- Steps 2-7 клонируем из step1 (c texture border).
+    local STEP_NAMES = {"box", "border", "mark", "text"}
     _step_width = {}
     for slot = 1, QUEST_SLOTS do
         local card_node = slot == 1 and gui.get_node("quest1_bg") or _card_clones[slot]["quest1_bg"]
         local get = function(id) return slot == 1 and gui.get_node(id) or _card_clones[slot][id] end
-        for s = 1, 3 do
+        local src = slot == 1 and gui.get_node("quest1_step1_box") or _card_clones[slot]["quest1_step1_box"]
+        for s = 1, VISIBLE_STEPS do
             local col = (s - 1) % 2
             local x = col == 0 and LEFT_X or RIGHT_X
             local y = 86 - math.floor((s - 1) / 2) * STEP_PITCH
             _step_width[s] = col == 0 and TEXT_W_L or TEXT_W_R
-            local box = get("quest1_step" .. s .. "_box")
-            if box then gui.set_position(box, vmath.vector3(x, y, 0.046)) end
-            local txt = get("quest1_step" .. s .. "_text")
-            if txt then gui.set_size(txt, vmath.vector3(_step_width[s], 14, 0)) end
-        end
-    end
-
-    -- Клонируем step1 (с texture border) в step4..step7 для каждой карточки.
-    local STEP_NAMES = {"box", "border", "mark", "text"}
-    for slot = 1, QUEST_SLOTS do
-        local src = slot == 1 and gui.get_node("quest1_step1_box") or _card_clones[slot]["quest1_step1_box"]
-        local card_node = slot == 1 and gui.get_node("quest1_bg") or _card_clones[slot]["quest1_bg"]
-        if src and card_node then
-            for s = 4, VISIBLE_STEPS do
+            if s == 1 then
+                local box = get("quest1_step1_box")
+                if box then gui.set_position(box, vmath.vector3(x, y, 0.046)) end
+                local txt = get("quest1_step1_text")
+                if txt then gui.set_size(txt, vmath.vector3(_step_width[1], 14, 0)) end
+            elseif src and card_node then
                 local ct = gui.clone_tree(src)
                 if ct then
                     for _, nm in ipairs(STEP_NAMES) do
                         local n = ct["quest1_step1_" .. nm]
                         if n then _card_clones[slot]["quest1_step" .. s .. "_" .. nm] = n end
                     end
-                    local col = (s - 1) % 2
-                    local x = col == 0 and LEFT_X or RIGHT_X
-                    local y = 86 - math.floor((s - 1) / 2) * STEP_PITCH
-                    _step_width[s] = col == 0 and TEXT_W_L or TEXT_W_R
                     local box = _card_clones[slot]["quest1_step" .. s .. "_box"]
                     if box then
                         gui.set_parent(box, card_node)
