@@ -280,6 +280,32 @@ local function loop2_wednesday_state()
     return state
 end
 
+local function loop2_after_office_state()
+    local state = common_phone_state()
+    state.flags.washed_up = true
+    state.flags.coffee_drunk = true
+    state.flags.loop2_fake_wednesday_started = true
+    state.flags.loop2_first_invite_rejected = true
+    state.flags.loop2_work_check_done = true
+    state.flags.loop2_returned_home = true
+    state.flags.anomaly_interpreted = true
+    state.flags.loop2_invite_after_office_sent = true
+
+    state.vars.iteration_number = 2
+
+    state.items = { "phone" }
+    state.msg = {
+        { "mila", "Эй, ты там?" },
+        { "mila", "Я так и не получила ответа." },
+        { "mila", "Всё в порядке?" },
+    }
+    state.meta = { iteration_number = 2 }
+    state.quests = {
+        check_the_loop = "done",
+    }
+    return state
+end
+
 local PRESETS = {
     {
         id = "sunday_start_bedroom",
@@ -378,6 +404,12 @@ local PRESETS = {
         label = "Loop 2: fake Wednesday (bedroom)",
         scene = "apartment_bedroom",
         state = loop2_wednesday_state(),
+    },
+    {
+        id = "loop2_after_office",
+        label = "Loop 2: after office check (hall, NPC second msg)",
+        scene = "apartment_hub",
+        state = loop2_after_office_state(),
     },
 }
 
