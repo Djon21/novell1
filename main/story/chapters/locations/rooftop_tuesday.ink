@@ -192,6 +192,13 @@
 -> tue_rooftop_loop_talk
 
 === tue_rooftop_loop_talk ===
+{iteration_number > 2:
+    # speaker:mc
+    Я уже стоял{mc_gender == "female":а|} здесь. В прошлый раз я сделал{mc_gender == "female":а|} выбор. Теперь пришло время проверить, был ли он правильным.
+
+    # speaker:none
+    Тот же ветер. Тот же город внизу. Те же вопросы, на которые пока нет окончательного ответа.
+}
 * [Держаться за человека рядом]
     ~ TRUST = TRUST + 1
     ~ player_was_honest = true

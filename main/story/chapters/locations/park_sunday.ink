@@ -617,6 +617,14 @@
 
 === park_loop_reveal ===
 # speaker:none
+{iteration_number > 2:
+# speaker:mc
+Я знаю этот момент. Я помню его с прошлого раза. И с позапрошлого.
+
+# speaker:none
+{npc_name} не понимает. И я начинаю сначала. В третий раз.
+    -> sunday_date_park_settle
+- else:
 {npc_name} ждёт. Ты делаешь вдох — и говоришь прежде, чем успеваешь испугаться.
 
 # speaker:mc
@@ -691,7 +699,7 @@
 # set_flag:loop2_revealed_to_npc=true
 ~ anomaly_interpreted = true
 ~ TRUST = TRUST + 2
--> sunday_date_park_settle
+}-> sunday_date_park_settle
 
 
 === sunday_date_park_settle ===

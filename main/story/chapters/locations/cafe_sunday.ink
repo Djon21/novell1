@@ -305,6 +305,20 @@
 
 === cafe_loop_reveal ===
 # speaker:none
+{iteration_number > 2:
+# speaker:mc
+Я знаю, что ты сейчас скажешь. Я знал{mc_gender == "female":а|} это в прошлый раз. И в позапрошлый.
+
+# speaker:none
+Я уже дважды сидел{mc_gender == "female":а|} напротив тебя и объяснял{mc_gender == "female":а|}, что время повторяется. И каждый раз ты не помнишь.
+
+# speaker:npc
+Что значит «я знал»?
+
+# speaker:mc
+Я тебе расскажу. В третий раз.
+    -> sunday_date_cafe_settle
+- else:
 Слова повисают в воздухе раньше, чем ты успеваешь их остановить.
 
 # speaker:mc
@@ -392,7 +406,7 @@
 # set_flag:loop2_revealed_to_npc=true
 ~ anomaly_interpreted = true
 ~ TRUST = TRUST + 2
--> sunday_date_cafe_settle
+}-> sunday_date_cafe_settle
 
 
 === sunday_date_cafe_settle ===
