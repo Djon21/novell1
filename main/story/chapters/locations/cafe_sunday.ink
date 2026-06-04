@@ -300,10 +300,8 @@
     ~ INSIGHT = INSIGHT + 1
     -> sunday_date_cafe_settle
 
-{iteration_number > 1 and not loop2_revealed_to_npc:
-* [«Слушай... я уже жил этот день. И знаю, что ты сейчас скажешь.»]
+* {iteration_number > 1 and not loop2_revealed_to_npc} [«Слушай... я уже жил этот день. И знаю, что ты сейчас скажешь.»]
     -> cafe_loop_reveal
-}
 
 === cafe_loop_reveal ===
 # speaker:none

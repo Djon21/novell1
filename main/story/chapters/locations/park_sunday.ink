@@ -503,10 +503,8 @@
     ~ INSIGHT = INSIGHT + 1
     -> sunday_date_park_settle
 
-{iteration_number > 1 and not loop2_revealed_to_npc:
-* [«Слушай... я уже жил этот день.»]
+* {iteration_number > 1 and not loop2_revealed_to_npc} [«Слушай... я уже жил этот день.»]
     -> park_loop_reveal
-}
 
 === park_path_main_talk ===
 # speaker:none
