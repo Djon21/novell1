@@ -83,6 +83,7 @@
 ~ anomaly_noticed = true
 ~ INSIGHT = INSIGHT + 1
 # set_flag:loop2_fake_wednesday_started=true
+# quest:start:check_the_loop
 - else:
 Воскресное утро.
 

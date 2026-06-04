@@ -625,6 +625,7 @@
 ~ anomaly_interpreted = true
 ~ INSIGHT = INSIGHT + 1
 # set_flag:anomaly_interpreted=true
+# quest:done:check_the_loop
 
 # speaker:none
 Телефон коротко вибрирует — напоминание о сообщении, которое пришло, пока ты проверял{mc_gender == "female":а|} пустую реальность.
