@@ -306,6 +306,54 @@ local function loop2_after_office_state()
     return state
 end
 
+local function rooftop_choice_state()
+    local state = common_phone_state()
+    state.flags.sunday_finished = true
+    state.flags.monday_started = true
+    state.flags.tuesday_started = true
+    state.flags.tuesday_morning_started = true
+    state.flags.tuesday_phone_checked = true
+    state.flags.tuesday_left_home = true
+    state.flags.tuesday_consequence_seen = true
+    state.flags.tuesday_investigation_done = true
+    -- loop2 флаги
+    state.flags.washed_up = true
+    state.flags.coffee_drunk = true
+    state.flags.loop2_fake_wednesday_started = true
+    state.flags.loop2_first_invite_rejected = true
+    state.flags.loop2_work_check_done = true
+    state.flags.loop2_returned_home = true
+    state.flags.anomaly_interpreted = true
+    state.flags.sunday_messenger_invite_sent = true
+    state.flags.date_agreed = true
+    state.flags.sunday_ready_to_leave = true
+    state.flags.met_npc_sunday = true
+    state.flags.monday_left_home = true
+    state.flags.monday_ready_for_work = true
+    state.flags.reached_office = true
+    state.flags.monday_checked_in_office = true
+    state.flags.monday_mail_read = true
+    state.flags.monday_folder_taken = true
+    state.flags.monday_case_file_assembled = true
+    state.flags.monday_case_file_submitted = true
+    state.flags.mon_office_error_seen = true
+    -- флаги для открытия истинной концовки (нужно 2+ false endings)
+    state.flags.loop2_revealed_to_npc = true
+
+    state.vars.iteration_number = 2
+    state.vars.false_endings_count = 2
+
+    state.items = { "phone" }
+    state.meta = { iteration_number = 2 }
+    state.quests = {
+        check_the_loop = "done",
+        loop2_date = "done",
+        loop2_monday = "done",
+        reveal_the_loop = "done",
+    }
+    return state
+end
+
 local PRESETS = {
     {
         id = "sunday_start_bedroom",
@@ -410,6 +458,13 @@ local PRESETS = {
         label = "Loop 2: after office check (hall, NPC second msg)",
         scene = "apartment_hub",
         state = loop2_after_office_state(),
+    },
+    {
+        id = "rooftop_choice",
+        label = "Rooftop: ending choice (iter 2, all endings)",
+        knot = "tue_rooftop_loop_talk",
+        state = rooftop_choice_state(),
+        allow_chapter_end = true,
     },
 }
 
