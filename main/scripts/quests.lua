@@ -33,6 +33,22 @@ M.phone_order = {
     "break_the_loop",
 }
 
+M.phone_order_iter1 = {
+    "make_coffee",
+    "reply_npc",
+    "meet_npc",
+    "spend_sunday",
+    "go_to_office",
+    "work_monday_case",
+    "follow_monday_trace",
+}
+
+M.phone_order_iter2 = {
+    "check_the_loop",
+    "reveal_the_loop",
+    "break_the_loop",
+}
+
 local ORDER_INDEX = {}
 for i, id in ipairs(M.phone_order) do
     ORDER_INDEX[id] = i
@@ -160,6 +176,12 @@ end
 
 function M.get_order(id)
     return ORDER_INDEX[id] or math.huge
+end
+
+-- Возвращает правильный phone_order для текущей итерации.
+-- iter_number = tonumber из meta_state.get("iteration_number") или 1.
+function M.get_order_for_iteration(iter_number)
+    return (tonumber(iter_number) or 1) >= 2 and M.phone_order_iter2 or M.phone_order_iter1
 end
 
 local function is_step_done(step, gs)
