@@ -21,7 +21,6 @@
 local M = {}
 
 M.phone_order = {
-    "find_phone",
     "make_coffee",
     "check_the_loop",
     "reply_npc",
@@ -40,15 +39,6 @@ for i, id in ipairs(M.phone_order) do
 end
 
 M.quests = {
-    find_phone = {
-        name = "Найти телефон",
-        description = "Телефон вибрирует рядом с кроватью. Нужно взять его и включить экран: там обычный утренний шум, без срочного ответа.",
-        steps = {
-            { text = "Подобрать телефон", done_when = "phone_taken" },
-            { text = "Включить экран",    done_when = "phone_active" },
-        },
-    },
-
     reply_npc = {
         name = "Ответить в Messenger",
         description = "После утренних дел пришло личное сообщение. Нужно открыть Messenger и выбрать место встречи.",
