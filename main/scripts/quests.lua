@@ -139,12 +139,13 @@ M.quests = {
 
     check_the_loop = {
         name = "Проверить день",
-        description = "Сегодня не понедельник, а странная среда. Офис закрыт, всё не на своих местах. Нужно проверить, осознать и принять реальность.",
+        description = "Сегодня не понедельник, а странная среда. Нужно собраться, проверить офис и понять, что происходит.",
         steps = {
-            { text = "Проснуться в среду",   done_when = "loop2_fake_wednesday_started" },
-            { text = "Проверить офис",       done_when = "loop2_work_check_done" },
-            { text = "Вернуться домой",      done_when = "loop2_returned_home" },
-            { text = "Принять реальность",   done_when = "anomaly_interpreted" },
+            { text = "Умыться и сделать кофе",     done_when = "coffee_drunk" },
+            { text = "Ответить на сообщение",      done_when = "loop2_first_invite_rejected" },
+            { text = "Проверить офис",             done_when = "loop2_work_check_done" },
+            { text = "Вернуться домой",            done_when = "loop2_returned_home" },
+            { text = "Принять реальность",         done_when = "anomaly_interpreted" },
         },
     },
 
