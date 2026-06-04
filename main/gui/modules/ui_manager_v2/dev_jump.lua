@@ -220,7 +220,7 @@ local function monday_office_state()
 
     table.insert(state.items, "card")
     state.quests.go_to_office = "done"
-    state.quests.work_case = "active"
+    state.quests.work_monday_case = "active"
     return state
 end
 
