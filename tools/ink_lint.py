@@ -170,6 +170,13 @@ def scan_all() -> int:
         for m in re.finditer(r"^===\s*([a-zA-Z_][\w]*)\s*===", text, re.MULTILINE):
             all_knots.add(m.group(1))
 
+    # Pass 1.5: collect all # set_flag:name=true for sync check
+    all_set_flags: set[str] = set()
+    for f in active:
+        text = f.read_text(encoding="utf-8", errors="replace")
+        for m in re.finditer(r'#\s*set_flag:\s*([a-zA-Z_][\w]*)\s*=\s*true', text):
+            all_set_flags.add(m.group(1))
+
     # Pass 2: lint
     _current_speaker = None
     _knot_has_gender_check = False
@@ -236,6 +243,28 @@ def scan_all() -> int:
                 next_line = lines[i] if i < len(lines) else ""
                 if next_line.strip().startswith("* ["):
                     warn(f, i, f"block-form conditional '{{...:}}' followed by '* [choice]' — use inline '* {{condition}} [choice]' instead")
+
+            # Проверка: ~ flag = true без # set_flag:flag=true нигде в коде
+            SKIP_SYNC_VARS = {
+                "INSIGHT", "TRUST", "SYNC",
+                "phone_active", "phone_taken", "can_leave_apt",
+                "anomaly_noticed", "npc_opened_up", "phone_history_seeded",
+                "date_route_chosen", "used_fallback", "requested_clarification",
+                "understood_uncertainty", "decision_deferred",
+                "office_strategy", "day_strategy", "anomaly_interpreted",
+            }
+            vm = re.match(r"^\s*~\s*([a-zA-Z_][\w]*)\s*=\s*true\s*$", stripped)
+            if vm:
+                varname = vm.group(1)
+                if varname not in SKIP_SYNC_VARS and varname not in all_set_flags and varname[:1].islower():
+                    warn(f, i, f"'~ {varname} = true' never '# set_flag:{varname}=true' anywhere — flag won't sync to game_state")
+                    has_set_flag = False
+                    for lb in range(max(0, i - 4), min(len(lines), i + 4)):
+                        if lb != i - 1 and lines[lb].strip() == "# set_flag:" + varname + "=true":
+                            has_set_flag = True
+                            break
+                    if not has_set_flag:
+                        warn(f, i, f"'~ {varname} = true' without '# set_flag:{varname}=true' nearby — flag won't sync to game_state")
 
             # Gendered verb check: реплики с глаголами прошедшего времени без {mc_gender}/{npc_gender}
             if _current_speaker in ("mc", "npc", "none") and not raw.strip().startswith("*") and not _knot_has_gender_check:
