@@ -266,6 +266,27 @@ local function tuesday_state()
     return state
 end
 
+local function loop2_wednesday_state()
+    local state = common_phone_state()
+    state.flags.washed_up = true
+    state.flags.coffee_drunk = true
+    state.flags.mug_taken = true
+    state.flags.kitchen_morning_seen = true
+    state.flags.loop2_fake_wednesday_started = true
+    state.flags.sunday_messenger_invite_sent = true
+
+    state.vars.washed_up = true
+    state.vars.coffee_drunk = true
+    state.vars.mug_taken = true
+    state.vars.iteration_number = 2
+
+    state.items = { "phone" }
+    state.quests = {
+        check_the_loop = "active",
+    }
+    return state
+end
+
 local PRESETS = {
     {
         id = "sunday_start_bedroom",
@@ -358,6 +379,12 @@ local PRESETS = {
         knot = "tue_rooftop_entry",
         state = tuesday_state(),
         allow_chapter_end = true,
+    },
+    {
+        id = "loop2_wednesday",
+        label = "Loop 2: fake Wednesday (kitchen)",
+        scene = "apartment_kitchen",
+        state = loop2_wednesday_state(),
     },
 }
 
