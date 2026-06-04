@@ -67,14 +67,8 @@ M.quests = {
         name = "Встретиться",
         description = "Вы договорились увидеться сегодня. Осталось собраться, выйти из квартиры и добраться до выбранного места.",
         steps = {
-            { text = "Договориться о встрече", done_when = "date_agreed" },
-            {
-                text = "Выбрать место",
-                done_when_any = { "date_place_cafe", "date_place_park" },
-            },
             { text = "Собраться",             done_when = "sunday_ready_to_leave" },
             { text = "Выйти из квартиры",     done_when = "left_apartment" },
-            { text = "Открыть карту",         done_when = "map_opened_after_apartment" },
             { text = "Прийти на встречу",     done_when = "met_npc_sunday" },
         },
     },
@@ -83,7 +77,6 @@ M.quests = {
         name = "Продолжить воскресенье",
         description = "После первой встречи день ещё не закончился. Можно провести немного времени вместе, вернуться домой и лечь спать.",
         steps = {
-            { text = "Встретиться", done_when = "met_npc_sunday" },
             { text = "Решить, куда пойти дальше", done_when = "sunday_after_date_active" },
             { text = "Провести ещё немного времени", done_when = "sunday_second_stop_done" },
             { text = "Вернуться домой", done_when = "sunday_evening_started" },
@@ -121,7 +114,6 @@ M.quests = {
         name = "Проверить последствия",
         description = "Вторник показывает, что вчерашнее стандартное решение не исчезло. Нужно увидеть след, разобраться с кейсом и дойти до разговора на крыше.",
         steps = {
-            { text = "Проснуться во вторник",       done_when = "tuesday_morning_started" },
             { text = "Проверить телефон",          done_when = "tuesday_phone_checked" },
             { text = "Выйти из дома",              done_when = "tuesday_left_home" },
             { text = "Увидеть последствие кейса",  done_when = "tuesday_consequence_seen" },
