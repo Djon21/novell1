@@ -267,6 +267,7 @@
 # set_flag:office_standard_solution_applied=true
 ~ office_standard_solution_applied = true
 # set_flag:mon_office_error_seen=true
+# quest:done:loop2_monday
 # note:add:Стандартное решение:данных недостаточно / решение применено автоматически
 # clue:add:standard_solution:Стандартное решение применено без уточнения
 -> mon_office_result_system_bias
@@ -374,6 +375,7 @@
 # set_flag:office_standard_solution_applied=true
 ~ office_standard_solution_applied = true
 # set_flag:mon_office_error_seen=true
+# quest:done:loop2_monday
 # note:add:Стандартное решение:оператор подтвердил стандартный путь при неполных данных
 -> mon_office_result_system_bias
 
@@ -393,6 +395,7 @@
 Статус меняется на needs_clarification. Он выглядит некрасиво, но честно.
 
 # set_flag:mon_office_error_seen=true
+# quest:done:loop2_monday
 # set_flag:office_clarification_requested=true
 ~ office_clarification_requested = true
 # note:add:Pipeline:validate / request_input / wait_for_response
@@ -415,6 +418,7 @@
 В очереди появляется новый статус: blocked_until_valid_input. Длинно, некрасиво, зато без лжи.
 
 # set_flag:mon_office_error_seen=true
+# quest:done:loop2_monday
 # set_flag:office_auto_solution_blocked=true
 ~ office_auto_solution_blocked = true
 # note:add:Pipeline:ambiguous case / auto resolution blocked

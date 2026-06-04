@@ -47,6 +47,7 @@ M.phone_order_iter2 = {
     "check_the_loop",
     "loop2_date",
     "reveal_the_loop",
+    "loop2_monday",
     "break_the_loop",
 }
 
@@ -168,6 +169,16 @@ M.quests = {
             { text = "Обсудить в баре",              done_when = "bar_discussion_done" },
             { text = "Договориться о понедельнике",  done_when = "loop2_office_mentioned" },
             { text = "Проснуться с планом",          done_when = "loop2_monday_aware" },
+        },
+    },
+
+    loop2_monday = {
+        name = "Проверить систему",
+        description = "Понедельник снова здесь. Офис, кейс, решение. Но теперь ты знаешь, что искать.",
+        steps = {
+            { text = "Добраться до офиса",    done_when = "reached_office" },
+            { text = "Проверить кейс",       done_when = "monday_mail_read" },
+            { text = "Принять решение",      done_when = "mon_office_error_seen" },
         },
     },
 
