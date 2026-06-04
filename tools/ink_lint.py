@@ -159,7 +159,7 @@ def scan_all() -> int:
     for f in all_ink:
         if "_old" in f.name:
             continue
-        if "archive" in f.parts:
+        if "archive" in f.parts or f.name.startswith("archive_"):
             continue
         active.append(f)
 
@@ -205,13 +205,17 @@ def scan_all() -> int:
         for m in re.finditer(r'#\s*set_flag:\s*([a-zA-Z_][\w]*)\s*=\s*true', text):
             all_set_flags.add(m.group(1))
 
-    # Pass 1.5c: collect all quest:start:ID and quest:done:ID tags
+    # Collect quest tags + phone_map locations
     quest_starts: dict[str, list[tuple[Path, int]]] = {}
     quest_dones: dict[str, list[tuple[Path, int]]] = {}
     quest_invalid: list[tuple[Path, int, str]] = []
+    phone_map_lines: list[tuple[Path, int, list[str]]] = []
+    set_flag_no_var: list[tuple[Path, int, str]] = []
+
     for f in active:
         raw_text = f.read_text(encoding="utf-8", errors="replace")
-        for i, ln in enumerate(raw_text.split("\n"), 1):
+        file_lines = raw_text.split("\n")
+        for i, ln in enumerate(file_lines, 1):
             # quest:complete — invalid tag
             if re.search(r'#\s*quest\s*:\s*complete', ln):
                 quest_invalid.append((f, i, "quest:complete is invalid — use quest:done"))
@@ -227,6 +231,18 @@ def scan_all() -> int:
             if dm:
                 qid = dm.group(1)
                 quest_dones.setdefault(qid, []).append((f, i))
+            # # set_flag:name  без VAR в bootstrap
+            fm = re.search(r'#\s*set_flag:\s*([a-zA-Z_][\w]*)\s*=', ln)
+            if fm:
+                flag_name = fm.group(1)
+                if flag_name not in ink_vars:
+                    set_flag_no_var.append((f, i, flag_name))
+            # # phone:map — для проверки map:allow/map:lock_all
+            if "# phone:map" in ln:
+                # Собираем контекст — 15 строк назад
+                ctx_start = max(0, i - 16)
+                ctx = file_lines[ctx_start:i]
+                phone_map_lines.append((f, i, ctx))
 
     # Читаем quests.lua для проверки существования квестов
     quest_catalog: set[str] = set()
@@ -263,6 +279,16 @@ def scan_all() -> int:
             if re.match(r"^\s*#\s*speaker\s*:", stripped, re.IGNORECASE):
                 m = re.search(r"speaker\s*:\s*(\w+)", stripped, re.IGNORECASE)
                 _current_speaker = m.group(1).lower() if m else None
+                _speaker_tag_line = i
+                continue
+
+            # Empty speaker dialogue: после # speaker:mc/npc/none идёт -> или # comment без текста
+            if _speaker_tag_line is not None and stripped:
+                if stripped.startswith("//") or (stripped.startswith("#") and "speaker" not in stripped):
+                    continue  # теги и комментарии между speaker и текстом — норма
+                if re.match(r"^(->|\* |\})", stripped):
+                    warn(f, _speaker_tag_line, f"empty speaker dialogue — no text after '# speaker:' tag (line {i}: '{stripped[:40]}')")
+                _speaker_tag_line = None
 
             # INCLUDE
             im = re.match(r"^INCLUDE\s+(.+)$", stripped)
@@ -423,6 +449,61 @@ def scan_all() -> int:
                          "phone_call_seed_sunday_morning", "phone_mail_seed_sunday_morning"):
             continue
         warn(INK_DIR, 0, f"dead knot '{knot_name}' — defined but never referenced by any -> or Lua scene")
+
+    # 6. Quest ID in ink tags not found in quests.lua catalog
+    for qid in sorted(set(list(quest_starts.keys()) + list(quest_dones.keys()))):
+        if qid not in quest_catalog and qid not in ("find_phone",):
+            for f, ln in (quest_starts.get(qid) or quest_dones.get(qid) or []):
+                warn(f, ln, f"quest tag references '{qid}' which is not defined in quests.lua")
+
+    # 7. # set_flag:name without VAR in bootstrap
+    skip_novar_suffixes = ("_seen", "_arrived", "_done", "_finished", "_pending", "_started", "_taken")
+    for f, ln, flag_name in set_flag_no_var:
+        # Флаги, которые не нужно объявлять в Ink (только Lua-side)
+        if flag_name in ink_vars:
+            continue
+        # Флаги-атомы (room_seen, arrived, done) — не требуют VAR
+        if any(flag_name.endswith(s) for s in skip_novar_suffixes):
+            continue
+        # Флаги без VAR, которые всё равно нужны в Lua (explicit skip list)
+        if flag_name in ("bedroom_morning_seen", "kitchen_morning_seen", "mon_home_bedroom_seen",
+                         "mon_home_hall_seen", "mon_home_kitchen_seen", "tue_home_bedroom_seen",
+                         "tue_home_hall_seen", "tue_home_kitchen_seen",
+                         "monday_dressed", "monday_washed_up", "work_card_taken",
+                         "monday_ready_for_work", "monday_left_home", "monday_finished",
+                         "tuesday_pending", "tuesday_morning_started", "tuesday_left_home",
+                         "tuesday_consequence_seen", "tuesday_investigation_done",
+                         "tuesday_rooftop_reached",
+                         "reached_office", "reached_work_district", "left_apartment",
+                         "mon_office_error_seen", "mon_office_arrived", "monday_office_finished",
+                         "mon_office_started", "monday_mail_read", "monday_folder_taken",
+                         "monday_report_page_taken", "monday_case_file_assembled",
+                         "monday_case_file_submitted", "monday_checked_in_office",
+                         "iteration_001_finished", "cafe_arrived", "cafe_order_done",
+                         "cafe_talk_done", "cafe_window_detail_seen", "cafe_shelf_detail_seen",
+                         "cafe_backroom_mirror_seen", "cafe_backroom_board_seen",
+                         "cafe_backroom_books_seen",
+                         "park_npc_at_bench", "park_npc_at_path", "park_npc_bench_shown",
+                         "park_npc_path_shown", "sunday_viewpoint_seen",
+                         "loop2_invite_after_office_sent",
+                         "msg_mila_replied", "msg_artem_replied",
+                         "tuesday_log_reviewed", "tuesday_npc_talked", "tuesday_appeal_read",
+                         "messenger_work_team_ack", "messenger_prod_bot_questioned",
+                         "bar_counter_seen_after_reveal",
+                         "cafe_order_coffee", "cafe_order_sweet", "cafe_order_tea"):
+            continue
+        warn(f, ln, f"'# set_flag:{flag_name}=...' but no 'VAR {flag_name}' in 00_bootstrap.ink")
+
+    # 8. # phone:map without # map:allow or # map:lock_all in context
+    for f, ln, ctx in phone_map_lines:
+        has_map_setup = False
+        for ctx_line in ctx:
+            cl = ctx_line.strip()
+            if cl.startswith("# map:allow") or cl.startswith("# map:lock_all") or cl.startswith("# map:lock_to"):
+                has_map_setup = True
+                break
+        if not has_map_setup:
+            warn(f, ln, f"'# phone:map' without preceding '# map:allow' or '# map:lock_all' — map may show wrong POIs")
 
     eprint(f"\n{len(active)} files scanned, {_error_count} errors, {_warning_count} warnings")
     if "--ci" in sys.argv:
