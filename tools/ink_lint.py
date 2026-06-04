@@ -221,11 +221,11 @@ def scan_all() -> int:
                     error(f, i, f"reference to unknown knot '{knot_part}'")
                 # -> DONE без тега завершения сцены перед ним
                 if knot_part == "DONE" and (not raw or raw[0] not in (" ", "\t")):
-                    # Разрешённые теги: return_to_scene, explore:, adv:, splash:, phone:map, phone:sms, phone:messenger, map:allow, hud:hint
+                    # Разрешённые теги: return_to_scene, explore:, adv:, goto_scene:, phone:map, phone:sms, phone:messenger
                     has_ret = False
                     for lookback in range(max(0, i - 11), i - 1):
                         ln = lines[lookback].strip()
-                        if ln.startswith("# return_to_scene") or ln.startswith("# explore:") or ln.startswith("# adv:"):
+                        if ln.startswith("# return_to_scene") or ln.startswith("# explore:") or ln.startswith("# adv:") or ln.startswith("# goto_scene:") or ln.startswith("# phone:"):
                             has_ret = True
                             break
                     if not has_ret:
