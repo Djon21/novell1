@@ -436,6 +436,7 @@
 # set_flag:sunday_after_date_active=true
 # set_flag:cafe_talk_done=true
 # quest:done:meet_npc
+# quest:done:loop2_date
 # quest:start:spend_sunday
 # map:lock_all
 {loop2_revealed_to_npc:

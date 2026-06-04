@@ -403,8 +403,9 @@
     ~ sunday_morning_routine_seen = true
     ~ sunday_messenger_invite_sent = true
     -> phone_msg_sunday_invite_after_coffee ->
-    # quest:start:reply_npc
-    # hud:hint:phone
+# quest:start:reply_npc
+# quest:start:loop2_date
+# hud:hint:phone
 - else:
     # speaker:none
     Телефон лежит рядом. Новое сообщение уже ждёт в Messenger.

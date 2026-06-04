@@ -45,6 +45,7 @@ M.phone_order_iter1 = {
 
 M.phone_order_iter2 = {
     "check_the_loop",
+    "loop2_date",
     "reveal_the_loop",
     "break_the_loop",
 }
@@ -146,6 +147,16 @@ M.quests = {
             { text = "Проверить офис",             done_when = "loop2_work_check_done" },
             { text = "Вернуться домой",            done_when = "loop2_returned_home" },
             { text = "Принять реальность",         done_when = "anomaly_interpreted" },
+        },
+    },
+
+    loop2_date = {
+        name = "Ещё один день",
+        description = "Реальность принята. NPC написал снова — пора ответить, собраться и пойти на встречу.",
+        steps = {
+            { text = "Ответить на приглашение", done_when = "date_agreed" },
+            { text = "Собраться на встречу",    done_when = "sunday_ready_to_leave" },
+            { text = "Провести время вместе",   done_when = "met_npc_sunday" },
         },
     },
 

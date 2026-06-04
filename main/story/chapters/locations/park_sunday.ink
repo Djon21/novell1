@@ -733,6 +733,7 @@
 # set_flag:met_npc_sunday=true
 # set_flag:sunday_after_date_active=true
 # quest:done:meet_npc
+# quest:done:loop2_date
 # quest:start:spend_sunday
 # map:lock_all
 {loop2_revealed_to_npc:
