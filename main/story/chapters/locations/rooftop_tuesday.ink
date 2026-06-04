@@ -127,6 +127,7 @@
 
 ~ current_iteration_end = "chapter_001"
 # set_flag:iteration_001_finished=true
+# quest:done:break_the_loop
 # pulse:1.0,255,255,255
 # shake:0.15,0.5
 -> loop1_to_iter2_reset
@@ -247,6 +248,7 @@
 ~ current_iteration_end = "npc"
 ~ TRUST = TRUST + 1
 ~ false_endings_count = false_endings_count + 1
+# quest:done:break_the_loop
 # loop:end:false:ending_npc
 -> tue_rooftop_loop_signal
 
@@ -276,6 +278,7 @@
 ~ current_iteration_end = "system"
 ~ INSIGHT = INSIGHT + 1
 ~ false_endings_count = false_endings_count + 1
+# quest:done:break_the_loop
 # loop:end:false:ending_system
 -> tue_rooftop_loop_signal
 
@@ -414,6 +417,7 @@
 ~ INSIGHT = INSIGHT + 2
 ~ TRUST = TRUST + 1
 ~ SYNC = SYNC + 2
+# quest:done:break_the_loop
 # loop:end:true
 -> tue_rooftop_loop_signal
 

@@ -691,8 +691,10 @@
 }
 
 ~ loop2_revealed_to_npc = true
+# set_flag:loop2_revealed_to_npc=true
 ~ anomaly_interpreted = true
 ~ TRUST = TRUST + 2
+# quest:start:reveal_the_loop
 -> sunday_date_park_settle
 
 
