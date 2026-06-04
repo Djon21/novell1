@@ -306,6 +306,19 @@ local function loop2_after_office_state()
     return state
 end
 
+local function loop3_start_state()
+    local state = common_phone_state()
+    state.flags.loop2_revealed_to_npc = true
+
+    state.vars.iteration_number = 3
+    state.vars.loop_awareness = 2
+
+    state.items = { "phone" }
+    state.meta = { iteration_number = 3 }
+    state.quests = {}
+    return state
+end
+
 local function rooftop_choice_state()
     local state = common_phone_state()
     state.flags.sunday_finished = true
@@ -458,6 +471,12 @@ local PRESETS = {
         label = "Loop 2: after office check (hall, NPC second msg)",
         scene = "apartment_hub",
         state = loop2_after_office_state(),
+    },
+    {
+        id = "loop3_start",
+        label = "Loop 3: start (bedroom, no fake Wednesday)",
+        scene = "apartment_bedroom",
+        state = loop3_start_state(),
     },
     {
         id = "rooftop_choice",
