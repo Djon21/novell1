@@ -555,12 +555,6 @@ function init(self)
         end
     end
 
-    -- Одноразовая чистка: find_phone удалён из каталога,
-    -- убираем его из game_state если он там висит.
-    if gs.get_quest and gs.get_quest("find_phone") then
-        gs.set_quest("find_phone", nil)
-    end
-
     self.list_drag = drag_scroll.new({
         step_px      = 32,
         threshold_px = 8,
