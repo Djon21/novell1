@@ -37,6 +37,12 @@
 # speaker:none
 Ты рассказываешь всё: как дошёл{mc_gender == "female":а|} до офиса, хотя офис был закрыт, как вернулся{mc_gender == "female":а|} домой, как {npc_gender == "female": написала она|написал он}, как вы встретились {date_place_cafe: в кафе| в парке}, как звучали те же слова.
 
+{loop2_first_invite_rejected:
+    {date_place_park:
+    И ещё одна мелочь: в прошлый раз {npc_name} ждал{npc_gender == "female":а|} у скамейки. А сегодня — в аллее. Будто что-то внутри {npc_name_gen} тоже изменило маршрут.
+    }
+}
+
 {npc_name} слушает не перебивая.
 
 # speaker:npc

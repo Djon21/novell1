@@ -240,12 +240,12 @@
 // iter 2 = "в аллее" (тонкая аномалия повторения).
 // Спрайт NPC появляется НЕ здесь, а в on_enter соответствующей sub-сцены
 // (park_bench_npc_show / park_path_npc_show).
-{iteration_number % 2 == 0:
-    // EVEN iter (iter 2, 4, ...) — at path
+{loop2_first_invite_rejected:
+    // Игрок сначала отклонил приглашение и пошёл в офис → NPC ждёт в аллее
     -> phone_msg_park_where_reply_path ->
     # set_flag:park_npc_at_path=true
 - else:
-    // ODD iter (iter 1, 3, ...) — at bench
+    // Игрок принял приглашение сразу → NPC ждёт у скамейки (как в iter 1)
     -> phone_msg_park_where_reply_bench ->
     # set_flag:park_npc_at_bench=true
 }
