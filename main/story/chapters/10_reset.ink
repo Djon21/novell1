@@ -11,7 +11,7 @@
 // Сюжетный переход в новую петлю. Это не ручной reset_iteration:
 // meta-состояние и выбор персонажа сохраняются, мир возвращается в воскресенье.
 # meta:add:completed_iterations:1
-# meta:set:iteration_number:2
+# meta:add:iteration_number:1
 # meta:add:loop_awareness:1
 ~ iteration_number = iteration_number + 1
 ~ loop_awareness = loop_awareness + 1
