@@ -526,13 +526,12 @@ function init(self)
     local TEXT_W_L = 180
     local TEXT_W_R = 150
     -- Step 1 из .gui (оригинал) — позиционируем + resize текста.
-    -- Steps 2-7 клонируем из step1 (c texture border).
-    local STEP_NAMES = {"box", "border", "mark", "text"}
+    -- Steps 2-7 клонируем из step1 (c texture border), всегда от оригинала .gui
+    local PROTO = gui.get_node("quest1_step1_box")
     _step_width = {}
     for slot = 1, QUEST_SLOTS do
         local card_node = slot == 1 and gui.get_node("quest1_bg") or _card_clones[slot]["quest1_bg"]
         local get = function(id) return slot == 1 and gui.get_node(id) or _card_clones[slot][id] end
-        local src = slot == 1 and gui.get_node("quest1_step1_box") or _card_clones[slot]["quest1_step1_box"]
         for s = 1, VISIBLE_STEPS do
             local col = (s - 1) % 2
             local x = col == 0 and LEFT_X or RIGHT_X
@@ -543,23 +542,24 @@ function init(self)
                 if box then gui.set_position(box, vmath.vector3(x, y, 0.046)) end
                 local txt = get("quest1_step1_text")
                 if txt then gui.set_size(txt, vmath.vector3(_step_width[1], 14, 0)) end
-            elseif src and card_node then
-                local ct = gui.clone_tree(src)
+            elseif PROTO and card_node then
+                local ct = gui.clone_tree(PROTO)
                 if ct then
-                    for _, nm in ipairs({"box", "mark", "text"}) do
-                        local n = ct["quest1_step1_" .. nm]
-                        if n then _card_clones[slot]["quest1_step" .. s .. "_" .. nm] = n end
-                    end
-                    -- border имеет ID "border" в .gui (не "quest1_step1_border")
-                    local bn = ct["border"]
-                    if bn then _card_clones[slot]["quest1_step" .. s .. "_border"] = bn end
-                    local box = _card_clones[slot]["quest1_step" .. s .. "_box"]
+                    local box = ct["quest1_step1_box"]
                     if box then
+                        _card_clones[slot]["quest1_step" .. s .. "_box"] = box
                         gui.set_parent(box, card_node)
                         gui.set_position(box, vmath.vector3(x, y, 0.046))
                     end
-                    local txt = _card_clones[slot]["quest1_step" .. s .. "_text"]
-                    if txt then gui.set_size(txt, vmath.vector3(_step_width[s], 14, 0)) end
+                    local txt = ct["quest1_step1_text"]
+                    if txt then
+                        _card_clones[slot]["quest1_step" .. s .. "_text"] = txt
+                        gui.set_size(txt, vmath.vector3(_step_width[s], 14, 0))
+                    end
+                    local bn = ct["border"]
+                    if bn then _card_clones[slot]["quest1_step" .. s .. "_border"] = bn end
+                    local mk = ct["quest1_step1_mark"]
+                    if mk then _card_clones[slot]["quest1_step" .. s .. "_mark"] = mk end
                 end
             end
         end
