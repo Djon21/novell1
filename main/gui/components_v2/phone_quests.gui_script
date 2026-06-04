@@ -227,9 +227,7 @@ local function list_all_quests()
     local list = gs.get_quests and gs.get_quests() or {}
     local out = {}
     for _, q in ipairs(list) do
-        if quests_catalog.get(q.id) then
-            table.insert(out, q)
-        end
+        table.insert(out, q)
     end
     return out
 end
@@ -555,6 +553,12 @@ function init(self)
                 end
             end
         end
+    end
+
+    -- Одноразовая чистка: find_phone удалён из каталога,
+    -- убираем его из game_state если он там висит.
+    if gs.get_quest and gs.get_quest("find_phone") then
+        gs.set_quest("find_phone", nil)
     end
 
     self.list_drag = drag_scroll.new({
