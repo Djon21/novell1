@@ -284,7 +284,7 @@
 -> DONE
 
 === leave_apartment_prompt ===
-{iteration_number > 1 and not loop2_work_check_done:
+{iteration_number == 2 and not loop2_work_check_done:
     {not sunday_dressed:
         # speaker:mc
         Если сегодня среда, то сначала надо хотя бы выйти как на работу.

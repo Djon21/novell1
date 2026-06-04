@@ -139,6 +139,9 @@
 // -----------------------------------------------------------------------------
 
 === msg_thread_mila ===
+{iteration_number > 2:
+    -> msg_thread_mila_iter3
+}
 {iteration_number > 1:
     {loop2_work_check_done:
         -> msg_thread_mila_loop2
@@ -218,7 +221,53 @@
     -> DONE
 
 
+=== msg_thread_mila_iter3 ===
+# speaker:none
+Открываешь Messenger. Сообщение от {npc_name}.
+
+# speaker:mc
+«Ты сегодня вообще живой?» — да, я помню. В прошлый раз я ответил{mc_gender == "female":а|} так же. И в позапрошлый — тоже.
+
+Третье воскресенье. Третье сообщение. Наверное, я должен устать. Но нет — скорее привык.
+
+* [«А тебе куда хочется?»]
+    # speaker:mc
+    Кафе, парк — я уже знаю оба варианта. Пусть выберет {npc_name}.
+
+    # msg:reply:mila:А тебе куда хочется?
+    -> msg_npc_place_sent_iter3
+
+* [«Давай в кафе. Как в прошлый раз.»]
+    # speaker:mc
+    В прошлый раз это сработало. Ну, почти.
+
+    # msg:reply:mila:Давай в кафе. Как в прошлый раз.
+    # set_flag:date_agreed=true
+    # set_flag:date_place_cafe=true
+    ~ date_agreed = true
+    ~ date_place_cafe = true
+    -> msg_npc_place_sent
+
+* [«Давай просто встретимся. Я расскажу кое-что.»]
+    ~ INSIGHT = INSIGHT + 1
+    ~ SYNC = SYNC + 1
+    # msg:reply:mila:Давай просто встретимся. Я расскажу кое-что.
+    # set_flag:date_agreed=true
+    # set_flag:date_place_park=true
+    ~ date_agreed = true
+    ~ date_place_park = true
+    -> msg_npc_place_sent
+
+* [Пока не отвечать]
+    # msg:read:mila
+    # return_to_scene
+    -> DONE
+
+
 === msg_thread_artem ===
+{iteration_number > 2:
+    -> msg_thread_artem_iter3
+}
 {iteration_number > 1:
     {loop2_work_check_done:
         -> msg_thread_artem_loop2
@@ -228,6 +277,36 @@
 - else:
     -> msg_thread_artem_iter1
 }
+
+
+
+=== msg_thread_artem_iter3 ===
+# speaker:none
+Открываешь Messenger.
+
+# speaker:mc
+{npc_name} пишет. Опять. Я уже знаю это сообщение.
+
+* [«Как ты?»]
+    # speaker:mc
+    Всё повторяется.
+
+    # msg:reply:artem:Как ты?
+    -> msg_npc_place_sent_iter3
+
+* [Сказать, что я знаю этот разговор]
+    ~ INSIGHT = INSIGHT + 1
+    # msg:reply:artem:Давай встретимся
+    # set_flag:date_agreed=true
+    # set_flag:date_place_park=true
+    ~ date_agreed = true
+    ~ date_place_park = true
+    -> msg_npc_place_sent
+
+* [Пока не отвечать]
+    # msg:read:artem
+    # return_to_scene
+    -> DONE
 
 === msg_thread_artem_iter1 ===
 # speaker:none
@@ -504,7 +583,12 @@
 # speaker:none
 Сообщение отправлено.
 
-{iteration_number > 1 and loop2_work_check_done:
+{iteration_number > 2:
+# speaker:mc
+Я знаю, что она/он ответит. Я помню этот разговор. Но всё равно приятно.
+
+- else:
+    {iteration_number > 1 and loop2_work_check_done:
 Теперь у воскресенья есть адрес — и это уже не теория о сломанном телефоне, а маршрут, который придётся проверить.
 
 # quest:done:reply_npc
@@ -528,11 +612,20 @@
 # return_to_scene
 -> DONE
 }
+}
 
 // -----------------------------------------------------------------------------
 // WORK / SYSTEM THREADS
 // -----------------------------------------------------------------------------
 
+
+=== msg_npc_place_sent_iter3 ===
+# speaker:none
+Сообщение отправлено.
+
+# speaker:mc
+Я знаю, как {npc_name_gen} ответит. Он/Она повторяется, но это уже не раздражает — успокаивает.
+-> msg_npc_place_sent
 === msg_thread_work_team ===
 # speaker:none
 Командный чат листается короткими служебными сообщениями.
