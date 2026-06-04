@@ -170,6 +170,20 @@ def scan_all() -> int:
         for m in re.finditer(r"^===\s*([a-zA-Z_][\w]*)\s*===", text, re.MULTILINE):
             all_knots.add(m.group(1))
 
+    # Pass 1a: collect all knot references (for dead knot detection)
+    refd_knots: set[str] = set(BUILTIN_KNOTS)
+    for f in active:
+        text = f.read_text(encoding="utf-8", errors="replace")
+        for m in re.finditer(r"->\s*([a-zA-Z_][\w]*)", text):
+            refd_knots.add(m.group(1))
+    # Also scan scene Lua files for knot references
+    scene_dir = ROOT / "main" / "data" / "scenes"
+    if scene_dir.exists():
+        for sf in sorted(scene_dir.rglob("*.lua")):
+            sft = sf.read_text(encoding="utf-8", errors="replace")
+            for m in re.finditer(r'''knot\s*=\s*["']([a-zA-Z_][\w]*)["']''', sft):
+                refd_knots.add(m.group(1))
+
     # Pass 1.5: collect all VAR declarations (dead flag detection)
     ink_vars: dict[str, int] = {}
     bootstrap_path = INK_DIR / "00_bootstrap.ink"
@@ -329,6 +343,26 @@ def scan_all() -> int:
                 continue
             if count <= 1:  # only found in bootstrap itself (declaration)
                 warn(bootstrap_path, 0, f"dead VAR '{varname}' — declared but never referenced in any active .ink file")
+
+    # Dead knot check: defined but never referenced by -> or Lua scene
+    skip_knot_prefixes = ("inv_", "phone_", "msg_", "sms_", "tue_", "mon_", "cafe_", "park_", "shop_", "bar_", "view_")
+    for knot_name in sorted(all_knots - refd_knots - {"DONE", "END", "START"}):
+        # Динамические knots: inventory, phone, scene-specific
+        if knot_name.startswith(skip_knot_prefixes):
+            continue
+        # Entry points: first-letter lowercase (knots are entry points, uppercase are usually internal)
+        # Also skip known entry points
+        if knot_name in ("seed_phone_history", "loop_entry", "apartment_start",
+                         "stages_start", "stage_1", "stage_2", "stage_3",
+                         "endings_start", "ending_break", "ending_merge", "ending_stay",
+                         "awareness_start", "investigation_start", "journal_start",
+                         "find_clue", "question_reality", "read_journal", "write_entry",
+                         "sunday_date_map_fallback", "park_message_where_are_you",
+                         "sms_service_done", "bathroom_not_now",
+                         "phone_msg_sunday_invite_second",
+                         "phone_call_seed_sunday_morning", "phone_mail_seed_sunday_morning"):
+            continue
+        warn(INK_DIR, 0, f"dead knot '{knot_name}' — defined but never referenced by any -> or Lua scene")
 
     eprint(f"\n{len(active)} files scanned, {_error_count} errors, {_warning_count} warnings")
     if "--ci" in sys.argv:
