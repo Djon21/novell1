@@ -26,6 +26,16 @@ python tools/ink_lint.py --ci
 - Story pipeline: `main/story/chapter_01.ink` + `INCLUDE chapters/*.ink` → compile → `main/story/chapter_01.json`
 - `chapter_01.ink` must only contain `INCLUDE` directives — no text/VAR/knots
 
+## Removing a Quest (Checklist)
+
+To fully remove a quest from the game, do ALL of the following:
+
+1. **`main/scripts/quests.lua`** — delete the quest from `M.quests {}` AND from `phone_order`
+2. **`main/story/**/*.ink`** — grep for `quest:start:QUEST_ID` and `quest:done:QUEST_ID` in ALL `.ink` files; remove those tags
+3. **`main/gui/modules/ui_manager_v2/dev_jump.lua`** — grep for `QUEST_ID`; if present in `state.quests`, remove it
+4. **Save file** — after the above steps, old save files may still contain the quest. The player needs to delete saves or start a new game. If you must add a migration, put `_quests["QUEST_ID"] = nil` in `game_state.deserialize()` but REMOVE it after one release.
+5. **Flags** — grep for each flag used in the quest's steps across ALL `.ink` and `.lua`. If a flag is ONLY used by this quest → remove the VAR from `00_bootstrap.ink` and all `set_flag`/`~ flag =` calls. If the flag is shared with other systems (scenes, phone, messenger, etc.) → leave it untouched.
+
 ## Gotchas
 
 - Runtime loads ONE file: `/main/story/chapter_01.json`. After .ink edits, recompile.
