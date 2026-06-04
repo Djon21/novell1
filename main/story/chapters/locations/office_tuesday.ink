@@ -90,7 +90,7 @@
     ~ INSIGHT = INSIGHT + 1
     -> tue_route_read_log
 
-* [Спросить мнение {npc_name}]
+* [Спросить мнение {npc_name_gen}]
     ~ TRUST = TRUST + 1
     -> tue_route_ask_npc
 
