@@ -487,14 +487,14 @@ function init(self)
         end
     end
 
-    -- Две колонки шагов (1-7 умещаются в 4 ряда по 14px).
-    -- Левая колонка: step 1,3,5,7 (x=82, текст 200px → до x=304).
-    -- Правая колонка: step 2,4,6 (x=320, текст 170px → до x=512).
-    -- Pbar смещён на x=520, чтобы не наезжать на правую колонку.
-    local STEP_PITCH = 14
-    local LEFT_X = 82
-    local RIGHT_X = 320
-    local TEXT_W_L = 200
+    -- Две колонки шагов (1-7 умещаются в 4 ряда по 18px).
+    -- Левая колонка: step 1,3,5,7 (x=50, текст 210px → до x=282).
+    -- Правая колонка: step 2,4,6 (x=340, текст 170px → до x=532).
+    -- Pbar смещён на x=540, чтобы не наезжать на правую колонку.
+    local STEP_PITCH = 18
+    local LEFT_X = 50
+    local RIGHT_X = 340
+    local TEXT_W_L = 210
     local TEXT_W_R = 170
     _step_width = {}
     for slot = 1, QUEST_SLOTS do
@@ -544,7 +544,7 @@ function init(self)
     -- Сдвигаем pbar вправо, чтобы правая колонка текста не наезжала.
     for slot = 1, QUEST_SLOTS do
         local pbar = slot == 1 and gui.get_node("quest1_pbar_bg") or _card_clones[slot]["quest1_pbar_bg"]
-        if pbar then gui.set_position(pbar, vmath.vector3(520, 83, 0.546)) end
+        if pbar then gui.set_position(pbar, vmath.vector3(545, 83, 0.546)) end
         local pfill = slot == 1 and gui.get_node("quest1_pbar_fill") or _card_clones[slot]["quest1_pbar_fill"]
         if pfill then gui.set_position(pfill, vmath.vector3(0, 0, 0.548)) end
     end
