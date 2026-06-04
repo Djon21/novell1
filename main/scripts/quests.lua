@@ -69,7 +69,7 @@ M.quests = {
         steps = {
             { text = "Собраться и выйти",    done_when = "sunday_ready_to_leave" },
             { text = "Купить подарок",        done_when = "sunday_gift_bought" },
-            { text = "Прийти на встречу",     done_when = "met_npc_sunday" },
+            { text = "Встретиться и поговорить", done_when = "met_npc_sunday" },
         },
     },
 
