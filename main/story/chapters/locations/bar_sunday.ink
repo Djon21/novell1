@@ -144,6 +144,7 @@
     # speaker:mc
     Я не знаю, что именно нужно сделать. Но точно не то же самое.
     ~ loop2_office_mentioned = true
+    # set_flag:loop2_office_mentioned=true
     -> bar_loop_monday_agreement
 
 * [Сказать, что пока не готов говорить о работе]
