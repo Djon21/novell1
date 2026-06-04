@@ -51,6 +51,10 @@ To fully remove a quest from the game, do ALL of the following:
 - Combine pairs sort lexically: `inv_combine_<low>_with_<high>`.
 - Backgrounds require dedicated atlas + `go.property` + `DEDICATED_BG_ATLAS_PROPS` registration in `ui_manager_v2.script`.
 
+## Bugfix Protocol
+
+When the user reports a bug, do NOT guess or theorize. READ the actual source code (`.ink`, `.lua`, `.gui`) that could be relevant BEFORE responding. Trace the exact code path step by step. If you can't find the root cause, ask the user for more specific details (screenshots, save state, dev jump preset). Do not propose fixes without understanding why the current code behaves the way it does.
+
 ## Where Things Live
 
 | What | Path |
