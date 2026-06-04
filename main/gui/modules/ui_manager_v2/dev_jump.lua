@@ -319,6 +319,20 @@ local function loop3_start_state()
     return state
 end
 
+local function loop4_start_state()
+    local state = common_phone_state()
+    state.flags.loop2_revealed_to_npc = true
+
+    state.vars.iteration_number = 4
+    state.vars.loop_awareness = 3
+    state.vars.false_endings_count = 2
+
+    state.items = { "phone" }
+    state.meta = { iteration_number = 4 }
+    state.quests = {}
+    return state
+end
+
 local function rooftop_choice_state()
     local state = common_phone_state()
     state.flags.sunday_finished = true
@@ -477,6 +491,12 @@ local PRESETS = {
         label = "Loop 3: start (bedroom, no fake Wednesday)",
         scene = "apartment_bedroom",
         state = loop3_start_state(),
+    },
+    {
+        id = "loop4_start",
+        label = "Loop 4: start (bedroom, true ending ready)",
+        scene = "apartment_bedroom",
+        state = loop4_start_state(),
     },
     {
         id = "rooftop_choice",
