@@ -242,9 +242,18 @@ def scan_all() -> int:
                 has_gender = "{mc_gender" in raw or "{npc_gender" in raw
                 if not has_gender:
                     for verb in GENDERED_VERBS:
-                        # Ищем слово целиком (не часть другого слова)
-                        if re.search(r"(?<!\w)" + re.escape(verb) + r"(?!\w)", raw):
-                            warn(f, i, f"gendered verb '{verb}' found without {{{{mc_gender}}}}/{{{{npc_gender}}}} alternation")
+                        match = re.search(r"(?<!\w)" + re.escape(verb) + r"(?!\w)", raw)
+                        if match:
+                            # Проверяем: есть ли "я" или "ты" в пределах 20 символов ДО глагола?
+                            verb_pos = match.start()
+                            before = raw[max(0, verb_pos - 25):verb_pos]
+                            # Если перед глаголом "он", "она", "они" — третье лицо, пропускаем
+                            third_person = bool(re.search(r'(?<!\w)(Он|Она|Оно|Они)\s*$', before))
+                            near_pronoun = bool(re.search(r'(?<!\w)(я |ты |мне |тебе )', before)) and not third_person
+                            # Если глагол в начале строки — почти всегда опущенное "я"
+                            verb_at_start = verb_pos < 10 and not third_person
+                            if near_pronoun or verb_at_start:
+                                warn(f, i, f"gendered verb '{verb}' found without {{{{mc_gender}}}}/{{{{npc_gender}}}} alternation")
                             break
 
     eprint(f"\n{len(active)} files scanned, {_error_count} errors, {_warning_count} warnings")
