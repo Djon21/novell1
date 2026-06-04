@@ -67,8 +67,7 @@ M.quests = {
         name = "Встретиться",
         description = "Вы договорились увидеться сегодня. Осталось собраться, выйти из квартиры и добраться до выбранного места.",
         steps = {
-            { text = "Собраться",             done_when = "sunday_ready_to_leave" },
-            { text = "Выйти из квартиры",     done_when = "left_apartment" },
+            { text = "Собраться и выйти",    done_when = "sunday_ready_to_leave" },
             { text = "Купить подарок",        done_when = "sunday_gift_bought" },
             { text = "Прийти на встречу",     done_when = "met_npc_sunday" },
         },
