@@ -28,15 +28,12 @@ local NODE_IDS = {
     "qtab_done_bg", "qtab_done_label", "qtab_done_count",
     "quests_scrollbar_track", "quests_scrollbar_thumb",
     "quests_footer_line", "quests_footer_left", "quests_footer_right",
+    "border_bg",
 }
 
 for i = 1, QUEST_SLOTS do
     local p = "quest" .. i
     table.insert(NODE_IDS, p .. "_bg")
-    table.insert(NODE_IDS, p .. "_top")
-    table.insert(NODE_IDS, p .. "_bottom")
-    table.insert(NODE_IDS, p .. "_left")
-    table.insert(NODE_IDS, p .. "_right")
     table.insert(NODE_IDS, p .. "_glyph_bg")
     table.insert(NODE_IDS, p .. "_glyph")
     table.insert(NODE_IDS, p .. "_name")
@@ -45,6 +42,7 @@ for i = 1, QUEST_SLOTS do
     table.insert(NODE_IDS, p .. "_desc")
     for j = 1, VISIBLE_STEPS do
         table.insert(NODE_IDS, p .. "_step" .. j .. "_box")
+        table.insert(NODE_IDS, p .. "_step" .. j .. "_border")
         table.insert(NODE_IDS, p .. "_step" .. j .. "_top")
         table.insert(NODE_IDS, p .. "_step" .. j .. "_bottom")
         table.insert(NODE_IDS, p .. "_step" .. j .. "_left")
@@ -77,6 +75,16 @@ local function get_node(id)
     if n then return n end
 
     if not _card_clones then return nil end
+
+    -- border_bg: нет префикса questN_, ищем во всех clone-таблицах
+    if id == "border_bg" then
+        for slot = 1, QUEST_SLOTS do
+            local clone = _card_clones[slot]
+            if clone and clone["border_bg"] then return clone["border_bg"] end
+        end
+        return nil
+    end
+
     local N, suffix = id:match("^quest(%d+)(_.+)$")
     if not N then return nil end
     N = tonumber(N)
@@ -132,6 +140,16 @@ local function set_border_color(prefix, color, alpha)
     set_color(prefix .. "_bottom", color, alpha)
     set_color(prefix .. "_left", color, alpha)
     set_color(prefix .. "_right", color, alpha)
+end
+
+-- Для шагов: если есть texture border (_border) — красим его,
+-- иначе используем старый 4-нодный border (_top/bottom/left/right).
+local function set_step_border(prefix, color, alpha)
+    if get_node(prefix .. "_border") then
+        set_color(prefix .. "_border", color, alpha)
+        return
+    end
+    set_border_color(prefix, color, alpha)
 end
 
 local function utf8_len_and_cut(s, max_chars)
@@ -246,19 +264,42 @@ end
 local function hide_card(i)
     local p = "quest" .. i
     for _, suffix in ipairs({
-        "_bg", "_top", "_bottom", "_left", "_right", "_glyph_bg", "_glyph", "_name", "_tag_bg", "_tag",
+        "_bg", "_glyph_bg", "_glyph", "_name", "_tag_bg", "_tag",
         "_desc", "_due", "_pbar_bg", "_pbar_fill", "_pct"
     }) do
         set_node_enabled(p .. suffix, false)
     end
+    set_node_enabled("border_bg", false)
     for j = 1, VISIBLE_STEPS do
         set_node_enabled(p .. "_step" .. j .. "_box", false)
+        set_node_enabled(p .. "_step" .. j .. "_border", false)
         set_node_enabled(p .. "_step" .. j .. "_top", false)
         set_node_enabled(p .. "_step" .. j .. "_bottom", false)
         set_node_enabled(p .. "_step" .. j .. "_left", false)
         set_node_enabled(p .. "_step" .. j .. "_right", false)
         set_node_enabled(p .. "_step" .. j .. "_mark", false)
         set_node_enabled(p .. "_step" .. j .. "_text", false)
+    end
+end
+
+local function show_card(i)
+    local p = "quest" .. i
+    for _, suffix in ipairs({
+        "_bg", "_glyph_bg", "_glyph", "_name", "_tag_bg", "_tag",
+        "_desc", "_due", "_pbar_bg", "_pbar_fill", "_pct"
+    }) do
+        set_node_enabled(p .. suffix, true)
+    end
+    set_node_enabled("border_bg", true)
+    for j = 1, VISIBLE_STEPS do
+        set_node_enabled(p .. "_step" .. j .. "_box", true)
+        set_node_enabled(p .. "_step" .. j .. "_border", true)
+        set_node_enabled(p .. "_step" .. j .. "_top", true)
+        set_node_enabled(p .. "_step" .. j .. "_bottom", true)
+        set_node_enabled(p .. "_step" .. j .. "_left", true)
+        set_node_enabled(p .. "_step" .. j .. "_right", true)
+        set_node_enabled(p .. "_step" .. j .. "_mark", true)
+        set_node_enabled(p .. "_step" .. j .. "_text", true)
     end
 end
 
@@ -323,12 +364,12 @@ local function render_card(i, q)
     local kind, glyph, tag, accent = classify(q)
     local bg_color, bg_alpha, border_color, border_alpha = style_for(kind)
     set_color(p .. "_bg", kind == "normal" and COLORS.card or bg_color, bg_alpha)
+    set_color("border_bg", border_color, border_alpha)
     set_color(p .. "_glyph_bg", accent, kind == "done" and 0.18 or 0.20)
     set_color(p .. "_glyph", accent, 1.0)
     set_color(p .. "_name", kind == "normal" and COLORS.paper or accent, kind == "done" and 0.62 or 1.0)
     set_color(p .. "_tag_bg", accent, 0.15)
     set_color(p .. "_tag", accent, 1.0)
-    set_border_color(p, border_color, border_alpha)
 
     set_text(p .. "_glyph", glyph)
     set_text(p .. "_name", clamp_text((q.title or q.name or q.id or "—"):upper(), 30))
@@ -379,7 +420,7 @@ local function render_card(i, q)
             set_color(box, checked and accent or COLORS.dark, checked and 1.0 or 0.0)
             set_color(mark, checked and COLORS.dark or accent, checked and 0.95 or 0.0)
             set_color(txt, checked and COLORS.paper or COLORS.paper_dim, kind == "done" and 0.45 or 0.86)
-            set_border_color(p .. "_step" .. j, checked and accent or COLORS.paper_dim, checked and 1.0 or 0.40)
+            set_step_border(p .. "_step" .. j, checked and accent or COLORS.paper_dim, checked and 1.0 or 0.40)
         end
     end
 end
@@ -512,17 +553,17 @@ function init(self)
         end
     end
 
-    -- Клонируем step3 в step4..step7 для каждой карточки.
-    local STEP_NAMES = {"box", "top", "bottom", "left", "right", "mark", "text"}
+    -- Клонируем step1 (с texture border) в step4..step7 для каждой карточки.
+    local STEP_NAMES = {"box", "border", "mark", "text"}
     for slot = 1, QUEST_SLOTS do
-        local src = slot == 1 and gui.get_node("quest1_step3_box") or _card_clones[slot]["quest1_step3_box"]
+        local src = slot == 1 and gui.get_node("quest1_step1_box") or _card_clones[slot]["quest1_step1_box"]
         local card_node = slot == 1 and gui.get_node("quest1_bg") or _card_clones[slot]["quest1_bg"]
         if src and card_node then
             for s = 4, VISIBLE_STEPS do
                 local ct = gui.clone_tree(src)
                 if ct then
                     for _, nm in ipairs(STEP_NAMES) do
-                        local n = ct["quest1_step3_" .. nm]
+                        local n = ct["quest1_step1_" .. nm]
                         if n then _card_clones[slot]["quest1_step" .. s .. "_" .. nm] = n end
                     end
                     local col = (s - 1) % 2
@@ -539,14 +580,6 @@ function init(self)
                 end
             end
         end
-    end
-
-    -- Сдвигаем pbar вправо, чтобы правая колонка текста не наезжала.
-    for slot = 1, QUEST_SLOTS do
-        local pbar = slot == 1 and gui.get_node("quest1_pbar_bg") or _card_clones[slot]["quest1_pbar_bg"]
-        if pbar then gui.set_position(pbar, vmath.vector3(545, 83, 0.546)) end
-        local pfill = slot == 1 and gui.get_node("quest1_pbar_fill") or _card_clones[slot]["quest1_pbar_fill"]
-        if pfill then gui.set_position(pfill, vmath.vector3(0, 0, 0.548)) end
     end
 
     self.list_drag = drag_scroll.new({
