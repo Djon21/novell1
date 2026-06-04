@@ -308,7 +308,7 @@
 
 {iteration_number > 1 and not loop2_revealed_to_npc:
     # speaker:mc
-    И в прошлый раз было «почти». И в прошлый раз она/он улыбнулась так же.
+    И в прошлый раз было «почти». И в прошлый раз {npc_gender == "female": она улыбнулась|он улыбнулся} так же.
 
     # speaker:none
     Улыбка совпадает до градуса. Как будто день перемотали на тот же кадр.
@@ -335,7 +335,7 @@
 
 {iteration_number > 1 and not loop2_revealed_to_npc:
     # speaker:none
-    Те же слова. Тот же план. Она/Он ещё не знает, что этот выбор уже был.
+    Те же слова. Тот же план. {npc_gender == "female": Она|Он} ещё не знает, что этот выбор уже был.
     ~ INSIGHT = INSIGHT + 1
     ~ anomaly_noticed = true
 }
