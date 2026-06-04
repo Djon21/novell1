@@ -405,6 +405,7 @@
 ~ loop2_revealed_to_npc = true
 # set_flag:loop2_revealed_to_npc=true
 ~ anomaly_interpreted = true
+# set_flag:anomaly_interpreted=true
 ~ TRUST = TRUST + 2
 }-> sunday_date_cafe_settle
 

@@ -126,6 +126,7 @@
 Обычный свет. Обычный вечер. Обычный конец трёх дней, после которого почему-то кажется, что утро уже где-то ждёт.
 
 ~ current_iteration_end = "chapter_001"
+# set_flag:current_iteration_end=chapter_001
 # set_flag:iteration_001_finished=true
 # quest:done:break_the_loop
 # pulse:1.0,255,255,255
@@ -253,6 +254,7 @@
 Почти.
 
 ~ current_iteration_end = "npc"
+# set_flag:current_iteration_end=npc
 ~ TRUST = TRUST + 1
 ~ false_endings_count = false_endings_count + 1
 # quest:done:break_the_loop
@@ -283,6 +285,7 @@
 Ответ есть. Но в нём не хватает человека.
 
 ~ current_iteration_end = "system"
+# set_flag:current_iteration_end=system
 ~ INSIGHT = INSIGHT + 1
 ~ false_endings_count = false_endings_count + 1
 # quest:done:break_the_loop
@@ -421,6 +424,7 @@
 На этот раз — по-настоящему.
 
 ~ current_iteration_end = "true"
+# set_flag:current_iteration_end=true
 ~ INSIGHT = INSIGHT + 2
 ~ TRUST = TRUST + 1
 ~ SYNC = SYNC + 2

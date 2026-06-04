@@ -264,6 +264,7 @@
 ~ office_strategy = "auto_standard"
 ~ day_strategy = "ignore"
 ~ anomaly_interpreted = true
+# set_flag:anomaly_interpreted=true
 # set_flag:office_standard_solution_applied=true
 ~ office_standard_solution_applied = true
 # set_flag:mon_office_error_seen=true

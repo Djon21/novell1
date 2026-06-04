@@ -16,8 +16,10 @@
 ~ iteration_number = iteration_number + 1
 ~ loop_awareness = loop_awareness + 1
 ~ current_iteration_end = ""
+# set_flag:current_iteration_end=
 ~ anomaly_noticed = false
 ~ anomaly_interpreted = false
+# set_flag:anomaly_interpreted=false
 ~ loop2_fake_wednesday_started = false
 ~ loop2_work_check_done = false
 ~ loop2_invite_after_office_sent = false
@@ -25,7 +27,9 @@
 ~ loop2_returned_home = false
 ~ loop2_revealed_to_npc = false
 ~ loop2_monday_aware = false
+# set_flag:loop2_monday_aware=false
 ~ loop2_office_mentioned = false
+# set_flag:loop2_office_mentioned=false
 
 // Сброс sunday-world state.
 ~ coffee_drunk = false
@@ -43,6 +47,7 @@
 ~ sunday_went_to_viewpoint = false
 ~ sunday_went_to_bar = false
 ~ bar_discussion_done = false
+# set_flag:bar_discussion_done=false
 ~ sunday_evening_started = false
 ~ sunday_finished = false
 ~ sunday_dressed = false
@@ -77,6 +82,7 @@
 ~ sunday_shop_street_pre_date_seen = false
 ~ sunday_shop_street_with_npc_seen = false
 ~ sunday_gift_bought = false
+# set_flag:sunday_gift_bought=false
 ~ sunday_gift_given = false
 ~ sunday_gift_right = false
 ~ sunday_current_gift = ""
