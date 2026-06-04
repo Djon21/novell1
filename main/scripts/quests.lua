@@ -40,20 +40,16 @@ end
 
 M.quests = {
     reply_npc = {
-        name = "Ответить в Messenger",
-        description = "После утренних дел пришло личное сообщение. Нужно открыть Messenger и выбрать место встречи.",
+        name = "Договориться о встрече",
+        description = "После утренних дел пришло личное сообщение. Нужно открыть Messenger и договориться о встрече.",
         steps = {
             {
                 text = "Прочитать сообщение",
                 done_when_any = { "msg_mila_read", "msg_artem_read" },
             },
             {
-                text = "Выбрать место встречи",
+                text = "Выбрать место и ответить",
                 done_when_any = { "date_place_cafe", "date_place_park" },
-            },
-            {
-                text = "Ответить",
-                done_when_any = { "msg_mila_replied", "msg_artem_replied" },
             },
         },
     },
