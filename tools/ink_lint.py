@@ -170,7 +170,21 @@ def scan_all() -> int:
         for m in re.finditer(r"^===\s*([a-zA-Z_][\w]*)\s*===", text, re.MULTILINE):
             all_knots.add(m.group(1))
 
-    # Pass 1.5: collect all # set_flag:name=true for sync check
+    # Pass 1.5: collect all VAR declarations (dead flag detection)
+    ink_vars: dict[str, int] = {}
+    bootstrap_path = INK_DIR / "00_bootstrap.ink"
+    if bootstrap_path.exists():
+        bt = bootstrap_path.read_text(encoding="utf-8", errors="replace")
+        for m in re.finditer(r'^VAR\s+([a-zA-Z_][\w]*)\s*=', bt, re.MULTILINE):
+            ink_vars[m.group(1)] = 0
+    # Search for each VAR in all active files
+    for fname in active:
+        ft = fname.read_text(encoding="utf-8", errors="replace")
+        for varname in list(ink_vars.keys()):
+            if varname in ft:
+                ink_vars[varname] += 1
+
+    # Pass 1.5b: collect all # set_flag:name=true for sync check
     all_set_flags: set[str] = set()
     for f in active:
         text = f.read_text(encoding="utf-8", errors="replace")
@@ -297,6 +311,24 @@ def scan_all() -> int:
                             if near_pronoun or verb_at_start:
                                 warn(f, i, f"gendered verb '{verb}' found without {{{{mc_gender}}}}/{{{{npc_gender}}}} alternation")
                             break
+
+    # Dead VAR check: declared in 00_bootstrap.ink but never referenced
+    if ink_vars:
+        # Служебные/числовые переменные — не варним
+        skip_dead = {
+            "iteration_number", "iteration_label", "loop_awareness",
+            "completed_iterations", "false_endings_count",
+            "mc_gender", "npc_gender",
+            "mc_name", "mc_name_gen", "mc_name_dat", "mc_name_acc", "mc_name_ins", "mc_name_prep",
+            "npc_name", "npc_name_gen", "npc_name_dat", "npc_name_acc", "npc_name_ins", "npc_name_prep",
+            "TRUST", "SYNC", "INSIGHT",
+            "current_iteration_end",
+        }
+        for varname, count in sorted(ink_vars.items()):
+            if varname in skip_dead:
+                continue
+            if count <= 1:  # only found in bootstrap itself (declaration)
+                warn(bootstrap_path, 0, f"dead VAR '{varname}' — declared but never referenced in any active .ink file")
 
     eprint(f"\n{len(active)} files scanned, {_error_count} errors, {_warning_count} warnings")
     if "--ci" in sys.argv:
