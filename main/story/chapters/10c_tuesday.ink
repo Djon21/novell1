@@ -49,6 +49,7 @@
 }
 
 # quest:start:follow_monday_trace
+# quest:start:break_the_loop
 # set_flag:tuesday_started=true
 # set_flag:tuesday_morning_started=true
 ~ tuesday_started = true

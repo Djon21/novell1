@@ -197,7 +197,6 @@ operator timeout.
 Окно офиса темнеет. Где-то выше есть крыша, город и место, где разговоры перестают помещаться в рабочие формулировки.
 
 # set_flag:tuesday_investigation_done=true
-# quest:start:break_the_loop
 -> tue_route_to_rooftop
 
 === tue_route_to_rooftop ===

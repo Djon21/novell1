@@ -186,7 +186,8 @@ M.quests = {
         name = "Разорвать петлю",
         description = "Крыша — место истины. Пора собрать всё, что стало известно за три дня, и решить, как разорвать этот круг.",
         steps = {
-            { text = "Осознать корень петли",  done_when = "tuesday_investigation_done" },
+            { text = "Увидеть последствие",     done_when = "tuesday_consequence_seen" },
+            { text = "Разобрать след",          done_when = "tuesday_investigation_done" },
             { text = "Подняться на крышу",     done_when = "tuesday_rooftop_reached" },
             { text = "Выбрать исход",           done_when = "current_iteration_end" },
         },
