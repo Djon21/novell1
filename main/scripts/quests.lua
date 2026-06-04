@@ -87,10 +87,9 @@ M.quests = {
 
     go_to_office = {
         name = "Добраться до офиса",
-        description = "Понедельник — рабочий день. Офис ближе воскресных маршрутов: собрать рабочие вещи, выйти из дома и дойти до бизнес-центра.",
+        description = "Понедельник — рабочий день. Офис ближе воскресных маршрутов: собраться, выйти из дома и дойти до бизнес-центра.",
         steps = {
-            { text = "Собраться к работе",      done_when = "monday_ready_for_work" },
-            { text = "Выйти из дома",           done_when = "monday_left_home" },
+            { text = "Собраться на работу",     done_when = "monday_ready_for_work" },
             { text = "Дойти до бизнес-центра",  done_when = "reached_work_district" },
             { text = "Добраться до офиса",      done_when = "reached_office" },
         },
