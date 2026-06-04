@@ -219,6 +219,7 @@
 
 # set_flag:park_arrived=true
 ~ park_arrived = true
+# quest:start:reveal_the_loop
 # map:lock_all
 // Messenger prompt живёт в 93_phone_messenger.ink.
 -> phone_msg_park_arrival_prompt ->
@@ -694,7 +695,6 @@
 # set_flag:loop2_revealed_to_npc=true
 ~ anomaly_interpreted = true
 ~ TRUST = TRUST + 2
-# quest:start:reveal_the_loop
 -> sunday_date_park_settle
 
 

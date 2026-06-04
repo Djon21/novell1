@@ -71,6 +71,7 @@
 Можно подойти к стойке и сделать первый совместный выбор: кофе, чай, сладкое — что угодно, лишь бы не стоять в середине зала с видом людей, которые забыли, зачем пришли.
 
 # set_flag:cafe_arrived=true
+# quest:start:reveal_the_loop
 # map:lock_all
 # return_to_scene
 -> DONE
@@ -393,7 +394,6 @@
 # set_flag:loop2_revealed_to_npc=true
 ~ anomaly_interpreted = true
 ~ TRUST = TRUST + 2
-# quest:start:reveal_the_loop
 -> sunday_date_cafe_settle
 
 
