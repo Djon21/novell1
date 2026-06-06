@@ -39,6 +39,12 @@ return {
                     return is_apartment_night(gs) or gs.get_flag("washed_up")
                 end,
             },
+            local function sunday_can_exit(gs)
+                return gs.get_flag("sunday_dressed")
+                   and (gs.get_flag("date_agreed")
+                        or gs.get_flag("loop2_fake_wednesday_started")
+                        or gs.get_flag("loop2_first_invite_rejected"))
+            end
             s.story{
                 id = "exit_apartment_locked",
                 rect = { x = 575, y = 215, w = 155, h = 345 },
@@ -46,10 +52,7 @@ return {
                 icon = "up",
                 knot = "leave_apartment_prompt",
                 visible_when = function(gs)
-                    return not is_apartment_night(gs)
-                       and not (gs.get_flag("sunday_dressed")
-                           and (gs.get_flag("date_agreed")
-                                or gs.get_flag("loop2_fake_wednesday_started")))
+                    return not is_apartment_night(gs) and not sunday_can_exit(gs)
                 end,
             },
             s.nav_ink{
@@ -59,10 +62,7 @@ return {
                 icon = "up",
                 knot = "leave_apartment_prompt",
                 visible_when = function(gs)
-                    return not is_apartment_night(gs)
-                       and gs.get_flag("sunday_dressed")
-                       and (gs.get_flag("date_agreed")
-                            or gs.get_flag("loop2_fake_wednesday_started"))
+                    return not is_apartment_night(gs) and sunday_can_exit(gs)
                 end,
             },
             s.inspect{
