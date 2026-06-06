@@ -40,10 +40,16 @@ return {
                 end,
             },
             local function sunday_can_exit(gs)
-                return gs.get_flag("sunday_dressed")
-                   and (gs.get_flag("date_agreed")
-                        or gs.get_flag("loop2_fake_wednesday_started")
-                        or gs.get_flag("loop2_first_invite_rejected"))
+                if not gs.get_flag("sunday_dressed") then return false end
+                if gs.get_flag("date_agreed") then return true end
+                -- Iter 2: exit доступен до офиса (reject + фейк-среда)
+                if gs.get_flag("loop2_first_invite_rejected")
+                or gs.get_flag("loop2_fake_wednesday_started") then
+                    if not gs.get_flag("loop2_work_check_done") then
+                        return true
+                    end
+                end
+                return false
             end
             s.story{
                 id = "exit_apartment_locked",
