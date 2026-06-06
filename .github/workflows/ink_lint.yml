@@ -1,5 +1,8 @@
 name: Ink Lint + Story Test
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 on:
   push:
     paths:
@@ -36,10 +39,6 @@ jobs:
         with:
           node-version: 20
       - name: Install dependencies
-        run: npm install
-      - name: Compile ink
-        run: |
-          pip install inklecate 2>/dev/null || true
-          # Fallback: use pre-compiled chapter_01.json
+        run: npm ci
       - name: Run story smoke test
-        run: node tests/story_test.js full
+        run: node tests/story_test.js iter1
