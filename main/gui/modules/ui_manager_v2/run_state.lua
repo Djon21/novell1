@@ -1,5 +1,6 @@
 local gs = require "main.scripts.game_state"
 local log = require "main.scripts.log"
+local meta = require "main.scripts.meta_state"
 local sm = require "main.scripts.save_manager"
 local scene_controller = require "main.scripts.scene_controller"
 
@@ -20,6 +21,7 @@ function M.persist(suppress_run_save)
     sm.set_game_state({
         gs = gs.serialize(),
         scene_controller = scene_controller.serialize(),
+        iteration_number = tonumber(meta.get("iteration_number", 1)) or 1,
     })
 end
 
@@ -27,6 +29,11 @@ function M.restore(set_suppressed, opts)
     opts = opts or {}
     local saved = sm.get_game_state()
     local scene_to_enter = nil
+
+    -- Restore iteration_number from save so meta_state matches the snapshot
+    if saved and saved.iteration_number then
+        meta.set("iteration_number", tonumber(saved.iteration_number) or 1)
+    end
 
     set_suppressed(true)
 

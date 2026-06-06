@@ -24,6 +24,9 @@ local H               = require "main.scripts.state._helpers"
 
 local M = {}
 
+-- Channel-модули для итерации в serialize/deserialize
+local CHANNELS = { sms_state, messenger_state, bank_state, mail_state, calls_state, clues_state, notes_state }
+
 M.MAX_INVENTORY_SLOTS = 12
 
 -- Приватное состояние, оставшееся в game_state (нечанальные домены)
@@ -494,7 +497,7 @@ function M.serialize()
     }
     -- Channel snapshots — каждый возвращает таблицу со своими ключами,
     -- которые мы мерджим в общий snapshot.
-    for _, ch in ipairs({ sms_state, messenger_state, bank_state, mail_state, calls_state, clues_state, notes_state }) do
+    for _, ch in ipairs(CHANNELS) do
         for k, v in pairs(ch.serialize() or {}) do
             snap[k] = v
         end
@@ -515,13 +518,9 @@ function M.deserialize(data)
     _map_all_pois_locked = data.map_all_pois_locked == true
     _current_scene  = data.current_scene
     -- Делегируем каждому channel-модулю восстановление + normalize.
-    sms_state.deserialize(data)
-    messenger_state.deserialize(data)
-    bank_state.deserialize(data)
-    mail_state.deserialize(data)
-    calls_state.deserialize(data)
-    clues_state.deserialize(data)
-    notes_state.deserialize(data)
+    for _, ch in ipairs(CHANNELS) do
+        ch.deserialize(data)
+    end
     if _terminal_lines == nil then
         seed_default_terminal()
     else

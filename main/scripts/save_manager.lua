@@ -37,6 +37,26 @@ end
 local CURRENT_VERSION = 2     -- v2: добавлено save_time для cloud-merge
 local DEBOUNCE_SEC = 0.5      -- окно для дебаунса auto-save
 
+-- Поля, которые проходят apply_defaults (все примитивы, nil-safe).
+-- version не включён — он управляется migrate_save().
+local SAVE_KEYS = { "save_time", "mc_gender", "chapter", "ink_state", "game_state" }
+local SAVE_DEFAULTS = { save_time = 0, chapter = 1 }
+
+-- Сложные миграции (изменение структуры ink_state / game_state).
+-- Индекс = версия, на которую обновляем (step).
+-- Пример: [1] = function(loaded) ... end  — v0→v1
+local COMPLEX_MIGRATIONS = {
+    -- Пока пусто: все прошлые миграции покрыты apply_defaults.
+}
+
+local function apply_defaults(loaded)
+    for _, k in ipairs(SAVE_KEYS) do
+        if loaded[k] == nil then
+            loaded[k] = SAVE_DEFAULTS[k]
+        end
+    end
+end
+
 local _data = nil
 local _dirty = false          -- есть несохранённые изменения
 local _debounce_handle = nil  -- активный timer.delay handle
@@ -53,37 +73,31 @@ local function defaults()
 end
 
 -- migrate_save(loaded) — поднимает старый формат до CURRENT_VERSION.
--- Каждая миграция: from_version → from_version+1, идём поступательно.
+-- Гибрид: apply_defaults для примитивов + version ladder только для
+-- сложных миграций (COMPLEX_MIGRATIONS).
 -- Возвращает мигрированную таблицу или nil если миграция невозможна
 -- (тогда вызывающий fallback'ается на defaults()).
 local function migrate_save(loaded)
     if type(loaded) ~= "table" then return nil end
     local v = tonumber(loaded.version) or 0
 
-    -- v0 → v1: добавлен поле `version`. Содержимое (mc_gender, ink_state,
-    -- game_state, chapter) совместимо. Просто проставляем версию.
-    if v < 1 then
-        loaded.version = 1
-        v = 1
-    end
-
-    -- v1 → v2: добавлено поле save_time для cloud-merge. У старых сейвов
-    -- проставляем 0 — на init pull облако всегда выиграет (если оно есть
-    -- и в нём save_time > 0). Если cloud тоже пустой — играем с локального.
-    if v < 2 then
-        loaded.save_time = loaded.save_time or 0
-        loaded.version = 2
-        v = 2
-    end
-
-    -- Будущие миграции сюда:
-    -- if v < 3 then ... end
-
-    if v ~= CURRENT_VERSION then
-        log.warn("save_manager", "unknown save version", v,
+    -- Неизвестная будущая версия — не можем безопасно мигрировать
+    if v > CURRENT_VERSION then
+        log.warn("save_manager", "unknown future save version", v,
             "- expected", CURRENT_VERSION, "; falling back to defaults")
         return nil
     end
+
+    -- Шаг 1: заполняем nil-поля из дефолтов (покрывает v0→v1, v1→v2)
+    apply_defaults(loaded)
+
+    -- Шаг 2: сложные миграции (изменение структуры ink_state / game_state)
+    for step = v + 1, CURRENT_VERSION do
+        local fn = COMPLEX_MIGRATIONS[step]
+        if fn then fn(loaded) end
+    end
+
+    loaded.version = CURRENT_VERSION
     return loaded
 end
 
