@@ -184,12 +184,12 @@ local function update_notif(self)
     set_badge(self, "app1", sms_unread)
     set_badge(self, "app7", msg_unread)
 
-    -- Pulse app7_bg1 when messenger has unread
+    -- Pulse app7_bg1 when messenger has need_reply (quest messages)
     local bg1 = gui.get_node("app7_bg1")
     if bg1 then
         gui.cancel_animation(bg1, "color.w")
         local cc = gui.get_color(bg1)
-        if msg_unread > 0 then
+        if msg_need_reply > 0 then
             gui.set_color(bg1, vmath.vector4(cc.x, cc.y, cc.z, 0.75))
             gui.animate(bg1, "color.w", 0.35, gui.EASING_INOUTSINE, 0.6, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
         else
@@ -319,7 +319,8 @@ function on_message(self, message_id, message, sender)
         local n = tonumber(message and message.n) or 0
         set_text("stats_msg", "сообщений: " .. tostring(n))
         local sms_unread = gs.get_sms_unread_total and gs.get_sms_unread_total() or 0
-        local msg_unread = gs.get_msg_unread_total and gs.get_msg_unread_total() or 0
+    local msg_unread = gs.get_msg_unread_total and gs.get_msg_unread_total() or 0
+    local msg_need_reply = gs.get_msg_need_reply_count and gs.get_msg_need_reply_count() or 0
         set_badge(self, "app1", sms_unread)
         set_badge(self, "app7", msg_unread)
 

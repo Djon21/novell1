@@ -280,6 +280,14 @@ function M.get_unread_total()
     return total
 end
 
+function M.get_need_reply_count()
+    local n = 0
+    for _, tag in pairs(_msg_tags) do
+        if tag.tone == "need_reply" then n = n + 1 end
+    end
+    return n
+end
+
 function M.get_unread(chat_id)
     return _msg_unread[chat_id] or 0
 end
