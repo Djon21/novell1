@@ -42,4 +42,4 @@ jobs:
           pip install inklecate 2>/dev/null || true
           # Fallback: use pre-compiled chapter_01.json
       - name: Run story smoke test
-        run: node tests/story_test.js iter1
+        run: node tests/story_test.js full

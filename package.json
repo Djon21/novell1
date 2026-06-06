@@ -7,7 +7,7 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "node tests/story_test.js all",
+    "test": "node tests/story_test.js full",
     "test:iter1": "node tests/story_test.js iter1"
   },
   "keywords": [],
