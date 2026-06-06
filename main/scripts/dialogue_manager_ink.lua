@@ -939,7 +939,7 @@ local function push_vars_to_ink(track_in_state)
     set_story_value("mc_name", sm.get_mc_name(), track_in_state)
     set_story_value("npc_name", sm.get_npc_name(), track_in_state)
     push_name_case_forms(gender, track_in_state)
-    set_story_value("iteration_number",    meta.get("iteration_number", 1),    track_in_state)
+    set_story_value("iteration_number",    tonumber(meta.get("iteration_number", 1)) or 1, track_in_state)
     set_story_value("iteration_label",     meta.get_iteration_label(),          track_in_state)
     set_story_value("loop_awareness",      meta.get("loop_awareness", 0),       track_in_state)
     set_story_value("completed_iterations",meta.get("completed_iterations", 0), track_in_state)
@@ -973,7 +973,7 @@ local function build_restore_history(saved_state)
         { name = "mc_gender", value = sm.get_gender() or "male" },
         { name = "mc_name", value = sm.get_mc_name() },
         { name = "npc_name", value = sm.get_npc_name() },
-        { name = "iteration_number",    value = meta.get("iteration_number", 1) },
+        { name = "iteration_number",    value = tonumber(meta.get("iteration_number", 1)) or 1 },
         { name = "iteration_label",     value = meta.get_iteration_label() },
         { name = "loop_awareness",      value = meta.get("loop_awareness", 0) },
         { name = "completed_iterations",value = meta.get("completed_iterations", 0) },
