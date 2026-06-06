@@ -1,0 +1,612 @@
+
+��
+��
+
+
+
+
+
+
+
+
+
+
+local M = {}
+local meta = require "main.scripts.meta_state"
+
+
+
+local ICON_MUG     = string.char(0xEE, 0x95, 0x81)
+
+local ICON_PHONE   = string.char(0xEE, 0xA4, 0x93)
+
+local ICON_KEY     = string.char(0xEE, 0x9C, 0xBC)
+
+local ICON_CUP     = string.char(0xEE, 0xBF, 0xAF)
+
+local ICON_NOTE    = string.char(0xEE, 0x81, 0xAF)
+
+local ICON_CARD    = string.char(0xEE, 0xA1, 0xB0)
+
+local ICON_USB     = string.char(0xEE, 0x87, 0xA0)
+
+local ICON_CIG     = string.char(0xEE, 0x9F, 0xB5)
+
+local ICON_CASH    = string.char(0xEE, 0xBD, 0xA3)
+
+local ICON_FOLDER  = string.char(0xEE, 0x8B, 0x87)
+
+
+local ICON_BRUSH   = string.char(0xEE, 0xA3, 0x8B)
+local ICON_PASTE   = string.char(0xEE, 0x90, 0xA9)
+
+local ICON_WATER   = string.char(0xEE, 0x95, 0x84)
+local ICON_TRASH   = string.char(0xEE, 0xA1, 0xB2)
+
+
+local ICON_GIFT    = ICON_KEY
+local ICON_DRINK   = ICON_WATER
+local ICON_SNACK   = ICON_CUP
+local ICON_BROOM   = ICON_BRUSH
+local ICON_NAPKINS = ICON_NOTE
+
+M.items = {
+    mug = {
+        name   = "Кружка",
+        type   = "расход.",
+        source = "кухня",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Белая, с трещиной. Выдаётся каждый раз, будто новая.",
+        description = "Белая кружка с трещиной. Ты уже брал её сегодня — и вчера.",
+        verbs  = { "use", "inspect" },
+        icon   = ICON_MUG,
+        qty    = 1,
+    },
+    phone = {
+        name   = "Телефон",
+        type   = "ключ",
+        source = "тумбочка",
+        iter   = "#017",
+        clue   = "да",
+        desc   = "Мой. Вибрирует. Три непрочитанных.",
+        description = "Смартфон. Вибрирует от новых сообщений.",
+        verbs  = { "use", "inspect", "read" },
+        icon   = ICON_PHONE,
+        qty    = 1,
+    },
+    key = {
+        name   = "Ключ от квартиры",
+        type   = "ключ",
+        source = "карман",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Металлический. Слегка тёплый — будто только что был в руке.",
+        description = "Ключ от квартиры. Тёплый.",
+        verbs  = { "use", "inspect" },
+        icon   = ICON_KEY,
+        qty    = 1,
+    },
+    cup = {
+        name   = "Стакан",
+        type   = "расход.",
+        source = "кухня",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Пустой. Вода. Кажется, ты уже пил из него.",
+        description = "Пустой стакан.",
+        verbs  = { "use", "inspect" },
+        icon   = ICON_CUP,
+        qty    = 1,
+    },
+    note = {
+        name   = "Записка",
+        type   = "улика",
+        source = "стол",
+        iter   = "#017",
+        clue   = "да",
+        desc   = "Мой почерк. Одна строка: \"не выходи до звонка\".",
+        description = "Записка твоим почерком: не выходи до звонка.",
+        verbs  = { "inspect", "read" },
+        icon   = ICON_NOTE,
+        qty    = 1,
+    },
+    card = {
+        name   = "Пропуск",
+        type   = "ключ",
+        source = "карман",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "«АВОСЬ Системы». Магнитная полоса затёрта до черноты.",
+        description = "Рабочий пропуск в офис.",
+        verbs  = { "use", "inspect" },
+        icon   = ICON_CARD,
+        qty    = 1,
+    },
+    usb = {
+        name   = "USB-флешка",
+        type   = "улика",
+        source = "?",
+        iter   = "#017",
+        clue   = "да",
+        desc   = "Без подписи. На корпусе маркером: «017». Откуда она у меня?",
+        description = "Безымянная флешка с цифрой 017.",
+        verbs  = { "inspect", "combine" },
+        icon   = ICON_USB,
+        qty    = 1,
+    },
+    cig = {
+        name   = "Сигарета",
+        type   = "расход.",
+        source = "кухня",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Последняя в пачке. Ты вроде бросил.",
+        description = "Одна сигарета.",
+        verbs  = { "use", "give" },
+        icon   = ICON_CIG,
+        qty    = 1,
+    },
+    cash = {
+        name   = "Наличные",
+        type   = "расход.",
+        source = "бумажник",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Примерно 1200 рублей. На метро хватит.",
+        description = "Несколько купюр.",
+        verbs  = { "use", "give" },
+        icon   = ICON_CASH,
+        qty    = 1200,
+    },
+
+    report_page = {
+        name   = "Распечатка кейса",
+        type   = "документ",
+        source = "рабочий стол",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Лист с кратким описанием кейса. Поля заполнены неровно, часть подтверждений отсутствует.",
+        description = "Распечатка рабочего кейса с неполными входными данными.",
+        verbs  = { "inspect", "read", "combine" },
+        icon   = ICON_NOTE,
+        qty    = 1,
+    },
+
+    folder = {
+        name   = "Папка",
+        type   = "документ",
+        source = "переговорка",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Плотная офисная папка для кейсов. Внутри только разделители и слишком аккуратные стикеры.",
+        description = "Пустая папка для сборки рабочего кейса.",
+        verbs  = { "inspect", "combine" },
+        icon   = ICON_FOLDER,
+        qty    = 1,
+    },
+
+
+    toothbrush = {
+        name   = "Зубная щётка",
+        type   = "расход.",
+        source = "ванная",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Обычная щётка. Самое честное устройство утренней перезагрузки.",
+        description = "Зубная щётка из стакана у раковины.",
+        verbs  = { "inspect", "combine" },
+        icon   = ICON_BRUSH,
+        qty    = 1,
+    },
+
+    toothpaste = {
+        name   = "Зубная паста",
+        type   = "расход.",
+        source = "ванная",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Мятная. Тюбик смят так, будто утро уже пытались начать без тебя.",
+        description = "Зубная паста. Почти закончилась, но ещё держится.",
+        verbs  = { "inspect", "combine" },
+        icon   = ICON_PASTE,
+        qty    = 1,
+    },
+
+    toothbrush_pasted = {
+        name   = "Щётка с пастой",
+        type   = "расход.",
+        source = "ванная",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Готова к самому героическому действию утра.",
+        description = "Зубная щётка с пастой.",
+        verbs  = { "inspect", "use" },
+        icon   = ICON_BRUSH,
+        qty    = 1,
+    },
+
+    park_trash_cup = {
+        name   = "Пустой стаканчик",
+        type   = "мусор",
+        source = "лавочка у реки",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Чужой бумажный стаканчик. Не улика, просто повод не сидеть рядом с мусором.",
+        description = "Пустой бумажный стаканчик с лавочки.",
+        verbs  = { "use", "inspect" },
+        icon   = ICON_TRASH,
+        qty    = 1,
+    },
+
+    water_bottle = {
+        name   = "Бутылка воды",
+        type   = "расход.",
+        source = "магазин",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Холодная вода из магазина. Маленькая забота, если вовремя вспомнить.",
+        description = "Бутылка воды.",
+        verbs  = { "inspect" },
+        icon   = ICON_WATER,
+        qty    = 1,
+    },
+
+    gift_iced_tea = {
+        name   = "Холодный чай",
+        type   = "подарок",
+        source = "магазин",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Бутылка холодного чая. Почти забота, если не говорить слишком уверенно.",
+        description = "Холодный чай из магазина перед встречей.",
+        verbs  = { "inspect" },
+        icon   = ICON_DRINK,
+        qty    = 1,
+    },
+
+    gift_berry_soda = {
+        name   = "Ягодная газировка",
+        type   = "подарок",
+        source = "магазин",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Слишком яркая бутылка. Выглядит как попытка сделать день легче.",
+        description = "Ягодная газировка из магазина.",
+        verbs  = { "inspect" },
+        icon   = ICON_DRINK,
+        qty    = 1,
+    },
+
+    gift_coffee_can = {
+        name   = "Кофе в банке",
+        type   = "подарок",
+        source = "магазин",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Холодный кофе в банке. Удобный, бодрый и немного безличный.",
+        description = "Кофе в банке из магазина.",
+        verbs  = { "inspect" },
+        icon   = ICON_DRINK,
+        qty    = 1,
+    },
+
+    gift_energy_drink = {
+        name   = "Печенье",
+        type   = "подарок",
+        source = "магазин",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Банка печенья. Тёплый подарок, который точно не оставит равнодушным.",
+        description = "Печенье из магазина.",
+        verbs  = { "inspect" },
+        icon   = ICON_DRINK,
+        qty    = 1,
+    },
+
+    gift_crackers = {
+        name   = "Солёные крекеры",
+        type   = "подарок",
+        source = "магазин",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Маленькая пачка крекеров. Слишком практично, чтобы быть романтично, но не бесполезно.",
+        description = "Солёные крекеры из магазина.",
+        verbs  = { "inspect" },
+        icon   = ICON_SNACK,
+        qty    = 1,
+    },
+
+    gift_chips = {
+        name   = "Маленькие чипсы",
+        type   = "подарок",
+        source = "магазин",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Пачка чипсов. Хрустит ещё до того, как её открыли.",
+        description = "Маленькая пачка чипсов.",
+        verbs  = { "inspect" },
+        icon   = ICON_SNACK,
+        qty    = 1,
+    },
+
+    gift_nuts = {
+        name   = "Орешки",
+        type   = "подарок",
+        source = "магазин",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Пакетик орешков. Вежливо маскируется под взрослый выбор.",
+        description = "Пакетик орешков из магазина.",
+        verbs  = { "inspect" },
+        icon   = ICON_SNACK,
+        qty    = 1,
+    },
+
+    gift_dark_chocolate = {
+        name   = "Тёмный шоколад",
+        type   = "подарок",
+        source = "магазин",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Плитка тёмного шоколада. Нормальный подарок, почти слишком нормальный.",
+        description = "Тёмный шоколад из магазина.",
+        verbs  = { "inspect" },
+        icon   = ICON_SNACK,
+        qty    = 1,
+    },
+
+    gift_milk_chocolate = {
+        name   = "Молочный шоколад",
+        type   = "подарок",
+        source = "магазин",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Плитка молочного шоколада. Добрый, простой и немного школьный выбор.",
+        description = "Молочный шоколад из магазина.",
+        verbs  = { "inspect" },
+        icon   = ICON_SNACK,
+        qty    = 1,
+    },
+
+    gift_waffle_bar = {
+        name   = "Вафельный батончик",
+        type   = "подарок",
+        source = "магазин",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Вафельный батончик. Самый короткий путь от неловкости к сахару.",
+        description = "Вафельный батончик из магазина.",
+        verbs  = { "inspect" },
+        icon   = ICON_SNACK,
+        qty    = 1,
+    },
+
+    gift_keychain_flashlight = {
+        name   = "Фонарик-брелок",
+        type   = "ключ",
+        source = "магазин",
+        iter   = "#017",
+        clue   = "да",
+        desc   = "Маленький фонарик на кольце. Странный подарок, зато с очень ясной функцией: не потеряться.",
+        description = "Маленький фонарик-брелок из бытового отдела.",
+        verbs  = { "inspect" },
+        icon   = ICON_GIFT,
+        qty    = 1,
+    },
+
+    gift_small_broom = {
+        name   = "Веник",
+        type   = "подарок",
+        source = "магазин",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Небольшой веник. Социально рискованный предмет для первого свидания.",
+        description = "Небольшой веник из бытового отдела.",
+        verbs  = { "inspect" },
+        icon   = ICON_BROOM,
+        qty    = 1,
+    },
+
+    gift_wet_wipes = {
+        name   = "Влажные салфетки",
+        type   = "подарок",
+        source = "магазин",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Упаковка влажных салфеток. Забота, которая очень старается выглядеть практично.",
+        description = "Влажные салфетки из магазина.",
+        verbs  = { "inspect" },
+        icon   = ICON_NAPKINS,
+        qty    = 1,
+    },
+
+    gift_paper_napkins = {
+        name   = "Бумажные салфетки",
+        type   = "подарок",
+        source = "магазин",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Пачка бумажных салфеток. На случай, если у дня будут крошки.",
+        description = "Бумажные салфетки из магазина.",
+        verbs  = { "inspect" },
+        icon   = ICON_NAPKINS,
+        qty    = 1,
+    },
+
+    case_file = {
+        name   = "Папка по кейсу",
+        type   = "ключ",
+        source = "офис",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Собранный кейс: распечатка, разделитель, место для решения. Выглядит готово — хотя данных всё ещё мало.",
+        description = "Собранная папка по рабочему кейсу.",
+        verbs  = { "inspect", "read", "use", "give" },
+        icon   = ICON_FOLDER,
+        qty    = 1,
+    },
+
+    
+    notebook = {
+        name   = "Блокнот",
+        type   = "улика",
+        source = "рабочий стол",
+        iter   = "#017",
+        clue   = "да",
+        desc   = "Маленький блокнот. Страницы пусты — но ты помнишь, что писал в них.",
+        description = "Блокнот для записей. Страницы кажутся знакомыми.",
+        verbs  = { "inspect", "read", "use" },
+        icon   = ICON_NOTE,
+        qty    = 1,
+    },
+
+    stone_artifact = {
+        name   = "Камень",
+        type   = "улика",
+        source = "река",
+        iter   = "#017",
+        clue   = "да",
+        desc   = "Маленький гладкий камень. На нём появились царапины — по одной на каждую итерацию.",
+        description = "Камень с реки. Каждая царапина — отдельная петля.",
+        verbs  = { "inspect", "give", "use" },
+        icon   = ICON_KEY,
+        qty    = 1,
+    },
+
+    archive_note = {
+        name   = "Записка из архива",
+        type   = "улика",
+        source = "архив",
+        iter   = "#017",
+        clue   = "да",
+        desc   = "Лист бумаги твоим почерком. Ты оставил это в прошлой итерации.",
+        description = "Записка из прошлой итерации. Мир хранит твои следы.",
+        verbs  = { "inspect", "read", "give" },
+        icon   = ICON_NOTE,
+        qty    = 1,
+    },
+
+    pen = {
+        name   = "Ручка",
+        type   = "расход.",
+        source = "стол",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Обычная шариковая ручка. Ею можно писать записки, которые переживут итерацию.",
+        description = "Ручка для записей.",
+        verbs  = { "inspect", "use" },
+        icon   = ICON_NOTE,
+        qty    = 1,
+    },
+
+    old_key = {
+        name   = "Старый ключ",
+        type   = "улика",
+        source = "архив",
+        iter   = "#017",
+        clue   = "да",
+        desc   = "Ржавый ключ с выцарапанным номером. Не от квартиры. Не от офиса.",
+        description = "Старый ключ. Номер не совпадает ни с одним известным замком.",
+        verbs  = { "inspect", "use" },
+        icon   = ICON_KEY,
+        qty    = 1,
+    },
+
+    photo = {
+        name   = "Фотография",
+        type   = "улика",
+        source = "рабочий стол",
+        iter   = "#017",
+        clue   = "да",
+        desc   = "Фото, которое меняется между итерациями.",
+        description = "Фотография, которая меняется между итерациями.",
+        verbs  = { "inspect" },
+        icon   = ICON_NOTE,
+        qty    = 1,
+    },
+
+    newspaper = {
+        name   = "Старая газета",
+        type   = "улика",
+        source = "архив",
+        iter   = "#017",
+        clue   = "да",
+        desc   = "Газета за прошлый месяц. Заголовок о системных ошибках.",
+        description = "Газета с заметкой о системных ошибках.",
+        verbs  = { "inspect", "read" },
+        icon   = ICON_NOTE,
+        qty    = 1,
+    },
+
+    gift_book = {
+        name   = "Книга",
+        type   = "подарок",
+        source = "магазин",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Тонкий роман. На обложке — человек, который смотрит на город сверху.",
+        description = "Книга из магазина. Почти подсказка.",
+        verbs  = { "inspect", "give" },
+        icon   = ICON_NOTE,
+        qty    = 1,
+    },
+
+    gift_flower = {
+        name   = "Цветок",
+        type   = "подарок",
+        source = "магазин",
+        iter   = "#017",
+        clue   = "нет",
+        desc   = "Один цветок в маленькой вазе. Не букет — просто жест.",
+        description = "Один цветок. Простой и достаточный.",
+        verbs  = { "inspect", "give" },
+        icon   = ICON_GIFT,
+        qty    = 1,
+    },
+}
+
+local function clone_item(item)
+    local copy = {}
+    for k, v in pairs(item) do
+        copy[k] = v
+    end
+    return copy
+end
+
+local function current_iteration_tag()
+    local label = meta.get_iteration_label and meta.get_iteration_label() or "001"
+    return "#" .. tostring(label)
+end
+
+function M.get(id) return M.items[id] end
+
+function M.get_runtime(id)
+    local item = M.items[id]
+    if item then
+        local runtime = clone_item(item)
+        if runtime.iter == "#017" then
+            runtime.iter = current_iteration_tag()
+        end
+        return runtime
+    end
+    if not id or id == "" then
+        return nil
+    end
+    return {
+        name = tostring(id),
+        type = "runtime",
+        source = "game_state",
+        iter = current_iteration_tag(),
+        clue = "нет",
+        desc = "Предмет есть в inventory state, но для него нет описания в items_catalog.lua.",
+        description = "Добавьте item_id '" .. tostring(id) .. "' в main/scripts/items_catalog.lua.",
+        verbs = { "inspect" },
+        icon = "?",
+        qty = 1,
+        missing = true,
+    }
+end
+
+return M
+@main/scripts/items_catalog.luamain.scripts.meta_state/main/scripts/meta_state.luac" 

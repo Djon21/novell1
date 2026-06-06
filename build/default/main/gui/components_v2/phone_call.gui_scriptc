@@ -1,0 +1,553 @@
+
+��
+
+
+
+
+
+
+
+
+local gs = require "main.scripts.game_state"
+local drag_scroll = require "main.gui.modules.drag_scroll"
+local U = require "main.gui.modules.gui_utils"
+local COLORS = U.COLORS
+
+local MAX_CALL_SLOTS = 6
+local SCROLL_STEP_ROWS = 3
+local DRAG_THRESHOLD_PX = 8
+local DRAG_STEP_PX = 64
+local ROW_H = 80
+local ROW_GAP = 5
+
+local NODE_IDS = {
+    "call_runtime_root", "v_call_title",
+    "v_call_tab_all_bg", "v_call_tab_all_text", "v_call_tab_all_count", "v_call_border_all",
+    "v_call_tab_missed_bg", "v_call_tab_missed_text", "v_call_tab_missed_count", "v_call_border_missed",
+    "v_call_divider", "v_call_scroll_track", "v_call_scroll_thumb",
+}
+
+local ROW_SUFFIXES = {
+    "_bg", "_accent", "_av_bg", "_av_text", "_name", "_dir_box",
+    "_meta", "_time", "_badge_bg", "_badge_text"
+}
+
+local _row_clones = nil
+
+for i = 1, MAX_CALL_SLOTS do
+    local p = "v_call_c" .. i
+    for _, suffix in ipairs(ROW_SUFFIXES) do
+        NODE_IDS[#NODE_IDS + 1] = p .. suffix
+    end
+end
+
+local FALLBACK_CALLS = {
+    { who = "Н. М.",       number = "+7 (926) 014-07-17", kind = "missed", time = "07:10", count = 3, group = "hot" },
+    { who = "Неизвестный", number = "+7 (???) ???-??-??", kind = "missed", time = "03:17", count = 1, group = "amber" },
+    { who = "Мама",        number = "+7 (915) 112-03-29", kind = "out",    time = "вчера", duration = "4:12", group = "violet" },
+    { who = "Отдел · Прод", number = "чат команды · on-call", kind = "in", time = "вчера", duration = "1:38", group = "accent" },
+    { who = "Мила",        number = "+7 (916) 330-19-30", kind = "in",     time = "сб", duration = "0:44", group = "green" },
+    { who = "Курьер",      number = "+7 (495) 003-00-17", kind = "out",    time = "пт", duration = "0:18", group = "dim" },
+    { who = "Работа",      number = "+7 (495) 222-14-00", kind = "in",     time = "чт", duration = "2:06", group = "accent" },
+    { who = "Такси",       number = "+7 (999) 555-01-01", kind = "out",    time = "ср", duration = "0:31", group = "amber" },
+    { who = "Домофон",     number = "подъезд · линия 2", kind = "in",      time = "вт", duration = "0:08", group = "dim" },
+    { who = "Сервис",      number = "+7 (800) 000-03-17", kind = "missed", time = "пн", count = 1, group = "hot" },
+}
+
+
+
+local get_node             = U.get_node
+local set_text             = U.set_text
+local set_color            = U.set_color
+local clamp_text           = U.clamp_text
+
+local function set_nodes_enabled(enabled)
+    U.set_nodes_enabled(NODE_IDS, enabled)
+end
+
+local function get_row_node(id)
+    local n = get_node(id)
+    if n then return n end
+    if not _row_clones then return nil end
+    local N, suffix = id:match("^v_call_c(%d+)(_.+)$")
+    if not N then return nil end
+    N = tonumber(N)
+    if N == 1 then return nil end
+    local clone = _row_clones[N]
+    if not clone then return nil end
+    return clone["v_call_c1" .. suffix]
+end
+
+local function set_row_enabled(slot, enabled)
+    for _, suffix in ipairs(ROW_SUFFIXES) do
+        local n = get_row_node("v_call_c" .. slot .. suffix)
+        if n then gui.set_enabled(n, enabled) end
+    end
+end
+
+local function row_set_text(slot, suffix, text)
+    local n = get_row_node("v_call_c" .. slot .. suffix)
+    if n then gui.set_text(n, text or "") end
+end
+
+local function row_set_color(slot, suffix, color, alpha)
+    local n = get_row_node("v_call_c" .. slot .. suffix)
+    if n then
+        gui.set_color(n, color)
+        if alpha ~= nil then gui.set_alpha(n, alpha) end
+    end
+end
+
+local function row_set_color_keep_alpha(slot, suffix, color)
+    local n = get_row_node("v_call_c" .. slot .. suffix)
+    if n then gui.set_color(n, color) end
+end
+
+local function row_set_alpha(slot, suffix, alpha)
+    local n = get_row_node("v_call_c" .. slot .. suffix)
+    if n then gui.set_alpha(n, alpha) end
+end
+
+local function row_set_node_enabled(slot, suffix, enabled)
+    local n = get_row_node("v_call_c" .. slot .. suffix)
+    if n then gui.set_enabled(n, enabled) end
+end
+
+local function truthy(v)
+    return v == true or v == 1 or v == "true" or v == "yes" or v == "1" or v == "missed"
+end
+
+local function normalize_calls(raw)
+    if type(raw) ~= "table" then return {} end
+    local out = {}
+    if #raw > 0 then
+        for i = 1, #raw do
+            if type(raw[i]) == "table" then out[#out + 1] = raw[i] end
+        end
+    else
+        for _, item in pairs(raw) do
+            if type(item) == "table" then out[#out + 1] = item end
+        end
+    end
+    return out
+end
+
+local _fb_calls = nil
+
+local function call_list()
+    local list = normalize_calls(gs.get_call_log and gs.get_call_log() or {})
+    if #list == 0 then
+        if not _fb_calls then
+            _fb_calls = {}
+            local seen = gs.get_flag and gs.get_flag("calls_fb_seen")
+            for i, c in ipairs(FALLBACK_CALLS) do
+                local copy = {}
+                for k, v in pairs(c) do copy[k] = v end
+                if seen then
+                    copy.count = 0
+                end
+                _fb_calls[i] = copy
+            end
+        end
+        return _fb_calls
+    end
+    return list
+end
+
+local function call_who(c)
+    if type(c) ~= "table" then return "—" end
+    return c.who or c.name or c.contact or c.title or c.from or c.to or "—"
+end
+
+local function call_number(c)
+    if type(c) ~= "table" then return "" end
+    return c.number or c.phone or c.meta or c.status or c.subtitle or ""
+end
+
+local function call_time(c)
+    if type(c) ~= "table" then return "" end
+    return c.time or c.date or c.at or c.timestamp or ""
+end
+
+local function call_kind(c)
+    if type(c) ~= "table" then return "in" end
+    local k = tostring(c.kind or c.type or c.direction or ""):lower()
+    if k == "missed" or k == "miss" or k == "пропущен" or truthy(c.missed) then return "missed" end
+    if k == "out" or k == "outgoing" or k == "исходящий" then return "out" end
+    if k == "in" or k == "incoming" or k == "входящий" then return "in" end
+    return "in"
+end
+
+local function call_count(c)
+    if type(c) ~= "table" then return 0 end
+    return tonumber(c.count or c.missed_count or c.badge or 0) or 0
+end
+
+local function call_duration(c)
+    if type(c) ~= "table" then return "" end
+    return c.duration or c.len or c.length or ""
+end
+
+local function row_count()
+    return MAX_CALL_SLOTS
+end
+
+local function clamp_offset(self, total)
+    local slots = math.max(1, row_count())
+    local max_offset = math.max(0, (tonumber(total) or 0) - slots)
+    self.call_offset = math.max(0, math.min(tonumber(self.call_offset) or 0, max_offset))
+    return max_offset
+end
+
+local function update_scrollbar(self, total)
+    local thumb = get_node("v_call_scroll_thumb")
+    if not thumb then return end
+
+    local track_h = 505
+    local top_y = 65 + track_h
+    local max_offset = math.max(0, (tonumber(total) or 0) - MAX_CALL_SLOTS)
+    self.call_offset = math.max(0, math.min(tonumber(self.call_offset) or 0, max_offset))
+    local ratio = math.min(1, MAX_CALL_SLOTS / math.max(1, total))
+    local h = math.max(46, track_h * ratio)
+    local t = max_offset > 0 and (self.call_offset / max_offset) or 0
+    local y = (top_y - h) - ((track_h - h) * t)
+
+    gui.set_size(thumb, vmath.vector3(4, h, 0))
+    gui.set_position(thumb, vmath.vector3(1204, y, 0.545))
+end
+
+local function avatar_color(c, kind)
+    local group = type(c) == "table" and tostring(c.group or c.color or "") or ""
+    group = group:lower()
+    if kind == "missed" or group == "hot" then return COLORS.hot, 0.25 end
+    if group == "amber" or group == "amb" then return COLORS.amber, 0.25 end
+    if group == "violet" or group == "vio" then return COLORS.violet, 0.30 end
+    if group == "green" or group == "gr" then return COLORS.green, 0.18 end
+    if group == "dim" then return COLORS.paper_dim, 0.10 end
+    return COLORS.accent, 0.20
+end
+
+local function direction_text(kind, duration)
+    if kind == "missed" then return "пропущен" end
+    if kind == "out" then
+        return duration ~= "" and ("исходящий · " .. duration) or "исходящий"
+    end
+    return duration ~= "" and ("входящий · " .. duration) or "входящий"
+end
+
+local function direction_color(kind)
+    if kind == "missed" then return COLORS.hot end
+    if kind == "out" then return COLORS.accent end
+    return COLORS.green
+end
+
+local function utf8_first_chars(s, n)
+    local out, i, count = {}, 1, 0
+    while i <= #s and count < n do
+        local byte = string.byte(s, i)
+        local size = 1
+        if byte >= 0xF0 then size = 4
+        elseif byte >= 0xE0 then size = 3
+        elseif byte >= 0xC0 then size = 2 end
+        table.insert(out, s:sub(i, i + size - 1))
+        i = i + size
+        count = count + 1
+    end
+    return table.concat(out)
+end
+
+local CYR_LOWER_TO_UPPER = {
+    ["а"] = "А", ["б"] = "Б", ["в"] = "В", ["г"] = "Г", ["д"] = "Д",
+    ["е"] = "Е", ["ё"] = "Ё", ["ж"] = "Ж", ["з"] = "З", ["и"] = "И",
+    ["й"] = "Й", ["к"] = "К", ["л"] = "Л", ["м"] = "М", ["н"] = "Н",
+    ["о"] = "О", ["п"] = "П", ["р"] = "Р", ["с"] = "С", ["т"] = "Т",
+    ["у"] = "У", ["ф"] = "Ф", ["х"] = "Х", ["ц"] = "Ц", ["ч"] = "Ч",
+    ["ш"] = "Ш", ["щ"] = "Щ", ["ъ"] = "Ъ", ["ы"] = "Ы", ["ь"] = "Ь",
+    ["э"] = "Э", ["ю"] = "Ю", ["я"] = "Я",
+}
+
+local function utf8_upper(s)
+    if not s or s == "" then return "" end
+    s = (s:gsub("[a-z]", function(c) return string.char(string.byte(c) - 0x20) end))
+    s = (s:gsub("[\208-\209][\128-\191]", function(c)
+        return CYR_LOWER_TO_UPPER[c] or c
+    end))
+    return s
+end
+
+local function initials(name)
+    if not name or name == "" then return "?" end
+    local clean = name:gsub("[%+%(%)%-%d]", " ")
+    clean = clean:gsub("·", " "):gsub("—", " ")
+                 :gsub("%s+", " "):gsub("^%s+", ""):gsub("%s+$", "")
+    if clean == "" then return "?" end
+    local parts = {}
+    for word in clean:gmatch("%S+") do parts[#parts + 1] = word end
+    local result
+    if #parts >= 2 then
+        result = utf8_first_chars(parts[1], 1) .. utf8_first_chars(parts[2], 1)
+    else
+        result = utf8_first_chars(parts[1], 2)
+    end
+    return utf8_upper(result)
+end
+
+local function build_call_list(self)
+    local all = call_list()
+    if self.filter == "missed" then
+        local out = {}
+        for _, c in ipairs(all) do
+            if call_kind(c) == "missed" then out[#out + 1] = c end
+        end
+        return out
+    end
+    return all
+end
+
+local function render_tab(self)
+    local all = call_list()
+    local total = #all
+    local missed = 0
+    for _, c in ipairs(all) do
+        if call_kind(c) == "missed" then missed = missed + math.max(1, call_count(c)) end
+    end
+    set_text("v_call_tab_all_count", tostring(total))
+    set_text("v_call_tab_missed_count", tostring(missed))
+    local all_active = self.filter ~= "missed"
+    set_color("v_call_tab_all_bg", all_active and COLORS.accent or COLORS.card, all_active and 0.15 or 0.60)
+    set_color("v_call_tab_missed_bg", (not all_active) and COLORS.accent or COLORS.card, (not all_active) and 0.15 or 0.60)
+    set_color("v_call_border_all", COLORS.accent, all_active and 0.55 or 0.25)
+    set_color("v_call_border_missed", COLORS.accent, (not all_active) and 0.55 or 0.25)
+end
+
+local function render_row(slot, call)
+    local has = type(call) == "table"
+    set_row_enabled(slot, has)
+    if not has then return end
+
+    local kind = call_kind(call)
+    local missed = kind == "missed"
+    local who = call_who(call)
+    local duration = tostring(call_duration(call) or "")
+    local count = call_count(call)
+    if missed and count <= 0 then count = truthy(call.missed) and 1 or 0 end
+
+    row_set_color(slot, "_bg", missed and COLORS.card_hot or COLORS.card, missed and 0.76 or 0.58)
+    row_set_alpha(slot, "_accent", missed and 0.85 or 0.0)
+    row_set_color(slot, "_accent", missed and COLORS.hot or COLORS.accent, missed and 0.85 or 0.0)
+
+    local av_color, av_alpha = avatar_color(call, kind)
+    row_set_color(slot, "_av_bg", av_color, av_alpha)
+    row_set_text(slot, "_av_text", initials(who))
+    row_set_color_keep_alpha(slot, "_av_text", av_color)
+
+    row_set_text(slot, "_name", clamp_text(who, 28))
+    row_set_color_keep_alpha(slot, "_name", missed and COLORS.hot or COLORS.paper)
+
+    local dir_color = direction_color(kind)
+    row_set_color(slot, "_dir_box", dir_color, 0.85)
+    local meta = direction_text(kind, duration)
+    local number = call_number(call)
+    if number ~= "" then meta = meta .. "    " .. number end
+    row_set_text(slot, "_meta", clamp_text(meta, 52))
+    row_set_color_keep_alpha(slot, "_meta", missed and COLORS.hot or COLORS.paper_dim)
+
+    row_set_text(slot, "_time", clamp_text(call_time(call), 8))
+    row_set_color_keep_alpha(slot, "_time", COLORS.paper_dim)
+
+    if count > 1 then
+        row_set_node_enabled(slot, "_badge_bg", true)
+        row_set_node_enabled(slot, "_badge_text", true)
+        row_set_alpha(slot, "_badge_bg", 1.0)
+        row_set_alpha(slot, "_badge_text", 1.0)
+        row_set_text(slot, "_badge_text", tostring(count))
+    else
+        row_set_alpha(slot, "_badge_bg", 0.0)
+        row_set_alpha(slot, "_badge_text", 0.0)
+        row_set_node_enabled(slot, "_badge_bg", false)
+        row_set_node_enabled(slot, "_badge_text", false)
+    end
+end
+
+local function render(self)
+    local list = build_call_list(self)
+    local total = #list
+    local slots = math.max(1, row_count())
+    clamp_offset(self, total)
+
+    set_text("v_call_title", "ЗВОНКИ")
+    render_tab(self)
+
+    for i = 1, slots do
+        render_row(i, list[(tonumber(self.call_offset) or 0) + i])
+    end
+
+    update_scrollbar(self, total)
+end
+
+local function refresh(self)
+    if self.call_offset == nil then self.call_offset = 0 end
+    render(self)
+end
+
+local function scroll_calls(self, delta_rows)
+    local list = build_call_list(self)
+    local total = #list
+    local max_offset = clamp_offset(self, total)
+    if max_offset <= 0 then return false end
+
+    local old = tonumber(self.call_offset) or 0
+    self.call_offset = math.max(0, math.min(old + delta_rows, max_offset))
+    if self.call_offset ~= old then
+        render(self)
+        return true
+    end
+    return false
+end
+
+local function is_wheel_down(action_id)
+    return action_id == hash("wheel_down") or action_id == hash("mouse_wheel_down") or action_id == hash("scroll_down")
+end
+
+local function is_wheel_up(action_id)
+    return action_id == hash("wheel_up") or action_id == hash("mouse_wheel_up") or action_id == hash("scroll_up")
+end
+
+local function is_wheel_axis(action_id)
+    return action_id == hash("wheel") or action_id == hash("mouse_wheel") or action_id == hash("scroll")
+end
+
+local function wheel_rows_from_action(action_id, action)
+    if is_wheel_down(action_id) then return SCROLL_STEP_ROWS end
+    if is_wheel_up(action_id) then return -SCROLL_STEP_ROWS end
+    if not is_wheel_axis(action_id) then return 0 end
+
+    local v = 0
+    if action then
+        v = tonumber(action.value) or 0
+        if v == 0 then v = tonumber(action.dy) or 0 end
+        if v == 0 and action_id ~= hash("touch") then v = tonumber(action.y) or 0 end
+    end
+    if v == 0 then return 0 end
+    return v > 0 and -SCROLL_STEP_ROWS or SCROLL_STEP_ROWS
+end
+
+local function inside_list(x, y)
+    local n = get_node("call_runtime_root")
+    return n and gui.is_enabled(n) and gui.pick_node(n, x, y) == true
+end
+
+local function is_inside_rect(id, x, y)
+    local n = get_node(id)
+    if not n or not gui.is_enabled(n) then return false end
+    return gui.pick_node(n, x, y)
+end
+
+local function handle_phone_input(self, action_id, action)
+    if not self.visible then return false end
+    action = action or {}
+
+    local wheel_rows = wheel_rows_from_action(action_id, action)
+    if wheel_rows ~= 0 then return scroll_calls(self, wheel_rows) end
+
+    if action_id ~= hash("touch") then return false end
+
+    local result = drag_scroll.handle(self.call_drag, action)
+
+    if result == "tap" and action.released then
+        local x, y = action.x or 0, action.y or 0
+        if is_inside_rect("v_call_tab_all_bg", x, y) then
+            self.filter = "all"
+            self.call_offset = 0
+            render(self)
+            drag_scroll.reset(self.call_drag)
+            return true
+        elseif is_inside_rect("v_call_tab_missed_bg", x, y) then
+            self.filter = "missed"
+            self.call_offset = 0
+            render(self)
+            drag_scroll.reset(self.call_drag)
+            return true
+        end
+    end
+
+    if result == "swallow" then return true end
+    if result == "tap" then return true end
+    return false
+end
+
+function init(self)
+    self.visible = false
+    self.call_offset = 0
+    self.filter = "all"
+
+    U.apply_adaptive_layout("call_runtime_root")
+
+    _row_clones = {}
+    local proto = gui.get_node("v_call_c1_bg")
+    if proto then
+        local proto_pos = gui.get_position(proto)
+        for slot = 2, MAX_CALL_SLOTS do
+            local clone = gui.clone_tree(proto)
+            _row_clones[slot] = clone
+            local clone_root = clone["v_call_c1_bg"]
+            local y_offset = -(slot - 1) * (ROW_H + ROW_GAP)
+            gui.set_position(clone_root, vmath.vector3(
+                proto_pos.x, proto_pos.y + y_offset, proto_pos.z))
+        end
+    end
+
+    self.call_drag = drag_scroll.new({
+        step_px      = DRAG_STEP_PX,
+        threshold_px = DRAG_THRESHOLD_PX,
+        owner        = self,
+        invert       = true,
+        is_inside    = inside_list,
+        on_step      = function(owner, delta) scroll_calls(owner, delta) end,
+    })
+    set_nodes_enabled(false)
+end
+
+function final(self)
+    set_nodes_enabled(false)
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash("open_app") then
+        self.visible = true
+        self.call_offset = 0
+        drag_scroll.reset(self.call_drag)
+        set_nodes_enabled(true)
+        if gs.mark_all_calls_seen then gs.mark_all_calls_seen() end
+        if gs.set_flag then gs.set_flag("calls_fb_seen", true) end
+        refresh(self)
+
+    elseif message_id == hash("close_app") then
+        self.visible = false
+        self.filter = "all"
+        drag_scroll.reset(self.call_drag)
+        set_nodes_enabled(false)
+
+    elseif message_id == hash("refresh_app") then
+        if self.visible then refresh(self) end
+
+    elseif message_id == hash("phone_input") then
+        if self.visible then
+            handle_phone_input(self, message and message.action_id or hash("touch"), {
+                x = message and message.x or 0,
+                y = message and message.y or 0,
+                dx = message and message.dx or 0,
+                dy = message and message.dy or 0,
+                value = message and message.value or 0,
+                pressed = message and message.pressed or false,
+                released = message and message.released or false,
+                repeated = message and message.repeated or false,
+            })
+        end
+    end
+end
+
+function on_input(self, action_id, action)
+    return handle_phone_input(self, action_id, action or {})
+end
+-@main/gui/components_v2/phone_call.gui_scriptmain.scripts.game_statemain.gui.modules.drag_scrollmain.gui.modules.gui_utils/main/scripts/game_state.luac"/main/gui/modules/drag_scroll.luac /main/gui/modules/gui_utils.luac" 

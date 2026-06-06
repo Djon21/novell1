@@ -1,14 +1,20 @@
-name: Ink Lint
+name: Ink Lint + Story Test
 
 on:
   push:
     paths:
       - "main/story/chapters/**/*.ink"
+      - "*.json"
       - "tools/ink_lint.py"
+      - "tests/story_test.js"
+      - "package.json"
   pull_request:
     paths:
       - "main/story/chapters/**/*.ink"
+      - "*.json"
       - "tools/ink_lint.py"
+      - "tests/story_test.js"
+      - "package.json"
 
 jobs:
   lint:
@@ -21,3 +27,19 @@ jobs:
           python-version: "3.10"
       - name: Run ink linter
         run: python tools/ink_lint.py --ci
+
+  story-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: npm install
+      - name: Compile ink
+        run: |
+          pip install inklecate 2>/dev/null || true
+          # Fallback: use pre-compiled chapter_01.json
+      - name: Run story smoke test
+        run: node tests/story_test.js iter1

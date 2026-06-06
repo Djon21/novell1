@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="build2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/.internal/cache/wasm-web/build.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

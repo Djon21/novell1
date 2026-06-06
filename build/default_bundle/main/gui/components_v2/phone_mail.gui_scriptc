@@ -1,0 +1,595 @@
+
+��
+֠
+
+
+
+
+
+
+
+local gs = require "main.scripts.game_state"
+local drag_scroll = require "main.gui.modules.drag_scroll"
+local U = require "main.gui.modules.gui_utils"
+local COLORS = U.COLORS
+
+local MAX_MAIL_SLOTS = 6
+local SCROLL_STEP_ROWS = 3
+local DRAG_THRESHOLD_PX = 8
+local DRAG_STEP_PX = 64
+local ROW_H = 80
+local ROW_GAP = 5
+
+local NODE_IDS = {
+    "mail_runtime_root", "v_mail_title",
+    "v_mail_tab_all_bg", "v_mail_tab_all_text", "v_mail_tab_all_count", "v_mail_border_all",
+    "v_mail_tab_unread_bg", "v_mail_tab_unread_text", "v_mail_tab_unread_count", "v_mail_border_unread",
+    "v_mail_divider", "v_mail_scroll_track", "v_mail_scroll_thumb",
+}
+
+local ROW_SUFFIXES = {
+    "_bg", "_accent", "_star", "_from", "_addr", "_subj", "_body",
+    "_tag1_bg", "_tag1_text", "_tag2_bg", "_tag2_text", "_time"
+}
+
+local _row_clones = nil
+
+for i = 1, MAX_MAIL_SLOTS do
+    local p = "v_mail_m" .. i
+    for _, suffix in ipairs(ROW_SUFFIXES) do
+        NODE_IDS[#NODE_IDS + 1] = p .. suffix
+    end
+end
+
+local FALLBACK_MAILS = {
+    {
+        from = "Бухгалтерия · БЦ Весна",
+        address = "accounts@vesna.corp",
+        subject = "Опоздания в апреле — последнее предупреждение",
+        body = "По итогам апреля зафиксировано 4 опоздания. Согласно п.4.2...",
+        time = "06:47",
+        unread = true,
+        urgent = true,
+        important = true,
+        label = "срочно",
+        label2 = "работа",
+        attachment_count = 1,
+    },
+    {
+        from = "Мосэнергосбыт",
+        address = "noreply@mes.ru",
+        subject = "Счёт за электроэнергию: просрочен 2 дня",
+        body = "Сумма к оплате: 1 247,80 ₽. Лицевой счёт 7702-3317...",
+        time = "06:32",
+        unread = true,
+        label = "счета",
+    },
+    {
+        from = "Мама",
+        address = "tatyana.m.1958@list.ru",
+        subject = "фотки с дачи",
+        body = "сынок, посмотри как ты в 6 лет на яблоне сидишь...",
+        time = "06:08",
+        unread = true,
+        important = true,
+        label = "семья",
+        attachment_count = 14,
+    },
+    {
+        from = "opsgenie",
+        address = "alerts@opsgenie.ru",
+        subject = "[P1] loop-daemon down · prod-eu-1",
+        body = "Service loop-daemon is reporting 0 healthy nodes for 47 minutes...",
+        time = "05:48",
+        unread = true,
+        urgent = true,
+        label = "работа",
+        label2 = "p1",
+    },
+    {
+        from = "Мила",
+        address = "mila.tundra@avos.mail",
+        subject = "Re: насчёт «Петли», 19:30",
+        body = "ок, договорились. только пожалуйста без петель на этот раз...",
+        time = "вчера",
+        unread = true,
+        label = "личное",
+    },
+    {
+        from = "Маринара (HR)",
+        address = "m.guseva@vesna.corp",
+        subject = "Подтверждение встречи · вт 14:00",
+        body = "Жду вас в переговорной «Карелия». Если планы изменятся...",
+        time = "пт",
+        label = "работа",
+    },
+    {
+        from = "avos.cloud",
+        address = "robot@avos.cloud",
+        subject = "Сводка по frame replay safety",
+        body = "v0.17.2 успешно развёрнута на staging. Ошибок не найдено...",
+        time = "чт",
+        label = "работа",
+    },
+    {
+        from = "promo@market.example",
+        address = "promo@market.example",
+        subject = "Скидки недели",
+        body = "Персональная подборка предложений. Только до полуночи...",
+        time = "ср",
+        label = "промо",
+    },
+}
+
+local get_node             = U.get_node
+local set_text             = U.set_text
+local set_color            = U.set_color
+
+local function set_nodes_enabled(enabled)
+    U.set_nodes_enabled(NODE_IDS, enabled)
+end
+
+local function utf8_char_width(byte)
+    byte = tonumber(byte) or 0
+    if byte < 0x80 then return 1 end
+    if byte >= 0xC2 and byte < 0xE0 then return 2 end
+    if byte >= 0xE0 and byte < 0xF0 then return 3 end
+    if byte >= 0xF0 and byte < 0xF5 then return 4 end
+    return 1
+end
+
+local function utf8_prefix(s, max_chars)
+    s = tostring(s or "")
+    max_chars = math.max(0, tonumber(max_chars) or 0)
+    if max_chars <= 0 or s == "" then return "", 0, 0 end
+    local i, chars, cut, bytes = 1, 0, 0, #s
+    while i <= bytes do
+        local w = utf8_char_width(s:byte(i))
+        if i + w - 1 > bytes then w = 1 end
+        chars = chars + 1
+        if chars <= max_chars then cut = i + w - 1 end
+        i = i + w
+    end
+    if chars <= max_chars then return s, chars, chars end
+    return s:sub(1, cut), max_chars, chars
+end
+
+local function clamp_text(s, limit)
+    s = tostring(s or ""):gsub("\r", " "):gsub("\n", " ")
+    limit = tonumber(limit) or 80
+    if limit <= 0 then return "" end
+    local ellipsis = "..."
+    local keep = math.max(1, limit - #ellipsis)
+    local prefix, _, total = utf8_prefix(s, keep)
+    if total > keep then return prefix .. ellipsis end
+    return s
+end
+
+local function get_row_node(id)
+    local n = get_node(id)
+    if n then return n end
+    if not _row_clones then return nil end
+    local N, suffix = id:match("^v_mail_m(%d+)(_.+)$")
+    if not N then return nil end
+    N = tonumber(N)
+    if N == 1 then return nil end
+    local clone = _row_clones[N]
+    if not clone then return nil end
+    return clone["v_mail_m1" .. suffix]
+end
+
+local function set_row_enabled(slot, enabled)
+    for _, suffix in ipairs(ROW_SUFFIXES) do
+        local n = get_row_node("v_mail_m" .. slot .. suffix)
+        if n then gui.set_enabled(n, enabled) end
+    end
+end
+
+local function row_set_text(slot, suffix, text)
+    local n = get_row_node("v_mail_m" .. slot .. suffix)
+    if n then gui.set_text(n, text or "") end
+end
+
+local function row_set_color(slot, suffix, color, alpha)
+    local n = get_row_node("v_mail_m" .. slot .. suffix)
+    if n then
+        gui.set_color(n, color)
+        if alpha ~= nil then gui.set_alpha(n, alpha) end
+    end
+end
+
+local function row_set_color_keep_alpha(slot, suffix, color)
+    local n = get_row_node("v_mail_m" .. slot .. suffix)
+    if n then gui.set_color(n, color) end
+end
+
+local function row_set_alpha(slot, suffix, alpha)
+    local n = get_row_node("v_mail_m" .. slot .. suffix)
+    if n then gui.set_alpha(n, alpha) end
+end
+
+local function row_set_node_enabled(slot, suffix, enabled)
+    local n = get_row_node("v_mail_m" .. slot .. suffix)
+    if n then gui.set_enabled(n, enabled) end
+end
+
+local function truthy(v)
+    return v == true or v == 1 or v == "true" or v == "yes" or v == "1" or v == "unread"
+end
+
+local function normalize_mails(raw)
+    if type(raw) ~= "table" then return {} end
+    local out = {}
+    if #raw > 0 then
+        for i = 1, #raw do
+            if type(raw[i]) == "table" then out[#out + 1] = raw[i] end
+        end
+    else
+        for _, item in pairs(raw) do
+            if type(item) == "table" then out[#out + 1] = item end
+        end
+    end
+    return out
+end
+
+local function mail_list()
+    local list = normalize_mails(gs.get_mails and gs.get_mails() or {})
+    if #list == 0 then return FALLBACK_MAILS end
+    return list
+end
+
+local function is_unread(m)
+    if type(m) ~= "table" then return false end
+    if m.unread ~= nil then return truthy(m.unread) end
+    if m.read ~= nil then return not truthy(m.read) end
+    if m.seen ~= nil then return not truthy(m.seen) end
+    return false
+end
+
+local function mail_from(m)
+    if type(m) ~= "table" then return "—" end
+    return m.from_name or m.sender_name or m.sender or m.from or m.author or "—"
+end
+
+local function mail_addr(m)
+    if type(m) ~= "table" then return "" end
+    return m.address or m.email or m.from_email or m.sender_email or m.reply_to or ""
+end
+
+local function mail_subject(m)
+    if type(m) ~= "table" then return "" end
+    return m.subject or m.title or ""
+end
+
+local function mail_body(m)
+    if type(m) ~= "table" then return "" end
+    return m.body or m.snippet or m.preview or m.text or m.message or ""
+end
+
+local function mail_time(m)
+    if type(m) ~= "table" then return "" end
+    return m.time or m.date or m.sent_at or m.received_at or ""
+end
+
+local function mail_urgent(m)
+    if type(m) ~= "table" then return false end
+    return truthy(m.urgent) or truthy(m.important) or tostring(m.priority or "") == "high" or tostring(m.label or ""):lower() == "urgent"
+end
+
+local function mail_important(m)
+    if type(m) ~= "table" then return false end
+    return truthy(m.starred) or truthy(m.important) or truthy(m.favorite)
+end
+
+local function mail_label(m, index)
+    if type(m) ~= "table" then return "" end
+    if type(m.labels) == "table" then
+        local v = m.labels[index]
+        if type(v) == "table" then return v.text or v.name or v.id or "" end
+        return v or ""
+    end
+    if index == 1 then return m.label or m.tag or m.category or "" end
+    return m.label2 or m.tag2 or ""
+end
+
+local function attachment_text(m)
+    if type(m) ~= "table" then return "" end
+    local n = tonumber(m.attachment_count or m.attachments_count or m.attachments or 0) or 0
+    if n <= 0 then return "" end
+    return "📎 " .. tostring(n)
+end
+
+local function row_count()
+    return MAX_MAIL_SLOTS
+end
+
+local function clamp_offset(self, total)
+    local slots = math.max(1, row_count())
+    local max_offset = math.max(0, (tonumber(total) or 0) - slots)
+    self.mail_offset = math.max(0, math.min(tonumber(self.mail_offset) or 0, max_offset))
+    return max_offset
+end
+
+local function update_scrollbar(self, total)
+    local thumb = get_node("v_mail_scroll_thumb")
+    if not thumb then return end
+
+    local track_h = 505
+    local top_y = 65 + track_h
+    local max_offset = math.max(0, (tonumber(total) or 0) - MAX_MAIL_SLOTS)
+    self.mail_offset = math.max(0, math.min(tonumber(self.mail_offset) or 0, max_offset))
+    local ratio = math.min(1, MAX_MAIL_SLOTS / math.max(1, total))
+    local h = math.max(46, track_h * ratio)
+    local t = max_offset > 0 and (self.mail_offset / max_offset) or 0
+    local y = (top_y - h) - ((track_h - h) * t)
+
+    gui.set_size(thumb, vmath.vector3(4, h, 0))
+    gui.set_position(thumb, vmath.vector3(1204, y, 0.545))
+end
+
+local function label_color(label)
+    local s = tostring(label or ""):lower()
+    if s == "срочно" or s == "p1" or s == "urgent" then return COLORS.hot end
+    if s == "счета" or s == "bills" then return COLORS.amber end
+    if s == "семья" or s == "личное" or s == "family" then return COLORS.violet end
+    if s == "работа" or s == "work" then return COLORS.accent end
+    return COLORS.paper_dim
+end
+
+local function render_row(slot, mail)
+    local has = type(mail) == "table"
+    set_row_enabled(slot, has)
+    if not has then return end
+
+    local unread = is_unread(mail)
+    local urgent = mail_urgent(mail)
+    local important = mail_important(mail)
+    local tag1 = tostring(mail_label(mail, 1) or "")
+    local tag2 = tostring(mail_label(mail, 2) or "")
+    local attach = attachment_text(mail)
+
+    row_set_color(slot, "_bg", urgent and COLORS.card_hot or COLORS.card, unread and 0.84 or 0.58)
+    row_set_alpha(slot, "_accent", unread and 0.85 or 0.0)
+    row_set_color(slot, "_accent", urgent and COLORS.hot or COLORS.accent, unread and 0.85 or 0.0)
+
+    row_set_text(slot, "_star", important and string.char(0xEE, 0xA0, 0xB8) or string.char(0xEE, 0xA0, 0xB9))
+    row_set_color_keep_alpha(slot, "_star", important and COLORS.amber or COLORS.paper_dim)
+
+    row_set_text(slot, "_from", clamp_text(mail_from(mail), 12))
+    row_set_text(slot, "_addr", clamp_text(mail_addr(mail), 26))
+    row_set_text(slot, "_subj", clamp_text(mail_subject(mail), 48))
+    row_set_text(slot, "_body", clamp_text(mail_body(mail), 62))
+    row_set_text(slot, "_time", attach ~= "" and attach or clamp_text(mail_time(mail), 8))
+
+    row_set_color_keep_alpha(slot, "_from", unread and COLORS.paper or COLORS.paper_dim)
+    row_set_color_keep_alpha(slot, "_subj", urgent and COLORS.hot or (unread and COLORS.accent or COLORS.paper))
+    row_set_color_keep_alpha(slot, "_body", COLORS.paper_dim)
+    row_set_color_keep_alpha(slot, "_time", attach ~= "" and COLORS.accent or COLORS.paper_dim)
+
+    if tag1 ~= "" then
+        row_set_node_enabled(slot, "_tag1_bg", true)
+        row_set_node_enabled(slot, "_tag1_text", true)
+        row_set_text(slot, "_tag1_text", clamp_text(tag1, 7))
+        local c = label_color(tag1)
+        row_set_color(slot, "_tag1_bg", c, 0.14)
+        row_set_color_keep_alpha(slot, "_tag1_text", c)
+    else
+        row_set_node_enabled(slot, "_tag1_bg", false)
+        row_set_node_enabled(slot, "_tag1_text", false)
+    end
+
+    if tag2 ~= "" then
+        row_set_node_enabled(slot, "_tag2_bg", true)
+        row_set_node_enabled(slot, "_tag2_text", true)
+        row_set_text(slot, "_tag2_text", clamp_text(tag2, 5))
+        local c = label_color(tag2)
+        row_set_color(slot, "_tag2_bg", c, 0.14)
+        row_set_color_keep_alpha(slot, "_tag2_text", c)
+    else
+        row_set_node_enabled(slot, "_tag2_bg", false)
+        row_set_node_enabled(slot, "_tag2_text", false)
+    end
+end
+
+local function is_inside_rect(id, x, y)
+    local n = get_node(id)
+    if not n or not gui.is_enabled(n) then return false end
+    return gui.pick_node(n, x, y)
+end
+
+local function build_mail_list(self)
+    local all = mail_list()
+    if self.filter == "unread" then
+        local out = {}
+        for _, m in ipairs(all) do
+            if is_unread(m) then out[#out + 1] = m end
+        end
+        return out
+    end
+    return all
+end
+
+local function render_tab(self)
+    local all = mail_list()
+    local total = #all
+    local unread = 0
+    for _, m in ipairs(all) do
+        if is_unread(m) then unread = unread + 1 end
+    end
+    set_text("v_mail_tab_all_count", tostring(total))
+    set_text("v_mail_tab_unread_count", tostring(unread))
+    local all_active = self.filter ~= "unread"
+    set_color("v_mail_tab_all_bg", all_active and COLORS.accent or COLORS.card, all_active and 0.15 or 0.60)
+    set_color("v_mail_tab_unread_bg", (not all_active) and COLORS.accent or COLORS.card, (not all_active) and 0.15 or 0.60)
+    set_color("v_mail_border_all", COLORS.accent, all_active and 0.55 or 0.25)
+    set_color("v_mail_border_unread", COLORS.accent, (not all_active) and 0.55 or 0.25)
+end
+
+local function render(self)
+    local list = build_mail_list(self)
+    local total = #list
+    local slots = math.max(1, row_count())
+    clamp_offset(self, total)
+
+    set_text("v_mail_title", "ПОЧТА")
+    render_tab(self)
+
+    for i = 1, slots do
+        render_row(i, list[(tonumber(self.mail_offset) or 0) + i])
+    end
+
+    update_scrollbar(self, total)
+end
+
+local function refresh(self)
+    if self.mail_offset == nil then self.mail_offset = 0 end
+    render(self)
+end
+
+local function scroll_mail(self, delta_rows)
+    local list = build_mail_list(self)
+    local total = #list
+    local max_offset = clamp_offset(self, total)
+    if max_offset <= 0 then return false end
+
+    local old = tonumber(self.mail_offset) or 0
+    self.mail_offset = math.max(0, math.min(old + delta_rows, max_offset))
+    if self.mail_offset ~= old then
+        render(self)
+        return true
+    end
+    return false
+end
+
+local function is_wheel_down(action_id)
+    return action_id == hash("wheel_down") or action_id == hash("mouse_wheel_down") or action_id == hash("scroll_down")
+end
+
+local function is_wheel_up(action_id)
+    return action_id == hash("wheel_up") or action_id == hash("mouse_wheel_up") or action_id == hash("scroll_up")
+end
+
+local function is_wheel_axis(action_id)
+    return action_id == hash("wheel") or action_id == hash("mouse_wheel") or action_id == hash("scroll")
+end
+
+local function wheel_rows_from_action(action_id, action)
+    if is_wheel_down(action_id) then return SCROLL_STEP_ROWS end
+    if is_wheel_up(action_id) then return -SCROLL_STEP_ROWS end
+    if not is_wheel_axis(action_id) then return 0 end
+
+    local v = 0
+    if action then
+        v = tonumber(action.value) or 0
+        if v == 0 then v = tonumber(action.dy) or 0 end
+        if v == 0 and action_id ~= hash("touch") then v = tonumber(action.y) or 0 end
+    end
+    if v == 0 then return 0 end
+    return v > 0 and -SCROLL_STEP_ROWS or SCROLL_STEP_ROWS
+end
+
+local function inside_list(x, y)
+    local n = get_node("mail_runtime_root")
+    return n and gui.is_enabled(n) and gui.pick_node(n, x, y) == true
+end
+
+local function handle_phone_input(self, action_id, action)
+    if not self.visible then return false end
+    action = action or {}
+
+    local wheel_rows = wheel_rows_from_action(action_id, action)
+    if wheel_rows ~= 0 then return scroll_mail(self, wheel_rows) end
+
+    if action_id ~= hash("touch") then return false end
+
+    if action.released then
+        local x, y = action.x or 0, action.y or 0
+        if is_inside_rect("v_mail_tab_all_bg", x, y) then
+            self.filter = "all"
+            self.mail_offset = 0
+            render(self)
+            return true
+        elseif is_inside_rect("v_mail_tab_unread_bg", x, y) then
+            self.filter = "unread"
+            self.mail_offset = 0
+            render(self)
+            return true
+        end
+    end
+
+    local result = drag_scroll.handle(self.mail_drag, action)
+    return result == "swallow" or result == "tap"
+end
+
+function init(self)
+    self.visible = false
+    self.mail_offset = 0
+    self.filter = "all"
+
+    U.apply_adaptive_layout("mail_runtime_root")
+
+    _row_clones = {}
+    local proto = gui.get_node("v_mail_m1_bg")
+    if proto then
+        local proto_pos = gui.get_position(proto)
+        for slot = 2, MAX_MAIL_SLOTS do
+            local clone = gui.clone_tree(proto)
+            _row_clones[slot] = clone
+            local clone_root = clone["v_mail_m1_bg"]
+            local y_offset = -(slot - 1) * (ROW_H + ROW_GAP)
+            gui.set_position(clone_root, vmath.vector3(
+                proto_pos.x, proto_pos.y + y_offset, proto_pos.z))
+        end
+    end
+
+    self.mail_drag = drag_scroll.new({
+        step_px      = DRAG_STEP_PX,
+        threshold_px = DRAG_THRESHOLD_PX,
+        owner        = self,
+        invert       = true,
+        is_inside    = inside_list,
+        on_step      = function(owner, delta) scroll_mail(owner, delta) end,
+    })
+    set_nodes_enabled(false)
+end
+
+function final(self)
+    set_nodes_enabled(false)
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash("open_app") then
+        self.visible = true
+        self.mail_offset = 0
+        set_nodes_enabled(true)
+        refresh(self)
+
+    elseif message_id == hash("close_app") then
+        self.visible = false
+        self.filter = "all"
+        drag_scroll.reset(self.mail_drag)
+        set_nodes_enabled(false)
+
+    elseif message_id == hash("refresh_app") then
+        if self.visible then refresh(self) end
+
+    elseif message_id == hash("phone_input") then
+        if self.visible then
+            handle_phone_input(self, message and message.action_id or hash("touch"), {
+                x = message and message.x or 0,
+                y = message and message.y or 0,
+                dx = message and message.dx or 0,
+                dy = message and message.dy or 0,
+                value = message and message.value or 0,
+                pressed = message and message.pressed or false,
+                released = message and message.released or false,
+                repeated = message and message.repeated or false,
+            })
+        end
+    end
+end
+
+function on_input(self, action_id, action)
+    return handle_phone_input(self, action_id, action or {})
+end
+-@main/gui/components_v2/phone_mail.gui_scriptmain.scripts.game_statemain.gui.modules.drag_scrollmain.gui.modules.gui_utils/main/scripts/game_state.luac"/main/gui/modules/drag_scroll.luac /main/gui/modules/gui_utils.luac" 

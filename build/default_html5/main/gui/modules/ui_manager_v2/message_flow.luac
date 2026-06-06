@@ -1,0 +1,355 @@
+
+�b
+�blocal dm = require "main.scripts.dialogue_manager_ink"
+local log = require "main.scripts.log"
+local gs = require "main.scripts.game_state"
+local sm = require "main.scripts.save_manager"
+local meta = require "main.scripts.meta_state"
+local scene_controller = require "main.scripts.scene_controller"
+local contacts = require "main.scripts.phone_contacts"
+local MSG = require "main.gui.modules.messages"
+
+local M = {}
+
+local function handle_menu(ctx, message_id, message, sender)
+    if message_id == MSG.show_menu then
+        ctx.show_menu()
+        return true
+    elseif message_id == MSG.return_to_menu then
+        ctx.return_to_menu()
+        return true
+    elseif message_id == MSG.toggle_mute then
+        ctx.toggle_mute()
+        return true
+    elseif message_id == MSG.start_game then
+        ctx.start_new_run(false)
+        return true
+    elseif message_id == MSG.continue_game then
+        sm.load()
+        meta.init()
+        if not sm.has_save() then
+            log.info("ui_manager", "continue_game ignored: no run-state save")
+            ctx.refresh_menu_state()
+            return true
+        end
+
+        local ok, bytes = pcall(sys.load_resource, "/main/story/chapter_01.json")
+        if not ok or not bytes then
+            log.error("ui_manager", "chapter_01.json not found")
+            return true
+        end
+        ctx.prepare_run_restore()
+        local restored = ctx.restore_run_state({ defer_scene_enter = true })
+        ctx.reset_dialogue_backlog()
+        dm.load_saved(bytes)
+        if restored and restored.scene_to_enter then
+            ctx.enter_restored_scene(restored.scene_to_enter)
+        end
+        ctx.handle_dialogue_update()
+        ctx.sync_ui_state()
+        return true
+    elseif message_id == MSG.reset_iteration or message_id == MSG.open_gallery then
+        ctx.reset_iteration_and_restart()
+        return true
+    elseif message_id == MSG.open_achievements then
+        ctx.dbg("[ui_manager_v2] open_achievements (TODO)")
+        return true
+    elseif message_id == MSG.load_slot then
+        
+        
+        local slot = message and message.slot or 0
+        sm.load()
+        meta.init()
+        local ok = true
+        if slot ~= 0 then
+            ok = sm.load_from_slot(slot)
+        end
+        if not ok or not sm.has_save() then
+            log.info("ui_manager", "load_slot ignored: slot", slot, "empty/invalid")
+            ctx.refresh_menu_state()
+            return true
+        end
+        local bytes = ctx.load_main_story_bytes and ctx.load_main_story_bytes() or nil
+        if not bytes then
+            local ok_b, b = pcall(sys.load_resource, "/main/story/chapter_01.json")
+            if ok_b then bytes = b end
+        end
+        if not bytes then
+            log.error("ui_manager", "chapter_01.json not found")
+            return true
+        end
+        ctx.prepare_run_restore()
+        local restored = ctx.restore_run_state({ defer_scene_enter = true })
+        ctx.reset_dialogue_backlog()
+        dm.load_saved(bytes)
+        if restored and restored.scene_to_enter then
+            ctx.enter_restored_scene(restored.scene_to_enter)
+        end
+        ctx.handle_dialogue_update()
+        ctx.sync_ui_state()
+        return true
+    end
+    return false
+end
+
+local function finish_chapter_and_return_to_menu(ctx, log_prefix)
+    local next_loop = meta.complete_iteration()
+    sm.clear_run()
+    ctx.reset_runtime_state()
+    if log_prefix then
+        ctx.dbg(log_prefix, next_loop.iteration_number)
+    end
+    ctx.show_menu()
+end
+
+local function reset_run_and_return_to_menu(ctx)
+    sm.clear_run()
+    ctx.reset_runtime_state()
+    ctx.show_menu()
+end
+
+local function handle_ending(ctx, message_id, message, sender)
+    if message_id == MSG.chapter_finished then
+        finish_chapter_and_return_to_menu(ctx, "[ui_manager_v2] chapter_finished -> iteration")
+        return true
+    elseif message_id == MSG.false_ending then
+        local iter = meta.get("iteration_number", 1) or 1
+        if iter < 2 then
+            log.info("ui_manager", "iter 001: ignoring false_ending -> chapter_finished")
+            finish_chapter_and_return_to_menu(ctx, "[ui_manager_v2] iter 001 forced-finish -> iteration")
+            return true
+        end
+
+        local id = message and message.id or "unknown"
+        local is_new = meta.record_false_ending(id)
+        log.info("ui_manager", "false_ending '" .. id .. "' new=" .. tostring(is_new)
+              .. " awareness=" .. tostring(meta.get("loop_awareness"))
+              .. " false_count=" .. tostring(meta.get_false_endings_count()))
+
+        reset_run_and_return_to_menu(ctx)
+        return true
+    elseif message_id == MSG.true_ending then
+        local iter = meta.get("iteration_number", 1) or 1
+        if iter < 2 then
+            log.info("ui_manager", "iter 001: ignoring true_ending -> chapter_finished")
+            finish_chapter_and_return_to_menu(ctx, nil)
+            return true
+        end
+
+        if not meta.is_true_ending_unlocked() then
+            log.warn("ui_manager", "true_ending reached but not unlocked - treating as false_ending 'early_true'")
+            meta.record_false_ending("early_true")
+            reset_run_and_return_to_menu(ctx)
+            return true
+        end
+
+        finish_chapter_and_return_to_menu(ctx, "[ui_manager_v2] true_ending -> iteration")
+        return true
+    end
+    return false
+end
+
+local function handle_system(ctx, message_id, message, sender)
+    if message_id == MSG.apply_dialogue_bg then
+        ctx.apply_dialogue_bg(message and message.name)
+        return true
+    end
+    return false
+end
+
+local function handle_dialogue(ctx, message_id, message, sender)
+    if message_id == MSG.dialogue_updated then
+        ctx.handle_dialogue_update()
+        return true
+    elseif message_id == MSG.dialogue_next then
+        ctx.cancel_dialogue_autoplay()
+        if dm.advance then dm.advance() end
+        ctx.handle_dialogue_update()
+        return true
+    elseif message_id == MSG.typewriter_done then
+        ctx.self.dialogue_waiting_for_typewriter = false
+        if ctx.self.dialogue_skip or ctx.self.dialogue_auto then
+            ctx.schedule_dialogue_autoadvance()
+        end
+        return true
+    elseif message_id == MSG.dialogue_skip then
+        ctx.dbg("[ui_manager_v2] dialogue_skip", message.on)
+        ctx.set_dialogue_play_mode("skip", message and message.on)
+        return true
+    elseif message_id == MSG.dialogue_auto then
+        ctx.dbg("[ui_manager_v2] dialogue_auto", message.on)
+        ctx.set_dialogue_play_mode("auto", message and message.on)
+        return true
+    elseif message_id == MSG.open_backlog then
+        ctx.open_dialogue_backlog()
+        return true
+    elseif message_id == MSG.close_backlog then
+        ctx.close_dialogue_backlog()
+        return true
+    end
+    return false
+end
+
+local function append_choice_to_backlog(ctx, index, speaker)
+    local self = ctx.self
+    local opt = self.current_choice_options and self.current_choice_options[index]
+    if not opt then
+        return
+    end
+
+    local text = tostring(opt.text or "")
+    if self.current_choice_question and self.current_choice_question ~= "" then
+        text = tostring(self.current_choice_question) .. "\n> " .. text
+    end
+    ctx.append_dialogue_backlog({
+        kind = "choice",
+        speaker = speaker,
+        text = text,
+    })
+end
+
+local function handle_choice(ctx, message_id, message, sender)
+    if message_id == MSG.choice_picked then
+        local idx = message and message.index
+        append_choice_to_backlog(ctx, idx, "ВЫБОР")
+        ctx.hide_choice()
+        if dm.choose then dm.choose(message.index) end
+        ctx.handle_dialogue_update()
+        return true
+    elseif message_id == MSG.choice_timeout then
+        append_choice_to_backlog(ctx, 1, "АВТО-ВЫБОР")
+        ctx.hide_choice()
+        if dm.choose then dm.choose(1) end
+        ctx.handle_dialogue_update()
+        return true
+    elseif message_id == MSG.choice_cancelled then
+        ctx.hide_choice()
+        return true
+    end
+    return false
+end
+
+local function handle_inventory(ctx, message_id, message, sender)
+    if message_id == MSG.open_inventory then
+        ctx.dbg("[ui_manager_v2] open_inventory from", sender)
+        ctx.open_inventory()
+        return true
+    elseif message_id == MSG.close_inventory then
+        ctx.dbg("[ui_manager_v2] close_inventory")
+        ctx.close_inventory()
+        return true
+    elseif message_id == MSG.inventory_verb then
+        ctx.dbg("[ui_manager_v2] inventory_verb", message.item_id, message.verb,
+            message.target_item_id or "")
+        ctx.handle_inventory_verb(message.item_id, message.verb, {
+            target_item_id = message.target_item_id,
+        })
+        return true
+    elseif message_id == MSG.cancel_armed_inventory then
+        ctx.clear_armed_state()
+        return true
+    end
+    return false
+end
+
+local function handle_sms_open_contact(ctx, contact_id)
+    if not contact_id then
+        return
+    end
+
+    if gs.mark_sms_read then gs.mark_sms_read(contact_id) end
+
+    local replied_flag = "sms_" .. tostring(contact_id) .. "_replied"
+    if gs.get_flag and gs.get_flag(replied_flag) then
+        return
+    end
+
+    ctx.close_phone()
+    local knot_name = nil
+    if contacts and contacts.get_ink_thread then
+        knot_name = contacts.get_ink_thread(contact_id)
+    end
+    knot_name = knot_name or ("sms_thread_" .. tostring(contact_id))
+    if dm.has_knot and dm.has_knot(knot_name) then
+        ctx.enter_side_dialogue(knot_name)
+    end
+end
+
+
+
+
+local function handle_messenger_open_chat(ctx, chat_id)
+    if not chat_id then return end
+
+    
+    
+    
+    local knot_name = nil
+    if gs.get_msg_prompt then
+        local pknot = gs.get_msg_prompt(chat_id)
+        if pknot and pknot ~= "" then knot_name = pknot end
+    end
+
+    if not knot_name then
+        
+        local replied_flag = "msg_" .. tostring(chat_id) .. "_replied"
+        if gs.get_flag and gs.get_flag(replied_flag) then return end
+
+        if contacts and contacts.get_ink_thread then
+            knot_name = contacts.get_ink_thread("msg", chat_id)
+        end
+        knot_name = knot_name or ("msg_thread_" .. tostring(chat_id))
+    end
+
+    if not (dm.has_knot and dm.has_knot(knot_name)) then return end
+    ctx.close_phone()
+    ctx.enter_side_dialogue(knot_name)
+end
+
+local function handle_phone(ctx, message_id, message, sender)
+    if message_id == MSG.open_phone then
+        ctx.dbg("[ui_manager_v2] open_phone from", sender)
+        ctx.open_phone()
+        return true
+    elseif message_id == MSG.close_phone then
+        ctx.close_phone()
+        return true
+    elseif message_id == MSG.phone_sms_viewed then
+        if gs.mark_all_sms_read then
+            gs.mark_all_sms_read()
+        end
+        return true
+    elseif message_id == MSG.sms_open_contact then
+        handle_sms_open_contact(ctx, message and message.contact_id)
+        return true
+    elseif message_id == MSG.messenger_open_chat then
+        handle_messenger_open_chat(ctx, message and message.chat_id)
+        return true
+    elseif message_id == MSG.phone_app_clicked then
+        ctx.dbg("[ui_manager_v2] phone_app_clicked", message.id)
+        return true
+    elseif message_id == MSG.map_travel then
+        local scene_id = message and message.scene
+        ctx.dbg("[ui_manager_v2] map_travel ->", scene_id)
+        if scene_id then
+            ctx.close_phone()
+            scene_controller.enter(scene_id)
+        end
+        return true
+    end
+    return false
+end
+
+function M.handle(ctx, message_id, message, sender)
+    if handle_menu(ctx, message_id, message, sender) then return true end
+    if handle_ending(ctx, message_id, message, sender) then return true end
+    if handle_system(ctx, message_id, message, sender) then return true end
+    if handle_dialogue(ctx, message_id, message, sender) then return true end
+    if handle_choice(ctx, message_id, message, sender) then return true end
+    if handle_inventory(ctx, message_id, message, sender) then return true end
+    if handle_phone(ctx, message_id, message, sender) then return true end
+    return false
+end
+
+return M
+0@main/gui/modules/ui_manager_v2/message_flow.lua!main.scripts.dialogue_manager_inkmain.scripts.logmain.scripts.game_statemain.scripts.save_managermain.scripts.meta_statemain.scripts.scene_controllermain.scripts.phone_contactsmain.gui.modules.messages'/main/scripts/dialogue_manager_ink.luac/main/scripts/log.luac/main/scripts/game_state.luac/main/scripts/save_manager.luac/main/scripts/meta_state.luac#/main/scripts/scene_controller.luac!/main/scripts/phone_contacts.luac/main/gui/modules/messages.luac" 

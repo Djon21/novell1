@@ -1,0 +1,409 @@
+
+�B
+�B
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+local log = require "main.scripts.log"
+local cloud_sync = require "main.scripts.cloud_sync"
+
+local M = {}
+
+local SAVE_PATH = sys.get_save_file("novell1", "save.dat")
+local BACKUP_PATH = sys.get_save_file("novell1", "save.dat.bak")
+
+
+
+
+
+local SLOT_COUNT = 3
+local function slot_path(slot)
+    return sys.get_save_file("novell1", "save_slot" .. tostring(slot) .. ".dat")
+end
+
+local CURRENT_VERSION = 2     
+local DEBOUNCE_SEC = 0.5      
+
+local _data = nil
+local _dirty = false          
+local _debounce_handle = nil  
+
+local function defaults()
+    return {
+        version    = CURRENT_VERSION,
+        save_time  = 0,         
+        mc_gender  = nil,
+        chapter    = 1,
+        ink_state  = nil,
+        game_state = nil,
+    }
+end
+
+
+
+
+
+local function migrate_save(loaded)
+    if type(loaded) ~= "table" then return nil end
+    local v = tonumber(loaded.version) or 0
+
+    
+    
+    if v < 1 then
+        loaded.version = 1
+        v = 1
+    end
+
+    
+    
+    
+    if v < 2 then
+        loaded.save_time = loaded.save_time or 0
+        loaded.version = 2
+        v = 2
+    end
+
+    
+    
+
+    if v ~= CURRENT_VERSION then
+        log.warn("save_manager", "unknown save version", v,
+            "- expected", CURRENT_VERSION, "; falling back to defaults")
+        return nil
+    end
+    return loaded
+end
+
+
+
+local function write_to_disk()
+    if not _data then return end
+
+    
+    
+    
+    local previous = sys.load(SAVE_PATH)
+    if previous and next(previous) ~= nil then
+        sys.save(BACKUP_PATH, previous)
+    end
+
+    
+    
+    _data.save_time = os.time()
+
+    sys.save(SAVE_PATH, _data)
+    _dirty = false
+
+    
+    
+    cloud_sync.push_throttled(_data)
+end
+
+local function ensure_loaded()
+    if not _data then
+        M.load()
+    end
+end
+
+
+
+
+
+local function debounce_save()
+    _dirty = true
+    if _debounce_handle then
+        timer.cancel(_debounce_handle)
+        _debounce_handle = nil
+    end
+    _debounce_handle = timer.delay(DEBOUNCE_SEC, false, function()
+        _debounce_handle = nil
+        if _dirty then
+            write_to_disk()
+        end
+    end)
+end
+
+function M.load()
+    local loaded = sys.load(SAVE_PATH)
+    
+    if not loaded or next(loaded) == nil then
+        local backup = sys.load(BACKUP_PATH)
+        if backup and next(backup) ~= nil then
+            log.warn("save_manager", "main save empty, restored from backup")
+            loaded = backup
+        end
+    end
+
+    if loaded and next(loaded) ~= nil then
+        local migrated = migrate_save(loaded)
+        _data = migrated or defaults()
+    else
+        _data = defaults()
+    end
+    return _data
+end
+
+
+function M.save()
+    ensure_loaded()
+    debounce_save()
+end
+
+
+
+function M.save_now()
+    ensure_loaded()
+    if _debounce_handle then
+        timer.cancel(_debounce_handle)
+        _debounce_handle = nil
+    end
+    write_to_disk()
+end
+
+
+
+
+
+
+
+
+
+
+function M.cloud_init(callback)
+    ensure_loaded()
+    cloud_sync.init(function(init_err)
+        if init_err then
+            
+            if callback then callback(init_err) end
+            return
+        end
+        cloud_sync.pull(function(pull_err, cloud_data)
+            if pull_err then
+                log.info("save_manager", "cloud pull failed:", pull_err)
+                if callback then callback(pull_err) end
+                return
+            end
+            local local_time = (_data and _data.save_time) or 0
+            local cloud_time = (cloud_data and cloud_data.save_time) or 0
+            if cloud_data and cloud_time > local_time then
+                local migrated = migrate_save(cloud_data)
+                if migrated then
+                    log.info("save_manager", "cloud save is newer (cloud=",
+                        cloud_time, "local=", local_time, ") - using cloud")
+                    _data = migrated
+                    
+                    
+                    sys.save(SAVE_PATH, _data)
+                else
+                    log.warn("save_manager", "cloud save version unknown - ignored")
+                end
+            else
+                log.info("save_manager", "local save is up to date (local=",
+                    local_time, "cloud=", cloud_time, ")")
+            end
+            if callback then callback(nil) end
+        end)
+    end)
+end
+
+
+
+
+function M.cloud_flush_now(callback)
+    if not _data then
+        if callback then callback("no_data") end
+        return
+    end
+    cloud_sync.flush_now(_data, callback)
+end
+
+function M.new_game()
+    _data = defaults()
+    M.save_now()
+end
+
+function M.clear_run()
+    ensure_loaded()
+    _data.mc_gender = nil
+    _data.chapter = 1
+    _data.ink_state = nil
+    _data.game_state = nil
+    M.save_now()
+end
+
+function M.has_save()
+    ensure_loaded()
+    
+    
+    
+    return _data.ink_state ~= nil and _data.game_state ~= nil
+end
+
+function M.set_ink_state(state)
+    ensure_loaded()
+    _data.ink_state = state
+    M.save()
+end
+
+function M.get_ink_state()
+    ensure_loaded()
+    return _data.ink_state
+end
+
+function M.set_game_state(state)
+    ensure_loaded()
+    _data.game_state = state
+    M.save()
+end
+
+function M.get_game_state()
+    ensure_loaded()
+    return _data.game_state
+end
+
+function M.set_gender(gender)
+    ensure_loaded()
+    _data.mc_gender = gender
+    M.save()
+end
+
+function M.get_gender()
+    ensure_loaded()
+    return _data.mc_gender
+end
+
+function M.get_mc_name()
+    ensure_loaded()
+    return _data.mc_gender == "female" and "Мила" or "Артём"
+end
+
+function M.get_npc_name()
+    ensure_loaded()
+    return _data.mc_gender == "female" and "Артём" or "Мила"
+end
+
+function M.set_chapter(n)
+    ensure_loaded()
+    _data.chapter = n
+    M.save()
+end
+
+function M.get_chapter()
+    ensure_loaded()
+    return _data.chapter
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function M.slot_count() return SLOT_COUNT end
+
+function M.save_to_slot(slot)
+    ensure_loaded()
+    if type(slot) ~= "number" or slot < 1 or slot > SLOT_COUNT then
+        log.warn("save_manager", "save_to_slot: invalid slot", tostring(slot))
+        return false
+    end
+    
+    
+    local snapshot = {
+        version    = _data.version,
+        save_time  = os.time(),
+        mc_gender  = _data.mc_gender,
+        chapter    = _data.chapter,
+        ink_state  = _data.ink_state,
+        game_state = _data.game_state,
+    }
+    sys.save(slot_path(slot), snapshot)
+    log.info("save_manager", "saved to slot", slot, "chapter=", snapshot.chapter)
+    return true
+end
+
+function M.load_from_slot(slot)
+    if type(slot) ~= "number" or slot < 1 or slot > SLOT_COUNT then
+        log.warn("save_manager", "load_from_slot: invalid slot", tostring(slot))
+        return false
+    end
+    local loaded = sys.load(slot_path(slot))
+    if not loaded or next(loaded) == nil then
+        log.warn("save_manager", "load_from_slot: slot", slot, "empty")
+        return false
+    end
+    local migrated = migrate_save(loaded)
+    if not migrated then
+        log.warn("save_manager", "load_from_slot: slot", slot, "incompatible version")
+        return false
+    end
+    _data = migrated
+    
+    
+    
+    M.save_now()
+    log.info("save_manager", "loaded from slot", slot, "chapter=", _data.chapter)
+    return true
+end
+
+
+
+function M.get_slot_info(slot)
+    local path
+    if slot == 0 then
+        path = SAVE_PATH
+    elseif type(slot) == "number" and slot >= 1 and slot <= SLOT_COUNT then
+        path = slot_path(slot)
+    else
+        return nil
+    end
+    local loaded = sys.load(path)
+    if not loaded or next(loaded) == nil then
+        return { exists = false, slot = slot }
+    end
+    return {
+        exists    = true,
+        slot      = slot,
+        save_time = loaded.save_time or 0,
+        chapter   = loaded.chapter or 1,
+        mc_gender = loaded.mc_gender,
+        
+        has_run   = (loaded.ink_state ~= nil and loaded.game_state ~= nil),
+    }
+end
+
+function M.delete_slot(slot)
+    if type(slot) ~= "number" or slot < 1 or slot > SLOT_COUNT then
+        return false
+    end
+    
+    
+    sys.save(slot_path(slot), {})
+    log.info("save_manager", "deleted slot", slot)
+    return true
+end
+
+return M
+@main/scripts/save_manager.luamain.scripts.logmain.scripts.cloud_sync/main/scripts/log.luac/main/scripts/cloud_sync.luac" 

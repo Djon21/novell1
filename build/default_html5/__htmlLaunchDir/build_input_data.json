@@ -1,0 +1,20 @@
+{
+  "project_git" : {
+    "sha1" : "ba887b9092aa4372e0a41d6f4a54370ab02dc392",
+    "origin" : "https://github.com/Djon21/novell1.git",
+    "branch" : "AVOS_G"
+  },
+  "bob_arguments" : {
+    "sha1" : "402218d5544666871f07ecdfa21032a7fb59413f",
+    "version" : "1.12.4",
+    "timestamp" : "2026-05-04 09:07:33"
+  },
+  "defold_sdk" : "402218d5544666871f07ecdfa21032a7fb59413f",
+  "dependencies" : [ {
+    "link" : "https://github.com/indiesoftby/defold-yagames/archive/master.zip",
+    "md5" : "70AD548935D6A7B883358F4FA5E7A3E3"
+  }, {
+    "link" : "https://github.com/abadonna/defold-ink/archive/master.zip",
+    "md5" : "DFED25C5415BEBA24BD5AF4DAAF8E231"
+  } ]
+}

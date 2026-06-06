@@ -1,0 +1,898 @@
+
+��
+��
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+local UI_MGR = "#ui_manager_v2"
+
+local BASE_W = 1280
+local BASE_H = 720
+local ROOT_ID = "dlg_root"
+
+local function get_viewport_size()
+    return gui.get_width(), gui.get_height()
+end
+
+local function set_box_size_if_possible(node, w, h)
+    
+    pcall(gui.set_size, node, vmath.vector3(w, h, 0))
+end
+
+local PORTRAIT_CLIP_W = 220
+local PORTRAIT_CLIP_H = 290
+
+local function apply_portrait_clip_layout()
+    local clip = gui.get_node("portrait_bg_fon")
+    local portrait = gui.get_node("portrait_bg")
+    local icon = gui.get_node("portrait_icon")
+
+    
+    
+    pcall(gui.set_clipping_mode, clip, gui.CLIPPING_MODE_STENCIL)
+    pcall(gui.set_clipping_visible, clip, true)
+    pcall(gui.set_clipping_inverted, clip, false)
+
+    local square = math.max(PORTRAIT_CLIP_W, PORTRAIT_CLIP_H)
+    set_box_size_if_possible(portrait, square, square)
+    gui.set_pivot(portrait, gui.PIVOT_SW)
+    gui.set_adjust_mode(portrait, gui.ADJUST_FIT)
+
+    local p = gui.get_position(portrait)
+    p.x = (PORTRAIT_CLIP_W - square) * 0.5
+    p.y = (PORTRAIT_CLIP_H - square) * 0.5
+    p.z = 0.01
+    gui.set_position(portrait, p)
+
+    local ip = gui.get_position(icon)
+    ip.x = PORTRAIT_CLIP_W * 0.5
+    ip.y = PORTRAIT_CLIP_H * 0.5 + 15
+    ip.z = 0.02
+    gui.set_position(icon, ip)
+end
+
+local function apply_adaptive_layout(self)
+    local screen_w, screen_h = get_viewport_size()
+    if not screen_w or not screen_h or screen_w <= 0 or screen_h <= 0 then return end
+    if self._adaptive_w == screen_w and self._adaptive_h == screen_h then return end
+
+    self._adaptive_w = screen_w
+    self._adaptive_h = screen_h
+
+    
+    for _, id in ipairs({ "scene_bg", "scene_bg_next" }) do
+        local bg = gui.get_node(id)
+        local bg_pos = gui.get_position(bg)
+        bg_pos.x = screen_w * 0.5
+        bg_pos.y = screen_h * 0.5
+        gui.set_position(bg, bg_pos)
+        gui.set_scale(bg, vmath.vector3(1, 1, 1))
+        set_box_size_if_possible(bg, screen_w, screen_h)
+        gui.set_pivot(bg, gui.PIVOT_CENTER)
+        gui.set_adjust_mode(bg, gui.ADJUST_ZOOM)
+    end
+
+    
+    
+    local scale = math.min(screen_w / BASE_W, screen_h / BASE_H)
+    if scale <= 0 then scale = 1 end
+
+    local root = gui.get_node(ROOT_ID)
+    local root_pos = gui.get_position(root)
+    root_pos.x = math.floor(((screen_w - BASE_W * scale) * 0.5) + 0.5)
+    root_pos.y = math.floor(((screen_h - BASE_H * scale) * 0.5) + 0.5)
+    gui.set_position(root, root_pos)
+    gui.set_scale(root, vmath.vector3(scale, scale, 1))
+    set_box_size_if_possible(root, BASE_W, BASE_H)
+    gui.set_pivot(root, gui.PIVOT_SW)
+    gui.set_adjust_mode(root, gui.ADJUST_FIT)
+end
+
+
+
+local log = require "main.scripts.log"
+local ui_state = require "main.scripts.ui_state"
+local function dbg(...) log.debug("dialogue", ...) end
+
+
+
+
+
+
+
+
+
+local CHARS = {
+    mila     = {
+        color = vmath.vector4(1.0, 0.239, 0.498, 1.0),
+        icon = string.char(0xEE, 0x9F, 0xBB),
+        atlas = "mila",
+        portrait = "mila_idle",
+        portrait_idle  = "mila_idle",
+        portrait_blink = "mila_blink",
+        portrait_talk  = "mila_talk",
+    },
+    artem    = {
+        color = vmath.vector4(0.49, 0.976, 1.0, 1.0),
+        icon = string.char(0xEE, 0x9F, 0xBB),
+        atlas = "artem",
+        portrait = "artem_idle",
+        portrait_idle  = "artem_idle",
+        portrait_blink = "artem_blink",
+        portrait_talk  = "artem_talk",
+    },
+    narrator = {
+        color = vmath.vector4(0.353, 1.0, 0.478, 1.0),
+        icon = string.char(0xEE, 0xA4, 0xB1),
+        atlas = "narrator",
+        portrait = "narrator",
+    },
+    
+    ["мила"]  = {
+        color = vmath.vector4(1.0, 0.239, 0.498, 1.0),
+        icon = string.char(0xEE, 0x9F, 0xBB),
+        atlas = "mila",
+        portrait = "mila_idle",
+        portrait_idle  = "mila_idle",
+        portrait_blink = "mila_blink",
+        portrait_talk  = "mila_talk",
+    },
+    ["артём"] = {
+        color = vmath.vector4(0.49, 0.976, 1.0, 1.0),
+        icon = string.char(0xEE, 0x9F, 0xBB),
+        atlas = "artem",
+        portrait = "artem_idle",
+        portrait_idle  = "artem_idle",
+        portrait_blink = "artem_blink",
+        portrait_talk  = "artem_talk",
+    },
+    
+    _default = { color = vmath.vector4(0.952, 0.925, 0.85, 1.0), icon = string.char(0xEE, 0x9F, 0xBB) },
+}
+
+local COLOR_BTN_BG      = vmath.vector4(0.067, 0.055, 0.173, 0.85)
+local COLOR_BTN_BG_ON   = vmath.vector4(0.49, 0.976, 1.0, 0.85)
+local COLOR_LABEL_OFF   = vmath.vector4(0.952, 0.925, 0.85, 0.8)
+local COLOR_LABEL_ON    = vmath.vector4(0.027, 0.023, 0.094, 1.0)
+local COLOR_NARRATOR_TX = vmath.vector4(0.353, 1.0, 0.478, 1.0)
+local COLOR_PAPER       = vmath.vector4(0.952, 0.925, 0.85, 1.0)
+
+local function set_text(id, s)
+    gui.set_text(gui.get_node(id), s or "")
+end
+
+local function set_color(id, c)
+    gui.set_color(gui.get_node(id), c)
+end
+
+local function click_flash(node)
+    gui.animate(node, "scale", vmath.vector4(0.94, 0.94, 1, 1), gui.EASING_OUTQUAD, 0.08, 0, function()
+        gui.animate(node, "scale", vmath.vector4(1, 1, 1, 1), gui.EASING_OUTQUAD, 0.15)
+    end)
+end
+
+local function ensure_backlog_nodes(self)
+    if self.backlog_nodes then return end
+    local n = {
+        btn_log = gui.get_node("btn_log"),
+        btn_log_label = gui.get_node("btn_log_label"),
+    }
+    self.backlog_nodes = n
+    gui.set_enabled(n.btn_log, true)
+    gui.set_enabled(n.btn_log_label, true)
+end
+
+local function set_dialogue_log_button_visible(self, visible)
+    ensure_backlog_nodes(self)
+    gui.set_enabled(self.backlog_nodes.btn_log, visible)
+    gui.set_enabled(self.backlog_nodes.btn_log_label, visible)
+end
+
+local function set_backlog_open(self, open)
+    ensure_backlog_nodes(self)
+    self.backlog_open = open and true or false
+    set_dialogue_log_button_visible(self, self.visible and not self.backlog_open)
+end
+
+
+local function utf8_lower(s)
+    
+    local upper_to_lower = {
+        ["А"]="а", ["Б"]="б", ["В"]="в", ["Г"]="г", ["Д"]="д", ["Е"]="е", ["Ё"]="ё", ["Ж"]="ж",
+        ["З"]="з", ["И"]="и", ["Й"]="й", ["К"]="к", ["Л"]="л", ["М"]="м", ["Н"]="н", ["О"]="о",
+        ["П"]="п", ["Р"]="р", ["С"]="с", ["Т"]="т", ["У"]="у", ["Ф"]="ф", ["Х"]="х", ["Ц"]="ц",
+        ["Ч"]="ч", ["Ш"]="ш", ["Щ"]="щ", ["Ъ"]="ъ", ["Ы"]="ы", ["Ь"]="ь", ["Э"]="э", ["Ю"]="ю", ["Я"]="я"
+    }
+    local result = {}
+    for ch in string.gmatch(s or "", "([%z\1-\127\194-\244][\128-\191]*)") do
+        result[#result + 1] = upper_to_lower[ch] or ch:lower()
+    end
+    return table.concat(result)
+end
+
+local function resolve_speaker(key)
+    if not key then return CHARS._default end
+    
+    local lower_key = utf8_lower(tostring(key))
+    dbg("[dialogue_v2] resolve_speaker: key='" .. tostring(key) .. "' lower_key='" .. lower_key .. "'")
+    local result = CHARS[lower_key]
+    if result then
+        dbg("[dialogue_v2] found in CHARS, portrait:", result.portrait)
+    else
+        dbg("[dialogue_v2] NOT found in CHARS, using _default")
+    end
+    return result or CHARS._default
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+local BLINK_MIN_DELAY = 2.0
+local BLINK_MAX_DELAY = 5.5
+
+
+
+
+
+
+
+
+
+local PORTRAIT_BG_X = -35   
+local PORTRAIT_BG_Y = 0
+local PORTRAIT_BG_SIZE = 290
+local IMAGE_SIZE = 512
+
+local OVERLAY_GEOMETRY = {
+    
+    mila_blink = { x = 208, y = 157, w = 142, h = 50 },
+    
+    mila_talk  = { x = 231, y = 234, w = 74,  h = 58 },
+    
+    artem_blink = { x = 198, y = 130, w = 121, h = 54 },
+    
+    artem_talk  = { x = 218, y = 189, w = 78,  h = 80 },
+}
+
+
+
+local OVERLAY_NODE_FOR_ANIM = {
+    mila_blink  = "portrait_overlay_eyes",
+    mila_talk   = "portrait_overlay",
+    artem_blink = "portrait_overlay_eyes",
+    artem_talk  = "portrait_overlay",
+}
+
+local function apply_overlay_geometry(node, anim_id)
+    local g = OVERLAY_GEOMETRY[anim_id]
+    if not g then return end
+    local s = PORTRAIT_BG_SIZE / IMAGE_SIZE
+    local node_w = g.w * s
+    local node_h = g.h * s
+    local node_x = PORTRAIT_BG_X + g.x * s
+    
+    local node_y = PORTRAIT_BG_Y + PORTRAIT_BG_SIZE - (g.y + g.h) * s
+    local cur_pos = gui.get_position(node)
+    gui.set_position(node, vmath.vector3(node_x, node_y, cur_pos.z))
+    gui.set_size(node, vmath.vector3(node_w, node_h, 0))
+end
+
+
+local function get_overlay_node()
+    local ok, n = pcall(gui.get_node, "portrait_overlay")
+    if ok then return n end
+    return nil
+end
+
+
+
+local function get_overlay_node_for_anim(anim_id)
+    local node_id = OVERLAY_NODE_FOR_ANIM[anim_id]
+    if node_id then
+        local ok, n = pcall(gui.get_node, node_id)
+        if ok and n then return n end
+    end
+    return get_overlay_node()
+end
+
+local function cancel_blink_timer(self)
+    if self.portrait_blink_timer then
+        timer.cancel(self.portrait_blink_timer)
+        self.portrait_blink_timer = nil
+    end
+end
+
+local function hide_node(node_id)
+    local ok, n = pcall(gui.get_node, node_id)
+    if ok and n then gui.set_enabled(n, false) end
+end
+
+
+
+local function hide_overlay()
+    hide_node("portrait_overlay")
+    hide_node("portrait_overlay_eyes")
+end
+
+local function hide_overlay_eyes()  hide_node("portrait_overlay_eyes") end
+local function hide_overlay_mouth() hide_node("portrait_overlay")      end
+
+local function play_overlay_anim(self, anim_id, complete_fn)
+    if not anim_id or anim_id == "" then return false end
+    local n = get_overlay_node_for_anim(anim_id)
+    if not n then return false end
+    
+    
+    local atlas = (self and self.current_char_meta and self.current_char_meta.atlas) or "mila"
+    pcall(gui.set_texture, n, atlas)
+    
+    apply_overlay_geometry(n, anim_id)
+    gui.set_enabled(n, true)
+    local ok = pcall(gui.play_flipbook, n, anim_id, complete_fn)
+    if not ok then
+        log.warn("dialogue", "overlay anim not found:", tostring(anim_id))
+        gui.set_enabled(n, false)
+        return false
+    end
+    return true
+end
+
+local schedule_blink
+schedule_blink = function(self)
+    cancel_blink_timer(self)
+    local c = self.current_char_meta
+    if not c or not c.portrait_blink then return end
+
+    local delay = BLINK_MIN_DELAY + math.random() * (BLINK_MAX_DELAY - BLINK_MIN_DELAY)
+    local token = self.portrait_anim_token
+    self.portrait_blink_timer = timer.delay(delay, false, function()
+        self.portrait_blink_timer = nil
+        if token ~= self.portrait_anim_token then return end
+        
+        
+        play_overlay_anim(self, c.portrait_blink, function()
+            if token ~= self.portrait_anim_token then return end
+            hide_overlay_eyes()
+            schedule_blink(self)
+        end)
+    end)
+end
+
+local function start_talk_anim(self)
+    local c = self.current_char_meta
+    if not c or not c.portrait_talk then return end
+    play_overlay_anim(self, c.portrait_talk)
+end
+
+local function stop_talk_anim(self)
+    hide_overlay_mouth()
+end
+
+
+local TYPEWRITER_CPS = 45  
+local PUNCT_DELAY    = 0.12  
+
+
+local function utf8_chars(s)
+    local out = {}
+    for ch in string.gmatch(s or "", "([%z\1-\127\194-\244][\128-\191]*)") do
+        out[#out + 1] = ch
+    end
+    return out
+end
+
+local function is_punct(ch)
+    return ch == "," or ch == "." or ch == "!" or ch == "?" or ch == ":" or ch == ";" or ch == "…"
+end
+
+local function typewriter_start(self, text)
+    self.tw_chars = utf8_chars(text or "")
+    self.tw_total = #self.tw_chars
+    self.tw_shown = 0
+    self.tw_accum = 0
+    self.tw_active = self.tw_total > 0
+    self.tw_pending_pause = 0
+    if self.tw_active then
+        gui.set_text(gui.get_node("dlg_text"), "")
+        start_talk_anim(self)
+    else
+        
+        
+        
+        gui.set_text(gui.get_node("dlg_text"), text or "")
+        msg.post(UI_MGR, "typewriter_done")
+        stop_talk_anim(self)
+        schedule_blink(self)
+    end
+end
+
+local function typewriter_finish(self)
+    self.tw_shown = self.tw_total
+    self.tw_active = false
+    gui.set_text(gui.get_node("dlg_text"), self.full_text or "")
+    msg.post(UI_MGR, "typewriter_done")
+    
+    
+    
+    stop_talk_anim(self)
+    schedule_blink(self)
+end
+
+local function render(self, msg)
+    local speaker_key = msg.speaker or msg.char or "_default"
+    if speaker_key == "" then speaker_key = "narrator" end
+    local c = resolve_speaker(speaker_key)
+
+    
+    
+    self.portrait_anim_token = (self.portrait_anim_token or 0) + 1
+    self.current_char_meta = c
+    cancel_blink_timer(self)
+    local loop_label = tostring(msg.loop_label or "")
+    if loop_label == "" then
+        loop_label = string.format("%03d", tonumber(msg.loop) or 1)
+    end
+    
+    dbg("[dialogue_v2] speaker_key:", speaker_key, "resolved portrait:", c.portrait)
+
+    local name = msg.name
+if not name or name == "" then
+    if speaker_key == "narrator" then
+        name = "НАРРАТОР"
+    else
+        name = (speaker_key ~= "_default" and speaker_key:upper()) or "—"
+    end
+end
+    set_text("nameplate_name", name:upper())
+    set_color("nameplate_name", COLOR_PAPER)
+
+    
+    local loop_num = tonumber(loop_label) or tonumber(msg.loop) or 1
+    set_text("loop_counter", string.format("петля #%03d", loop_num))
+
+    
+    local portrait_bg = gui.get_node("portrait_bg")
+    local portrait_icon = gui.get_node("portrait_icon")
+    
+    
+    
+    
+    hide_overlay()
+    local portrait_id = msg.portrait or c.portrait_idle or c.portrait
+    
+    dbg("[dialogue_v2] final portrait_id:", portrait_id)
+
+    apply_portrait_clip_layout()
+    if portrait_id then
+        
+        local atlas = c.atlas or "mila"
+        pcall(gui.set_texture, portrait_bg, atlas)
+        local ok, err = pcall(gui.play_flipbook, portrait_bg, portrait_id)
+        if ok then
+            gui.set_enabled(portrait_bg, true)
+            gui.set_enabled(portrait_icon, false)
+            dbg("[dialogue_v2] showing cropped portrait sprite:", portrait_id)
+        else
+            log.warn("dialogue", "portrait animation not found:", tostring(portrait_id), err)
+            gui.set_enabled(portrait_bg, false)
+            gui.set_enabled(portrait_icon, true)
+            set_text("portrait_icon", c.icon)
+            set_color("portrait_icon", c.color)
+        end
+    else
+        
+        gui.set_enabled(portrait_bg, false)
+        gui.set_enabled(portrait_icon, true)
+        set_text("portrait_icon", c.icon)
+        set_color("portrait_icon", c.color)
+        dbg("[dialogue_v2] showing portrait icon for:", speaker_key)
+    end
+
+    local text = msg.text or ""
+    
+    if speaker_key == "narrator" then
+        set_color("dlg_text", COLOR_NARRATOR_TX)
+    else
+        set_color("dlg_text", COLOR_PAPER)
+    end
+    
+    
+    
+    
+    
+    self.full_text = text
+    self.current_text = text
+    typewriter_start(self, text)
+end
+
+function update(self, dt)
+    apply_adaptive_layout(self)
+    if not self.tw_active then return end
+    if self.tw_pending_pause and self.tw_pending_pause > 0 then
+        self.tw_pending_pause = self.tw_pending_pause - dt
+        if self.tw_pending_pause > 0 then return end
+    end
+    self.tw_accum = (self.tw_accum or 0) + dt
+    local step = 1.0 / TYPEWRITER_CPS
+    while self.tw_active and self.tw_accum >= step do
+        self.tw_accum = self.tw_accum - step
+        self.tw_shown = self.tw_shown + 1
+        if self.tw_shown >= self.tw_total then
+            typewriter_finish(self)
+            return
+        end
+        local ch = self.tw_chars[self.tw_shown]
+        if is_punct(ch) then
+            self.tw_pending_pause = PUNCT_DELAY
+        end
+        
+        local shown = table.concat(self.tw_chars, "", 1, self.tw_shown)
+        gui.set_text(gui.get_node("dlg_text"), shown)
+        if self.tw_pending_pause and self.tw_pending_pause > 0 then return end
+    end
+end
+
+local BG_TEXTURE_KEY = "backgrounds"
+
+local function bind_bg_nodes_to_texture()
+    local current = gui.get_node("scene_bg")
+    local next_node = gui.get_node("scene_bg_next")
+    gui.set_texture(current, BG_TEXTURE_KEY)
+    gui.set_texture(next_node, BG_TEXTURE_KEY)
+    return current, next_node
+end
+
+local function set_bg(self, bg_name, animation_id)
+    if not bg_name or bg_name == "" or bg_name == "none" then return end
+    animation_id = animation_id or bg_name
+    if self.current_bg == bg_name and self.current_bg_animation == animation_id then return end
+
+    local n, n_next = bind_bg_nodes_to_texture()
+    local ok, err = pcall(gui.play_flipbook, n, animation_id)
+    if not ok then
+        log.warn("dialogue", "bg animation not found:", bg_name, animation_id, err)
+        return
+    end
+
+    pcall(gui.play_flipbook, n_next, animation_id)
+    self.current_bg = bg_name
+    self.current_bg_animation = animation_id
+    if self.bg_visible ~= false then
+        gui.set_enabled(n, true)
+    end
+end
+
+function init(self)
+    msg.post(".", "acquire_input_focus")
+    self.visible = false
+    self.auto = false
+    self.skip = false
+    self.backlog_index = 0
+    self.backlog_open = false
+    self.full_text = ""
+    self.current_text = ""
+    self.current_bg = nil
+    self.current_bg_animation = nil
+    self.bg_visible = false
+    
+    self.current_char_meta = nil
+    self.portrait_anim_token = 0
+    self.portrait_blink_timer = nil
+    bind_bg_nodes_to_texture()
+    gui.set_enabled(gui.get_node("scene_bg"), false)
+    gui.set_enabled(gui.get_node("scene_bg_next"), false)
+    gui.set_enabled(gui.get_node("dlg_root"), false)
+    apply_portrait_clip_layout()
+    apply_adaptive_layout(self)
+    ensure_backlog_nodes(self)
+    
+    render(self, { speaker = "_default", name = "—", text = "" })
+    
+    
+    local next_label = gui.get_node("btn_next_label")
+    local pos = gui.get_position(next_label)
+    gui.animate(next_label, "position.x", pos.x + 5, 
+        gui.EASING_INOUTSINE, 1.4, 0, nil, 
+        gui.PLAYBACK_LOOP_PINGPONG)
+end
+
+
+
+
+local SCENE_CHAR_NODES = { "scene_character_1", "scene_character_2" }
+local GAME_HEIGHT = 720  
+
+
+local SCENE_CHAR_HOVER_SCALE = 1.04
+local SCENE_CHAR_HOVER_DURATION = 0.08
+
+local function scene_char_set_hover(self, slot, hovered)
+    self._scene_char_hover = self._scene_char_hover or {}
+    if self._scene_char_hover[slot] == hovered then return end
+    self._scene_char_hover[slot] = hovered
+    local node_id = SCENE_CHAR_NODES[slot]
+    local ok, n = pcall(gui.get_node, node_id)
+    if not ok or not n then return end
+    gui.cancel_animation(n, gui.PROP_SCALE)
+    local target = hovered and SCENE_CHAR_HOVER_SCALE or 1.0
+    gui.animate(n, gui.PROP_SCALE, vmath.vector3(target, target, 1),
+        gui.EASING_OUTQUAD, SCENE_CHAR_HOVER_DURATION)
+end
+
+local function set_scene_character(slot, atlas, sprite, x, y, w, h)
+    local node_id = SCENE_CHAR_NODES[slot]
+    if not node_id then return end
+    local ok, n = pcall(gui.get_node, node_id)
+    if not ok then return end
+    
+    pcall(gui.set_texture, n, atlas)
+    pcall(gui.play_flipbook, n, sprite)
+    gui.set_size(n, vmath.vector3(w, h, 0))
+    gui.set_position(n, vmath.vector3(x, GAME_HEIGHT - y, 0.06 + slot * 0.001))
+    gui.set_enabled(n, true)
+end
+
+local function clear_scene_character(self, slot)
+    local node_id = SCENE_CHAR_NODES[slot]
+    if not node_id then return end
+    local ok, n = pcall(gui.get_node, node_id)
+    if not ok then return end
+    gui.cancel_animation(n, gui.PROP_SCALE)
+    gui.set_scale(n, vmath.vector3(1, 1, 1))
+    gui.set_enabled(n, false)
+    if self and self._scene_char_hover then
+        self._scene_char_hover[slot] = nil
+    end
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash("render_dialogue") then
+        apply_adaptive_layout(self)
+        render(self, message or {})
+
+    elseif message_id == hash("set_scene_character") then
+        if message then
+            set_scene_character(message.slot, message.atlas, message.sprite,
+                                message.x, message.y, message.w, message.h)
+        end
+
+    elseif message_id == hash("clear_scene_character") then
+        if message then clear_scene_character(self, message.slot) end
+
+    elseif message_id == hash("set_background") then
+        set_bg(self, message and message.name, message and message.animation)
+
+    elseif message_id == hash("show_bg") then
+        self.bg_visible = true
+        if self.current_bg then
+            gui.set_enabled(gui.get_node("scene_bg"), true)
+        end
+
+    elseif message_id == hash("hide_bg") then
+        self.bg_visible = false
+        gui.set_enabled(gui.get_node("scene_bg"), false)
+        gui.set_enabled(gui.get_node("scene_bg_next"), false)
+
+    elseif message_id == hash("show_dialogue") then
+        self.visible = true
+        gui.set_enabled(gui.get_node("dlg_root"), true)
+        set_dialogue_log_button_visible(self, not self.backlog_open)
+
+    elseif message_id == hash("hide_dialogue") then
+        self.visible = false
+        
+        cancel_blink_timer(self)
+        self.portrait_anim_token = (self.portrait_anim_token or 0) + 1
+        hide_overlay()
+        gui.set_enabled(gui.get_node("dlg_root"), false)
+        set_dialogue_log_button_visible(self, false)
+
+    elseif message_id == hash("set_auto") then
+        self.auto = message.on and true or false
+        gui.set_color(gui.get_node("btn_auto"), self.auto and COLOR_BTN_BG_ON or COLOR_BTN_BG)
+        gui.set_color(gui.get_node("btn_auto_label"), self.auto and COLOR_LABEL_ON or COLOR_LABEL_OFF)
+
+    elseif message_id == hash("set_skip") then
+        self.skip = message.on and true or false
+        gui.set_color(gui.get_node("btn_skip"), self.skip and COLOR_BTN_BG_ON or COLOR_BTN_BG)
+        gui.set_color(gui.get_node("btn_skip_label"), self.skip and COLOR_LABEL_ON or COLOR_LABEL_OFF)
+
+    elseif message_id == hash("finish_typewriter") then
+        if self.tw_active then
+            typewriter_finish(self)
+        end
+
+    elseif message_id == hash("clear_backlog") then
+        self.backlog_index = 0
+
+    elseif message_id == hash("open_backlog") then
+        set_backlog_open(self, true)
+
+    elseif message_id == hash("close_backlog") then
+        set_backlog_open(self, false)
+
+    elseif message_id == hash("set_overlay_state") then
+        
+        
+        
+        
+        local target = message and message.target
+        local open = message and message.open and true or false
+        if target then
+            self.overlay_blockers = self.overlay_blockers or {}
+            self.overlay_blockers[target] = open or nil
+        end
+
+    elseif message_id == hash("layout_changed") or message_id == hash("resize_dialogue") then
+        self._adaptive_w = nil
+        self._adaptive_h = nil
+        apply_adaptive_layout(self)
+
+    elseif message_id == hash("show_transit_dim") then
+        
+        
+        
+        
+        local n = gui.get_node("transit_dim")
+        if n then
+            gui.cancel_animation(n, "color.w")
+            local c = gui.get_color(n)
+            gui.set_color(n, vmath.vector4(c.x, c.y, c.z, 0))
+            gui.animate(n, "color.w", 0.92, gui.EASING_OUTQUAD, 0.30)
+        end
+
+    elseif message_id == hash("hide_transit_dim") then
+        local n = gui.get_node("transit_dim")
+        if n then
+            gui.cancel_animation(n, "color.w")
+            gui.animate(n, "color.w", 0, gui.EASING_INQUAD, 0.40)
+        end
+    end
+end
+
+
+
+local function scene_char_pick(action)
+    if not action or not action.x then return nil end
+    local scene_characters = require("main.scripts.scene_characters")
+    for slot = 1, 2 do
+        local node_id = SCENE_CHAR_NODES[slot]
+        local ok, n = pcall(gui.get_node, node_id)
+        if ok and n and gui.is_enabled(n) then
+            if scene_characters.get_action(slot)
+               and gui.pick_node(n, action.x, action.y) then
+                return slot
+            end
+        end
+    end
+    return nil
+end
+
+function on_input(self, action_id, action)
+    
+    
+    if not self.visible and action and action.x and not ui_state.modal_open then
+        
+        if action_id == nil and not action.pressed and not action.released then
+            local hovered_slot = scene_char_pick(action)
+            self._scene_char_hover = self._scene_char_hover or {}
+            for slot = 1, 2 do
+                scene_char_set_hover(self, slot, hovered_slot == slot)
+            end
+        end
+        
+        if action_id == hash("touch") and action.pressed then
+            local clicked_slot = scene_char_pick(action)
+            if clicked_slot then
+                msg.post(UI_MGR, "scene_character_clicked", { slot = clicked_slot })
+                return true
+            end
+        end
+    end
+
+    if not self.visible and not self.backlog_open then return false end
+    if action_id ~= hash("touch") or not action.pressed then return false end
+
+    
+    
+    if not self.backlog_open and self.overlay_blockers then
+        if next(self.overlay_blockers) ~= nil then
+            return false
+        end
+    end
+    ensure_backlog_nodes(self)
+
+    
+    
+    
+    
+    
+    if self.skip and not self.backlog_open then
+        self.skip = false
+        gui.set_color(gui.get_node("btn_skip"), COLOR_BTN_BG)
+        gui.set_color(gui.get_node("btn_skip_label"), COLOR_LABEL_OFF)
+        msg.post(UI_MGR, "dialogue_skip", { on = false })
+        return true
+    end
+
+    if self.backlog_open then
+        return true
+    end
+
+    if gui.pick_node(self.backlog_nodes.btn_log, action.x, action.y) then
+        click_flash(self.backlog_nodes.btn_log)
+        msg.post(UI_MGR, "open_backlog")
+        return true
+    end
+
+    if gui.pick_node(gui.get_node("btn_skip"), action.x, action.y) then
+        click_flash(gui.get_node("btn_skip"))
+        self.skip = not self.skip
+        gui.set_color(gui.get_node("btn_skip"), self.skip and COLOR_BTN_BG_ON or COLOR_BTN_BG)
+        gui.set_color(gui.get_node("btn_skip_label"), self.skip and COLOR_LABEL_ON or COLOR_LABEL_OFF)
+        msg.post(UI_MGR, "dialogue_skip", { on = self.skip })
+        return true
+    end
+
+    if gui.pick_node(gui.get_node("btn_auto"), action.x, action.y) then
+        click_flash(gui.get_node("btn_auto"))
+        self.auto = not self.auto
+        gui.set_color(gui.get_node("btn_auto"), self.auto and COLOR_BTN_BG_ON or COLOR_BTN_BG)
+        gui.set_color(gui.get_node("btn_auto_label"), self.auto and COLOR_LABEL_ON or COLOR_LABEL_OFF)
+        msg.post(UI_MGR, "dialogue_auto", { on = self.auto })
+        return true
+    end
+
+    if gui.pick_node(gui.get_node("btn_next"), action.x, action.y) then
+        click_flash(gui.get_node("btn_next"))
+        if self.tw_active then
+            typewriter_finish(self)
+        else
+            msg.post(UI_MGR, "dialogue_next")
+        end
+        return true
+    end
+
+    
+    if gui.pick_node(gui.get_node("dbox"), action.x, action.y) then
+        if self.tw_active then
+            typewriter_finish(self)
+        else
+            msg.post(UI_MGR, "dialogue_next")
+        end
+        return true
+    end
+
+    return false
+end
+.@main/gui/components_v2/dialogue_v2.gui_scriptmain.scripts.logmain.scripts.ui_statemain.scripts.scene_characters/main/scripts/log.luac/main/scripts/ui_state.luac#/main/scripts/scene_characters.luac" 

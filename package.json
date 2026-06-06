@@ -1,0 +1,20 @@
+{
+  "name": "avos_g",
+  "version": "1.0.0",
+  "description": "`AVOS_S` — narrative point-and-click / visual novel на Defold.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "node tests/story_test.js all",
+    "test:iter1": "node tests/story_test.js iter1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "inkjs": "^2.4.0"
+  }
+}
