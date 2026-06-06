@@ -112,6 +112,7 @@
 # speaker:mc
 Сначала до меня доходит вибрация телефона. Потом свет из окна. Потом всё остальное.
 }
+-> seed_phone_history ->
 === seed_phone_history ===
 ~ phone_history_seeded = true
 # set_flag:phone_history_seeded=true
