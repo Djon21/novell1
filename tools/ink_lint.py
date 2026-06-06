@@ -153,6 +153,20 @@ def validate_tag(file: Path, line_n: int, line_text: str) -> None:
             warn(file, line_n, f"tag '{key}': value {raw_val!r} — unexpected format (expected {spec})")
 
 
+def get_included_ink_files() -> set[Path]:
+    """Return set of .ink files that are INCLUDEd by chapter_01.ink (recursive)."""
+    included: set[Path] = set()
+    chapter = INK_DIR / "chapter_01.ink"
+    if not chapter.exists():
+        return included
+    text = chapter.read_text(encoding="utf-8", errors="replace")
+    for m in re.finditer(r'^\s*INCLUDE\s+(.+)$', text, re.MULTILINE):
+        rel = m.group(1).strip().replace("/", "\\")
+        fpath = (chapter.parent / rel).resolve()
+        if fpath.exists() and "archive" not in fpath.parts and "_old" not in fpath.name:
+            included.add(fpath)
+    return included
+
 def scan_all() -> int:
     all_ink = sorted(INK_DIR.rglob("*.ink"))
     active: list[Path] = []
@@ -162,6 +176,7 @@ def scan_all() -> int:
         if "archive" in f.parts or f.name.startswith("archive_"):
             continue
         active.append(f)
+    included_files = get_included_ink_files()
 
     # Pass 1: collect knot definitions
     all_knots: set[str] = set(BUILTIN_KNOTS)
@@ -431,22 +446,19 @@ def scan_all() -> int:
             warn(nf, 0, f"file in chapters/New/ — not compiled into chapter_01.json (inactive)")
 
     # Dead knot check: defined but never referenced by -> or Lua scene
+    # Dead knot detection: only consider knots from INCLUDEd files
+    included_knots: set[str] = set(BUILTIN_KNOTS)
+    for f in included_files:
+        text = f.read_text(encoding="utf-8", errors="replace")
+        for m in re.finditer(r"^===\s*([a-zA-Z_][\w]*)\s*===", text, re.MULTILINE):
+            included_knots.add(m.group(1))
     skip_knot_prefixes = ("inv_", "phone_", "msg_", "sms_", "tue_", "mon_", "cafe_", "park_", "shop_", "bar_", "view_")
-    for knot_name in sorted(all_knots - refd_knots - {"DONE", "END", "START"}):
-        # Динамические knots: inventory, phone, scene-specific
+    # Knots that are legitimately called from Lua (not from Ink ->)
+    lua_entry_knots = {"apartment_start", "seed_phone_history"}
+    for knot_name in sorted(included_knots - refd_knots - {"DONE", "END", "START"}):
         if knot_name.startswith(skip_knot_prefixes):
             continue
-        # Entry points: first-letter lowercase (knots are entry points, uppercase are usually internal)
-        # Also skip known entry points
-        if knot_name in ("seed_phone_history", "loop_entry", "apartment_start",
-                         "stages_start", "stage_1", "stage_2", "stage_3",
-                         "endings_start", "ending_break", "ending_merge", "ending_stay",
-                         "awareness_start", "investigation_start", "journal_start",
-                         "find_clue", "question_reality", "read_journal", "write_entry",
-                         "sunday_date_map_fallback", "park_message_where_are_you",
-                         "sms_service_done", "bathroom_not_now",
-                         "phone_msg_sunday_invite_second",
-                         "phone_call_seed_sunday_morning", "phone_mail_seed_sunday_morning"):
+        if knot_name in lua_entry_knots:
             continue
         warn(INK_DIR, 0, f"dead knot '{knot_name}' — defined but never referenced by any -> or Lua scene")
 
