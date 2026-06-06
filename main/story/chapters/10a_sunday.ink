@@ -643,9 +643,7 @@
 
 Рука сама тянется к экрану. Не потому что нужно ответить. А потому что в этом дне, который повторяется, есть хотя бы одна вещь, которую не хочется прожить иначе: встреча.
 
-# set_flag:date_agreed=true
 # set_flag:sunday_messenger_invite_sent=true
-~ date_agreed = true
 ~ sunday_messenger_invite_sent = true
 
 # quest:start:reply_npc
