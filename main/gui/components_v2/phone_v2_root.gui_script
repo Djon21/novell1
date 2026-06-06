@@ -181,6 +181,7 @@ local function update_notif(self)
     -- app1 показывает только SMS, app7 — только Messenger.
     local sms_unread = gs.get_sms_unread_total and gs.get_sms_unread_total() or 0
     local msg_unread = gs.get_msg_unread_total and gs.get_msg_unread_total() or 0
+    local msg_need_reply = gs.get_msg_need_reply_count and gs.get_msg_need_reply_count() or 0
     set_badge(self, "app1", sms_unread)
     set_badge(self, "app7", msg_unread)
 
