@@ -139,17 +139,18 @@
 // -----------------------------------------------------------------------------
 
 === msg_thread_mila ===
-{iteration_number >= 3:
-    -> msg_thread_mila_iter3
+{iteration_number == 1:
+    -> msg_thread_mila_iter1
 }
-{iteration_number > 1:
+{iteration_number == 2:
     {loop2_work_check_done:
         -> msg_thread_mila_loop2
     - else:
         -> msg_thread_mila_loop2_reject
     }
-- else:
-    -> msg_thread_mila_iter1
+}
+{iteration_number >= 3:
+    -> msg_thread_mila_iter3
 }
 
 === msg_thread_mila_iter1 ===
@@ -269,17 +270,18 @@
 
 
 === msg_thread_artem ===
-{iteration_number >= 3:
-    -> msg_thread_artem_iter3
+{iteration_number == 1:
+    -> msg_thread_artem_iter1
 }
-{iteration_number > 1:
+{iteration_number == 2:
     {loop2_work_check_done:
         -> msg_thread_artem_loop2
     - else:
         -> msg_thread_artem_loop2_reject
     }
-- else:
-    -> msg_thread_artem_iter1
+}
+{iteration_number >= 3:
+    -> msg_thread_artem_iter3
 }
 
 
