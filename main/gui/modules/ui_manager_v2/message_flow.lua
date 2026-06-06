@@ -287,6 +287,10 @@ end
 local function handle_messenger_open_chat(ctx, chat_id)
     if not chat_id then return end
 
+    local iter = meta.get and meta.get("iteration_number", 1) or 1
+    local ink_iter = dm.get_variable and dm.get_variable("iteration_number")
+    print("DEBUG messenger_open_chat chat_id=", chat_id, "meta_iter=", iter, "ink_iter=", ink_iter)
+
     -- Приоритет №1 — runtime prompt (# msg:prompt:CHAT:KNOT). Это
     -- «открытая инициатива» из конкретной сцены: игнорим _replied и
     -- штатный msg_thread, идём в указанный knot.
