@@ -177,7 +177,6 @@ function walkIter1(w, log) {
     setVars(w.story, { iteration_number: 1 });
     w.walk(); w.pick(0);
     w.walk();
-    w.runKnot("seed_phone_history");
 
     log && console.log("  -- Phase: Set up for date --");
     setVars(w.story, {
@@ -246,7 +245,6 @@ function walkIter2(w, log, targetEnding) {
     setVars(w.story, { iteration_number: 2 });
     w.walk(); w.pick(0);
     w.walk();
-    w.runKnot("seed_phone_history");
 
     log && console.log("  -- Phase: Fake Wednesday --");
     setVars(w.story, {
