@@ -1,5 +1,7 @@
 # Ink Tag Reference For GPT
 
+> Последнее обновление: 2026-06-06
+
 Этот файл - короткий справочник тегов для авторинга Ink. Его можно загружать в GPT вместо `main/scripts/dialogue_manager_ink.lua`, если задача только написать или проверить сценарий.
 
 Source of truth в коде: `main/scripts/dialogue_manager_ink.lua`, функция `apply_tags`.
@@ -352,8 +354,9 @@ Auto-hide при смене группы сцен — встроенное по�
 |---|---|---|
 | `meta:add:KEY:DELTA` | `# meta:add:loop_awareness:1` | Увеличивает числовое meta-поле. |
 | `meta:set:KEY:VALUE` | `# meta:set:loop_awareness:2` | Задаёт meta-поле. |
-| `loop:end:false:ID` | `# loop:end:false:ending_a` | Помечает ложную концовку. |
-| `loop:end:true` | `# loop:end:true` | Помечает истинную концовку. |
+| `chapter_finished` | `# chapter_finished` | Линейный конец итерации (001). |
+| `loop:end:false:ID` | `# loop:end:false:ending_a` | Помечает ложную концовку (002+). |
+| `loop:end:true` | `# loop:end:true` | Помечает истинную концовку (002+). |
 
 Поддержанные numeric meta keys:
 

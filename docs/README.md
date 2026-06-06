@@ -14,6 +14,7 @@
 4. `guides/HOW_TO_WRITE_INK.md` — ink-теги, паттерны
 5. `scenario_context/README.md` — компактный контекст для GPT, который помогает со сценарием и хабами
 6. `reference/TODO.md` — живые хвосты
+12. `docs/guides/STORY_TESTING.md` — тестирование Ink
 
 ## Reference
 
@@ -39,6 +40,7 @@
 
 ### Работа с контентом
 - `HOW_TO_WRITE_INK.md` — все ink-теги и паттерны
+| `STORY_TESTING.md` | Документация системы автоматического тестирования Ink-стори через inkjs |
 - `HOW_TO_ADD_SCENES.md` — фоны, сцены, hotspot'ы
 - `HOW_TO_ADD_PORTRAITS.md` — портреты персонажей (статика)
 - `HOW_TO_ANIMATE_PORTRAITS.md` — layered-портреты: моргание + движение рта, пайплайн с нейронкой
@@ -63,6 +65,7 @@
 - `GUI_UTILS.md` — общие GUI-хелперы
 - `DRAG_SCROLL.md` — drag-to-scroll для phone-app'ов
 - `YANDEX_SDK_AND_ADS.md` — Yandex Games SDK и реклама
+- `STORY_TESTING.md` — система тестирования сюжета через inkjs (CI, Walkthrough, ограничения)
 
 ## Legacy
 

@@ -15,6 +15,9 @@ powershell -ExecutionPolicy Bypass -File .\scripts\build.ps1 -NoDownload
 
 # CI lint:
 python tools/ink_lint.py --ci
+
+# Story smoke test (checks Ink through real Continue()):
+node tests/story_test.js full
 ```
 
 ## Architecture
@@ -25,6 +28,7 @@ python tools/ink_lint.py --ci
 - Scene facade: `main/scripts/scenes.lua` (~75 lines) → scenes in `main/data/scenes/`
 - Story pipeline: `main/story/chapter_01.ink` + `INCLUDE chapters/*.ink` → compile → `main/story/chapter_01.json`
 - `chapter_01.ink` must only contain `INCLUDE` directives — no text/VAR/knots
+- Story test: `tests/story_test.js` (~400 lines) → walks 3 iterations via real Ink conditionals, validates story doesn't crash
 
 ## Removing a Quest (Checklist)
 
@@ -75,6 +79,7 @@ When the user reports a bug, do NOT guess or theorize. READ the actual source co
 | Phone assets | `main/images/phone/` |
 | Localization | `main/data/strings/{ru,en,tr}.json` |
 | Logs | `main/scripts/log.lua` (error/warn/info/debug/trace) |
+| Story tests | `tests/story_test.js` |
 
 ## Documentation
 

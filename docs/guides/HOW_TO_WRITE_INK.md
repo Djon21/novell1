@@ -1,5 +1,7 @@
 # Как писать Ink-файлы для AVOS_S
 
+*Обновлено: 2026-06-06*
+
 Единственный source of truth по авторингу Ink для текущего runtime: `dialogue_manager_ink.lua`, `scene_controller.lua`, `game_state.lua` и flow-модули `main/gui/modules/ui_manager_v2/`.
 
 Правило: Ink пишет текст и шлёт теги-команды; состояние сцен, инвентарь, телефон, карту и квесты исполняет Lua.
@@ -36,16 +38,12 @@ main/story/
 ├── chapter_01.json
 └── chapters/
     ├── 00_bootstrap.ink
+    ├── 01_loop_entry.ink
     ├── 10_apartment.ink
     ├── 10_reset.ink
     ├── 10a_sunday.ink
     ├── 10b_monday.ink
     ├── 10c_tuesday.ink
-    ├── 50_investigation.ink
-    ├── 51_awareness.ink
-    ├── 60_stages.ink
-    ├── 70_loop_journal.ink
-    ├── 80_endings.ink
     ├── 91_inventory_actions.ink
     ├── 92_phone_sms.ink
     ├── 93_phone_messenger.ink
@@ -133,6 +131,7 @@ Git Bash / Linux:
 | `bg:none` | `# bg:none` | Убирает фон. Использовать редко. |
 | `color:R,G,B` | `# color:0.1,0.1,0.15` | Тинт фона, значения 0…1. |
 | `speaker:ID` | `# speaker:mc`, `# speaker:npc`, `# speaker:none` | `mc`/`npc` подменяются на текущие имена. `none` — нарратор. |
+| `scene_char:CHAR_ID:POSE` | `# scene_char:alex:idle` | Показывает персонажа на текущем фоне сцены. CHAR_ID из `scene_characters.lua`, POSE — анимация/состояние. |
 | `sfx:NAME` | `# sfx:phone_notify` | Одноразовый звук. |
 | `shake:I,D` | `# shake:0.2,0.5` | Тряска экрана: сила, длительность. |
 | `pulse:D,R,G,B` | `# pulse:0.8,0,255,0` | Цветовая вспышка RGB 0…255. |
@@ -149,6 +148,7 @@ Git Bash / Linux:
 | `quest:start:ID` | `# quest:start:make_coffee` | Активировать phone quest. |
 | `quest:done:ID` | `# quest:done:make_coffee` | Закрыть phone quest. |
 | `quest:fail:ID` | `# quest:fail:reply_npc` | Провалить phone quest. |
+| `quest:ID=STATUS` | `# quest:make_coffee=done` | Прямо задать статус квеста. STATUS ∈ `active`, `done`, `failed`. |
 
 `quest:complete` не поддерживается.
 
@@ -157,15 +157,23 @@ Git Bash / Linux:
 | Тег | Пример | Что делает |
 |---|---|---|
 | `sms:add:CONTACT:TEXT` | `# sms:add:mila:Есть планы?` | Входящее SMS. |
+| `sms:add_old:CONTACT:TIME:TEXT` | `# sms:add_old:mama:пн:Не забудь поесть.` | Добавляет старое (уже прочитанное) SMS. Без уведомления. Формат как у `sms:add`, но без всплывашки. |
+| `sms:add_hot:CONTACT:TEXT` | `# sms:add_hot:unknown:если помнишь, ответь.` | Тревожное входящее SMS: красный/розовый акцент, выделенный border. |
 | `sms:reply:CONTACT:TEXT` | `# sms:reply:mila:Хорошо.` | Исходящее SMS от ГГ. Авто-флаг: `sms_<contact>_replied=true`. |
 | `sms:reply_old:CONTACT:TIME:TEXT` | `# sms:reply_old:mama:пн:Да, всё нормально.` | Старое исходящее SMS для seed-истории. Не ставит `sms_<contact>_replied`. |
 | `sms:read:CONTACT` | `# sms:read:mila` | Пометить чат прочитанным вручную. |
+| `sms:tag:CONTACT:TONE[:LABEL]` | `# sms:tag:unknown:hot:сигнал` | Pin-тег на SMS-чате. TONE ∈ `hot`, `amber`, `danger`, `warn`. `:clear` — снять тег. |
+| `sms:need_reply:CONTACT[:LABEL]` | `# sms:need_reply:mila` | Пин «ждёт ответа». Авто-снимается при `# sms:reply:…` в этот чат. |
 | `bank:set:AMOUNT` | `# bank:set:272229` | Выставить runtime-баланс карты. Обычно только в seed истории телефона. |
 | `bank:charge:AMOUNT:MERCHANT` | `# bank:charge:980:Кофейня «петля»` | Списать деньги и автоматически добавить SMS от банка с новым балансом. |
 | `msg:add:CHAT:TEXT` | `# msg:add:mila:Привет в мессенджере` | Входящее сообщение в Messenger-приложение (отдельно от SMS). |
+| `msg:add_old:CHAT:TIME:TEXT` | `# msg:add_old:friends:пт:Как дела?` | Добавляет старое (уже прочитанное) сообщение в Messenger. Без уведомления. |
 | `msg:reply:CHAT:TEXT` | `# msg:reply:mila:Ок` | Исходящее в Messenger. Авто-флаг: `msg_<chat>_replied=true`. |
 | `msg:reply_old:CHAT:TIME:TEXT` | `# msg:reply_old:friends:пт:Я могу отменить заранее.` | Старое исходящее сообщение для seed-истории. Не ставит `msg_<chat>_replied`. |
 | `msg:read:CHAT` | `# msg:read:mila` | Пометить чат прочитанным вручную. Авто-флаг `msg_<chat>_read=true` ставится при открытии Messenger. |
+| `msg:tag:CHAT:TONE[:LABEL]` | `# msg:tag:loop:hot:сигнал` | Pin-тег для Messenger. TONE ∈ `hot`, `amber`, `danger`, `warn`, `need_reply`. `:clear` — снять тег. |
+| `msg:need_reply:CHAT[:LABEL]` | `# msg:need_reply:mila` | Пин «ждёт ответа» для Messenger. Авто-снимается при `# msg:reply:…`. |
+| `msg:prompt:CHAT:KNOT[:LABEL]` | `# msg:prompt:mila:park_message_where_are_you:НАПИСАТЬ` | Открытая инициатива: pin «НАПИСАТЬ», дивертит в KNOT при тапе input'а. `:clear` — снять. |
 | `note:add:TITLE:BODY` | `# note:add:Кейс:не хватает данных` | Добавить заметку. |
 | `mail:add:FROM:SUBJECT[:BODY]` | `# mail:add:system:Кейс 017:Собрать пакет` | Добавить письмо. |
 | `mail:read` / `mail:read:INDEX` | `# mail:read` | Пометить почту прочитанной. |
@@ -176,6 +184,8 @@ Git Bash / Linux:
 | `clue:add:ID:LABEL` | `# clue:add:repeat:Повторяющийся сигнал` | Добавить улику. |
 | `term:LEVEL:TEXT` | `# term:warn:missing field` | Строка терминала. LEVEL: `ok`/`warn`/`err`/`info`/`prompt`/`plain`. |
 | `term:clear` / `term:defaults` | — | Очистить / вернуть дефолтный терминал. |
+
+> **Примечание по `_old` вариантам:** `sms:add_old` и `msg:add_old` НЕ объявлены в tag-registry lookup table (`tag_handlers`), но обрабатываются runtime как специальные случаи в `dialogue_manager_ink.lua`. Они существуют исключительно для seed-истории и read-only чатов — не используют уведомления и не меняют `replied`-флаги.
 
 Для покупок не пиши вручную `# sms:add:bank:... Баланс ...`. Используй `# bank:charge:AMOUNT:MERCHANT`, иначе баланс быстро начнёт расходиться между ветками.
 
@@ -206,6 +216,7 @@ Git Bash / Linux:
 | `phone:map` | `# phone:map` | Открыть телефон сразу на карте. |
 | `phone:app:NAME` | `# phone:app:sms` | Открыть конкретное приложение телефона. |
 | `phone:close` | `# phone:close` | Закрыть телефон-overlay. Использовать только в специальных телефонных knot'ах. |
+| `phone:loop_reset` | `# phone:loop_reset` | Очистить телефонный runtime новой петли: SMS, Messenger, unread, tags, bank. Не трогает meta-state. |
 | `hud:hint:phone` | `# hud:hint:phone` | Кнопка PHN в HUD начинает пульсировать. Hint **устойчив**: переживает open/close телефона и держится пока автор не снимет явно. |
 | `hud:hint:bag` | `# hud:hint:bag` | То же для кнопки инвентаря BAG. |
 | `hud:hint:phone:off` / `hud:hint:bag:off` | — | Снять подсказку (использовать в knot'е выполнения нужного действия — например после `# sms:reply:`). |
@@ -233,6 +244,43 @@ Git Bash / Linux:
 >     -> done
 > ```
 > Если игрок закроет телефон не ответив — pulse возобновится в HUD до тех пор, пока он не зайдёт и не ответит.
+
+### Splash-перебивки (полноэкранные заглушки)
+
+Полноэкранный overlay с анимацией. Используется для смены дня, перехода между локациями, воспоминаний.
+**Блокирует Ink** — ждёт тапа игрока для продолжения.
+
+| Тег | Пример | Что делает |
+|---|---|---|
+| `splash:day:DAY` | `# splash:day:monday` | Смена дня. DAY ∈ `sunday`–`wednesday`. |
+| `splash:location:SCENE_ID` | `# splash:location:park_riverside_bench` | Прибытие в локацию. |
+| `splash:text:TITLE[:SUBTITLE]` | `# splash:text:Воспоминание` | Нейтральный title-only. |
+| `splash:memory:TITLE` | `# splash:memory:Вчера вечером` | Тёплая палитра (amber), eyebrow «ВОСПОМИНАНИЕ». |
+| `splash:alarm:TITLE` | `# splash:alarm:Сбой системы` | Hot-палитра (розовый), eyebrow «ВНИМАНИЕ». |
+
+Backward‑compat: `# day_transition:to:DAY` работает как алиас `splash:day:DAY`.
+
+### Transit (атмосферный overlay)
+
+В отличие от splash, **transit не блокирует ink и не требует тапа**. Это фон для нарративных монтажей: дорога, сборы, флешбэк-секвенция. Текст идёт поверх overlay в dialogue-панели.
+
+| Тег | Пример | Что делает |
+|---|---|---|
+| `transit:start:TITLE[:SUBTITLE[:EYEBROW]]` | `# transit:start:На автомате:знакомый маршрут` | Открывает overlay с заголовком. Eyebrow по умолчанию «В ПУТИ». |
+| `transit:end` | `# transit:end` | Скрывает overlay. Вызывать перед следующим `# bg:`. |
+
+### Scene characters (фигуры на фоне)
+
+Спрайты-фигуры на фоне exploration-сцены (в стиле Persona 5).
+Конфиг — `main/scripts/scene_characters.lua`.
+
+| Тег | Пример | Что делает |
+|---|---|---|
+| `scene_char:show:GROUP:KEY` | `# scene_char:show:park:mila_idle` | Показать персонажа `KEY` в группе `GROUP`. |
+| `scene_char:hide:GROUP:KEY` | `# scene_char:hide:park:mila_idle` | Спрятать конкретного персонажа. |
+| `scene_char:hide_all` | `# scene_char:hide_all` | Спрятать всех персонажей текущей группы. |
+
+Auto-hide при смене группы. См. `docs/guides/HOW_TO_ADD_SCENE_CHARACTERS.md`.
 
 ### Реклама Яндекс Игр
 
