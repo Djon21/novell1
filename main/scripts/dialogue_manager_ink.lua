@@ -1298,10 +1298,12 @@ function M.load_saved(json_bytes)
         for _, cmd in ipairs(deferred_commands) do
             table.insert(pending_commands, cmd)
         end
-        deferred_commands = {}
     else
         pending_commands = {}
     end
+    -- clear stale deferred commands from replay (scene transitions, etc.)
+    -- they've already been fired during restore or shouldn't fire at all
+    deferred_commands = {}
 
     -- Синхронизируем лог-флаги (чтобы первое изменение после рестарта
     -- корректно залоггировалось).
