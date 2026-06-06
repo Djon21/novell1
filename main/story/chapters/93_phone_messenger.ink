@@ -593,6 +593,17 @@
 # speaker:mc
 Я знаю, что {npc_gender == "female": она|он} ответит. Я помню этот разговор. Но всё равно приятно.
 
+# quest:done:reply_npc
+# quest:start:meet_npc
+# hud:hint:phone:off
+# map:allow:reset
+{date_place_cafe:
+    # map:allow:poi_cafe
+- else:
+    # map:allow:poi_park
+}
+# phone:map
+-> DONE
 - else:
     {iteration_number > 1 and loop2_work_check_done:
 Теперь у воскресенья есть адрес — и это уже не теория о сломанном телефоне, а маршрут, который придётся проверить.
