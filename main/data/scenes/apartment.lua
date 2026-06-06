@@ -7,6 +7,18 @@ local apartment_bg              = s.apartment_bg
 local is_apartment_night        = s.is_apartment_night
 local is_sunday_apartment_night = s.is_sunday_apartment_night
 
+local function sunday_can_exit(gs)
+    if not gs.get_flag("sunday_dressed") then return false end
+    if gs.get_flag("date_agreed") then return true end
+    if gs.get_flag("loop2_first_invite_rejected")
+    or gs.get_flag("loop2_fake_wednesday_started") then
+        if not gs.get_flag("loop2_work_check_done") then
+            return true
+        end
+    end
+    return false
+end
+
 return {
 
     apartment_hub = {
@@ -39,18 +51,6 @@ return {
                     return is_apartment_night(gs) or gs.get_flag("washed_up")
                 end,
             },
-            local function sunday_can_exit(gs)
-                if not gs.get_flag("sunday_dressed") then return false end
-                if gs.get_flag("date_agreed") then return true end
-                -- Iter 2: exit доступен до офиса (reject + фейк-среда)
-                if gs.get_flag("loop2_first_invite_rejected")
-                or gs.get_flag("loop2_fake_wednesday_started") then
-                    if not gs.get_flag("loop2_work_check_done") then
-                        return true
-                    end
-                end
-                return false
-            end
             s.story{
                 id = "exit_apartment_locked",
                 rect = { x = 575, y = 215, w = 155, h = 345 },
