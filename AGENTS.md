@@ -55,6 +55,12 @@ To fully remove a quest from the game, do ALL of the following:
 
 When the user reports a bug, do NOT guess or theorize. READ the actual source code (`.ink`, `.lua`, `.gui`) that could be relevant BEFORE responding. Trace the exact code path step by step. If you can't find the root cause, ask the user for more specific details (screenshots, save state, dev jump preset). Do not propose fixes without understanding why the current code behaves the way it does.
 
+## TODO / Known Technical Debt
+
+- **Save migration refactor** — `docs/reference/TODO.md` P2 — Архитектура / Рефакторинг
+- **Phone quest cards → gui.clone_tree** — `docs/reference/TODO.md` P2
+- **Templating для остальных phone-apps** — `docs/reference/TODO.md` P2
+
 ## Where Things Live
 
 | What | Path |

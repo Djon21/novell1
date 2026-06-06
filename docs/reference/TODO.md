@@ -48,6 +48,10 @@ history и commit messages.
   живёт в большом `if/elseif` внутри `apply_tags`. Следующий шаг — вынести
   новые и редкие теги в registry, оставив core-теги inline только там, где это
   реально упрощает runtime.
+- [ ] **Save migration refactor.** Заменить version ladder в
+  `save_manager.lua:migrate_save()` на гибрид: `ipairs`-defaults для примитивов
+  + version ladder только для сложных миграций (ink_state). Описание —
+  `docs/design/SaveMigration.md`.
 
 ## P3 — Cleanup
 
