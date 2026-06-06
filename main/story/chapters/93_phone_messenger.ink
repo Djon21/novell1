@@ -269,6 +269,8 @@
 
 
 === msg_thread_artem ===
+# speaker:none
+[DEBUG iteration_number={iteration_number} loop2_work_check_done={loop2_work_check_done}]
 {iteration_number > 2:
     -> msg_thread_artem_iter3
 }
