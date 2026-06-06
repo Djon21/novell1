@@ -139,7 +139,7 @@
 // -----------------------------------------------------------------------------
 
 === msg_thread_mila ===
-{iteration_number > 2:
+{iteration_number >= 3:
     -> msg_thread_mila_iter3
 }
 {iteration_number > 1:
@@ -269,9 +269,7 @@
 
 
 === msg_thread_artem ===
-# speaker:mc
-(DEBUG: итерация {iteration_number})
-{iteration_number > 2:
+{iteration_number >= 3:
     -> msg_thread_artem_iter3
 }
 {iteration_number > 1:
