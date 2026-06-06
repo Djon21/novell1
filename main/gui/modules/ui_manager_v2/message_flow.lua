@@ -312,6 +312,13 @@ local function handle_messenger_open_chat(ctx, chat_id)
     end
 
     if not (dm.has_knot and dm.has_knot(knot_name)) then return end
+
+    -- Sync iteration vars before entering side dialogue (jump_to_knot doesn't push)
+    if dm.set_var then
+        dm.set_var("iteration_number", tonumber(meta.get("iteration_number", 1)) or 1, false)
+        dm.set_var("loop2_work_check_done", gs.get_flag and gs.get_flag("loop2_work_check_done") or false, false)
+    end
+
     ctx.close_phone()
     ctx.enter_side_dialogue(knot_name)
 end
