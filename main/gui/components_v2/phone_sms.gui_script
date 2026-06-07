@@ -898,6 +898,7 @@ local function refresh_list(self)
         end
     end
     self._row_btns = {}
+    self.list_grid:clear()
 
     for i = 1, math.min(MAX_ROWS, total) do
         local m = messages[i]
@@ -906,11 +907,12 @@ local function refresh_list(self)
             self.rows[i] = msg_contact_id(m)
             local y = (total - i) * (ROW_H + ROW_GAP)
             set_pos("msg" .. i .. "_bg", 0, y)
-            local btn_node = (i == 1) and gui.get_node("sms_list/msg1_bg") or
+            local row_node = (i == 1) and gui.get_node("sms_list/msg1_bg") or
                 (_row_clones[i] and (_row_clones[i]["sms_list/msg1_bg"] or _row_clones[i]["msg1_bg"]))
-            if btn_node then
+            if row_node then
+                self.list_grid:add(row_node)
                 local cid = msg_contact_id(m)
-                local btn = self.druid:new_button(btn_node, function(dself)
+                local btn = self.druid:new_button(row_node, function(dself)
                     open_thread(dself, cid)
                 end)
                 btn:set_click_zone(gui.get_node("sms_list/list_scroll_view"))
@@ -920,11 +922,7 @@ local function refresh_list(self)
     end
     for i = total + 1, MAX_ROWS do hide_row(i) end
 
-    local content_h = total * (ROW_H + ROW_GAP)
-    self.list_content_h = content_h
-    if self.list_scroll then
-        self.list_scroll:set_size(vmath.vector3(ROW_W, content_h, 0))
-    end
+    self.list_content_h = total * (ROW_H + ROW_GAP)
     sync_list_scrollbar(self, total)
 end
 
@@ -1510,6 +1508,10 @@ function init(self)
     self.list_scroll:set_extra_stretch_size(0)
     self.list_scroll.style.WHEEL_SCROLL_SPEED = 40
     self.list_scroll._is_mouse_hover = true
+    self.list_grid = self.druid:new_grid("sms_list/list_scroll_content", "sms_list/msg1_bg", 1)
+    self.list_grid:set_item_size(ROW_W, ROW_H + ROW_GAP)
+    self.list_grid:set_position_function(function() end)
+    self.list_scroll:bind_grid(self.list_grid)
     self.list_scroll.on_scroll:subscribe(function(self, pos)
         sync_list_scrollbar(self, self.list_content_h or 0)
     end)
