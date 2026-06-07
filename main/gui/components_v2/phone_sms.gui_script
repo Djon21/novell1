@@ -1302,10 +1302,14 @@ local function open_list(self)
     apply_static_layout()
     set_view(self, "list")
     refresh_list(self)
-    -- TEST: druid button on msg1_bg (created after nodes are enabled)
-    self.test_btn = self.druid:new_button("sms_list/msg1_bg", function()
-        print("DRUID BUTTON CLICKED!")
-    end)
+    -- TEST: druid button on msg1_bg with node handle + explicit enable
+    local node = gui.get_node("sms_list/msg1_bg")
+    if node then
+        self.test_btn = self.druid:new_button(node, function()
+            print("DRUID BUTTON CLICKED!")
+        end)
+        self.test_btn:set_enabled(true)
+    end
 end
 
 local function open_thread(self, contact_id)
