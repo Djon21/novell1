@@ -1508,6 +1508,17 @@ function init(self)
     set_all_enabled(false)
 end
 
+local function cleanup_msg_clones(self)
+    if self._msg_clones then
+        for _, clone in pairs(self._msg_clones) do
+            local root = clone["sms_thread/bub1_bg"] or clone["bub1_bg"]
+            if root then pcall(delete_tree, root) end
+        end
+    end
+    self._msg_clones = nil
+    for k in pairs(_bubble_clones) do _bubble_clones[k] = nil end
+end
+
 function final(self)
     if self.druid then self.druid:final() end
     if self.sms_pulse_active then
@@ -1521,17 +1532,6 @@ end
 
 function update(self, dt)
     if self.druid then self.druid:update(dt) end
-end
-
-local function cleanup_msg_clones(self)
-    if self._msg_clones then
-        for _, clone in pairs(self._msg_clones) do
-            local root = clone["sms_thread/bub1_bg"] or clone["bub1_bg"]
-            if root then pcall(delete_tree, root) end
-        end
-    end
-    self._msg_clones = nil
-    for k in pairs(_bubble_clones) do _bubble_clones[k] = nil end
 end
 
 function on_message(self, message_id, message, sender)
