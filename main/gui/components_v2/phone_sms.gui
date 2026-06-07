@@ -145,20 +145,8 @@ nodes {
 }
 nodes {
   type: TYPE_BOX
-  id: "sms_list/list_scroll_view"
-  parent: "sms_list/list_root"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
-  id: "sms_list/list_scroll_content"
-  parent: "sms_list/list_scroll_view"
-  template_node_child: true
-}
-nodes {
-  type: TYPE_BOX
   id: "sms_list/msg1_bg"
-  parent: "sms_list/list_scroll_content"
+  parent: "sms_list/list_root"
   template_node_child: true
 }
 nodes {
