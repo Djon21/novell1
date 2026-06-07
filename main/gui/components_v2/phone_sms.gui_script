@@ -1169,7 +1169,7 @@ local function build_thread_layout(chat)
     return items, content_h
 end
 
-local function update_thread_scrollbar(self, content_h)
+local function sync_thread_scrollbar(self, content_h)
     local thumb = get_node("th_scrollbar_thumb")
     local track = get_node("th_scrollbar_track")
     if not thumb then return end
@@ -1223,7 +1223,7 @@ render_thread = function(self)
         if self.thread_scroll then
             self.thread_scroll:set_size(vmath.vector3(630, 0, 0))
         end
-        update_thread_scrollbar(self, 0)
+        sync_thread_scrollbar(self, 0)
         return
     end
 
@@ -1243,7 +1243,7 @@ render_thread = function(self)
     if self.thread_scroll then
         self.thread_scroll:set_size(vmath.vector3(630, content_h, 0))
     end
-    update_thread_scrollbar(self, content_h)
+    sync_thread_scrollbar(self, content_h)
 end
 
 local function set_view(self, view)
