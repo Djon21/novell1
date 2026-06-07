@@ -1314,11 +1314,6 @@ local function open_thread(self, contact_id)
     apply_static_layout()
     set_view(self, "thread")
     render_thread(self)
-
-    -- Auto-scroll to bottom (latest messages)
-    if self.thread_scroll and (self.thread_content_h or 0) > THREAD_SCROLL_H then
-        self.thread_scroll:scroll_to_percent(vmath.vector3(0, 1, 0), true)
-    end
 end
 
 local function flash_node(id)
@@ -1492,12 +1487,12 @@ function init(self)
 
     U.apply_adaptive_layout("sms_runtime_root")
 
-    -- Druid instance: handles scroll input for thread view
+    -- Druid scroll for thread view
     self.druid = druid.new(self)
     self.thread_scroll = self.druid:new_scroll("sms_thread/th_scroll_view", "sms_thread/th_scroll_content")
     self.thread_scroll:set_horizontal_scroll(false)
     self.thread_scroll:set_vertical_scroll(true)
-    self.thread_scroll:set_view_size(vmath.vector3(630, THREAD_SCROLL_H, 0))
+    self.thread_scroll:set_inert(false)
     self.thread_scroll:set_extra_stretch_size(0)
     self.thread_scroll:set_click_zone("sms_thread/th_scroll_click_zone")
     self.thread_scroll.on_scroll:subscribe(function(self, pos)
