@@ -1185,12 +1185,9 @@ render_thread = function(self)
     end
 
     -- Удаляем старые клоны сообщений
-    if self._msg_clones then
-        for _, clone in pairs(self._msg_clones) do
-            local root = clone["sms_thread/bub1_bg"] or clone["bub1_bg"]
-            if root then pcall(delete_tree, root) end
-        end
-    end
+    cleanup_msg_clones(self)
+    -- Чистим кеш нод — старые хендлы удалённых клонов висят в кеше
+    for k in pairs(node_cache) do node_cache[k] = nil end
     self._msg_clones = {}
 
     local count = #chat
