@@ -1573,16 +1573,28 @@ function on_message(self, message_id, message, sender)
             }
             local action_id = message and message.action_id or MSG.touch
             if self.druid then
-                -- Map project wheel hashes to druid's expected mouse_wheel hashes
-                local daction = action_id
-                if action_id == MSG.wheel_up then
-                    daction = hash("mouse_wheel_up")
-                elseif action_id == MSG.wheel_down then
-                    daction = hash("mouse_wheel_down")
+                -- Forward touch/released to druid for scroll drag handling
+                -- call AFTER our handler so we get first chance at taps
+                if action_id == MSG.touch then
+                    handle_phone_input(self, action_id, action)
+                    local daction = action_id
+                    if action_id == MSG.wheel_up then
+                        daction = hash("mouse_wheel_down")
+                    elseif action_id == MSG.wheel_down then
+                        daction = hash("mouse_wheel_up")
+                    end
+                    self.druid:on_input(daction, action)
+                else
+                    -- Wheel events: druid handles first, then we process
+                    local daction = action_id
+                    if action_id == MSG.wheel_up then
+                        daction = hash("mouse_wheel_down")
+                    elseif action_id == MSG.wheel_down then
+                        daction = hash("mouse_wheel_up")
+                    end
+                    self.druid:on_input(daction, action)
                 end
-                self.druid:on_input(daction, action)
             end
-            handle_phone_input(self, action_id, action)
         end
     end
 end
