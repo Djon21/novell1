@@ -892,13 +892,6 @@ local function refresh_list(self)
         return
     end
 
-    if self._row_btns then
-        for _, btn in ipairs(self._row_btns) do
-            if btn then self.druid:remove(btn) end
-        end
-    end
-    self._row_btns = {}
-
     for i = 1, math.min(MAX_ROWS, total) do
         local m = messages[i]
         if m then
@@ -906,17 +899,6 @@ local function refresh_list(self)
             self.rows[i] = msg_contact_id(m)
             local y = (total - i) * (ROW_H + ROW_GAP)
             set_pos("msg" .. i .. "_bg", 0, y)
-            -- Druid button for this row
-            local btn_node = (i == 1) and gui.get_node("sms_list/msg1_bg") or
-                (_row_clones[i] and (_row_clones[i]["sms_list/msg1_bg"] or _row_clones[i]["msg1_bg"]))
-            if btn_node then
-                local cid = msg_contact_id(m)
-                local btn = self.druid:new_button(btn_node, function(dself)
-                    open_thread(dself, cid)
-                end)
-                btn:set_click_zone(gui.get_node("sms_list/list_scroll_view"))
-                self._row_btns[i] = btn
-            end
         end
     end
     for i = total + 1, MAX_ROWS do hide_row(i) end
@@ -1558,7 +1540,6 @@ function on_message(self, message_id, message, sender)
         self.list_messages = nil
         self.all_messages = nil
         self.thread_messages = nil
-        self._row_btns = nil
         self.active_contact_id = nil
         self.filter = "all"
         if self.list_scroll then
@@ -1595,7 +1576,7 @@ function on_message(self, message_id, message, sender)
             }
             local action_id = message and message.action_id or MSG.touch
             if self.druid then
-                -- Handle our input first (preserves original action table)
+                -- Handle our tap detection first (correct node handles from clone table)
                 handle_phone_input(self, action_id, action)
                 local daction = action_id
                 if action_id == MSG.wheel_up then
