@@ -913,7 +913,7 @@ local function refresh_list(self)
                 old.on_click:unsubscribe(old._click_fn)
             end
             local cid = msg_contact_id(m)
-            self._row_btns[i] = self.druid:new_button("msg" .. i .. "_bg", function(dself)
+            self._row_btns[i] = self.druid:new_button("sms_list/msg" .. i .. "_bg", function(dself)
                 open_thread(dself, cid)
             end)
             self._row_btns[i]:set_click_zone("sms_list/list_scroll_view")
