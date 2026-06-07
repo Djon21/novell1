@@ -20,7 +20,7 @@ local UI_MGR = "#ui_manager_v2"
 local PHONE_ROOT = "#phone_v2"
 
 local MAX_ROWS = 6
-local MAX_BUBBLES = 10
+local MAX_BUBBLES = 30
 local LIST_SCROLL_STEP_PX = 64
 local LIST_DRAG_THRESHOLD_PX = 8
 local function dbg(...) log.debug("phone_sms", ...) end
@@ -1234,10 +1234,8 @@ render_thread = function(self)
     for idx = 1, #chat do
         if slot > MAX_BUBBLES then break end
         local y = THREAD_SCROLL_H - layout[idx].bottom
-        if y + layout[idx].height >= 0 and y <= THREAD_SCROLL_H then
-            render_bubble(slot, chat[idx], y)
-            slot = slot + 1
-        end
+        render_bubble(slot, chat[idx], y)
+        slot = slot + 1
     end
 
     if self.thread_scroll then
