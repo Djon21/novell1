@@ -273,6 +273,7 @@ nodes {
   id: "th_scroll_view"
   pivot: PIVOT_SW
   parent: "thread_root"
+  clipping_mode: CLIPPING_MODE_STENCIL
   alpha: 0.0
 }
 nodes {
