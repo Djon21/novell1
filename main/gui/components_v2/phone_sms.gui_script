@@ -899,6 +899,7 @@ local function refresh_list(self)
     end
     self._row_btns = {}
     self.list_grid:clear()
+    --]]
 
     for i = 1, math.min(MAX_ROWS, total) do
         local m = messages[i]
@@ -910,7 +911,7 @@ local function refresh_list(self)
             local row_node = (i == 1) and gui.get_node("sms_list/msg1_bg") or
                 (_row_clones[i] and (_row_clones[i]["sms_list/msg1_bg"] or _row_clones[i]["msg1_bg"]))
             if row_node then
-                self.list_grid:add(row_node)
+                --self.list_grid:add(row_node)
                 local cid = msg_contact_id(m)
                 local btn = self.druid:new_button(row_node, function(dself)
                     open_thread(dself, cid)
@@ -922,6 +923,7 @@ local function refresh_list(self)
     for i = total + 1, MAX_ROWS do hide_row(i) end
 
     self.list_content_h = total * (ROW_H + ROW_GAP)
+    --sync_list_scrollbar(self, total)
     sync_list_scrollbar(self, total)
 end
 
@@ -1504,6 +1506,7 @@ function init(self)
         sync_thread_scrollbar(self, self.thread_content_h or 0)
     end)
 
+    --[[
     self.list_scroll = self.druid:new_scroll("sms_list/list_scroll_view", "sms_list/list_scroll_content")
     self.list_scroll:set_horizontal_scroll(false)
     self.list_scroll:set_vertical_scroll(true)
@@ -1518,6 +1521,7 @@ function init(self)
     self.list_scroll.on_scroll:subscribe(function(self, pos)
         sync_list_scrollbar(self, self.list_content_h or 0)
     end)
+    ]]
 
     clone_rows()
     apply_static_layout()
