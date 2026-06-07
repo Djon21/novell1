@@ -1217,7 +1217,7 @@ render_thread = function(self)
             self._msg_clones[idx] = clone
             _bubble_clones[idx] = clone
         end
-        local y = THREAD_SCROLL_H - layout[idx].bottom
+        local y = layout[idx].bottom
         render_bubble(idx, chat[idx], y)
     end
 
