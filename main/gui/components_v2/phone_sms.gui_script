@@ -1217,7 +1217,7 @@ render_thread = function(self)
             self._msg_clones[idx] = clone
             _bubble_clones[idx] = clone
         end
-        local y = layout[idx].bottom
+        local y = content_h - layout[idx].top
         render_bubble(idx, chat[idx], y)
     end
 
@@ -1296,10 +1296,9 @@ local function open_thread(self, contact_id)
     set_view(self, "thread")
     render_thread(self)
 
-    -- Scroll to bottom (latest messages first)
-    local content_h = self.thread_content_h or 0
-    if self.thread_scroll and content_h > THREAD_SCROLL_H then
-        self.thread_scroll:scroll_to(vmath.vector3(0, content_h - THREAD_SCROLL_H, 0), true)
+    -- Scroll to bottom (newest messages)
+    if self.thread_scroll and (self.thread_content_h or 0) > THREAD_SCROLL_H then
+        self.thread_scroll:scroll_to(vmath.vector3(0, 0, 0), true)
     end
 end
 
