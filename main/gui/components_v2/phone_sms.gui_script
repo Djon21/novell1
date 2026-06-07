@@ -11,6 +11,7 @@
 --   - reply action in thread calls the old sms_open_contact flow through ui_manager.
 
 local drag_scroll = require "main.gui.modules.drag_scroll"
+local druid = require "druid.druid"
 local MSG = require "main.gui.modules.messages"
 local U = require "main.gui.modules.gui_utils"
 local log = require "main.scripts.log"
@@ -68,7 +69,6 @@ local BUBBLE_IN_MIN_W, BUBBLE_OUT_MIN_W = 176, 164
 local BUBBLE_IN_MAX_W, BUBBLE_OUT_MAX_W = 438, 438
 local BUBBLE_AVG_GLYPH_W = 8.3
 local THREAD_WHEEL_STEP_PX = 40
-local THREAD_DRAG_THRESHOLD_PX = 5
 
 local gs_cache = nil
 local dm_cache = nil
@@ -138,6 +138,7 @@ local THREAD_NODE_IDS = {
     "th_scrollbar_track", "th_scrollbar_thumb",
     "th_input_line",
     "th_send_bg", "border_send", "th_send_label",
+    "th_scroll_view", "th_scroll_click_zone", "th_scroll_content",
 }
 
 for i = 1, MAX_BUBBLES do
@@ -1168,22 +1169,13 @@ local function build_thread_layout(chat)
     return items, content_h
 end
 
-local function clamp_thread_offset(self, content_h)
-    local max_offset = math.max(0, (tonumber(content_h) or 0) - THREAD_SCROLL_H)
-    self.thread_offset = math.max(0, math.min(tonumber(self.thread_offset) or 0, max_offset))
-    return max_offset
-end
-
 local function update_thread_scrollbar(self, content_h)
     local thumb = get_node("th_scrollbar_thumb")
     local track = get_node("th_scrollbar_track")
     if not thumb then return end
 
     content_h = tonumber(content_h) or 0
-    local max_offset = clamp_thread_offset(self, content_h)
-    if content_h <= THREAD_SCROLL_H or max_offset <= 0 then
-        -- A mature chat view does not show a fake full-height thumb when the
-        -- conversation fits. Hide the scrollbar instead of adding noise.
+    if content_h <= THREAD_SCROLL_H then
         if track then gui.set_enabled(track, false) end
         gui.set_enabled(thumb, false)
         return
@@ -1198,28 +1190,12 @@ local function update_thread_scrollbar(self, content_h)
     local ratio = math.min(1, THREAD_SCROLL_H / content_h)
     local h = math.max(46, THREAD_SCROLL_H * ratio)
     local travel = THREAD_SCROLL_H - h
-    local t = (self.thread_offset or 0) / max_offset
+    local pos = self.thread_scroll and self.thread_scroll:get_percent() or vmath.vector3()
+    local t = pos.y
     local y = (THREAD_SAFE_BOTTOM + THREAD_SCROLL_H - h) - travel * t
     gui.set_size(thumb, vmath.vector3(THREAD_SCROLL_W, h, 0))
     gui.set_position(thumb, vmath.vector3(THREAD_SCROLL_X, y, 0.545))
     gui.set_alpha(thumb, 0.70)
-end
-
-local function step_thread(self, delta)
-    if not self.active_contact_id then return false end
-    local chat = self.thread_messages or sms_storage_messages(self.active_contact_id)
-    self.thread_messages = chat
-    local _, content_h = build_thread_layout(chat)
-    local max_offset = clamp_thread_offset(self, content_h)
-    if max_offset <= 0 then return false end
-
-    local old = self.thread_offset or 0
-    self.thread_offset = math.max(0, math.min(old + delta, max_offset))
-    if self.thread_offset ~= old then
-        render_thread(self)
-        return true
-    end
-    return false
 end
 
 render_thread = function(self)
@@ -1230,8 +1206,6 @@ render_thread = function(self)
 
     set_text("th_name", contact.name or "—")
     set_text("th_num", "SIM 1 · " .. tostring(contact.number or "—"))
-    -- Запустить или остановить pulse только при изменении состояния.
-    -- Иначе render_thread/refresh_app будет постоянно cancel+restart animation.
     local should_pulse = sms_can_reply(contact_id, contact)
     if should_pulse and not self.sms_pulse_active then
         start_sms_send_pulse()
@@ -1245,38 +1219,31 @@ render_thread = function(self)
     set_node_enabled("th_empty", count == 0)
     for i = 1, MAX_BUBBLES do hide_bubble(i) end
     if count == 0 then
+        self.thread_content_h = 0
+        if self.thread_scroll then
+            self.thread_scroll:set_size(vmath.vector3(630, 0, 0))
+        end
         update_thread_scrollbar(self, 0)
         return
     end
 
-    -- Oldest messages are at the top of the virtual column; newest at the bottom.
     local layout, content_h = build_thread_layout(chat)
-    clamp_thread_offset(self, content_h)
-    local view_top = self.thread_offset or 0
-    local view_bottom = view_top + THREAD_SCROLL_H
-    local bottom_anchor_shift = math.max(0, THREAD_SCROLL_H - content_h)
-    local slot = 1
+    self.thread_content_h = content_h
 
+    local slot = 1
     for idx = 1, #chat do
-        local item = layout[idx]
-        -- No clipping node is used here, so partially visible bubbles are hidden.
-        if item and item.bottom >= view_top and item.top <= view_bottom then
-            local y = THREAD_TOP - (item.top - view_top) - bottom_anchor_shift
-            if y >= THREAD_SAFE_BOTTOM - 2 and (y + item.height) <= THREAD_TOP + 2 then
-                render_bubble(slot, chat[idx], y)
-                slot = slot + 1
-            end
-            if slot > MAX_BUBBLES then break end
+        if slot > MAX_BUBBLES then break end
+        local y = THREAD_TOP - layout[idx].bottom
+        if y + layout[idx].height >= THREAD_SAFE_BOTTOM and y <= THREAD_TOP then
+            render_bubble(slot, chat[idx], y)
+            slot = slot + 1
         end
     end
-    update_thread_scrollbar(self, content_h)
-end
 
-local function reset_thread_drag(self)
-    self.thread_dragging = false
-    self.thread_drag_started = false
-    self.thread_drag_last_y = nil
-    self.thread_drag_total = 0
+    if self.thread_scroll then
+        self.thread_scroll:set_size(vmath.vector3(630, content_h, 0))
+    end
+    update_thread_scrollbar(self, content_h)
 end
 
 local function set_view(self, view)
@@ -1300,7 +1267,11 @@ local function set_view(self, view)
     set_node_enabled("sms_thread/thread_root", show_thread)
     set_many_enabled(LIST_NODE_IDS, show_list)
     set_many_enabled(THREAD_NODE_IDS, show_thread)
-    if show_list then reset_thread_drag(self) end
+    if show_list then
+        if self.thread_scroll then
+            self.thread_scroll:scroll_to(vmath.vector3(0, 0, 0), true)
+        end
+    end
     if show_thread and self.list_drag then drag_scroll.reset(self.list_drag) end
     if not show_thread and self.sms_pulse_active then
         stop_sms_send_pulse()
@@ -1338,13 +1309,17 @@ local function open_thread(self, contact_id)
     msg.post(PHONE_ROOT, MSG.refresh_phone)
 
     self.thread_messages = sms_storage_messages(self.active_contact_id)
-    local _, content_h = build_thread_layout(self.thread_messages)
-    self.thread_offset = math.max(0, content_h - THREAD_SCROLL_H)
     self.list_messages = nil
 
     apply_static_layout()
     set_view(self, "thread")
     render_thread(self)
+
+    -- Auto-scroll to bottom (latest messages)
+    local content_h = self.thread_content_h or 0
+    if self.thread_scroll and content_h > THREAD_SCROLL_H then
+        self.thread_scroll:scroll_to(vmath.vector3(0, -(content_h - THREAD_SCROLL_H), 0), true)
+    end
 end
 
 local function flash_node(id)
@@ -1423,15 +1398,8 @@ local function is_inside_list(x, y)
     return point_in_rect(x, y, CONTENT_X, LIST_BOTTOM, ROW_W, LIST_H)
 end
 
-local function is_inside_thread_messages(x, y)
-    return point_in_rect(x, y, THREAD_X, THREAD_SAFE_BOTTOM, THREAD_W, THREAD_SCROLL_H)
-end
-
-
 local function trigger_reply_choices(self)
     if not self.active_contact_id then return false end
-    -- Защита: тап на input/send когда отвечать нельзя (нет knot, уже
-    -- отвечал, readonly) — молча игнорируем чтобы не дёргать ui_manager.
     local contact = contacts().get(self.active_contact_id)
     if not sms_can_reply(self.active_contact_id, contact) then return false end
     msg.post(UI_MGR, MSG.sms_open_contact, { contact_id = self.active_contact_id })
@@ -1443,44 +1411,7 @@ local function handle_thread_input(self, action_id, action)
     local x = action.x or 0
     local y = action.y or 0
 
-    -- Thread uses direct pixel scrolling; inbox/list still uses drag_scroll.
-    local wheel_rows = wheel_rows_from_action(action_id, action)
-    if wheel_rows ~= 0 then
-        step_thread(self, wheel_rows * THREAD_WHEEL_STEP_PX)
-        return true
-    end
-    if action_id ~= MSG.touch then return true end
-
-    if action.pressed then
-        reset_thread_drag(self)
-        if is_inside_thread_messages(x, y) then
-            self.thread_dragging = true
-            self.thread_drag_last_y = y
-            self.thread_drag_total = 0
-        end
-        return true
-    end
-
-    if self.thread_dragging and not action.released then
-        local last_y = self.thread_drag_last_y or y
-        local dy = y - last_y
-        self.thread_drag_last_y = y
-        self.thread_drag_total = (self.thread_drag_total or 0) + math.abs(dy)
-
-        if self.thread_drag_started or self.thread_drag_total >= THREAD_DRAG_THRESHOLD_PX then
-            self.thread_drag_started = true
-            if dy ~= 0 then
-                step_thread(self, -dy)
-            end
-        end
-        return true
-    end
-
-    if action.released then
-        local was_drag = self.thread_drag_started == true
-        reset_thread_drag(self)
-        if was_drag then return true end
-
+    if action_id == MSG.touch and action.released then
         local back = get_node("th_back_bg")
         if back and gui.is_enabled(back) and gui.pick_node(back, x, y) then
             flash_node("th_back_bg")
@@ -1494,8 +1425,6 @@ local function handle_thread_input(self, action_id, action)
             trigger_reply_choices(self)
             return true
         end
-
-        return true
     end
 
     return true
@@ -1564,6 +1493,17 @@ function init(self)
 
     U.apply_adaptive_layout("sms_runtime_root")
 
+    -- Druid instance: handles scroll input for thread view
+    self.druid = druid.new(self)
+    self.thread_scroll = self.druid:new_scroll("th_scroll_view", "th_scroll_content")
+    self.thread_scroll:set_horizontal_scroll(false)
+    self.thread_scroll:set_vertical_scroll(true)
+    self.thread_scroll:set_extra_stretch_size(0)
+    self.thread_scroll:set_click_zone("th_scroll_click_zone")
+    self.thread_scroll.on_scroll:subscribe(function(self, pos)
+        sync_thread_scrollbar(self, self.thread_content_h or 0)
+    end)
+
     self.list_drag = drag_scroll.new({
         step_px      = LIST_SCROLL_STEP_PX,
         threshold_px = LIST_DRAG_THRESHOLD_PX,
@@ -1571,7 +1511,6 @@ function init(self)
         is_inside    = is_inside_list,
         on_step      = function(owner, delta) scroll_list(owner, delta) end,
     })
-    reset_thread_drag(self)
     clone_rows()
     clone_bubbles()
     apply_static_layout()
@@ -1579,6 +1518,7 @@ function init(self)
 end
 
 function final(self)
+    if self.druid then self.druid:final() end
     if self.sms_pulse_active then
         stop_sms_send_pulse()
         self.sms_pulse_active = false
@@ -1587,6 +1527,10 @@ function final(self)
     delete_bubble_clones()
     delete_row_clones()
     node_cache = {}
+end
+
+function update(self, dt)
+    if self.druid then self.druid:update(dt) end
 end
 
 function on_message(self, message_id, message, sender)
@@ -1603,9 +1547,7 @@ function on_message(self, message_id, message, sender)
         self.thread_messages = nil
         self.active_contact_id = nil
         self.filter = "all"
-        self.thread_offset = 0
         if self.list_drag then drag_scroll.reset(self.list_drag) end
-        reset_thread_drag(self)
         self.view = "list"
         if self.sms_pulse_active then
             stop_sms_send_pulse()
@@ -1624,6 +1566,9 @@ function on_message(self, message_id, message, sender)
 
     elseif message_id == MSG.phone_input then
         if self.visible then
+            if self.druid then
+                self.druid:on_message(message_id, message, sender)
+            end
             handle_phone_input(self, message and message.action_id or MSG.touch, {
                 x = message and message.x or 0,
                 y = message and message.y or 0,
@@ -1639,7 +1584,9 @@ function on_message(self, message_id, message, sender)
 end
 
 function on_input(self, action_id, action)
-    -- Normal route is phone_v2_root -> phone_input. This fallback is harmless
-    -- in editor/tests if the app receives input directly.
+    if self.druid then
+        local consumed = self.druid:on_input(action_id, action)
+        if consumed then return true end
+    end
     return handle_phone_input(self, action_id, action or {})
 end
