@@ -236,6 +236,66 @@ nodes {
 }
 nodes {
   position {
+    x: 520.0
+    y: 110.0
+    z: 0.552
+  }
+  size {
+    x: 690.0
+    y: 1.0
+  }
+  color {
+    x: 0.953
+    y: 0.925
+    z: 0.851
+  }
+  type: TYPE_BOX
+  id: "th_input_line"
+  pivot: PIVOT_SW
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "thread_root"
+  alpha: 0.1
+}
+nodes {
+  position {
+    z: 0.052
+  }
+  size {
+    x: 1280.0
+    y: 720.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "th_scroll_view"
+  pivot: PIVOT_SW
+  parent: "thread_root"
+  alpha: 0.0
+}
+nodes {
+  position {
+    z: 0.053
+  }
+  size {
+    x: 630.0
+    y: 2000.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "th_scroll_content"
+  pivot: PIVOT_SW
+  parent: "th_scroll_view"
+  alpha: 0.0
+}
+nodes {
+  position {
     x: 540.0
     y: 500.0
     z: 0.052
@@ -332,47 +392,6 @@ nodes {
 }
 nodes {
   position {
-    x: 520.0
-    y: 110.0
-    z: 0.552
-  }
-  size {
-    x: 690.0
-    y: 1.0
-  }
-  color {
-    x: 0.953
-    y: 0.925
-    z: 0.851
-  }
-  type: TYPE_BOX
-  id: "th_input_line"
-  pivot: PIVOT_SW
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "thread_root"
-  alpha: 0.1
-}
-nodes {
-  position {
-    z: 0.052
-  }
-  size {
-    x: 1280.0
-    y: 720.0
-  }
-  color {
-    x: 0.031
-    y: 0.024
-    z: 0.094
-  }
-  type: TYPE_BOX
-  id: "th_scroll_view"
-  pivot: PIVOT_SW
-  parent: "thread_root"
-  alpha: 0.0
-}
-nodes {
-  position {
     x: 540.0
     y: 120.0
     z: 0.053
@@ -390,25 +409,6 @@ nodes {
   id: "th_scroll_click_zone"
   pivot: PIVOT_SW
   parent: "thread_root"
-  alpha: 0.0
-}
-nodes {
-  position {
-    z: 0.053
-  }
-  size {
-    x: 630.0
-    y: 2000.0
-  }
-  color {
-    x: 0.031
-    y: 0.024
-    z: 0.094
-  }
-  type: TYPE_BOX
-  id: "th_scroll_content"
-  pivot: PIVOT_SW
-  parent: "th_scroll_view"
   alpha: 0.0
 }
 nodes {

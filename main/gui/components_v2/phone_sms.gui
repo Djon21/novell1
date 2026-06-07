@@ -220,7 +220,6 @@ nodes {
   parent: "sms_list/msg1_bg"
   template_node_child: true
 }
-
 nodes {
   type: TYPE_TEXT
   id: "sms_list/msg1_av"
@@ -289,8 +288,26 @@ nodes {
 }
 nodes {
   type: TYPE_BOX
-  id: "sms_thread/bub1_bg"
+  id: "sms_thread/th_input_line"
   parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_scroll_view"
+  parent: "sms_thread/thread_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/th_scroll_content"
+  parent: "sms_thread/th_scroll_view"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "sms_thread/bub1_bg"
+  parent: "sms_thread/th_scroll_content"
   template_node_child: true
 }
 nodes {
@@ -313,7 +330,7 @@ nodes {
 }
 nodes {
   type: TYPE_BOX
-  id: "sms_thread/th_input_line"
+  id: "sms_thread/th_scroll_click_zone"
   parent: "sms_thread/thread_root"
   template_node_child: true
 }

@@ -1495,11 +1495,11 @@ function init(self)
 
     -- Druid instance: handles scroll input for thread view
     self.druid = druid.new(self)
-    self.thread_scroll = self.druid:new_scroll("th_scroll_view", "th_scroll_content")
+    self.thread_scroll = self.druid:new_scroll("sms_thread/th_scroll_view", "sms_thread/th_scroll_content")
     self.thread_scroll:set_horizontal_scroll(false)
     self.thread_scroll:set_vertical_scroll(true)
     self.thread_scroll:set_extra_stretch_size(0)
-    self.thread_scroll:set_click_zone("th_scroll_click_zone")
+    self.thread_scroll:set_click_zone("sms_thread/th_scroll_click_zone")
     self.thread_scroll.on_scroll:subscribe(function(self, pos)
         sync_thread_scrollbar(self, self.thread_content_h or 0)
     end)
