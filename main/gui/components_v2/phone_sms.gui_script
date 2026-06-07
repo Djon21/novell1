@@ -1358,12 +1358,22 @@ local function wheel_rows_from_action(action_id, action)
 end
 
 local function pick_row(self, x, y)
+    -- Get scroll content node position to account for druid scroll offset
+    local content_node = gui.get_node("sms_list/list_scroll_content")
+    local content_pos = content_node and gui.get_position(content_node) or vmath.vector3()
+    local view_node = gui.get_node("sms_list/list_scroll_view")
+    local view_pos = view_node and gui.get_position(view_node) or vmath.vector3()
+
     for i = 1, MAX_ROWS do
         local contact_id = self.rows and self.rows[i]
         if contact_id then
-            local id = "msg" .. i .. "_bg"
-            local n = get_node(id)
-            if n and gui.is_enabled(n) and gui.pick_node(n, x, y) then
+            local n = get_node("msg" .. i .. "_bg")
+            if n and gui.is_enabled(n) then
+                local pos = gui.get_position(n)
+                local size = gui.get_size(n)
+                local ax = view_pos.x + content_pos.x + pos.x
+                local ay = view_pos.y + content_pos.y + pos.y
+                if x >= ax and x <= ax + size.x and y >= ay and y <= ay + size.y then
                 return contact_id, id
             end
         end
