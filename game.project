@@ -30,6 +30,8 @@ title = АВОСЬ
 custom_resources = /main/story,/main/data
 dependencies#0 = https://github.com/indiesoftby/defold-yagames/archive/master.zip
 dependencies#1 = https://github.com/abadonna/defold-ink/archive/master.zip
+dependencies#2 = https://github.com/Insality/defold-event/archive/master.zip
+dependencies#3 = https://github.com/Insality/druid/archive/master.zip
 
 [yagames]
 sdk_init_snippet = try { window.__gameLang = ysdk.environment.i18n.lang; console.log("YaGames lang:", window.__gameLang); } catch (e) { console.warn("Cannot read environment.i18n.lang:", e); }
