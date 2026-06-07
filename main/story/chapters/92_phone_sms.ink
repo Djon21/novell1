@@ -55,6 +55,36 @@
 # sms:reply_old:mama:сб:Пока обычный. Сам{mc_gender == "female":а|} удивляюсь.
 # sms:add_old:mama:сб:Тогда за выходные выспись. И не спорь с телефоном перед сном.
 # sms:add_old:prod:сб:Прод упал. Тех. долг догнал. Подними, пожалуйста.
+# sms:add_old:test:пн:1
+# sms:add_old:test:пн:2
+# sms:add_old:test:пн:3
+# sms:add_old:test:пн:4
+# sms:add_old:test:пн:5
+# sms:add_old:test:пн:6
+# sms:add_old:test:пн:7
+# sms:add_old:test:пн:8
+# sms:add_old:test:пн:9
+# sms:add_old:test:пн:10
+# sms:add_old:test:пн:11
+# sms:add_old:test:пн:12
+# sms:add_old:test:пн:13
+# sms:add_old:test:пн:14
+# sms:add_old:test:пн:15
+# sms:add_old:test:пн:16
+# sms:add_old:test:пн:17
+# sms:add_old:test:пн:18
+# sms:add_old:test:пн:19
+# sms:add_old:test:пн:20
+# sms:add_old:test:пн:21
+# sms:add_old:test:пн:22
+# sms:add_old:test:пн:23
+# sms:add_old:test:пн:24
+# sms:add_old:test:пн:25
+# sms:add_old:test:пн:26
+# sms:add_old:test:пн:27
+# sms:add_old:test:пн:28
+# sms:add_old:test:пн:29
+# sms:add_old:test:пн:30
 ->->
 
 === phone_sms_take_phone_sunday_morning ===
