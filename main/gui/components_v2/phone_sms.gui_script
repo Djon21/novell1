@@ -1186,7 +1186,7 @@ render_thread = function(self)
 
     -- Удаляем старые клоны сообщений
     if self._msg_clones then
-        for _, clone in ipairs(self._msg_clones) do
+        for _, clone in pairs(self._msg_clones) do
             local root = clone["sms_thread/bub1_bg"] or clone["bub1_bg"]
             if root then pcall(delete_tree, root) end
         end
@@ -1208,26 +1208,24 @@ render_thread = function(self)
     self.thread_content_h = content_h
 
     local proto = gui.get_node("sms_thread/bub1_bg") or gui.get_node("bub1_bg")
+    -- Slot 1 uses the original prototype (resolved directly, not via clone pool)
+    local first_clone_idx = 2
     for idx = 1, #chat do
-        if not proto then break end
-        local ok, clone = pcall(clone_tree, proto)
-        if not ok or not clone then break end
-
-        -- Parent clone under scroll content
-        local root = clone["sms_thread/bub1_bg"] or clone["bub1_bg"]
-        if not root then break end
-        local content_node = gui.get_node("sms_thread/th_scroll_content")
-        if content_node then
-            gui.set_parent(root, content_node)
+        if idx >= first_clone_idx then
+            if not proto then break end
+            local ok, clone = pcall(clone_tree, proto)
+            if not ok or not clone then break end
+            local root = clone["sms_thread/bub1_bg"] or clone["bub1_bg"]
+            if not root then break end
+            local content_node = gui.get_node("sms_thread/th_scroll_content")
+            if content_node then
+                gui.set_parent(root, content_node)
+            end
+            self._msg_clones[idx] = clone
+            _bubble_clones[idx] = clone
         end
-
-        self._msg_clones[idx] = clone
         local y = THREAD_SCROLL_H - layout[idx].bottom
-        local slot_id = idx
-        -- Configure bubble appearance via existing functions
-        -- Temporarily store clone in _bubble_clones slot so resolve works
-        _bubble_clones[slot_id] = clone
-        render_bubble(slot_id, chat[idx], y)
+        render_bubble(idx, chat[idx], y)
     end
 
     if self.thread_scroll then
@@ -1527,13 +1525,12 @@ end
 
 local function cleanup_msg_clones(self)
     if self._msg_clones then
-        for _, clone in ipairs(self._msg_clones) do
+        for _, clone in pairs(self._msg_clones) do
             local root = clone["sms_thread/bub1_bg"] or clone["bub1_bg"]
             if root then pcall(delete_tree, root) end
         end
     end
     self._msg_clones = nil
-    -- Clear bubble clone slots used by render_bubble
     for k in pairs(_bubble_clones) do _bubble_clones[k] = nil end
 end
 
