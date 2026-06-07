@@ -1367,14 +1367,16 @@ local function pick_row(self, x, y)
     for i = 1, MAX_ROWS do
         local contact_id = self.rows and self.rows[i]
         if contact_id then
-            local n = get_node("msg" .. i .. "_bg")
+            local id = "msg" .. i .. "_bg"
+            local n = get_node(id)
             if n and gui.is_enabled(n) then
                 local pos = gui.get_position(n)
                 local size = gui.get_size(n)
                 local ax = view_pos.x + content_pos.x + pos.x
                 local ay = view_pos.y + content_pos.y + pos.y
                 if x >= ax and x <= ax + size.x and y >= ay and y <= ay + size.y then
-                return contact_id, id
+                    return contact_id, id
+                end
             end
         end
     end
