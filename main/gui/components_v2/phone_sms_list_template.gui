@@ -349,41 +349,23 @@ nodes {
 nodes {
   position {
     x: 520.0
-    y: 65.0
-    z: 0.03
+    y: 490.0
+    z: 0.032
   }
   size {
     x: 680.0
-    y: 500.0
+    y: 80.0
   }
   color {
-    x: 0.031
-    y: 0.024
-    z: 0.094
+    x: 0.078
+    y: 0.071
+    z: 0.204
   }
-  type: TYPE_BOX
-  id: "list_scroll_view"
-  pivot: PIVOT_SW
-  parent: "list_root"
-  clipping_mode: CLIPPING_MODE_STENCIL
-  alpha: 0.0
-}
-nodes {
-  position {
-    z: 0.031
-  }
-  type: TYPE_BOX
-  id: "list_scroll_content"
-  pivot: PIVOT_SW
-  parent: "list_scroll_view"
-  alpha: 0.0
-}
-nodes {
   type: TYPE_BOX
   id: "msg1_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_scroll_content"
+  parent: "list_root"
   alpha: 0.6
 }
 nodes {
