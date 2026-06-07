@@ -915,7 +915,6 @@ local function refresh_list(self)
                 local btn = self.druid:new_button(row_node, function(dself)
                     open_thread(dself, cid)
                 end)
-                btn:set_click_zone(gui.get_node("sms_list/list_scroll_view"))
                 self._row_btns[i] = btn
             end
         end
