@@ -1567,10 +1567,7 @@ function on_message(self, message_id, message, sender)
 
     elseif message_id == MSG.phone_input then
         if self.visible then
-            if self.druid then
-                self.druid:on_message(message_id, message, sender)
-            end
-            handle_phone_input(self, message and message.action_id or MSG.touch, {
+            local action = {
                 x = message and message.x or 0,
                 y = message and message.y or 0,
                 dx = message and message.dx or 0,
@@ -1579,7 +1576,12 @@ function on_message(self, message_id, message, sender)
                 pressed = message and message.pressed or false,
                 released = message and message.released or false,
                 repeated = message and message.repeated or false,
-            })
+            }
+            local action_id = message and message.action_id or MSG.touch
+            if self.druid then
+                self.druid:on_input(action_id, action)
+            end
+            handle_phone_input(self, action_id, action)
         end
     end
 end
