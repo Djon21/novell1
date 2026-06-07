@@ -886,13 +886,6 @@ local function refresh_list(self)
     local total = #messages
     render_tab(self)
 
-    if self._row_btns then
-        for _, btn in ipairs(self._row_btns) do
-            if btn then btn.on_click:unsubscribe(btn._click_fn) end
-        end
-    end
-    self._row_btns = {}
-
     if total == 0 then
         for i = 1, MAX_ROWS do hide_row(i) end
         sync_list_scrollbar(self, total)
@@ -906,20 +899,6 @@ local function refresh_list(self)
             self.rows[i] = msg_contact_id(m)
             local y = (total - i) * (ROW_H + ROW_GAP)
             set_pos("msg" .. i .. "_bg", 0, y)
-            -- Druid button for row tap
-            if not self._row_btns then self._row_btns = {} end
-            if self._row_btns[i] then
-                local old = self._row_btns[i]
-                old.on_click:unsubscribe(old._click_fn)
-            end
-            local cid = msg_contact_id(m)
-            local btn_node = (i == 1) and gui.get_node("sms_list/msg1_bg") or (_row_clones[i] and _row_clones[i]["msg1_bg"])
-            if btn_node then
-                self._row_btns[i] = self.druid:new_button(btn_node, function(dself)
-                    open_thread(dself, cid)
-                end)
-                self._row_btns[i]:set_click_zone("sms_list/list_scroll_view")
-            end
         end
     end
     for i = total + 1, MAX_ROWS do hide_row(i) end
@@ -1558,7 +1537,6 @@ function on_message(self, message_id, message, sender)
         self.list_messages = nil
         self.all_messages = nil
         self.thread_messages = nil
-        self._row_btns = nil
         self.active_contact_id = nil
         self.filter = "all"
         if self.list_scroll then
@@ -1595,6 +1573,8 @@ function on_message(self, message_id, message, sender)
             }
             local action_id = message and message.action_id or MSG.touch
             if self.druid then
+                -- Handle our input first (preserves original action table)
+                handle_phone_input(self, action_id, action)
                 local daction = action_id
                 if action_id == MSG.wheel_up then
                     daction = hash("mouse_wheel_down")
@@ -1602,8 +1582,9 @@ function on_message(self, message_id, message, sender)
                     daction = hash("mouse_wheel_up")
                 end
                 self.druid:on_input(daction, action)
+            else
+                handle_phone_input(self, action_id, action)
             end
-            handle_phone_input(self, action_id, action)
         end
     end
 end
