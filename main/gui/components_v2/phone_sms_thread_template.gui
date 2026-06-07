@@ -258,6 +258,8 @@ nodes {
 }
 nodes {
   position {
+    x: 541.0
+    y: 123.0
     z: 0.052
   }
   size {
@@ -282,7 +284,7 @@ nodes {
   }
   size {
     x: 630.0
-    y: 2000.0
+    y: 470.0
   }
   color {
     x: 0.031
@@ -297,8 +299,8 @@ nodes {
 }
 nodes {
   position {
-    x: 540.0
-    y: 500.0
+    x: 14.0
+    y: 408.0
     z: 0.052
   }
   size {

@@ -1241,7 +1241,7 @@ render_thread = function(self)
     end
 
     if self.thread_scroll then
-        self.thread_scroll:set_size(vmath.vector3(630, content_h, 0), vmath.vector3(THREAD_X, THREAD_SAFE_BOTTOM, 0))
+        self.thread_scroll:set_size(vmath.vector3(630, content_h, 0))
     end
     sync_thread_scrollbar(self, content_h)
 end
