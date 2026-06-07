@@ -1581,9 +1581,9 @@ function on_message(self, message_id, message, sender)
                 -- Map project wheel hashes to druid's expected mouse_wheel hashes
                 local daction = action_id
                 if action_id == MSG.wheel_up then
-                    daction = hash("mouse_wheel_down")
-                elseif action_id == MSG.wheel_down then
                     daction = hash("mouse_wheel_up")
+                elseif action_id == MSG.wheel_down then
+                    daction = hash("mouse_wheel_down")
                 end
                 self.druid:on_input(daction, action)
             end
