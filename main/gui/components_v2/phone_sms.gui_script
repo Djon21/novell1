@@ -1427,7 +1427,7 @@ local function handle_list_touch(self, action_id, action)
     if wheel_rows ~= 0 then return false end
     if action_id ~= MSG.touch then return false end
 
-    if action and (action.released or not action.pressed) then
+    if action and action.released then
         if is_inside_rect("tab_all_bg", x, y) then
             self.filter = "all"
             refresh_list(self)
