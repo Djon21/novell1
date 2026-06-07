@@ -1160,7 +1160,7 @@ local function sync_thread_scrollbar(self, content_h)
     local h = math.max(46, THREAD_SCROLL_H * ratio)
     local travel = THREAD_SCROLL_H - h
     local pos = self.thread_scroll and self.thread_scroll:get_percent() or vmath.vector3()
-    local t = pos.y
+    local t = 1 - pos.y
     local y = (THREAD_SAFE_BOTTOM + THREAD_SCROLL_H - h) - travel * t
     gui.set_size(thumb, vmath.vector3(THREAD_SCROLL_W, h, 0))
     gui.set_position(thumb, vmath.vector3(THREAD_SCROLL_X, y, 0.545))
