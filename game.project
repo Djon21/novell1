@@ -35,7 +35,3 @@ dependencies#3 = https://github.com/Insality/druid/archive/master.zip
 
 [yagames]
 sdk_init_snippet = try { window.__gameLang = ysdk.environment.i18n.lang; console.log("YaGames lang:", window.__gameLang); } catch (e) { console.warn("Cannot read environment.i18n.lang:", e); }
-
-[druid]
-input_scroll_up = wheel_down
-input_scroll_down = wheel_up

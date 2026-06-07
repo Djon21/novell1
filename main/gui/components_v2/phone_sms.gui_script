@@ -1484,6 +1484,12 @@ function init(self)
     -- Enable wheel scrolling (disabled by default in druid)
     self.thread_scroll.style.WHEEL_SCROLL_SPEED = 40
     self.thread_scroll._is_mouse_hover = true
+    -- remap wheel direction: in our layout scroll_up increases pos (newer),
+    -- but wheel_up should show older. Swap: wheel_down→scroll_up, wheel_up→scroll_down
+    self._wheel_up_id = hash("wheel_up")
+    self._wheel_down_id = hash("wheel_down")
+    self._druid_scroll_up = hash("mouse_wheel_up")
+    self._druid_scroll_down = hash("mouse_wheel_down")
     self.thread_scroll.on_scroll:subscribe(function(self, pos)
         sync_thread_scrollbar(self, self.thread_content_h or 0)
     end)
@@ -1572,7 +1578,14 @@ function on_message(self, message_id, message, sender)
             }
             local action_id = message and message.action_id or MSG.touch
             if self.druid then
-                self.druid:on_input(action_id, action)
+                -- Map project wheel hashes to druid's expected mouse_wheel hashes
+                local daction = action_id
+                if action_id == MSG.wheel_up then
+                    daction = hash("mouse_wheel_down")
+                elseif action_id == MSG.wheel_down then
+                    daction = hash("mouse_wheel_up")
+                end
+                self.druid:on_input(daction, action)
             end
             handle_phone_input(self, action_id, action)
         end
