@@ -365,6 +365,7 @@ nodes {
   id: "list_scroll_view"
   pivot: PIVOT_SW
   parent: "list_root"
+  clipping_mode: CLIPPING_MODE_STENCIL
   alpha: 0.0
 }
 nodes {

@@ -118,6 +118,17 @@ local LIST_NODE_IDS = {
     "list_scroll_view", "list_scroll_content",
 }
 
+for i = 1, MAX_ROWS do
+    local p = "msg" .. i
+    for _, suffix in ipairs({
+        "_bg", "_border", "_dot",
+        "_name", "_time", "_body", "_pin_bg", "_pin_border_t", "_pin_border_b",
+        "_pin_border_l", "_pin_border_r", "_pin"
+    }) do
+        LIST_NODE_IDS[#LIST_NODE_IDS + 1] = p .. suffix
+    end
+end
+
 local THREAD_NODE_IDS = {
     "thread_root",
     "th_back_bg", "th_back_border", "th_back_label",
