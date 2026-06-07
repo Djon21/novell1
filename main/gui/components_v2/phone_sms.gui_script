@@ -19,8 +19,9 @@ local log = require "main.scripts.log"
 local UI_MGR = "#ui_manager_v2"
 local PHONE_ROOT = "#phone_v2"
 
-local ROW_W, ROW_H, ROW_GAP = 680, 80, 5
-local MAX_ROWS = 15
+local MAX_ROWS = 6
+local LIST_SCROLL_STEP_PX = 64
+local LIST_DRAG_THRESHOLD_PX = 8
 local function dbg(...) log.debug("phone_sms", ...) end
 
 -- Use shared GUI utilities only where they do not bypass SMS virtual ids.
@@ -117,17 +118,6 @@ local LIST_NODE_IDS = {
     "sms_scrollbar_track", "sms_scrollbar_thumb",
     "list_scroll_view", "list_scroll_content",
 }
-
-for i = 1, MAX_ROWS do
-    local p = "msg" .. i
-    for _, suffix in ipairs({
-        "_bg", "_border", "_dot",
-        "_name", "_time", "_body", "_pin_bg", "_pin_border_t", "_pin_border_b",
-        "_pin_border_l", "_pin_border_r", "_pin"
-    }) do
-        LIST_NODE_IDS[#LIST_NODE_IDS + 1] = p .. suffix
-    end
-end
 
 local THREAD_NODE_IDS = {
     "thread_root",
@@ -779,33 +769,8 @@ local function show_row(i, m)
     show_pin(p, tone, tag)
 end
 
-local function sync_list_scrollbar(self, total)
-    local thumb = get_node("sms_scrollbar_thumb")
-    local track = get_node("sms_scrollbar_track")
-    if not thumb then return end
-
-    local content_h = total * (ROW_H + ROW_GAP)
-    if content_h <= LIST_H then
-        if track then gui.set_enabled(track, false) end
-        gui.set_enabled(thumb, false)
-        return
-    end
-
-    if track then
-        gui.set_enabled(track, true)
-        gui.set_alpha(track, 0.08)
-    end
-    gui.set_enabled(thumb, true)
-
-    local ratio = math.min(1, LIST_H / content_h)
-    local h = math.max(46, LIST_H * ratio)
-    local travel = LIST_H - h
-    local pos = self.list_scroll and self.list_scroll:get_percent() or vmath.vector3()
-    local t = 1 - pos.y
-    local y = (LIST_BOTTOM + LIST_H - h) - travel * t
-    gui.set_size(thumb, vmath.vector3(SCROLL_W, h, 0))
-    gui.set_position(thumb, vmath.vector3(SCROLL_X, y, 0.545))
-    gui.set_alpha(thumb, 0.70)
+local function update_scrollbar(self, total)
+    return
 end
 
 local set_border
@@ -870,6 +835,37 @@ local function render_tab(self)
     set_color("border_unread", COLORS.accent, (not all_active) and 0.55 or 0.25)
 end
 
+local function sync_list_scrollbar(self, total)
+    local thumb = get_node("sms_scrollbar_thumb")
+    local track = get_node("sms_scrollbar_track")
+    if not thumb then return end
+
+    local content_h = total * (ROW_H + ROW_GAP)
+    if content_h <= LIST_H then
+        if track then gui.set_enabled(track, false) end
+        gui.set_enabled(thumb, false)
+        return
+    end
+
+    if track then
+        gui.set_enabled(track, true)
+        gui.set_alpha(track, 0.08)
+    end
+    gui.set_enabled(thumb, true)
+
+    local ratio = math.min(1, LIST_H / content_h)
+    local h = math.max(46, LIST_H * ratio)
+    local travel = LIST_H - h
+    local content_node = gui.get_node("sms_list/list_scroll_content")
+    local cy = content_node and gui.get_position(content_node).y or 0
+    local t = 1 - (cy / -(content_h - LIST_H))
+    t = math.max(0, math.min(1, t))
+    local y = (LIST_BOTTOM + LIST_H - h) - travel * t
+    gui.set_size(thumb, vmath.vector3(SCROLL_W, h, 0))
+    gui.set_position(thumb, vmath.vector3(SCROLL_X, y, 0.545))
+    gui.set_alpha(thumb, 0.70)
+end
+
 local function refresh_list(self)
     local all_messages = self.all_messages or list_messages()
     self.all_messages = all_messages
@@ -892,17 +888,6 @@ local function refresh_list(self)
         return
     end
 
-    if self._row_btns then
-        for _, btn in ipairs(self._row_btns) do
-            if btn then self.druid:remove(btn) end
-        end
-    end
-    self._row_btns = {}
-    --[[
-    self.list_grid:clear()
-    --]]
-    --]]
-
     for i = 1, math.min(MAX_ROWS, total) do
         local m = messages[i]
         if m then
@@ -910,22 +895,15 @@ local function refresh_list(self)
             self.rows[i] = msg_contact_id(m)
             local y = (total - i) * (ROW_H + ROW_GAP)
             set_pos("msg" .. i .. "_bg", 0, y)
-            local row_node = (i == 1) and gui.get_node("sms_list/msg1_bg") or
-                (_row_clones[i] and (_row_clones[i]["sms_list/msg1_bg"] or _row_clones[i]["msg1_bg"]))
-            if row_node then
-                --self.list_grid:add(row_node)
-                local cid = msg_contact_id(m)
-                local btn = self.druid:new_button(row_node, function(dself)
-                    open_thread(dself, cid)
-                end)
-                self._row_btns[i] = btn
-            end
         end
     end
     for i = total + 1, MAX_ROWS do hide_row(i) end
 
-    self.list_content_h = total * (ROW_H + ROW_GAP)
-    --sync_list_scrollbar(self, total)
+    local content_h = total * (ROW_H + ROW_GAP)
+    self.list_content_h = content_h
+    if self.list_scroll then
+        self.list_scroll:set_size(vmath.vector3(ROW_W, content_h, 0))
+    end
     sync_list_scrollbar(self, total)
 end
 
@@ -1272,11 +1250,6 @@ local function set_view(self, view)
             self.list_scroll:scroll_to_percent(vmath.vector3(0, 1, 0), true)
         end
     end
-    if show_thread then
-        if self.list_scroll then
-            self.list_scroll:scroll_to_percent(vmath.vector3(0, 1, 0), true)
-        end
-    end
     if not show_thread and self.sms_pulse_active then
         stop_sms_send_pulse()
         self.sms_pulse_active = false
@@ -1302,14 +1275,6 @@ local function open_list(self)
     apply_static_layout()
     set_view(self, "list")
     refresh_list(self)
-    -- TEST: druid button on msg1_bg with node handle + explicit enable
-    local node = gui.get_node("sms_list/msg1_bg")
-    if node then
-        self.test_btn = self.druid:new_button(node, function()
-            print("DRUID BUTTON CLICKED!")
-        end)
-        self.test_btn:set_enabled(true)
-    end
 end
 
 local function open_thread(self, contact_id)
@@ -1384,16 +1349,26 @@ local function wheel_rows_from_action(action_id, action)
 end
 
 local function pick_row(self, x, y)
+    local content_node = gui.get_node("sms_list/list_scroll_content")
+    local content_pos = content_node and gui.get_position(content_node) or vmath.vector3()
+    local view_node = gui.get_node("sms_list/list_scroll_view")
+    local view_pos = view_node and gui.get_position(view_node) or vmath.vector3()
+
     for i = 1, MAX_ROWS do
         local contact_id = self.rows and self.rows[i]
         if contact_id then
-            -- Get the correct node handle: slot 1 = prototype, slot 2+ = clone
             local n = (i == 1) and gui.get_node("sms_list/msg1_bg") or nil
             if not n and _row_clones[i] then
                 n = _row_clones[i]["sms_list/msg1_bg"] or _row_clones[i]["msg1_bg"]
             end
-            if n and gui.is_enabled(n) and gui.pick_node(n, x, y) then
-                return contact_id, "msg" .. i .. "_bg"
+            if n then
+                local pos = gui.get_position(n)
+                local size = gui.get_size(n)
+                local ax = view_pos.x + content_pos.x + pos.x
+                local ay = view_pos.y + content_pos.y + pos.y
+                if x >= ax and x <= ax + size.x and y >= ay and y <= ay + size.y then
+                    return contact_id, "msg" .. i .. "_bg"
+                end
             end
         end
     end
@@ -1443,9 +1418,10 @@ local function handle_list_touch(self, action_id, action)
     local y = action and action.y or 0
 
     local wheel_rows = wheel_rows_from_action(action_id, action)
-    if wheel_rows ~= 0 then return false end
+    if wheel_rows ~= 0 then return scroll_list(self, wheel_rows) end
     if action_id ~= MSG.touch then return false end
 
+    -- Табы
     if action and action.released then
         if is_inside_rect("tab_all_bg", x, y) then
             self.filter = "all"
@@ -1512,7 +1488,6 @@ function init(self)
         sync_thread_scrollbar(self, self.thread_content_h or 0)
     end)
 
-    --[[
     self.list_scroll = self.druid:new_scroll("sms_list/list_scroll_view", "sms_list/list_scroll_content")
     self.list_scroll:set_horizontal_scroll(false)
     self.list_scroll:set_vertical_scroll(true)
@@ -1520,14 +1495,9 @@ function init(self)
     self.list_scroll:set_extra_stretch_size(0)
     self.list_scroll.style.WHEEL_SCROLL_SPEED = 40
     self.list_scroll._is_mouse_hover = true
-    self.list_grid = self.druid:new_grid("sms_list/list_scroll_content", "sms_list/msg1_bg", 1)
-    self.list_grid:set_item_size(ROW_W, ROW_H + ROW_GAP)
-    self.list_grid:set_position_function(function() end)
-    self.list_scroll:bind_grid(self.list_grid)
     self.list_scroll.on_scroll:subscribe(function(self, pos)
         sync_list_scrollbar(self, self.list_content_h or 0)
     end)
-    ]]
 
     clone_rows()
     apply_static_layout()
@@ -1573,11 +1543,7 @@ function on_message(self, message_id, message, sender)
         self.all_messages = nil
         self.thread_messages = nil
         self.active_contact_id = nil
-        self._row_btns = nil
         self.filter = "all"
-        if self.list_scroll then
-            self.list_scroll:scroll_to(vmath.vector3(0, 0, 0), true)
-        end
         cleanup_msg_clones(self)
         self.view = "list"
         if self.sms_pulse_active then
@@ -1609,18 +1575,23 @@ function on_message(self, message_id, message, sender)
             }
             local action_id = message and message.action_id or MSG.touch
             if self.druid then
-                local daction = action_id
-                if action_id == MSG.wheel_up then
-                    daction = hash("mouse_wheel_down")
-                elseif action_id == MSG.wheel_down then
-                    daction = hash("mouse_wheel_up")
+                if action_id == MSG.touch then
+                    -- Touch: our handler first (needs original action for row picking)
+                    handle_phone_input(self, action_id, action)
+                    self.druid:on_input(action_id, action)
+                else
+                    -- Wheel: druid first, then us
+                    local daction = action_id
+                    if action_id == MSG.wheel_up then
+                        daction = hash("mouse_wheel_up")
+                    elseif action_id == MSG.wheel_down then
+                        daction = hash("mouse_wheel_down")
+                    end
+                    self.druid:on_input(daction, action)
                 end
-                if action.pressed or action.released then
-                    print("DRUID TAP:", action.pressed and "DOWN" or "UP", "at", action.x, action.y)
-                end
-                self.druid:on_input(daction, action)
+            else
+                handle_phone_input(self, action_id, action)
             end
-            handle_phone_input(self, action_id, action)
         end
     end
 end
