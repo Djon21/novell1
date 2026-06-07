@@ -362,10 +362,48 @@ nodes {
     z: 0.204
   }
   type: TYPE_BOX
+  id: "list_scroll_view"
+  pivot: PIVOT_SW
+  parent: "list_root"
+  alpha: 0.0
+}
+nodes {
+  position {
+    x: 520.0
+    y: 65.0
+    z: 0.03
+  }
+  size {
+    x: 680.0
+    y: 500.0
+  }
+  color {
+    x: 0.031
+    y: 0.024
+    z: 0.094
+  }
+  type: TYPE_BOX
+  id: "list_scroll_view_pos"
+  pivot: PIVOT_SW
+  parent: "list_root"
+  alpha: 0.0
+}
+nodes {
+  position {
+    z: 0.031
+  }
+  type: TYPE_BOX
+  id: "list_scroll_content"
+  pivot: PIVOT_SW
+  parent: "list_scroll_view_pos"
+  alpha: 0.0
+}
+nodes {
+  type: TYPE_BOX
   id: "msg1_bg"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  parent: "list_root"
+  parent: "list_scroll_content"
   alpha: 0.6
 }
 nodes {
