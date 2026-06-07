@@ -1503,6 +1503,7 @@ function init(self)
     self.thread_scroll:set_click_zone("sms_thread/th_scroll_click_zone")
     -- Enable wheel scrolling (disabled by default in druid)
     self.thread_scroll.style.WHEEL_SCROLL_SPEED = 40
+    self.thread_scroll.style.WHEEL_SCROLL_INVERTED = true
     self.thread_scroll._is_mouse_hover = true
     self.thread_scroll.on_scroll:subscribe(function(self, pos)
         sync_thread_scrollbar(self, self.thread_content_h or 0)
