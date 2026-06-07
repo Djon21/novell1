@@ -1,4 +1,5 @@
 script: "/main/gui/components_v2/phone_sms.gui_script"
+max_nodes: 2048
 fonts {
   name: "jb_mono_10"
   font: "/main/fonts/jb_mono_10.font"
