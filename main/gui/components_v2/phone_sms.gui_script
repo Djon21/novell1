@@ -894,10 +894,7 @@ local function refresh_list(self)
 
     if self._row_btns then
         for _, btn in ipairs(self._row_btns) do
-            if btn then
-                btn.on_click:unsubscribe(btn._click_fn)
-                self.druid:remove(btn)
-            end
+            if btn then self.druid:remove(btn) end
         end
     end
     self._row_btns = {}
@@ -1561,6 +1558,7 @@ function on_message(self, message_id, message, sender)
         self.all_messages = nil
         self.thread_messages = nil
         self.active_contact_id = nil
+        self._row_btns = nil
         self.filter = "all"
         if self.list_scroll then
             self.list_scroll:scroll_to(vmath.vector3(0, 0, 0), true)
