@@ -1217,10 +1217,6 @@ render_thread = function(self)
             if not ok or not clone then break end
             local root = clone["sms_thread/bub1_bg"] or clone["bub1_bg"]
             if not root then break end
-            local content_node = gui.get_node("sms_thread/th_scroll_content")
-            if content_node then
-                gui.set_parent(root, content_node)
-            end
             self._msg_clones[idx] = clone
             _bubble_clones[idx] = clone
         end
