@@ -1033,7 +1033,7 @@ local function render_bubble(slot, sms, y)
     if is_sep then
         local layout = bubble_layout(sms)
         local w, h = layout.w, layout.h
-        local x = THREAD_X + (THREAD_W - w) / 2
+        local x = (THREAD_W - w) / 2
         set_box(p .. "_bg", x, y, w, h, COLORS.dark, typ == "daysep" and 0.40 or 0.22)
         set_border(p, x, y, w, h, COLORS.paper_dim, 0.05)
         set_local_pos(p .. "_text", w / 2, h / 2, 0.059)
@@ -1053,7 +1053,7 @@ local function render_bubble(slot, sms, y)
     local layout = bubble_layout(sms)
     local raw_text = layout.text
     local w, h = layout.w, layout.h
-    local x = is_out and (THREAD_R - w) or THREAD_X
+    local x = is_out and (THREAD_W - w) or 0
     local bg = is_out and COLORS.accent or (is_hot and COLORS.card_hot or COLORS.card)
     local border = is_out and COLORS.accent or (is_hot and COLORS.hot or COLORS.accent)
     local bg_alpha = is_out and 0.20 or 0.22
@@ -1233,15 +1233,15 @@ render_thread = function(self)
     local slot = 1
     for idx = 1, #chat do
         if slot > MAX_BUBBLES then break end
-        local y = THREAD_TOP - layout[idx].bottom
-        if y + layout[idx].height >= THREAD_SAFE_BOTTOM and y <= THREAD_TOP then
+        local y = THREAD_SCROLL_H - layout[idx].bottom
+        if y + layout[idx].height >= 0 and y <= THREAD_SCROLL_H then
             render_bubble(slot, chat[idx], y)
             slot = slot + 1
         end
     end
 
     if self.thread_scroll then
-        self.thread_scroll:set_size(vmath.vector3(630, content_h, 0))
+        self.thread_scroll:set_size(vmath.vector3(630, content_h, 0), vmath.vector3(THREAD_X, THREAD_SAFE_BOTTOM, 0))
     end
     sync_thread_scrollbar(self, content_h)
 end
@@ -1314,6 +1314,12 @@ local function open_thread(self, contact_id)
     apply_static_layout()
     set_view(self, "thread")
     render_thread(self)
+
+    -- Scroll to bottom (latest messages first)
+    local content_h = self.thread_content_h or 0
+    if self.thread_scroll and content_h > THREAD_SCROLL_H then
+        self.thread_scroll:scroll_to(vmath.vector3(0, content_h - THREAD_SCROLL_H, 0), true)
+    end
 end
 
 local function flash_node(id)
