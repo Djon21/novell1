@@ -1561,7 +1561,6 @@ function update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
-    print("SMS on_message:", message_id)
     if message_id == MSG.open_app then
         self.visible = true
         self.list_offset = self.list_offset or 0
@@ -1616,7 +1615,9 @@ function on_message(self, message_id, message, sender)
                 elseif action_id == MSG.wheel_down then
                     daction = hash("mouse_wheel_up")
                 end
-                print("druid:on_input", daction, action.released, action.pressed)
+                if action.pressed or action.released then
+                    print("DRUID TAP:", action.pressed and "DOWN" or "UP", "at", action.x, action.y)
+                end
                 self.druid:on_input(daction, action)
             end
             handle_phone_input(self, action_id, action)
@@ -1625,7 +1626,6 @@ function on_message(self, message_id, message, sender)
 end
 
 function on_input(self, action_id, action)
-    print("SMS on_input lifecycle", action_id, action and action.released)
     if self.druid then
         local consumed = self.druid:on_input(action_id, action)
         if consumed then return true end
