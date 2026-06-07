@@ -20,7 +20,6 @@ local UI_MGR = "#ui_manager_v2"
 local PHONE_ROOT = "#phone_v2"
 
 local MAX_ROWS = 6
-local MAX_BUBBLES = 30
 local LIST_SCROLL_STEP_PX = 64
 local LIST_DRAG_THRESHOLD_PX = 8
 local function dbg(...) log.debug("phone_sms", ...) end
@@ -140,13 +139,6 @@ local THREAD_NODE_IDS = {
     "th_send_bg", "border_send", "th_send_label",
     "th_scroll_view", "th_scroll_click_zone", "th_scroll_content",
 }
-
-for i = 1, MAX_BUBBLES do
-    local p = "bub" .. i
-    for _, suffix in ipairs({ "_bg", "_border", "_text", "_stamp" }) do
-        THREAD_NODE_IDS[#THREAD_NODE_IDS + 1] = p .. suffix
-    end
-end
 
 local COLORS = U.COLORS
 
@@ -330,22 +322,6 @@ end
 
 local function delete_row_clones()
     delete_slot_clones(_row_clones, "sms_list/msg1_bg", "msg1_bg")
-end
-
-local function clone_bubbles()
-    clone_slot_tree({
-        name = "clone_bubbles",
-        prototype_id = "bub1_bg",
-        clones = _bubble_clones,
-        max_slots = MAX_BUBBLES,
-        step_y = BUBBLE_H + BUBBLE_GAP,
-        root_key_prefixed = "sms_thread/bub1_bg",
-        root_key = "bub1_bg",
-    })
-end
-
-local function delete_bubble_clones()
-    delete_slot_clones(_bubble_clones, "sms_thread/bub1_bg", "bub1_bg")
 end
 
 local function set_text(id, value)
@@ -938,13 +914,6 @@ local function scroll_list(self, delta_rows)
     return false
 end
 
-local function hide_bubble(i)
-    local p = "bub" .. i
-    for _, suffix in ipairs({ "_bg", "_border", "_text", "_stamp" }) do
-        set_node_enabled(p .. suffix, false)
-    end
-end
-
 local function set_bubble_enabled(i, enabled)
     local p = "bub" .. i
     for _, suffix in ipairs({ "_bg", "_border", "_text", "_stamp" }) do
@@ -1215,9 +1184,17 @@ render_thread = function(self)
         self.sms_pulse_active = false
     end
 
+    -- Удаляем старые клоны сообщений
+    if self._msg_clones then
+        for _, clone in ipairs(self._msg_clones) do
+            local root = clone["sms_thread/bub1_bg"] or clone["bub1_bg"]
+            if root then pcall(delete_tree, root) end
+        end
+    end
+    self._msg_clones = {}
+
     local count = #chat
     set_node_enabled("th_empty", count == 0)
-    for i = 1, MAX_BUBBLES do hide_bubble(i) end
     if count == 0 then
         self.thread_content_h = 0
         if self.thread_scroll then
@@ -1230,12 +1207,27 @@ render_thread = function(self)
     local layout, content_h = build_thread_layout(chat)
     self.thread_content_h = content_h
 
-    local slot = 1
+    local proto = gui.get_node("sms_thread/bub1_bg") or gui.get_node("bub1_bg")
     for idx = 1, #chat do
-        if slot > MAX_BUBBLES then break end
+        if not proto then break end
+        local ok, clone = pcall(clone_tree, proto)
+        if not ok or not clone then break end
+
+        -- Parent clone under scroll content
+        local root = clone["sms_thread/bub1_bg"] or clone["bub1_bg"]
+        if not root then break end
+        local content_node = gui.get_node("sms_thread/th_scroll_content")
+        if content_node then
+            gui.set_parent(root, content_node)
+        end
+
+        self._msg_clones[idx] = clone
         local y = THREAD_SCROLL_H - layout[idx].bottom
-        render_bubble(slot, chat[idx], y)
-        slot = slot + 1
+        local slot_id = idx
+        -- Configure bubble appearance via existing functions
+        -- Temporarily store clone in _bubble_clones slot so resolve works
+        _bubble_clones[slot_id] = clone
+        render_bubble(slot_id, chat[idx], y)
     end
 
     if self.thread_scroll then
@@ -1514,7 +1506,6 @@ function init(self)
         on_step      = function(owner, delta) scroll_list(owner, delta) end,
     })
     clone_rows()
-    clone_bubbles()
     apply_static_layout()
     set_all_enabled(false)
 end
@@ -1525,14 +1516,25 @@ function final(self)
         stop_sms_send_pulse()
         self.sms_pulse_active = false
     end
-    set_all_enabled(false)
-    delete_bubble_clones()
+    cleanup_msg_clones(self)
     delete_row_clones()
     node_cache = {}
 end
 
 function update(self, dt)
     if self.druid then self.druid:update(dt) end
+end
+
+local function cleanup_msg_clones(self)
+    if self._msg_clones then
+        for _, clone in ipairs(self._msg_clones) do
+            local root = clone["sms_thread/bub1_bg"] or clone["bub1_bg"]
+            if root then pcall(delete_tree, root) end
+        end
+    end
+    self._msg_clones = nil
+    -- Clear bubble clone slots used by render_bubble
+    for k in pairs(_bubble_clones) do _bubble_clones[k] = nil end
 end
 
 function on_message(self, message_id, message, sender)
@@ -1550,6 +1552,7 @@ function on_message(self, message_id, message, sender)
         self.active_contact_id = nil
         self.filter = "all"
         if self.list_drag then drag_scroll.reset(self.list_drag) end
+        cleanup_msg_clones(self)
         self.view = "list"
         if self.sms_pulse_active then
             stop_sms_send_pulse()
