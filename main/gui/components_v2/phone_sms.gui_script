@@ -1582,14 +1582,7 @@ function on_message(self, message_id, message, sender)
             }
             local action_id = message and message.action_id or MSG.touch
             if self.druid then
-                -- Map project action IDs to druid-expected hashes
-                local druid_id = action_id
-                if action_id == MSG.wheel_up then
-                    druid_id = hash("mouse_wheel_down")
-                elseif action_id == MSG.wheel_down then
-                    druid_id = hash("mouse_wheel_up")
-                end
-                self.druid:on_input(druid_id, action)
+                self.druid:on_input(action_id, action)
             end
             handle_phone_input(self, action_id, action)
         end
