@@ -1515,6 +1515,11 @@ function init(self)
         sync_list_scrollbar(self, self.list_content_h or 0)
     end)
 
+    -- TEST: standalone button on msg1_bg
+    self.test_btn = self.druid:new_button("sms_list/msg1_bg", function()
+        print("DRUID BUTTON CLICKED!")
+    end)
+
     clone_rows()
     apply_static_layout()
     set_all_enabled(false)
