@@ -1503,7 +1503,6 @@ function init(self)
     self.thread_scroll:set_click_zone("sms_thread/th_scroll_click_zone")
     -- Enable wheel scrolling (disabled by default in druid)
     self.thread_scroll.style.WHEEL_SCROLL_SPEED = 40
-    self.thread_scroll.style.WHEEL_SCROLL_INVERTED = true
     self.thread_scroll._is_mouse_hover = true
     self.thread_scroll.on_scroll:subscribe(function(self, pos)
         sync_thread_scrollbar(self, self.thread_content_h or 0)
@@ -1586,9 +1585,9 @@ function on_message(self, message_id, message, sender)
                 -- Map project action IDs to druid-expected hashes
                 local druid_id = action_id
                 if action_id == MSG.wheel_up then
-                    druid_id = hash("mouse_wheel_up")
-                elseif action_id == MSG.wheel_down then
                     druid_id = hash("mouse_wheel_down")
+                elseif action_id == MSG.wheel_down then
+                    druid_id = hash("mouse_wheel_up")
                 end
                 self.druid:on_input(druid_id, action)
             end
