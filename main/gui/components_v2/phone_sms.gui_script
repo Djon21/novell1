@@ -898,7 +898,9 @@ local function refresh_list(self)
         end
     end
     self._row_btns = {}
+    --[[
     self.list_grid:clear()
+    --]]
     --]]
 
     for i = 1, math.min(MAX_ROWS, total) do
